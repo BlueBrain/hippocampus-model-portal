@@ -1,115 +1,61 @@
 [
   {
-    "name": "mpg150218_A_idB",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/25ea5804-5535-42f9-82d8-66d8f6cb5b06",
+    "name": "050921AM2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/836087b2-4094-44ab-8874-53527a2c1fc4",
     "region": "SP",
     "mtype": "SP_PC"
   },
   {
-    "name": "oh140521_B0_Rat_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/5c12eb34-4b8f-412c-b038-d1d147d3a6b3",
+    "name": "980205AB",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/767e4bca-9095-46cb-a2be-9ebd5a15deac",
     "region": "SP",
     "mtype": "SP_PC"
   },
   {
-    "name": "mpg150226_A_idC",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/966baafb-7d77-45ad-a828-508e03b9cbf6",
+    "name": "990728BHP2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/30ae3286-c65d-49a7-8eb9-97528aec8d14",
+    "region": "SR",
+    "mtype": "SR_SCA"
+  },
+  {
+    "name": "980120A",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/b9cb9987-ea99-4bce-b6d8-54930214d418",
+    "region": "SO",
+    "mtype": "SO_BP"
+  },
+  {
+    "name": "010710HP2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/0843b7ba-f3a2-4679-bda3-2e1ee2ae5fac",
+    "region": "SP",
+    "mtype": "SP_Ivy"
+  },
+  {
+    "name": "970627BHP1",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/ff6f5132-9461-4e66-a86b-7ff2c561fd77",
+    "region": "SP",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "011023HP2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/c7f673b3-47f6-420c-aba7-bc4dea8679a1",
+    "region": "SO",
+    "mtype": "SO_BS"
+  },
+  {
+    "name": "990611HP2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/2c3207e0-15b3-41bf-b6c7-5fb6f8c28640",
+    "region": "SR",
+    "mtype": "SR_SCA"
+  },
+  {
+    "name": "060919AM2",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/786621ed-72b7-4b84-96d8-c3485de59893",
     "region": "SP",
     "mtype": "SP_PC"
   },
   {
-    "name": "oh140807_A0_idG",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/4f3607e6-1816-4f80-a9f2-010b3684190d",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg150304_A_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/da5962df-ae8e-4065-92f5-7600a65753f5",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg150211_A_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/7bbb6a96-07d3-4cc8-9d79-3b6e449c4d18",
-    "region": "SP",
-    "mtype": "SR_PC"
-  },
-  {
-    "name": "mpg150223_B_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/bd15acf5-495d-465d-b0af-d12744622f21",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "oh140807_A0_idH",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/c83e7b44-81c7-45ad-a5da-b38601c75bad",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141208_B_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/28401f32-3768-4b37-af45-8ee17975d81a",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "oh140807_A0_idF",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/041db701-a5cf-412c-abbd-1198c6b2ceb4",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141216_A_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/184ec6f5-1593-4834-9df4-98cc0ff640d9",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg150217_A_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/368441d3-9f7a-43de-92d8-6b1b394eb147",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141202_A_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/1d8fb798-9f64-4f1e-b4c7-431d9cb237c8",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141017_a1-2_idC",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/a5972703-4d42-4d93-9e24-6ae695104011",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141217_A_idB",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/c1caddf3-aadc-473d-8c4d-601164c2db88",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "oh140807_A0_idA",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/b4502ad8-569a-4f4f-8c33-f69b06bf07fd",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg141216_A_idC",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/ca4cfe3a-3e61-41bf-88f4-1d7334bbdcaa",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "mpg150223_B_idB",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/e39c39fd-81e8-43a2-bf44-21408afa2165",
-    "region": "SP",
-    "mtype": "SP_PC"
-  },
-  {
-    "name": "oh140807_A0_idC",
-    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/de56bc29-cc89-44b5-9b0e-808380beb73a",
+    "name": "990803",
+    "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/f8740320-f3e3-4f08-870f-69adef9c4e0c",
     "region": "SP",
     "mtype": "SP_PC"
   }
