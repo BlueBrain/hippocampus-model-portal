@@ -1,0 +1,27 @@
+.factsheet__basis {
+  font-size: 1rem;
+
+  .row {
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  .pos-relative {
+    position: relative;
+  }
+
+  .bar {
+    height: 100%;
+    background-color: rgba(130, 130, 130, 0.23);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .name {
+    text-align: right;
+
+    &.na {
+      color: red;
+    }
+  }
+}

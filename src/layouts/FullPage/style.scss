@@ -1,0 +1,12 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+@import '../../assets/styles/config/_queries';
+
+.full-page__basis {
+  padding: 160px 60px;
+  min-height: 100vh;
+  background-color: map-get($basePalette, "navy-4");
+  @media (max-width: $small) {
+    padding: 90px 30px 60px;
+  }
+}

@@ -1,0 +1,22 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+$size: 6rem;
+
+.scroll-top__base {
+  display: inline-block;
+  background-color: map-get($basePalette, "navy-2");
+  color: map-get($basePalette, "white");
+  text-decoration: none;
+  text-align: center;
+  border-radius: $size;
+  width: $size;
+  height: $size;
+  font-size: (2 / 3) * $size;
+  & svg {
+    padding-top: 0.75rem;
+  }
+  &:hover {
+    background-color: map-get($basePalette, "navy-1");
+  }
+}

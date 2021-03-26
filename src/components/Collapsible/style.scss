@@ -1,0 +1,59 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+$padding: 20px 30px;
+
+@mixin collapsible__basis {
+  border-radius: 3px;
+  overflow: hidden;
+  .header {
+    background-color: map-get($basePalette, "navy-2");
+    font-size: map-get($fontSize, "large");
+    font-weight: 400;
+    padding: $padding;
+    &:hover {
+      cursor: pointer;
+      background-color: map-get($basePalette, "navy-1");
+    }
+  }
+  .arrow {
+    float: right;
+    margin-top: 0.25rem;
+    transition: all 0.5s;
+  }
+  .content {
+    background-color: map-get($basePalette, "white");
+    color: map-get($basePalette, "navy-4");
+    padding: $padding;
+    overflow: hidden;
+  }
+
+  &.red {
+    .header {
+      background-color: red;
+      color: white;
+    }
+  }
+}
+
+.collapsible__expanded {
+  @include collapsible__basis;
+  .content {
+    max-height: 20000px;
+    transition: max-height 1s, padding 0.3s;
+  }
+}
+
+.collapsible__collapsed {
+  @include collapsible__basis;
+  .arrow {
+    transform: rotate(180deg);
+    margin-top: -0.25rem;
+  }
+  .content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: max-height 0.3s, padding 0.3s 0.2s;
+  }
+}

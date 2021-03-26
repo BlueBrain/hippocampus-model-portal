@@ -1,0 +1,22 @@
+
+.layer {
+  font-size: 1.2rem;
+  line-height: 3.2rem;
+  background-color: #333746;
+  border: 1px solid white;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.layer.active {
+  background-color: #141317;
+}
+
+.layer:last-child {
+  margin-bottom: 0;
+}
+
+.layer:hover {
+  background-color: #141317;
+}

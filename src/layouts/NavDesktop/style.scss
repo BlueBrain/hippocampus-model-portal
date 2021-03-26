@@ -1,0 +1,111 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+@import '../../assets/styles/config/_queries';
+
+.nav-desktop__basis {
+  list-style: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+  @media (max-width: $small) {
+    display: none;
+  }
+
+  li {
+    display: inline-block;
+    margin-right: 40px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .flyout {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    background: map-get($basePalette, "white");
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 4px 4px 4px 0 rgba(59, 65, 101, 0.6);
+
+    a,
+    button {
+      font-size: map-get($fontSize, "small");
+      white-space: nowrap;
+      line-height: 45px;
+      flex-grow: 1;
+      text-align: left;
+    }
+  }
+
+  .home-nav {
+    border-bottom: 1px solid map-get($basePalette, "grey-2");
+    margin-right: 10px;
+    padding: 5px 17px;
+    display: flex;
+
+    li {
+      margin: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+  }
+
+  .secondary-nav {
+    width: 300px;
+
+    button {
+      border-bottom: 1px solid map-get($basePalette, "grey-2");
+      color: map-get($basePalette, "grey-2");
+      text-transform: none;
+      padding-left: 20px;
+      margin: 0 10px 0 20px;
+    }
+
+    li {
+      height: 45px;
+      display: flex;
+      margin-right: 0;
+
+      &:last-child {
+        button {
+          border-bottom: none;
+        }
+      }
+    }
+
+    li > ul {
+      display: none;
+    }
+
+    li.active button {
+      color: map-get($basePalette, "navy-2");
+    }
+
+    li.active > ul {
+      display: flex;
+      position: absolute;
+      left: 300px;
+      width: 200px;
+      top: 0;
+      bottom: 0;
+      background: map-get($basePalette, "white");
+      border-left-width: 10px;
+      border-left-style: solid;
+      padding: 20px;
+      box-sizing: border-box;
+      flex-direction: column;
+      justify-content: center;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      @media (min-width: $large) {
+        width: 300px;
+      }
+    }
+
+    li > ul > li {
+      margin: 5px 0;
+    }
+  }
+}

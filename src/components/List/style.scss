@@ -1,0 +1,149 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+$maxHeight: 120px;
+$width: 250px;
+$padding: 10px 10px 10px 20px;
+
+.list__basis {
+  width: $width;
+  padding: $padding;
+  background-color: map-get($basePalette, "navy-1");
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 16px;
+
+  &.block {
+    width: auto;
+  }
+
+  p {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin: 0 0 0 5px;
+    color: map-get($basePalette, "white");
+  }
+
+  .elements {
+    margin: 8px 0;
+    max-height: $maxHeight;
+    overflow-y: scroll;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+  }
+
+  &.yellow {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "yellow");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "yellow");
+    }
+  }
+
+  &.blue {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "blue");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "blue");
+    }
+  }
+
+  &.lavender {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "lavender");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "lavender");
+    }
+  }
+
+  &.green {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "green");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "green");
+    }
+  }
+
+  &.orange {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "orange");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "orange");
+    }
+  }
+
+  &.grey {
+    ::-webkit-scrollbar-thumb {
+      background: map-get($accentPalette, "grey");
+    }
+
+    .list-element__basis:hover {
+      background-color: map-get($accentPalette, "grey");
+    }
+  }
+}
+
+.list-element__basis {
+  background-color: map-get($basePalette, "white");
+  color: map-get($basePalette, "navy-1");
+  margin: 8px 20px 8px 10px;
+  border-radius: 3px;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  padding: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    color: map-get($basePalette, "white");
+  }
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &.selected {
+    color: map-get($basePalette, "white");
+    background-color: map-get($basePalette, "navy-3");
+    cursor: initial;
+    outline-style: none;
+
+    .yellow & {
+      background-color: map-get($accentPalette, "yellow");
+    }
+    .blue & {
+      background-color: map-get($accentPalette, "blue");
+    }
+    .lavender & {
+      background-color: map-get($accentPalette, "lavender");
+    }
+    .green & {
+      background-color: map-get($accentPalette, "green");
+    }
+    .grey & {
+      background-color: map-get($accentPalette, "grey");
+    }
+    .orange & {
+      background-color: map-get($accentPalette, "orange");
+    }
+  }
+}

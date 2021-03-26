@@ -1,0 +1,41 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+$maxWidth: 600px;
+
+.image-viewer__basis {
+  max-width: $maxWidth;
+  position: relative;
+
+  img {
+    width: 100%;
+    cursor: pointer;
+  }
+  // button,
+  // a {
+  //   font-size: 1.5rem;
+  //   line-height: 1rem;
+  //   padding: 0.3rem;
+  //   background: #basePalette[navy-2];
+  //   color: #basePalette[white];
+  //   border-radius: 3px;
+  //   border: none;
+  //   position: absolute;
+  //   box-shadow: 4px 1px 4px 0 rgba(0, 0, 0, 0.3);
+  //   transition: all 0.2s;
+  //   &:hover {
+  //     box-shadow: none;
+  //   }
+  //   &:active {
+  //     background-color: #basePalette[navy-1];
+  //   }
+  //   &.icon-button__expand {
+  //     margin-left: -2.5rem;
+  //     top: 0.5rem;
+  //   }
+  //   &.icon-button__download {
+  //     margin-left: 0.5rem;
+  //     bottom: 0.5rem;
+  //   }
+  // }
+}

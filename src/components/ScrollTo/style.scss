@@ -1,0 +1,40 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+.scroll-to__basis {
+  display: block;
+  font-weight: 400;
+  font-size: map-get($fontSize, "large");
+  background-color: map-get($basePalette, "navy-2");
+  color: map-get($basePalette, "white");
+  text-decoration: none;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  &:hover {
+    background-color: map-get($basePalette, "navy-1");
+  }
+
+  &.yellow {
+    background-color: map-get($accentPalette, "yellow");
+  }
+  &.blue {
+    background-color: map-get($accentPalette, "blue");
+  }
+  &.lavender {
+    background-color: map-get($accentPalette, "lavender");
+  }
+  &.green {
+    background-color: map-get($accentPalette, "green");
+  }
+  &.grey {
+    background-color: map-get($accentPalette, "grey");
+  }
+}
+
+.scroll-to__direction {
+  display: block;
+  font-size: 2rem;
+  height: 1.5rem;
+  margin-top: -0.25rem;
+}

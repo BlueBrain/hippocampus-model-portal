@@ -1,0 +1,89 @@
+@import '../../assets/styles/config/_colors';
+
+g {
+  outline-style: none;
+}
+
+.brain-regions-svg {
+  &__region {
+    cursor: pointer;
+
+    &:hover {
+      .brain-regions-svg__shape {
+        transition: fill 0.2s ease-in-out;
+
+        &.yellow {
+          fill: map-get($accentPalette, "yellow");
+        }
+
+        &.orange {
+          fill: map-get($accentPalette, "orange");
+        }
+
+        &.blue {
+          fill: map-get($accentPalette, "blue");
+        }
+
+        &.lavender {
+          fill: map-get($accentPalette, "lavender");
+        }
+
+        &.green {
+          fill: map-get($accentPalette, "green");
+        }
+
+        &.grey {
+          fill: map-get($accentPalette, "grey");
+        }
+      }
+    }
+  }
+
+  &__shape {
+    fill: #303354;
+    stroke: #fff;
+    stroke-width: 1.6671;
+    stroke-miterlimit: 10;
+
+    &--active {
+      stroke: #fff;
+      stroke-width: 1.6671;
+      stroke-miterlimit: 10;
+
+      &.yellow {
+        fill: map-get($accentPalette, "yellow");
+      }
+
+      &.orange {
+        fill: map-get($accentPalette, "orange");
+      }
+
+      &.blue {
+        fill: map-get($accentPalette, "blue");
+      }
+
+      &.lavender {
+        fill: map-get($accentPalette, "lavender");
+      }
+
+      &.green {
+        fill: map-get($accentPalette, "green");
+      }
+
+      &.grey {
+        fill: map-get($accentPalette, "grey");
+      }
+    }
+  }
+
+  &__outline {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.6667;
+    stroke-miterlimit: 10;
+  }
+
+  &__name {
+    fill: #fff;
+  }
+}

@@ -1,0 +1,169 @@
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+@import '../../assets/styles/config/_queries';
+
+.nav-mobile__basis {
+  display: none;
+  position: fixed;
+  top: 7px;
+  right: 7px;
+  font-size: 1.5rem;
+  height: 1.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 1;
+  background: map-get($basePalette, "navy-4");
+  border-radius: 1.5rem;
+  border: 1px solid map-get($basePalette, "navy-2");
+  box-shadow: 0 0 4px 0 rgba(59, 65, 101, 0.6);
+  @media (max-width: $small) {
+    display: flex;
+  }
+}
+
+.nav-mobile__menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  bottom: 0;
+  z-index: 2;
+  margin: 0;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  background-color: map-get($basePalette, "navy-4");
+
+  &.open {
+    right: 0;
+  }
+
+  .close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: map-get($basePalette, "white");
+    padding: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  a,
+  button {
+    white-space: nowrap;
+    line-height: 45px;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .top-links {
+    height: 120px;
+    display: flex;
+    padding: 10px 40px;
+    box-sizing: border-box;
+
+    a {
+      flex-grow: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      line-height: 30px;
+    }
+
+    img {
+      width: 45px;
+    }
+  }
+
+  .menu-search {
+    height: 120px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 40px 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .secondary-nav {
+    position: absolute;
+    top: 120px;
+    bottom: 120px;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: map-get($basePalette, "white");
+
+    a,
+    button {
+      text-transform: uppercase;
+    }
+
+    button {
+      width: calc(100% - 20px);
+      font-size: map-get($fontSize, "large");
+      box-shadow: 0 6px 10px -10px rgba(59, 65, 101, 0.6);
+      height: 75px;
+      padding-left: 40px;
+    }
+
+    button svg {
+      float: right;
+      margin-right: 30px;
+      font-size: 25px;
+      line-height: 75px;
+      margin-top: 8px;
+      transition: all 0.7s;
+    }
+
+    li > span {
+      height: 75px;
+      float: left;
+    }
+
+    li {
+      width: 100%;
+      overflow: visible;
+    }
+
+    li > ul {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.7s;
+      display: flex;
+      width: 100%;
+      background: map-get($basePalette, "white");
+      box-sizing: border-box;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    li.active button {
+      color: map-get($basePalette, "navy-2");
+    }
+
+    li.active button svg {
+      transform: rotate(180deg);
+    }
+
+    li.active > ul {
+      max-height: 500px;
+    }
+
+    li > ul > li {
+      box-shadow: none;
+    }
+
+    li > ul > li a {
+      border-bottom: 1px solid map-get($basePalette, "grey-2");
+      padding: 5px 20px 5px 30px;
+    }
+
+    li > ul > li svg {
+      margin-right: 10px;
+    }
+  }
+}

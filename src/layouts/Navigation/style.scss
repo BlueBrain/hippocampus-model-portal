@@ -1,0 +1,76 @@
+@import '../../assets/styles/config/_queries';
+@import '../../assets/styles/config/_colors';
+@import '../../assets/styles/config/_fonts';
+
+.nav__basis {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 30px;
+  left: 60px;
+  right: 60px;
+  z-index: 1;
+  @media (max-width: $small) {
+    justify-content: center;
+    top: 5px;
+  }
+
+  .home-nav,
+  .secondary-nav {
+    &,
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    a,
+    button {
+      background: none;
+      outline: none;
+      border: none;
+      display: inline-block;
+      color: map-get($basePalette, "navy-1");
+      font-size: map-get($fontSize, "medium");
+      font-weight: 700;
+      text-decoration: none;
+      &:hover {
+        color: map-get($basePalette, "navy-3");
+      }
+    }
+  }
+
+  .secondary-nav {
+    li > span {
+      display: inline-block;
+      height: 100%;
+      width: 20px;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    li > ul > li svg {
+      width: 25px;
+      flex: 0 0 auto;
+      margin-right: 7px;
+      @media (min-width: $large) {
+        width: 30px;
+      }
+    }
+
+    li > ul > li a {
+      display: flex;
+      align-items: center;
+      white-space: initial;
+      line-height: initial;
+    }
+  }
+
+  .show-mobile {
+    display: none;
+
+    @media (max-width: $small) {
+      display: inline;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@import '_queries';
+
+// @font-face {
+//   font-family: 'SuisseIntl';
+//   font-weight: 300;
+//   src: url('/assets/fonts/suisseintl-light-webfont.woff2') format('woff2'),
+//        url('/assets/fonts/suisseintl-light-webfont.woff') format('woff');
+//   font-display: swap;
+// }
+// @font-face {
+//   font-family: 'SuisseIntl';
+//   font-weight: 400;
+//   src: url('/assets/fonts/suisseintl-regular-webfont.woff2') format('woff2'),
+//        url('/assets/fonts/suisseintl-regular-webfont.woff') format('woff');
+//   font-display: swap;
+// }
+// @font-face {
+//   font-family: 'SuisseIntl';
+//   font-weight: 700;
+//   src: url('/assets/fonts/suisseintl-semibold-webfont.woff2') format('woff2'),
+//        url('/assets/fonts/suisseintl-semibold-webfont.woff') format('woff');
+//   font-display: swap;
+// }
+
+@mixin font-default {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 16px;
+  // @media (max-width: $small) {
+  //   font-size: 11px;
+  // }
+  // @media (min-width: $large) {
+  //   font-size: 19px;
+  // }
+}
+
+$fontSize: (
+  "small": 0.9rem,
+  "medium": 1rem,
+  "large": 1.5rem,
+);
