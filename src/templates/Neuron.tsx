@@ -24,6 +24,7 @@ import Collapsible from '../components/Collapsible';
 
 import MtypeFactsheet from '../components/MtypeFactsheet';
 import EtypeFactsheet from '../components/EtypeFactsheet';
+import ModelMorphologyFactsheet from '../components/ModelMorphologyFactsheet';
 import Factsheet from '../components/Factsheet';
 import MorphHistogram from '../components/MorphHistogram';
 import ImageViewer from '../components/ImageViewer';
@@ -39,6 +40,8 @@ import models from '../models.json';
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
 const { TabPane } = Tabs;
+
+const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
 
 export type NeuronsTemplateProps = {
@@ -133,13 +136,11 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
     return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
   };
 
-  const memodelArchiveHref = [
-    basePath,
-    '/data/memodel_archives',
-    encodeURIComponent(currentMtype),
-    encodeURIComponent(currentEtype),
-    `${currentInstance}.tar.xz`
-  ].join('/');
+  const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
+
+  const morphologyName = currentInstance
+    ? currentInstance.match(modelMorphologyRe)[1]
+    : null;
 
   return (
     <>
@@ -212,52 +213,41 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
           </HttpData>
         )} */}
 
-        <Collapsible className="mt-4" title={`E-Type ${currentEtype}`}>
+        <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
           <HttpData path={etypeFactsheetPath(currentInstance)}>
             {data => (
-              <EtypeFactsheet data={data} />
-            )}
-          </HttpData>
-        </Collapsible>
-
-        {/* {currentInstance && (
-          <HttpData path={etypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}>
-            {data => (
-              <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
+              <>
                 <EtypeFactsheet data={data} />
                 <div className="text-right mt-3 mb-3">
                   <Button
                     type="primary"
-                    href={etypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}
+                    href={etypeFactsheetPath(currentInstance)}
                     download
                   >
                     Download factsheet
                   </Button>
                 </div>
-
-                <h3>Experimental traces used for model fitting</h3>
-                <ESData query={ephysByNameDataQuery(data[4].value)}>
-                  {esDocuments => (
-                    <Tabs type="card" className="mt-3">
-                      {esDocuments && esDocuments.map(esDocument => (
-                        <TabPane key={esDocument._source.name} tab={esDocument._source.name}>
-                          <div style={{ minHeight: '600px' }}>
-                            <NexusPlugin
-                              name="neuron-electrophysiology"
-                              resource={esDocument._source}
-                              nexusClient={nexus}
-                            />
-                          </div>
-                        </TabPane>
-                      ))}
-                    </Tabs>
-                  )}
-                </ESData>
-
-              </Collapsible>
+              </>
             )}
           </HttpData>
-        )} */}
+          {/* TODO: add experimental traces used for model fitting */}
+        </Collapsible>
+
+        <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
+          <h3>Anatomy</h3>
+          <ModelMorphologyFactsheet morphologyName={morphologyName}/>
+          <div className="row end-xs mt-3 mb-3">
+            <div className="col">
+              <Button
+                type="primary"
+                download
+                href={memodelArchiveHref}
+              >
+                Download model
+              </Button>
+            </div>
+          </div>
+        </Collapsible>
 
         {/* {currentInstance && (
           <HttpData path={metypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}>

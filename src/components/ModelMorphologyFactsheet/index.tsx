@@ -3,7 +3,7 @@ import NumberFormat from '../NumberFormat';
 import isNil from 'lodash/isNil';
 
 import Unit from '../Unit';
-import expMorphologyStats from '../../exp-morphology-stats.json';
+import ModelMorphologyStats from '../../model-morphology-stats.json';
 
 
 const classPrefix = 'factsheet__';
@@ -62,7 +62,7 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
   morphologyName,
   className = '',
 }) => {
-  const stats = expMorphologyStats[morphologyName];
+  const stats = ModelMorphologyStats[morphologyName];
 
   if (!stats) {
     return (
@@ -82,8 +82,6 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
 
   return (
     <div className={`${classPrefix}basis ${className}`}>
-      <h3>Morphology factsheet</h3>
-
       <div className="mb-3 mt-3">
         <MorphologyFactsheetEntry fact={{
           name: 'soma diameter',
