@@ -70,7 +70,7 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
             <Link href="/experimental-data/neuronal-morphology">Neuron Morphology</Link>
           </li>
           <li>
-            <Link href="/experimental-data/neuron-electrophysiology">Neuron Electrophysiology</Link>
+            <Link href="/experimental-data/neuronal-electrophysiology">Neuron Electrophysiology</Link>
           </li>
         </ul>
       </li>
