@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ScrollTo from '../../components/ScrollTo';
-// import './style.scss';
 
 
 const classPrefix = 'data-container__';
@@ -22,7 +21,7 @@ const DataContainer: React.FC<DataContainerProps> = ({
           <div className="center">{children}</div>
           <div className="scroll-to">
             <ScrollTo anchor="filters" direction="up">
-              Return to filters
+              Return to selectors
             </ScrollTo>
           </div>
         </div>

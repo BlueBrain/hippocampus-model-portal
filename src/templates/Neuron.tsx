@@ -202,16 +202,6 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
       </Filters>
 
       <DataContainer visible={!!currentInstance}>
-        {/* {currentMtype && (
-          <HttpData path={`${basePath}/data/MTypes/L5_BTC/factsheet.json`}>
-            {data => (
-              <Collapsible title={`M-Type ${currentMtype} Factsheet`}>
-                <MtypeFactsheet data={data} />
-                <MorphHistogram className="mt-4" region={currentRegion} mtype={currentMtype} />
-              </Collapsible>
-            )}
-          </HttpData>
-        )} */}
 
         <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
           <HttpData path={etypeFactsheetPath(currentInstance)}>
@@ -236,7 +226,8 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
         <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
           <h3>Anatomy</h3>
           <ModelMorphologyFactsheet morphologyName={morphologyName}/>
-          <div className="row end-xs mt-3 mb-3">
+
+          <div className="row end-xs mt-3 mb-4">
             <div className="col">
               <Button
                 type="primary"
@@ -247,90 +238,23 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
               </Button>
             </div>
           </div>
+
+          <NeuronMorphology
+            path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`}
+          />
+          <div className="row end-xs mt-3 mb-3">
+            <div className="col">
+              <Button
+                type="primary"
+                download
+                href={`${basePath}/data/model-morphologies-swc/${morphologyName}.asc`}
+              >
+                Download morphology
+              </Button>
+            </div>
+          </div>
         </Collapsible>
 
-        {/* {currentInstance && (
-          <HttpData path={metypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}>
-            {data => (
-              <>
-                <Collapsible className="mt-4" title={`ME-Type Instance ${currentInstance} Factsheet`}>
-                  <h3>Anatomy</h3>
-                  {data && (
-                    <Factsheet facts={data[0].values}/>
-                  )}
-                  <h3 className="mt-3">Physiology</h3>
-                  {data && (
-                    <Factsheet facts={data[1].values}/>
-                  )}
-
-                  <div className="row end-xs mt-3 mb-3">
-                    <div className="col">
-                      <Button
-                        type="primary"
-                        download
-                        href={memodelArchiveHref}
-                      >
-                        Download model
-                      </Button>
-                    </div>
-                  </div>
-
-                  <NeuronMorphology
-                    path={`${basePath}/data/memodel_morphologies/${data[2].value}.swc`}
-                  />
-
-                  {data && (
-                    <ESData
-                      query={morphologyDataQuery(currentMtype, data[2].value)}
-                    >
-                      {esDocuments => (
-                        <>
-                          {!!esDocuments  && (
-                            <NexusFileDownloadButton
-                              className="mt-2"
-                              filename={getMorphologyDistribution(esDocuments[0]._source).name}
-                              url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
-                              org={sscx.org}
-                              project={sscx.project}
-                            >
-                              Download morphology
-                            </NexusFileDownloadButton>
-                          )}
-                          {!!esDocuments && (
-                            <NexusPlugin
-                              className="mt-3"
-                              name="neuron-morphology"
-                              resource={esDocuments[0]._source}
-                              nexusClient={nexus}
-                            />
-                          )}
-                        </>
-                      )}
-                    </ESData>
-                  )}
-
-
-                  <div className="row mt-4">
-                    <div className="col-xs-12 col-sm-6">
-                      <ImageViewer src="https://bbp.epfl.ch/nmc-portal/documents/10184/1921846/cADpyr_dend-C060114A2_axon-C060114A5.png" />
-                    </div>
-                  </div>
-
-                  <div className="row mt-4">
-                    <div className="col-xs-12 col-sm-6">
-                      <h4 className="mt-4">EPSP Attenuation</h4>
-                      <VideoPlayer src="https://bbp.epfl.ch/project/media/nmc-portal/METypes/L5_TTPC1_cADpyr/dend-C060114A2_axon-C060114A5/epsp.mp4" />
-                    </div>
-                    <div className="col-xs-12 col-sm-6">
-                    <h4 className="mt-4">bAP Attenuation</h4>
-                      <VideoPlayer src="https://bbp.epfl.ch/project/media/nmc-portal/METypes/L5_TTPC1_cADpyr/dend-C060114A2_axon-C060114A5/bap.mp4" />
-                    </div>
-                  </div>
-                </Collapsible>
-              </>
-            )}
-          </HttpData>
-        )} */}
       </DataContainer>
     </>
   );

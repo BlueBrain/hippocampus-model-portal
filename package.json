@@ -13,16 +13,19 @@
     "abort-controller": "^3.0.0",
     "antd": "^4.13.1",
     "chart.js": "^2.9.4",
+    "d3": "^6.6.1",
     "expr-eval": "^2.0.2",
     "file-saver": "^2.0.5",
     "flexboxgrid": "^6.3.1",
+    "morphoviewer": "^0.1.20",
     "next": "10.0.8",
     "node-fetch": "^2.6.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",
     "react-image-lightbox": "^5.1.1",
-    "sass": "^1.32.8"
+    "sass": "^1.32.8",
+    "swcmorphologyparser": "^0.1.11"
   },
   "devDependencies": {
     "@types/node": "^14.14.32",
