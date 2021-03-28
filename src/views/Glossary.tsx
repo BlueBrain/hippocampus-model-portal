@@ -6,8 +6,6 @@ import { accentColors } from '../config';
 import { Color } from '../types';
 import glossaryContent from './glossary-content.json';
 
-// import './Glossary.scss';
-
 
 const colorName: Color = 'lavender';
 const color = accentColors[colorName];
@@ -39,13 +37,11 @@ const Glossary: React.FC = () => {
           </section>
         ))}
 
-        <img style={{ width: '100%' }} src="/assets/images/etypes.png" alt="etype" />
-
-        <h4>Spike Characteristics</h4>
-        <img style={{ width: '100%' }} src="/assets/images/spike.png" alt="spike" />
-
-        <h4>Firing Behavior</h4>
-        <img style={{ width: '100%' }} src="/assets/images/firing-behavior.png" alt="firing-behavior" />
+        <img
+          className="w-100 mt-2"
+          src="/model/assets/images/etypes.png"
+          alt="etype"
+        />
       </div>
     </FullPage>
   );

@@ -29,38 +29,18 @@
     ["c.v. of PSP", "the coefficient of variation of the PSP amplitude measured as the ratio of SD and mean"]
 
   ],
-  "List of single cell stimulus protocols": [
-    ["IDRest", "Step current injection in soma. Current amplitude is a percentage of the rheobase."],
-    ["APThreshold", "Ramp current inject in soma. Current amplitude is a percentage of the rheobase."],
-    ["APWaveform", "High resolution (higher sampling frequency) short step current injection in soma. Typically elicits 1 or 2 action potentials."]
-  ],
   "List of m-types": [
-    ["DAC", "Descending Axon Cell"],
-    ["NGC-DA", "Neurogliaform Cell with dense axonal arborization"],
-    ["NGC-SA", "Neurogliaform Cell with slender axonal arborization"],
-    ["HAC", "Horizontal Axon Cell"],
-    ["LAC", "Large Axon Cell"],
-    ["SAC", "Small Axon Cell"],
-    ["MC", "Martinotti Cell"],
-    ["BTC", "Bitufted Cell"],
-    ["DBC", "Double Bouquet Cell"],
-    ["BP", "Bipolar Cell"],
-    ["NGC", "Neurogliaform Cell"],
-    ["LBC", "Large Basket Cell"],
-    ["NBC", "Nest Basket Cell"],
-    ["SBC", "Small Basket Cell"],
-    ["ChC", "Chandelier Cell"],
+    ["PPA", "Perforant Pathway Associated Cell"],
+    ["SCA", "Schaffer Collateral Associated Cell"],
+    ["AA", "Axon Axonic Cell"],
+    ["BS", "Bistratified Cell"],
+    ["PVBC", "PV+ Basket Cell"],
+    ["CCKBC", "CCK+ Basket Cell"],
     ["PC", "Pyramidal Cell"],
-    ["SP", "Star Pyramidal Cell"],
-    ["SS", "Spiny Stellate Cell"],
-    ["TTPC1", "Thick-tufted Pyramidal Cell with a late bifurcating apical tuft"],
-    ["TTPC2", "Thick-tufted Pyramidal Cell with an early bifurcating apical tuft"],
-    ["UTPC", "Untufted Pyramidal Cell"],
-    ["STPC", "Slender-tufted Pyramidal Cell"],
-    ["TPC_L4", "Tufted Pyramidal Cell with apical dendrites terminating in layer 4"],
-    ["TPC_L1", "Tufted Pyramidal Cell with apical dendrites terminating in layer 1"],
-    ["IPC", "Pyramidal Cell with inverted apical-like dendrites"],
-    ["BPC", "Pyramidal Cell with bipolar apical-like dendrites"]
+    ["BP", "Back-Projecting Cell"],
+    ["OLM", "Oriens Lacunosum-Moleculare Cell"],
+    ["Tri", "Trilaminar Cell"],
+    ["Ivy", "Ivy Cell"]
   ],
   "List of s-types": [
     ["I1", "Inhibitory, facilitating"],
