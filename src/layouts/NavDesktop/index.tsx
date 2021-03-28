@@ -77,7 +77,7 @@ const NavDesktop = () => {
           </div>
         )}
       </li>
-      <li>
+      {/* <li>
         <NavButton
           path="/downloads"
           name="Download"
@@ -85,14 +85,14 @@ const NavDesktop = () => {
           notifications={undefined}
           highlight
         />
-      </li>
+      </li> */}
       <li>
         <NavButton path="/glossary" name="Glossary" />
       </li>
       <li>
         <NavButton
           path="/contact"
-          name="Contact"
+          name="Contact Us"
         />
       </li>
     </ul>

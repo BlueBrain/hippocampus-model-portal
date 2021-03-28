@@ -21,22 +21,9 @@
 html, body {
   @include font-default;
   color: map-get($basePalette, "white");
-  background-color: map-get($basePalette, "navy-4");
+  background-color: #17151A;
   scroll-behavior: smooth;
 }
-
-// html,
-// body {
-//   width: 100%;
-//   max-width: 100%;
-// }
-
-// html,
-// body,
-// div {
-//   margin: 0;
-//   padding: 0;
-// }
 
 #__next {
   height: 100%;
@@ -44,7 +31,6 @@ html, body {
 
 button {
   @include font-default;
-  // color: map-get($basePalette, "white");
 }
 
 input {
@@ -1703,47 +1689,6 @@ $collapsible-padding: 20px 30px;
 
 
 
-// SynapticPathwaySelector
-.synaptic_pathways_svg__st2 {
-  fill: none;
-}
-
-.synaptic_pathways_svg__st3 {
-  enable-background: new;
-}
-
-.synaptic_pathways_svg__st4 {
-  fill: #fff;
-}
-
-.synaptic_pathways_svg__st5 {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.1629;
-  stroke-miterlimit: 10;
-}
-
-#pre_pathway_svg__layers,
-#post_pathway_svg__layers {
-  path {
-    cursor: pointer;
-    fill: #303354;
-    transition: fill 0.1s ease-in-out;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1938,81 +1883,19 @@ $collapsible-padding: 20px 30px;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  // width: 100%;
-  // position: relative;
-  // box-sizing: border-box;
-  // overflow: hidden;
-  background-color: map-get($basePalette, "navy-4");
-  background-repeat: no-repeat;
-  background-position: center;
-  // background-attachment: fixed;
-  background-image: url('/sscx-portal/assets/images/backgrounds/default.svg');
-  background-size: cover;
+  background-color: #17151A;
 
   @media (max-width: $small) {
     padding: 60px 20px;
   }
-
-  &.background-alt {
-    background-image: url('/sscx-portal/assets/images/backgrounds/alt.svg');
-  }
-
-  // .center {
-    // display: block;
-    // width: 100%;
-    // margin: 60px auto 60px;
-    // max-width: 2160px;
-    // display: flex;
-    // flex-wrap: wrap;
-    // justify-content: space-between;
-    // @media (max-width: $small) {
-    //   flex-direction: column;
-    // }
-  // }
-
-  // .center-col {
-  //   // flex: 50%;
-  //   flex-grow: 1;
-  //   &:first-child {
-  //     // margin-right: 40px;
-  //   }
-  //   &:last-child {
-  //     // margin-left: 40px;
-  //   }
-  //   @media (max-width: $small) {
-  //     &:first-child {
-  //       margin-right: 0;
-  //     }
-  //     &:last-child {
-  //       margin-left: 0;
-  //     }
-  //   }
-  // }
 }
 
 .scroll-to {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
-  // left: 0;
   width: 100%;
 }
-
-
-// .filters__basis {
-//   @media (max-width: $small) {
-//     .center-col {
-//       align-self: center;
-//     }
-//     .title__basis {
-//       display: inline-block;
-//     }
-//   }
-// }
-
-
-
-
 
 
 
@@ -2108,7 +1991,7 @@ $collapsible-padding: 20px 30px;
 .full-page__basis {
   padding: 160px 60px;
   min-height: 100vh;
-  background-color: map-get($basePalette, "navy-4");
+  background-color: #17151A;
   @media (max-width: $small) {
     padding: 90px 30px 60px;
   }
@@ -2438,7 +2321,7 @@ $collapsible-padding: 20px 30px;
 
   .flyout {
     position: absolute;
-    left: 0;
+    left: -20px;
     top: 60px;
     background: map-get($basePalette, "white");
     border-top-left-radius: 5px;
@@ -2469,7 +2352,7 @@ $collapsible-padding: 20px 30px;
   }
 
   .secondary-nav {
-    width: 300px;
+    width: 240px;
 
     button {
       border-bottom: 1px solid map-get($basePalette, "grey-2");
@@ -2520,7 +2403,7 @@ $collapsible-padding: 20px 30px;
     li.active > ul {
       display: flex;
       position: absolute;
-      left: 300px;
+      left: 240px;
       width: 200px;
       top: 0;
       bottom: 0;
@@ -2536,7 +2419,7 @@ $collapsible-padding: 20px 30px;
       border-bottom-right-radius: 5px;
 
       @media (min-width: $large) {
-        width: 300px;
+        width: 240px;
       }
     }
 
@@ -2790,7 +2673,7 @@ $collapsible-padding: 20px 30px;
   #section-3 {
     min-height: 100vh;
     padding-top: 90px;
-    background-color: map-get($basePalette, "navy-4");
+    background-color: #17151A;
 
     .intro {
       text-align: center;
