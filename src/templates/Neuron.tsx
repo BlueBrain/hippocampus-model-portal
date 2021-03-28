@@ -154,7 +154,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
             />
             <InfoBox
               color="grey-1"
-              text="We labeled single neurons with biocytin to stain their axonal and dendritic morphologies to enable their 3D reconstruction and their objective classification into morphological types (m-types). In addition, we also characterized the electrical firing patterns of these neurons to different intensities of step currents injected in the soma to group their response into electrical types (e-types). We then mapped the e-types expressed in each m-type to account for the observed diversity of morpho-electrical subtypes (me-types)."
+              text="We reconstructed the 3D morphology of single neurons and classified them into morphological types (m-types). In addition, we recorded electrical traces from the same cell types and classified the traces into electrical types (e-types). Finally, we mapped the e-types expressed in each m-type to account for the observed diversity of morpho-electrical subtypes (me-types)."
             />
           </div>
           <div className="col-xs-12 col-lg-6">
@@ -190,7 +190,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
                   <List
                     list={instances}
                     value={currentInstance}
-                    title={`Model instance ${instances.length ? '('+instances.length+')' : ''}`}
+                    title={`ME-type instance ${instances.length ? '('+instances.length+')' : ''}`}
                     color="grey-1"
                     onSelect={setInstance}
                   />

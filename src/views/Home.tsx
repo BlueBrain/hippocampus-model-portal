@@ -10,11 +10,9 @@ const Home: React.FC = () => (
     <section id="section-3">
       <div className="intro">
         <h2 className="text-white">Explore</h2>
-        <h3>Navigate the various datasets made available!</h3>
+        <h3>Explore the existing Hippocampus model and all its components</h3>
         <p>
-          In order to address the still existing gaps in our knowledge in brain
-          ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
+          In this section, you can navigate through the different components of the hippocampus CA1 model. The Hub is under ongoing development, so new content will be added periodically. The full model will be completely accessible once the associated publications are released.
         </p>
       </div>
 

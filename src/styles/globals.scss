@@ -2794,7 +2794,8 @@ $collapsible-padding: 20px 30px;
 
     .intro {
       text-align: center;
-      margin-bottom: 2rem;
+      margin: 0 auto 2rem auto;
+      max-width: 860px;
 
       h2 {
         text-transform: uppercase;

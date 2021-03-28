@@ -77,7 +77,7 @@ const NeuronElectrophysiology: React.FC = () => {
             />
             <InfoBox
               color="grey-1"
-              text="Electrical traces were recorded from neurons using whole-cell patch clamp experiments in brain slices. A standardized stimulus protocol, called the e-code, is injected in each cell. Our scientists then classify the cells based on their firing type in different electrical types (e-types)."
+              text="We recorded electrical traces from neurons using single-cell recording experiments in brain slices. Then, we classified the traces in different electrical types (e-types) based on their firing patterns. We have identified one e-type for excitatory cells and four e-types for inhibitory cells."
             />
           </div>
 

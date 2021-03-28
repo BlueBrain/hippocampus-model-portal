@@ -3,7 +3,6 @@ import React from 'react';
 import NeuronTemplate from '../../templates/Neuron';
 import { colorName, sectionTitle } from './config';
 import Collapsible from '../../components/Collapsible';
-// import { neuronFactsheetPath } from '../../queries/http';
 
 
 const pathwayFactsheetPath = () => '';

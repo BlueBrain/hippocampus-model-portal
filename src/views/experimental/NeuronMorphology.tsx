@@ -94,7 +94,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
             />
             <InfoBox
               color="grey-1"
-              text="Reconstructed neurons are classified into diverse morphological types (m-types). Each m-type has several instances of reconstructed axonal and dendritic morphologies. Using objective classification methods, we have identified 60 m-types in the primary rat Somatosensory Cortex."
+              text="We classified neuronal morphologies in different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we have identified 12 m-types in rat hippocampus CA1."
             />
           </div>
           <div className="col-xs-12 col-lg-6">
