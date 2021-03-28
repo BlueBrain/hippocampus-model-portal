@@ -67,19 +67,10 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
             </Link> */}
           </li>
           <li>
-            <Link href="/experimental-data/neuronal-morphology">
-              <a>
-                Neuron Morphology
-              </a>
-            </Link>
+            <Link href="/experimental-data/neuronal-morphology">Neuron Morphology</Link>
           </li>
           <li>
-            <span className="inactive">Neuron Electrophysiology</span>
-            {/* <Link href="/experimental-data/neuron-electrophysiology">
-              <a>
-                Neuron Electrophysiology
-              </a>
-            </Link> */}
+            <Link href="/experimental-data/neuron-electrophysiology">Neuron Electrophysiology</Link>
           </li>
         </ul>
       </li>
@@ -164,12 +155,7 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
             </Link> */}
           </li>
           <li>
-            <span className="inactive">Neurons</span>
-            {/* <Link href="/digital-reconstructions/neurons">
-              <a>
-                Neurons
-              </a>
-            </Link> */}
+            <Link href="/digital-reconstructions/neurons">Neurons</Link>
           </li>
         </ul>
       </li>

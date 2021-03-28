@@ -8,8 +8,8 @@ import get from 'lodash/get';
 import { etypeFactsheetPath, metypeFactsheetPath } from '../queries/http';
 import ServerSideContext from '../context/server-side-context';
 import Title from '../components/Title';
+import LayerSelector from '../components/LayerSelector';
 import InfoBox from '../components/InfoBox';
-import { lorem } from '../views/Styleguide';
 import Filters from '../layouts/Filters';
 import Pills from '../components/Pills';
 import HttpData from '../components/HttpData';
@@ -34,6 +34,9 @@ import NexusPlugin from '../components/NexusPlugin';
 import NexusFileDownloadButton from '../components/NexusFileDownloadButton';
 import { morphologyDataQuery, ephysByNameDataQuery } from '../queries/es';
 import { basePath } from '../config';
+import models from '../models.json';
+
+import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
 const { TabPane } = Tabs;
 
@@ -53,26 +56,24 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
 }) => {
   const router = useRouter();
   const nexus = useNexusContext();
-  const serverSideContext = useContext(ServerSideContext);
+  // const serverSideContext = useContext(ServerSideContext);
 
-  const query = { ...serverSideContext?.query, ...router?.query };
+  const query = {
+    // ...serverSideContext?.query,
+    ...router?.query
+  };
 
-  const [memodelIndex, setMemodelIndex] = useState<any>(null);
-  const [memodelNumberExceptions, setMemodelNumberExceptions] = useState<any>(null);
-
-  const currentRegion: BrainRegion = query.brain_region as BrainRegion;
   const currentLayer: Layer = query.layer as Layer;
-  const currentEtype: string = query.etype as string;
   const currentMtype: string = query.mtype as string;
+  const currentEtype: string = query.etype as string;
   const currentInstance: string = query.instance as string;
 
   const setParams = (params: Record<string, string>): void => {
     const query = {
       ...{
-        brain_region: currentRegion,
         layer: currentLayer,
-        etype: currentEtype,
         mtype: currentMtype,
+        etype: currentEtype,
         instance: currentInstance,
       },
       ...params,
@@ -80,14 +81,6 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
     router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setRegion = (region: BrainRegion) => {
-    setParams({
-      'brain_region': region,
-      mtype: null,
-      etype: null,
-      instance: null,
-    });
-  };
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
@@ -113,22 +106,27 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
     setParams({ instance })
   };
 
-  const mtypes = currentLayer && memodelIndex
-    ? Object.keys(memodelIndex[currentRegion])
-      .filter(mtype => currentLayer.match(/\d+/)[0].includes(mtype.match(/\d+/)[0]))
+  const mtypes = currentLayer
+    ? models
+      .filter(model => model.layer === currentLayer)
+      .map(model => model.mtype)
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur],[])
+      .sort()
     : [];
 
-  const etypes = currentMtype && memodelIndex
-    ? memodelIndex[currentRegion][currentMtype]
+  const etypes = currentMtype
+    ? models
+      .filter(model => model.mtype === currentMtype)
+      .map(model => model.etype)
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur],[])
+      .sort()
     : [];
 
-  const memodelInstanceRange = () => {
-    return range(1, );
-  }
-
-  const instances = currentEtype && memodelIndex
-    ? range(1, get(memodelNumberExceptions, `${currentMtype}.${currentEtype}.${currentRegion}`, 5) + 1)
-      .map(idx => `${currentMtype}_${currentEtype}_${idx}`)
+  const instances = currentEtype
+    ? models
+      .filter(model => model.mtype === currentMtype && model.etype === currentEtype)
+      .map(model => model.name)
+      .sort()
     : [];
 
   const getMorphologyDistribution = (morphologyResource: any) => {
@@ -140,95 +138,70 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
     '/data/memodel_archives',
     encodeURIComponent(currentMtype),
     encodeURIComponent(currentEtype),
-    encodeURIComponent(currentRegion),
     `${currentInstance}.tar.xz`
   ].join('/');
 
-  useEffect(() => {
-    if (memodelIndex) return;
-
-    fetch(`${basePath}/data/memodel-number-exceptions.json`)
-      .then(res => res.json())
-      .then(memodelNumberExceptions => setMemodelNumberExceptions(memodelNumberExceptions))
-      .then(() => fetch(`${basePath}/data/memodel-index.json`))
-      .then(res => res.json())
-      .then(memodelIndex => setMemodelIndex(memodelIndex));
-  }, []);
-
   return (
     <>
-      <Filters primaryColor={color} hasData={!!currentInstance}>
-        <div className="center-col">
-          <Title
-            primaryColor={color}
-            title="Neurons"
-            subtitle={sectionTitle}
-            hint="Select a subregion of interest in the S1 of the rat brain."
-          />
-          <div>
-            <InfoBox
-              text="We labeled single neurons with biocytin to stain their axonal and dendritic morphologies to enable their 3D reconstruction and their objective classification into morphological types (m-types). In addition, we also characterized the electrical firing patterns of these neurons to different intensities of step currents injected in the soma to group their response into electrical types (e-types). We then mapped the e-types expressed in each m-type to account for the observed diversity of morpho-electrical subtypes (me-types)."
-              color={color}
+      <Filters color={color} hasData={!!currentInstance}>
+        <div className="row bottom-xs w-100">
+          <div className="col-xs-12 col-lg-6">
+            <Title
+              primaryColor="grey-1"
+              title={<span>Neurons</span>}
+              subtitle="Digital Reconstructions"
             />
-            <br />
-            <Pills
-              title="1. Select a subregion"
-              list={['S1DZ', 'S1DZO', 'S1FL', 'S1HL', 'S1J', 'S1Sh', 'S1Tr', 'S1ULp']}
-              defaultValue={currentRegion}
-              onSelect={setRegion as (s: string) => void}
-              color={color}
+            <InfoBox
+              color="grey-1"
+              text="We labeled single neurons with biocytin to stain their axonal and dendritic morphologies to enable their 3D reconstruction and their objective classification into morphological types (m-types). In addition, we also characterized the electrical firing patterns of these neurons to different intensities of step currents injected in the soma to group their response into electrical types (e-types). We then mapped the e-types expressed in each m-type to account for the observed diversity of morpho-electrical subtypes (me-types)."
             />
           </div>
-        </div>
-        <div className="center-col">
-          <ComboSelector
-            selector={
-              <MicrocircuitSelector
-                color={accentColors[color]}
-                defaultActiveLayer={currentLayer}
-                onLayerSelected={setLayer}
-                disabled={!currentRegion}
-              />
-            }
-            list1={
-              <List
-                title="m-type"
-                list={mtypes}
-                value={currentMtype}
-                onSelect={setMtype}
-                color={color}
-              />
-            }
-            list2={
-              <List
-                title="e-type"
-                list={etypes}
-                value={currentEtype}
-                onSelect={setEtype}
-                color="orange"
-              />
-            }
-            list3={
-              <List
-                title="me-type instance"
-                block
-                list={instances}
-                value={currentInstance}
-                onSelect={setInstance}
-                color="orange"
-              />
-            }
-            selectorTitle="2. Choose a layer"
-            listsTitle="3. Choose mtype, etype and neuron instance"
-            list1Open={!!currentLayer}
-            list2Open={!!currentMtype}
-            list3Open={!!currentMtype && !!currentEtype}
-          />
+          <div className="col-xs-12 col-lg-6">
+            <div className={styles.selector}>
+              <div className={styles.selectorColumn}>
+                <div className={styles.selectorHead}>1. Choose a layer</div>
+                <div className={styles.selectorBody}>
+                  <LayerSelector
+                    activeLayer={currentLayer}
+                    onLayerSelected={setLayer}
+                  />
+                </div>
+              </div>
+              <div className={styles.selectorColumn}>
+                <div className={styles.selectorHead}>2. Select model</div>
+                <div className={styles.selectorBody}>
+                  <List
+                    className="mb-2"
+                    list={mtypes}
+                    value={currentMtype}
+                    title={`M-type ${mtypes.length ? '('+mtypes.length+')' : ''}`}
+                    color="grey-1"
+                    onSelect={setMtype}
+                  />
+                  <List
+                    className="mb-2"
+                    list={etypes}
+                    value={currentEtype}
+                    title={`E-type ${etypes.length ? '('+etypes.length+')' : ''}`}
+                    color="grey-1"
+                    onSelect={setEtype}
+                  />
+                  <List
+                    list={instances}
+                    value={currentInstance}
+                    title={`Model instance ${instances.length ? '('+instances.length+')' : ''}`}
+                    color="grey-1"
+                    onSelect={setInstance}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Filters>
 
-      <DataContainer>
-        {currentMtype && (
+      <DataContainer visible={!!currentInstance}>
+        {/* {currentMtype && (
           <HttpData path={`${basePath}/data/MTypes/L5_BTC/factsheet.json`}>
             {data => (
               <Collapsible title={`M-Type ${currentMtype} Factsheet`}>
@@ -237,9 +210,17 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
               </Collapsible>
             )}
           </HttpData>
-        )}
+        )} */}
 
-        {currentInstance && (
+        <Collapsible className="mt-4" title={`E-Type ${currentEtype}`}>
+          <HttpData path={etypeFactsheetPath(currentInstance)}>
+            {data => (
+              <EtypeFactsheet data={data} />
+            )}
+          </HttpData>
+        </Collapsible>
+
+        {/* {currentInstance && (
           <HttpData path={etypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}>
             {data => (
               <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
@@ -276,9 +257,9 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
               </Collapsible>
             )}
           </HttpData>
-        )}
+        )} */}
 
-        {currentInstance && (
+        {/* {currentInstance && (
           <HttpData path={metypeFactsheetPath(currentRegion, currentMtype, currentEtype, currentInstance)}>
             {data => (
               <>
@@ -308,7 +289,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
                     path={`${basePath}/data/memodel_morphologies/${data[2].value}.swc`}
                   />
 
-                  {/* {data && (
+                  {data && (
                     <ESData
                       query={morphologyDataQuery(currentMtype, data[2].value)}
                     >
@@ -336,7 +317,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
                         </>
                       )}
                     </ESData>
-                  )} */}
+                  )}
 
 
                   <div className="row mt-4">
@@ -359,7 +340,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
               </>
             )}
           </HttpData>
-        )}
+        )} */}
       </DataContainer>
     </>
   );

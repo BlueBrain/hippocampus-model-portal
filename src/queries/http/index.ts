@@ -15,12 +15,9 @@ export const subregionMicrocircuitFactsheetPath = (subregion: string): string =>
 }
 
 export const etypeFactsheetPath = (
-  region: string,
-  mtype: string,
-  etype: string,
   instance: string
 ): string => {
-  return `${basePath}/data/memodel_factsheets/${mtype}/${etype}/${region}/${instance}/e_type_factsheeet.json`;
+  return `${basePath}/data/model-info/${instance}/etype_factsheet.json`;
 }
 
 export const metypeFactsheetPath = (

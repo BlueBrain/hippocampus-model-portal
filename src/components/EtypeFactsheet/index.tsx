@@ -3,7 +3,7 @@ import get from 'lodash/get';
 import { Table, Collapse, Popover } from 'antd';
 
 import NumberFormat from '../NumberFormat';
-import IonChannelPlot, { Equation } from '../IonChannelPlot';
+import ChannelParamPlot from '../ChannelParamPlot';
 import styles from './index.module.scss';
 
 
@@ -13,32 +13,48 @@ export type EtypeFactsheetProps = {
   data?: any;
 };
 
+const featureUnit = {
+  voltage_deflection: 'mV',
+  voltage_base: 'mV',
+  steady_state_voltage: 'mV',
+  spikecount: '',
+  time_to_last_spike: 'ms',
+  inv_time_to_first_spike: 'Hz',
+  inv_first_isi: 'Hz',
+  inv_second_isi: 'Hz',
+  inv_third_isi: 'Hz',
+  inv_fourth_isi: 'Hz',
+  inv_fifth_isi: 'Hz',
+  inv_last_isi: 'Hz',
+  mean_frequency: 'ms',
+  ahp_depth: 'mV',
+};
+
 
 const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
   data,
 }) => {
-  // Experimental features and model fitness table data preparation
-  const expFeatures = get(data, '[0].values[0]');
+  // Experimental features table data preparation
+  const expFeatures = data.features;
 
   const tableData = {};
   const protocols = [];
   Object.entries(expFeatures).forEach(([protocol, protocolVal]) => {
     protocols.push(protocol);
     Object.entries(protocolVal).forEach(([measurement, measurementVal]) => {
-      measurementVal.features.sort((f1, f2) => (f1.name > f2.name) ? 1 : -1).forEach(feature => {
+      Object.entries(measurementVal).sort((f1, f2) => (f1[0] > f2[0] ? 1 : -1)).forEach(([featureName, featureValue]) => {
         if (!tableData[protocol]) {
           tableData[protocol] = [];
         }
 
         tableData[protocol].push({
-          key: feature.name,
+          key: featureName,
           protocol,
           measurement,
-          feature: feature.name,
-          unit: feature.unit,
-          mean: feature.values[0].mean,
-          std: feature.values[0].std,
-          modelFitness: feature['model fitness'],
+          feature: featureName,
+          unit: featureUnit[featureName.toLowerCase()],
+          mean: featureValue[0],
+          std: featureValue[1],
         })
       });
     });
@@ -62,15 +78,15 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
       dataIndex: 'std',
       render: (std, row) => <span><NumberFormat value={std} /> {row.unit}</span>
     },
-    {
-      title: 'Model fitness',
-      dataIndex: 'modelFitness',
-      render: modelFitness => <NumberFormat value={modelFitness} />
-    },
+    // {
+    //   title: 'Model fitness',
+    //   dataIndex: 'modelFitness',
+    //   render: modelFitness => <NumberFormat value={modelFitness} />
+    // },
   ];
 
   // Channel mechanisms data preparation
-  const channelMechanisms = get(data, '[1].values[0].location_map');
+  const channelMechanisms = data.distributions
   const sections = Object.keys(channelMechanisms);
 
   return (
@@ -105,17 +121,16 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
           <div className={`row ${styles.mechanismsRow}`} key={section}>
             <div className="col-xs-6 col-md-4">{section}</div>
             <div className="col-xs-6 col-md-8">
-              {Object.entries(channelMechanisms[section].channels).map(([channelName, channelData]: [string, any]) => (
+              {channelMechanisms[section].map(channelParams => (
                 <Popover
-                  key={channelName}
-                  title={channelName}
+                  key={channelParams[0].channel}
+                  title={channelParams[0].channel}
                   content={(
                     <>
-                      {Object.entries(channelData.equations).map(([equationLabel, equation]: [string, Equation]) => (
-                        <IonChannelPlot
-                          key={equationLabel}
-                          name={equationLabel}
-                          equation={equation}
+                      {channelParams.map(channelParam => (
+                        <ChannelParamPlot
+                          key={channelParam.parameter}
+                          channelParam={channelParam}
                         />
                       ))}
                     </>
@@ -124,7 +139,7 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
                   <span
                     className={styles.channelLabel}
                   >
-                    {channelName}
+                    {channelParams[0].channel}
                   </span>
                 </Popover>
               ))}

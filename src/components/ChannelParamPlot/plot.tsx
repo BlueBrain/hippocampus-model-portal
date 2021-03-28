@@ -5,18 +5,20 @@ import { Parser } from 'expr-eval';
 import styles from './styles.module.scss';
 
 
-export type Equation = {
-  latex: string;
-  plot: string;
-  type: 'exponential' | 'uniform';
+export type ChannelParam = {
+  channel: string;
+  parameter: string;
+  distribution: 'uniform' | string;
+  min?: number;
+  max?: number;
+  formula?: string;
 }
 
-type IonChannelPlotProps = {
-  name: string;
-  equation: Equation;
+type ChannelParamPlotProps = {
+  channelParam: ChannelParam;
 }
 
-const IonChannelPlot: React.FC<IonChannelPlotProps> = ({ name, equation }) => {
+const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => {
   const canvasEl = useRef<HTMLCanvasElement>(null);
 
   const createPlot = () => {
@@ -29,8 +31,8 @@ const IonChannelPlot: React.FC<IonChannelPlotProps> = ({ name, equation }) => {
       data: {
         datasets: [{
           fill: 'origin',
-          data: getData(equation),
-          label: equation.type,
+          data: getData(channelParam),
+          label: channelParam.parameter,
           backgroundColor: 'rgba(255, 177, 193, 0.5)',
         }],
         labels: getXAxes(),
@@ -75,21 +77,29 @@ const IonChannelPlot: React.FC<IonChannelPlotProps> = ({ name, equation }) => {
       }).map(Function.call, x => x * 100);
     }
 
-    function getData (data) {
+    function getData (parameter) {
       let arrayValues = [];
-      switch (data.type) {
+      switch (parameter.distribution) {
       case 'uniform':
-        arrayValues = new Array(plotLength).fill(data.latex);
-        maxValue = data.latex;
+        const UNIFORM_CONST = 1;
+        arrayValues = new Array(plotLength).fill(UNIFORM_CONST);
+        maxValue = UNIFORM_CONST;
+        textBottom = UNIFORM_CONST.toString();
         break;
-      case 'exponential':
-        let parser = new Parser();
-        let expr = parser.parse(data.plot);
-        arrayValues = getXAxes().map(xVal => expr.evaluate({ x: xVal }));
+      default:
+        const parser = new Parser();
+        const equation = parameter.formula
+          .replace(/math\.exp/g, 'exp')
+          .replace(/\{/g, '(')
+          .replace(/\}/g, ')');
+
+        const expr = parser.parse(equation);
+        arrayValues = getXAxes().map(xVal => expr.evaluate({ distance: xVal, value: 1 }));
         maxValue = Math.max.apply(null, arrayValues);
+        textBottom = parameter.formula;
         break;
       }
-      textBottom = data.plot;
+
       return arrayValues;
     }
   };
@@ -106,11 +116,10 @@ const IonChannelPlot: React.FC<IonChannelPlotProps> = ({ name, equation }) => {
 
   return (
     <div className={styles.plotContainer}>
-      <span>{name}</span>
       <canvas ref={canvasEl} width="320" height="220" />
     </div>
   );
 };
 
 
-export default IonChannelPlot;
+export default ChannelParamPlot;

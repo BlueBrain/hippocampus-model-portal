@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { keyBy } from 'lodash';
 import { useNexusContext } from '@bbp/react-nexus';
 
-import { sscx } from '../../config';
+import { hippocampus } from '../../config';
 import ImageViewer from '../ImageViewer';
 
 import styles from './styles.module.scss'
@@ -58,7 +58,7 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
 
     nexus.View
       // query ElesticSearch endpoint to get agents by their ids
-      .elasticSearchQuery(sscx.org, sscx.project, sscx.datasetViewId, contributionEsQuery)
+      .elasticSearchQuery(hippocampus.org, hippocampus.project, hippocampus.datasetViewId, contributionEsQuery)
       // extract ES documents
       .then(data => data.hits.hits)
       // extract Nexus original documents

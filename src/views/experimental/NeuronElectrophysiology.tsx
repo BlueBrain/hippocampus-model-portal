@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 
-import ServerSideContext from '../../context/server-side-context';
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
 import ImageViewer from '../../components/ImageViewer';
@@ -16,16 +15,20 @@ import List from '../../components/List';
 import ComboSelector from '../../components/ComboSelector';
 import Collapsible from '../../components/Collapsible';
 import ExpTraceTable from '../../components/ExpTraceTable';
-import eTypes from '../../__generated__/experimentalData.json';
+import traces from '../../traces.json';
 import { basePath } from '../../config';
+import styles from '../../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
 
 const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
-  const serverSideContext = useContext(ServerSideContext);
+  // const serverSideContext = useContext(ServerSideContext);
 
-  const query = { ...serverSideContext.query, ...router.query };
+  const query = {
+    // ...serverSideContext.query,
+    ...router.query
+  };
 
   const setQuery = (query: any) => {
     router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
@@ -46,8 +49,11 @@ const NeuronElectrophysiology: React.FC = () => {
 
   const currentEtype: string = query.etype as string;
   const currentInstance: string = query.etype_instance as string;
-  const etypeData = eTypes.find(etype => etype.label === currentEtype);
-  const instances = etypeData ? etypeData.experiments.map(e => e.label) : [];
+
+  const etypes = Object.keys(traces).sort();
+  const instances = currentEtype
+    ? traces[currentEtype]
+    : []
 
   const getAndSortTraces = (esDocuments) => {
     return esDocuments
@@ -58,55 +64,47 @@ const NeuronElectrophysiology: React.FC = () => {
   return (
     <>
       <Filters
-        primaryColor={colorName}
+        color={colorName}
         backgroundAlt
         hasData={!!currentEtype && !!currentInstance}
       >
-        <div className="center-col">
-          <Title
-            primaryColor={colorName}
-            title="Neuron Electrophysiology"
-            subtitle="Experimental Data"
-            hint="Select a layer of interest in the S1 of the rat brain."
-          />
-          <div className="mb-4">
+        <div className="row bottom-xs w-100">
+          <div className="col-xs-12 col-lg-6">
+            <Title
+              primaryColor={colorName}
+              title={<span>Neuron <br/> Electrophysiology</span>}
+              subtitle="Experimental Data"
+            />
             <InfoBox
-              color={colorName}
+              color="grey-1"
               text="Electrical traces were recorded from neurons using whole-cell patch clamp experiments in brain slices. A standardized stimulus protocol, called the e-code, is injected in each cell. Our scientists then classify the cells based on their firing type in different electrical types (e-types)."
             />
           </div>
-        </div>
-        <div className="center-col">
-          <ComboSelector
-            selector={
-              <img
-                src={`${basePath}/assets/images/electroIllustration.svg`}
-                alt="Electro-physiology"
-                className="electro-phys-image"
-              />
-            }
-            list1={
-              <List
-                title="e-type"
-                list={eTypes.map(etype => etype.label)}
-                color={colorName}
-                onSelect={setEtype}
-                value={currentEtype}
-              />
-            }
-            list2={
-              <List
-                title={`Experiment instance (${instances.length})`}
-                list={instances}
-                color={colorName}
-                onSelect={setInstance}
-                value={currentInstance}
-              />
-            }
-            listsTitle="Select cell type"
-            list2Open={!!currentEtype}
-            withGradient
-          />
+
+          <div className="col-xs-12 col-lg-4 col-lg-offset-1">
+            <div className={styles.selector}>
+              <div className={styles.selectorHead}>Select cell type</div>
+              <div className={styles.selectorBody}>
+                <List
+                  list={etypes}
+                  value={currentEtype}
+                  title="e-type"
+                  color={colorName}
+                  onSelect={setEtype}
+                />
+                <br/>
+                <br/>
+                <br/>
+                <List
+                  list={instances}
+                  value={currentInstance}
+                  title={`Experiment instance (${instances.length})`}
+                  color={colorName}
+                  onSelect={setInstance}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </Filters>
 
@@ -145,7 +143,7 @@ const NeuronElectrophysiology: React.FC = () => {
           <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)}>
             {esDocuments => (
               <>
-                {!!esDocuments && (
+                {!!esDocuments && !!esDocuments.length && (
                   <NexusPlugin
                     name="neuron-electrophysiology"
                     resource={esDocuments[0]._source}

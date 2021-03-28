@@ -14,6 +14,7 @@ type ListProps = {
   onSelect?: (s: string) => void;
   color?: Color;
   block?: boolean;
+  className?: string;
 };
 
 type ListElementProps = {
@@ -46,6 +47,7 @@ const List: React.FC<ListProps> = ({
   value,
   onSelect = () => {},
   color,
+  className = '',
 }) => {
   const handleSelectedElement = (element: string) => onSelect(element);
 
@@ -53,7 +55,7 @@ const List: React.FC<ListProps> = ({
 
   return (
     <div
-      className={`${classPrefixList}basis bg-${color}`}
+      className={`${classPrefixList}basis bg-${color} ${className}`}
       role="radiogroup"
       aria-labelledby={`${classPrefixList}${id}`}
     >

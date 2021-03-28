@@ -1,0 +1,26 @@
+
+.selector {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+}
+
+.selectorColumn {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+}
+
+.selectorHead {
+  text-align: center;
+  background-color: white;
+  color: black;
+}
+
+.selectorBody {
+  padding: 1.4rem;
+  margin: auto;
+  min-width: 340px;
+}

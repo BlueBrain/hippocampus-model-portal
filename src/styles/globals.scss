@@ -2788,6 +2788,8 @@ $collapsible-padding: 20px 30px;
   }
 
   #section-3 {
+    min-height: 100vh;
+    padding-top: 90px;
     background-color: map-get($basePalette, "navy-4");
 
     .intro {

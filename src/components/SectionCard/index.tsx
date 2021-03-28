@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react';
+import Link from 'next/link';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
@@ -33,7 +34,9 @@ const SectionCard: React.FC<SectionCardProps> = ({
       </div>
       <div className={styles.body}>
         {links.map(link => link.href ? (
-          <a href={link.href} key={link.label}>{link.label}</a>
+          <Link key={link.label} href={link.href}>
+            {link.label}
+          </Link>
         ) : (
           <p key={link.label}>{link.label}</p>
         ))}

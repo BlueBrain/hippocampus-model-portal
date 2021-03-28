@@ -47,7 +47,7 @@ export const electroPhysiologyDataQuery = (
 
   return {
     from: 0,
-    size: 10000,
+    size: 100,
     query: {
       bool: {
         filter: [
@@ -67,12 +67,10 @@ export const electroPhysiologyDataQuery = (
           },
           {
             nested: {
-              path: 'distribution',
+              path: 'annotation.hasBody',
               query: {
                 bool: {
-                  must: {
-                    match: { 'distribution.encodingFormat': 'application/nwb' },
-                  },
+                  filter: { term: { 'annotation.hasBody.label.raw': etype } },
                 },
               },
             },
@@ -330,18 +328,6 @@ export const etypeTracesDataQuery = (
               must_not: {
                 exists: {
                   "field": "note",
-                },
-              },
-            },
-          },
-          {
-            nested: {
-              path: 'distribution',
-              query: {
-                bool: {
-                  must: {
-                    match: { 'distribution.encodingFormat': 'application/nwb' },
-                  },
                 },
               },
             },

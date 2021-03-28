@@ -1,0 +1,275 @@
+[
+  {
+    "name": "CA1_int_bAC_011017HP2_20190329115307",
+    "morphology": "011017HP2",
+    "layer": "SO",
+    "etype": "bAC",
+    "mtype": "SO_OLM"
+  },
+  {
+    "name": "CA1_int_bAC_011023HP2_20190329115556",
+    "morphology": "011023HP2",
+    "layer": "SO",
+    "etype": "bAC",
+    "mtype": "SO_BS"
+  },
+  {
+    "name": "CA1_int_bAC_011127HP1_20190329115610",
+    "morphology": "011127HP1",
+    "layer": "SLM",
+    "etype": "bAC",
+    "mtype": "SLM_PPA"
+  },
+  {
+    "name": "CA1_int_bAC_060314AM2_20190329115909",
+    "morphology": "060314AM2",
+    "layer": "SP",
+    "etype": "bAC",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "CA1_int_bAC_971114B_20190329120113",
+    "morphology": "971114B",
+    "layer": "SO",
+    "etype": "bAC",
+    "mtype": "SO_Tri"
+  },
+  {
+    "name": "CA1_int_bAC_980120A_20190329120234",
+    "morphology": "980120A",
+    "layer": "SO",
+    "etype": "bAC",
+    "mtype": "SO_BP"
+  },
+  {
+    "name": "CA1_int_cAC_010710HP2_20190328145252",
+    "morphology": "010710HP2",
+    "layer": "SP",
+    "etype": "cAC",
+    "mtype": "SP_Ivy"
+  },
+  {
+    "name": "CA1_int_cAC_011017HP2_20190328145524",
+    "morphology": "011017HP2",
+    "layer": "SO",
+    "etype": "cAC",
+    "mtype": "SO_OLM"
+  },
+  {
+    "name": "CA1_int_cAC_031031AM1_20190328150015",
+    "morphology": "031031AM1",
+    "layer": "SP",
+    "etype": "cAC",
+    "mtype": "SP_CCKBC"
+  },
+  {
+    "name": "CA1_int_cAC_970627BHP1_20190328160727",
+    "morphology": "970627BHP1",
+    "layer": "SP",
+    "etype": "cAC",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "CA1_int_cAC_980120A_20190328160925",
+    "morphology": "980120A",
+    "layer": "SO",
+    "etype": "cAC",
+    "mtype": "SO_BP"
+  },
+  {
+    "name": "CA1_int_cAC_980513B_20190328161527",
+    "morphology": "980513B",
+    "layer": "SP",
+    "etype": "cAC",
+    "mtype": "SP_BS"
+  },
+  {
+    "name": "CA1_int_cAC_990611HP2_20190328162145",
+    "morphology": "990611HP2",
+    "layer": "SR",
+    "etype": "cAC",
+    "mtype": "SR_SCA"
+  },
+  {
+    "name": "CA1_int_cNAC_010710HP2_20190328163258",
+    "morphology": "010710HP2",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_Ivy"
+  },
+  {
+    "name": "CA1_int_cNAC_011017HP2_20190328164612",
+    "morphology": "011017HP2",
+    "layer": "SO",
+    "etype": "cNAC",
+    "mtype": "SO_OLM"
+  },
+  {
+    "name": "CA1_int_cNAC_011023HP2_20190328164923",
+    "morphology": "011023HP2",
+    "layer": "SO",
+    "etype": "cNAC",
+    "mtype": "SO_BS"
+  },
+  {
+    "name": "CA1_int_cNAC_060314AM2_20190328165336",
+    "morphology": "060314AM2",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "CA1_int_cNAC_970509HP2_20190305115627",
+    "morphology": "970509HP2",
+    "layer": "SO",
+    "etype": "cNAC",
+    "mtype": "SO_Tri"
+  },
+  {
+    "name": "CA1_int_cNAC_970627BHP1_20190306162834",
+    "morphology": "970627BHP1",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "CA1_int_cNAC_970717D_20190307182510",
+    "morphology": "970717D",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_Ivy"
+  },
+  {
+    "name": "CA1_int_cNAC_970911C_20190305120404",
+    "morphology": "970911C",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_AA"
+  },
+  {
+    "name": "CA1_int_cNAC_971114B_20190329154607",
+    "morphology": "971114B",
+    "layer": "SO",
+    "etype": "cNAC",
+    "mtype": "SO_Tri"
+  },
+  {
+    "name": "CA1_int_cNAC_980120A_20190329155034",
+    "morphology": "980120A",
+    "layer": "SO",
+    "etype": "cNAC",
+    "mtype": "SO_BP"
+  },
+  {
+    "name": "CA1_int_cNAC_980513B_20190329155523",
+    "morphology": "980513B",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_BS"
+  },
+  {
+    "name": "CA1_int_cNAC_990111HP2_20190329155703",
+    "morphology": "990111HP2",
+    "layer": "SP",
+    "etype": "cNAC",
+    "mtype": "SP_PVBC"
+  },
+  {
+    "name": "CA1_int_cNAC_990611HP2_20190328165521",
+    "morphology": "990611HP2",
+    "layer": "SR",
+    "etype": "cNAC",
+    "mtype": "SR_SCA"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg141017_a1-2_idC_20190328143405",
+    "morphology": "mpg141017_a1-2_idC",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg141208_B_idA_20190328144006",
+    "morphology": "mpg141208_B_idA",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg141209_A_idA_20190328144646",
+    "morphology": "mpg141209_A_idA",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg141216_A_idA_20190305133333",
+    "morphology": "mpg141216_A_idA",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg141217_A_idB_20190305112803",
+    "morphology": "mpg141217_A_idB",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_mpg150305_A_idB_20190305112012",
+    "morphology": "mpg150305_A_idB",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idA_20190305112828",
+    "morphology": "oh140807_A0_idA",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idB_20190305105211",
+    "morphology": "oh140807_A0_idB",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idC_20190305103627",
+    "morphology": "oh140807_A0_idC",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idF_20190305115459",
+    "morphology": "oh140807_A0_idF",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idG_20190328143451",
+    "morphology": "oh140807_A0_idG",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idH_20190328143152",
+    "morphology": "oh140807_A0_idH",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  },
+  {
+    "name": "CA1_pyr_cACpyr_oh140807_A0_idJ_20190328142723",
+    "morphology": "oh140807_A0_idJ",
+    "layer": "SP",
+    "etype": "cACpyr",
+    "mtype": "SP_PC"
+  }
+]

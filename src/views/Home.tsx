@@ -1,18 +1,5 @@
-// import './Home.scss';
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 
-import Title from '../components/Title';
-import ImageSlider from '../components/ImageSlider';
-import Button from '../components/Button';
-import InfoBox1 from '../components/Home/InfoBox1';
-import InfoBox2 from '../components/Home/InfoBox2';
-import { Color } from '../types';
-import Search from '../components/Search';
-import { FaTwitter, FaFacebookF, FaLinkedinIn } from 'react-icons/fa';
-import CtaButton from '../components/CtaButton';
-import { basePath } from '../config';
 import SectionCard from '../components/SectionCard';
 
 
@@ -20,153 +7,6 @@ const classPrefix = 'Home__';
 
 const Home: React.FC = () => (
   <div className={`${classPrefix}basis`}>
-    <section id="section-1" className="content">
-      <div style={{
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        height: '100%',
-        width: '100%',
-        background:'linear-gradient(90deg, #343744 0%, #bdc7e2 100%)',
-      }}></div>
-
-      <Image
-        src="/assets/images/backgrounds/home-page/hippocampus_hub-landing_banner.jpeg"
-        layout="fill"
-        objectFit="cover"
-        unoptimized
-      />
-
-      <div style={{
-        position: 'absolute',
-        bottom: '40px',
-        left: '60px',
-        color: 'grey',
-      }}> ©Blue Brain Project/EPFL 2005-2021 </div>
-      <div className="title">
-        <Title
-          title={<span>Hippocampus <br/> Model Portal</span>}
-          hint="Welcome to the Hippocampus Portal created by the EPFL Blue Brain Project and CNR. <br/> Explore the datasets, models and visuals to understand how we reconstruct the rodent hippocampus in silico."
-          primary
-        />
-        <div className="cta">
-          <CtaButton width="280px" color="yellow">Explore now</CtaButton>
-          <br/>
-          <CtaButton width="280px" className="mt-2" color="grey">Go to hub</CtaButton>
-
-          {/* <a href="#section-3">
-            <Button primary width={140}>
-              Explore
-            </Button>
-          </a>
-          <Link href="/styleguide">
-            <Button width={140}>Read paper</Button>
-          </Link> */}
-        </div>
-        {/* <div className="search-form">
-          <Search />
-        </div> */}
-      </div>
-      {/* <img
-        className="top-section-image"
-        src={require('url:../assets/images/computer.svg')}
-        alt="computer"
-      /> */}
-      {/* <div className="social-media">
-        <a href="#">
-          <div className="social-media-icon">
-            <FaTwitter />
-          </div>
-        </a>
-        <a href="#">
-          <div className="social-media-icon">
-            <FaFacebookF />
-          </div>
-        </a>
-        <a href="#">
-          <div className="social-media-icon">
-            <FaLinkedinIn />
-          </div>
-        </a>
-      </div> */}
-    </section>
-
-    {/* <section id="section-2">
-      <h2>
-        Select and Explore. Download.{' '}
-        <span className="nowrap">
-          Contribute
-          <span className="accent-border" />
-        </span>
-      </h2>
-      <div className="content">
-        <div className="workflow">
-          <InfoBox1
-            icon="search"
-            title="Select and Explore"
-            teaser="Discover how the Blue Brain Project collects and organizes sparse multi-scale datasets, and extrapolates principles of organization for dense digital reconstructions of brain regions such as the SSCx."
-          >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </p>
-          </InfoBox1>
-          <InfoBox1
-            icon="download"
-            title="Download"
-            teaser="The Blue Brain Project has made various models and data available for you to download."
-          >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </p>
-          </InfoBox1>
-          <InfoBox1
-            icon="mail"
-            title="Contribute"
-            teaser="Please get in touch if you wish to collaborate with us on experimental datasets or computational models presented here."
-          >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </p>
-          </InfoBox1>
-        </div>
-        <div className="image">
-          <img
-            id="screenshot"
-            src={`${basePath}/assets/images/screenshot.png`}
-            alt="screenshot"
-            loading="lazy"
-          />
-        </div>
-      </div>
-    </section> */}
-
     <section id="section-3">
       <div className="intro">
         <h2 className="text-white">Explore</h2>
@@ -195,10 +35,11 @@ const Home: React.FC = () => (
               },
               {
                 label: 'Neuronal Morphology',
-                href: '/model/experimental-data/neuronal-morphology',
+                href: '/experimental-data/neuronal-morphology',
               },
               {
                 label: 'Neuronal Electrophysiology',
+                href: '/experimental-data/neuronal-electrophysiology/',
               }
             ]}
           />
@@ -246,6 +87,7 @@ const Home: React.FC = () => (
               },
               {
                 label: 'Neurons',
+                href: '/digital-reconstructions/neurons/'
               }
             ]}
           />
