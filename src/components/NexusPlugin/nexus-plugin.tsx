@@ -3,6 +3,7 @@
  */
 import * as React from 'react';
 import invariant from 'ts-invariant';
+import isFunction from 'lodash/isFunction';
 import { NexusClient, Resource } from '@bbp/nexus-sdk';
 // import { Result } from 'antd';
 
@@ -113,9 +114,9 @@ export class NexusPlugin extends React.Component<
   }
 
   componentWillUnmount() {
-    this.destroyPlugin &&
-      typeof this.destroyPlugin === 'function' &&
+    if (isFunction(this.destroyPlugin)) {
       this.destroyPlugin();
+    }
   }
 
   render() {

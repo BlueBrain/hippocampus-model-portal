@@ -15,6 +15,7 @@
     "file-saver": "^2.0.5",
     "flexboxgrid": "^6.3.1",
     "next": "10.0.8",
+    "node-fetch": "^2.6.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",

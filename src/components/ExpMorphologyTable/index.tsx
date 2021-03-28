@@ -92,7 +92,7 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
               <td style={{ textAlign: 'center'}}>
                 <div className={styles.morphImageContainer}>
                   <ImageViewer
-                    src={`${basePath}/data/exp-morph-images/${morph.name}.png`}
+                    src={`${basePath}/assets/images/exp-morph-images/${morph.name}.jpeg`}
                     alt={`Morphology ${morph.name} image`}
                     loading="lazy"
                   />
