@@ -6,22 +6,18 @@ import { accentColors } from '../config';
 import { Color } from '../types';
 import glossaryContent from './glossary-content.json';
 
-
-const colorName: Color = 'lavender';
-const color = accentColors[colorName];
-
 const Glossary: React.FC = () => {
   const sectionLabels = Object.keys(glossaryContent);
 
   return (
     <FullPage>
-      <Title title="Glossary" primaryColor={colorName} />
+      <Title title="Glossary" primaryColor="grey-1" />
 
       <div className="glossary__container">
         {sectionLabels.map(sectionLabel => (
           <section key={sectionLabel}>
             {sectionLabel !== 'Glossary' && (
-              <Title subtitle={sectionLabel} primaryColor={colorName} />
+              <Title subtitle={sectionLabel} primaryColor="grey-1" />
             )}
 
             {(glossaryContent as any)[sectionLabel].map(([term, description]: [term: any, d: any]) => (
