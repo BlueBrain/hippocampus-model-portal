@@ -17,7 +17,6 @@ import DataContainer from '../components/DataContainer';
 import { Layer, Color } from '../types';
 import { BrainRegion } from '../components/BrainRegionsSelector';
 import ComboSelector from '../components/ComboSelector';
-import MicrocircuitSelector from '../components/MicrocircuitSelector';
 import List from '../components/List';
 import { accentColors } from '../config';
 import Collapsible from '../components/Collapsible';

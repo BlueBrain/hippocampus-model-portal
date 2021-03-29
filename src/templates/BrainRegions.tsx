@@ -6,7 +6,6 @@ import BrainRegionsSelector, { BrainRegion } from '../components/BrainRegionsSel
 import Title from '../components/Title';
 import InfoBox from '../components/InfoBox';
 import Selector from '../components/Selector';
-import { lorem } from '../views/Styleguide';
 import Filters from '../layouts/Filters';
 import { Color } from '../types';
 
@@ -37,7 +36,7 @@ const BrainRegions: React.FC<BrainRegionTemplateProps> = ({
 
   return (
     <>
-      <Filters primaryColor={color} hasData={!!currentRegion}>
+      <Filters color={color} hasData={!!currentRegion}>
         <div className="center-col">
           <Title
             primaryColor={color}

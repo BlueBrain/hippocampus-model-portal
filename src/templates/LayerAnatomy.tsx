@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import ServerSideContext from '../context/server-side-context';
-import LayerAnatomySelector from '../components/LayerAnatomySelector';
 import Title from '../components/Title';
 import InfoBox from '../components/InfoBox';
 import Selector from '../components/Selector';
@@ -35,7 +34,7 @@ const LayerAnatomy: React.FC<LayerAnatomyTemplateProps> = ({
 
   return (
     <>
-      <Filters primaryColor={color} backgroundAlt hasData={!!currentLayer}>
+      <Filters color={color} backgroundAlt hasData={!!currentLayer}>
         <div className="center-col">
           <Title
             primaryColor={color}
@@ -53,11 +52,11 @@ const LayerAnatomy: React.FC<LayerAnatomyTemplateProps> = ({
         </div>
         <div className="center-col">
           <Selector title="Choose a layer">
-            <LayerAnatomySelector
+            {/* <LayerAnatomySelector
               color={color}
               activeLayer={currentLayer}
               onLayerSelected={setLayerQuery}
-            />
+            /> */}
           </Selector>
         </div>
       </Filters>

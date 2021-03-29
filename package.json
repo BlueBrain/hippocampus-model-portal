@@ -20,6 +20,7 @@
     "morphoviewer": "^0.1.20",
     "next": "10.0.8",
     "node-fetch": "^2.6.1",
+    "plyr": "^3.6.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",

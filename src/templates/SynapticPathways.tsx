@@ -4,13 +4,11 @@ import { useRouter } from 'next/router';
 import ServerSideContext from '../context/server-side-context';
 import Title from '../components/Title';
 import InfoBox from '../components/InfoBox';
-import { lorem } from '../views/Styleguide';
 import Filters from '../layouts/Filters';
 import Pills from '../components/Pills';
 import { Layer, Color } from '../types';
 import { BrainRegion } from '../components/BrainRegionsSelector';
 import ComboSelector from '../components/ComboSelector';
-import SynapticPathwaySelector from '../components/SynapticPathwaySelector';
 import List from '../components/List';
 import { accentColors } from '../config';
 import { basePath } from '../config';
@@ -92,7 +90,7 @@ const SynapticPathways: React.FC<SynapticPathwaysTemplateProps> = ({
 
   return (
     <>
-      <Filters primaryColor={color} hasData={!!hasData}>
+      <Filters color={color} hasData={!!hasData}>
         <div className="center-col">
           <Title
             primaryColor={color}
@@ -118,13 +116,14 @@ const SynapticPathways: React.FC<SynapticPathwaysTemplateProps> = ({
         <div className="center-col">
           <ComboSelector
             selector={
-              <SynapticPathwaySelector
-                color={accentColors[color]}
-                defaultActivePreLayer={currentPreLayer}
-                onPreLayerSelected={setPreLayerQuery}
-                defaultActivePostLayer={currentPostLayer}
-                onPostLayerSelected={setPostLayerQuery}
-              />
+              <p></p>
+              // <SynapticPathwaySelector
+              //   color={accentColors[color]}
+              //   defaultActivePreLayer={currentPreLayer}
+              //   onPreLayerSelected={setPreLayerQuery}
+              //   defaultActivePostLayer={currentPostLayer}
+              //   onPostLayerSelected={setPostLayerQuery}
+              // />
             }
             list1={
               <List

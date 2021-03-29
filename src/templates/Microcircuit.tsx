@@ -5,9 +5,7 @@ import ServerSideContext from '../context/server-side-context';
 import Filters from '../layouts/Filters';
 import Title from '../components/Title';
 import InfoBox from '../components/InfoBox';
-import { lorem } from '../views/Styleguide';
 import Selector from '../components/Selector';
-import MicrocircuitSelector from '../components/MicrocircuitSelector';
 import { Layer, Color } from '../types';
 import Pills from '../components/Pills';
 import { BrainRegion } from '../components/BrainRegionsSelector';
@@ -60,7 +58,7 @@ const Microcircuit: React.FC<MicrocircuitTemplateProps> = ({
   return (
     <>
       <Filters
-        primaryColor={color}
+        color={color}
         backgroundAlt
         hasData={!!currentLayer && !!currentRegion}
       >
@@ -85,12 +83,12 @@ const Microcircuit: React.FC<MicrocircuitTemplateProps> = ({
         </div>
         <div className="center-col">
           <Selector title="2. Choose a layer" column>
-            <MicrocircuitSelector
+            {/* <MicrocircuitSelector
               color={accentColors[color]}
               defaultActiveLayer={currentLayer}
               onLayerSelected={setLayer}
               disabled={!currentRegion}
-            />
+            /> */}
           </Selector>
         </div>
       </Filters>

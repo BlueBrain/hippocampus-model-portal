@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNexusContext } from '@bbp/react-nexus';
 
-import { sscx } from '../../config';
+import { hippocampus } from '../../config';
 
 
 type NexusFileProps = {
@@ -32,8 +32,8 @@ const NexusFile: React.FC<NexusFileProps> = ({
     if (hasData) {
       setState({ ...state, loading: true });
       nexus.File.get(
-        sscx.org,
-        sscx.project,
+        hippocampus.org,
+        hippocampus.project,
         contentUrl.split('/').reverse()[0],
         { as: 'blob' }
       )

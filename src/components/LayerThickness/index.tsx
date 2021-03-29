@@ -5,7 +5,7 @@ import ErrorBoundary from '../ErrorBoundary';
 import { Layer } from '../../types'
 import NexusImage from '../NexusImage';
 import NumberFormat from '../NumberFormat';
-import { sscx } from '../../config';
+import { hippocampus } from '../../config';
 
 // import './style.scss';
 
@@ -83,8 +83,8 @@ const LayerThickness: React.FC<LayerThicknessProps> = ({ layer, data = [], class
                   {sliceCollection.images.map((image: string) => (
                     <div key={image} className="image-container">
                       <NexusImage
-                        org={sscx.org}
-                        project={sscx.project}
+                        org={hippocampus.org}
+                        project={hippocampus.project}
                         imageUrl={image}
                       />
                     </div>
