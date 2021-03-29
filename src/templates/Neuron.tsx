@@ -247,7 +247,7 @@ const Neurons: React.FC<NeuronsTemplateProps> = ({
               <Button
                 type="primary"
                 download
-                href={`${basePath}/data/model-morphologies-swc/${morphologyName}.asc`}
+                href={`${basePath}/data/model-morphologies-asc/${morphologyName}.asc`}
               >
                 Download morphology
               </Button>
