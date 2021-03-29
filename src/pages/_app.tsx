@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps }) {
     <NexusProvider nexusClient={nexusClient}>
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet" />
+        <meta name="robots" content="noindex,nofollow"></meta>
       </Head>
       <Component {...pageProps} />
     </NexusProvider>
