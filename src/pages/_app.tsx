@@ -23,8 +23,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <NexusProvider nexusClient={nexusClient}>
       <Head>
-        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet" />
-        <meta name="robots" content="noindex,nofollow"></meta>
+        <meta name="robots" content="noindex,nofollow" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" />
+        <link rel="icon" type= "image/x-icon" href="https://hippocampushub.eu/favicon.ico" />
       </Head>
       <Component {...pageProps} />
     </NexusProvider>
