@@ -76,7 +76,7 @@ const Footer: React.FC<{}> = () => {
           </div>
         </div>
         <div className="mt-2">
-          <p>©CNR-IBF & Blue Brain Project/EPFL 2021.</p>
+          <p>©Blue Brain Project/EPFL 2005-2021</p>
         </div>
       </div>
     </footer>
