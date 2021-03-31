@@ -35,6 +35,7 @@ const ListElement: React.FC<ListElementProps> = ({
       tabIndex={0}
       className={`${classPrefixListElement}basis ${selected ? 'selected' : ''}`}
       onClick={() => onSelect && onSelect(element)}
+      title={element}
     >
       {element}
     </div>
