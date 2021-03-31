@@ -1,5 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
 import { Table, Collapse, Popover } from 'antd';
 
 import NumberFormat from '../NumberFormat';
@@ -15,9 +16,11 @@ export type EtypeFactsheetProps = {
 
 const featureUnit = {
   voltage_deflection: 'mV',
+  voltage_deflection_begin: 'mV',
   voltage_base: 'mV',
   steady_state_voltage: 'mV',
   spikecount: '',
+  time_to_first_spike: 'ms',
   time_to_last_spike: 'ms',
   inv_time_to_first_spike: 'Hz',
   inv_first_isi: 'Hz',
@@ -28,7 +31,12 @@ const featureUnit = {
   inv_last_isi: 'Hz',
   mean_frequency: 'ms',
   ahp_depth: 'mV',
+  AP1_amp: 'mV',
 };
+
+const featureLabel = {
+  Spikecount: 'spikecount',
+}
 
 
 const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
@@ -51,7 +59,7 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
           key: featureName,
           protocol,
           measurement,
-          feature: featureName,
+          feature: featureLabel[featureName] || featureName,
           unit: featureUnit[featureName.toLowerCase()],
           mean: featureValue[0],
           std: featureValue[1],
@@ -67,6 +75,10 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
       title: 'Feature',
       dataIndex: 'feature',
       render: feature => feature.replace(/\_/g, ' '),
+    },
+    {
+      title: 'Recording site',
+      dataIndex: 'measurement',
     },
     {
       title: 'Mean',
@@ -86,8 +98,10 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
   ];
 
   // Channel mechanisms data preparation
-  const channelMechanisms = data.distributions
+  const channelMechanisms = data.distributions;
   const sections = Object.keys(channelMechanisms);
+
+  const groupByChannel = (rawChannelParams) => groupBy(rawChannelParams.flat(), 'channel');
 
   return (
     <div className={styles.container}>
@@ -121,10 +135,10 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
           <div className={`row ${styles.mechanismsRow}`} key={section}>
             <div className="col-xs-6 col-md-4">{section}</div>
             <div className="col-xs-6 col-md-8">
-              {channelMechanisms[section].map(channelParams => (
+              {Object.entries<any[]>(groupByChannel(channelMechanisms[section])).map(([channel, channelParams]) => (
                 <Popover
-                  key={channelParams[0].channel}
-                  title={channelParams[0].channel}
+                  key={channel}
+                  title={channel}
                   content={(
                     <>
                       {channelParams.map(channelParam => (
