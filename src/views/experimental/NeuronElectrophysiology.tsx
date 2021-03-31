@@ -52,7 +52,7 @@ const NeuronElectrophysiology: React.FC = () => {
 
   const etypes = Object.keys(traces).sort();
   const instances = currentEtype
-    ? traces[currentEtype]
+    ? traces[currentEtype].sort()
     : []
 
   const getAndSortTraces = (esDocuments) => {
