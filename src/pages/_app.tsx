@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="robots" content="noindex,nofollow" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" />
-        <link rel="icon" type= "image/x-icon" href="https://hippocampushub.eu/favicon.ico" />
+        <link rel="shortcut icon" href="https://hippocampushub.eu/favicon.ico" />
       </Head>
       <Component {...pageProps} />
     </NexusProvider>
