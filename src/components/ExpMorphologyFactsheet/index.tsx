@@ -88,7 +88,7 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
         <MorphologyFactsheetEntry fact={{
           name: 'soma diameter',
           unit: 'µm',
-          value: stats.mean_soma_radius,
+          value: stats.mean_soma_radius * 2,
         }} />
       </div>
 
