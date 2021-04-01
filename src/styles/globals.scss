@@ -1850,7 +1850,7 @@ $collapsible-padding: 20px 30px;
   background-color: #17151A;
 
   @media (max-width: $small) {
-    padding: 60px 20px;
+    padding: 100px 20px;
   }
 }
 
@@ -2401,7 +2401,7 @@ $collapsible-padding: 20px 30px;
   background-color: map-get($basePalette, "grey-1");
 
   section {
-    padding: 30px 30px 60px;
+    padding: 30px 30px 80px;
     overflow: hidden;
   }
 

@@ -21,22 +21,22 @@ const Menu: React.FC<MenuProps> = ({ open, onClose }) => (
       <MdClose />
     </div>
     <div className="top-links">
-      <a href="/build/">
-        <img
-          src={`${basePath}/assets/images/icons/home.svg`}
-          alt="Explore models"
-        />
-        <span>Explore models</span>
-      </a>
       <Link href="/">
         <a>
           <img
             src={`${basePath}/assets/images/icons/home.svg`}
-            alt="Build models"
+            alt="Explore models"
           />
-          <span>Build models</span>
+          <span>Explore models</span>
         </a>
       </Link>
+      <a href="/build/">
+        <img
+          src={`${basePath}/assets/images/icons/home.svg`}
+          alt="Build models"
+        />
+        <span>Build models</span>
+      </a>
       <Link href="/glossary">
         <a>
           <img
