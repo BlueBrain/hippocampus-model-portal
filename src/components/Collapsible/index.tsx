@@ -1,8 +1,6 @@
 import React, { ReactChild, ReactFragment } from 'react';
 import { IoIosArrowUp } from 'react-icons/io';
 
-// import './style.scss';
-
 
 const classPrefix = 'collapsible__';
 
@@ -27,7 +25,11 @@ const Collapsible: React.FC<CollapsibleProps> = ({
 
   return (
     <div id="data" className={`${classPrefix}${isCollapsed ? 'collapsed' : 'expanded'} ${color} ${className}`}>
-      <div onClick={() => setCollapsed(!isCollapsed)} className="header">
+      <div
+        className="header"
+        title={title}
+        onClick={() => setCollapsed(!isCollapsed)}
+      >
         {title}
         <span className="arrow">
           <IoIosArrowUp />

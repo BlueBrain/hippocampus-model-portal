@@ -458,19 +458,23 @@ $collapsible-padding: 20px 30px;
   border-radius: 3px;
   overflow: hidden;
   .header {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
     background-color: map-get($basePalette, "navy-2");
     font-size: map-get($fontSize, "large");
     font-weight: 400;
-    padding: $collapsible-padding;
+    padding: 20px 60px 20px 30px;
     &:hover {
       cursor: pointer;
       background-color: map-get($basePalette, "navy-1");
     }
   }
   .arrow {
-    float: right;
-    margin-top: 0.25rem;
-    transition: all 0.5s;
+    position: absolute;
+    top: calc(50% - 17px);
+    right: 30px;
+    transition: transform 0.5s;
   }
   .content {
     background-color: map-get($basePalette, "white");
@@ -499,7 +503,6 @@ $collapsible-padding: 20px 30px;
   @include collapsible__basis;
   .arrow {
     transform: rotate(180deg);
-    margin-top: -0.25rem;
   }
   .content {
     max-height: 0;
@@ -989,33 +992,6 @@ $collapsible-padding: 20px 30px;
     width: 100%;
     cursor: pointer;
   }
-  // button,
-  // a {
-  //   font-size: 1.5rem;
-  //   line-height: 1rem;
-  //   padding: 0.3rem;
-  //   background: #basePalette[navy-2];
-  //   color: #basePalette[white];
-  //   border-radius: 3px;
-  //   border: none;
-  //   position: absolute;
-  //   box-shadow: 4px 1px 4px 0 rgba(0, 0, 0, 0.3);
-  //   transition: all 0.2s;
-  //   &:hover {
-  //     box-shadow: none;
-  //   }
-  //   &:active {
-  //     background-color: #basePalette[navy-1];
-  //   }
-  //   &.icon-button__expand {
-  //     margin-left: -2.5rem;
-  //     top: 0.5rem;
-  //   }
-  //   &.icon-button__download {
-  //     margin-left: 0.5rem;
-  //     bottom: 0.5rem;
-  //   }
-  // }
 }
 
 
