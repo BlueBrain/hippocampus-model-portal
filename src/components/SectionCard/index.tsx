@@ -38,7 +38,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
             {link.label}
           </Link>
         ) : (
-          <p key={link.label}>{link.label}</p>
+          <p key={link.label}>{link.label}<sup>*</sup></p>
         ))}
 
         <div
