@@ -75,6 +75,18 @@ export const electroPhysiologyDataQuery = (
               },
             },
           },
+          {
+            nested: {
+              path: 'distribution',
+              query: {
+                bool: {
+                  must: {
+                    match: { 'distribution.encodingFormat': 'application/nwb' },
+                  },
+                },
+              },
+            },
+          },
         ],
       },
     },
@@ -338,6 +350,18 @@ export const etypeTracesDataQuery = (
               query: {
                 bool: {
                   filter: { term: { 'annotation.hasBody.label.raw': etype } },
+                },
+              },
+            },
+          },
+          {
+            nested: {
+              path: 'distribution',
+              query: {
+                bool: {
+                  must: {
+                    match: { 'distribution.encodingFormat': 'application/rab' },
+                  },
                 },
               },
             },
