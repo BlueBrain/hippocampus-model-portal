@@ -3,31 +3,18 @@
     ["m-type", "morphological type"],
     ["e-type", "electrical type"],
     ["s-type", "synapse type"],
-    ["Intrinsic", "efferent fibres arising from within the hippocampal microcircuit"],
-    ["Extrinsic", "efferent fibres arising from outside the hippocampal microcircuit"],
-    ["Synaptic contact", "a direct apposition between the axon and dendrites or soma"],
-    ["Synaptic connection", "the set of all synaptic contacts between the presynaptic axon and the postsynaptic dendrites or soma"],
-    ["Synaptic connection-type (pathway)", "the set of all connections between pairs of neurons of pre and postsynaptic m-types"],
     ["Branch order", "the number of bifurcations between an axonal or dendritic section and the soma. Branch order is denoted by °. For e.g., 1° refers to the first dendritic branch originating from the soma or the main apical dendrite"],
     ["Path distance", "the distance between a given section and the soma measured along the axon or dendrites"],
-    ["Innervation pattern", "a histogram of the locations of synapses measured by branch order or path distance"],
-    ["Neuronal convergence", "the total number of neurons of one m-type targeting a single neuron of another m-type"],
-    ["Neuronal divergence", "the total number of neurons of one m-type targeted by a single neuron of another m-type"],
     ["Resting membrane potential (V<sub>m</sub>)", "the membrane potential (in mV) of a single neuron when potential (V<sub>m</sub>) electrically inert or in resting state"],
     ["Membrane time constant (τ<sub>m</sub>)", "the time taken (in ms) for the neuronal membrane to charge or discharge"],
     ["Input resistance (R<sub>in</sub>)", "is given by Ohm's law from the difference in membrane potential of a single neuron at the point of a current injection to after it has reached a steady state (Rin=∆V/∆I MΩ)"],
-    ["g<sub>syn</sub>", "the peak conductance (in nS) for a single synaptic contact"],
-    ["U<sub>se</sub>", "utilization of synaptic efficacy - analogous to the transmitter release probability at a single synaptic contact"],
-    ["Dep", "time constant  (in ms) for recovery from depression"],
-    ["Fac", "time constant  (in ms) for recovery from facilitation"],
-    ["PSP", "the postsynaptic membrane potential change (in mV) evoked by a presynaptic stimulus; typically an injection of a brief pulse or a train of pulses to the presynaptic soma"],
-    ["Latency", "the onset time (in ms) measured as the difference between the time to peak of the presynaptic AP and time taken to reach 5% of peak PSP amplitude"],
-    ["Amplitude", "the difference in the membrane potential (in mV) measured between the peak and baseline"],
-    ["Rise time", "the mean time (in ms) to rise from 20% to 80% of peak PSP amplitude"],
-    ["Decay time constant", "the mean time (in ms) to decay from peak PSP amplitude to baseline constant"],
-    ["Transmission failure", "an event where the presynaptic stimulus fails to evoke a postsynaptic response"],
-    ["c.v. of PSP", "the coefficient of variation of the PSP amplitude measured as the ratio of SD and mean"]
-
+    ["g<sub>syn</sub>", "the peak conductance (in nS) for a single synaptic contact"]
+  ],
+  "List of layers": [
+    ["SLM", "Stratum Lacunosum-Moleculare"],
+    ["SR", "Stratum Radiatum"],
+    ["SP", "Stratum Pyramidal"],
+    ["SO", "Stratum Oriens"]
   ],
   "List of m-types": [
     ["PPA", "Perforant Pathway Associated Cell"],
