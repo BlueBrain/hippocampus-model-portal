@@ -1703,24 +1703,6 @@ $collapsible-padding: 20px 30px;
   max-width: 100%;
   overflow: hidden;
 
-  // .grey-1 {
-  //   background-color: #343846;
-  // }
-  // .grey-2 {
-  //   background-color: #545a70;
-  // }
-  // .grey-3 {
-  //   background-color: #8690b3;
-  // }
-  // .grey-4 {
-  //   background-color: #9fa9d0;
-  // }
-  // .grey-5 {
-  //   background-color: #c3cce7;
-  // }
-
-
-
 
   &.yellow {
     & h2 {
@@ -2055,23 +2037,12 @@ $collapsible-padding: 20px 30px;
       font-size: map-get($fontSize, "medium");
       font-weight: 700;
       text-decoration: none;
-      &:hover {
-        color: map-get($basePalette, "navy-3");
-      }
     }
   }
 
   .secondary-nav {
-    li > span {
-      display: inline-block;
-      height: 100%;
-      width: 20px;
-      margin: 0;
-      flex-shrink: 0;
-    }
-
     .inactive {
-      color: grey;
+      color: rgba(255, 255, 255, 0.5);
       white-space: initial;
       line-height: initial;
       display: flex;
@@ -2088,11 +2059,12 @@ $collapsible-padding: 20px 30px;
       }
     }
 
-    li > ul > li a {
+    li > ul > li a, li > ul > li span {
       display: flex;
       align-items: center;
       white-space: initial;
       line-height: initial;
+      color: white;
     }
   }
 
@@ -2209,10 +2181,10 @@ $collapsible-padding: 20px 30px;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    background-color: map-get($basePalette, "white");
 
     a,
-    button {
+    button,
+    span {
       text-transform: uppercase;
     }
 
@@ -2233,11 +2205,6 @@ $collapsible-padding: 20px 30px;
       transition: all 0.7s;
     }
 
-    li > span {
-      height: 75px;
-      float: left;
-    }
-
     li {
       width: 100%;
       overflow: visible;
@@ -2249,14 +2216,17 @@ $collapsible-padding: 20px 30px;
       transition: max-height 0.7s;
       display: flex;
       width: 100%;
-      background: map-get($basePalette, "white");
       box-sizing: border-box;
       flex-direction: column;
       justify-content: center;
     }
 
+    li button {
+      color: #f7f8fc;
+    }
+
     li.active button {
-      color: map-get($basePalette, "navy-2");
+      color: white;
     }
 
     li.active button svg {
@@ -2274,6 +2244,12 @@ $collapsible-padding: 20px 30px;
     li > ul > li a {
       border-bottom: 1px solid map-get($basePalette, "grey-2");
       padding: 5px 20px 5px 30px;
+    }
+
+    li > ul > li span {
+      border-bottom: 1px solid map-get($basePalette, "grey-2");
+      padding: 5px 20px 5px 30px;
+      line-height: initial;
     }
 
     li > ul > li svg {
@@ -2307,6 +2283,14 @@ $collapsible-padding: 20px 30px;
     display: none;
   }
 
+  a:hover {
+    color: white;
+  }
+
+  button:focus {
+    outline: none;
+  }
+
   li {
     display: inline-block;
     margin-right: 40px;
@@ -2330,8 +2314,6 @@ $collapsible-padding: 20px 30px;
     left: -20px;
     top: 60px;
     background: map-get($basePalette, "white");
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
     box-shadow: 4px 4px 4px 0 rgba(59, 65, 101, 0.6);
 
     a,
@@ -2345,10 +2327,17 @@ $collapsible-padding: 20px 30px;
   }
 
   .home-nav {
-    border-bottom: 1px solid map-get($basePalette, "grey-2");
-    margin-right: 10px;
-    padding: 5px 17px;
-    display: flex;
+    position: relative;
+
+    a:hover {
+      color: black;
+    }
+
+    ul {
+      background-color: #f7f8fc;
+      width: calc(100% + 200px);
+      display: flex;
+    }
 
     li {
       margin: 0;
@@ -2359,30 +2348,13 @@ $collapsible-padding: 20px 30px;
 
   .secondary-nav {
     width: 240px;
+    position: relative;
 
     button {
-      border-bottom: 1px solid map-get($basePalette, "grey-2");
-      // color: map-get($basePalette, "grey-2");
+      border-bottom: 1px solid white;
       color: white;
       text-transform: none;
       padding-left: 20px;
-      // margin: 0 10px 0 20px;
-    }
-
-    >li:nth-child(1) {
-      background-color: #343846;
-    }
-    >li:nth-child(2) {
-      background-color: #545a70;
-    }
-    >li:nth-child(3) {
-      background-color: #8690b3;
-    }
-    >li:nth-child(4) {
-      background-color: #9fa9d0;
-    }
-    >li:nth-child(5) {
-      background-color: #c3cce7;
     }
 
     li {
@@ -2402,7 +2374,6 @@ $collapsible-padding: 20px 30px;
     }
 
     li.active button {
-      // color: map-get($basePalette, "navy-2");
       color: white;
     }
 
@@ -2413,25 +2384,18 @@ $collapsible-padding: 20px 30px;
       width: 200px;
       top: 0;
       bottom: 0;
-      background: map-get($basePalette, "white");
-      // border-left-width: 10px;
-      // border-left-style: solid;
-      padding: 56px 0 20px 0;
-      // padding-top: 56px;
+      padding-bottom: 20px;
       box-sizing: border-box;
       flex-direction: column;
-      // justify-content: center;
-      border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
 
-      @media (min-width: $large) {
-        width: 240px;
-      }
+      // @media (min-width: $large) {
+      //   width: 240px;
+      // }
     }
 
     li > ul > li {
-      // margin: 5px 0;
-      border-top: 1px solid grey;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
       padding: 0 20px;
     }
   }
@@ -3101,6 +3065,10 @@ $collapsible-padding: 20px 30px;
 
 .text-right {
   text-align: right;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
 }
 
 .text-bold {

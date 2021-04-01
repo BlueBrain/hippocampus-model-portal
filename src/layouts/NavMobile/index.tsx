@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Link, withRouter } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { MdClose } from 'react-icons/md';
@@ -8,8 +7,6 @@ import { IoMdMenu } from 'react-icons/io';
 import { SecondaryNav } from '../Navigation';
 import { basePath } from '../../config';
 
-// import './style.scss';
-import Search from '../../components/Search';
 
 const classPrefix = 'nav-mobile__';
 
@@ -24,47 +21,40 @@ const Menu: React.FC<MenuProps> = ({ open, onClose }) => (
       <MdClose />
     </div>
     <div className="top-links">
+      <a href="/build/">
+        <img
+          src={`${basePath}/assets/images/icons/home.svg`}
+          alt="Explore models"
+        />
+        <span>Explore models</span>
+      </a>
       <Link href="/">
         <a>
           <img
             src={`${basePath}/assets/images/icons/home.svg`}
-            alt="home"
+            alt="Build models"
           />
-          <span>Home</span>
+          <span>Build models</span>
         </a>
       </Link>
-      <Link href="#">
+      <Link href="/glossary">
         <a>
           <img
             src={`${basePath}/assets/images/icons/globe.svg`}
-            alt="globe"
+            alt="Glossary"
           />
           <span>Glossary</span>
         </a>
       </Link>
-      <Link href="#">
-        <a>
-          <img
-            src={`${basePath}/assets/images/icons/mail-alt.svg`}
-            alt="mail"
-          />
-          <span>Contact</span>
-        </a>
-      </Link>
-      <Link href="/downloads">
-        <a>
-          <img
-            src={`${basePath}/assets/images/icons/download-alt.svg`}
-            alt="download"
-          />
-          <span>Download</span>
-        </a>
-      </Link>
+      <a href="/#contact-us">
+        <img
+          src={`${basePath}/assets/images/icons/mail-alt.svg`}
+          alt="Contact"
+        />
+        <span>Contact</span>
+      </a>
     </div>
     <SecondaryNav canClose />
-    <div className="menu-search">
-      <Search />
-    </div>
   </div>
 );
 

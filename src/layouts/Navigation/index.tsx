@@ -1,32 +1,27 @@
-import React, { ReactChild, ReactFragment } from 'react';
-// import './style.scss';
+import React from 'react';
+import Link from 'next/link';
+
 import Brand from '../Brand';
 import NavDesktop from '../NavDesktop';
 import NavMobile from '../NavMobile';
-// import { Link } from 'react-router-dom';
-import Link from 'next/link';
-import { accentColors } from '../../config';
-import SvgRegions from '../../components/Icons/Regions';
-import SvgNeuron from '../../components/Icons/Neuron';
-import SvgMicrocircuit from '../../components/Icons/Microcircuit';
-import SvgSynapse from '../../components/Icons/Synapse';
 import { IoIosArrowDropdown } from 'react-icons/io';
+
 
 const classPrefix = 'nav__';
 
 export const HomeNav: React.FC = () => (
-  <ul className="home-nav">
-    <li>
-      <Link href="/about">
-        About
-      </Link>
-    </li>
-    <li>
-      <Link href="#">
-        Explore
-      </Link>
-    </li>
-  </ul>
+  <div className="home-nav">
+    <ul>
+      <li>
+        <Link href="/">
+          <a className="text-uppercase">Explore models</a>
+        </Link>
+      </li>
+      <li>
+        <a className="text-uppercase" href="/build/">Build models</a>
+      </li>
+    </ul>
+  </div>
 );
 
 type NavProps = {
@@ -47,17 +42,14 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
 
   return (
     <ul className="secondary-nav">
-      <li className={active === 'exp' ? 'active' : ''}>
-        {/* <span style={{ backgroundColor: accentColors.yellow }} /> */}
+      <li className={`bg-grey-1 ${active === 'exp' ? 'active' : ''}`}>
         <button onClick={() => toggleSubmenu('exp')}>
           Experimental Data{' '}
           <span className="show-mobile">
             <IoIosArrowDropdown />
           </span>
         </button>
-        <ul
-          style={{ borderLeftColor: accentColors.yellow }}
-        >
+        <ul className="bg-grey-1">
           <li>
             <span className="inactive">Layer Anatomy</span>
             {/* <Link href="/experimental-data/layer-anatomy">
@@ -74,17 +66,14 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
           </li>
         </ul>
       </li>
-      <li className={active === 'rec' ? 'active' : undefined}>
-        {/* <span style={{ backgroundColor: accentColors.blue }} /> */}
+      <li className={`bg-grey-2 ${active === 'rec' ? 'active' : ''}`}>
         <button onClick={() => toggleSubmenu('rec')}>
           Reconstruction Data{' '}
           <span className="show-mobile">
             <IoIosArrowDropdown />
           </span>
         </button>
-        <ul
-          style={{ borderLeftColor: accentColors.blue }}
-        >
+        <ul className="bg-grey-2">
           <li>
             <span className="inactive">Brain Regions</span>
             {/* <Link href="/reconstruction-data/brain-regions">
@@ -119,17 +108,14 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
           </li>
         </ul>
       </li>
-      <li className={active === 'dig' ? 'active' : undefined}>
-        {/* <span style={{ backgroundColor: accentColors.lavender }} /> */}
+      <li className={`bg-grey-3 ${active === 'dig' ? 'active' : ''}`}>
         <button onClick={() => toggleSubmenu('dig')}>
           Digital Reconstructions{' '}
           <span className="show-mobile">
             <IoIosArrowDropdown />
           </span>
         </button>
-        <ul
-          style={{ borderLeftColor: accentColors.lavender }}
-        >
+        <ul className="bg-grey-3">
           <li>
             <span className="inactive">Brain Regions</span>
             {/* <Link href="/digital-reconstructions/brain-regions">
@@ -159,17 +145,14 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
           </li>
         </ul>
       </li>
-      <li className={active === 'val' ? 'active' : undefined}>
-        {/* <span style={{ backgroundColor: accentColors.green }} /> */}
+      <li className={`bg-grey-4 ${active === 'val' ? 'active' : ''}`}>
         <button onClick={() => toggleSubmenu('val')}>
           Validations{' '}
           <span className="show-mobile">
             <IoIosArrowDropdown />
           </span>
         </button>
-        <ul
-          style={{ borderLeftColor: accentColors.green }}
-        >
+        <ul className="bg-grey-4">
           <li>
             <span className="inactive">Brain Regions</span>
             {/* <Link href="/validations/brain-regions">
@@ -204,17 +187,14 @@ export const SecondaryNav: React.FC<NavProps> = ({ initActive, canClose }) => {
           </li>
         </ul>
       </li>
-      <li className={active === 'pre' ? 'active' : undefined}>
-        {/* <span style={{ backgroundColor: accentColors.grey }} /> */}
+      <li className={`bg-grey-5 ${active === 'pre' ? 'active' : ''}`}>
         <button onClick={() => toggleSubmenu('pre')}>
           Predictions{' '}
           <span className="show-mobile">
             <IoIosArrowDropdown />
           </span>
         </button>
-        <ul
-          style={{ borderLeftColor: accentColors.grey }}
-        >
+        <ul className="bg-grey-5">
           <li>
             <span className="inactive">Brain Regions</span>
             {/* <Link href="/predictions/brain-regions">
