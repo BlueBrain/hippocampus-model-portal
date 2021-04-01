@@ -7,8 +7,7 @@
     ["Path distance", "the distance between a given section and the soma measured along the axon or dendrites"],
     ["Resting membrane potential (V<sub>m</sub>)", "the membrane potential (in mV) of a single neuron when potential (V<sub>m</sub>) electrically inert or in resting state"],
     ["Membrane time constant (τ<sub>m</sub>)", "the time taken (in ms) for the neuronal membrane to charge or discharge"],
-    ["Input resistance (R<sub>in</sub>)", "is given by Ohm's law from the difference in membrane potential of a single neuron at the point of a current injection to after it has reached a steady state (Rin=∆V/∆I MΩ)"],
-    ["g<sub>syn</sub>", "the peak conductance (in nS) for a single synaptic contact"]
+    ["Input resistance (R<sub>in</sub>)", "is given by Ohm's law from the difference in membrane potential of a single neuron at the point of a current injection to after it has reached a steady state (Rin=∆V/∆I MΩ)"]
   ],
   "List of layers": [
     ["SLM", "Stratum Lacunosum-Moleculare"],
