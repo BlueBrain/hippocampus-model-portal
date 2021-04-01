@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { basePath } from '../../config';
 
-// import './style.scss';
 
 
 const classPrefix = 'brand__';
@@ -11,17 +10,17 @@ const classPrefix = 'brand__';
 const Brand: React.FC = () => {
   return (
     <div className={`${classPrefix}basis`}>
-      <div className="logo">
-        <a href="https://www.epfl.ch/">
+      <Link href="/">
+        <a>
           <img
+            className="logo"
             src={`${basePath}/assets/images/epfl-logo.svg`}
             alt="EPFL logo"
           />
-        </a>
-      </div>
-      <Link href="/">
-        <a>
-          <h1 className="text-white" >Hippocampus Model Portal</h1>
+          <div className="divider"></div>
+          <span className="text-grey">Blue Brain Project</span>
+          <div className="divider second-divider"></div>
+          <span className="hub-explore">The Hippocampus Hub Explore</span>
         </a>
       </Link>
     </div>

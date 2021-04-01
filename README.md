@@ -1,4 +1,4 @@
-# Hippocampus Model Portal
+# The Hippocampus Hub Explore
 
 The Hippocampus portal is a freely accessible resource, which provides experimental data sets on the multi-scale organization of the rat hippocampus, and resulting computational models.
 

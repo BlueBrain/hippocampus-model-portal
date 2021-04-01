@@ -173,6 +173,10 @@ section {
   color: white;
 }
 
+.text-grey {
+  color: rgba(247, 248, 252, 0.5);
+}
+
 .text-capitalize {
   text-transform: capitalize;
 }
@@ -1827,45 +1831,49 @@ $collapsible-padding: 20px 30px;
 
 // layout / Brand
 .brand__basis {
-  .logo,
-  h1 {
+  a {
+    text-align: center;
+    display: block;
+    font-size: 1.2rem;
+  }
+  a, a:active {
+    color: white;
+  }
+
+  .divider {
     display: inline-block;
-  }
-
-  .logo {
-    width: 60px;
-    padding-right: 12px;
-    position: relative;
-    @media (max-width: $small) {
-      width: 42px;
-      padding-right: 10px;
-    }
-    img {
-      vertical-align: initial;
-    }
-    box-sizing: content-box;
-  }
-
-  .logo:after {
-    content: ' ';
     height: 20px;
     width: 2px;
-    display: block;
-    background: map-get($basePalette, "white");
-    position: absolute;
-    top: 0;
-    right: -2px;
-    @media (max-width: $small) {
-      height: 1rem;
+    background: rgba(247, 248, 252, 0.5);
+    vertical-align: middle;
+    margin: 0 0.5rem;
+  }
+
+  @media (max-width: $small) {
+    .second-divider {
+      display: none;
     }
   }
 
-  h1 {
-    font-weight: 400;
-    padding-left: 12px;
+  span {
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .hub-explore {
+    font-weight: bold;
+    // font-size: 1.2rem;
+    vertical-align: middle;
+
     @media (max-width: $small) {
-      padding-left: 10px;
+      display: block;
     }
+  }
+
+
+  .logo {
+    display: inline-block;
+    width: 60px;
   }
 }
 
@@ -3093,6 +3101,10 @@ $collapsible-padding: 20px 30px;
 
 .text-right {
   text-align: right;
+}
+
+.text-bold {
+  font-weight: bold;
 }
 
 
