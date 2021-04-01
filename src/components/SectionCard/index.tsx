@@ -25,7 +25,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   const [infoOpened, setInfoOpened] = useState(false);
 
   return (
-    <div className={`${styles.container} bg-grey-${idx}`}>
+    <div className={`${styles.container} bg-grey-${idx} ${infoOpened ? 'show' : ''}`}>
       <div className={styles.head}>
         <div className={styles.title}>
           <div className={styles.idx}>0{idx}</div>
@@ -49,10 +49,11 @@ const SectionCard: React.FC<SectionCardProps> = ({
         </div>
 
         <div
-          className={`${styles.info} bg-grey-${idx} ${infoOpened ? 'show' : ''}`}
+          className={styles.info}
         >
           {description}
         </div>
+        <div className={styles.infoBottomGradient}></div>
       </div>
     </div>
   );

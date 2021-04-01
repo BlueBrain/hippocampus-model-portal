@@ -1,6 +1,8 @@
 
 .container {
   text-align: left;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease 0s, background-color 0.3s ease 0s
 }
 
 .head {
@@ -68,10 +70,33 @@
   top: 100%;
   padding: 1.2rem;
   border-top: 1px solid grey;
+  background-color: #161419;
   transition: top 0.3s ease 0s;
   overflow-y: scroll;
+}
 
-  &:global(.show) {
+.infoBottomGradient {
+  position: absolute;
+  bottom: -4rem;
+  width: 100%;
+  height: 4rem;
+  background-color: lightseagreen;
+  z-index: 5;
+  background: linear-gradient(180deg,transparent 0%, #161419 90%);
+  transition: top 0.3s ease 0s;
+}
+
+:global(.show) {
+  .info {
     top: 0;
+  }
+
+  .infoBottomGradient {
+    bottom: 0;
+  }
+
+  &.container {
+    background-color: #161419 !important;
+    border: 1px solid white;
   }
 }
