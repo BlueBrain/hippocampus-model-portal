@@ -4,11 +4,11 @@ import Link from 'next/link';
 import styles from './styles.module.scss';
 
 
-const Footer: React.FC<{}> = () => {
+const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.sectionContent}>
-        <h3>Hippocampus Model Portal</h3>
+        <h3>The Hippocampus Hub Explore</h3>
         <div className="row between-xs">
           <div className="col-xs-12 col-sm-4">
             <p>
