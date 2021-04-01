@@ -137,20 +137,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
 
       <DataContainer visible={!!currentInstance}>
         <Collapsible title="Population">
-          <h3>Factsheet</h3>
-          <p>TBD</p>
-
-          <h3 className="mt-3">Distribution</h3>
-          <div className="row">
-            <div className="col-xs-12 col-sm-6">
-              <ImageViewer src={`${basePath}/assets/images/population-distribution-1.png`} />
-            </div>
-            <div className="col-xs-12 col-sm-6">
-              <ImageViewer src={`${basePath}/assets/images/population-distribution-2.png`} />
-            </div>
-          </div>
-
-          <h3 className="mt-3">Reconstructed morphologies</h3>
+          <h3>Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
               <>

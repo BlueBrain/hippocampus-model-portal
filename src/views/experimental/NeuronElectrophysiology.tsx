@@ -109,37 +109,7 @@ const NeuronElectrophysiology: React.FC = () => {
       </Filters>
 
       <DataContainer visible={!!currentEtype && !!currentInstance}>
-        <Collapsible title="Population">
-          <h3>Factsheet</h3>
-          <p>TBD</p>
-
-          <h3 className="mt-3">Distribution</h3>
-          <div className="row">
-            <div className="col-xs-12 col-sm-6">
-              <ImageViewer src={`${basePath}/assets/images/population-distribution-1.png`} />
-            </div>
-            <div className="col-xs-12 col-sm-6">
-              <ImageViewer src={`${basePath}/assets/images/population-distribution-2.png`} />
-            </div>
-          </div>
-
-          <h3 className="mt-3">Experimental instances</h3>
-
-          <ESData query={etypeTracesDataQuery(currentEtype)}>
-            {esDocuments => (
-              <>
-                {!!esDocuments && (
-                  <ExpTraceTable traces={getAndSortTraces(esDocuments)}/>
-                )}
-              </>
-            )}
-          </ESData>
-        </Collapsible>
-
-        <Collapsible
-          className="mt-4"
-          title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
-        >
+        <Collapsible title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}>
           <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)}>
             {esDocuments => (
               <>
@@ -149,6 +119,20 @@ const NeuronElectrophysiology: React.FC = () => {
                     resource={esDocuments[0]._source}
                     nexusClient={nexus}
                   />
+                )}
+              </>
+            )}
+          </ESData>
+        </Collapsible>
+
+        <Collapsible title="Population" className="mt-4">
+          <h3 className="mt-3">Experimental instances</h3>
+
+          <ESData query={etypeTracesDataQuery(currentEtype)}>
+            {esDocuments => (
+              <>
+                {!!esDocuments && (
+                  <ExpTraceTable traces={getAndSortTraces(esDocuments)}/>
                 )}
               </>
             )}
