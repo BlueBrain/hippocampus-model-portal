@@ -19,7 +19,7 @@
 }
 
 .idx {
-  color: grey;
+  color: #f7f8fc;
   padding: 1rem 0 1.2rem;
 }
 
@@ -41,7 +41,7 @@
   }
 
   >p {
-    color: grey;
+    color: rgba(255, 255, 255, 50%);
     cursor: default;
     user-select: none;
   }
@@ -80,7 +80,6 @@
   bottom: -4rem;
   width: 100%;
   height: 4rem;
-  background-color: lightseagreen;
   z-index: 5;
   background: linear-gradient(180deg,transparent 0%, #161419 90%);
   transition: top 0.3s ease 0s;
