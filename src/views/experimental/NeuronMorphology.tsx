@@ -5,7 +5,6 @@ import { useNexusContext } from '@bbp/react-nexus';
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
 import LayerSelector from '../../components/LayerSelector';
-import ImageViewer from '../../components/ImageViewer';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '../../queries/es';
 import Filters from '../../layouts/Filters';
 import Title from '../../components/Title';
@@ -19,17 +18,15 @@ import morphologies from '../../morphologies.json';
 import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
-import { hippocampus, basePath } from '../../config';
-import styles from '../../../styles/experimental-data/neuron-morphology.module.scss';
+import { hippocampus } from '../../config';
+import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
 
 const NeuronExperimentalMorphology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
-  // const serverSideContext = useContext(ServerSideContext);
 
   const query = {
-    // ...serverSideContext.query,
     ...router.query
   };
 

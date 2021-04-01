@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { Color } from '../../types';
 
-// import './style.scss';
 
 const classPrefixList = 'list__';
 const classPrefixListElement = 'list-element__';

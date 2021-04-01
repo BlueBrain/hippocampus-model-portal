@@ -5,7 +5,6 @@ import { useNexusContext } from '@bbp/react-nexus';
 import { parseUrl } from '../../utils';
 
 import 'react-image-lightbox/style.css';
-// import './style.scss';
 
 
 const classPrefix = 'nexus-image__';

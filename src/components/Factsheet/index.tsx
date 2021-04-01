@@ -4,8 +4,6 @@ import isNil from 'lodash/isNil';
 
 import Unit from '../Unit';
 
-// import './style.scss';
-
 
 const classPrefix = 'factsheet__';
 

@@ -7,8 +7,6 @@ import NexusImage from '../NexusImage';
 import NumberFormat from '../NumberFormat';
 import { hippocampus } from '../../config';
 
-// import './style.scss';
-
 
 const classPrefix = 'layer-thickness__';
 

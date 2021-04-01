@@ -4,7 +4,6 @@ import { useNexusContext } from '@bbp/react-nexus';
 
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
-import ImageViewer from '../../components/ImageViewer';
 import NexusPlugin from '../../components/NexusPlugin';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '../../queries/es';
 import Filters from '../../layouts/Filters';
@@ -12,21 +11,17 @@ import Title from '../../components/Title';
 import InfoBox from '../../components/InfoBox';
 import { colorName } from './config';
 import List from '../../components/List';
-import ComboSelector from '../../components/ComboSelector';
 import Collapsible from '../../components/Collapsible';
 import ExpTraceTable from '../../components/ExpTraceTable';
 import traces from '../../traces.json';
-import { basePath } from '../../config';
-import styles from '../../../styles/experimental-data/neuron-electrophysiology.module.scss';
+import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
 
 const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
-  // const serverSideContext = useContext(ServerSideContext);
 
   const query = {
-    // ...serverSideContext.query,
     ...router.query
   };
 

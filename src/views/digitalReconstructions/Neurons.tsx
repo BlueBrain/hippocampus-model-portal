@@ -19,7 +19,7 @@ import NeuronMorphology from '../../components/NeuronMorphology';
 import { basePath } from '../../config';
 import models from '../../models.json';
 
-import styles from '../../../styles/digital-reconstructions/neurons.module.scss';
+import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
 
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;

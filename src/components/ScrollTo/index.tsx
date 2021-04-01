@@ -3,8 +3,6 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 import { Direction, Color } from '../../types';
 
-// import './style.scss';
-
 
 const classPrefix = 'scroll-to__';
 
