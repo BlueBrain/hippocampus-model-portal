@@ -163,15 +163,17 @@ const NeuronExperimentalMorphology: React.FC = () => {
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
-                  <NexusFileDownloadButton
-                    className="mt-2"
-                    filename={getMorphologyDistribution(esDocuments[0]._source).name}
-                    url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
-                    org={hippocampus.org}
-                    project={hippocampus.project}
-                  >
-                    Download morphology
-                  </NexusFileDownloadButton>
+                  <div className="text-right">
+                    <NexusFileDownloadButton
+                      className="mt-2"
+                      filename={getMorphologyDistribution(esDocuments[0]._source).name}
+                      url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
+                      org={hippocampus.org}
+                      project={hippocampus.project}
+                    >
+                      Download morphology
+                    </NexusFileDownloadButton>
+                  </div>
                 )}
                 {!!esDocuments && !!esDocuments.length && (
                   <NexusPlugin
