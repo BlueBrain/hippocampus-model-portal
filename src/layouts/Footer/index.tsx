@@ -37,9 +37,8 @@ const Footer: React.FC = () => {
             </p>
             <p>
               <a
-                href="https://www.epfl.ch/about/presidency/presidents-team/legal-affairs/epfl-privacy-policy/"
+                href="/model/privacy-policy"
                 target="_blank"
-                rel="noopener"
               >
                 Privacy Policy
               </a>
