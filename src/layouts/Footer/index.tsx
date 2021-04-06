@@ -46,16 +46,6 @@ const Footer: React.FC = () => {
             </p>
             <p>
               <a
-                href="https://www.epfl.ch/about/overview/regulations-and-guidelines/disclaimer/"
-                target="_blank"
-                rel="noopener"
-              >
-                Disclaimer
-              </a>
-              - EPFL/BBP
-            </p>
-            <p>
-              <a
                 href="https://www.epfl.ch/about/presidency/presidents-team/legal-affairs/epfl-privacy-policy/cookies-policy/"
                 target="_blank"
                 rel="noopener"
