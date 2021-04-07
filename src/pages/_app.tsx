@@ -4,6 +4,7 @@ import { createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 
 import { nexus } from '../config';
+import GoogleAnalytics from '../components/GoogleAnalytics';
 
 import '../styles/globals.scss'
 
@@ -19,18 +20,19 @@ const nexusClient = createNexusClient({
 });
 
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   return (
     <NexusProvider nexusClient={nexusClient}>
       <Head>
         <meta name="robots" content="noindex,nofollow" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" />
-        <link rel="shortcut icon" href="https://hippocampushub.eu/favicon.ico" />
+        <link rel="shortcut icon" href="https://www.hippocampushub.eu/favicon.ico" />
       </Head>
       <Component {...pageProps} />
+      <GoogleAnalytics />
     </NexusProvider>
   )
 }
 
 
-export default MyApp
+export default App

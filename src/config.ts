@@ -24,3 +24,8 @@ export const accentColors: { [key: string]: string } = {
 };
 
 export const basePath = '/model';
+
+export const gtm = {
+  id: 'G-SGZ83Y6E8H',
+  cookiePrefsKey: 'bbpCookiePreferences',
+};
