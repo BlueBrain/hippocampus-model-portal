@@ -81,7 +81,7 @@ const Neurons: React.FC = () => {
     ? models
       .filter(model => model.layer === currentLayer)
       .map(model => model.mtype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur],[])
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 
@@ -89,7 +89,7 @@ const Neurons: React.FC = () => {
     ? models
       .filter(model => model.mtype === currentMtype)
       .map(model => model.etype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur],[])
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 
@@ -112,7 +112,7 @@ const Neurons: React.FC = () => {
 
   return (
     <>
-      <Filters color={colorName} hasData={!!currentInstance}>
+      <Filters>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
@@ -143,7 +143,7 @@ const Neurons: React.FC = () => {
                     className="mb-2"
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${mtypes.length ? '('+mtypes.length+')' : ''}`}
+                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
                     color="grey-1"
                     onSelect={setMtype}
                   />
@@ -151,14 +151,14 @@ const Neurons: React.FC = () => {
                     className="mb-2"
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${etypes.length ? '('+etypes.length+')' : ''}`}
+                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
                     color="grey-1"
                     onSelect={setEtype}
                   />
                   <List
                     list={instances}
                     value={currentInstance}
-                    title={`ME-type instance ${instances.length ? '('+instances.length+')' : ''}`}
+                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
                     color="grey-1"
                     onSelect={setInstance}
                   />
@@ -193,7 +193,7 @@ const Neurons: React.FC = () => {
 
         <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
           <h3>Anatomy</h3>
-          <ModelMorphologyFactsheet morphologyName={morphologyName}/>
+          <ModelMorphologyFactsheet morphologyName={morphologyName} />
 
           <div className="row end-xs mt-3 mb-4">
             <div className="col">

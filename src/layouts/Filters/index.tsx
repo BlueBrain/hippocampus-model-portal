@@ -7,17 +7,13 @@ import { Color } from '../../types';
 const classPrefix = 'filters__';
 
 type FiltersProps = {
-  color: Color;
   children: ReactChild | ReactFragment;
-  hasData?: boolean;
   backgroundAlt?: boolean;
   id?: string;
 };
 
 const Filters: React.FC<FiltersProps> = ({
-  color,
   children,
-  hasData,
   backgroundAlt,
   id = 'filters',
 }) => {
@@ -29,14 +25,6 @@ const Filters: React.FC<FiltersProps> = ({
       >
         {children}
       </div>
-
-      {!!hasData && (
-        <div className="scroll-to">
-          <ScrollTo anchor="data" color={color} direction="down">
-            View data
-          </ScrollTo>
-        </div>
-      )}
     </div>
   );
 };

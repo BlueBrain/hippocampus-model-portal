@@ -81,7 +81,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
 
   return (
     <>
-      <Filters color={colorName} backgroundAlt hasData={!!currentInstance}>
+      <Filters backgroundAlt>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
@@ -124,6 +124,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     title="Reconstructed morphology"
                     color={colorName}
                     onSelect={setInstance}
+                    anchor="data"
                   />
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { Color } from '../../types';
 
@@ -12,44 +12,27 @@ type ListProps = {
   value?: string;
   onSelect?: (s: string) => void;
   color?: Color;
+  anchor?: string;
   block?: boolean;
   className?: string;
-};
-
-type ListElementProps = {
-  element: string;
-  selected?: boolean;
-  onSelect?: (s: string) => void;
-};
-
-const ListElement: React.FC<ListElementProps> = ({
-  element,
-  selected,
-  onSelect,
-}) => {
-  return (
-    <div
-      role="radio"
-      aria-checked={selected}
-      tabIndex={0}
-      className={`${classPrefixListElement}basis ${selected ? 'selected' : ''}`}
-      onClick={() => onSelect && onSelect(element)}
-      title={element}
-    >
-      {element}
-    </div>
-  );
 };
 
 const List: React.FC<ListProps> = ({
   title,
   list,
   value,
-  onSelect = () => {},
+  onSelect = () => { },
   color,
+  anchor = '',
   className = '',
 }) => {
-  const handleSelectedElement = (element: string) => onSelect(element);
+  const handleSelectedElement = (element: string) => {
+    const target = anchor && document.querySelector(`#${anchor}`);
+    if (target) {
+      target.scrollIntoView();
+    }
+    onSelect(element);
+  }
 
   const id = title ? title.replace(/\s/g, '') : 'no_title';
 
@@ -61,13 +44,19 @@ const List: React.FC<ListProps> = ({
     >
       {title && <p>{title}</p>}
       <div className="elements">
-        {list.map(el => (
-          <ListElement
-            key={`${el}`}
-            element={el}
-            selected={value === el}
-            onSelect={handleSelectedElement}
-          />
+        {list.map(element => (
+          <div
+            key={element}
+            role="radio"
+            aria-checked={value === element}
+            tabIndex={0}
+            className={`${classPrefixListElement}basis ${value === element ? 'selected' : ''}`}
+            onClick={() => handleSelectedElement(element)}
+            title={element}
+          >
+            {element}
+          </div>
+
         ))}
       </div>
     </div>
