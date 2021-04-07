@@ -54,11 +54,7 @@ const CookiePrefsForm: React.FC = () => {
           <div className="row end-sm middle-xs">
             <div className="col-xs-12 col-md-6 col-lg-8 mt-2">
               We use cookies to improve user experience and analyze website traffic. Read the &nbsp;
-              <a
-                href="https://www.epfl.ch/about/presidency/presidents-team/legal-affairs/epfl-privacy-policy/cookies-policy/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >Cookies policy</a>
+              <a href="/model/cookies-policy" target="_blank">Cookies policy</a>
             </div>
             <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2 mt-2">
               <CtaButton
