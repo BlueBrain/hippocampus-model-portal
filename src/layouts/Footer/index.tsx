@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           <div className="col-xs-12 col-sm-4">
             <p>
               <a
-                href="/model/terms-of-use"
+                href="/model/terms-of-use/"
                 target="_blank"
               >
                 Terms of Use
@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
             </p>
             <p>
               <a
-                href="/model/privacy-policy"
+                href="/model/privacy-policy/"
                 target="_blank"
               >
                 Privacy Policy
@@ -46,11 +46,11 @@ const Footer: React.FC = () => {
             </p>
             <p>
               <a
-                href="https://www.epfl.ch/about/presidency/presidents-team/legal-affairs/epfl-privacy-policy/cookies-policy/"
+                href="/model/cookies-policy/"
                 target="_blank"
                 rel="noopener"
               >
-                Cookies
+                Cookies Policy
               </a>
               - EPFL/BBP
             </p>
