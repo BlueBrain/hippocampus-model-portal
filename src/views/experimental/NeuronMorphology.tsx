@@ -14,11 +14,12 @@ import { colorName } from './config';
 import { Layer } from '../../types';
 import Collapsible from '../../components/Collapsible';
 import List from '../../components/List';
-import morphologies from '../../morphologies.json';
+import morphologies from '../../exp-morphology-list.json';
 import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import { hippocampus } from '../../config';
+
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
 
