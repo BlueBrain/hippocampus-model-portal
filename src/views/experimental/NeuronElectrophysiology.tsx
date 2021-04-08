@@ -59,15 +59,13 @@ const NeuronElectrophysiology: React.FC = () => {
   return (
     <>
       <Filters
-        color={colorName}
         backgroundAlt
-        hasData={!!currentEtype && !!currentInstance}
       >
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
               primaryColor={colorName}
-              title={<span>Neuron <br/> Electrophysiology</span>}
+              title={<span>Neuron <br /> Electrophysiology</span>}
               subtitle="Experimental Data"
             />
             <InfoBox
@@ -87,15 +85,16 @@ const NeuronElectrophysiology: React.FC = () => {
                   color={colorName}
                   onSelect={setEtype}
                 />
-                <br/>
-                <br/>
-                <br/>
+                <br />
+                <br />
+                <br />
                 <List
                   list={instances}
                   value={currentInstance}
                   title={`Experiment instance (${instances.length})`}
                   color={colorName}
                   onSelect={setInstance}
+                  anchor="data"
                 />
               </div>
             </div>
@@ -103,9 +102,11 @@ const NeuronElectrophysiology: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentEtype && !!currentInstance}>
+      <div id="data" />
+
+      {!!currentEtype && !!currentInstance && <DataContainer>
         <Collapsible title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}>
-          <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)}>
+          <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)} >
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
@@ -127,13 +128,14 @@ const NeuronElectrophysiology: React.FC = () => {
             {esDocuments => (
               <>
                 {!!esDocuments && (
-                  <ExpTraceTable traces={getAndSortTraces(esDocuments)}/>
+                  <ExpTraceTable traces={getAndSortTraces(esDocuments)} />
                 )}
               </>
             )}
           </ESData>
         </Collapsible>
       </DataContainer>
+      }
     </>
   );
 };

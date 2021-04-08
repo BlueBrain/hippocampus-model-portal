@@ -161,6 +161,7 @@ const Neurons: React.FC = () => {
                     title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
                     color="grey-1"
                     onSelect={setInstance}
+                    anchor="data"
                   />
                 </div>
               </div>
@@ -169,8 +170,9 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentInstance}>
+      <div id="data" />
 
+      {!!currentInstance && <DataContainer >
         <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
           <HttpData path={etypeFactsheetPath(currentInstance)}>
             {data => (
@@ -223,7 +225,7 @@ const Neurons: React.FC = () => {
           </div>
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer>}
     </>
   );
 };

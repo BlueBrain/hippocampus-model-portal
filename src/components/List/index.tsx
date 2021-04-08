@@ -28,6 +28,7 @@ const List: React.FC<ListProps> = ({
 }) => {
   const handleSelectedElement = (element: string) => {
     const target = anchor && document.querySelector(`#${anchor}`);
+    console.log(target)
     if (target) {
       target.scrollIntoView();
     }

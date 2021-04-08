@@ -43,7 +43,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
   };
   const currentLayer: Layer = query.layer as Layer;
 
-  const mtypes =  currentLayer
+  const mtypes = currentLayer
     ? Array.from(new Set(morphologies.filter(m => m.region === currentLayer).map(m => m.mtype))).sort()
     : [];
 
@@ -86,7 +86,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
           <div className="col-xs-12 col-lg-6">
             <Title
               primaryColor={colorName}
-              title={<span>Neuronal <br/> Morphology</span>}
+              title={<span>Neuronal <br /> Morphology</span>}
               subtitle="Experimental Data"
             />
             <InfoBox
@@ -115,9 +115,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     color={colorName}
                     onSelect={setMtype}
                   />
-                  <br/>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
+                  <br />
                   <List
                     list={instances}
                     value={currentInstance}
@@ -133,7 +133,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentInstance}>
+      <div id="data" />
+
+      {!!currentInstance && <DataContainer>
         <Collapsible title="Population">
           <h3>Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
@@ -185,7 +187,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
             )}
           </ESData>
         </Collapsible>
-      </DataContainer>
+      </DataContainer>}
     </>
   );
 };
