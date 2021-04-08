@@ -1105,6 +1105,10 @@ $collapsible-padding: 20px 30px;
   }
 
   .secondary-nav {
+    a {
+      font-weight: normal;
+    }
+
     .inactive {
       color: rgba(255, 255, 255, 0.5);
       white-space: initial;
