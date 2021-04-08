@@ -1206,6 +1206,7 @@ $collapsible-padding: 20px 30px;
     line-height: 45px;
     text-align: left;
     text-decoration: none;
+    font-size: 0.8rem;
   }
 
   .top-links {
@@ -1257,8 +1258,8 @@ $collapsible-padding: 20px 30px;
     }
 
     button {
-      width: calc(100% - 20px);
-      font-size: map-get($fontSize, "large");
+      width: 100%;
+      font-size: 1.2rem;
       box-shadow: 0 6px 10px -10px rgba(59, 65, 101, 0.6);
       height: 75px;
       padding-left: 40px;

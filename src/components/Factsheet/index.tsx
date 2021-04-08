@@ -32,8 +32,8 @@ const FactsheetSingleValueEntry: React.FC<{
 }) => {
   return (
     <div className="row mt-1">
-      <div className="col-xs-4 name">{fact.name}</div>
-      <div className="col-xs-4 value">
+      <div className="col-xs-8 col-sm-4 name">{fact.name}</div>
+      <div className="col-xs-4 col-sm-8 value">
         {isNil(fact.value)
           ? (<span>-</span>)
           : (<span>
