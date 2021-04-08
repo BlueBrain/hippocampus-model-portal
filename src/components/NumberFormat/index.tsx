@@ -6,6 +6,7 @@ import isNumber from 'lodash/isNumber';
 type NumberFormatProps = {
   value?: any;
   decimals?: number;
+  significantFigures?: number;
   thousandSeparator?: boolean;
   prefix?: string;
   suffix?: string;
@@ -13,14 +14,14 @@ type NumberFormatProps = {
 
 const NumberFormat: React.FC<NumberFormatProps> = ({
   value,
-  decimals = 2,
+  significantFigures = 5,
   thousandSeparator = true,
   prefix = '',
   suffix = '',
 }) => {
   if (!isNumber(value)) return value;
 
-  const fixed = parseFloat(value.toFixed(decimals));
+  const fixed = parseFloat(value.toPrecision(significantFigures));
 
   const formatted = thousandSeparator
     ? fixed.toLocaleString('en')
