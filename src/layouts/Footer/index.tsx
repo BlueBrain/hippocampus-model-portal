@@ -48,7 +48,6 @@ const Footer: React.FC = () => {
               <a
                 href="/model/cookies-policy/"
                 target="_blank"
-                rel="noopener"
               >
                 Cookies Policy
               </a>
@@ -59,9 +58,9 @@ const Footer: React.FC = () => {
             <p><Link href="/">Home</Link></p>
             <p><a href="/build/">Build Models</a></p>
             <p><a href="/model/">Explore Models</a></p>
-            <p><a href="/#resources">Resources</a></p>
-            <p><a href="/#terms">Terms & Conditions</a></p>
-            <p><a href="/#contact-us">Contact Us</a></p>
+            <p><a href="/#resources" target="_blank">Resources</a></p>
+            <p><a href="/#terms" target="_blank">Terms & Conditions</a></p>
+            <p><a href="/#contact-us" target="_blank">Contact Us</a></p>
           </div>
         </div>
         <div className="mt-2">
