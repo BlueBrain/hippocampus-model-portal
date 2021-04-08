@@ -52,23 +52,25 @@ const CookiePrefsForm: React.FC = () => {
       {formVisible && (
         <div className={styles.container}>
           <div className="row end-sm middle-xs">
-            <div className="col-xs-12 col-md-6 col-lg-8 mt-2">
+            <div className="col-xs-12 col-sm-4 col-md-6 mt-2">
               We use cookies to improve user experience and analyze website traffic. Read the &nbsp;
               <a href="/model/cookies-policy" target="_blank">Cookies policy</a>
             </div>
-            <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2 mt-2">
+            <div className="col-xs-12 col-sm-4 col-md-3 mt-2">
               <CtaButton
                 color="grey"
                 block
+                maxWidth={320}
                 onClick={disallowGtm}
               >
                 Don't allow
               </CtaButton>
             </div>
-            <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2 mt-2">
+            <div className="col-xs-12 col-sm-4 col-md-3 mt-2">
               <CtaButton
                 color="yellow"
                 block
+                maxWidth={320}
                 onClick={allowGtm}
               >
                 Allow

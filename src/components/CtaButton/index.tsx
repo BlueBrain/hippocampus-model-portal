@@ -12,6 +12,7 @@ type CtaButtonProps = {
   block?: boolean;
   className?: string;
   onClick?: () => void;
+  maxWidth?: number;
 };
 
 const CtaButton: React.FC<CtaButtonProps> = ({
@@ -21,13 +22,16 @@ const CtaButton: React.FC<CtaButtonProps> = ({
   color = 'blue',
   block = false,
   onClick = () => {},
+  maxWidth,
 }) => {
   return (
     <div
       className={`${styles.container} ${color} ${className}`}
       style={{
         width,
-        display: block ? 'block' : 'inline-block'
+        display: block ? 'block' : 'inline-block',
+        maxWidth: maxWidth ? `${maxWidth}px` : 'unset',
+        margin: '0 auto',
       }}
       onClick={onClick}
     >
