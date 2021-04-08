@@ -89,21 +89,12 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
           {traces.map(trace => (
             <tr key={trace.name}>
               <td className="text-capitalize">{trace.name}</td>
-              {/* <td style={{ textAlign: 'center'}}>
-                <div className={styles.morphImageContainer}>
-                  <ImageViewer
-                    src={`/data/exp-morph-images/${morph.name}.png`}
-                    alt={`Morphology ${morph.name} image`}
-                    loading="lazy"
-                  />
-                </div>
-              </td> */}
               <td>{trace.annotation.hasBody.label}</td>
               <td>
                 {agentMap && entryToArray(trace.contribution)
                   .map(contribution => agentMap[contribution.agent['@id']])
                   .sort((a1, a2) => a1.type > a2.type ? 1 : -1)
-                  .map(agent => <span>{agent.label} <br/></span>)
+                  .map(agent => <span key={agent.label}>{agent.label} <br/></span>)
                 }
               </td>
             </tr>

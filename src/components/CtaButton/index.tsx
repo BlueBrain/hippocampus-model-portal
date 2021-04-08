@@ -11,6 +11,7 @@ type CtaButtonProps = {
   width?: string;
   block?: boolean;
   className?: string;
+  onClick?: () => void;
 };
 
 const CtaButton: React.FC<CtaButtonProps> = ({
@@ -19,6 +20,7 @@ const CtaButton: React.FC<CtaButtonProps> = ({
   width = 'auto',
   color = 'blue',
   block = false,
+  onClick = () => {},
 }) => {
   return (
     <div
@@ -27,6 +29,7 @@ const CtaButton: React.FC<CtaButtonProps> = ({
         width,
         display: block ? 'block' : 'inline-block'
       }}
+      onClick={onClick}
     >
       <span className={styles.text}>
         {children}

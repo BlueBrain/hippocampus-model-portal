@@ -103,7 +103,7 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
                 {agentMap && entryToArray(morph.contribution)
                   .map(contribution => agentMap[contribution.agent['@id']])
                   .sort((a1, a2) => a1.type > a2.type ? 1 : -1)
-                  .map(agent => <span>{agent.label} <br/></span>)
+                  .map(agent => <span key={agent.label}>{agent.label} <br/></span>)
                 }
               </td>
             </tr>
