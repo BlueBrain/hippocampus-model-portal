@@ -5,6 +5,7 @@ const basePath = '/model';
 
 module.exports = {
   trailingSlash: true,
+  productionBrowserSourceMaps: true,
   basePath: basePath,
   assetPrefix: `${basePath}/`,
   images: {

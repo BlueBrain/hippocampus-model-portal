@@ -12,6 +12,10 @@ export const nexus = {
   token: process.env.NEXT_PUBLIC_NEXUS_TOKEN,
 };
 
+export const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+export const isProduction = process.env.NODE_ENV === 'production';
+
 export const nexusPluginBaseUrl = 'https://bbp.epfl.ch/nexus/plugins';
 
 export const accentColors: { [key: string]: string } = {
