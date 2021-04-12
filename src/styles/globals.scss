@@ -1166,10 +1166,8 @@ $collapsible-padding: 20px 30px;
   padding: 0 0.5rem;
   cursor: pointer;
   z-index: 1;
-  background: map-get($basePalette, "navy-4");
   border-radius: 1.5rem;
-  border: 1px solid map-get($basePalette, "navy-2");
-  box-shadow: 0 0 4px 0 rgba(59, 65, 101, 0.6);
+  border: 1px solid transparent;
   @media (max-width: $small) {
     display: flex;
   }
