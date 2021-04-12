@@ -40,7 +40,7 @@ const NavButton: React.FC<NavButtonProps> = ({
   );
 
   return external
-    ? (<a href={path} target="_blank">{button}</a>)
+    ? (<a href={path}>{button}</a>)
     : (<Link href={path}><a>{button}</a></Link>);
 };
 
