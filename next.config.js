@@ -11,6 +11,9 @@ module.exports = {
   images: {
     path: `${basePath}/_next/image`,
   },
+  future: {
+    webpack5: true,
+  },
   async redirects() {
     return [
       {
