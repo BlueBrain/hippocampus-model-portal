@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef  } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -46,15 +46,30 @@ const NavButton: React.FC<NavButtonProps> = ({
 
 const NavDesktop = () => {
   const router = useRouter();
+  const homeLinkRef = useRef(null);
 
   const [secondaryNav, setSecondaryNav] = React.useState(false);
-  React.useEffect(() => setSecondaryNav(false), [router]);
+
+  const handleClickOutside = e => {
+    if (!homeLinkRef || !homeLinkRef.current) return;
+
+    if (!homeLinkRef.current.contains(e.target)) {
+      setSecondaryNav(false);
+    }
+  };
+
+  useEffect(() => setSecondaryNav(false), [router]);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
 
   return (
     <ul className={`${classPrefix}basis`}>
-      <li style={{ position: 'relative' }}>
+      <li style={{ position: 'relative' }} ref={homeLinkRef}>
         {secondaryNav ? (
-          <NavButton path="/" name="Home" home />
+          <NavButton path="/" external name="Home" home />
         ) : (
           <Button
             width={140}
