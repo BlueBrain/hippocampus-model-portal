@@ -185,7 +185,7 @@ const Home: React.FC = () => (
         </div>
       </div>
       <div style={{ maxWidth: '1280px', margin: '0 auto', paddingLeft: '0.5rem' }}>
-        <small className="text-grey"><sup>*</sup> This page is under construction</small>
+        <small className="text-grey"><sup>*</sup> Coming soon</small>
       </div>
     </section>
   </div>
