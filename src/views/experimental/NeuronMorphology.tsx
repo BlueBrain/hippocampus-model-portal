@@ -137,7 +137,41 @@ const NeuronExperimentalMorphology: React.FC = () => {
       <div id="data" />
 
       {!!currentInstance && <DataContainer>
-        <Collapsible title="Population">
+        <Collapsible title={`Neuron Morphology ${currentMtype} ${currentInstance}`}>
+          <ESData
+            query={morphologyDataQuery(currentMtype, currentInstance)}
+          >
+            {esDocuments => (
+              <>
+                {!!esDocuments && !!esDocuments.length && (
+                  <>
+                    <h3>3D view</h3>
+                    <NexusPlugin
+                      className="mt-3"
+                      name="neuron-morphology"
+                      resource={esDocuments[0]._source}
+                      nexusClient={nexus}
+                    />
+                    <div className="text-right">
+                      <NexusFileDownloadButton
+                        className="mt-3"
+                        filename={getMorphologyDistribution(esDocuments[0]._source).name}
+                        url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
+                        org={hippocampus.org}
+                        project={hippocampus.project}
+                      >
+                        Download morphology
+                      </NexusFileDownloadButton>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </ESData>
+          <ExpMorphologyFactsheet className="mt-3" morphologyName={currentInstance} />
+        </Collapsible>
+
+        <Collapsible title="Population" className="mt-4 mb-4">
           <h3>Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
@@ -147,43 +181,6 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     morphologies={getAndSortMorphologies(esDocuments)}
                   />
                 }
-              </>
-            )}
-          </ESData>
-        </Collapsible>
-
-        <Collapsible
-          className="mt-4 mb-4"
-          title={`Neuron Morphology ${currentMtype} ${currentInstance}`}
-        >
-          <ExpMorphologyFactsheet morphologyName={currentInstance} />
-
-          <ESData
-            query={morphologyDataQuery(currentMtype, currentInstance)}
-          >
-            {esDocuments => (
-              <>
-                {!!esDocuments && !!esDocuments.length && (
-                  <div className="text-right">
-                    <NexusFileDownloadButton
-                      className="mt-2"
-                      filename={getMorphologyDistribution(esDocuments[0]._source).name}
-                      url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
-                      org={hippocampus.org}
-                      project={hippocampus.project}
-                    >
-                      Download morphology
-                    </NexusFileDownloadButton>
-                  </div>
-                )}
-                {!!esDocuments && !!esDocuments.length && (
-                  <NexusPlugin
-                    className="mt-3"
-                    name="neuron-morphology"
-                    resource={esDocuments[0]._source}
-                    nexusClient={nexus}
-                  />
-                )}
               </>
             )}
           </ESData>

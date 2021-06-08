@@ -173,6 +173,37 @@ const Neurons: React.FC = () => {
       <div id="data" />
 
       {!!currentInstance && <DataContainer >
+        <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
+          <h3>Anatomy</h3>
+          <ModelMorphologyFactsheet morphologyName={morphologyName} />
+
+          <div className="row end-xs mt-3 mb-4">
+            <div className="col">
+              <Button
+                type="primary"
+                download
+                href={memodelArchiveHref}
+              >
+                Download model
+              </Button>
+            </div>
+          </div>
+
+          <h3 className="mb-3">Morphology</h3>
+          <NeuronMorphology path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`} />
+          <div className="row end-xs mt-3 mb-3">
+            <div className="col">
+              <Button
+                type="primary"
+                download
+                href={`${basePath}/data/model-morphologies-asc/${morphologyName}.asc`}
+              >
+                Download morphology
+              </Button>
+            </div>
+          </div>
+        </Collapsible>
+
         <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
           <HttpData path={etypeFactsheetPath(currentInstance)}>
             {data => (
@@ -191,38 +222,6 @@ const Neurons: React.FC = () => {
             )}
           </HttpData>
           {/* TODO: add experimental traces used for model fitting */}
-        </Collapsible>
-
-        <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
-          <h3>Anatomy</h3>
-          <ModelMorphologyFactsheet morphologyName={morphologyName} />
-
-          <div className="row end-xs mt-3 mb-4">
-            <div className="col">
-              <Button
-                type="primary"
-                download
-                href={memodelArchiveHref}
-              >
-                Download model
-              </Button>
-            </div>
-          </div>
-
-          <NeuronMorphology
-            path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`}
-          />
-          <div className="row end-xs mt-3 mb-3">
-            <div className="col">
-              <Button
-                type="primary"
-                download
-                href={`${basePath}/data/model-morphologies-asc/${morphologyName}.asc`}
-              >
-                Download morphology
-              </Button>
-            </div>
-          </div>
         </Collapsible>
 
       </DataContainer>}
