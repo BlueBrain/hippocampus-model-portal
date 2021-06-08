@@ -77,7 +77,6 @@ const Feedback: React.FC = () => {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic c3NjeDphZXc0b29TaA==',
         },
       })
       if (res.ok) {
