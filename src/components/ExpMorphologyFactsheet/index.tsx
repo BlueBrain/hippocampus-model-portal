@@ -82,7 +82,7 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
 
   return (
     <div className={`${classPrefix}basis ${className}`}>
-      <h3>Morphology factsheet</h3>
+      <h3>Morphometrics</h3>
 
       <div className="mb-3 mt-3">
         <MorphologyFactsheetEntry fact={{

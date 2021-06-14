@@ -74,6 +74,10 @@ section {
 
 // common, utils
 
+.pos-relative {
+  position: relative;
+}
+
 .mt-0 {
   margin-top: 0 !important;
 }
@@ -912,7 +916,7 @@ $collapsible-padding: 20px 30px;
     margin: 0 0.5rem;
   }
 
-  @media (max-width: $small) {
+  @media (max-width: 75em) {
     .second-divider {
       display: none;
     }
@@ -927,7 +931,7 @@ $collapsible-padding: 20px 30px;
     font-weight: bold;
     vertical-align: middle;
 
-    @media (max-width: $small) {
+    @media (max-width: 75em) {
       display: block;
     }
   }
@@ -1074,7 +1078,9 @@ $collapsible-padding: 20px 30px;
 // layout / Navigation
 .nav__basis {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   position: absolute;
   top: 30px;
   left: 60px;
@@ -1676,7 +1682,13 @@ $collapsible-padding: 20px 30px;
 
 
 
-
+:root {
+  --color-grey-1: #343846;
+  --color-grey-2: #545a70;
+  --color-grey-3: #8690b3;
+  --color-grey-4: #9fa9d0;
+  --color-grey-5: #c3cce7;
+}
 
 .bg-grey-1 {
   background-color: #343846;
@@ -1692,4 +1704,8 @@ $collapsible-padding: 20px 30px;
 }
 .bg-grey-5 {
   background-color: #c3cce7;
+}
+
+.bg-white {
+  background-color: white;
 }

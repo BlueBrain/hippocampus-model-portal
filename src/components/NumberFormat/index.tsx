@@ -5,7 +5,6 @@ import isNumber from 'lodash/isNumber';
 
 type NumberFormatProps = {
   value?: any;
-  decimals?: number;
   significantFigures?: number;
   thousandSeparator?: boolean;
   prefix?: string;
