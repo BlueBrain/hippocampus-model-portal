@@ -55,12 +55,21 @@ const Feedback: React.FC = () => {
     setResponseStatus(null)
     setSending(true);
 
-    const pageUrl = `${deploymentUrl}/${router.basePath}/${router.asPath}`;
+    const pageUrl = `${deploymentUrl}${router.basePath}${router.asPath}`;
+
+    const labels = ['triage'];
+
+    if (router.basePath.startsWith('/model')) {
+      labels.push('section: explore');
+    } else if (router.basePath.startsWith('/build')) {
+      labels.push('section: build');
+    }
 
     try {
-      const res = await fetch(`${feedbackUrl}/hippocampus-model-portal/issues`, {
+      const res = await fetch(`${feedbackUrl}/hippocampushub/hh-feedback`, {
         method: 'POST',
         body: JSON.stringify({
+          labels,
           title: details.slice(0, 100),
           body: [
             `Field | Element`,
@@ -72,7 +81,6 @@ const Feedback: React.FC = () => {
             ``,
             `${details.slice(100)}`,
           ].join('\n'),
-          labels: ['triage']
         }),
         headers: {
           'Accept': 'application/json',
@@ -91,8 +99,6 @@ const Feedback: React.FC = () => {
       setSending(false)
     }
   }
-
-
 
   return (
     <div className={`${formVisible ? styles.formVisible : ''}`}>
