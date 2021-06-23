@@ -25,7 +25,6 @@ html, body {
   @include font-default;
   color: map-get($basePalette, "white");
   background-color: #17151A;
-  scroll-behavior: smooth;
 }
 
 #__next {

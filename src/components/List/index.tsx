@@ -29,7 +29,7 @@ const List: React.FC<ListProps> = ({
   const handleSelectedElement = (element: string) => {
     const target = anchor && document.querySelector(`#${anchor}`);
     if (target) {
-      window.setTimeout(() => target.scrollIntoView(true), 0)
+      window.setTimeout(() => target.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' }), 0);
     }
     onSelect(element);
   }
