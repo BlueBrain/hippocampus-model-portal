@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
+import { Button } from 'antd';
 
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
@@ -110,11 +111,23 @@ const NeuronElectrophysiology: React.FC = () => {
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
-                  <NexusPlugin
-                    name="neuron-electrophysiology"
-                    resource={esDocuments[0]._source}
-                    nexusClient={nexus}
-                  />
+                  <>
+                    <NexusPlugin
+                      name="neuron-electrophysiology"
+                      resource={esDocuments[0]._source}
+                      nexusClient={nexus}
+                    />
+                    <div className="text-right">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        size="small"
+                        href={`/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
+                      >
+                        See electrophysiology in the Build section
+                      </Button>
+                    </div>
+                  </>
                 )}
               </>
             )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
+import { Button } from 'antd';
 
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
@@ -153,6 +154,15 @@ const NeuronExperimentalMorphology: React.FC = () => {
                       nexusClient={nexus}
                     />
                     <div className="text-right">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        size="small"
+                        href={`/build/data/morphology?query=${encodeURIComponent(currentInstance)}`}
+                      >
+                        See morphology in the Build section
+                      </Button>
+
                       <NexusFileDownloadButton
                         className="mt-3"
                         filename={getMorphologyDistribution(esDocuments[0]._source).name}
