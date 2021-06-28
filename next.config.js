@@ -1,9 +1,13 @@
-const isProd = process.env.NODE_ENV === 'production';
+const { withSentryConfig } = require('@sentry/nextjs');
 
+
+const SentryWebpackPluginOptions = {
+  silent: true,
+};
 
 const basePath = '/model';
 
-module.exports = {
+const nextConfig = {
   trailingSlash: true,
   productionBrowserSourceMaps: true,
   basePath: basePath,
@@ -27,3 +31,5 @@ module.exports = {
     ]
   },
 };
+
+module.exports = withSentryConfig(nextConfig, SentryWebpackPluginOptions);

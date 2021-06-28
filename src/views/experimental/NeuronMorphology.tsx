@@ -28,9 +28,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
-  const query = {
-    ...router.query
-  };
+  const { query } = router;
 
   const setQuery = (query: any): void => {
     router.push({ query, pathname: router.pathname }, undefined, { shallow: true });

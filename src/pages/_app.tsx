@@ -6,14 +6,11 @@ import { NexusProvider } from '@bbp/react-nexus';
 import { nexus } from '../config';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import Feedback from '../components/Feedback';
-import { init as initSentry } from '../services/sentry';
 
 import '../styles/globals.scss'
 
 
 require('abort-controller/polyfill');
-
-initSentry();
 
 const nexusClient = createNexusClient({
   uri: nexus.url,
