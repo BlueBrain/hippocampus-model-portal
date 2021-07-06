@@ -158,7 +158,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                         size="small"
                         href={`/build/data/morphology?query=${encodeURIComponent(currentInstance)}`}
                       >
-                        See morphology in the Build section
+                        Send to the Build section
                       </Button>
 
                       <NexusFileDownloadButton

@@ -124,7 +124,7 @@ const NeuronElectrophysiology: React.FC = () => {
                         size="small"
                         href={`/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
                       >
-                        See electrophysiology in the Build section
+                        Send to the Build section
                       </Button>
                     </div>
                   </>
