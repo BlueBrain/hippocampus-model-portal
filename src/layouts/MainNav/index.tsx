@@ -159,7 +159,6 @@ const MainNav: React.FC = () => {
         label="Home"
         className="menu-group-home"
         external
-        background="white"
         href="/"
       >
         <SubmenuLink label="About the Hub" href="/#about" external />
@@ -187,6 +186,7 @@ const MainNav: React.FC = () => {
       <MenuItem
         label="Explore models"
         className="menu-group-explore"
+        background="white"
         href="/"
       >
         <SubmenuGroup label="Experimental Data" background="grey-1">
