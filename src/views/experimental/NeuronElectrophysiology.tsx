@@ -106,7 +106,10 @@ const NeuronElectrophysiology: React.FC = () => {
       <div id="data" />
 
       {!!currentEtype && !!currentInstance && <DataContainer>
-        <Collapsible title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}>
+        <Collapsible
+          id="instanceSection"
+          title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
+        >
           <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)} >
             {esDocuments => (
               <>
@@ -134,7 +137,11 @@ const NeuronElectrophysiology: React.FC = () => {
           </ESData>
         </Collapsible>
 
-        <Collapsible title="Population" className="mt-4">
+        <Collapsible
+          id="etypeSection"
+          className="mt-4"
+          title="Population"
+        >
           <h3 className="mt-3">Experimental instances</h3>
 
           <ESData query={etypeTracesDataQuery(currentEtype)}>

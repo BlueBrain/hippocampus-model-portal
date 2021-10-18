@@ -75,7 +75,10 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
   }, [traces]);
 
   return (
-    <div className="layer-anatomy-summary__basis mt-2">
+    <div
+      id={traces.length && agentMap ? 'expTraceTable' : null}
+      className="layer-anatomy-summary__basis mt-2"
+    >
       <table>
         <thead>
           <tr>

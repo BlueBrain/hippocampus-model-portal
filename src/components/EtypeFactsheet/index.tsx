@@ -104,7 +104,7 @@ const EtypeFactsheet: React.FC<EtypeFactsheetProps> = ({
   const groupByChannel = (rawChannelParams) => groupBy(rawChannelParams.flat(), 'channel');
 
   return (
-    <div className={styles.container}>
+    <div id="etypeFactsheet" className={styles.container}>
       <h3>Factsheet</h3>
       <Collapse
         className="mb-3"

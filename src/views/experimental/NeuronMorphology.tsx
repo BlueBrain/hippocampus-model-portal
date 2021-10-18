@@ -133,10 +133,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
         </div>
       </Filters>
 
-      <div id="data" />
-
-      {!!currentInstance && <DataContainer>
-        <Collapsible title={`Neuron Morphology ${currentMtype} ${currentInstance}`}>
+      <DataContainer visible={!!currentInstance}>
+        <Collapsible
+          id="morphologySection"
+          title={`Neuron Morphology ${currentMtype} ${currentInstance}`}
+        >
           <ESData
             query={morphologyDataQuery(currentMtype, currentInstance)}
           >
@@ -162,6 +163,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                       </Button>
 
                       <NexusFileDownloadButton
+                        id="morphologyDownloadBtn"
                         className="mt-3"
                         filename={getMorphologyDistribution(esDocuments[0]._source).name}
                         url={getMorphologyDistribution(esDocuments[0]._source).contentUrl}
@@ -176,7 +178,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
               </>
             )}
           </ESData>
-          <ExpMorphologyFactsheet className="mt-3" morphologyName={currentInstance} />
+          <ExpMorphologyFactsheet
+            id="morphometrics"
+            className="mt-3"
+            morphologyName={currentInstance}
+          />
         </Collapsible>
 
         <Collapsible title="Population" className="mt-4 mb-4">
@@ -193,7 +199,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
             )}
           </ESData>
         </Collapsible>
-      </DataContainer>}
+      </DataContainer>
     </>
   );
 };

@@ -23,6 +23,7 @@ type MorphologyFactsheetEntryType = {
 type MorphologyFactsheetProps = {
   morphologyName: string;
   className?: string;
+  id?: string;
 };
 
 
@@ -61,6 +62,7 @@ const strPrettify = (str) => str ? str.replace(/\_/g, ' ') : str;
 const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
   morphologyName,
   className = '',
+  id,
 }) => {
   const stats = expMorphologyStats[morphologyName];
 
@@ -81,7 +83,7 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
   };
 
   return (
-    <div className={`${classPrefix}basis ${className}`}>
+    <div id={id} className={`${classPrefix}basis ${className}`}>
       <h3>Morphometrics</h3>
 
       <div className="mb-3 mt-3">

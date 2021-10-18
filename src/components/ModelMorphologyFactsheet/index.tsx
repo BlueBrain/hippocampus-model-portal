@@ -81,7 +81,7 @@ const MorphologyFactsheet: React.FC<MorphologyFactsheetProps> = ({
   };
 
   return (
-    <div className={`${classPrefix}basis ${className}`}>
+    <div id="modelMorphologyFactsheet" className={`${classPrefix}basis ${className}`}>
       <div className="mb-3 mt-3">
         <MorphologyFactsheetEntry fact={{
           name: 'soma diameter',

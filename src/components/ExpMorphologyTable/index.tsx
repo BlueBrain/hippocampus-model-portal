@@ -75,7 +75,7 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
   }, [morphologies]);
 
   return (
-    <div className="layer-anatomy-summary__basis mt-2">
+    <div id="expMorphologyTable" className="layer-anatomy-summary__basis mt-2">
       <table>
         <thead>
           <tr>

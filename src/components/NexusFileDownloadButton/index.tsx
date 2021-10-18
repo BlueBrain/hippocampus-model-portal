@@ -14,6 +14,7 @@ export type NexusFileDownloadButtonProps = {
   project?: string;
   children: React.ReactNode;
   className?: string;
+  id?: string;
 };
 
 const NexusFileDownloadButton: React.FC<NexusFileDownloadButtonProps> = ({
@@ -23,6 +24,7 @@ const NexusFileDownloadButton: React.FC<NexusFileDownloadButtonProps> = ({
   project,
   children,
   className = '',
+  id,
 }) => {
   const nexus = useNexusContext();
 
@@ -41,6 +43,7 @@ const NexusFileDownloadButton: React.FC<NexusFileDownloadButtonProps> = ({
 
   return (
     <Button
+      id={id}
       className={className}
       type="primary"
       size="small"
