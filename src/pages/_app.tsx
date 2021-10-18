@@ -23,6 +23,7 @@ function App({ Component, pageProps }) {
     <NexusProvider nexusClient={nexusClient}>
       <Head>
         <meta name="robots" content="noindex,nofollow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" />
         <link rel="shortcut icon" href="https://www.hippocampushub.eu/favicon.ico" />
 
