@@ -15,9 +15,9 @@ const DataContainer: React.FC<DataContainerProps> = ({
   children,
 }) => {
   return (
-    <>
+    <div id="data">
       {visible && (
-        <div id="data" className={`${classPrefix}basis`}>
+        <div className={`${classPrefix}basis`}>
           <div className="center">{children}</div>
           <div className="scroll-to">
             <ScrollTo anchor="filters" direction="up">
@@ -26,7 +26,7 @@ const DataContainer: React.FC<DataContainerProps> = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
