@@ -168,10 +168,11 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <div id="data" />
-
-      {!!currentInstance && <DataContainer >
-        <Collapsible className="mt-4" title={`Model instance ${currentInstance} Factsheet`}>
+      <DataContainer visible={!!currentInstance}>
+        <Collapsible
+          className="mt-4"
+          title={`Model instance ${currentInstance} Factsheet`}
+        >
           <h3>Anatomy</h3>
           <ModelMorphologyFactsheet morphologyName={morphologyName} />
 
@@ -221,8 +222,7 @@ const Neurons: React.FC = () => {
           </HttpData>
           {/* TODO: add experimental traces used for model fitting */}
         </Collapsible>
-
-      </DataContainer>}
+      </DataContainer>
     </>
   );
 };

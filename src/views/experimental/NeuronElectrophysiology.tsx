@@ -103,9 +103,7 @@ const NeuronElectrophysiology: React.FC = () => {
         </div>
       </Filters>
 
-      <div id="data" />
-
-      {!!currentEtype && !!currentInstance && <DataContainer>
+      <DataContainer visible={!!currentInstance}>
         <Collapsible
           id="instanceSection"
           title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
@@ -155,7 +153,6 @@ const NeuronElectrophysiology: React.FC = () => {
           </ESData>
         </Collapsible>
       </DataContainer>
-      }
     </>
   );
 };
