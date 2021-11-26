@@ -4,3 +4,9 @@
   border: 1px solid #dedede;
   border-radius: 5px;
 }
+
+.highlightedRowBg {
+  td, th {
+    background-color: #edeff8;
+  }
+}

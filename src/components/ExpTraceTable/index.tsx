@@ -10,6 +10,7 @@ import styles from './styles.module.scss'
 
 type ExpTraceTableProps = {
   traces: Record<string, any>[];
+  currentTrace?: string;
 };
 
 function entryToArray(entry) {
@@ -30,7 +31,7 @@ function getAgentType(agent) {
     : 'person';
 }
 
-const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
+const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ currentTrace, traces = [] }) => {
   const nexus = useNexusContext();
 
   const agentIds = traces.reduce((ids: string[], trace) => {
@@ -74,6 +75,8 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
       .then(agentMap => setAgentMap(agentMap));
   }, [traces]);
 
+  const isCurrent = trace => trace.name === currentTrace;
+
   return (
     <div
       id={traces.length && agentMap ? 'expTraceTable' : null}
@@ -81,7 +84,7 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
     >
       <table>
         <thead>
-          <tr>
+          <tr className={styles.highlightedRowBg}>
             <th>Name</th>
             {/* <th>Image</th> */}
             <th>E-Type</th>
@@ -90,9 +93,13 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ traces = [] }) => {
         </thead>
         <tbody>
           {traces.map(trace => (
-            <tr key={trace.name}>
-              <td className="text-capitalize">{trace.name}</td>
-              <td>{trace.annotation.hasBody.label}</td>
+            <tr className={isCurrent(trace) ? styles.highlightedRowBg : undefined} key={trace.name}>
+              <td className={`text-capitalize ${isCurrent(trace) ? 'text-bold' : undefined}`}>
+                {trace.name}
+              </td>
+              <td className={`text-capitalize ${isCurrent(trace) ? 'text-bold' : undefined}`}>
+                {trace.annotation.hasBody.label}
+              </td>
               <td>
                 {agentMap && entryToArray(trace.contribution)
                   .map(contribution => agentMap[contribution.agent['@id']])

@@ -146,7 +146,10 @@ const NeuronElectrophysiology: React.FC = () => {
             {esDocuments => (
               <>
                 {!!esDocuments && (
-                  <ExpTraceTable traces={getAndSortTraces(esDocuments)} />
+                  <ExpTraceTable
+                    traces={getAndSortTraces(esDocuments)}
+                    currentTrace={currentInstance}
+                  />
                 )}
               </>
             )}

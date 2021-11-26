@@ -10,6 +10,7 @@ import styles from './styles.module.scss'
 
 type ExpMorphologyTableProps = {
   morphologies: Record<string, any>[];
+  currentMorphology?: string;
 };
 
 function entryToArray(entry) {
@@ -30,7 +31,7 @@ function getAgentType(agent) {
     : 'person';
 }
 
-const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = [] }) => {
+const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorphology, morphologies = [] }) => {
   const nexus = useNexusContext();
 
   const agentIds = morphologies.reduce((ids: string[], morphology) => {
@@ -74,10 +75,12 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
       .then(agentMap => setAgentMap(agentMap));
   }, [morphologies]);
 
+  const isCurrent = morphology => morphology.name === morphology;
+
   return (
     <div id="expMorphologyTable" className="layer-anatomy-summary__basis mt-2">
       <table>
-        <thead>
+        <thead className={styles.highlightedRowBg}>
           <tr>
             <th>Name</th>
             <th>Image</th>
@@ -88,7 +91,9 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
         <tbody>
           {morphologies.map(morph => (
             <tr key={morph.name}>
-              <td className="text-capitalize">{morph.name}</td>
+              <td className={`text-capitalize ${isCurrent(morph) ? 'text-bold' : ''}`}>
+                {morph.name}
+              </td>
               <td style={{ textAlign: 'center'}}>
                 <div className={styles.morphImageContainer}>
                   <ImageViewer
@@ -98,7 +103,9 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ morphologies = 
                   />
                 </div>
               </td>
-              <td>{morph.annotation.hasBody.label}</td>
+              <td className={isCurrent(morph) ? 'text-bold' : ''}>
+                {morph.annotation.hasBody.label}
+              </td>
               <td>
                 {agentMap && entryToArray(morph.contribution)
                   .map(contribution => agentMap[contribution.agent['@id']])
