@@ -75,7 +75,7 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorpholo
       .then(agentMap => setAgentMap(agentMap));
   }, [morphologies]);
 
-  const isCurrent = morphology => morphology.name === morphology;
+  const isCurrent = morphology => morphology.name === currentMorphology;
 
   return (
     <div id="expMorphologyTable" className="layer-anatomy-summary__basis mt-2">
@@ -90,7 +90,10 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorpholo
         </thead>
         <tbody>
           {morphologies.map(morph => (
-            <tr key={morph.name}>
+            <tr
+              className={isCurrent(morph) ? styles.highlightedRowBg : undefined}
+              key={morph.name}
+            >
               <td className={`text-capitalize ${isCurrent(morph) ? 'text-bold' : ''}`}>
                 {morph.name}
               </td>
