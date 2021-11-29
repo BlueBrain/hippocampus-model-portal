@@ -1,0 +1,35 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: hippocampus-model-portal-dev
+  labels:
+    app: hippocampus-model-portal-dev
+  namespace: bbp-ou-nse
+spec:
+  source:
+    git:
+      ref: develop
+      uri: 'https://github.com/BlueBrain/hippocampus-model-portal.git'
+    sourceSecret:
+      name: hippocampus-model-portal-repo-secret
+    type: Git
+  triggers:
+    - generic:
+        secretReference:
+          name: hippocampus-model-portal-build-webhook-secret
+      type: Generic
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: hippocampus-model-portal:dev
+  runPolicy: SerialLatestOnly
+  resources:
+    limits:
+      cpu: '1'
+      memory: 4Gi
+  failedBuildsHistoryLimit: 3
+  successfulBuildsHistoryLimit: 5
