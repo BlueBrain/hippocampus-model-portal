@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'antd/lib/style/index.css';
 @import 'flexboxgrid';
 
@@ -759,7 +761,7 @@ $collapsible-padding: 20px 30px;
   border-radius: $size;
   width: $size;
   height: $size;
-  font-size: (2 / 3) * $size;
+  font-size: math.div(2, 3) * $size;
   & svg {
     padding-top: 0.75rem;
   }
