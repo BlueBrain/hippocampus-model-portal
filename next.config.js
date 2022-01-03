@@ -8,14 +8,21 @@ const SentryWebpackPluginOptions = {
 const basePath = '/model';
 
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   trailingSlash: true,
   productionBrowserSourceMaps: true,
   basePath: basePath,
   assetPrefix: `${basePath}/`,
   images: {
     path: `${basePath}/_next/image`,
+    minimumCacheTTL: 259200,
   },
   webpack5: true,
+  experimental: {
+    esmExternals: true,
+  },
   async redirects() {
     return [
       {
