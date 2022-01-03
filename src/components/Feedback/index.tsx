@@ -122,7 +122,7 @@ const Feedback: React.FC = () => {
           <Form.Item>
             <Select
               placeholder="Feedback type (optional)"
-              ref={issueSelectRef}
+              ref={issueSelectRef as any}
               disabled={sending}
               getPopupContainer={() => document.getElementById('feedbackForm')}
               value={type}
