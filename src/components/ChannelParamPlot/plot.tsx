@@ -1,5 +1,15 @@
 import React, { useRef, useEffect } from 'react';
-import Chart from 'chart.js';
+import {
+  Chart,
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Filler,
+  Legend,
+  Title,
+} from 'chart.js';
 import { Parser } from 'expr-eval';
 
 import styles from './styles.module.scss';
@@ -17,6 +27,17 @@ export type ChannelParam = {
 type ChannelParamPlotProps = {
   channelParam: ChannelParam;
 }
+
+Chart.register(
+  LineElement,
+  PointElement,
+  LineController,
+  CategoryScale,
+  LinearScale,
+  Filler,
+  Legend,
+  Title,
+);
 
 const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => {
   const canvasEl = useRef<HTMLCanvasElement>(null);
@@ -39,32 +60,36 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
       },
       options: {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: false,
-              suggestedMax: maxValue * 1.6,
-              suggestedMin: 0,
-            },
-          }],
-          xAxes: [{
-            scaleLabel: {
+          y: {
+            beginAtZero: false,
+            suggestedMax: maxValue * 1.6,
+            suggestedMin: 0,
+          },
+          x: {
+            title: {
               display: true,
-              labelString: 'µm',
+              text: 'µm',
             },
-          }],
+          },
         },
-        title: {
-          fontSize: 12,
-          text: textBottom,
-          position: 'bottom',
-          display: true,
-          fontWeight: 'normal',
-          padding: 6,
-        },
-        legend: {
-          labels: {
-            boxWidth: 0,
-            fontSize: 12,
+        plugins: {
+          title: {
+            font: {
+              size: 12,
+              weight: 'normal',
+            },
+            text: textBottom,
+            position: 'bottom',
+            display: true,
+            padding: 6,
+          },
+          legend: {
+            labels: {
+              boxWidth: 0,
+              font: {
+                size: 12,
+              },
+            },
           },
         },
       },
