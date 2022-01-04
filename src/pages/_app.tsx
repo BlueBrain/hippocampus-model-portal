@@ -5,6 +5,7 @@ import { NexusProvider } from '@bbp/react-nexus';
 import smoothscroll from 'smoothscroll-polyfill';
 
 import { nexus } from '../config';
+import MainLayout from '../layouts/MainLayout';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import Feedback from '../components/Feedback';
 
@@ -37,7 +38,9 @@ function App({ Component, pageProps }) {
       <GoogleAnalytics />
       <Feedback />
 
-      <Component {...pageProps} />
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
     </NexusProvider>
   )
 }
