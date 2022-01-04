@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
+import smoothscroll from 'smoothscroll-polyfill';
 
 import { nexus } from '../config';
 import GoogleAnalytics from '../components/GoogleAnalytics';
@@ -10,7 +11,12 @@ import Feedback from '../components/Feedback';
 import '../styles/globals.scss'
 
 
-require('abort-controller/polyfill');
+if (typeof window === 'undefined') {
+  require('abort-controller/polyfill');
+} else {
+  smoothscroll.polyfill();
+  require('systemjs');
+}
 
 const nexusClient = createNexusClient({
   uri: nexus.url,
@@ -26,10 +32,6 @@ function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" />
         <link rel="shortcut icon" href="https://www.hippocampushub.eu/favicon.ico" />
-
-        <script src="https://www.unpkg.com/systemjs@6.1.7/dist/system.js" />
-        <script src="https://www.unpkg.com/systemjs@6.1.7/dist/extras/named-exports.js" />
-        <script type="systemjs-importmap" src="/model/systemjs-importmap.json" />
       </Head>
 
       <GoogleAnalytics />

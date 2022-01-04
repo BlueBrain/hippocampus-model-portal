@@ -35,7 +35,9 @@
     "react-icons": "^4.2.0",
     "react-image-lightbox": "^5.1.1",
     "sass": "^1.32.8",
-    "swcmorphologyparser": "^0.1.11"
+    "smoothscroll-polyfill": "^0.4.4",
+    "swcmorphologyparser": "^0.1.11",
+    "systemjs": "^6.11.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^12.0.7",
