@@ -190,7 +190,7 @@ const MainNav: React.FC = () => {
         href="/"
       >
         <SubmenuGroup label="Experimental Data" background="grey-1">
-          <SubmenuGroupLink label="Layer Anatomy" />
+          <SubmenuGroupLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
           <SubmenuGroupLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
           <SubmenuGroupLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
         </SubmenuGroup>

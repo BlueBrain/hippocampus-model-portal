@@ -10,7 +10,7 @@ export const accentColors: { [key: string]: string } = {
 
 export const hippocampus = {
   org: 'public',
-  project: 'hippocampus-hub',
+  project: 'hippocampus',
   datasetViewId: encodeURIComponent('https://bbp.epfl.ch/neurosciencegraph/data/views/es/dataset'),
 };
 

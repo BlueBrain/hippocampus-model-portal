@@ -14,15 +14,13 @@ const Home: React.FC = () => (
         <p>
           In this section, you can explore morphological reconstructions,
           electrophysiological recordings and models of single neurons.
-          The models you find in this section are a continuation of the&nbsp;
-          <a
+          The models you find in this section are a continuation of the <a
             href="https://www.humanbrainproject.eu/en/brain-simulation/hippocampus/"
             target="_blank"
             rel="noopener noreferrer"
           >
             hippocampal research
-          </a>&nbsp;
-          carried out in the Human Brain Project during 2014-2020.
+          </a> carried out in the Human Brain Project during 2014-2020.
           Currently we are finalising a full-scale model of the rat hippocampus CA1,
           which will be available and freely accessible in due course, when the publication is released.
         </p>
@@ -47,10 +45,11 @@ const Home: React.FC = () => (
             links={[
               {
                 label: 'Layer Anatomy',
+                href: '/experimental-data/layer-anatomy/',
               },
               {
                 label: 'Neuronal Morphology',
-                href: '/experimental-data/neuronal-morphology',
+                href: '/experimental-data/neuronal-morphology/',
               },
               {
                 label: 'Neuronal Electrophysiology',

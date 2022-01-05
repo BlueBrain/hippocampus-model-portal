@@ -1,30 +1,40 @@
-import React, { ReactChild, ReactFragment } from 'react';
+import React from 'react';
 
 import ScrollTo from '../../components/ScrollTo';
 import { Color } from '../../types';
-// import './style.scss';
 
-const classPrefix = 'filters__';
+import styles from './styles.module.scss';
+
 
 type FiltersProps = {
-  children: ReactChild | ReactFragment;
-  backgroundAlt?: boolean;
+  hasData?: boolean;
+  primaryColor?: Color;
   id?: string;
 };
 
 const Filters: React.FC<FiltersProps> = ({
+  primaryColor,
   children,
-  backgroundAlt,
+  hasData,
   id = 'filters',
 }) => {
   return (
     <div>
-      <div
-        id={id}
-        className={`${classPrefix}basis ${backgroundAlt ? 'background-alt' : ''}`}
-      >
+      <div id={id} className={styles.container}>
         {children}
       </div>
+      {!!hasData && (
+        <div className="scroll-to">
+          <ScrollTo
+            anchor="data"
+            color={primaryColor}
+            direction="down"
+            animated
+          >
+            Click to view data
+          </ScrollTo>
+        </div>
+      )}
     </div>
   );
 };

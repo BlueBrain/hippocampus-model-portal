@@ -1,28 +1,28 @@
-import React, { ReactChild, ReactFragment } from 'react';
+import React from 'react';
+
 import { Layer } from '../../types';
+import { layers } from '../../constants';
 
 import styles from './styles.module.scss'
 
 
 type LayerSelectProps = {
-  activeLayer?: Layer;
-  onLayerSelected?: (layer: Layer) => void;
+  value?: Layer;
+  onSelect?: (layer: Layer) => void;
 };
 
-const LAYERS: Layer[] = ['SLM', 'SR', 'SP', 'SO'];
-
 const LayerSelector: React.FC<LayerSelectProps> = ({
-  activeLayer,
-  onLayerSelected = () => {},
+  value: currentLayer,
+  onSelect = () => {},
 }) => {
-  const selectLayer = (l: Layer): void => onLayerSelected(l);
+  const selectLayer = (l: Layer): void => onSelect(l);
 
   return (
     <div>
-      {LAYERS.map(layer => (
+      {layers.map(layer => (
         <div
           key={layer}
-          className={`${styles.layer} ${layer === activeLayer ? styles.active : ''}`}
+          className={`${styles.layer} ${layer === currentLayer ? styles.active : ''}`}
           onClick={() => selectLayer(layer)}
         >
           {layer}

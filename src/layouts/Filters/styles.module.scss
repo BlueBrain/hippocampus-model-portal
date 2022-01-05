@@ -1,0 +1,15 @@
+
+@import '../../styles/config/_queries';
+
+.container {
+  padding: 100px 60px 3rem;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  background-color: #17151A;
+
+  @media (max-width: $ant-breakpoint-md) {
+    padding: 80px 20px 2rem;
+  }
+}

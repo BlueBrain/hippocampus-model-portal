@@ -81,7 +81,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
 
   return (
     <>
-      <Filters backgroundAlt>
+      <Filters>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
@@ -89,10 +89,13 @@ const NeuronExperimentalMorphology: React.FC = () => {
               title={<span>Neuronal <br /> Morphology</span>}
               subtitle="Experimental Data"
             />
-            <InfoBox
-              color="grey-1"
-              text="We classified neuronal morphologies in different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we have identified 12 m-types in rat hippocampus CA1."
-            />
+            <InfoBox>
+              <p>
+                We classified neuronal morphologies in different morphological types (m-types)
+                and created digital 3D reconstructions. Using objective classification methods,
+                we have identified 12 m-types in rat hippocampus CA1.
+              </p>
+            </InfoBox>
           </div>
           <div className="col-xs-12 col-lg-6">
             <div className={styles.selector}>
@@ -100,8 +103,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <div className={styles.selectorHead}>1. Choose a layer</div>
                 <div className={styles.selectorBody}>
                   <LayerSelector
-                    activeLayer={currentLayer}
-                    onLayerSelected={setLayer}
+                    value={currentLayer}
+                    onSelect={setLayer}
                   />
                 </div>
               </div>

@@ -27,6 +27,9 @@
   text-transform: uppercase;
   margin-right: 1.5rem;
   padding: 0.2rem 0;
+  a {
+    color: white;
+  }
 
   &:global(.bg-white) {
     padding: 0.2rem 1rem;

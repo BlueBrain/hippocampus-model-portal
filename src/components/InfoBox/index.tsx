@@ -5,22 +5,19 @@ import styles from './styles.module.scss';
 
 
 type InfoBoxProps = {
-  title?: string;
-  text: string;
   color?: Color;
 };
 
 const InfoBox: React.FC<InfoBoxProps> = ({
-  title,
-  text,
-  color = '',
+  color = 'grey-1',
+  children,
 }) => {
   return (
     <div className={`${styles.container} bg-${color}`}>
-      {title && <h3>{title}</h3>}
-      <p>{text}</p>
+      {children}
     </div>
   );
 };
+
 
 export default InfoBox;

@@ -27,18 +27,10 @@ html, body {
   @include font-default;
   color: map-get($basePalette, "white");
   background-color: #17151A;
-}
-
-#__next {
-  height: 100%;
-}
-
-button {
-  @include font-default;
-}
-
-input {
-  @include font-default;
+  scroll-behavior: smooth;
+  width: auto;
+  height: auto;
+  min-height: 100vh;
 }
 
 button,
@@ -46,26 +38,8 @@ a {
   cursor: pointer;
 }
 
-h1 {
-  font-size: 1.5rem;
-}
-
-h2 {
-  font-size: 2.5rem;
-}
-
-h3 {
-  font-size: map-get($fontSize, "large");
-  font-weight: 600;
-}
-
 p {
   font-weight: 300;
-}
-
-a {
-  color: map-get($basePalette, "white");
-  font-weight: 400;
 }
 
 section {
@@ -205,6 +179,10 @@ section {
 
 .text-grey {
   color: rgba(247, 248, 252, 0.5);
+}
+
+.text-tmp {
+  color: rgb(250, 173, 20);
 }
 
 .w-100 {
@@ -699,7 +677,6 @@ $collapsible-padding: 20px 30px;
 
 
 
-
 // ScrollTo
 .scroll-to__basis {
   display: block;
@@ -707,12 +684,18 @@ $collapsible-padding: 20px 30px;
   font-size: map-get($fontSize, "large");
   background-color: #343846;
   color: map-get($basePalette, "white");
+  box-shadow: 0 -8px 12px 0px rgba(0,0,0,0.3);
   text-decoration: none;
   text-align: center;
   padding: 15px;
   cursor: pointer;
   &:hover {
     background-color: #545A70;
+  }
+
+  &.animated svg {
+    animation: arrow-down 1s infinite;
+    animation-timing-function: ease-out;
   }
 
   &.yellow {
@@ -949,20 +932,6 @@ $collapsible-padding: 20px 30px;
 
 
 
-
-// layout / Filters
-.filters__basis {
-  padding: 100px 60px 80px;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  background-color: #17151A;
-
-  @media (max-width: $small) {
-    padding: 100px 20px;
-  }
-}
-
 .scroll-to {
   position: -webkit-sticky;
   position: sticky;
@@ -1163,6 +1132,7 @@ $collapsible-padding: 20px 30px;
 
       a {
         text-decoration: underline;
+        color: white;
 
         &:hover  {
           color: white;

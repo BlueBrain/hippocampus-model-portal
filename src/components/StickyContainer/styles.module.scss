@@ -1,0 +1,22 @@
+
+@import '../../styles/config/_queries';
+
+
+.container {
+  position: sticky;
+  bottom: 100px;
+  margin-top: auto;
+  // fix Firefox behave differently on collapsing margins
+  display: table;
+}
+
+.flexWrapper {
+  display: flex;
+  height: 100%;
+}
+
+@media (max-width: $ant-breakpoint-md) {
+  .container {
+    margin: 0 auto;
+  }
+}
