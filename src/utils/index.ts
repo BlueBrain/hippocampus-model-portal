@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 interface ParsedNexusUrl {
   deployment: string;
   entityType: string;
@@ -71,3 +73,16 @@ export const parseUrl = (nexusUrl: string): ParsedNexusUrl => {
     id: matches[6],
   };
 };
+
+
+export function downloadAsJson(data, name) {
+  const dataBlob = new Blob([JSON.stringify(data)]);
+  saveAs(dataBlob, name);
+};
+
+
+export function entryToArray(entry) {
+  if (Array.isArray(entry)) return entry;
+
+  return [entry];
+}

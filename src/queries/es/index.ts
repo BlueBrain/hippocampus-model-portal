@@ -26,9 +26,14 @@ export const layerAnatomyDataQuery = {
               },
               {
                 term: {
-                  '@type': 'SliceCollection',
-                }
-              }
+                  '@type': 'Subject',
+                },
+              },
+              {
+                term: {
+                  '@type': 'Organization',
+                },
+              },
             ],
           },
         },

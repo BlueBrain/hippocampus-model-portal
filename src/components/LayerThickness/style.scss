@@ -1,0 +1,22 @@
+
+.layer-thickness__basis {
+  table {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 1rem;
+  }
+
+  .image-cell {
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+
+  .image-container {
+    max-width: 100px;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+}

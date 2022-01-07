@@ -11,6 +11,9 @@ import DataContainer from '../../components/DataContainer';
 import Collapsible from '../../components/Collapsible';
 import LayerSelector from '../../components/LayerSelector';
 import { colorName } from './config';
+import { layerAnatomyDataQuery } from '../../queries/es';
+import ESData from '../../components/ESData';
+import LayerThickness from '../../components/LayerThickness';
 import { Layer } from '../../types';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
@@ -80,27 +83,38 @@ const LayerAnatomyView: React.FC = () => {
       </Filters>
 
       <DataContainer visible={!!layer}>
-        <Collapsible
-          id="layerSection"
-          title={`Layer ${layer}`}
-        >
-          <div>
-            <h3>Layer thickness for CA1</h3>
-            <p>
-              Data are provided in the form of raw microscopy images of NeuN
-              (neuron-specific nuclear protein) stained coronal slices with annotations of individual layer extents,
-              and spreadsheets summarizing measurements of layer thicknesses.
-            </p>
-          </div>
-        </Collapsible>
+        <ESData query={layerAnatomyDataQuery}>
+          {data => (
+            <>{data && (
+              <>
+                <Collapsible
+                  id="layerSection"
+                  title={`Layer ${layer}`}
+                >
+                  <div>
+                    <h3>Layer thickness for CA1</h3>
+                    <p>
+                      Data are provided in the form of raw microscopy images of NeuN
+                      (neuron-specific nuclear protein) stained coronal slices with annotations of individual layer extents,
+                      and spreadsheets summarizing measurements of layer thicknesses.
+                    </p>
+                  </div>
 
-        <Collapsible
-          id="summarySection"
-          title="Summary"
-          className="mt-4"
-        >
-          Summary section content
-        </Collapsible>
+                  <LayerThickness layer={layer as Layer} data={data} />
+                </Collapsible>
+
+                <Collapsible
+                  id="summarySection"
+                  title="Summary"
+                  className="mt-4"
+                >
+                  Summary section content
+                </Collapsible>
+              </>
+            )}
+            </>
+          )}
+        </ESData>
       </DataContainer>
     </>
   );
