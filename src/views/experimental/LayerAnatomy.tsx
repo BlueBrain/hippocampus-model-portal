@@ -14,6 +14,7 @@ import { colorName } from './config';
 import { layerAnatomyDataQuery } from '../../queries/es';
 import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
+import NeuronDensity from '../../components/NeuronDensity';
 import { Layer } from '../../types';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
@@ -93,7 +94,7 @@ const LayerAnatomyView: React.FC = () => {
                 >
                   <div>
                     <h3>Layer thickness for CA1</h3>
-                    <p>
+                    <p className="text-tmp">
                       Data are provided in the form of raw microscopy images of NeuN
                       (neuron-specific nuclear protein) stained coronal slices with annotations of individual layer extents,
                       and spreadsheets summarizing measurements of layer thicknesses.
@@ -101,6 +102,17 @@ const LayerAnatomyView: React.FC = () => {
                   </div>
 
                   <LayerThickness layer={layer as Layer} data={data} />
+
+                  <div>
+                    <h3>Neuron density</h3>
+                    <p className="text-tmp">
+                      Data are given as raw microscopy images of NeuN stained slices with annotations of
+                      individual layer extents, and spreadsheets summarizing measurements of neuron counts
+                      across different layers.
+                    </p>
+                  </div>
+
+                  <NeuronDensity layer={layer as Layer} data={data} />
                 </Collapsible>
 
                 <Collapsible
