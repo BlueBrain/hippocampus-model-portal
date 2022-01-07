@@ -22,19 +22,18 @@ interface NeuronDensityData {
 
 const NeuronDensity: React.FC<LayerThicknessProps> = ({ layer, data = [] }) => {
   const entities = data.map(document => document._source);
-  let densityUnit = '';
 
   const rawNeuronDensities = entities
     .filter(entity => entity['@type'].toString().includes('NeuronDensity'))
     .filter(entity => entity.note.match(/validation/i))
     .filter(entity => entity.brainLocation?.brainRegion?.label === `CA1_${layer}`);
 
-  debugger;
-
   const neuronDensities = rawNeuronDensities.map(neuralDensity => {
-    densityUnit = neuralDensity.series.find((s: any) => s.statistic === 'mean')?.unitCode;
+    const unit = neuralDensity.series.find((s: any) => s.statistic === 'mean')?.unitCode;
     const mean = neuralDensity.series.find((s: any) => s.statistic === 'mean')?.value;
     const std = neuralDensity.series.find((s: any) => s.statistic === 'standard deviation')?.value;
+    const sem = neuralDensity.series.find((s: any) => s.statistic === 'standard error of the mean')?.value;
+
     return ({
       layer,
       value: <>
@@ -42,15 +41,20 @@ const NeuronDensity: React.FC<LayerThicknessProps> = ({ layer, data = [] }) => {
         &nbsp;
         <NumberFormat value={std} prefix="± " />
       </>,
+      sem: <NumberFormat value={sem} />,
+      unit,
       n: neuralDensity.series.find((s: any) => s.statistic === 'N')?.value,
     });
   });
+
+  const unit = neuronDensities[0]?.unit;
 
   const columns = [
     { dataIndex: 'layer' as keyof NeuronDensityData, title: 'Layer' },
     { title: 'Neuron density',
       children: [
-        { dataIndex: 'value' as keyof NeuronDensityData, title: <>Mean ± std, {densityUnit}</> },
+        { dataIndex: 'value' as keyof NeuronDensityData, title: <>Mean ± std, {unit}</> },
+        { dataIndex: 'sem' as keyof NeuronDensityData, title: <>Standard error of the mean, {unit}</> },
         { dataIndex: 'n' as keyof NeuronDensityData, title: 'No. of measurements', className: 'narrowColumn' },
       ],
     },
