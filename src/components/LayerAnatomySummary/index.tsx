@@ -78,7 +78,7 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
     { dataIndex: 'layer' as keyof SummaryData, title: 'Layer' },
     { title: 'Layer thickness',
       children: [
-        { dataIndex: 'thickness' as keyof SummaryData, title: <> Mean*, {thicknessUnit} </> },
+        { dataIndex: 'thickness' as keyof SummaryData, title: <> Mean, {thicknessUnit} </> },
         { dataIndex: 'thicknessN' as keyof SummaryData, title: 'No. of measurements', className: 'narrowColumn' },
       ] },
     { title: 'Neuron density',
@@ -94,9 +94,6 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
       {!!summary.length && (
         <div id="layerAnatomySummary" className={`${classPrefix}basis`}>
           <ResponsiveTable<SummaryData> columns={columns} data={summary} rowKey={({ name }) => name} />
-          <small className="ant-typography ant-typography-secondary">
-            * {summary[0]?.thicknessEntityDescription}
-          </small>
 
           <div className="text-right mt-2">
             <HttpDownloadButton
