@@ -15,6 +15,7 @@ import { layerAnatomyDataQuery } from '../../queries/es';
 import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
 import NeuronDensity from '../../components/NeuronDensity';
+import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
@@ -24,7 +25,7 @@ const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
-  const { layer } = router.query;
+  const { layer } = router.query as { layer: Layer};
 
   const setLayerQuery = (layer: Layer) => {
     const query = { layer };
@@ -120,7 +121,7 @@ const LayerAnatomyView: React.FC = () => {
                   title="Summary"
                   className="mt-4"
                 >
-                  Summary section content
+                  <LayerAnatomySummary data={data} highlightLayer={layer} />
                 </Collapsible>
               </>
             )}
