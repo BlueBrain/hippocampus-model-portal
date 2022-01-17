@@ -519,13 +519,11 @@ $collapsible-padding: 20px 30px;
     width: 100%;
   }
 
-  table, th, td {
-    border: 1px solid #e6e6e6;
-  }
-
   th, td {
-    padding: 0.5rem;
-    padding-left: 1rem;
+    padding: 0.5rem 1rem;
+    @media (max-width: $ant-breakpoint-sm) {
+      padding: 0;
+    }
   }
 }
 
