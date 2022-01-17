@@ -19,6 +19,7 @@ export type LayerThicknessProps = {
 
 type SliceElement = {
   name: string;
+  species: string;
   layerThickness: ReactNode;
   n: ReactNode;
   contribution: String;
@@ -28,7 +29,8 @@ const LayerThickness: React.FC<LayerThicknessProps> = ({ layer, data = [], class
   const { layerThicknesses, unit, factsheetData } = getData(layer, data);
 
   const columns = [
-    { dataIndex: 'name' as keyof SliceElement, title: 'Animal', className: 'text-tmp' },
+    { dataIndex: 'name' as keyof SliceElement, title: 'Animal' },
+    { dataIndex: 'species' as keyof SliceElement, title: 'Species and strain' },
     { dataIndex: 'layerThickness' as keyof SliceElement, title: <>Layer thickness, {unit}</> },
     { dataIndex: 'n' as keyof SliceElement, title: 'No. of measurements', className: 'narrowColumn' },
     { dataIndex: 'contribution' as keyof SliceElement, title: 'Contribution' },
