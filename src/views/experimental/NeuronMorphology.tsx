@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
@@ -19,7 +20,12 @@ import morphologies from '../../exp-morphology-list.json';
 import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
+import Metadata from '../../components/Metadata';
 import { hippocampus } from '../../config';
+import { downloadAsJson } from '../../utils';
+
+// TODO: dedup with expMorphologyFactsheet
+import expMorphologyStats from '../../exp-morphology-stats.json';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
@@ -68,6 +74,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
     });
   };
   const currentInstance: string = query.instance as string;
+
+  const factsheetData = currentInstance ? expMorphologyStats[currentInstance] : null;
 
   const getMorphologyDistribution = (morphologyResource: any) => {
     return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
@@ -148,6 +156,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
+                    <Metadata nexusDocument={esDocuments[0]._source} />
                     <h3>3D view</h3>
                     <NexusPlugin
                       className="mt-3"
@@ -173,7 +182,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                         org={hippocampus.org}
                         project={hippocampus.project}
                       >
-                        Download morphology
+                        morphology
                       </NexusFileDownloadButton>
                     </div>
                   </>
@@ -186,6 +195,18 @@ const NeuronExperimentalMorphology: React.FC = () => {
             className="mt-3"
             morphologyName={currentInstance}
           />
+          {!!factsheetData && (
+            <div className="text-right mt-2">
+              <Button
+                type="primary"
+                size="small"
+                icon={<DownloadOutlined />}
+                onClick={() => downloadAsJson(factsheetData, `exp-morphology-factsheet-${currentInstance}`)}
+              >
+                factsheet
+              </Button>
+            </div>
+          )}
         </Collapsible>
 
         <Collapsible title="Population" className="mt-4 mb-4">
