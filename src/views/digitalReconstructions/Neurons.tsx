@@ -120,8 +120,15 @@ const Neurons: React.FC = () => {
             />
             <InfoBox
               color="grey-1"
-              text="We reconstructed the 3D morphology of single neurons and classified them into morphological types (m-types). In addition, we recorded electrical traces from the same cell types and classified the traces into electrical types (e-types). Finally, we mapped the e-types expressed in each m-type to account for the observed diversity of morpho-electrical subtypes (me-types)."
-            />
+            >
+              <p>
+                We reconstructed the 3D morphology of single neurons and classified them into
+                morphological types (m-types). In addition, we recorded electrical traces from the same cell types
+                and classified the traces into electrical types (e-types). Finally, we mapped the e-types
+                expressed in each m-type to account for the observed diversity
+                of morpho-electrical subtypes (me-types).
+              </p>
+            </InfoBox>
           </div>
           <div className="col-xs-12 col-lg-6">
             <div className={styles.selector}>
@@ -129,8 +136,8 @@ const Neurons: React.FC = () => {
                 <div className={styles.selectorHead}>1. Choose a layer</div>
                 <div className={styles.selectorBody}>
                   <LayerSelector
-                    activeLayer={currentLayer}
-                    onLayerSelected={setLayer}
+                    value={currentLayer}
+                    onSelect={setLayer}
                   />
                 </div>
               </div>
