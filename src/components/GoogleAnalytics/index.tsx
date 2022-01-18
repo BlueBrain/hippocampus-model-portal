@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 
-import { gtm } from '../../config';
+import { gtm, isProduction } from '../../config';
 import CtaButton from '../CtaButton';
 import { getCookiePrefs, setCookiePrefs, initGtm } from '../../services/gtag';
 
@@ -23,7 +23,7 @@ const CookiePrefsForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') return;
+    if (!isProduction || !gtm.id) return;
 
     const cookiePrefs = getCookiePrefs();
     if (!cookiePrefs) {
