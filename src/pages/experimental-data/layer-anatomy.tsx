@@ -3,7 +3,7 @@ import Head from 'next/head';
 import LayerAnatomyView from '../../views/experimental/LayerAnatomy';
 
 
-export default function About() {
+export default function LayerAnatomyPage() {
   return (
     <>
       <Head>

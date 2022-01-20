@@ -1,10 +1,10 @@
 import React from 'react';
 
-import NeuronEphysView from '../../views/experimental/NeuronElectrophysiology';
+import NeuronElectrophysiologyView from '../../views/experimental/NeuronElectrophysiology';
 
 
-export default function About() {
+export default function NeuronElectrophysiologyPage() {
   return (
-    <NeuronEphysView />
+    <NeuronElectrophysiologyView />
   );
 };

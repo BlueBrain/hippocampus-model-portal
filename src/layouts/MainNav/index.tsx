@@ -193,6 +193,9 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
           <SubmenuGroupLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
           <SubmenuGroupLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
+          <SubmenuGroupLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
+          <SubmenuGroupLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
+          <SubmenuGroupLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Reconstruction Data" background="grey-2">

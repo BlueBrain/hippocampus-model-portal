@@ -11,7 +11,7 @@ type DataContainerProps = {
 };
 
 const DataContainer: React.FC<DataContainerProps> = ({
-  visible,
+  visible = true,
   children,
 }) => {
   return (

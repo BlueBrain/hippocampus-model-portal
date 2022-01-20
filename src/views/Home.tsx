@@ -54,6 +54,18 @@ const Home: React.FC = () => (
               {
                 label: 'Neuronal Electrophysiology',
                 href: '/experimental-data/neuronal-electrophysiology/',
+              },
+              {
+                label: 'Connection Anatomy',
+                href: '/experimental-data/connection-anatomy/',
+              },
+              {
+                label: 'Connection Physiology',
+                href: '/experimental-data/connection-physiology/',
+              },
+              {
+                label: 'Schaffer Collaterals',
+                href: '/experimental-data/schaffer-collaterals/',
               }
             ]}
           />
