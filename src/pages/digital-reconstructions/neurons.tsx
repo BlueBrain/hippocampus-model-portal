@@ -1,10 +1,22 @@
 import React from 'react';
+import Head from 'next/head';
 
 import NeuronsView from '../../views/digital-reconstructions/Neurons';
 
 
-export default function About() {
+export default function DigRecNeuronsPage() {
   return (
-    <NeuronsView />
+    <>
+      <Head>
+        <title>Neurons / Digital reconstructions / SSCx Portal</title>
+        {/* TODO: add description */}
+        <meta
+          name="description"
+          content=""
+        />
+      </Head>
+
+      <NeuronsView />
+    </>
   );
 };

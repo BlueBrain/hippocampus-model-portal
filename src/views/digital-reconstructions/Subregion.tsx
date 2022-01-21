@@ -13,7 +13,7 @@ import Collapsible from '../../components/Collapsible';
 import selectorStyle from '../../styles/selector.module.scss';
 
 
-const SynapticPathwaysView: React.FC = () => {
+const SubregionView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,8 +29,8 @@ const SynapticPathwaysView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Synaptic Pathways"
-                subtitle="Reconstruction Data"
+                title="Sub-region"
+                subtitle="Digital Reconstructions"
               />
               <div role="information">
                 <InfoBox>
@@ -73,11 +73,18 @@ const SynapticPathwaysView: React.FC = () => {
 
       <DataContainer>
         <Collapsible
-          id="synapticPathwaysSection"
-          title="Synaptic pathways"
+          id="subregionSection"
+          title="Sub-region"
         >
-          <h3>Synaptic connectivity morphological generalisation</h3>
-          <p>Text + illustration</p>
+          <p>Text + subregion factsheet</p>
+        </Collapsible>
+
+        <Collapsible
+          id="simulationsSection"
+          title="Simulations"
+          className="mt-4"
+        >
+          <p>Text + images/videos? + links to the pair recording app</p>
         </Collapsible>
       </DataContainer>
     </>
@@ -85,4 +92,4 @@ const SynapticPathwaysView: React.FC = () => {
 };
 
 
-export default SynapticPathwaysView;
+export default SubregionView;

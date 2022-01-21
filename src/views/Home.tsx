@@ -127,16 +127,19 @@ const Home: React.FC = () => (
             links={[
               {
                 label: 'Sub-region',
+                href: '/digital-reconstructions/subregion/',
               },
               {
                 label: 'Microcircuits',
+                href: '/digital-reconstructions/microcircuits/',
               },
               {
                 label: 'Synaptic Pathways',
+                href: '/digital-reconstructions/synaptic-pathways/',
               },
               {
                 label: 'Neurons',
-                href: '/digital-reconstructions/neurons/'
+                href: '/digital-reconstructions/neurons/',
               }
             ]}
           />

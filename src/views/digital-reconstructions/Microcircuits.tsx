@@ -13,7 +13,7 @@ import Collapsible from '../../components/Collapsible';
 import selectorStyle from '../../styles/selector.module.scss';
 
 
-const SynapticPathwaysView: React.FC = () => {
+const MicrocircuitsView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,8 +29,8 @@ const SynapticPathwaysView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Synaptic Pathways"
-                subtitle="Reconstruction Data"
+                title="Microcircuits"
+                subtitle="Digital Reconstructions"
               />
               <div role="information">
                 <InfoBox>
@@ -58,7 +58,7 @@ const SynapticPathwaysView: React.FC = () => {
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
                   <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
+                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=LayerSelector&font=bebas"
                     width="640"
                     height="480"
                     unoptimized
@@ -73,11 +73,26 @@ const SynapticPathwaysView: React.FC = () => {
 
       <DataContainer>
         <Collapsible
-          id="synapticPathwaysSection"
-          title="Synaptic pathways"
+          id="layerSection"
+          title="Layer <X>"
         >
-          <h3>Synaptic connectivity morphological generalisation</h3>
-          <p>Text + illustration</p>
+          <p>Layer factsheet</p>
+        </Collapsible>
+
+        <Collapsible
+          id="layerSection"
+          title="Microcircuit"
+          className="mt-4"
+        >
+          <p>Microcircuit factsheet</p>
+        </Collapsible>
+
+        <Collapsible
+          id="simulationsSection"
+          title="Simulations"
+          className="mt-4"
+        >
+          <p>Text + images/videos? + links to the pair recording app</p>
         </Collapsible>
       </DataContainer>
     </>
@@ -85,4 +100,4 @@ const SynapticPathwaysView: React.FC = () => {
 };
 
 
-export default SynapticPathwaysView;
+export default MicrocircuitsView;

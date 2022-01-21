@@ -30,7 +30,7 @@ const SynapticPathwaysView: React.FC = () => {
               <Title
                 primaryColor={colorName}
                 title="Synaptic Pathways"
-                subtitle="Reconstruction Data"
+                subtitle="Digital Reconstructions"
               />
               <div role="information">
                 <InfoBox>
@@ -58,7 +58,7 @@ const SynapticPathwaysView: React.FC = () => {
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
                   <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
+                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=PathwaySelect&font=bebas"
                     width="640"
                     height="480"
                     unoptimized
@@ -73,11 +73,30 @@ const SynapticPathwaysView: React.FC = () => {
 
       <DataContainer>
         <Collapsible
-          id="synapticPathwaysSection"
-          title="Synaptic pathways"
+          id="pathwaySection"
+          title="Pathway <X>-<Y>"
         >
-          <h3>Synaptic connectivity morphological generalisation</h3>
-          <p>Text + illustration</p>
+          <p>Pathway factsheet</p>
+          <p>Synaptic anatomy&physiology distribution plots</p>
+          <p>3D viewer for exemplar connection</p>
+        </Collapsible>
+
+        <Collapsible
+          id="synaptomesSection"
+          title="Synaptomes"
+          className="mt-4"
+        >
+          <p>Text</p>
+          <p>Pre-synaptic Synaptome plots + render</p>
+          <p>Post-synaptic Synaptome plots + render</p>
+        </Collapsible>
+
+        <Collapsible
+          id="simulationsSection"
+          title="Simulations"
+          className="mt-4"
+        >
+          <p>Text + images/videos? + links to the pair recording app</p>
         </Collapsible>
       </DataContainer>
     </>

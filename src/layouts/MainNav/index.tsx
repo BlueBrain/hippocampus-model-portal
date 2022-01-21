@@ -199,27 +199,27 @@ const MainNav: React.FC = () => {
         </SubmenuGroup>
 
         <SubmenuGroup label="Reconstruction Data" background="grey-2">
-          <SubmenuGroupLink label="Brain Region" href="/reconstruction-data/subregion/" />
+          <SubmenuGroupLink label="Sub-region" href="/reconstruction-data/subregion/" />
           <SubmenuGroupLink label="Synaptic Pathways" href="/reconstruction-data/synaptic-pathways/" />
           <SubmenuGroupLink label="Neurons" href="/reconstruction-data/neurons/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Digital Reconstructions" background="grey-3">
-          <SubmenuGroupLink label="Brain Region" />
-          <SubmenuGroupLink label="Microcircuits" />
-          <SubmenuGroupLink label="Synaptic Pathways" />
+          <SubmenuGroupLink label="Sub-region" href="/digital-reconstructions/subregion/" />
+          <SubmenuGroupLink label="Microcircuits" href="/digital-reconstructions/microcircuits/" />
+          <SubmenuGroupLink label="Synaptic Pathways" href="/digital-reconstructions/synaptic-pathways/" />
           <SubmenuGroupLink label="Neurons" href="/digital-reconstructions/neurons/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Validations" background="grey-4">
-          <SubmenuGroupLink label="Brain Region" />
+          <SubmenuGroupLink label="Sub-region" />
           <SubmenuGroupLink label="Microcircuits" />
           <SubmenuGroupLink label="Synaptic Pathways" />
           <SubmenuGroupLink label="Neurons" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Predictions" background="grey-5">
-          <SubmenuGroupLink label="Brain Region" />
+          <SubmenuGroupLink label="Sub-region" />
           <SubmenuGroupLink label="Microcircuits" />
           <SubmenuGroupLink label="Synaptic Pathways" />
           <SubmenuGroupLink label="Neurons" />
