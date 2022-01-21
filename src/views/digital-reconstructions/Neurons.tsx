@@ -208,12 +208,31 @@ const Neurons: React.FC = () => {
               </Button>
             </div>
           </div>
+
+          <h3 className="text-tmp">Table: experimental morphologies used for this model</h3>
+
+          <h3 className="text-tmp">EPSP and bAP attenuation videos?</h3>
         </Collapsible>
 
-        <Collapsible className="mt-4" title={`E-Type ${currentEtype} Factsheet`}>
+        <Collapsible
+          id="mtypeSection"
+          className="mt-4"
+          title="M-Type <X>"
+        >
+          <h3 className="text-tmp">Text?</h3>
+          <h3 className="text-tmp">M-type population factsheet</h3>
+          <h3 className="text-tmp">M-type population distribution plots</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="etypeSection"
+          className="mt-4"
+          title={`E-Type ${currentEtype} Factsheet`}
+        >
           <HttpData path={etypeFactsheetPath(currentInstance)}>
             {data => (
               <>
+                <h3 className="text-tmp">Text?</h3>
                 <EtypeFactsheet data={data} />
                 <div className="text-right mt-3 mb-3">
                   <Button
@@ -224,6 +243,7 @@ const Neurons: React.FC = () => {
                     Download factsheet
                   </Button>
                 </div>
+                <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
               </>
             )}
           </HttpData>
