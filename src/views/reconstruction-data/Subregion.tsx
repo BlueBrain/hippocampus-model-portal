@@ -76,7 +76,7 @@ const ConnectionAnatomyView: React.FC = () => {
           id="subregionGeneralisationSection"
           title="Sub-region generalisation"
         >
-          <p>Text + illustration</p>
+          <h3 className="text-tmp">Text + illustration</h3>
         </Collapsible>
       </DataContainer>
     </>

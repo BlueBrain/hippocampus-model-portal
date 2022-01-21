@@ -76,8 +76,8 @@ const SynapticPathwaysView: React.FC = () => {
           id="synapticPathwaysSection"
           title="Synaptic pathways"
         >
-          <h3>Synaptic connectivity morphological generalisation</h3>
-          <p>Text + illustration</p>
+          <h3 className="text-tmp">Synaptic connectivity morphological generalisation</h3>
+          <p className="text-tmp">Text + illustration</p>
         </Collapsible>
       </DataContainer>
     </>

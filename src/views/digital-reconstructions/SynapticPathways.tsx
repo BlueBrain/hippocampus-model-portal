@@ -76,9 +76,9 @@ const SynapticPathwaysView: React.FC = () => {
           id="pathwaySection"
           title="Pathway <X>-<Y>"
         >
-          <p>Pathway factsheet</p>
-          <p>Synaptic anatomy&physiology distribution plots</p>
-          <p>3D viewer for exemplar connection</p>
+          <h3 className="text-tmp">Pathway factsheet</h3>
+          <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
+          <h3 className="text-tmp">3D viewer for exemplar connection</h3>
         </Collapsible>
 
         <Collapsible
@@ -86,9 +86,9 @@ const SynapticPathwaysView: React.FC = () => {
           title="Synaptomes"
           className="mt-4"
         >
-          <p>Text</p>
-          <p>Pre-synaptic Synaptome plots + render</p>
-          <p>Post-synaptic Synaptome plots + render</p>
+          <h3 className="text-tmp">Text</h3>
+          <h3 className="text-tmp">Pre-synaptic Synaptome plots + render</h3>
+          <h3 className="text-tmp">Post-synaptic Synaptome plots + render</h3>
         </Collapsible>
 
         <Collapsible
@@ -96,7 +96,7 @@ const SynapticPathwaysView: React.FC = () => {
           title="Simulations"
           className="mt-4"
         >
-          <p>Text + images/videos? + links to the pair recording app</p>
+          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
         </Collapsible>
       </DataContainer>
     </>

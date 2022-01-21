@@ -76,7 +76,7 @@ const MicrocircuitsView: React.FC = () => {
           id="layerSection"
           title="Layer <X>"
         >
-          <p>Layer factsheet</p>
+          <h3 className="text-tmp">Layer factsheet</h3>
         </Collapsible>
 
         <Collapsible
@@ -84,7 +84,7 @@ const MicrocircuitsView: React.FC = () => {
           title="Microcircuit"
           className="mt-4"
         >
-          <p>Microcircuit factsheet</p>
+          <h3 className="text-tmp">Microcircuit factsheet</h3>
         </Collapsible>
 
         <Collapsible
@@ -92,7 +92,7 @@ const MicrocircuitsView: React.FC = () => {
           title="Simulations"
           className="mt-4"
         >
-          <p>Text + images/videos? + links to the pair recording app</p>
+          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
         </Collapsible>
       </DataContainer>
     </>

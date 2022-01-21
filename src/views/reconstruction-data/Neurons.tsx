@@ -76,8 +76,8 @@ const NeuronsView: React.FC = () => {
           id="morphologyTypeSection"
           title="Morphology-type"
         >
-          <h3>Neuron morphology generalization</h3>
-          <p>Text + illustration</p>
+          <h3 className="text-tmp">Neuron morphology generalization</h3>
+          <p className="text-tmp">Text + illustration</p>
         </Collapsible>
 
         <Collapsible
@@ -85,8 +85,8 @@ const NeuronsView: React.FC = () => {
           title="Electrophysiology-type"
           className="mt-4"
         >
-          <h3>Feature-based generalization</h3>
-          <p>Text + illustration</p>
+          <h3 className="text-tmp">Feature-based generalization</h3>
+          <p className="text-tmp">Text + illustration</p>
         </Collapsible>
 
         <Collapsible
@@ -94,8 +94,8 @@ const NeuronsView: React.FC = () => {
           title="Morpho-electrophysiological instance"
           className="mt-4"
         >
-          <h3>Neuron morpholo-electrophysiological generalization</h3>
-          <p>Text + illustration</p>
+          <h3 className="text-tmp">Neuron morpholo-electrophysiological generalization</h3>
+          <p className="text-tmp">Text + illustration</p>
         </Collapsible>
       </DataContainer>
     </>

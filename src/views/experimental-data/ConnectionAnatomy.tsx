@@ -76,7 +76,7 @@ const ConnectionAnatomyView: React.FC = () => {
           id="boutonDensitySection"
           title="Bouton density"
         >
-          <p>Table + text</p>
+          <h3 className="text-tmp">Table + text</h3>
         </Collapsible>
 
         <Collapsible
@@ -84,7 +84,7 @@ const ConnectionAnatomyView: React.FC = () => {
           className="mt-4"
           title="Number of synapses per connection"
         >
-          <p>Table + text</p>
+          <h3 className="text-tmp">Table + text</h3>
         </Collapsible>
       </DataContainer>
     </>

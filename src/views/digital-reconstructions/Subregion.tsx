@@ -76,7 +76,7 @@ const SubregionView: React.FC = () => {
           id="subregionSection"
           title="Sub-region"
         >
-          <p>Text + subregion factsheet</p>
+          <h3 className="text-tmp">Text + subregion factsheet</h3>
         </Collapsible>
 
         <Collapsible
@@ -84,7 +84,7 @@ const SubregionView: React.FC = () => {
           title="Simulations"
           className="mt-4"
         >
-          <p>Text + images/videos? + links to the pair recording app</p>
+          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
         </Collapsible>
       </DataContainer>
     </>

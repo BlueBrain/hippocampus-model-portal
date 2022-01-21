@@ -76,7 +76,7 @@ const ConnectionPhysiologyView: React.FC = () => {
           id="tbd"
           title="TBD"
         >
-          <p>TBD</p>
+          <h3 className="text-tmp">TBD</h3>
         </Collapsible>
       </DataContainer>
     </>
