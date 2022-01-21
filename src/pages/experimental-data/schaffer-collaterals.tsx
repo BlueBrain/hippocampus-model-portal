@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import SchafferCollateralsView from '../../views/experimental/SchafferCollaterals';
+import SchafferCollateralsView from '../../views/experimental-data/SchafferCollaterals';
 
 
 export default function ConnectionPhysiologyPage() {

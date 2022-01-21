@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import ConnectionPhysiologyView from '../../views/experimental/ConnectionPhysiology';
+import ConnectionPhysiologyView from '../../views/experimental-data/ConnectionPhysiology';
 
 
 export default function ConnectionPhysiologyPage() {

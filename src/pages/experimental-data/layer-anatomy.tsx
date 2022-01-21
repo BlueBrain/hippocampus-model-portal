@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import LayerAnatomyView from '../../views/experimental/LayerAnatomy';
+import LayerAnatomyView from '../../views/experimental-data/LayerAnatomy';
 
 
 export default function LayerAnatomyPage() {

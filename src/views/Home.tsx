@@ -85,16 +85,16 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-regions',
-              },
-              {
-                label: 'Microcircuit',
+                label: 'Sub-region',
+                href: '/reconstruction-data/subregion/',
               },
               {
                 label: 'Synaptic Pathways',
+                href: '/reconstruction-data/synaptic-pathways/',
               },
               {
                 label: 'Neurons',
+                href: '/reconstruction-data/neurons/',
               }
             ]}
           />
@@ -126,10 +126,10 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-regions',
+                label: 'Sub-region',
               },
               {
-                label: 'Microcircuit',
+                label: 'Microcircuits',
               },
               {
                 label: 'Synaptic Pathways',
@@ -162,10 +162,10 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-regions',
+                label: 'Sub-region',
               },
               {
-                label: 'Microcircuit',
+                label: 'Microcircuits',
               },
               {
                 label: 'Synaptic Pathways',
@@ -192,10 +192,10 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-regions',
+                label: 'Sub-region',
               },
               {
-                label: 'Microcircuit',
+                label: 'Microcircuits',
               },
               {
                 label: 'Synaptic Pathways',
