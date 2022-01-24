@@ -32,6 +32,6 @@ export const nexusPluginBaseUrl = process.env.NEXT_PUBLIC_NEXUS_PLUGIN_BASE_URL;
 export const feedbackUrl = process.env.NEXT_PUBLIC_FEEDBACK_URL;
 
 export const gtm = {
-  id: 'G-SGZ83Y6E8H',
-  cookiePrefsKey: 'bbpCookiePreferences',
+  id: process.env.NEXT_PUBLIC_GTM_ID,
+  cookiePrefsKey: 'hippocampusPortalCookiePreferences',
 };
