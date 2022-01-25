@@ -193,6 +193,10 @@ section {
   display: block;
 }
 
+.narrowColumn {
+  max-width: 75px;
+}
+
 .spin {
   animation: spin 2s infinite linear;
 }
@@ -208,6 +212,20 @@ section {
 
 .ant-table-thead > tr > th {
   font-weight: bold;
+}
+
+.responsiveTable.no-left-margin.nested-table.xs-column {
+  .ant-table.ant-table-layout-fixed {
+      margin:0;
+  }
+}
+
+.responsiveTable {
+  @media (max-width: $ant-breakpoint-sm) {
+    .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+      background: unset;
+    }
+  }
 }
 
 

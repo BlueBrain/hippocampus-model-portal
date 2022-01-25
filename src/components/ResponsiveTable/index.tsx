@@ -96,13 +96,13 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
 
   return (
     <Table<Type>
+      className="responsiveTable no-left-margin nested-table xs-column"
       bordered
       size="small"
       rowKey={(record: any) => record.key || `${record.dataIndex}__`}
       pagination={false}
       columns={tableColumns}
       dataSource={data}
-      className="responsiveTable"
       rowClassName={(record: Type, index: number) => {
         if (record.isHighlight) {
           return classes.highlightBackground;
