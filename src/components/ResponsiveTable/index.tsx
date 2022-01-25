@@ -104,9 +104,10 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
       columns={tableColumns}
       dataSource={data}
       rowClassName={(record: Type, index: number) => {
-        if (record.isHighlight) {
-          return classes.highlightBackground;
-        }
+        // TODO: find better solution to support striped sub-rows on mobile
+        // if (record.isHighlight) {
+        //   return classes.highlightBackground;
+        // }
         return (index % 2 ? classes.responsiveTablEven : classes.responsiveTablOdd);
       }}
       {...restProps}
