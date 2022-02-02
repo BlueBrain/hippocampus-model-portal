@@ -78,7 +78,16 @@ const SynapticPathwaysView: React.FC = () => {
         >
           <h3 className="text-tmp">Pathway factsheet</h3>
           <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
-          <h3 className="text-tmp">3D viewer for exemplar connection</h3>
+          <h3 className="text-tmp">Exemplar connection</h3>
+          <div>
+            <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+              <iframe src="https://bp.ocp.bbp.epfl.ch/viewer/rat-ca1-20211110-biom?gids=138484%2C68228"
+                frameBorder="0"
+                allowFullScreen
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+              />
+            </div>
+          </div>
         </Collapsible>
 
         <Collapsible
