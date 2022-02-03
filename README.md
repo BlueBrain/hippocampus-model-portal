@@ -7,13 +7,13 @@ The Hippocampus portal is a freely accessible resource, which provides experimen
 
 First, install dependencies:
 ```bash
-yarn
+npm install
 ```
 
 To start the portal in development mode, run:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 Open [http://localhost:3000/model/](http://localhost:3000/model) with your browser to see the result.
@@ -24,7 +24,7 @@ Open [http://localhost:3000/model/](http://localhost:3000/model) with your brows
 Compile the app in .next folder:
 
 ```bash
-yarn build
+npm run build
 ```
 
 
