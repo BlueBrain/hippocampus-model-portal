@@ -21,6 +21,7 @@ const nextConfig = {
   images: {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 259200,
+    domains: ['hipp-portal-auth-proxy'],
   },
   webpack5: true,
   experimental: {
