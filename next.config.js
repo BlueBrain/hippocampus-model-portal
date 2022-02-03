@@ -10,6 +10,8 @@ const SentryWebpackPluginOptions = {
 
 const basePath = '/model';
 
+const day = 60 * 60 * 24;
+
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -20,8 +22,9 @@ const nextConfig = {
   assetPrefix: `${basePath}/`,
   images: {
     path: `${basePath}/_next/image`,
-    minimumCacheTTL: 259200,
-    domains: ['hipp-portal-auth-proxy'],
+    minimumCacheTTL: 30 * day,
+    formats: ['image/avif', 'image/webp'],
+    domains: ['hipp-portal-auth-proxy', 'localhost'],
   },
   webpack5: true,
   experimental: {
