@@ -30,9 +30,14 @@ npm run build
 
 ### ENV variables
 
-**NEXT_PUBLIC_NEXUS_TOKEN**: An auth token used to query the data from Nexus. By default not set. Hippocampus project data will become publicly accessible once the corresponding scientific paper is published and portal goes live, you can generate a token using your account with access to the `public | hippocampus` Nexus project.
+**NEXT_PUBLIC_NEXUS_TOKEN**: An auth token used to query the data from Nexus. By default not set.
+Hippocampus project data will become publicly accessible once the corresponding scientific paper is published
+and portal goes live, you can generate a token using your account with access
+to the `public | hippocampus` Nexus project.
 
-**NEXT_PUBLIC_NEXUS_URL**: The URL of the Nexus KG deployment, defaults to `https://bbp.epfl.ch/nexus/v1`
+**NEXT_PUBLIC_NEXUS_URL**: The URL of the Nexus KG deployment, defaults to `https://bbp.epfl.ch/nexus/v1`.
+
+**NEXT_PUBLIC_NEXUS_AUTH_PROXY_URL**: Internal to deployment cluster URL of the HTTP auth proxy to access Nexus images.
 
 
 ## Docker image
@@ -46,3 +51,16 @@ You can then run it with:
 ```bash
 docker run -it --rm -p 8000:8000 hippocampus-model-portal
 ```
+
+## HTTP auth proxy
+
+The purpose of the auth proxy is to enable image optimisation service (which is a part of portal deployment
+build with Next.js and doesn't support auth headers) to fetch images from Nexus for already authenticated,
+internal (to the EPFL network) clients by adding an auth token to the proxied requests.
+
+```
+            |       OpenShift cluster     |
+WebClient --|-> ImageOpt ---> AuthProxy --|-> Nexus
+```
+
+Relevant code is located in `tools/http-auth-proxy`.

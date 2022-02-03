@@ -1,5 +1,7 @@
 import { saveAs } from 'file-saver';
 
+import { nexus, hippocampus } from '../config';
+
 interface ParsedNexusUrl {
   deployment: string;
   entityType: string;
@@ -72,6 +74,22 @@ export const parseUrl = (nexusUrl: string): ParsedNexusUrl => {
     schema: matches[5],
     id: matches[6],
   };
+};
+
+type composeNexusUrlArg = {
+  id: string;
+  type: 'resource' | 'file';
+  org?: string;
+  project?: string;
+}
+
+export const composeNexusUrl: (composeNexusUrlArg) => string = ({
+  id,
+  type = 'file',
+  org = hippocampus.org,
+  project = hippocampus.project,
+}) => {
+  return `${nexus.url}/${type}s/${org}/${project}/${encodeURIComponent(id)}`;
 };
 
 

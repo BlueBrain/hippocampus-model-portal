@@ -20,6 +20,9 @@ export const basePath = '/model';
 export const isServer = typeof window === 'undefined';
 export const isProduction = process.env.NODE_ENV === 'production';
 
+export const nexusImgLoaderUrl = process.env.NEXT_PUBLIC_NEXUS_IMG_LOADER_URL;
+export const nexusAuthProxyUrl = process.env.NEXT_PUBLIC_NEXUS_AUTH_PROXY_URL;
+
 export const nexus = {
   url: process.env.NEXT_PUBLIC_NEXUS_URL,
   token: process.env.NEXT_PUBLIC_NEXUS_TOKEN,
