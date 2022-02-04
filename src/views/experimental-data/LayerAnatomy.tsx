@@ -14,7 +14,6 @@ import { colorName } from './config';
 import { layerAnatomyDataQuery } from '../../queries/es';
 import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
-import NeuronDensity from '../../components/NeuronDensity';
 import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
 
@@ -103,17 +102,6 @@ const LayerAnatomyView: React.FC = () => {
                   </div>
 
                   <LayerThickness layer={layer as Layer} data={data} />
-
-                  <div>
-                    <h3>Neuron density</h3>
-                    <p className="text-tmp">
-                      Data are given as raw microscopy images of NeuN stained slices with annotations of
-                      individual layer extents, and spreadsheets summarizing measurements of neuron counts
-                      across different layers.
-                    </p>
-                  </div>
-
-                  <NeuronDensity layer={layer as Layer} data={data} />
                 </Collapsible>
 
                 <Collapsible
