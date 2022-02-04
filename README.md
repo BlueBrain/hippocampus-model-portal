@@ -54,13 +54,14 @@ docker run -it --rm -p 8000:8000 hippocampus-model-portal
 
 ## HTTP auth proxy
 
-The purpose of the auth proxy is to enable image optimisation service (which is a part of portal deployment
-build with Next.js and doesn't support auth headers) to fetch images from Nexus for already authenticated,
+The purpose of the auth proxy is to enable image optimisation service (which is a part of Next.js portal deployment
+and doesn't support auth headers) to fetch images from Nexus for already authenticated,
 internal (to the EPFL network) clients by adding an auth token to the proxied requests.
 
 ```
             |       OpenShift cluster     |
 WebClient --|-> ImageOpt ---> AuthProxy --|-> Nexus
+                (Next.js)
 ```
 
 Relevant code is located in `tools/http-auth-proxy`.
