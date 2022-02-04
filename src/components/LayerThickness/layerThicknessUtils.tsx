@@ -47,6 +47,7 @@ export const getData = (layer: Layer, data?: ElasticSearchViewQueryResponse<any>
           <div style={{ width: '160px' }}>
             <NexusImage
               src={sliceImgUrl}
+              key={sliceImgUrl}
               width="640"
               height="480"
               sizes="120px"
