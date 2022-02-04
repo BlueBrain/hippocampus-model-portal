@@ -21,11 +21,6 @@ export const layerAnatomyDataQuery = {
               },
               {
                 term: {
-                  '@type': 'NeuronDensity',
-                },
-              },
-              {
-                term: {
                   '@type': 'Subject',
                 },
               },
