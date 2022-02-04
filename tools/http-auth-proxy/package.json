@@ -1,0 +1,14 @@
+{
+  "name": "http-auth-proxy",
+  "version": "0.0.1",
+  "description": "An HTTP proxy that adds an auth header to outgoing requests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-proxy": "^1.18.1"
+  }
+}

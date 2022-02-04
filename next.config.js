@@ -13,20 +13,21 @@ const basePath = '/model';
 const day = 60 * 60 * 24;
 
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  trailingSlash: true,
-  productionBrowserSourceMaps: true,
   basePath: basePath,
   assetPrefix: `${basePath}/`,
+  trailingSlash: true,
+  webpack5: true,
   images: {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 30 * day,
     formats: ['image/avif', 'image/webp'],
     domains: ['hipp-portal-auth-proxy', 'localhost'],
   },
-  webpack5: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  compress: false,
+  productionBrowserSourceMaps: true,
   experimental: {
     esmExternals: true,
   },
