@@ -26,7 +26,7 @@ const NeuronDensity: React.FC<LayerThicknessProps> = ({ layer, data = [] }) => {
   const rawNeuronDensities = entities
     .filter(entity => entity['@type'].toString().includes('NeuronDensity'))
     .filter(entity => entity.note.match(/validation/i))
-    .filter(entity => entity.brainLocation?.brainRegion?.label === `CA1_${layer}`);
+    .filter(entity => entity.name === `Neuron density: CA1_${layer}`);
 
   const neuronDensities = rawNeuronDensities.map(neuralDensity => {
     const unit = neuralDensity.series.find((s: any) => s.statistic === 'mean')?.unitCode;
