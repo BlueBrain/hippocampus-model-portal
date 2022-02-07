@@ -426,44 +426,6 @@ $collapsible-padding: 20px 30px;
 
 
 
-// DataContainer
-.data-container__basis {
-  background-color: map-get($basePalette, "grey");
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
-  overflow: hidden;
-
-  .center {
-    background-color: map-get($basePalette, "grey");
-    margin: 4rem auto 60px;
-    max-width: 1080px;
-    margin-bottom: calc(100px + 4rem);
-  }
-
-  .scroll-to {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    bottom: 0;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Factsheet
 .factsheet__basis {
   font-size: 1rem;
