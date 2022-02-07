@@ -178,9 +178,9 @@ const Neurons: React.FC = () => {
       <DataContainer
         visible={!!currentInstance}
         navItems={[
-          { id: 'modelInstance', label: `Model instance ${currentInstance} Factsheet` },
-          { id: 'mtypeSection', label: 'M-Type <X>' },
-          { id: 'etypeSection', label: `E-Type ${currentEtype} Factsheet` },
+          { id: 'modelInstance', label: 'Model' },
+          { id: 'mtypeSection', label: 'M-Type' },
+          { id: 'etypeSection', label: 'E-Type' },
         ]}
       >
         <Collapsible

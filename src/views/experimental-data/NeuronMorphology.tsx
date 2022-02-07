@@ -147,8 +147,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
       <DataContainer
         visible={!!currentInstance}
         navItems={[
-          { id: 'morphologySection', label: `Neuron Morphology ${currentMtype} ${currentInstance}` },
-          { id: 'population', label: 'Population' },
+          { id: 'morphologySection', label: 'Neuron Morphology' },
+          { id: 'populationSection', label: 'Population' },
         ]}
       >
         <Collapsible
@@ -216,7 +216,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
         </Collapsible>
 
         <Collapsible
-          id="population"
+          id="populationSection"
           title="Population"
           className="mt-4 mb-4"
         >

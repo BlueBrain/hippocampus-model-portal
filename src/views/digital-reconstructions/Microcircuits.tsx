@@ -73,7 +73,7 @@ const MicrocircuitsView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'layerSection', label: 'Layer <X>' },
+          { id: 'layerSection', label: 'Layer' },
           { id: 'microcircuitSection', label: 'Microcircuit' },
           { id: 'simulationsSection', label: 'Simulations' },
         ]}

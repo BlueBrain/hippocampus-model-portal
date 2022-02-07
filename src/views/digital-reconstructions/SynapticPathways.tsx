@@ -73,7 +73,7 @@ const SynapticPathwaysView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'pathwaySection', label: 'Pathway <X>-<Y>' },
+          { id: 'pathwaySection', label: 'Pathway' },
           { id: 'synaptomesSection', label: 'Synaptomes' },
           { id: 'simulationsSection', label: 'Simulations' },
         ]}

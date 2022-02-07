@@ -116,7 +116,7 @@ const NeuronElectrophysiology: React.FC = () => {
       <DataContainer
         visible={!!currentInstance}
         navItems={[
-          { id: 'instanceSection', label: `Electrophysiological Recordings for ${currentEtype}_${currentInstance}` },
+          { id: 'instanceSection', label: 'Electrophysiological Recordings' },
           { id: 'etypeSection', label: 'Population' },
         ]}
       >

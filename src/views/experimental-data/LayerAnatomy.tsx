@@ -86,7 +86,7 @@ const LayerAnatomyView: React.FC = () => {
       <DataContainer
         visible={!!layer}
         navItems={[
-          { id: 'layerSection', label: `Layer ${layer}` },
+          { id: 'layerSection', label: 'Layer' },
           { id: 'summarySection', label: 'Summary' },
         ]}
       >

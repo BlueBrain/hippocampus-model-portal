@@ -73,9 +73,9 @@ const NeuronsView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'morphologyTypeSection', label: 'Morphology-type' },
-          { id: 'electrophysiologyTypeSection', label: 'Electrophysiology-type' },
-          { id: 'morphoElectrophysiologicalInstanceSection', label: 'Morpho-electrophysiological instance' },
+          { id: 'morphologyTypeSection', label: 'M-type' },
+          { id: 'electrophysiologyTypeSection', label: 'E-type' },
+          { id: 'morphoElectrophysiologicalInstanceSection', label: 'ME-type instance' },
         ]}
       >
         <Collapsible
