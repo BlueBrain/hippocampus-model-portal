@@ -144,7 +144,13 @@ const NeuronExperimentalMorphology: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentInstance}>
+      <DataContainer
+        visible={!!currentInstance}
+        navItems={[
+          { id: 'morphologySection', label: `Neuron Morphology ${currentMtype} ${currentInstance}` },
+          { id: 'population', label: 'Population' },
+        ]}
+      >
         <Collapsible
           id="morphologySection"
           title={`Neuron Morphology ${currentMtype} ${currentInstance}`}
@@ -209,7 +215,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
           )}
         </Collapsible>
 
-        <Collapsible title="Population" className="mt-4 mb-4">
+        <Collapsible
+          id="population"
+          title="Population"
+          className="mt-4 mb-4"
+        >
           <h3>Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (

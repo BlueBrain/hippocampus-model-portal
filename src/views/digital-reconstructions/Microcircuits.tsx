@@ -71,7 +71,13 @@ const MicrocircuitsView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer>
+      <DataContainer
+        navItems={[
+          { id: 'layerSection', label: 'Layer <X>' },
+          { id: 'microcircuitSection', label: 'Microcircuit' },
+          { id: 'simulationsSection', label: 'Simulations' },
+        ]}
+      >
         <Collapsible
           id="layerSection"
           title="Layer <X>"
@@ -80,7 +86,7 @@ const MicrocircuitsView: React.FC = () => {
         </Collapsible>
 
         <Collapsible
-          id="layerSection"
+          id="microcircuitSection"
           title="Microcircuit"
           className="mt-4"
         >

@@ -113,7 +113,13 @@ const NeuronElectrophysiology: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentInstance}>
+      <DataContainer
+        visible={!!currentInstance}
+        navItems={[
+          { id: 'instanceSection', label: `Electrophysiological Recordings for ${currentEtype}_${currentInstance}` },
+          { id: 'etypeSection', label: 'Population' },
+        ]}
+      >
         <Collapsible
           id="instanceSection"
           title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
