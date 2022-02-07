@@ -6,6 +6,7 @@ import NexusImage from '../NexusImage';
 import NexusFileDownloadButton from '../NexusFileDownloadButton';
 import { composeNexusUrl } from '../../utils';
 import { hippocampus } from '../../config';
+import { NexusMorphology } from '../../types';
 
 import styles from './styles.module.scss';
 
@@ -31,7 +32,7 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
     return `/experimental-data/neuronal-morphology/?${searchParams.toString()}#data`;
   };
 
-  const columns: ColumnsType = [
+  const columns: ColumnsType<NexusMorphology> = [
     {
       title: 'Name',
       dataIndex: 'name',

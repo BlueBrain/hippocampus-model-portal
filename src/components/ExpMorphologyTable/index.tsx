@@ -5,7 +5,7 @@ import { Table } from 'antd';
 
 import { hippocampus } from '../../config';
 import { entryToArray } from '../../utils';
-import { Layer } from '../../types';
+import { Layer, NexusMorphology } from '../../types';
 import { useExpMorphologyColumns } from './expMorphologyTableUtils';
 
 import styles from './styles.module.scss'
@@ -15,7 +15,7 @@ type ExpMorphologyTableProps = {
   // layer and mtype here are used to compose a link to the morphology instance page
   layer: Layer;
   mtype: string;
-  morphologies: Record<string, any>[];
+  morphologies: NexusMorphology[];
   currentMorphology?: string;
 };
 
@@ -82,7 +82,7 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({
 
   return (
     <div id="expMorphologyTable" className="layer-anatomy-summary__basis mt-2">
-      <Table
+      <Table<NexusMorphology>
         className="responsiveTable"
         columns={columns}
         dataSource={morphologies}
