@@ -71,7 +71,12 @@ const SubregionView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer>
+      <DataContainer
+        navItems={[
+          { id: 'subregionSection', label: 'Sub-region' },
+          { id: 'simulationsSection', label: 'Simulations' },
+        ]}
+      >
         <Collapsible
           id="subregionSection"
           title="Sub-region"

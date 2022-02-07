@@ -175,8 +175,16 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer visible={!!currentInstance}>
+      <DataContainer
+        visible={!!currentInstance}
+        navItems={[
+          { id: 'modelInstance', label: 'Instance' },
+          { id: 'mtypeSection', label: 'M-Type' },
+          { id: 'etypeSection', label: 'E-Type' },
+        ]}
+      >
         <Collapsible
+          id="modelInstance"
           className="mt-4"
           title={`Model instance ${currentInstance} Factsheet`}
         >

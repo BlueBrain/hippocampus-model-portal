@@ -71,7 +71,11 @@ const ConnectionAnatomyView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer>
+      <DataContainer
+        navItems={[
+          { id: 'subregionGeneralisationSection', label: 'Sub-region' },
+        ]}
+      >
         <Collapsible
           id="subregionGeneralisationSection"
           title="Sub-region generalisation"

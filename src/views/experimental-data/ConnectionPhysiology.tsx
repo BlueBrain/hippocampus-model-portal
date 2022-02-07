@@ -71,7 +71,11 @@ const ConnectionPhysiologyView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer>
+      <DataContainer
+        navItems={[
+          { id: 'tbd', label: 'TBD' },
+        ]}
+      >
         <Collapsible
           id="tbd"
           title="TBD"

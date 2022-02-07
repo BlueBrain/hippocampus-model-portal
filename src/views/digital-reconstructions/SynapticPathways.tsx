@@ -71,7 +71,13 @@ const SynapticPathwaysView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer>
+      <DataContainer
+        navItems={[
+          { id: 'pathwaySection', label: 'Pathway' },
+          { id: 'synaptomesSection', label: 'Synaptomes' },
+          { id: 'simulationsSection', label: 'Simulations' },
+        ]}
+      >
         <Collapsible
           id="pathwaySection"
           title="Pathway <X>-<Y>"

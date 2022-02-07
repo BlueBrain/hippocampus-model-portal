@@ -1,0 +1,38 @@
+@import '@/styles/config/_colors';
+@import '@/styles/config/_queries';
+
+.dataContainer {
+  background-color: map-get($basePalette, "grey");
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  padding: 4rem 0 6rem 0;
+}
+
+.center {
+  background-color: map-get($basePalette, "grey");
+  margin: 0 auto;
+  max-width: $full-hd;
+  margin-bottom: 4rem;
+}
+
+.scrollTo {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 0;
+}
+
+.scrollTop {
+  position: sticky;
+  float: right;
+  margin: 4rem 0;
+  color: map-get($basePalette, "navy-1");
+  top: 85vh;
+  right: calc((85vw - $full-hd) / 4);
+
+  @media (max-width: $ant-breakpoint-xl) {
+    display: none;
+  }
+}

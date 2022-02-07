@@ -83,7 +83,13 @@ const LayerAnatomyView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer visible={!!layer}>
+      <DataContainer
+        visible={!!layer}
+        navItems={[
+          { id: 'layerSection', label: 'Layer' },
+          { id: 'summarySection', label: 'Summary' },
+        ]}
+      >
         <ESData query={layerAnatomyDataQuery}>
           {data => (
             <>{data && (
