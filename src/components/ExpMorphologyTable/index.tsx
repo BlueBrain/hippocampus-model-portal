@@ -47,7 +47,6 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({
     return Array.from(new Set([...ids, ...currIds]));
   }, []);
 
-  // const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
   const { setAgentMap, columns } = useExpMorphologyColumns(layer, mtype, currentMorphology);
 
   useEffect(() => {
