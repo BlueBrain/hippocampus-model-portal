@@ -1,0 +1,24 @@
+@use 'sass:math';
+
+@import '@/styles/config/_colors';
+@import '@/styles/config/_fonts';
+
+$size: 6rem;
+
+.scrollTtop {
+  display: inline-block;
+  background-color: map-get($basePalette, "navy-2");
+  color: map-get($basePalette, "white");
+  text-decoration: none;
+  text-align: center;
+  border-radius: $size;
+  width: $size;
+  height: $size;
+  font-size: math.div(2, 3) * $size;
+  & svg {
+    padding-top: 0.75rem;
+  }
+  &:hover {
+    background-color: map-get($basePalette, "navy-1");
+  }
+}
