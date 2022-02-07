@@ -1,0 +1,55 @@
+
+@import '@/styles/config/_queries';
+
+.container {
+  position: sticky;
+  float: left;
+  margin-top: 4rem;
+  color: #313254;
+  top: 50vh;
+  transform: translate3d(-50%, -50%, 0);
+  left: calc((100vw - $full-hd) / 4);
+  z-index: 1;
+
+  @media (max-width: $ant-breakpoint-xl) {
+    display: none;
+  }
+}
+
+.sectionItem {
+  cursor: pointer;
+  line-height: 2.4rem;
+}
+
+.circle {
+  height: 1.2rem;
+  width: 1.2rem;
+  background-color: #aeb2c3;
+  border-radius: 1.2rem;
+  display: inline-block;
+  vertical-align: middle;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.label {
+  font-size: 1.2rem;
+  margin-left: 0.6rem;
+  color: grey;
+  user-select: none;
+  vertical-align: middle;
+  transition: color 0.3s ease-in-out;
+
+  @media (max-width: 1580px) {
+    display: none;
+  }
+}
+
+.sectionItemCurrent {
+  .label {
+    color: #050a30;
+  }
+
+  .circle {
+    background-color: #313254;
+  }
+}
