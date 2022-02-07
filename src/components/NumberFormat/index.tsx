@@ -11,6 +11,16 @@ type NumberFormatProps = {
   suffix?: string;
 };
 
+export function formatNumber(value, significantFigures = 5, thousandSeparator = true, prefix = '', suffix = '') {
+  if (!isNumber(value)) return value;
+
+  const formatted = thousandSeparator
+    ? value.toLocaleString('en', { maximumSignificantDigits: significantFigures })
+    : value.toPrecision(significantFigures);
+
+  return `${prefix}${formatted}${suffix}`;
+}
+
 const NumberFormat: React.FC<NumberFormatProps> = ({
   value,
   significantFigures = 5,
@@ -18,15 +28,7 @@ const NumberFormat: React.FC<NumberFormatProps> = ({
   prefix = '',
   suffix = '',
 }) => {
-  if (!isNumber(value)) return value;
-
-  const fixed = parseFloat(value.toPrecision(significantFigures));
-
-  const formatted = thousandSeparator
-    ? fixed.toLocaleString('en')
-    : fixed;
-
-  return `${prefix}${formatted}${suffix}`;
+  return formatNumber(value, significantFigures, thousandSeparator, prefix, suffix);
 }
 
 

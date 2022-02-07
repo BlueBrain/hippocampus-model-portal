@@ -46,7 +46,15 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
     return {
       layer,
       thicknessEntityDescription: thicknessEntity.description,
-      thickness: <><NumberFormat value={thicknessMean} /> &nbsp; <NumberFormat value={thicknessStd} prefix="± " /></>,
+      thickness: (<>
+        <NumberFormat
+          value={thicknessMean}
+          thousandSeparator={false}
+        /> &nbsp; <NumberFormat
+          value={thicknessStd}
+          prefix="± "
+        />
+      </>),
       thicknessN: <NumberFormat value={thicknessN} />,
       rawThickness: thicknessEntity,
       isHighlight,
