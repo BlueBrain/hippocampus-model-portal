@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
 import { ElasticSearchViewQueryResponse } from '@bbp/nexus-sdk';
-import Image from 'next/image';
 
 import ErrorBoundary from '../ErrorBoundary';
-import NexusImage from '../NexusImage';
+import NumberFormat from '../NumberFormat';
 import HttpDownloadButton from '../../components/HttpDownloadButton';
 import { downloadAsJson } from '../../utils';
 import { Layer } from '../../types';
@@ -36,7 +35,7 @@ const LayerThickness: React.FC<LayerThicknessProps> = ({ layer, data = [], class
     { dataIndex: 'species' as keyof SliceElement, title: 'Species and strain' },
     { dataIndex: 'sliceImage' as keyof SliceElement , title: 'Slice image' },
     { dataIndex: 'layerThickness' as keyof SliceElement, title: <>Layer thickness, {unit}</> },
-    { dataIndex: 'n' as keyof SliceElement, title: 'No. of measurements', className: 'narrowColumn' },
+    { dataIndex: 'n' as keyof SliceElement, title: 'No. of measurements' },
     { dataIndex: 'contribution' as keyof SliceElement, title: 'Contribution' },
   ];
 
