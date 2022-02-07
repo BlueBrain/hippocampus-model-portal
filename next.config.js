@@ -17,6 +17,7 @@ const nextConfig = {
   assetPrefix: `${basePath}/`,
   trailingSlash: true,
   webpack5: true,
+  swcMinify: true,
   images: {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 30 * day,
