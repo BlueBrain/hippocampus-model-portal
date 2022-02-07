@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { keyBy } from 'lodash';
 import { useNexusContext } from '@bbp/react-nexus';
+import { Table } from 'antd';
 
-import { hippocampus, basePath } from '../../config';
-import ImageViewer from '../ImageViewer';
+import { hippocampus } from '../../config';
+import { entryToArray } from '../../utils';
+import { Layer } from '../../types';
+import { useExpMorphologyColumns } from './expMorphologyTableUtils';
 
 import styles from './styles.module.scss'
 
 
 type ExpMorphologyTableProps = {
+  // layer and mtype here are used to compose a link to the morphology instance page
+  layer: Layer;
+  mtype: string;
   morphologies: Record<string, any>[];
   currentMorphology?: string;
 };
-
-function entryToArray(entry) {
-  if (Array.isArray(entry)) return entry;
-
-  return [entry];
-}
 
 function getAgentLabel(agent) {
   return agent.name
@@ -31,7 +31,12 @@ function getAgentType(agent) {
     : 'person';
 }
 
-const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorphology, morphologies = [] }) => {
+const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({
+  layer,
+  mtype,
+  currentMorphology,
+  morphologies = []
+}) => {
   const nexus = useNexusContext();
 
   const agentIds = morphologies.reduce((ids: string[], morphology) => {
@@ -42,7 +47,8 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorpholo
     return Array.from(new Set([...ids, ...currIds]));
   }, []);
 
-  const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
+  // const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
+  const { setAgentMap, columns } = useExpMorphologyColumns(layer, mtype, currentMorphology);
 
   useEffect(() => {
     if (!agentIds.length) return;
@@ -75,51 +81,16 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({ currentMorpholo
       .then(agentMap => setAgentMap(agentMap));
   }, [morphologies]);
 
-  const isCurrent = morphology => morphology.name === currentMorphology;
-
   return (
     <div id="expMorphologyTable" className="layer-anatomy-summary__basis mt-2">
-      <table>
-        <thead className={styles.highlightedRowBg}>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>M-Type</th>
-            <th>Contribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          {morphologies.map(morph => (
-            <tr
-              className={isCurrent(morph) ? styles.highlightedRowBg : undefined}
-              key={morph.name}
-            >
-              <td className={`text-capitalize ${isCurrent(morph) ? 'text-bold' : ''}`}>
-                {morph.name}
-              </td>
-              <td style={{ textAlign: 'center'}}>
-                <div className={styles.morphImageContainer}>
-                  <ImageViewer
-                    src={`${basePath}/assets/images/exp-morph-images/${morph.name}.jpeg`}
-                    alt={`Morphology ${morph.name} image`}
-                    loading="lazy"
-                  />
-                </div>
-              </td>
-              <td className={isCurrent(morph) ? 'text-bold' : ''}>
-                {morph.annotation.hasBody.label}
-              </td>
-              <td>
-                {agentMap && entryToArray(morph.contribution)
-                  .map(contribution => agentMap[contribution.agent['@id']])
-                  .sort((a1, a2) => a1.type > a2.type ? 1 : -1)
-                  .map(agent => <span key={agent.label}>{agent.label} <br/></span>)
-                }
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table
+        className="responsiveTable"
+        columns={columns}
+        dataSource={morphologies}
+        size="small"
+        rowKey={(record) => record.name}
+        rowClassName={morphology => morphology.name === currentMorphology ? styles.highlightedRowBg : undefined}
+      />
     </div>
   );
 };
