@@ -16,3 +16,70 @@ export type Color =
   | 'grey-3'
   | 'grey-4'
   | 'grey-5';
+
+
+type NexusSubject = {
+  '@id': string;
+  '@type': 'Subject';
+  species: {
+    '@id': string;
+    label: string;
+  };
+};
+
+type NexusContribution = {
+  '@type': 'Contribution';
+  agent: {
+    '@id': string;
+    '@type': string;
+  };
+  hadRole?: {
+    '@id': string;
+    label: string;
+  };
+};
+
+type NexusDerivation = {
+  '@type': 'Derivation';
+  entity: {
+    '@id': string;
+    '@type': string;
+  };
+};
+
+type NexusDataDownload = {
+  '@type': 'DataDownload';
+  contentSize: {
+    unitCode: string;
+    value: number;
+  };
+  contentUrl: string;
+  encodingFormat: string;
+  name: string;
+};
+
+export type NexusMorphology = {
+  '@id': string;
+  '@type': string[];
+  name: string;
+  annotation: {
+    name: string;
+    hasBody: {
+      label: string;
+    };
+  };
+  brainLocation: {
+    brainRegion: {
+      '@id': string;
+      label: string;
+    };
+  };
+  contribution: NexusContribution | NexusContribution[];
+  derivation: NexusDerivation | NexusDerivation[];
+  distribution: NexusDataDownload | NexusDataDownload[];
+  image: {
+    '@id': string;
+    '@type': 'Entity';
+  };
+  subject: NexusSubject;
+};
