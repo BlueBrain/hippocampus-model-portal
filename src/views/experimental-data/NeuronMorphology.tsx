@@ -216,6 +216,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments &&
                   <ExpMorphologyTable
+                    layer={currentLayer}
+                    mtype={currentMtype}
                     morphologies={getAndSortMorphologies(esDocuments)}
                     currentMorphology={currentInstance}
                   />

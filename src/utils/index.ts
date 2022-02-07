@@ -89,6 +89,10 @@ export const composeNexusUrl: (composeNexusUrlArg) => string = ({
   org = hippocampus.org,
   project = hippocampus.project,
 }) => {
+  if (!id) {
+    throw new Error('id should be defined');
+  }
+
   return `${nexus.url}/${type}s/${org}/${project}/${encodeURIComponent(id)}`;
 };
 

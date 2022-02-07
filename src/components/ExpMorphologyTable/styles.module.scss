@@ -1,12 +1,23 @@
+@import '../../styles/config/_queries';
 
 .morphImageContainer {
   width: 200px;
   border: 1px solid #dedede;
   border-radius: 5px;
+  @media (max-width: $ant-breakpoint-sm){
+    width: unset;
+  }
+}
+
+.centeredText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
 }
 
 .highlightedRowBg {
   td, th {
-    background-color: #edeff8;
+    background-color: #fafbfd;
   }
 }
