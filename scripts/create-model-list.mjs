@@ -1,8 +1,8 @@
 import { writeFileSync, readFileSync, readdirSync } from 'fs';
 
 
-const MODELS_PATH = '/Users/getta/dev/tmp/hippocampus-models';
-const NEURON_DB_PATH = '/Users/getta/Desktop/neuronDB.dat';
+const MODELS_PATH = 'tmp/models';
+const NEURON_DB_PATH = 'tmp/neuronDB.dat';
 
 
 const morphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
@@ -15,17 +15,13 @@ async function main() {
   const modelNames = readdirSync(MODELS_PATH);
 
   const models = modelNames.map(modelName => {
-    // console.log(`Model name: ${modelName}`);
     const morphology = modelName.match(morphologyRe)[1];
-    // console.log(`Morphology: ${morphology}`);
     const etype = modelName.match(etypeRe)[1];
-    // console.log(`Etype     : ${etype}`);
 
     const neuronDbRe = new RegExp(`^${morphology}\\s\\w+\\s\\w+$`, 'gmi');
     const neuronDbMatch = modelDb.match(neuronDbRe);
 
     if (!neuronDbMatch) {
-      // console.warn(`Warn: no NeuronDB record for ${morphology}`);
       return {
         name: modelName,
         morphology,
@@ -34,8 +30,6 @@ async function main() {
         mtype: null,
       }
     }
-
-    // console.log(neuronDbMatch);
 
     const neuronDbRecordMatch = neuronDbMatch[0].match(neuronDbRecordRe);
 
@@ -50,7 +44,6 @@ async function main() {
     return model;
   });
 
-  // writeFileSync('./src/traces.json', JSON.stringify(ephys));
   console.log(JSON.stringify(models));
 }
 
