@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -18,6 +18,7 @@ import Collapsible from '../../components/Collapsible';
 import ExpTraceTable from '../../components/ExpTraceTable';
 import Metadata from '../../components/Metadata';
 import traces from '../../traces.json';
+import { defaultSelection } from '@/constants';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -64,6 +65,16 @@ const NeuronElectrophysiology: React.FC = () => {
       .map(esDocument => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.etype) {
+      const query = defaultSelection.experimentalData.neuronElectrophysiology;
+      router.replace({ query }, undefined, { shallow: true });
+    }
+  }, [router.query]);
+  
 
   return (
     <>

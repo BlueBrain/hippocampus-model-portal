@@ -17,5 +17,9 @@ export const defaultSelection = {
       mtype: 'SLM_PPA',
       instance: '011127HP1',
     },
+    neuronElectrophysiology: {
+      etype: 'bAC',
+      etype_instance: '95810035',
+    },
   },
 };
