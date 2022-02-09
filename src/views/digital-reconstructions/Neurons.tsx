@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 import { Button } from 'antd';
@@ -18,6 +18,7 @@ import ModelMorphologyFactsheet from '../../components/ModelMorphologyFactsheet'
 import NeuronMorphology from '../../components/NeuronMorphology';
 import { basePath } from '../../config';
 import models from '../../models.json';
+import { defaultSelection } from '@/constants';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
@@ -107,6 +108,15 @@ const Neurons: React.FC = () => {
   const morphologyName = currentInstance
     ? currentInstance.match(modelMorphologyRe)[1]
     : null;
+
+    useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.layer) {
+      const query = defaultSelection.digitalReconstruction.neurons;
+      router.replace({ query }, undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   return (
     <>
