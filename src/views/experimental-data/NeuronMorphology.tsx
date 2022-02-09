@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -23,6 +23,7 @@ import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import Metadata from '../../components/Metadata';
 import { hippocampus } from '../../config';
 import { downloadAsJson } from '../../utils';
+import { defaultSelection } from '@/constants';
 
 // TODO: dedup with expMorphologyFactsheet
 import expMorphologyStats from '../../exp-morphology-stats.json';
@@ -86,6 +87,15 @@ const NeuronExperimentalMorphology: React.FC = () => {
       .map(esDocument => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.layer) {
+      const query = defaultSelection.experimentalData.neuronMorphology;
+      router.replace({ query }, undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   return (
     <>

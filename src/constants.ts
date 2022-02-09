@@ -12,5 +12,10 @@ export const defaultSelection = {
     layerAnatomy: {
       layer: 'SLM',
     },
+    neuronMorphology: {
+      layer: 'SLM',
+      mtype: 'SLM_PPA',
+      instance: '011127HP1',
+    },
   },
 };
