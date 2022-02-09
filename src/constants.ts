@@ -6,3 +6,11 @@ export const layers: Layer[] = [
   'SP',
   'SO',
 ];
+
+export const defaultSelection = {
+  experimentalData: {
+    layerAnatomy: {
+      layer: 'SLM',
+    },
+  },
+};

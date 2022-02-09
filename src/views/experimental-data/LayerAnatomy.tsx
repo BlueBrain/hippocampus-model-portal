@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Row, Col } from 'antd';
@@ -16,6 +16,7 @@ import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
 import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
+import { defaultSelection } from '@/constants';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
@@ -30,6 +31,15 @@ const LayerAnatomyView: React.FC = () => {
     const query = { layer };
     router.push({ query }, undefined, { shallow: true });
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.layer) {
+      const query = defaultSelection.experimentalData.layerAnatomy;
+      router.replace({ query }, undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   return (
     <>
