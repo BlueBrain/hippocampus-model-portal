@@ -17,6 +17,7 @@ import LayerThickness from '../../components/LayerThickness';
 import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
 import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
@@ -31,15 +32,6 @@ const LayerAnatomyView: React.FC = () => {
     const query = { layer };
     router.push({ query }, undefined, { shallow: true });
   };
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    if (!router.query.layer) {
-      const query = defaultSelection.experimentalData.layerAnatomy;
-      router.replace({ query }, undefined, { shallow: true });
-    }
-  }, [router.query]);
 
   return (
     <>
@@ -137,5 +129,10 @@ const LayerAnatomyView: React.FC = () => {
   );
 };
 
-
-export default LayerAnatomyView;
+export default withPreselection(
+  LayerAnatomyView,
+  {
+    key: 'layer',
+    defaultQuery: defaultSelection.experimentalData.layerAnatomy,
+  },
+);
