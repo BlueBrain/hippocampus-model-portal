@@ -83,3 +83,33 @@ export type NexusMorphology = {
   };
   subject: NexusSubject;
 };
+
+type NexusTraceImage = {
+  '@id': string;
+  about: 'nsg:ResponseTrace' | 'nsg:StimulationTrace';
+  repetition: number;
+  stimulusType: {
+    '@id': string;
+  };
+}
+
+export type NexusTrace = {
+  '@id': string;
+  '@type': string[];
+  name: string;
+  brainLocation: {
+    '@type': 'BrainLocation';
+    brainRegion: {
+      '@id': string;
+      label: string;
+    }
+  };
+  contribution: NexusContribution | NexusContribution[];
+  distribution: NexusDataDownload | NexusDataDownload[];
+  image: NexusTraceImage[];
+  subject: NexusSubject;
+  isRelatedTo?: {
+    '@id': string;
+    '@type': 'NeuronMorphology';
+  };
+};
