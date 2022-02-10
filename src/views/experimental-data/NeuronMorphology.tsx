@@ -89,7 +89,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
 
   return (
     <>
-      <Filters>
+      <Filters hasData={!!currentInstance}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
