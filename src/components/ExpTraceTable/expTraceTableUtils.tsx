@@ -7,17 +7,11 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 
 import { hippocampus, basePath } from '../../config';
 import NexusImage from '../NexusImage';
-import { composeNexusUrl } from '../../utils';
+import { composeNexusUrl, entryToArray } from '../../utils';
 import NexusFileDownloadButton from '../NexusFileDownloadButton';
 
 import styles from './styles.module.scss';
 
-
-export function entryToArray(entry) {
-  return Array.isArray(entry)
-    ? entry
-    : [entry];
-}
 
 const getStepImageNexusUrl = (trace) => {
   const idRestResponseImages = entryToArray(trace.image)
