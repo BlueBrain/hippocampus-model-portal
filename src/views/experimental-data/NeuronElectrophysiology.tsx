@@ -19,6 +19,7 @@ import ExpTraceTable from '../../components/ExpTraceTable';
 import Metadata from '../../components/Metadata';
 import traces from '../../traces.json';
 import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -65,16 +66,6 @@ const NeuronElectrophysiology: React.FC = () => {
       .map(esDocument => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
   };
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    if (!router.query.etype) {
-      const query = defaultSelection.experimentalData.neuronElectrophysiology;
-      router.replace({ query }, undefined, { shallow: true });
-    }
-  }, [router.query]);
-  
 
   return (
     <>
@@ -202,4 +193,10 @@ const NeuronElectrophysiology: React.FC = () => {
   );
 };
 
-export default NeuronElectrophysiology;
+export default withPreselection(
+  NeuronElectrophysiology,
+  {
+    key: 'etype',
+    defaultQuery: defaultSelection.experimentalData.neuronElectrophysiology,
+  },
+);

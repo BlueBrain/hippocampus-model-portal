@@ -24,6 +24,7 @@ import Metadata from '../../components/Metadata';
 import { hippocampus } from '../../config';
 import { downloadAsJson } from '../../utils';
 import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 // TODO: dedup with expMorphologyFactsheet
 import expMorphologyStats from '../../exp-morphology-stats.json';
@@ -87,15 +88,6 @@ const NeuronExperimentalMorphology: React.FC = () => {
       .map(esDocument => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
   };
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    if (!router.query.layer) {
-      const query = defaultSelection.experimentalData.neuronMorphology;
-      router.replace({ query }, undefined, { shallow: true });
-    }
-  }, [router.query]);
 
   return (
     <>
@@ -251,4 +243,10 @@ const NeuronExperimentalMorphology: React.FC = () => {
   );
 };
 
-export default NeuronExperimentalMorphology;
+export default withPreselection(
+  NeuronExperimentalMorphology,
+  {
+    key: 'layer',
+    defaultQuery: defaultSelection.experimentalData.neuronMorphology,
+  },
+);
