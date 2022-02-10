@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -23,6 +23,8 @@ import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import Metadata from '../../components/Metadata';
 import { hippocampus } from '../../config';
 import { downloadAsJson } from '../../utils';
+import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 // TODO: dedup with expMorphologyFactsheet
 import expMorphologyStats from '../../exp-morphology-stats.json';
@@ -241,4 +243,10 @@ const NeuronExperimentalMorphology: React.FC = () => {
   );
 };
 
-export default NeuronExperimentalMorphology;
+export default withPreselection(
+  NeuronExperimentalMorphology,
+  {
+    key: 'layer',
+    defaultQuery: defaultSelection.experimentalData.neuronMorphology,
+  },
+);

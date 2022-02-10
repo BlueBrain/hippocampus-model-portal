@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Row, Col } from 'antd';
@@ -16,6 +16,8 @@ import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
 import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
+import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
@@ -127,5 +129,10 @@ const LayerAnatomyView: React.FC = () => {
   );
 };
 
-
-export default LayerAnatomyView;
+export default withPreselection(
+  LayerAnatomyView,
+  {
+    key: 'layer',
+    defaultQuery: defaultSelection.experimentalData.layerAnatomy,
+  },
+);

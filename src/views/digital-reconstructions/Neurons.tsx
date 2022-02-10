@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 import { Button } from 'antd';
@@ -18,6 +18,8 @@ import ModelMorphologyFactsheet from '../../components/ModelMorphologyFactsheet'
 import NeuronMorphology from '../../components/NeuronMorphology';
 import { basePath } from '../../config';
 import models from '../../models.json';
+import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
@@ -262,4 +264,10 @@ const Neurons: React.FC = () => {
   );
 };
 
-export default Neurons;
+export default withPreselection(
+  Neurons,
+  {
+    key: 'layer',
+    defaultQuery: defaultSelection.digitalReconstruction.neurons,
+  },
+);

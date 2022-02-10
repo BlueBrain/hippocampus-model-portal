@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -18,6 +18,8 @@ import Collapsible from '../../components/Collapsible';
 import ExpTraceTable from '../../components/ExpTraceTable';
 import Metadata from '../../components/Metadata';
 import traces from '../../traces.json';
+import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -191,4 +193,10 @@ const NeuronElectrophysiology: React.FC = () => {
   );
 };
 
-export default NeuronElectrophysiology;
+export default withPreselection(
+  NeuronElectrophysiology,
+  {
+    key: 'etype',
+    defaultQuery: defaultSelection.experimentalData.neuronElectrophysiology,
+  },
+);
