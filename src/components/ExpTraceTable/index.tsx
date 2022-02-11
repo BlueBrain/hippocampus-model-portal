@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { keyBy } from 'lodash';
+import { Table } from 'antd';
 import { useNexusContext } from '@bbp/react-nexus';
 
 import { hippocampus } from '../../config';
-import ImageViewer from '../ImageViewer';
+import { entryToArray } from '../../utils';
+import { NexusTrace } from '../../types';
+import { useExperimentalTraceTable } from './expTraceTableUtils';
 
 import styles from './styles.module.scss'
 
 
 type ExpTraceTableProps = {
-  traces: Record<string, any>[];
+  etype: string;
+  traces: NexusTrace[];
   currentTrace?: string;
 };
-
-function entryToArray(entry) {
-  if (Array.isArray(entry)) return entry;
-
-  return [entry];
-}
 
 function getAgentLabel(agent) {
   return agent.name
@@ -31,7 +29,7 @@ function getAgentType(agent) {
     : 'person';
 }
 
-const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ currentTrace, traces = [] }) => {
+const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ etype, currentTrace, traces = [] }) => {
   const nexus = useNexusContext();
 
   const agentIds = traces.reduce((ids: string[], trace) => {
@@ -42,7 +40,7 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ currentTrace, traces = []
     return Array.from(new Set([...ids, ...currIds]));
   }, []);
 
-  const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
+  const { agentMap, setAgentMap, columns } = useExperimentalTraceTable(etype, currentTrace);
 
   useEffect(() => {
     if (!agentIds.length) return;
@@ -82,35 +80,12 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ currentTrace, traces = []
       id={traces.length && agentMap ? 'expTraceTable' : null}
       className="layer-anatomy-summary__basis mt-2"
     >
-      <table>
-        <thead>
-          <tr className={styles.highlightedRowBg}>
-            <th>Name</th>
-            {/* <th>Image</th> */}
-            <th>E-Type</th>
-            <th>Contribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          {traces.map(trace => (
-            <tr className={isCurrent(trace) ? styles.highlightedRowBg : undefined} key={trace.name}>
-              <td className={`text-capitalize ${isCurrent(trace) ? 'text-bold' : undefined}`}>
-                {trace.name}
-              </td>
-              <td className={`text-capitalize ${isCurrent(trace) ? 'text-bold' : undefined}`}>
-                {trace.annotation.hasBody.label}
-              </td>
-              <td>
-                {agentMap && entryToArray(trace.contribution)
-                  .map(contribution => agentMap[contribution.agent['@id']])
-                  .sort((a1, a2) => a1.type > a2.type ? 1 : -1)
-                  .map(agent => <span key={agent.label}>{agent.label} <br/></span>)
-                }
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table<NexusTrace>
+        columns={columns}
+        dataSource={traces}
+        rowKey={({ name }) => name}
+        rowClassName={trace => isCurrent(trace) ? styles.highlightedRowBg : undefined}
+      />
     </div>
   );
 };

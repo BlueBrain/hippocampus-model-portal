@@ -365,7 +365,7 @@ export const etypeTracesDataQuery = (
               query: {
                 bool: {
                   must: {
-                    match: { 'distribution.encodingFormat': 'application/rab' },
+                    match: { 'distribution.encodingFormat': 'application/nwb' },
                   },
                 },
               },

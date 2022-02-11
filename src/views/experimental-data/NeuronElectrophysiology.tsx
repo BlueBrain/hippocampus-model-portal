@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -60,6 +60,14 @@ const NeuronElectrophysiology: React.FC = () => {
   const instances = currentEtype
     ? traces[currentEtype].sort()
     : []
+
+  const fullElectroPhysiologyDataQueryObj = useMemo(() => {
+    return electroPhysiologyDataQuery(currentEtype, currentInstance);
+  }, [currentEtype, currentInstance]);
+
+  const etypeTracesDataQueryObj = useMemo(() => {
+    return etypeTracesDataQuery(currentEtype);
+  }, [currentEtype]);
 
   const getAndSortTraces = (esDocuments) => {
     return esDocuments
@@ -126,7 +134,7 @@ const NeuronElectrophysiology: React.FC = () => {
           id="instanceSection"
           title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
         >
-          <ESData query={electroPhysiologyDataQuery(currentEtype, currentInstance)} >
+          <ESData query={fullElectroPhysiologyDataQueryObj} >
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
@@ -175,11 +183,12 @@ const NeuronElectrophysiology: React.FC = () => {
         >
           <h3 className="mt-3">Experimental instances</h3>
 
-          <ESData query={etypeTracesDataQuery(currentEtype)}>
+          <ESData query={etypeTracesDataQueryObj}>
             {esDocuments => (
               <>
                 {!!esDocuments && (
                   <ExpTraceTable
+                    etype={currentEtype}
                     traces={getAndSortTraces(esDocuments)}
                     currentTrace={currentInstance}
                   />
