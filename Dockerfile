@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . ./
-RUN npm run build
+RUN npm run build --verbose
 RUN chmod 777 -R .next/cache
 
 EXPOSE 8000
