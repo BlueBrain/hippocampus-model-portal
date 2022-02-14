@@ -319,6 +319,47 @@ export const dataByIdQuery = (
   };
 };
 
+export const entriesByIdsQuery = (
+  ids: string[]
+): ESQuery | null => {
+  if(!ids) {
+    return null;
+  }
+
+  return {
+    from: 0,
+    size: 100,
+    query: {
+      bool: {
+        filter: [
+          {
+            bool: {
+              should: [
+                {
+                  term: {
+                    '_deprecated': false,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            bool: {
+              should: [
+                {
+                  terms: {
+                    '@id': ids,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  };
+};
+
 
 export const etypeTracesDataQuery = (
   etype: string,

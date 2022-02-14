@@ -108,3 +108,7 @@ export function entryToArray(entry) {
 
   return [entry];
 }
+
+export function getCompareByFn(compareProp) {
+  return (obj1, obj2) => obj1[compareProp] > obj2[compareProp] ? 1 : -1;
+}
