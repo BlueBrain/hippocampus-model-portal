@@ -6,7 +6,7 @@ import { writeFileSync } from 'fs';
 
 
 const org = 'public';
-const project = 'hippocampus-hub';
+const project = 'hippocampus';
 const datasetViewId = encodeURIComponent('https://bbp.epfl.ch/neurosciencegraph/data/views/es/dataset');
 
 export const nexusConf = {
