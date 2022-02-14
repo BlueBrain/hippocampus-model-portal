@@ -17,6 +17,7 @@ if (typeof window === 'undefined') {
 } else {
   smoothscroll.polyfill();
   require('systemjs');
+  require('systemjs/dist/extras/amd');
 }
 
 const nexusClient = createNexusClient({
