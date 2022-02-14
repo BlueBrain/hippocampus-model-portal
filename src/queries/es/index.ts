@@ -58,9 +58,16 @@ export const electroPhysiologyDataQuery = (
         filter: [
           {
             bool: {
-              must: [
-                { term: { '@type': 'Trace' } },
-              ],
+              must: {
+                term: { _deprecated: false },
+              }
+            },
+          },
+          {
+            bool: {
+              must: {
+                term: { '@type': 'Trace' },
+              },
             },
           },
           {
@@ -113,6 +120,13 @@ export const ephysByNameDataQuery = (
         filter: [
           {
             bool: {
+              must: {
+                term: { _deprecated: false },
+              }
+            },
+          },
+          {
+            bool: {
               must: [
                 { term: { '@type': 'Trace' } },
               ],
@@ -128,7 +142,7 @@ export const ephysByNameDataQuery = (
           {
             bool: {
               must: {
-                term: { 'note': 'subset' }
+                term: { note: 'subset' }
               }
             }
           },
@@ -169,7 +183,7 @@ export const mtypeExpMorphologyListDataQuery = (
               should: [
                 {
                   term: {
-                    '_deprecated': false,
+                    _deprecated: false,
                   },
                 },
               ],
@@ -227,7 +241,7 @@ export const morphologyDataQuery = (
               should: [
                 {
                   term: {
-                    '_deprecated': false,
+                    _deprecated: false,
                   },
                 },
               ],
@@ -255,22 +269,6 @@ export const morphologyDataQuery = (
               ],
             },
           },
-          // {
-          //   nested: {
-          //     path: 'annotation.hasBody',
-          //     query: {
-          //       bool: {
-          //         filter: [
-          //           {
-          //             term: {
-          //               'annotation.hasBody.label.raw': mtype,
-          //             },
-          //           },
-          //         ],
-          //       },
-          //     },
-          //   },
-          // },
         ],
       },
     },
@@ -296,7 +294,7 @@ export const dataByIdQuery = (
               should: [
                 {
                   term: {
-                    '_deprecated': false,
+                    _deprecated: false,
                   },
                 },
               ],
@@ -337,7 +335,7 @@ export const entriesByIdsQuery = (
               should: [
                 {
                   term: {
-                    '_deprecated': false,
+                    _deprecated: false,
                   },
                 },
               ],
@@ -376,6 +374,13 @@ export const etypeTracesDataQuery = (
         filter: [
           {
             bool: {
+              must: {
+                term: { _deprecated: false },
+              }
+            },
+          },
+          {
+            bool: {
               must: [
                 { term: { '@type': 'Trace' } },
               ],
@@ -385,7 +390,7 @@ export const etypeTracesDataQuery = (
             bool: {
               must_not: {
                 exists: {
-                  "field": "note",
+                  field: 'note',
                 },
               },
             },
