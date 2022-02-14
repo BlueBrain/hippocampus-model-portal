@@ -14,7 +14,7 @@ export const hippocampus = {
   datasetViewId: encodeURIComponent('https://bbp.epfl.ch/neurosciencegraph/data/views/es/dataset'),
 };
 
-export const deploymentUrl = 'https://hippocampushub.eu';
+export const deploymentUrl = 'https://www.hippocampushub.eu';
 export const basePath = '/model';
 
 export const isServer = typeof window === 'undefined';

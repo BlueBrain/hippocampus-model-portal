@@ -8,7 +8,7 @@ import DataContainer from '../../components/DataContainer';
 import NexusPlugin from '../../components/NexusPlugin';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '../../queries/es';
-import { hippocampus } from '../../config';
+import { deploymentUrl, hippocampus } from '../../config';
 import Filters from '../../layouts/Filters';
 import Title from '../../components/Title';
 import InfoBox from '../../components/InfoBox';
@@ -165,7 +165,7 @@ const NeuronElectrophysiology: React.FC = () => {
                         className="mr-1"
                         type="primary"
                         size="small"
-                        href={`/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
+                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
                       >
                         Send to the Build section
                       </Button>

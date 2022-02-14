@@ -22,7 +22,7 @@ import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import Metadata from '../../components/Metadata';
 import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
-import { hippocampus } from '../../config';
+import { hippocampus, deploymentUrl } from '../../config';
 import { downloadAsJson } from '../../utils';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
@@ -178,7 +178,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                         className="mr-1"
                         type="primary"
                         size="small"
-                        href={`/build/data/morphology?query=${encodeURIComponent(currentInstance)}`}
+                        href={`${deploymentUrl}/build/data/morphology?query=${encodeURIComponent(currentInstance)}`}
                       >
                         Send to the Build section
                       </Button>
