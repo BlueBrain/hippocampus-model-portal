@@ -17,6 +17,7 @@ import List from '../../components/List';
 import Collapsible from '../../components/Collapsible';
 import ExpTraceTable from '../../components/ExpTraceTable';
 import Metadata from '../../components/Metadata';
+import TraceRelatedMorphologies from '../../components/TraceRelatedMorphologies';
 import traces from '../../traces.json';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
@@ -168,6 +169,9 @@ const NeuronElectrophysiology: React.FC = () => {
                       >
                         Send to the Build section
                       </Button>
+                    </div>
+                    <div className="mt-3">
+                      <TraceRelatedMorphologies trace={esDocuments[0]._source} />
                     </div>
                   </>
                 )}

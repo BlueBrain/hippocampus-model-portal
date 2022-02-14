@@ -39,6 +39,16 @@ type NexusContribution = {
   };
 };
 
+type NexusAnnotation = {
+  '@type': string[];
+  hasBody: {
+    '@id': string;
+    '@type': string;
+    label: string;
+  };
+  name?: string;
+};
+
 type NexusDerivation = {
   '@type': 'Derivation';
   entity: {
@@ -62,12 +72,7 @@ export type NexusMorphology = {
   '@id': string;
   '@type': string[];
   name: string;
-  annotation: {
-    name: string;
-    hasBody: {
-      label: string;
-    };
-  };
+  annotation: NexusAnnotation;
   brainLocation: {
     brainRegion: {
       '@id': string;
@@ -82,6 +87,10 @@ export type NexusMorphology = {
     '@type': 'Entity';
   };
   subject: NexusSubject;
+  isRelatedTo?: {
+    '@id': string;
+    '@type': 'Trace';
+  };
 };
 
 type NexusTraceImage = {
@@ -104,6 +113,7 @@ export type NexusTrace = {
       label: string;
     }
   };
+  annotation: NexusAnnotation;
   contribution: NexusContribution | NexusContribution[];
   distribution: NexusDataDownload | NexusDataDownload[];
   image: NexusTraceImage[];

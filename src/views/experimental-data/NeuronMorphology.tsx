@@ -21,6 +21,7 @@ import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import Metadata from '../../components/Metadata';
+import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
 import { hippocampus } from '../../config';
 import { downloadAsJson } from '../../utils';
 import { defaultSelection } from '@/constants';
@@ -192,6 +193,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
                       >
                         morphology
                       </NexusFileDownloadButton>
+                    </div>
+                    <div className="mt-3">
+                      <MorphologyRelatedTraces morphology={esDocuments[0]._source} />
                     </div>
                   </>
                 )}
