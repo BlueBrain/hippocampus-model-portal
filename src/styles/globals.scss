@@ -23,6 +23,16 @@
 @import 'config/_queries';
 
 
+// colors
+:root {
+  --color-blue-2: #343846;
+}
+
+.set-accent-color--blue-2 {
+  --accent-color: var(--color-blue-2);
+}
+
+
 html, body {
   @include font-default;
   color: map-get($basePalette, "white");
