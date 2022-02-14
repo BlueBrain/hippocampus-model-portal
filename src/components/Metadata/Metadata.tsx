@@ -23,7 +23,7 @@ function getAgentRoleLabel(agent) {
 function getAgentName(agent) {
   return agent.name
     ? agent.name
-    : `${agent.familyName} ${agent.givenName}`;
+    : `${agent.givenName} ${agent.familyName}`;
 }
 
 function getAgentType(agent) {
