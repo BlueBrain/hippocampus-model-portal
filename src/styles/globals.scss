@@ -1208,6 +1208,10 @@ $collapsible-padding: 20px 30px;
   --color-grey-3: #8690b3;
   --color-grey-4: #9fa9d0;
   --color-grey-5: #c3cce7;
+
+  --color-text-high-white: #ffffffdd;
+  --color-text-medium-white: #ffffffa8;
+  --color-text-disabled-white: #ffffff61;
 }
 
 .bg-grey-1 {
@@ -1228,4 +1232,8 @@ $collapsible-padding: 20px 30px;
 
 .bg-white {
   background-color: white;
+}
+
+.bg-almost-white {
+  background-color: #dedede;
 }

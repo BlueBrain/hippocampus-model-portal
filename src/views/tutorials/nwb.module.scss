@@ -1,0 +1,47 @@
+
+@import '../../styles/config/_queries';
+
+.section {
+  padding-left: 1rem;
+
+  @media (max-width: $ant-breakpoint-md) {
+    padding-left: 0;
+  }
+}
+
+.container {
+  padding: 30px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  color: var(--color-text-medium-white);
+
+  a, a:hover {
+    color: var(--color-text-medium-white);
+    text-decoration: underline;
+  }
+
+  h2, h3 {
+    color: var(--color-text-high-white);
+  }
+
+  h2 {
+    margin-top: 2.6rem;
+  }
+
+  h3 {
+    margin-top: 1.8rem;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  @media (max-width: $ant-breakpoint-md) {
+    padding: 0;
+
+    ul, ol {
+      padding-inline-start: 1.6rem;
+    }
+  }
+}
