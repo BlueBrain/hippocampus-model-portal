@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -23,14 +23,26 @@ import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
 import Metadata from '../../components/Metadata';
 import { hippocampus } from '../../config';
 import { downloadAsJson } from '../../utils';
-import { defaultSelection } from '@/constants';
+import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
 
 // TODO: dedup with expMorphologyFactsheet
 import expMorphologyStats from '../../exp-morphology-stats.json';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
+const getMtypes = (currentLayer) => {
+  return currentLayer
+    ? Array.from(new Set(morphologies.filter(m => m.region === currentLayer).map(m => m.mtype))).sort()
+    : [];
+}
+
+const getInstances = (currentMtype) => {
+  return currentMtype
+    ? morphologies.filter(m => m.mtype === currentMtype).map(m => m.name).sort()
+    : [];
+}
 
 const NeuronExperimentalMorphology: React.FC = () => {
   const router = useRouter();
@@ -51,9 +63,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
   };
   const currentLayer: Layer = query.layer as Layer;
 
-  const mtypes = currentLayer
-    ? Array.from(new Set(morphologies.filter(m => m.region === currentLayer).map(m => m.mtype))).sort()
-    : [];
+  const mtypes = getMtypes(currentLayer);
 
   const setMtype = (mtype: string) => {
     setQuery({
@@ -64,9 +74,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
   };
   const currentMtype: string = query.mtype as string;
 
-  const instances = currentMtype
-    ? morphologies.filter(m => m.mtype === currentMtype).map(m => m.name).sort()
-    : []
+  const instances = getInstances(currentMtype);
 
   const setInstance = (instance: string) => {
     setQuery({
@@ -243,10 +251,40 @@ const NeuronExperimentalMorphology: React.FC = () => {
   );
 };
 
-export default withPreselection(
+const hocPreselection = withPreselection(
   NeuronExperimentalMorphology,
   {
     key: 'layer',
     defaultQuery: defaultSelection.experimentalData.neuronMorphology,
+  },
+);
+
+const qsEntries = [
+  {
+    title: 'Layer',
+    key: 'layer',
+    values: layers,
+  },
+  {
+    title: 'M-type',
+    key: 'mtype',
+    getValuesFn: getMtypes,
+    getValuesParam: 'layer',
+    paramsToKeepOnChange: ['layer'],
+  },
+  {
+    title: 'Instance',
+    key: 'instance',
+    getValuesFn: getInstances,
+    getValuesParam: 'mtype',
+    paramsToKeepOnChange: ['layer', 'mtype'],
+  },  
+];
+
+export default withQuickSelector(
+  hocPreselection,
+  { 
+    entries: qsEntries,
+    color: colorName,
   },
 );

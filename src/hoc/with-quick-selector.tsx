@@ -3,12 +3,14 @@ import { useRouter } from 'next/router';
 import QuickSelector from '@/components/QuickSelector';
 import { Color } from '@/types';
 
-
 type QuickSelectionProps = {
   entries: Array<{
     title: string;
     key: string;
-    values: Array<string>;
+    values?: Array<string>;
+    getValuesFn?: Function;
+    getValuesParam?: string;
+    paramsToKeepOnChange?: Array<string>;
   }>;
   color: Color;
 };
@@ -30,9 +32,16 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
 
     const [quickSelection, setQuickSelection] = useState(initialStateObj);
 
-    const setQs = (query) => {
-      setQuickSelection(query);
-      router.push({ query }, undefined, { shallow: true });
+    const allEntriesAreSet = (qsQuery) => qsParams.entries.every(entry => (
+      !!qsQuery[entry.key]
+    ));
+
+    const setQs = (qsQuery) => {
+      setQuickSelection(qsQuery);
+
+      if (allEntriesAreSet(qsQuery)) {
+        router.push({ query: qsQuery }, undefined, { shallow: true });
+      }
     };
 
     useEffect(() => {
@@ -42,13 +51,37 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
       setQuickSelection(stateObj);
     }, [router.query]);
 
-    const entries = qsParams.entries.map(entry => ({
-      ...entry,
-      currentValue: quickSelection[entry.key] || '',
-      onChange: (param) => {
-        setQs({ [entry.key]: param });
-      },
-    }));
+    const entries = qsParams.entries.map(entry => {
+      const currentValue = quickSelection[entry.key] || '';
+
+      const values = entry.values
+        ? entry.values
+        : entry.getValuesFn(quickSelection[entry.getValuesParam]);
+
+      // using this that sets the nulls because the quickSelection is async
+      const getQsQuery = (changedParam) => {
+        return Object.entries(quickSelection).reduce((acc, [key, value]) => {
+          if (key === entry.key) {
+            acc[key] = changedParam;
+          }
+          else if (entry.paramsToKeepOnChange?.includes(key)) {
+            acc[key] = value;
+          } else {
+            acc[key] = '';
+          }
+          return acc;
+        }, {});
+      };
+
+      return {
+        title: entry.title,
+        values: values || [],
+        currentValue,
+        onChange: (param) => {
+          setQs(getQsQuery(param));
+        },
+      };
+    });
 
     return (<>
       <QuickSelector
