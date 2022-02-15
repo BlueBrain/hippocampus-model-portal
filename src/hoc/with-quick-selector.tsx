@@ -3,15 +3,17 @@ import { useRouter } from 'next/router';
 import QuickSelector from '@/components/QuickSelector';
 import { Color } from '@/types';
 
+type Entry = {
+  title: string;
+  key: string;
+  values?: Array<string>;
+  getValuesFn?: Function;
+  getValuesParam?: string | Array<string>;
+  paramsToKeepOnChange?: Array<string>;
+};
+
 type QuickSelectionProps = {
-  entries: Array<{
-    title: string;
-    key: string;
-    values?: Array<string>;
-    getValuesFn?: Function;
-    getValuesParam?: string;
-    paramsToKeepOnChange?: Array<string>;
-  }>;
+  entries: Array<Entry>;
   color: Color;
 };
 
@@ -51,37 +53,46 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
       setQuickSelection(stateObj);
     }, [router.query]);
 
-    const entries = qsParams.entries.map(entry => {
-      const currentValue = quickSelection[entry.key] || '';
+    const getValues = (entry: Entry) => {
+      if (!entry?.values && !entry?.getValuesParam) return [];
 
-      const values = entry.values
-        ? entry.values
-        : entry.getValuesFn(quickSelection[entry.getValuesParam]);
+      if (entry.values?.length) return entry.values;
 
+      if (Array.isArray(entry.getValuesParam)) {
+        const args = entry.getValuesParam.map(param => (
+          quickSelection[param]
+        ));
+        return entry.getValuesFn(...args);
+      }
+
+      if (typeof(entry.getValuesParam) === 'string') {
+        return entry.getValuesFn(quickSelection[entry.getValuesParam]);
+      }      
+    };
+
+    const getQsQuery = (changedParam: string, entry: Entry) => {
       // using this that sets the nulls because the quickSelection is async
-      const getQsQuery = (changedParam) => {
-        return Object.entries(quickSelection).reduce((acc, [key, value]) => {
-          if (key === entry.key) {
-            acc[key] = changedParam;
-          }
-          else if (entry.paramsToKeepOnChange?.includes(key)) {
-            acc[key] = value;
-          } else {
-            acc[key] = '';
-          }
-          return acc;
-        }, {});
-      };
+      return Object.entries(quickSelection).reduce((acc, [key, value]) => {
+        if (key === entry.key) {
+          acc[key] = changedParam;
+        }
+        else if (entry.paramsToKeepOnChange?.includes(key)) {
+          acc[key] = value;
+        } else {
+          acc[key] = '';
+        }
+        return acc;
+      }, {});
+    };
 
-      return {
-        title: entry.title,
-        values: values || [],
-        currentValue,
-        onChange: (param) => {
-          setQs(getQsQuery(param));
-        },
-      };
-    });
+    const entries = qsParams.entries.map(entry => ({
+      title: entry.title,
+      values: getValues(entry),
+      currentValue: quickSelection[entry.key] || '',
+      onChange: (param) => {
+        setQs(getQsQuery(param, entry));
+      },
+    }));
 
     return (<>
       <QuickSelector
