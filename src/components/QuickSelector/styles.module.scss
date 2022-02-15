@@ -1,0 +1,48 @@
+@import '@/styles/config/_queries';
+
+
+.quickSelectorContainer {
+  background-color: var(--accent-color);
+  position: fixed;
+  top: -80px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  transition: transform 0.2s ease-out;
+  box-shadow: 0 4px 12px 0px rgba(0,0,0,0.3);
+}
+
+.show {
+  transform: translateY(80px);
+}
+
+.quickSelectorItem {
+  > label {
+    margin: 0 10px 0 20px;
+  }
+}
+
+.quickSelectorItem:first-child {
+  > label {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: $ant-breakpoint-sm) {
+  .quick-selector-container {
+    display: none;
+  }
+  .quick-selector-item {
+    display: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .quickSelectorContainer {
+    display: none;
+  }
+}

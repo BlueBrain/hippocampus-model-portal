@@ -7,6 +7,7 @@ export type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 export type Color =
   | 'yellow'
   | 'blue'
+  | 'blue-2'
   | 'lavender'
   | 'green'
   | 'grey'

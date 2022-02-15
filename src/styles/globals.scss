@@ -23,6 +23,16 @@
 @import 'config/_queries';
 
 
+// colors
+:root {
+  --color-blue-2: #343846;
+}
+
+.set-accent-color--blue-2 {
+  --accent-color: var(--color-blue-2);
+}
+
+
 html, body {
   @include font-default;
   color: map-get($basePalette, "white");
@@ -527,7 +537,7 @@ $collapsible-padding: 20px 30px;
   $padding: 10px 10px 10px 20px;
 
   padding: $padding;
-  background-color: map-get($basePalette, "navy-1");
+  background-color: var(--accent-color);
 
   p {
     font-weight: 500;

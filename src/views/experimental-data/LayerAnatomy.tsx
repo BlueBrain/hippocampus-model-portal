@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Row, Col } from 'antd';
@@ -16,8 +16,9 @@ import ESData from '../../components/ESData';
 import LayerThickness from '../../components/LayerThickness';
 import LayerAnatomySummary from '../../components/LayerAnatomySummary';
 import { Layer } from '../../types';
-import { defaultSelection } from '@/constants';
+import { defaultSelection , layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
@@ -129,10 +130,24 @@ const LayerAnatomyView: React.FC = () => {
   );
 };
 
-export default withPreselection(
+const hocPreselection = withPreselection(
   LayerAnatomyView,
   {
     key: 'layer',
     defaultQuery: defaultSelection.experimentalData.layerAnatomy,
+  },
+);
+
+const qsEntries = [{
+  title: 'Layer',
+  key: 'layer',
+  values: layers,
+}];
+
+export default withQuickSelector(
+  hocPreselection,
+  { 
+    entries: qsEntries,
+    color: colorName,
   },
 );

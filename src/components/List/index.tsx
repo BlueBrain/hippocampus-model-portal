@@ -38,7 +38,7 @@ const List: React.FC<ListProps> = ({
 
   return (
     <div
-      className={`${classPrefixList}basis bg-${color} ${className}`}
+      className={`${classPrefixList}basis set-accent-color--${color} ${className}`}
       role="radiogroup"
       aria-labelledby={`${classPrefixList}${id}`}
     >

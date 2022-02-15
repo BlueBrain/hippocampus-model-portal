@@ -18,8 +18,10 @@ import ModelMorphologyFactsheet from '../../components/ModelMorphologyFactsheet'
 import NeuronMorphology from '../../components/NeuronMorphology';
 import { basePath } from '../../config';
 import models from '../../models.json';
-import { defaultSelection } from '@/constants';
+import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
+import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
@@ -27,12 +29,39 @@ import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
 
+const getMtypes = (layer) => {
+  return layer
+    ? models
+      .filter(model => model.layer === layer)
+      .map(model => model.mtype)
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .sort()
+    : [];
+}
+
+const getEtypes = (mtype) => {
+  return mtype
+    ? models
+      .filter(model => model.mtype === mtype)
+      .map(model => model.etype)
+      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .sort()
+    : [];
+}
+
+const getInstances = (mtype, etype) => {
+  return etype
+    ? models
+      .filter(model => model.mtype === mtype && model.etype === etype)
+      .map(model => model.name)
+      .sort()
+    : [];
+}
+
 const Neurons: React.FC = () => {
   const router = useRouter();
 
-  const query = {
-    ...router?.query
-  };
+  const { query } = router;
 
   const currentLayer: Layer = query.layer as Layer;
   const currentMtype: string = query.mtype as string;
@@ -77,28 +106,11 @@ const Neurons: React.FC = () => {
     setParams({ instance })
   };
 
-  const mtypes = currentLayer
-    ? models
-      .filter(model => model.layer === currentLayer)
-      .map(model => model.mtype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
+  const mtypes = getMtypes(currentLayer);
 
-  const etypes = currentMtype
-    ? models
-      .filter(model => model.mtype === currentMtype)
-      .map(model => model.etype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
+  const etypes = getEtypes(currentMtype);
 
-  const instances = currentEtype
-    ? models
-      .filter(model => model.mtype === currentMtype && model.etype === currentEtype)
-      .map(model => model.name)
-      .sort()
-    : [];
+  const instances = getInstances(currentMtype, currentEtype);
 
   const getMorphologyDistribution = (morphologyResource: any) => {
     return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
@@ -116,12 +128,12 @@ const Neurons: React.FC = () => {
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
-              primaryColor="grey-1"
+              primaryColor={colorName}
               title={<span>Neurons</span>}
               subtitle="Digital Reconstructions"
             />
             <InfoBox
-              color="grey-1"
+              color={colorName}
             >
               <p>
                 We reconstructed the 3D morphology of single neurons and classified them into
@@ -151,7 +163,7 @@ const Neurons: React.FC = () => {
                     list={mtypes}
                     value={currentMtype}
                     title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setMtype}
                   />
                   <List
@@ -159,14 +171,14 @@ const Neurons: React.FC = () => {
                     list={etypes}
                     value={currentEtype}
                     title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setEtype}
                   />
                   <List
                     list={instances}
                     value={currentInstance}
                     title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setInstance}
                     anchor="data"
                   />
@@ -264,10 +276,48 @@ const Neurons: React.FC = () => {
   );
 };
 
-export default withPreselection(
+const hocPreselection = withPreselection(
   Neurons,
   {
     key: 'layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
+  },
+);
+
+const qsEntries = [
+  {
+    title: 'Layer',
+    key: 'layer',
+    values: layers,
+  },
+  {
+    title: 'M-type',
+    key: 'mtype',
+    getValuesFn: getMtypes,
+    getValuesParam: 'layer',
+    paramsToKeepOnChange: ['layer'],
+  },
+  {
+    title: 'E-Type',
+    key: 'etype',
+    getValuesFn: getEtypes,
+    getValuesParam: 'mtype',
+    paramsToKeepOnChange: ['layer', 'mtype'],
+  },
+
+  {
+    title: 'Instance',
+    key: 'instance',
+    getValuesFn: getInstances,
+    getValuesParam: ['mtype', 'etype'],
+    paramsToKeepOnChange: ['layer', 'mtype', 'etype'],
+  },
+];
+
+export default withQuickSelector(
+  hocPreselection,
+  { 
+    entries: qsEntries,
+    color: colorName,
   },
 );
