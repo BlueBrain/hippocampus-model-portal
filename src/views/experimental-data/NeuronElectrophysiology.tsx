@@ -20,6 +20,7 @@ import Metadata from '../../components/Metadata';
 import traces from '../../traces.json';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -28,13 +29,21 @@ const getEphysDistribution = (resource: any) => Array.isArray(resource.distribut
   ? resource.distribution.find((d: any) => d.name.match(/\.nwb$/i))
   : resource.distribution;
 
+const getEtype = () => {
+  return Object.keys(traces).sort();
+};
+
+const getInstance = (currentEtype) => {
+  return currentEtype
+    ? traces[currentEtype].sort()
+    : [];
+};
+
 const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
-  const query = {
-    ...router.query
-  };
+  const { query } = router;
 
   const setQuery = (query: any) => {
     router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
@@ -43,7 +52,7 @@ const NeuronElectrophysiology: React.FC = () => {
   const setEtype = (etype: string) => {
     setQuery({
       etype,
-      etype_instance: currentInstance,
+      etype_instance: null,
     });
   };
   const setInstance = (instance: string) => {
@@ -56,10 +65,8 @@ const NeuronElectrophysiology: React.FC = () => {
   const currentEtype: string = query.etype as string;
   const currentInstance: string = query.etype_instance as string;
 
-  const etypes = Object.keys(traces).sort();
-  const instances = currentEtype
-    ? traces[currentEtype].sort()
-    : []
+  const etypes = getEtype();
+  const instances = getInstance(currentEtype);
 
   const getAndSortTraces = (esDocuments) => {
     return esDocuments
@@ -193,10 +200,33 @@ const NeuronElectrophysiology: React.FC = () => {
   );
 };
 
-export default withPreselection(
+const hocPreselection = withPreselection(
   NeuronElectrophysiology,
   {
     key: 'etype',
     defaultQuery: defaultSelection.experimentalData.neuronElectrophysiology,
+  },
+);
+
+const qsEntries = [
+  {
+    title: 'E-type',
+    key: 'etype',
+    values: getEtype(),
+  },
+  {
+    title: 'Instance',
+    key: 'etype_instance',
+    getValuesFn: getInstance,
+    getValuesParam: 'etype',
+    paramsToKeepOnChange: ['etype'],
+  },  
+];
+
+export default withQuickSelector(
+  hocPreselection,
+  { 
+    entries: qsEntries,
+    color: colorName,
   },
 );
