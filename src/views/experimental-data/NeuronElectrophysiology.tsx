@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 import ESData from '../../components/ESData';
 import DataContainer from '../../components/DataContainer';
@@ -20,6 +21,7 @@ import Metadata from '../../components/Metadata';
 import TraceRelatedMorphologies from '../../components/TraceRelatedMorphologies';
 import traces from '../../traces.json';
 import { defaultSelection } from '@/constants';
+import { basePath } from '../../config';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
@@ -151,6 +153,17 @@ const NeuronElectrophysiology: React.FC = () => {
                     <h3 className="mt-3">Patch clamp recording</h3>
                     <div className="row start-xs end-sm mt-2 mb-2">
                       <div className="col-xs">
+                        <Button
+                          className="mr-1"
+                          type="dashed"
+                          icon={<QuestionCircleOutlined />}
+                          href={`${basePath}/tutorials/nwb/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          size="small"
+                        >
+                          How to read NWB files
+                        </Button>
                         <NexusFileDownloadButton
                           filename={getEphysDistribution(esDocuments[0]._source).name}
                           url={getEphysDistribution(esDocuments[0]._source).contentUrl}
