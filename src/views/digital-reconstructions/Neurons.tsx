@@ -128,12 +128,12 @@ const Neurons: React.FC = () => {
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
-              primaryColor="grey-1"
+              primaryColor={colorName}
               title={<span>Neurons</span>}
               subtitle="Digital Reconstructions"
             />
             <InfoBox
-              color="grey-1"
+              color={colorName}
             >
               <p>
                 We reconstructed the 3D morphology of single neurons and classified them into
@@ -163,7 +163,7 @@ const Neurons: React.FC = () => {
                     list={mtypes}
                     value={currentMtype}
                     title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setMtype}
                   />
                   <List
@@ -171,14 +171,14 @@ const Neurons: React.FC = () => {
                     list={etypes}
                     value={currentEtype}
                     title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setEtype}
                   />
                   <List
                     list={instances}
                     value={currentInstance}
                     title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
-                    color="grey-1"
+                    color={colorName}
                     onSelect={setInstance}
                     anchor="data"
                   />
