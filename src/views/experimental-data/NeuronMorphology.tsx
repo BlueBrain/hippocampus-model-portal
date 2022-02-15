@@ -32,15 +32,15 @@ import expMorphologyStats from '../../exp-morphology-stats.json';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
 
-const getMtypes = (currentLayer) => {
-  return currentLayer
-    ? Array.from(new Set(morphologies.filter(m => m.region === currentLayer).map(m => m.mtype))).sort()
+const getMtypes = (layer) => {
+  return layer
+    ? Array.from(new Set(morphologies.filter(m => m.region === layer).map(m => m.mtype))).sort()
     : [];
 }
 
-const getInstances = (currentMtype) => {
-  return currentMtype
-    ? morphologies.filter(m => m.mtype === currentMtype).map(m => m.name).sort()
+const getInstances = (mtype) => {
+  return mtype
+    ? morphologies.filter(m => m.mtype === mtype).map(m => m.name).sort()
     : [];
 }
 
@@ -278,7 +278,7 @@ const qsEntries = [
     getValuesFn: getInstances,
     getValuesParam: 'mtype',
     paramsToKeepOnChange: ['layer', 'mtype'],
-  },  
+  },
 ];
 
 export default withQuickSelector(

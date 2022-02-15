@@ -17,11 +17,11 @@ type QuickSelectionProps = {
   color: Color;
 };
 
-const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
+const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {
 
-  const getStateObj = (router) => qsParams.entries.reduce(
+  const getStateObj = (router) => qsProps.entries.reduce(
     (state, entry) => {
-      state[entry.key] = router.query[entry.key] || '';
+      state[entry.key] = router.query[entry.key] || null;
       return state;
     },
     {},
@@ -34,7 +34,7 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
 
     const [quickSelection, setQuickSelection] = useState(initialStateObj);
 
-    const allEntriesAreSet = (qsQuery) => qsParams.entries.every(entry => (
+    const allEntriesAreSet = (qsQuery) => qsProps.entries.every(entry => (
       !!qsQuery[entry.key]
     ));
 
@@ -85,10 +85,10 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
       }, {});
     };
 
-    const entries = qsParams.entries.map(entry => ({
+    const entries = qsProps.entries.map(entry => ({
       title: entry.title,
       values: getValues(entry),
-      currentValue: quickSelection[entry.key] || '',
+      currentValue: quickSelection[entry.key] || null,
       onChange: (param) => {
         setQs(getQsQuery(param, entry));
       },
@@ -96,7 +96,7 @@ const withQuickSelector = (WrappedComponent, qsParams: QuickSelectionProps) => {
 
     return (<>
       <QuickSelector
-        color={qsParams.color}
+        color={qsProps.color}
         entries={entries}
       />
       <WrappedComponent />

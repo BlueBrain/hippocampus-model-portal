@@ -33,9 +33,9 @@ const getEtype = () => {
   return Object.keys(traces).sort();
 };
 
-const getInstance = (currentEtype) => {
-  return currentEtype
-    ? traces[currentEtype].sort()
+const getInstance = (etype) => {
+  return etype
+    ? traces[etype].sort()
     : [];
 };
 

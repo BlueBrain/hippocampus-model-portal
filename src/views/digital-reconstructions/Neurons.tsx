@@ -29,34 +29,35 @@ import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
 
-const getMtypes = (currentLayer) => {
-  return currentLayer
+const getMtypes = (layer) => {
+  return layer
     ? models
-      .filter(model => model.layer === currentLayer)
+      .filter(model => model.layer === layer)
       .map(model => model.mtype)
       .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getEtypes = (currentMtype) => {
-  return currentMtype
+const getEtypes = (mtype) => {
+  return mtype
     ? models
-      .filter(model => model.mtype === currentMtype)
+      .filter(model => model.mtype === mtype)
       .map(model => model.etype)
       .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getInstances = (currentMtype, currentEtype) => {
-  return currentEtype
+const getInstances = (mtype, etype) => {
+  return etype
     ? models
-      .filter(model => model.mtype === currentMtype && model.etype === currentEtype)
+      .filter(model => model.mtype === mtype && model.etype === etype)
       .map(model => model.name)
       .sort()
     : [];
 }
+
 const Neurons: React.FC = () => {
   const router = useRouter();
 
