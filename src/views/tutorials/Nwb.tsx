@@ -245,7 +245,6 @@ const NwbTutorialView: React.FC = () => {
 
           <h3>Read NWB file</h3>
 
-          <h3 id="matlab-read-file">Read NWB file</h3>
           <MatlabCode code={code.matlab1} />
         </div>
       </div>
