@@ -20,7 +20,7 @@ const nextConfig = {
   swcMinify: true,
   images: {
     path: `${basePath}/_next/image`,
-    minimumCacheTTL: 30 * day,
+    minimumCacheTTL: 7 * day,
     formats: ['image/avif', 'image/webp'],
     domains: ['hipp-portal-auth-proxy', 'localhost'],
   },
