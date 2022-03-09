@@ -120,7 +120,7 @@ const NwbTutorialView: React.FC = () => {
           <h3>Load all tables into memory</h3>
 
           <p>
-            The easiest way to work with the data is to retrieve and combine all icephys table
+            The easiest way to work with the data is to retrieve and combine all icephys tables
             in a single pandas DataFrame. This step can take some time.
           </p>
 
