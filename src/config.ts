@@ -30,6 +30,8 @@ export const nexus = {
 
 export const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
+export const staticDataBaseUrl = process.env.NEXT_PUBLIC_STATIC_DATA_BASE_URL;
+
 export const nexusPluginBaseUrl = process.env.NEXT_PUBLIC_NEXUS_PLUGIN_BASE_URL;
 
 export const feedbackUrl = process.env.NEXT_PUBLIC_FEEDBACK_URL;

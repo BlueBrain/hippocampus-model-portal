@@ -1,5 +1,11 @@
 
-import { basePath } from '../../config';
+import { basePath, staticDataBaseUrl } from '../../config';
+
+// Experimental Data
+
+export const expMorphPopulationFactesheetPath = (mtype: string) => {
+  return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/factsheet.json`;
+};
 
 
 export const subregionCircuitFactsheetPath = (subregion: string): string => {

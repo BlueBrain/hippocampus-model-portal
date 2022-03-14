@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import groupBy from 'lodash/groupBy';
 
 import ESData from '../../components/ESData';
+import HttpData from '../../components/HttpData';
 import DataContainer from '../../components/DataContainer';
 import LayerSelector from '../../components/LayerSelector';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '../../queries/es';
@@ -17,6 +19,7 @@ import { Layer } from '../../types';
 import Collapsible from '../../components/Collapsible';
 import List from '../../components/List';
 import morphologies from '../../exp-morphology-list.json';
+import Factsheet, { FactsheetEntryType } from '../../components/Factsheet';
 import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '../../components/ExpMorphologyTable';
 import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
@@ -32,6 +35,34 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 import expMorphologyStats from '../../exp-morphology-stats.json';
 
 import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
+import { expMorphPopulationFactesheetPath } from '@/queries/http';
+
+const factsheetEntryTypes = [
+  'all',
+  'axon',
+  'dendrite',
+  'apical',
+  'basal',
+  'soma',
+];
+
+const NeuriteTypeGroupedFactsheets: React.FC<{ facts: FactsheetEntryType[] }> = ({ facts }) => {
+  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.name.includes(entryType)) ?? '-');
+
+  return (
+    <>
+      {factsheetEntryTypes
+        .filter(entryType => factsGrouped[entryType])
+        .map(entryType => (
+          <div key={entryType}>
+            <h4 className="text-capitalize">{entryType}</h4>
+            <Factsheet facts={factsGrouped[entryType]} />
+          </div>
+        ))
+      }
+    </>
+  );
+};
 
 const getMtypes = (layer) => {
   return layer
@@ -234,7 +265,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
           title="Population"
           className="mt-4 mb-4"
         >
-          <h3>Reconstructed morphologies</h3>
+          <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
+            {(factsheetData, loading) => (
+              <div>
+                <h3>Factsheet</h3>
+                <Spin spinning={loading}>
+                  <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
+                </Spin>
+              </div>
+            )}
+          </HttpData>
+
+
+          <h3 className="mt-4">Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
               <>
@@ -287,7 +330,7 @@ const qsEntries = [
 
 export default withQuickSelector(
   hocPreselection,
-  { 
+  {
     entries: qsEntries,
     color: colorName,
   },

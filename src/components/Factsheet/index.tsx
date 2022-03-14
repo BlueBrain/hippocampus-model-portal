@@ -8,11 +8,12 @@ import Unit from '../Unit';
 const classPrefix = 'factsheet__';
 
 
-type FactsheetEntryType = {
+export type FactsheetEntryType = {
   name: string;
   description: string;
   unit?: string;
   value?: number | string;
+  values?: number[];
   value_map?: {
     [key: string]: string | number;
   };
@@ -50,11 +51,14 @@ const FactsheetSingleMeanStdEntry: React.FC<{
 }> = ({
   fact,
 }) => {
+  const mean = fact.value_map?.mean || fact.values[0];
+  const std = fact.value_map?.std || fact.values[1];
+
   return (
     <div className="row mt-1">
       <div className="col-xs-4 name">{fact.name}</div>
       <div className="col-xs-4 value">
-        <NumberFormat value={fact.value_map?.mean} /> ± <NumberFormat value={fact.value_map?.std} /> <Unit value={fact.unit} />
+        <NumberFormat value={mean} />{std ? <> ± <NumberFormat value={std} /></> : ''} <Unit value={fact.unit} />
       </div>
     </div>
   );
@@ -105,6 +109,10 @@ const FactsheetEntry: React.FC<{
     !isNil(fact.value_map.mean) &&
     !isNil(fact.value_map.std)
   ) {
+    return (<FactsheetSingleMeanStdEntry fact={fact} />);
+  }
+
+  if (Array.isArray(fact.values)) {
     return (<FactsheetSingleMeanStdEntry fact={fact} />);
   }
 
