@@ -5,37 +5,39 @@ import { Button, Spin } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import groupBy from 'lodash/groupBy';
 
-import ESData from '../../components/ESData';
-import HttpData from '../../components/HttpData';
-import DataContainer from '../../components/DataContainer';
-import LayerSelector from '../../components/LayerSelector';
-import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '../../queries/es';
-import Filters from '../../layouts/Filters';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import NexusPlugin from '../../components/NexusPlugin';
-import { colorName } from './config';
-import { Layer } from '../../types';
-import Collapsible from '../../components/Collapsible';
-import List from '../../components/List';
-import morphologies from '../../exp-morphology-list.json';
-import Factsheet, { FactsheetEntryType } from '../../components/Factsheet';
-import ExpMorphologyFactsheet from '../../components/ExpMorphologyFactsheet';
-import ExpMorphologyTable from '../../components/ExpMorphologyTable';
-import NexusFileDownloadButton from '../../components/NexusFileDownloadButton';
-import Metadata from '../../components/Metadata';
-import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
-import { hippocampus, deploymentUrl } from '../../config';
-import { downloadAsJson } from '../../utils';
+import { hippocampus, deploymentUrl } from '@/config';
+import { downloadAsJson } from '@/utils';
 import { defaultSelection, layers } from '@/constants';
+import { Layer } from '@/types';
+
+import ESData from '@/components/ESData';
+import HttpData from '@/components/HttpData';
+import DataContainer from '@/components/DataContainer';
+import LayerSelector from '@/components/LayerSelector';
+import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
+import { expMorphPopulationFactesheetPath } from '@/queries/http';
+import Filters from '@/layouts/Filters';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import NexusPlugin from '@/components/NexusPlugin';
+import { colorName } from './config';
+import Collapsible from '@/components/Collapsible';
+import List from '@/components/List';
+import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
+import ExpMorphologyFactsheet from '@/components/ExpMorphologyFactsheet';
+import ExpMorphologyTable from '@/components/ExpMorphologyTable';
+import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import Metadata from '@/components/Metadata';
+import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
 // TODO: dedup with expMorphologyFactsheet
-import expMorphologyStats from '../../exp-morphology-stats.json';
+import expMorphologyStats from '@/exp-morphology-stats.json';
+import morphologies from '@/exp-morphology-list.json';
 
-import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
-import { expMorphPopulationFactesheetPath } from '@/queries/http';
+import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
 
 const factsheetEntryTypes = [
   'all',
@@ -271,6 +273,14 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <h3>Factsheet</h3>
                 <Spin spinning={loading}>
                   <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
+                  <div className="text-right mt-2">
+                      <HttpDownloadButton
+                        href={expMorphPopulationFactesheetPath(currentMtype)}
+                        download={`exp-morphology-population-factsheet-${currentMtype}.json`}
+                      >
+                        factsheet
+                      </HttpDownloadButton>
+                    </div>
                 </Spin>
               </div>
             )}
