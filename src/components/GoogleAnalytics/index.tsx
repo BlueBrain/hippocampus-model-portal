@@ -39,14 +39,18 @@ const CookiePrefsForm: React.FC = () => {
   return (
     <>
       <Head>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gtm.id}`}></script>
-        <script
-            async
-            dangerouslySetInnerHTML={{
-              __html: `window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}`
-            }}
-          />
+        {gtm.id && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gtm.id}`}></script>
+              <script
+              async
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}`
+              }}
+            />
+          </>
+        )}
       </Head>
 
       {formVisible && (
