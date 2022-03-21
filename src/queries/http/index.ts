@@ -7,6 +7,9 @@ export const expMorphPopulationFactesheetPath = (mtype: string) => {
   return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/factsheet.json`;
 };
 
+export const expMorphPopulationDistributionPlotsPath = (mtype: string) => {
+  return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/distribution-plots.json`;
+};
 
 export const subregionCircuitFactsheetPath = (subregion: string): string => {
   return `${basePath}/data/model-data/factsheets/REGION/${subregion}/Circuit/factsheet.json`;

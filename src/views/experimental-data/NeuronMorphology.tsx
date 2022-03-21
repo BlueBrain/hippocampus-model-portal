@@ -15,7 +15,7 @@ import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
 import LayerSelector from '@/components/LayerSelector';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
-import { expMorphPopulationFactesheetPath } from '@/queries/http';
+import { expMorphPopulationFactesheetPath, expMorphPopulationDistributionPlotsPath } from '@/queries/http';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
@@ -32,6 +32,7 @@ import Metadata from '@/components/Metadata';
 import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
+import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 
 // TODO: dedup with expMorphologyFactsheet
 import expMorphologyStats from '@/exp-morphology-stats.json';
@@ -274,18 +275,38 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <Spin spinning={loading}>
                   <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
                   <div className="text-right mt-2">
-                      <HttpDownloadButton
-                        href={expMorphPopulationFactesheetPath(currentMtype)}
-                        download={`exp-morphology-population-factsheet-${currentMtype}.json`}
-                      >
-                        factsheet
-                      </HttpDownloadButton>
-                    </div>
+                    <HttpDownloadButton
+                      href={expMorphPopulationFactesheetPath(currentMtype)}
+                      download={`exp-morphology-population-factsheet-${currentMtype}.json`}
+                    >
+                      factsheet
+                    </HttpDownloadButton>
+                  </div>
                 </Spin>
               </div>
             )}
           </HttpData>
 
+          {instances.length > 1 && (
+            <HttpData path={expMorphPopulationDistributionPlotsPath(currentMtype)}>
+              {(plotsData, loading) => (
+                <div className="mt-4">
+                  <h3>Distributions</h3>
+                  <Spin spinning={loading}>
+                    <MorphDistributionPlots data={plotsData} />
+                    <div className="text-right mt-2">
+                      <HttpDownloadButton
+                        href={expMorphPopulationFactesheetPath(currentMtype)}
+                        download={`exp-morphology-population-factsheet-${currentMtype}.json`}
+                      >
+                        distributions
+                      </HttpDownloadButton>
+                    </div>
+                  </Spin>
+                </div>
+              )}
+            </HttpData>
+          )}
 
           <h3 className="mt-4">Reconstructed morphologies</h3>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
