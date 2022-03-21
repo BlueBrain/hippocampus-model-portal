@@ -18,6 +18,28 @@ export type HistogramProps = {
   title: string;
 };
 
+const plotlyLayout = {
+  height: 160,
+  margin: {
+    l: 16,
+    t: 24,
+    r: 16,
+    b: 16,
+  },
+  font: {
+    size: 10,
+    family: 'Titillium Web',
+  },
+  paper_bgcolor: 'transparent',
+  plot_bgcolor: 'transparent',
+};
+
+const plotlyConfig = {
+  responsive: true,
+  displayModeBar: false,
+  staticPlot: true,
+};
+
 const Histogram: React.FC<HistogramProps> = ({ title, values, color }) => {
   const chartContainerRef = useRef(null);
   const [setIntersection, isIntersected] = useIntersection({ rootMargin: DEFAULT_INTERSECTION_ROOT_MARGIN });
@@ -43,30 +65,7 @@ const Histogram: React.FC<HistogramProps> = ({ title, values, color }) => {
       },
     }];
 
-    const layout = {
-      title,
-      height: 160,
-      margin: {
-        l: 16,
-        t: 24,
-        r: 16,
-        b: 16,
-      },
-      font: {
-        size: 10,
-        family: 'Titillium Web',
-      },
-      paper_bgcolor: 'transparent',
-      plot_bgcolor: 'transparent',
-    };
-
-    const config = {
-      responsive: true,
-      displayModeBar: false,
-      staticPlot: true,
-    };
-
-    requestIdleCallback(() => Plotly.newPlot(chartEl, data, layout, config));
+    requestIdleCallback(() => Plotly.newPlot(chartEl, data, { ...plotlyLayout, title }, plotlyConfig));
 
     return () => Plotly.purge(chartEl);
   }, [title, values, color, isIntersected]);
