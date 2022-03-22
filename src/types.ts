@@ -4,6 +4,8 @@ export type Direction = 'up' | 'down';
 
 export type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
+export type NeuriteType = 'all' | 'axon' | 'apical' | 'basal' | 'dendrite' | 'soma';
+
 export type Color =
   | 'yellow'
   | 'blue'
