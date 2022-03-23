@@ -8,6 +8,7 @@ class AppDocument extends Document {
     return (
       <Html>
         <Head>
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
           <script type="systemjs-importmap" src={`${basePath}/systemjs-importmap.json`}></script>
         </Head>
 

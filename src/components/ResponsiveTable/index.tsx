@@ -43,7 +43,7 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
         const children = (column as GroupColumnType<Type>).children;
         if (children) {
           const childrenValue = children.map((child) => (
-            <div>
+            <div key={child.key}>
               {child.title}: {record[(child as ColumnType<Type>).dataIndex]}
             </div>
           ));
