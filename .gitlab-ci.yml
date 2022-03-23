@@ -1,7 +1,32 @@
-trigger_build:
-  stage: deploy
-  image: curlimages/curl
+include:
+  - project: cs/gitlabci-templates
+    file: /build-image-using-kaniko.yml
+
+stages:
+  - lint
+  - deploy
+
+cache:
+  paths:
+  - node_modules/
+
+eslint:
+  image: node:16-alpine
+  stage: lint
+  before_script:
+    - npm ci
   script:
-    - curl -X POST -k -s -S -f -o /dev/null "$BUILD_WEBHOOK_URL"
-  only:
-    - develop
+    - npm run lint
+
+deploy-dev:
+  extends: .build-image-using-kaniko
+  stage: deploy
+  variables:
+    CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
+    REGISTRY_IMAGE_TAG: dev
+    CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
+    KANIKO_EXTRA_ARGS: --build-arg NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN NEXT_PUBLIC_NEXUS_TOKEN=$NEXT_PUBLIC_NEXUS_TOKEN
+    KUBERNETES_MEMORY_LIMIT: 8Gi
+    KUBERNETES_MEMORY_REQUEST: 4Gi
+  # only:
+  #  - develop
