@@ -31,7 +31,7 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   experimental: {
     esmExternals: true,
-    staticPageGenerationTimeout: 120,
+    staticPageGenerationTimeout: 240,
     outputStandalone: true,
   },
   async redirects() {
