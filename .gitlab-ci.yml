@@ -28,8 +28,8 @@ deploy-dev:
     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
     REGISTRY_IMAGE_TAG: dev
     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
-    KANIKO_EXTRA_ARGS: --build-arg=TEST_MSG --build-arg=NEXT_PUBLIC_SENTRY_DSN --build-arg=SENTRY_AUTH_TOKEN --build-arg=NEXT_PUBLIC_NEXUS_TOKEN
-    KUBERNETES_MEMORY_LIMIT: 8Gi
-    KUBERNETES_MEMORY_REQUEST: 4Gi
+    KANIKO_EXTRA_ARGS: --build-arg=NEXT_PUBLIC_SENTRY_DSN --build-arg=SENTRY_AUTH_TOKEN --build-arg=NEXT_PUBLIC_NEXUS_TOKEN
+    KUBERNETES_MEMORY_LIMIT: 16Gi
+    KUBERNETES_MEMORY_REQUEST: 8Gi
   # only:
   #  - develop
