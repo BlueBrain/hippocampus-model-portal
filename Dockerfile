@@ -11,10 +11,11 @@ RUN npm ci
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
+
 ARG NEXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_AUTH_TOKEN
 ARG NEXT_PUBLIC_NEXUS_TOKEN
-ARG TEST_MSG
+
 RUN echo "here is the message: $TEST_MSG"
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
