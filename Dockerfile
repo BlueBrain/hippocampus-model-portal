@@ -16,7 +16,6 @@ ARG NEXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_AUTH_TOKEN
 ARG NEXT_PUBLIC_NEXUS_TOKEN
 
-RUN echo "here is the message: $TEST_MSG"
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

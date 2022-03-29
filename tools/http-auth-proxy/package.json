@@ -4,7 +4,8 @@
   "description": "An HTTP proxy that adds an auth header to outgoing requests.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "docker build -t bbpgitlab.epfl.ch:5050/nse/hippocampus-model-portal:http-auth-proxy .",
+    "push": "docker push bbpgitlab.epfl.ch:5050/nse/hippocampus-model-portal:http-auth-proxy"
   },
   "author": "",
   "license": "ISC",
