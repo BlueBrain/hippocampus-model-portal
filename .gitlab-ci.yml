@@ -24,7 +24,7 @@ deploy-dev:
   variables:
     NEXT_PUBLIC_SENTRY_DSN: $NEXT_PUBLIC_SENTRY_DSN
     SENTRY_AUTH_TOKEN: $SENTRY_AUTH_TOKEN
-    NEXT_PUBLIC_NEXUS_TOKEN: $NEXT_PUBLIC_NEXUS_TOKEN
+    NEXT_PUBLIC_NEXUS_TOKEN: $NEXUS_AUTH_TOKEN
     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
     REGISTRY_IMAGE_TAG: dev
     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
@@ -33,5 +33,31 @@ deploy-dev:
     KUBERNETES_MEMORY_LIMIT: 8Gi
     KUBERNETES_CPU_REQUEST: 2
     KUBERNETES_CPU_LIMIT: 2
-  only:
-   - develop
+  # only:
+  #  - develop
+
+# deploy-http-auth-proxy:
+#   extends: .build-image-using-kaniko
+#   stage: deploy
+#   variables:
+#     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
+#     REGISTRY_IMAGE_TAG: http-auth-proxy
+#     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
+#     TARGET_URL: $AUTH_PROXY_TARGET_URL
+#     AUTH_TOKEN: $NEXUS_AUTH_TOKEN
+#     KANIKO_EXTRA_ARGS: --build-arg=TARGET_URL --build-arg=AUTH_TOKEN
+#     KUBERNETES_MEMORY_REQUEST: 1Gi
+#     KUBERNETES_MEMORY_LIMIT: 2Gi
+#   when: manual
+
+# deploy-static-data-server:
+#   extends: .build-image-using-kaniko
+#   stage: deploy
+#   variables:
+#     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
+#     REGISTRY_IMAGE_TAG: static-data-server
+#     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
+#     KANIKO_EXTRA_ARGS: --build-arg=TARGET_URL --build-arg=AUTH_TOKEN
+#     KUBERNETES_MEMORY_REQUEST: 1Gi
+#     KUBERNETES_MEMORY_LIMIT: 2Gi
+#   when: manual
