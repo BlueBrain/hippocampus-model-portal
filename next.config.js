@@ -22,7 +22,7 @@ const nextConfig = {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 7 * day,
     formats: ['image/avif', 'image/webp'],
-    domains: ['hipp-portal-auth-proxy', 'localhost'],
+    domains: ['hippocampus-portal-auth-proxy', 'localhost'],
   },
   eslint: {
     ignoreDuringBuilds: true,
