@@ -1,0 +1,255 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hippocampus-portal-dev
+  name: hippocampus-portal-dev
+  namespace: bbp-ou-nse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hippocampus-portal-dev
+  template:
+    metadata:
+      labels:
+        app: hippocampus-portal-dev
+    spec:
+      containers:
+      - image: bbpgitlab.epfl.ch:5050/nse/hippocampus-model-portal:dev
+        name: hippocampus-portal-dev
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8000
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+      imagePullSecrets:
+      - name: gitlab-nse-image-pull
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: bbp-ou-nse
+  name: hippocampus-portal-dev
+spec:
+  podSelector:
+    matchLabels:
+      app: hippocampus-portal-dev
+  policyTypes:
+    - Egress
+  egress:
+    - {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hippocampus-portal-dev
+  namespace: bbp-ou-nse
+  labels:
+    app: hippocampus-portal-dev
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: hippocampus-portal-dev
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hippocampus-portal-dev
+  namespace: bbp-ou-nse
+spec:
+  secretName: hippocampus-portal-dev-cert
+  issuerRef:
+    name: bbp-acme-issuer
+  dnsNames:
+  - hippocampus-portal-dev.kcp.bbp.epfl.ch
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hippocampus-portal-dev
+  namespace: bbp-ou-nse
+spec:
+  rules:
+  - host: hippocampus-portal-dev.kcp.bbp.epfl.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: hippocampus-portal-dev
+            port:
+              number: 8000
+  tls:
+  - hosts:
+    - hippocampus-portal-dev.kcp.bbp.epfl.ch
+    secretName: hippocampus-portal-dev-cert
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hippocampus-portal-static-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: netapp-ephemeral
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hippocampus-portal-static-data
+  name: hippocampus-portal-static-data
+  namespace: bbp-ou-nse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hippocampus-portal-static-data
+  template:
+    metadata:
+      labels:
+        app: hippocampus-portal-static-data
+    spec:
+      volumes:
+      - name: static-data
+        persistentVolumeClaim:
+          claimName: hippocampus-portal-static-data
+      containers:
+      - image: bbpgitlab.epfl.ch:5050/nse/hippocampus-model-portal:static-data-server
+        name: hippocampus-portal-static-data
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: "/usr/share/nginx/html/data"
+          name: static-data
+        ports:
+          - containerPort: 8000
+      imagePullSecrets:
+      - name: gitlab-nse-image-pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hippocampus-portal-static-data
+  namespace: bbp-ou-nse
+  labels:
+    app: hippocampus-portal-static-data
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: hippocampus-portal-static-data
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hippocampus-portal-static-data
+  namespace: bbp-ou-nse
+spec:
+  rules:
+  - host: hippocampus-portal-dev.kcp.bbp.epfl.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/model/data"
+        backend:
+          service:
+            name: hippocampus-portal-static-data
+            port:
+              number: 8000
+  tls:
+  - hosts:
+    - hippocampus-portal-dev.kcp.bbp.epfl.ch
+    secretName: hippocampus-portal-dev-cert
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hippocampus-portal-auth-proxy
+    requires-access-outside-bbp-network: "true"
+  name: hippocampus-portal-auth-proxy
+  namespace: bbp-ou-nse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hippocampus-portal-auth-proxy
+  template:
+    metadata:
+      labels:
+        app: hippocampus-portal-auth-proxy
+    spec:
+      containers:
+      - image: bbpgitlab.epfl.ch:5050/nse/hippocampus-model-portal:http-auth-proxy
+        name: hippocampus-portal-auth-proxy
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8000
+      imagePullSecrets:
+      - name: gitlab-nse-image-pull
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: bbp-ou-nse
+  name: hippocampus-portal-auth-proxy
+spec:
+  podSelector:
+    matchLabels:
+      app: hippocampus-portal-auth-proxy
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: hippocampus-portal-dev
+  egress:
+    - {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hippocampus-portal-auth-proxy
+  namespace: bbp-ou-nse
+  labels:
+    app: hippocampus-portal-auth-proxy
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: hippocampus-portal-auth-proxy
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hippocampus-portal-auth-proxy
+  namespace: bbp-ou-nse
+spec:
+  rules:
+  - host: hippocampus-portal-auth-proxy.kcp.bbp.epfl.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: hippocampus-portal-auth-proxy
+            port:
+              number: 8000
