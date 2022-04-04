@@ -4,7 +4,7 @@ include:
 
 stages:
   - lint
-  - deploy
+  - build
 
 cache:
   paths:
@@ -18,9 +18,9 @@ eslint:
   script:
     - npm run lint
 
-deploy-dev:
+build-img-dev:
   extends: .build-image-using-kaniko
-  stage: deploy
+  stage: build
   variables:
     NEXT_PUBLIC_SENTRY_DSN: $SENTRY_DSN
     SENTRY_AUTH_TOKEN: $SENTRY_AUTH_TOKEN
@@ -33,3 +33,5 @@ deploy-dev:
     KUBERNETES_MEMORY_LIMIT: 8Gi
     KUBERNETES_CPU_REQUEST: 2
     KUBERNETES_CPU_LIMIT: 2
+  only:
+  - develop
