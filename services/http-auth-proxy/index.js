@@ -1,6 +1,6 @@
 const httpProxy = require('http-proxy');
 
-const target = process.env.TARGET;
+const target = process.env.TARGET_URL;
 const authToken = process.env.AUTH_TOKEN;
 const port = process.env.PORT || 8000;
 

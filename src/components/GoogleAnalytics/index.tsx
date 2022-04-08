@@ -67,7 +67,7 @@ const CookiePrefsForm: React.FC = () => {
                 maxWidth={320}
                 onClick={disallowGtm}
               >
-                Don't allow
+                Don&apos;t allow
               </CtaButton>
             </div>
             <div className="col-xs-12 col-sm-4 col-md-3 mt-2">

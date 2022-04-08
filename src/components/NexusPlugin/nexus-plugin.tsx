@@ -97,6 +97,7 @@ export class NexusPlugin extends React.Component<
     this.setState({ error, loading: false });
   }
 
+  // eslint-disable-next-line react/no-deprecated
   componentWillUpdate(prevProps: NexusPluginClassProps) {
     // Reload the plugin(and pass in new props to it) when props change
     // NOTE: will not reload the plugin if nexusClient or goToResource changes

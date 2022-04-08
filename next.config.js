@@ -1,7 +1,7 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer') ({
-  enabled: process.env.ANALYZE === "true",
+  enabled: process.env.ANALYZE === 'true',
 });
 
 const SentryWebpackPluginOptions = {
@@ -22,7 +22,7 @@ const nextConfig = {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 7 * day,
     formats: ['image/avif', 'image/webp'],
-    domains: ['hipp-portal-auth-proxy', 'localhost'],
+    domains: ['hippocampus-portal-auth-proxy', 'localhost'],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -31,7 +31,8 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   experimental: {
     esmExternals: true,
-    staticPageGenerationTimeout: 120,
+    staticPageGenerationTimeout: 240,
+    outputStandalone: true,
   },
   async redirects() {
     return [
