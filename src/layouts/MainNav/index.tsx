@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import NextLink from 'next/link';
 import { HomeFilled, GlobalOutlined, ToolFilled  } from '@ant-design/icons';
 
+import { basePath } from '../../config';
+
 import styles from './nav.module.scss';
 
 
@@ -225,7 +227,7 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Neurons" />
         </SubmenuGroup>
 
-        <SubmenuLink label="Glossary" href="/model/glossary/" external grey />
+        <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external grey />
       </MenuItem>
 
       <MenuItem label="Contact us" external href="/#contact-us" />

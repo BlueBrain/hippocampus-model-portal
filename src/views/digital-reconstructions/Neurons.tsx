@@ -316,7 +316,7 @@ const qsEntries = [
 
 export default withQuickSelector(
   hocPreselection,
-  { 
+  {
     entries: qsEntries,
     color: colorName,
   },

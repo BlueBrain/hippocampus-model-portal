@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { basePath } from '../../config';
+
 import styles from './styles.module.scss';
 
 
@@ -25,19 +27,19 @@ const Footer: React.FC = () => {
           </div>
           <div className="col-xs-12 col-sm-4">
             <p>
-              <a href="/model/terms-of-use/">Terms of Use</a> - EPFL/BBP
+              <a href={`${basePath}/terms-of-use/`}>Terms of Use</a> - EPFL/BBP
             </p>
             <p>
-              <a href="/model/privacy-policy/">Privacy Policy</a> - EPFL/BBP
+              <a href={`${basePath}/privacy-policy/`}>Privacy Policy</a> - EPFL/BBP
             </p>
             <p>
-              <a href="/model/cookies-policy/">Cookies Policy</a> - EPFL/BBP
+              <a href={`${basePath}/cookies-policy/`}>Cookies Policy</a> - EPFL/BBP
             </p>
           </div>
           <div className="col-xs-12 col-sm-4">
             <p><a href="/">Home</a></p>
             <p><a href="/build/">Build Models</a></p>
-            <p><a href="/model/">Explore Models</a></p>
+            <p><a href={`${basePath}/`}>Explore Models</a></p>
             <p><a href="/#resources">Resources</a></p>
             <p><a href="/#terms">Terms & Conditions</a></p>
             <p><a href="/#contact-us">Contact Us</a></p>

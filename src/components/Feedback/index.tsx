@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Form, Input, Button, Select } from 'antd';
 import { GatewayOutlined, UserOutlined, CloseOutlined } from '@ant-design/icons';
 
-import { feedbackUrl, deploymentUrl } from '../../config';
+import { basePath, feedbackUrl, deploymentUrl } from '../../config';
 
 import styles from './styles.module.scss';
 
@@ -59,7 +59,7 @@ const Feedback: React.FC = () => {
 
     const labels = ['triage'];
 
-    if (router.basePath.startsWith('/model')) {
+    if (router.basePath.startsWith(basePath)) {
       labels.push('section: explore');
     } else if (router.basePath.startsWith('/build')) {
       labels.push('section: build');

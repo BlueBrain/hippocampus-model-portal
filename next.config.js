@@ -8,7 +8,7 @@ const SentryWebpackPluginOptions = {
   silent: true,
 };
 
-const basePath = '/model';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 
 const day = 60 * 60 * 24;
 

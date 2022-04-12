@@ -15,7 +15,7 @@ export const hippocampus = {
 };
 
 export const deploymentUrl = 'https://www.hippocampushub.eu';
-export const basePath = '/model';
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 
 export const isServer = typeof window === 'undefined';
 export const isProduction = process.env.NODE_ENV === 'production';

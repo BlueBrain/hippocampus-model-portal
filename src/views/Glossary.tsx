@@ -5,6 +5,7 @@ import FullPage from '../layouts/FullPage';
 import { accentColors } from '../config';
 import { Color } from '../types';
 import glossaryContent from './glossary-content.json';
+import { basePath } from '../config';
 
 const Glossary: React.FC = () => {
   const sectionLabels = Object.keys(glossaryContent);
@@ -35,7 +36,7 @@ const Glossary: React.FC = () => {
 
         <img
           className="w-100 mt-2"
-          src="/model/assets/images/etypes.png"
+          src={`${basePath}/assets/images/etypes.png`}
           alt="etype"
         />
       </div>
