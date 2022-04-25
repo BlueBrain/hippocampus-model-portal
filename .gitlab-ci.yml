@@ -26,6 +26,7 @@ build-img-dev:
     SENTRY_AUTH_TOKEN: $SENTRY_AUTH_TOKEN
     NEXT_PUBLIC_NEXUS_TOKEN: $NEXUS_AUTH_TOKEN
     NEXT_PUBLIC_BASE_PATH: /hippocampus-portal-dev
+    NEXT_PUBLIC_STATIC_DATA_BASE_URL: /hippocampus-portal-dev/data
     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
     REGISTRY_IMAGE_TAG: dev
     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
@@ -34,6 +35,7 @@ build-img-dev:
       --build-arg=SENTRY_AUTH_TOKEN
       --build-arg=NEXT_PUBLIC_NEXUS_TOKEN
       --build-arg=NEXT_PUBLIC_BASE_PATH
+      --build-arg=NEXT_PUBLIC_STATIC_DATA_BASE_URL
     KUBERNETES_MEMORY_REQUEST: 4Gi
     KUBERNETES_MEMORY_LIMIT: 8Gi
     KUBERNETES_CPU_REQUEST: 2
