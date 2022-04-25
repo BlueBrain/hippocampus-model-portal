@@ -64,7 +64,7 @@ export const useExperimentalTraceTable = (etype, currentTrace) => {
             <NexusImage
               width={1657}
               height={1270}
-              sizes="120px"
+              sizes="200px"
               src={getStepImageNexusUrl(trace)}
               layout="responsive"
               alt="Response trace"

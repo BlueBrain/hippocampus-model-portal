@@ -60,7 +60,7 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
               key={imgUrl}
               width="640"
               height="480"
-              sizes="120px"
+              sizes="200px"
               layout="responsive"
               alt="Slice image"
             />
