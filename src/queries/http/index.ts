@@ -3,6 +3,10 @@ import { basePath, staticDataBaseUrl } from '../../config';
 
 // Experimental Data
 
+export const expMorphFactesheetPath = (morphName: string) => {
+  return `${staticDataBaseUrl}/exp-data/morph/${morphName}/factsheet.json`;
+};
+
 export const expMorphPopulationFactesheetPath = (mtype: string) => {
   return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/factsheet.json`;
 };

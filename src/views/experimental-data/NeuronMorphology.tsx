@@ -15,7 +15,11 @@ import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
 import LayerSelector from '@/components/LayerSelector';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
-import { expMorphPopulationFactesheetPath, expMorphPopulationDistributionPlotsPath } from '@/queries/http';
+import {
+  expMorphFactesheetPath,
+  expMorphPopulationFactesheetPath,
+  expMorphPopulationDistributionPlotsPath
+} from '@/queries/http';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
@@ -24,7 +28,6 @@ import { colorName } from './config';
 import Collapsible from '@/components/Collapsible';
 import List from '@/components/List';
 import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
-import ExpMorphologyFactsheet from '@/components/ExpMorphologyFactsheet';
 import ExpMorphologyTable from '@/components/ExpMorphologyTable';
 import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
@@ -34,11 +37,10 @@ import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 
-// TODO: dedup with expMorphologyFactsheet
-import expMorphologyStats from '@/exp-morphology-stats.json';
 import morphologies from '@/exp-morphology-list.json';
 
 import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
+
 
 const factsheetEntryTypes = [
   'all',
@@ -49,11 +51,16 @@ const factsheetEntryTypes = [
   'soma',
 ];
 
-const NeuriteTypeGroupedFactsheets: React.FC<{ facts: FactsheetEntryType[] }> = ({ facts }) => {
+type NeuriteTypeGroupedFactsheetsProps = {
+  facts: FactsheetEntryType[];
+  id?: string;
+}
+
+const NeuriteTypeGroupedFactsheets: React.FC<NeuriteTypeGroupedFactsheetsProps> = ({ facts, id }) => {
   const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.name.includes(entryType)) ?? '-');
 
   return (
-    <>
+    <div id={id}>
       {factsheetEntryTypes
         .filter(entryType => factsGrouped[entryType])
         .map(entryType => (
@@ -63,7 +70,7 @@ const NeuriteTypeGroupedFactsheets: React.FC<{ facts: FactsheetEntryType[] }> = 
           </div>
         ))
       }
-    </>
+    </div>
   );
 };
 
@@ -119,8 +126,6 @@ const NeuronExperimentalMorphology: React.FC = () => {
     });
   };
   const currentInstance: string = query.instance as string;
-
-  const factsheetData = currentInstance ? expMorphologyStats[currentInstance] : null;
 
   const getMorphologyDistribution = (morphologyResource: any) => {
     return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
@@ -244,23 +249,25 @@ const NeuronExperimentalMorphology: React.FC = () => {
               </>
             )}
           </ESData>
-          <ExpMorphologyFactsheet
-            id="morphometrics"
-            className="mt-3"
-            morphologyName={currentInstance}
-          />
-          {!!factsheetData && (
-            <div className="text-right mt-2">
-              <Button
-                type="primary"
-                size="small"
-                icon={<DownloadOutlined />}
-                onClick={() => downloadAsJson(factsheetData, `exp-morphology-factsheet-${currentInstance}`)}
-              >
-                factsheet
-              </Button>
-            </div>
-          )}
+
+          <HttpData path={expMorphFactesheetPath(currentInstance)}>
+            {(factsheetData, loading) => (
+              <div className="mt-3">
+                <h3>Factsheet</h3>
+                <Spin spinning={loading}>
+                  <NeuriteTypeGroupedFactsheets id="morphometrics" facts={factsheetData.values} />
+                  <div className="text-right mt-2">
+                    <HttpDownloadButton
+                      href={expMorphFactesheetPath(currentInstance)}
+                      download={`exp-morphology-factsheet-${currentInstance}.json`}
+                    >
+                      factsheet
+                    </HttpDownloadButton>
+                  </div>
+                </Spin>
+              </div>
+            )}
+          </HttpData>
         </Collapsible>
 
         <Collapsible
