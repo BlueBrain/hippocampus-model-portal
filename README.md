@@ -16,7 +16,7 @@ To start the portal in development mode, run:
 npm run dev
 ```
 
-Open [http://localhost:3000/model/](http://localhost:3000/model) with your browser to see the result.
+Open [http://localhost:3000/hippocampus-portal-dev/](http://localhost:3000/hippocampus-portal-dev/) with your browser to see the result.
 
 
 ## Build for production
