@@ -3,14 +3,16 @@ import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
+import BoutonDenisityTable from './connection-anatomy/BoutonDensityTable';
+import SynsPerConnTable from './connection-anatomy/SynsPerConnTable';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import selectorStyle from '@/styles/selector.module.scss';
 
 
 const ConnectionAnatomyView: React.FC = () => {
@@ -81,7 +83,8 @@ const ConnectionAnatomyView: React.FC = () => {
           id="boutonDensitySection"
           title="Bouton density"
         >
-          <h3 className="text-tmp">Table + text</h3>
+          <h3 className="text-tmp">Text description</h3>
+          <BoutonDenisityTable />
         </Collapsible>
 
         <Collapsible
@@ -89,7 +92,8 @@ const ConnectionAnatomyView: React.FC = () => {
           className="mt-4"
           title="Number of synapses per connection"
         >
-          <h3 className="text-tmp">Table + text</h3>
+          <h3 className="text-tmp">Text description</h3>
+          <SynsPerConnTable />
         </Collapsible>
       </DataContainer>
     </>
