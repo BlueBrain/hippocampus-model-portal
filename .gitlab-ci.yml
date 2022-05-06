@@ -28,7 +28,7 @@ build-img-dev:
     NEXT_PUBLIC_BASE_PATH: /hippocampus-portal-dev
     NEXT_PUBLIC_STATIC_DATA_BASE_URL: /hippocampus-portal-dev/data
     CI_REGISTRY_IMAGE: $CI_REGISTRY/nse/hippocampus-model-portal
-    REGISTRY_IMAGE_TAG: dev-${GIT_SHA:0:7}-$(date +%s)
+    REGISTRY_IMAGE_TAG: dev-${CI_COMMIT_SHA:0:7}-$(date +%s)
     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
     KANIKO_EXTRA_ARGS: >
       --build-arg=NEXT_PUBLIC_SENTRY_DSN
