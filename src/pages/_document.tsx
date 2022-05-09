@@ -1,7 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-import { basePath } from '../config';
-
 
 class AppDocument extends Document {
   render() {
@@ -15,8 +13,18 @@ class AppDocument extends Document {
 
           <link rel="shortcut icon" href="https://www.hippocampushub.eu/favicon.ico" />
 
-          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-          <script type="systemjs-importmap" src={`${basePath}/systemjs-importmap.json`}></script>
+          <script
+            type="systemjs-importmap"
+            dangerouslySetInnerHTML={{
+              __html: `{
+                "imports": {
+                  "react": "https://unpkg.com/react@17.0.2/umd/react.production.min.js",
+                  "react-dom": "https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"
+                }
+              }`
+            }}
+          />
+
         </Head>
 
         <body>
