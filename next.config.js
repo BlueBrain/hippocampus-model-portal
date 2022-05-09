@@ -50,6 +50,5 @@ const nextConfig = {
   },
 };
 
-// FIXME: return back Sentry integration when Sentry service disruption is over
-// module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, SentryWebpackPluginOptions));
-module.exports = withBundleAnalyzer(nextConfig);
+
+module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, SentryWebpackPluginOptions));
