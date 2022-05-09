@@ -26,7 +26,7 @@ const MorphologyLink: React.FC<{morphology: NexusMorphology}> = ({ morphology })
   const href = `/experimental-data/neuronal-morphology/?${searchParams.toString()}#data`;
 
   return (
-    <Link href={href}>{morphology.name}</Link>
+    <Link href={href} prefetch={false}>{morphology.name}</Link>
   );
 };
 

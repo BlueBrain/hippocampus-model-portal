@@ -34,7 +34,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
       </div>
       <div className={styles.body}>
         {links.map(link => link.href ? (
-          <Link key={link.label} href={link.href}>
+          <Link key={link.label} href={link.href} prefetch={false}>
             {link.label}
           </Link>
         ) : (

@@ -24,7 +24,7 @@ const TraceLink: React.FC<{trace: NexusTrace}> = ({ trace }) => {
   const href = `/experimental-data/neuronal-electrophysiology/?${searchParams.toString()}#data`;
 
   return (
-    <Link href={href}>{trace.name}</Link>
+    <Link href={href} prefetch={false}>{trace.name}</Link>
   );
 };
 

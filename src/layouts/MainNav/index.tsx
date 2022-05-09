@@ -65,7 +65,7 @@ type LinkProps = {
 const Link: React.FC<LinkProps> = ({ href, label, external = false, className = '' }) => {
   return external
     ? (<a className={className} href={href}>{label}</a>)
-    : (<NextLink href={href}><a className={className}>{label}</a></NextLink>)
+    : (<NextLink href={href} prefetch={false}><a className={className}>{label}</a></NextLink>)
 };
 
 type SubmenuLinkProps = {
