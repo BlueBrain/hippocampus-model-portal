@@ -17,12 +17,14 @@ export type MorphDistributionPlotsProps = {
       title: string;
       neuriteType: NeuriteType;
     }
-  }
+  };
+  type: 'population' | 'singleMorphology';
 };
 
 const histogramTitle = (entry) => {
   const titleSub = entry.key
     .replace(entry.neuriteType, '')
+    .replace(/_/g, ' ')
     .replace(/  /g, ' ')
     .replace(/ of$/, '')
     .replace(/ of $/, '')
@@ -33,7 +35,7 @@ const histogramTitle = (entry) => {
   return capitalize(titleSub) + unitSub;
 };
 
-const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data }) => {
+const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data, type }) => {
   const plotEntries = sortBy(Object.entries(data).map(([key, val]) => ({ ...val, key })), 'key');
   const groupedEntries = groupBy(plotEntries, 'neuriteType');
 
@@ -48,6 +50,7 @@ const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data }) 
             key={neuriteType}
             className="w-100"
             gutter={[16, 24]}
+            justify={type === 'singleMorphology' ? 'space-between' : undefined}
           >
             {groupedEntries[neuriteType].map(entry => (
               <Col
@@ -59,6 +62,8 @@ const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data }) 
                 <Histogram
                   title={histogramTitle(entry)}
                   values={entry.values}
+                  bins={entry.bins}
+                  counts={entry.counts}
                   color={neuriteColor[entry.neuriteType]}
                 />
               </Col>

@@ -13,13 +13,17 @@ const useLayoutEffect = typeof window === 'undefined'
   : React.useLayoutEffect;
 
 export type HistogramProps = {
-  values: number[];
   color: string;
   title: string;
-};
+
+  values?: number[];
+
+  bins?: number[];
+  counts?: number[];
+}
 
 const plotlyLayout = {
-  height: 160,
+  // height: 160,
   margin: {
     l: 16,
     t: 24,
@@ -32,6 +36,7 @@ const plotlyLayout = {
   },
   paper_bgcolor: 'transparent',
   plot_bgcolor: 'transparent',
+  bargap: 0,
 };
 
 const plotlyConfig = {
@@ -40,7 +45,31 @@ const plotlyConfig = {
   staticPlot: true,
 };
 
-const Histogram: React.FC<HistogramProps> = ({ title, values, color }) => {
+function getPlotData(values, bins, counts, color) {
+  if (values) {
+    return [{
+      type: 'histogram',
+      x: values,
+      nbinsx: 10,
+      marker: {
+        color,
+        opacity: 0.8,
+      },
+    }]
+  }
+
+  return [{
+    type: 'bar',
+    x: bins,
+    y: counts,
+    marker: {
+      color,
+      opacity: 0.8,
+    },
+  }];
+}
+
+const Histogram: React.FC<HistogramProps> = ({ title, color, values, bins, counts }) => {
   const chartContainerRef = useRef(null);
   const [setIntersection, isIntersected] = useIntersection({ rootMargin: DEFAULT_INTERSECTION_ROOT_MARGIN });
 
@@ -55,20 +84,12 @@ const Histogram: React.FC<HistogramProps> = ({ title, values, color }) => {
 
     const chartEl = chartContainerRef.current;
 
-    const data = [{
-      type: 'histogram',
-      x: values,
-      nbinsx: 10,
-      marker: {
-        color,
-        opacity: 0.8,
-      },
-    }];
+    const data = getPlotData(values, bins, counts, color);
 
     requestIdleCallback(() => Plotly.newPlot(chartEl, data, { ...plotlyLayout, title }, plotlyConfig));
 
     return () => Plotly.purge(chartEl);
-  }, [title, values, color, isIntersected]);
+  }, [title, values, bins, counts, color, isIntersected]);
 
   return (
     <div

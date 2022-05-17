@@ -2,11 +2,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button, Spin } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
 import groupBy from 'lodash/groupBy';
 
 import { hippocampus, deploymentUrl } from '@/config';
-import { downloadAsJson } from '@/utils';
 import { defaultSelection, layers } from '@/constants';
 import { Layer } from '@/types';
 
@@ -18,7 +16,8 @@ import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/
 import {
   expMorphFactesheetPath,
   expMorphPopulationFactesheetPath,
-  expMorphPopulationDistributionPlotsPath
+  expMorphPopulationDistributionPlotsPath,
+  expMorphDistributionPlotsPath,
 } from '@/queries/http';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
@@ -268,6 +267,25 @@ const NeuronExperimentalMorphology: React.FC = () => {
               </div>
             )}
           </HttpData>
+
+          <HttpData path={expMorphDistributionPlotsPath(currentInstance)}>
+            {(plotsData, loading) => (
+              <div className="mt-4">
+                <h3>Distributions</h3>
+                <Spin spinning={loading}>
+                  <MorphDistributionPlots type="singleMorphology" data={plotsData} />
+                  <div className="text-right mt-2">
+                    <HttpDownloadButton
+                      href={expMorphDistributionPlotsPath(currentInstance)}
+                      download={`exp-morphology-distributions-factsheet-${currentInstance}.json`}
+                    >
+                      distributions
+                    </HttpDownloadButton>
+                  </div>
+                </Spin>
+              </div>
+            )}
+          </HttpData>
         </Collapsible>
 
         <Collapsible
@@ -300,11 +318,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <div className="mt-4">
                   <h3>Distributions</h3>
                   <Spin spinning={loading}>
-                    <MorphDistributionPlots data={plotsData} />
+                    <MorphDistributionPlots type="population" data={plotsData} />
                     <div className="text-right mt-2">
                       <HttpDownloadButton
-                        href={expMorphPopulationFactesheetPath(currentMtype)}
-                        download={`exp-morphology-population-factsheet-${currentMtype}.json`}
+                        href={expMorphPopulationDistributionPlotsPath(currentMtype)}
+                        download={`exp-morphology-population-distributions-${currentMtype}.json`}
                       >
                         distributions
                       </HttpDownloadButton>
