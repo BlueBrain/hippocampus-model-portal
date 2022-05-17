@@ -30,7 +30,7 @@ const data: BoutonDensity[] = [{
   reference: (
     <>
       <a
-        href="http://doi.org/10.1523/JNEUROSCI.15-10-06651.1995"
+        href="https://doi.org/10.1126/science.8085161"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -47,7 +47,17 @@ const data: BoutonDensity[] = [{
   unit: '/µm',
   n: 1,
   sem: 4.13,
-  reference: <>Sik et al., 1994 <sup>[3]</sup></>,
+  reference: (
+    <>
+      <a
+        href="https://doi.org/10.1126/science.8085161"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sik et al., 1995
+      </a> <sup>[3]</sup>
+    </>
+  ),
 }, {
   mtype: 'SP_PC',
   region: 'CA1',
@@ -58,7 +68,23 @@ const data: BoutonDensity[] = [{
   unit: '/µm',
   n: 4,
   sem: 3.01,
-  reference: <>Esclapez et al., 1999; Bezaire and Soltesz, 2013 <sup>[4]</sup></>,
+  reference: (
+    <>
+      <a
+        href="https://doi.org/10.1002/(sici)1096-9861(19990614)408:4%3C449::aid-cne1%3E3.0.co;2-r"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Esclapez et al., 1999
+      </a>; <a
+        href="https://dx.doi.org/10.1002%2Fhipo.22141"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Bezaire and Soltesz, 2013
+      </a> <sup>[4]</sup>
+    </>
+  ),
 }, {
   mtype: 'SO_Tri',
   region: 'CA1',
@@ -72,7 +98,7 @@ const data: BoutonDensity[] = [{
   reference: (
     <>
       <a
-        href="http://doi.org/10.1523/JNEUROSCI.15-10-06651.1995"
+        href="https://doi.org/10.1126/science.8085161"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -93,7 +119,7 @@ const data: BoutonDensity[] = [{
   reference: (
     <>
       <a
-        href="http://doi.org/10.1523/JNEUROSCI.15-10-06651.1995"
+        href="https://doi.org/10.1126/science.8085161"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -114,7 +140,7 @@ const data: BoutonDensity[] = [{
   reference: (
     <>
       <a
-        href="http://doi.org/10.1523/JNEUROSCI.15-10-06651.1995"
+        href="https://doi.org/10.1126/science.8085161"
         target="_blank"
         rel="noopener noreferrer"
       >

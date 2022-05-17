@@ -28,7 +28,15 @@ const data: DataEntry[] = [{
   n: 1,
   sem: 0,
   reference: (
-    <>Buhl et al., 1994a</>
+    <>
+      <a
+        href="https://doi.org/10.1038/368823a0"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Buhl et al., 1994a
+      </a>
+    </>
   ),
 }, {
   from: 'SP_PVBC',
@@ -41,7 +49,15 @@ const data: DataEntry[] = [{
   n: 64,
   sem: 0.1353977649125,
   reference: (
-    <>Sik et al., 1995 <sup>[1]</sup></>
+    <>
+      <a
+        href="https://doi.org/10.1126/science.8085161"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sik et al., 1995
+      </a> <sup>[1]</sup>
+    </>
   ),
 }, {
   from: 'SP_PC',
@@ -54,7 +70,15 @@ const data: DataEntry[] = [{
   n: 6,
   sem: 0.79,
   reference: (
-    <>Birò et al., 2005</>
+    <>
+      <a
+        href="https://doi.org/10.1523/jneurosci.3688-04.2005"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Birò et al., 2005
+      </a>
+    </>
   ),
 }, {
   from: 'SO_OLM',
@@ -67,7 +91,15 @@ const data: DataEntry[] = [{
   n: 2,
   sem: 7,
   reference: (
-    <>Maccaferri et al., 2000</>
+    <>
+      <a
+        href="https://doi.org/10.1111/j.1469-7793.2000.t01-3-00091.x"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Maccaferri et al., 2000
+      </a>
+    </>
   ),
 }, {
   from: 'AA',
@@ -80,7 +112,15 @@ const data: DataEntry[] = [{
   n: 1,
   sem: 'n/a',
   reference: (
-    <>Buhl et al., 1994a</>
+    <>
+      <a
+        href="https://doi.org/10.1038/368823a0"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Buhl et al., 1994a
+      </a>
+    </>
   ),
 }, {
   from: 'AA',
@@ -93,7 +133,15 @@ const data: DataEntry[] = [{
   n: 9,
   sem: 'n/a',
   reference: (
-    <>Buhl et al., 1994b</>
+    <>
+      <a
+        href="https://doi.org/10.1152/jn.1994.71.4.1289"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Buhl et al., 1994b
+      </a>
+    </>
   ),
 }, {
   from: 'SP_PC',
@@ -106,7 +154,15 @@ const data: DataEntry[] = [{
   n: 6,
   sem: 0.166666666666667,
   reference: (
-    <>Deuchars and Thomson, 1996</>
+    <>
+      <a
+        href="https://doi.org/10.1016/0306-4522(96)00251-5"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Deuchars and Thomson, 1996
+      </a>
+    </>
   ),
 }, {
   from: 'SP_CCKBC',
@@ -119,7 +175,15 @@ const data: DataEntry[] = [{
   n: 14,
   sem: 0.8,
   reference: (
-    <>Foldy et al., 2010</>
+    <>
+      <a
+        href="https://doi.org/10.1523/jneurosci.6238-09.2010"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Foldy et al., 2010
+      </a>
+    </>
   ),
 }, {
   from: 'SR_SCA',
@@ -132,7 +196,15 @@ const data: DataEntry[] = [{
   n: 3,
   sem: 0.666666666666667,
   reference: (
-    <>Vida et al., 1998</>
+    <>
+      <a
+        href="https://doi.org/10.1111/j.1469-7793.1998.755bv.x"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Vida et al., 1998
+      </a>
+    </>
   ),
 }, {
   from: 'SP_PVBC',
@@ -145,7 +217,15 @@ const data: DataEntry[] = [{
   n: 15,
   sem: 0.6,
   reference: (
-    <>Foldy et al., 2010</>
+    <>
+      <a
+        href="https://doi.org/10.1523/jneurosci.6238-09.2010"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Foldy et al., 2010
+      </a>
+    </>
   ),
 }, {
   from: 'SR_SCA',
@@ -158,7 +238,15 @@ const data: DataEntry[] = [{
   n: 9,
   sem: 'n/a',
   reference: (
-    <>Ali 2011</>
+    <>
+      <a
+        href="https://doi.org/10.1152/jn.00831.2010"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ali 2011
+      </a>
+    </>
   ),
 }];
 
