@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM fholzer/nginx-brotli
 
 RUN apk add rsync
 
