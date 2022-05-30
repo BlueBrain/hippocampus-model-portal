@@ -1,17 +1,19 @@
 
-import { CylinderGeometry, Vector3, Matrix4, Quaternion, SphereBufferGeometry, Mesh, BufferGeometry, Float32BufferAttribute, Uint16BufferAttribute } from 'three';
+import { CylinderGeometry, Vector3, Matrix4, Quaternion, SphereBufferGeometry, Mesh, BufferGeometry, Float32BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute } from 'three';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import last from 'lodash/last';
 
 
 export class RendererCtrl {
-  countinuousRenderCounter = 0;
+  public stopped = false;
 
-  once = true;
+  private countinuousRenderCounter = 0;
+  private once = true;
+  private stopTime = null;
 
-  stopTime = null;
+  public get render() {
+    if (this.stopped) return false;
 
-  get render() {
     if (this.countinuousRenderCounter) return true;
 
     if (this.stopTime) {
@@ -27,19 +29,23 @@ export class RendererCtrl {
     return once;
   }
 
-  renderOnce() {
+  public renderOnce() {
     this.once = true;
   }
 
-  renderFor(time) {
+  public renderFor(time) {
     const now = Date.now();
     if (this.stopTime && this.stopTime > now + time) return;
     this.stopTime = now + time;
   }
 
-  renderUntilStopped() {
+  public renderUntilStopped() {
     this.countinuousRenderCounter += 1;
     return () => { this.countinuousRenderCounter -= 1; };
+  }
+
+  public stop() {
+    this.stopped = true
   }
 }
 
@@ -85,12 +91,14 @@ function _createSecGeometryFromPoints(pts, simplificationRatio = 1) {
   return mergeBufferGeometries(geometries);
 }
 
-export async function createSecGeometryFromPoints(workerPool, pts) {
-  const [vertices, normals, index] = await workerPool.queue(thread => thread.createSecGeometryFromPoints(pts));
+export function deserializeBufferGeometry(data) {
+  const [vertices, normals, index] = data;
 
   const normalsBuffer = new Float32BufferAttribute(normals, 3);
   const vertexBuffer = new Float32BufferAttribute(vertices, 3);
-  const indexBuffer = new Uint16BufferAttribute(index, 1);
+  const indexBuffer = vertexBuffer.count < 65535
+    ? new Uint16BufferAttribute(index, 1)
+    : new Uint32BufferAttribute(index, 1);
 
   const geometry = new BufferGeometry();
 

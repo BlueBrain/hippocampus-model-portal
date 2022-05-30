@@ -1,10 +1,30 @@
-import { DoubleSide, SphereGeometry, Vector3, CylinderGeometry, MeshBasicMaterial, Mesh, MeshLambertMaterial, Object3D, PointLight, PerspectiveCamera, Fog, AmbientLight, Color, Scene, WebGLRenderer } from 'three';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
-import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import chunk from 'lodash/chunk';
+import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import {
+  AmbientLight,
+  Color,
+  DoubleSide,
+  Fog,
+  Mesh,
+  MeshLambertMaterial,
+  Object3D,
+  PerspectiveCamera,
+  PointLight,
+  Scene,
+  SphereGeometry,
+  Vector3,
+  WebGLRenderer
+} from 'three';
 
-import { RendererCtrl, createSomaGeometryFromPoints, createSecGeometryFromPoints } from './utils';
+import {
+  createSomaGeometryFromPoints,
+  deserializeBufferGeometry,
+  RendererCtrl,
+} from './utils';
 import { Pool } from '@/services/threads';
+import { NeuriteType } from './constants';
+
 
 const FOG_COLOR = 0xffffff;
 const FOG_NEAR = 1;
@@ -19,14 +39,38 @@ const BACKGROUND_COLOR = 0xfefdfb;
 const secTypeMap = [
   'soma',
   'axon',
-  'basal',
-  'apical',
+  'dend',
+  'dend',
 ];
+
+const CellType = {
+  PRE: 0,
+  POST: 1,
+}
+
+type SectionPts = number[][];
+
+type MorphologySecData = {
+  [extendedSecType: string]: SectionPts[],
+};
+
+const material = {
+  SOMA: new MeshLambertMaterial({ color: 0x000000 }),
+
+  PRE_DEND: new MeshLambertMaterial({ color: 0x85CAFF, side: DoubleSide }),
+  PRE_B_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
+  PRE_NB_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
+
+  POST_B_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
+  POST_NB_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
+  POST_AXON: new MeshLambertMaterial({ color: 0xF9A09F, side: DoubleSide }),
+
+  SYNAPSE: new MeshLambertMaterial({ color: 0xF5F749 }),
+}
 
 export default class ConnectionViewer {
   private data: any = null;
 
-  private isDestroyed = false;
   private container: HTMLDivElement = null;
   private canvas: HTMLCanvasElement = null;
   private renderer: WebGLRenderer = null;
@@ -35,19 +79,19 @@ export default class ConnectionViewer {
   private controls: TrackballControls = null;
   private ctrl: RendererCtrl = new RendererCtrl();
 
-  private preMorphObj: Object3D = null;
-  private postMorphObj: Object3D = null;
-  private synapseObj: Object3D = null;
+  private secMesh: { [neuriteType: string]: Mesh } = {};
+  private somaMesh: Mesh = null;
+  private synMesh: Mesh = null;
 
   private geometryWorkerPool: Pool = null;
+  private morphologySecData: MorphologySecData = {};
 
   constructor(container: HTMLDivElement) {
     this.container = container;
   }
 
-  async init(data: any) {
-    if(this.isDestroyed) throw new Error(`Can't init already destroyed instance of ConnectionViewer `);
-
+  // TODO: add type decrlaration for `data`
+  public async init(data: any) {
     this.data = data;
 
     this.initCanvas();
@@ -55,16 +99,40 @@ export default class ConnectionViewer {
     this.initScene();
     this.initCamera();
     this.initControls();
-    this.initObjects();
     this.initEvents();
 
-    await this.initMorphologies();
-    this.initSynapses();
+    this.initGeometryWorkerPool();
+    this.indexSecData();
+    await this.createSynMesh();
+    await this.createSomaMesh();
+    await this.createSecMeshes();
+    this.disposeGeometryWorkerPool();
 
     this.alignCamera();
 
+    this.cleanup();
 
     this.startRenderLoop();
+  }
+
+  public resize() {
+    const { clientWidth, clientHeight } = this.container;
+    this.camera.aspect = clientWidth / clientHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(clientWidth, clientHeight);
+
+    this.ctrl.renderOnce();
+  }
+
+  public setNeuriteVisibility(visibility) {
+    Object.entries(visibility).forEach(([neuriteType, visible]) => {
+      if(!this.secMesh[neuriteType]) {
+        throw new Error(`Mesh for ${neuriteType} is not found}`);
+      }
+
+      const { material } = this.secMesh[neuriteType];
+      material.visible = visible;
+    });
   }
 
   private initCanvas() {
@@ -105,66 +173,125 @@ export default class ConnectionViewer {
     this.controls.rotateSpeed = 0.8;
   }
 
-  private initObjects() {
-    this.preMorphObj = new Object3D();
-    this.scene.add(this.preMorphObj);
-
-    this.postMorphObj = new Object3D();
-    this.scene.add(this.postMorphObj);
-
-    this.synapseObj = new Object3D();
-    this.scene.add(this.synapseObj);
-  }
-
   private initEvents() {}
 
-  private async initMorphologies() {
+  private initGeometryWorkerPool() {
     const geometryWorkerFactory = () => new Worker(new URL('./workers/neuron-geometry.ts', import.meta.url), { name: 'geometry-worker'});
     this.geometryWorkerPool = new Pool(geometryWorkerFactory, 2);
     console.log('pool created');
+  }
 
-    console.log('Awaiting for morpphologies to be added');
-    const preMaterial = new MeshLambertMaterial({ color: 0x2d8cf0, side: DoubleSide });
-    await this.addMorphology(this.data.pre.morph, preMaterial);
-
-    const postMaterial = new MeshLambertMaterial({ color: 0xed4014, side: DoubleSide });
-    await this.addMorphology(this.data.post.morph, postMaterial);
-
-    console.log('Adding morphologies - done');
-
+  private disposeGeometryWorkerPool() {
     this.geometryWorkerPool.terminate();
     this.geometryWorkerPool = null;
   }
 
-  private async addMorphology(sections, material) {
+  private async indexSecData() {
+    console.log('Building index for morph section data');
+    this.extractMorphologySecData(CellType.PRE, this.data.pre.morph);
+    this.extractMorphologySecData(CellType.POST, this.data.post.morph);
+  }
 
-    const createGeometries = sections.map(async section => {
-      const secType = secTypeMap[section[0]];
-      const secId = section[1];
+  private extractMorphologySecData(cellType: number, sections) {
+    const morphSecData = this.morphologySecData;
+    sections.forEach((section) => {
+      const secTypeStr = secTypeMap[section[0]];
       const isBaseSec = Boolean(section[2]);
 
-      // if(!isBaseSec) return null;
-
       const ptsFlat = section.slice(-(section.length - 3));
-      const pts = chunk(ptsFlat, 4);
 
-      const geometry = secType === 'soma'
-        ? await createSomaGeometryFromPoints(pts)
-        : await createSecGeometryFromPoints(this.geometryWorkerPool, pts);
+      const secDataKey = `${cellType === CellType.PRE ? 'pre' : 'post'}_${isBaseSec ? 'b' : 'nb'}_${secTypeStr}`;
 
-      return geometry
-    });
-
-    return Promise.all(createGeometries).then(geometries => {
-      console.time('merge');
-      const geometry = mergeBufferGeometries(geometries.filter(Boolean).filter(geometry => geometry.type === 'BufferGeometry'));
-      console.timeEnd('merge');
-      const mesh = new Mesh(geometry, material);
-      this.preMorphObj.add(mesh);
+      if (!morphSecData[secDataKey]) {
+        morphSecData[secDataKey] = [ptsFlat];
+      } else {
+        morphSecData[secDataKey].push(ptsFlat);
+      }
     });
   }
 
-  private initSynapses() {
+  private createSomaMesh() {
+    const somaGeometries = this.morphologySecData.pre_nb_soma.concat(this.morphologySecData.post_nb_soma)
+      .map(pts => createSomaGeometryFromPoints(chunk(pts, 4)));
+
+    const somaGeometry = mergeBufferGeometries(somaGeometries);
+
+    this.somaMesh = new Mesh(somaGeometry, material.SOMA);
+    this.scene.add(this.somaMesh);
+  }
+
+  private createSecMeshes() {
+    const preDendGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.pre_nb_dend))
+      .then(deserializeBufferGeometry);
+
+    const preBaseAxonGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.pre_b_axon))
+      .then(deserializeBufferGeometry);
+
+    const preNonBaseAxonGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.pre_nb_axon))
+      .then(deserializeBufferGeometry);
+
+    const postBaseDendGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.post_b_dend))
+      .then(deserializeBufferGeometry);
+
+    const postNonBaseDendGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.post_nb_dend))
+      .then(deserializeBufferGeometry);
+
+    const postAxonGeometryPromise = this.geometryWorkerPool
+      .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.post_nb_axon))
+      .then(deserializeBufferGeometry);
+
+    console.log('Generating meshes');
+    console.time('genMesh');
+    return Promise.all([
+      preDendGeometryPromise,
+      preBaseAxonGeometryPromise,
+      preNonBaseAxonGeometryPromise,
+      postBaseDendGeometryPromise,
+      postNonBaseDendGeometryPromise,
+      postAxonGeometryPromise
+    ]).then(([
+      preDendGeometry,
+      preBaseAxonGeometry,
+      preNonBaseAxonGeometry,
+      postBaseDendGeometry,
+      postNonBaseDendGeometry,
+      postAxonGeometry
+    ]) => {
+      console.timeEnd('genMesh');
+      const preDendMesh = new Mesh(preDendGeometry, material.PRE_DEND);
+      this.secMesh[NeuriteType.PRE_NB_DEND] = preDendMesh;
+      this.scene.add(preDendMesh);
+
+      const preBaseAxonMesh = new Mesh(preBaseAxonGeometry, material.PRE_B_AXON);
+      this.secMesh[NeuriteType.PRE_B_AXON] = preBaseAxonMesh;
+      this.scene.add(preBaseAxonMesh);
+
+      const preNonBaseAxonMesh = new Mesh(preNonBaseAxonGeometry, material.PRE_NB_AXON);
+      this.secMesh[NeuriteType.PRE_NB_AXON] = preNonBaseAxonMesh;
+      this.scene.add(preNonBaseAxonMesh);
+
+      const postBaseDendMesh = new Mesh(postBaseDendGeometry, material.POST_B_DEND);
+      this.secMesh[NeuriteType.POST_B_DEND] = postBaseDendMesh;
+      this.scene.add(postBaseDendMesh);
+
+      const postNonBaseDendMesh = new Mesh(postNonBaseDendGeometry, material.POST_NB_DEND);
+      this.secMesh[NeuriteType.POST_NB_DEND] = postNonBaseDendMesh;
+      this.scene.add(postNonBaseDendMesh);
+
+      const postAxonMesh = new Mesh(postAxonGeometry, material.POST_AXON);
+      this.secMesh[NeuriteType.POST_NB_AXON] = postAxonMesh;
+      this.scene.add(postAxonMesh);
+
+      console.log('Meshes successfully generated');
+    });
+  }
+
+  private createSynMesh() {
     const geometries = this.data.synapses.map(synapse => {
       const geometry = new SphereGeometry(6, 32, 16);
       geometry.translate(...synapse.slice(0, 3));
@@ -173,10 +300,12 @@ export default class ConnectionViewer {
     });
 
     const geometry = mergeBufferGeometries(geometries);
-    const material = new MeshLambertMaterial({ color: 0xffff00 });
-    const synapsesMesh = new Mesh(geometry, material);
+    this.synMesh = new Mesh(geometry, material.SYNAPSE);
+  }
 
-    this.synapseObj.add(synapsesMesh);
+  private cleanup() {
+    this.data = null;
+    this.morphologySecData = null;
   }
 
   private alignCamera() {
@@ -192,20 +321,29 @@ export default class ConnectionViewer {
 
     this.camera.position.z = distance + center.z;
     this.controls.target = center;
-    this.ctrl.renderFor(20000);
+    // TODO: add event listeners to continue rendering when user interacts with the view
+    this.ctrl.renderUntilStopped();
   }
 
   private startRenderLoop() {
+    if (this.ctrl.stopped) return;
+
     if (this.ctrl.render) {
       this.controls.update();
-      // this.renderer.setRenderTarget(null);
       this.renderer.render(this.scene, this.camera);
     }
-    requestAnimationFrame(this.startRenderLoop.bind(this));
+    // FIXME: use requestAnimationFrame instead of timeout for prod
+    // requestAnimationFrame(this.startRenderLoop.bind(this));
+    setTimeout(this.startRenderLoop.bind(this), 50);
   }
 
-  destroy() {
-    // TODO: implementation
-    this.isDestroyed = true;
+  public destroy() {
+    Object.values(this.secMesh).forEach(mesh => mesh.geometry.dispose());
+    this.synMesh?.geometry.dispose();
+    this.somaMesh?.geometry.dispose();
+    this.controls.dispose();
+    this.renderer.dispose();
+
+    this.container.removeChild(this.canvas);
   }
 }

@@ -1,4 +1,5 @@
 import last from 'lodash/last';
+import chunk from 'lodash/chunk';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { Vector3 } from 'three/src/math/Vector3';
 import { Matrix4 } from 'three/src/math/Matrix4';
@@ -9,8 +10,36 @@ import { expose, transfer } from '@/services/threads';
 
 const HALF_PI = Math.PI * 0.5;
 
-function _createSecGeometryFromPoints(pts, simplificationRatio = 2) {
+const SIMPLIFICATION_DISTANCE_THRESHOLD = 6;
+const SIMPLIFICATION_DIAMETER_STD_THRESHOLD = 0.1;
+
+function getStandardDeviation(array) {
+  const n = array.length;
+  const mean = array.reduce((a, b) => a + b) / n;
+  return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+}
+
+function simplify(pts) {
+  let i = 0;
+  while (i < pts.length - 2) {
+    const vStart = new Vector3(...pts[i]);
+    const vEnd = new Vector3(...pts[i + 2]);
+    const distance = vStart.distanceTo(vEnd);
+
+    const sd = getStandardDeviation([pts[i][3], pts[i + 1][3], pts[i + 2][3]]);
+
+    if (distance < SIMPLIFICATION_DISTANCE_THRESHOLD && sd < SIMPLIFICATION_DIAMETER_STD_THRESHOLD) {
+      pts.splice(i + 1, 1);
+    } else {
+      i++;
+    }
+  }
+}
+
+function _createSecGeometryFromPoints(pts, simplificationRatio = 1) {
   const sRatio = simplificationRatio;
+
+  simplify(pts);
 
   const geometries = [];
 
@@ -47,11 +76,14 @@ function _createSecGeometryFromPoints(pts, simplificationRatio = 2) {
     geometries.push(geometry);
   }
 
-  return mergeBufferGeometries(geometries);
+  const secGeometry = mergeBufferGeometries(geometries);
+  geometries.forEach(geometry => geometry.dispose());
+
+  return secGeometry;
 }
 
 
-function getGeometryBuffers(geometry) {
+function _getGeometryBuffers(geometry) {
   const vertices = geometry.getAttribute('position').array.buffer;
   const normals = geometry.getAttribute('normal').array.buffer;
 
@@ -60,24 +92,27 @@ function getGeometryBuffers(geometry) {
   return [ vertices, normals, index ];
 }
 
-function createSecGeometriesFromPoints({ sections, simplificationRatio }) {
-  const geometries = sections.map(pts => _createSecGeometryFromPoints(pts, simplificationRatio));
-  const buffersList = geometries.map(geometry => getGeometryBuffers(geometry));
 
-  const allBuffers = buffersList.flatMap();
+function createNeuriteGeometry(ptsList, simplificationRatio) {
+  const geometries = ptsList.map(pts => _createSecGeometryFromPoints(chunk(pts, 4), simplificationRatio));
 
-  return transfer(buffersList, allBuffers);
+  const geometry = mergeBufferGeometries(geometries);
+  const buffers = _getGeometryBuffers(geometry);
+
+  geometries.forEach(geometry => geometry.dispose());
+
+  return transfer(buffers, buffers);
 }
 
-function createSecGeometryFromPoints(pts, simplificationRatio) {
+function createSecGeometry(pts, simplificationRatio) {
   const geometry = _createSecGeometryFromPoints(pts, simplificationRatio);
-  const buffers = getGeometryBuffers(geometry);
+  const buffers = _getGeometryBuffers(geometry);
 
   return transfer(buffers, buffers);
 }
 
 
 expose({
-  createSecGeometryFromPoints,
-  createSecGeometriesFromPoints,
+  createNeuriteGeometry,
+  createSecGeometry,
 });

@@ -93,7 +93,6 @@ export class Pool {
 
   constructor(workerFactory, size = 4) {
     this.threads = range(size).map(() => new Thread(workerFactory));
-    console.log(this.threads);
 
     this.threads.map(thread => {
       thread[$worker].onTaskDone = this._onTaskDone.bind(this);

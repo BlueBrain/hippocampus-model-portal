@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Spin } from 'antd';
 import Image from 'next/image';
 
@@ -17,6 +17,17 @@ import selectorStyle from '../../styles/selector.module.scss';
 
 
 const SynapticPathwaysView: React.FC = () => {
+  const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+
+  const onConnViewerReady = () => {
+    console.log('Conn viewer is reported ready');
+    setConnViewerReady(true);
+  };
+
+  useEffect(() => {
+    setConnViewerReady(false);
+  }, []);
+
   return (
     <>
       <Filters hasData={true}>
@@ -93,8 +104,8 @@ const SynapticPathwaysView: React.FC = () => {
             {(data, loading) => (
               <div className="mt-3">
                 <h3>Factsheet</h3>
-                <Spin spinning={loading}>
-                  <ConnectionViewer data={data} />
+                <Spin spinning={!connViewerReady}>
+                  <ConnectionViewer data={data} onReady={onConnViewerReady} />
                 </Spin>
               </div>
             )}
