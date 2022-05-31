@@ -87,7 +87,6 @@ def main():
 
     log.info(f'Reading pre {pre_mtype} with GID {pre_gid}')
     pre_cell = circuit.cells.get(pre_gid).to_dict()
-    print(pre_cell)
     pre_morph = circuit.morph.get(pre_gid, transform=True)
     pre_base_sec_ids_raw = [
       [sec.id for sec in pre_morph.section(int(synapse[4])).iter(IterType.upstream)]
@@ -99,7 +98,6 @@ def main():
 
     log.info(f'Reading post {post_mtype} with GID {post_gid}')
     post_cell = circuit.cells.get(post_gid).to_dict()
-    print(post_cell)
     post_morph = circuit.morph.get(post_gid, transform=True)
     post_base_sec_ids_raw = [
       [sec.id for sec in post_morph.section(int(synapse[5])).iter(IterType.upstream)]
