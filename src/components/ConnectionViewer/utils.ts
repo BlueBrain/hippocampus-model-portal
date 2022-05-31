@@ -130,18 +130,20 @@ function getSomaPositionFromPoints(pts) {
 
 function getSomaRadiusFromPoints(pts) {
   const position = getSomaPositionFromPoints(pts);
-  let radius;
+  let diameter;
 
   if (pts.length === 1) {
-    radius = pts[0][3];
+    diameter = pts[0][3];
   } else if (pts.length === 3) {
     const secondPt = new Vector3().fromArray(pts[1]);
     const thirdPt = new Vector3().fromArray(pts[2]);
-    radius = (position.distanceTo(secondPt) + position.distanceTo(thirdPt)) / 2;
+    diameter = (position.distanceTo(secondPt) + position.distanceTo(thirdPt)) / 2;
   } else {
-    // radius = pts.reduce((distance, pt) => distance + position.distanceTo(new THREE.Vector3().fromArray(pt)), 0) / pts.length;
-    radius = Math.max(...pts.map(pt => position.distanceTo(new Vector3().fromArray(pt))));
+    // diameter = pts.reduce((distance, pt) => distance + position.distanceTo(new THREE.Vector3().fromArray(pt)), 0) / pts.length;
+    diameter = Math.max(...pts.map(pt => position.distanceTo(new Vector3().fromArray(pt))));
   }
+
+  const radius = diameter / 2;
 
   return radius;
 }

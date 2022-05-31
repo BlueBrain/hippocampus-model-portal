@@ -9,7 +9,6 @@ import {
   Fog,
   Mesh,
   MeshLambertMaterial,
-  Object3D,
   PerspectiveCamera,
   PointLight,
   Scene,
@@ -315,7 +314,7 @@ export default class ConnectionViewer {
 
   private createSynMesh() {
     const geometries = this.data.synapses.map(synapse => {
-      const geometry = new SphereGeometry(6, 32, 16);
+      const geometry = new SphereGeometry(4, 32, 16);
       geometry.translate(...synapse.slice(0, 3));
 
       return geometry;
