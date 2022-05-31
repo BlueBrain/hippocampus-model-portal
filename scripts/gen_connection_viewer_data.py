@@ -15,6 +15,7 @@ coloredlogs.install(level='DEBUG')
 SEC_SHORT_TYPE_DICT = {
     'soma': 0,
     'SOMA_SIMPLE_CONTOUR': 0,
+    'SOMA_SINGLE_POINT': 0,
     'axon': 1,
     'basal_dendrite': 2,
     'apical_dendrite': 3,
@@ -25,7 +26,6 @@ def sec_data(nm_sections, base_sec_ids=[]):
     Convert neurom sections into a list with the following structure:
     [
       sec_type,      # int
-      sec_id,        # int,
       has_syns,      # int, values: 0, 1, this shows if current section or it's childrens have synapses,
       X1, Y1, Z1, D1 # int, segment coordinates and diameter
       ...,
@@ -35,7 +35,6 @@ def sec_data(nm_sections, base_sec_ids=[]):
     return [
       [
         SEC_SHORT_TYPE_DICT[section.type.name],
-        section.id if hasattr(section, 'id') else 0,
         1 if ((section.id if hasattr(section, 'id') else 0) in base_sec_ids) else 0
       ] + np.column_stack((section.points, section.diameters)).reshape(-1).tolist()
       for section

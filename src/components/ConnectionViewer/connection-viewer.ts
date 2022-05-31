@@ -1,4 +1,5 @@
 import chunk from 'lodash/chunk';
+import throttle from 'lodash/throttle';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import {
@@ -78,6 +79,7 @@ export default class ConnectionViewer {
   private camera: PerspectiveCamera = null;
   private controls: TrackballControls = null;
   private ctrl: RendererCtrl = new RendererCtrl();
+  private onUserInteract: EventListener = null;
 
   private secMesh: { [neuriteType: string]: Mesh } = {};
   private somaMesh: Mesh = null;
@@ -133,6 +135,22 @@ export default class ConnectionViewer {
       const { material } = this.secMesh[neuriteType];
       material.visible = visible;
     });
+
+    this.ctrl.renderOnce();
+  }
+
+  public destroy() {
+    Object.values(this.secMesh).forEach(mesh => mesh.geometry.dispose());
+    this.synMesh?.geometry.dispose();
+    this.somaMesh?.geometry.dispose();
+
+    this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
+    this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
+
+    this.controls.dispose();
+    this.renderer.dispose();
+
+    this.container.removeChild(this.canvas);
   }
 
   private initCanvas() {
@@ -173,12 +191,16 @@ export default class ConnectionViewer {
     this.controls.rotateSpeed = 0.8;
   }
 
-  private initEvents() {}
+  private initEvents() {
+    this.onUserInteract = throttle(() => this.ctrl.renderFor(4000), 100).bind(this);
+
+    this.canvas.addEventListener('wheel', this.onUserInteract, { capture: false, passive: true });
+    this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
+  }
 
   private initGeometryWorkerPool() {
     const geometryWorkerFactory = () => new Worker(new URL('./workers/neuron-geometry.ts', import.meta.url), { name: 'geometry-worker'});
     this.geometryWorkerPool = new Pool(geometryWorkerFactory, 2);
-    console.log('pool created');
   }
 
   private disposeGeometryWorkerPool() {
@@ -187,18 +209,19 @@ export default class ConnectionViewer {
   }
 
   private async indexSecData() {
-    console.log('Building index for morph section data');
+    console.time('secDataIndex');
     this.extractMorphologySecData(CellType.PRE, this.data.pre.morph);
     this.extractMorphologySecData(CellType.POST, this.data.post.morph);
+    console.timeEnd('secDataIndex');
   }
 
   private extractMorphologySecData(cellType: number, sections) {
     const morphSecData = this.morphologySecData;
     sections.forEach((section) => {
       const secTypeStr = secTypeMap[section[0]];
-      const isBaseSec = Boolean(section[2]);
+      const isBaseSec = Boolean(section[1]);
 
-      const ptsFlat = section.slice(-(section.length - 3));
+      const ptsFlat = section.slice(-(section.length - 2));
 
       const secDataKey = `${cellType === CellType.PRE ? 'pre' : 'post'}_${isBaseSec ? 'b' : 'nb'}_${secTypeStr}`;
 
@@ -245,8 +268,8 @@ export default class ConnectionViewer {
       .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.post_nb_axon))
       .then(deserializeBufferGeometry);
 
-    console.log('Generating meshes');
     console.time('genMesh');
+
     return Promise.all([
       preDendGeometryPromise,
       preBaseAxonGeometryPromise,
@@ -263,6 +286,7 @@ export default class ConnectionViewer {
       postAxonGeometry
     ]) => {
       console.timeEnd('genMesh');
+
       const preDendMesh = new Mesh(preDendGeometry, material.PRE_DEND);
       this.secMesh[NeuriteType.PRE_NB_DEND] = preDendMesh;
       this.scene.add(preDendMesh);
@@ -286,8 +310,6 @@ export default class ConnectionViewer {
       const postAxonMesh = new Mesh(postAxonGeometry, material.POST_AXON);
       this.secMesh[NeuriteType.POST_NB_AXON] = postAxonMesh;
       this.scene.add(postAxonMesh);
-
-      console.log('Meshes successfully generated');
     });
   }
 
@@ -301,6 +323,7 @@ export default class ConnectionViewer {
 
     const geometry = mergeBufferGeometries(geometries);
     this.synMesh = new Mesh(geometry, material.SYNAPSE);
+    this.scene.add(this.synMesh);
   }
 
   private cleanup() {
@@ -310,19 +333,28 @@ export default class ConnectionViewer {
 
   private alignCamera() {
     console.log('Align camera');
-    const pts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(3, 7);
-    const center = new Vector3(pts[0], pts[1], pts[2]);
-    const radius = 50;
+    const preSomaPts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
+    const postSomaPts = this.data.post.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
 
-    this.camera.position.x = center.x;
-    this.camera.position.y = center.y;
+    const preSomaVec = new Vector3(preSomaPts[0], preSomaPts[1], preSomaPts[2]);
+    const postSomaVec = new Vector3(postSomaPts[0], postSomaPts[1], postSomaPts[2]);
 
-    const distance = radius / Math.tan(Math.PI * this.camera.fov / 360) * 1.15;
+    const centerVec = new Vector3().addVectors(preSomaVec, postSomaVec).divideScalar(2);
+    const radius = centerVec.distanceTo(preSomaVec);
 
-    this.camera.position.z = distance + center.z;
-    this.controls.target = center;
-    // TODO: add event listeners to continue rendering when user interacts with the view
-    this.ctrl.renderUntilStopped();
+
+    // const pts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(3, 7);
+    // const center = new Vector3(pts[0], pts[1], pts[2]);
+    // const radius = 50;
+
+    this.camera.position.x = centerVec.x;
+    this.camera.position.y = centerVec.y;
+
+    const distance = radius / Math.tan(Math.PI * this.camera.fov / 360) * 2;
+
+    this.camera.position.z = distance + centerVec.z;
+    this.controls.target = centerVec;
+    this.ctrl.renderOnce();
   }
 
   private startRenderLoop() {
@@ -332,18 +364,7 @@ export default class ConnectionViewer {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
     }
-    // FIXME: use requestAnimationFrame instead of timeout for prod
-    // requestAnimationFrame(this.startRenderLoop.bind(this));
-    setTimeout(this.startRenderLoop.bind(this), 50);
-  }
 
-  public destroy() {
-    Object.values(this.secMesh).forEach(mesh => mesh.geometry.dispose());
-    this.synMesh?.geometry.dispose();
-    this.somaMesh?.geometry.dispose();
-    this.controls.dispose();
-    this.renderer.dispose();
-
-    this.container.removeChild(this.canvas);
+    requestAnimationFrame(this.startRenderLoop.bind(this));
   }
 }

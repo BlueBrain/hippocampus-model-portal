@@ -100,7 +100,7 @@ const SynapticPathwaysView: React.FC = () => {
           <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
           <h3 className="text-tmp">Exemplar connection</h3>
 
-          <HttpData path={`${basePath}/data/connection-viewer/SP_BS-SP_PC.json`}>
+          <HttpData path={`${basePath}/data/connection-viewer/SO_BP-SO_Tri.json`}>
             {(data, loading) => (
               <div className="mt-3">
                 <h3>Factsheet</h3>
