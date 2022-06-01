@@ -15,7 +15,7 @@ import List from '../../components/List';
 import Collapsible from '../../components/Collapsible';
 import EtypeFactsheet from '../../components/EtypeFactsheet';
 import ModelMorphologyFactsheet from '../../components/ModelMorphologyFactsheet';
-import NeuronMorphology from '../../components/NeuronMorphology';
+// import NeuronMorphology from '../../components/NeuronMorphology';
 import { basePath } from '../../config';
 import models from '../../models.json';
 import { defaultSelection, layers } from '@/constants';
@@ -218,7 +218,7 @@ const Neurons: React.FC = () => {
           </div>
 
           <h3 className="mb-3">Morphology</h3>
-          <NeuronMorphology path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`} />
+          {/* <NeuronMorphology path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`} /> */}
           <div className="row end-xs mt-3 mb-3">
             <div className="col">
               <Button
