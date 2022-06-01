@@ -198,7 +198,11 @@ export default class ConnectionViewer {
   }
 
   private initGeometryWorkerPool() {
-    const geometryWorkerFactory = () => new Worker(new URL('./workers/neuron-geometry.ts', import.meta.url), { name: 'geometry-worker'});
+    const geometryWorkerFactory = () => {
+      const workerUrl = new URL('./workers/neuron-geometry.ts', import.meta.url);
+      return new Worker(workerUrl, { name: 'geometry-worker'});
+    };
+
     this.geometryWorkerPool = new Pool(geometryWorkerFactory, 2);
   }
 

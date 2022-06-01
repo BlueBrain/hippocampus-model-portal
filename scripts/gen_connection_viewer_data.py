@@ -26,7 +26,7 @@ def sec_data(nm_sections, base_sec_ids=[]):
     Convert neurom sections into a list with the following structure:
     [
       sec_type,      # int
-      has_syns,      # int, values: 0, 1, this shows if current section or it's childrens have synapses,
+      syn_path,      # int, values: 0, 1, this shows if current section or it's childrens have synapses,
       X1, Y1, Z1, D1 # int, segment coordinates and diameter
       ...,
       Xn, Yn, Zn, Dn
