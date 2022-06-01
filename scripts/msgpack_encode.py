@@ -17,7 +17,7 @@ def encode_file(file_path):
   with open(file_path, 'r') as f:
     data = json.load(f)
 
-  encoded_data = msgpack.packb(data)
+  encoded_data = msgpack.packb(data, use_single_float=True)
 
   encoded_file_path = re.match('(.*)\.json', file_path).groups()[0] + '.msgpack'
 
@@ -37,7 +37,7 @@ def main():
     return encode_file(input_path)
 
   for file_name in listdir(input_path):
-    if not re.match('.*\.json', file_name):
+    if not re.match('.*\.json$', file_name):
       continue
 
     encode_file(join(input_path, file_name))
