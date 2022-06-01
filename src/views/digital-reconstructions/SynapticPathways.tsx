@@ -4,18 +4,20 @@ import { Row, Col, Spin } from 'antd';
 import chunk from 'lodash/chunk';
 
 import { Layer } from '@/types';
-import { pathwayIndexPath, connectionViewerDataPath } from '@/queries/http';
+import { layers } from '@/constants';
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import { pathwayIndexPath, connectionViewerDataPath } from '@/queries/http';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 import ConnectionViewer from '@/components/ConnectionViewer';
 import HttpData from '@/components/HttpData';
 import LayerSelector from '@/components/LayerSelector';
 import List from '@/components/List';
+import QuickSelector from '@/components/QuickSelector';
 
 import selectorStyle from '../../styles/selector.module.scss';
 
@@ -35,6 +37,7 @@ const SynapticPathwaysView: React.FC = () => {
   const { prelayer, postlayer, pretype, posttype } = router.query as Record<string, string>;
 
   const [pathwayIndex, setPathwayIndex] = useState<PathwayIndex>(null);
+  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ prelayer, postlayer, pretype, posttype });
   const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
 
   const setParams = (params: Record<string, string>): void => {
@@ -50,12 +53,20 @@ const SynapticPathwaysView: React.FC = () => {
       posttype: null,
     });
   };
+  const setQsPreLayer = (prelayer) => {
+    const { region } = quickSelection;
+    setQuickSelection({ prelayer });
+  };
 
   const setPostLayerQuery = (layer: Layer) => {
     setParams({
       postlayer: layer,
       posttype: null,
     });
+  };
+  const setQsPostLayer = (postlayer) => {
+    const { prelayer, pretype } = quickSelection;
+    setQuickSelection({ prelayer, pretype, postlayer });
   };
 
   const setPreTypeQuery = (pretype: string) => {
@@ -64,11 +75,20 @@ const SynapticPathwaysView: React.FC = () => {
       posttype: null,
     });
   };
+  const setQsPreType = (pretype) => {
+    const { prelayer } = quickSelection;
+    setQuickSelection({ prelayer, pretype });
+  };
 
   const setPostTypeQuery = (posttype: string) => {
     setParams({
       posttype,
     });
+  };
+  const setQsPostType = (posttype) => {
+    const { prelayer, pretype, postlayer } = quickSelection;
+    setQuickSelection({ prelayer, pretype, postlayer, posttype });
+    setParams({ prelayer, pretype, postlayer, posttype });
   };
 
   const getPreMtypes = (prelayer) => {
@@ -82,6 +102,7 @@ const SynapticPathwaysView: React.FC = () => {
   };
 
   const preMtypes = getPreMtypes(prelayer);
+  const qsPreMtypes = getPreMtypes(quickSelection.prelayer);
 
   // TODO: move outside of the component (as well as the one above)
   const getPostMtypes = (pretype, postlayer) => {
@@ -96,6 +117,7 @@ const SynapticPathwaysView: React.FC = () => {
   };
 
   const postMtypes = getPostMtypes(pretype, postlayer);
+  const qsPostMtypes = getPostMtypes(quickSelection.pretype, quickSelection.postlayer);
 
   const pathway = pretype && posttype
     ? `${pretype}-${posttype}`
@@ -194,6 +216,40 @@ const SynapticPathwaysView: React.FC = () => {
         </Row>
       </Filters>
 
+      <QuickSelector
+        color={colorName}
+        entries={[
+          {
+            title: 'Pre-syn layer',
+            currentValue: quickSelection.prelayer,
+            values: layers,
+            onChange: setQsPreLayer,
+            width: '80px',
+          },
+          {
+            title: 'Pre-syn M-type',
+            currentValue: quickSelection.pretype,
+            values: qsPreMtypes,
+            onChange: setQsPreType,
+            width: '120px',
+          },
+          {
+            title: 'Post-syn layer',
+            currentValue: quickSelection.postlayer,
+            values: layers,
+            onChange: setQsPostLayer,
+            width: '80px',
+          },
+          {
+            title: 'Post-syn M-type',
+            currentValue: quickSelection.posttype,
+            values: qsPostMtypes,
+            onChange: setQsPostType,
+            width: '120px',
+          },
+        ]}
+      />
+
       <DataContainer
         visible={!!pretype && !!posttype}
         navItems={[
@@ -204,16 +260,16 @@ const SynapticPathwaysView: React.FC = () => {
       >
         <Collapsible
           id="pathwaySection"
-          title="Pathway <X>-<Y>"
+          title={`Pathway ${pathway}`}
         >
           <h3 className="text-tmp">Pathway factsheet</h3>
           <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
           <h3 className="text-tmp">Exemplar connection</h3>
 
           <HttpData path={connectionViewerDataPath(pretype, posttype)}>
-            {(data, loading) => (
+            {(data) => (
               <div className="mt-3">
-                <h3>Exemplar connection 3D viewer: {pretype} - {posttype}</h3>
+                <h3>Exemplar connection 3D viewer</h3>
                 <Spin spinning={!connViewerReady}>
                   <ConnectionViewer data={data} onReady={() => setConnViewerReady(true)} />
                 </Spin>
