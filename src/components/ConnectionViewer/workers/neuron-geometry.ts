@@ -1,4 +1,3 @@
-import last from 'lodash/last';
 import chunk from 'lodash/chunk';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { Vector3 } from 'three/src/math/Vector3';
@@ -19,6 +18,7 @@ function getStandardDeviation(array) {
   return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 }
 
+
 function simplify(pts) {
   let i = 0;
   while (i < pts.length - 2) {
@@ -35,6 +35,7 @@ function simplify(pts) {
     }
   }
 }
+
 
 function _createSecGeometryFromPoints(pts) {
   simplify(pts);
@@ -91,8 +92,8 @@ function _getGeometryBuffers(geometry) {
 }
 
 
-function createNeuriteGeometry(ptsList, simplificationRatio) {
-  const geometries = ptsList.map(pts => _createSecGeometryFromPoints(chunk(pts, 4), simplificationRatio));
+function createNeuriteGeometry(ptsList) {
+  const geometries = ptsList.map(pts => _createSecGeometryFromPoints(chunk(pts, 4)));
 
   const geometry = mergeBufferGeometries(geometries);
   const buffers = _getGeometryBuffers(geometry);
@@ -102,8 +103,8 @@ function createNeuriteGeometry(ptsList, simplificationRatio) {
   return transfer(buffers, buffers);
 }
 
-function createSecGeometry(pts, simplificationRatio) {
-  const geometry = _createSecGeometryFromPoints(pts, simplificationRatio);
+function createSecGeometry(pts) {
+  const geometry = _createSecGeometryFromPoints(pts);
   const buffers = _getGeometryBuffers(geometry);
 
   return transfer(buffers, buffers);

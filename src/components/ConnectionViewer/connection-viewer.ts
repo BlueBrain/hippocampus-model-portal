@@ -198,11 +198,8 @@ export default class ConnectionViewer {
   }
 
   private initGeometryWorkerPool() {
-    const geometryWorkerFactory = () => {
-      const workerUrl = new URL('./workers/neuron-geometry.ts', import.meta.url);
-      return new Worker(workerUrl, { name: 'geometry-worker'});
-    };
-
+    const conf = { name: 'geometry-worker' };
+    const geometryWorkerFactory = () => new Worker(new URL('./workers/neuron-geometry.ts', import.meta.url), conf);
     this.geometryWorkerPool = new Pool(geometryWorkerFactory, 2);
   }
 
@@ -335,7 +332,6 @@ export default class ConnectionViewer {
   }
 
   private alignCamera() {
-    console.log('Align camera');
     const preSomaPts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
     const postSomaPts = this.data.post.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
 
@@ -344,11 +340,6 @@ export default class ConnectionViewer {
 
     const centerVec = new Vector3().addVectors(preSomaVec, postSomaVec).divideScalar(2);
     const radius = centerVec.distanceTo(preSomaVec);
-
-
-    // const pts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(3, 7);
-    // const center = new Vector3(pts[0], pts[1], pts[2]);
-    // const radius = 50;
 
     this.camera.position.x = centerVec.x;
     this.camera.position.y = centerVec.y;

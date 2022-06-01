@@ -1,7 +1,14 @@
 
-import { CylinderGeometry, Vector3, Matrix4, Quaternion, SphereBufferGeometry, Mesh, BufferGeometry, Float32BufferAttribute, Uint16BufferAttribute, Uint32BufferAttribute } from 'three';
-import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
-import last from 'lodash/last';
+import {
+  BufferGeometry,
+  Float32BufferAttribute,
+  Matrix4,
+  Quaternion,
+  SphereBufferGeometry,
+  Uint16BufferAttribute,
+  Uint32BufferAttribute,
+  Vector3,
+} from 'three';
 
 
 export class RendererCtrl {
@@ -49,47 +56,6 @@ export class RendererCtrl {
   }
 }
 
-const HALF_PI = Math.PI * 0.5;
-function _createSecGeometryFromPoints(pts, simplificationRatio = 1) {
-  const sRatio = simplificationRatio;
-
-  const geometries = [];
-
-  for (let i = 0; i < pts.length - 1; i += sRatio) {
-    const vstart = new Vector3(pts[i][0], pts[i][1], pts[i][2]);
-    const vend = new Vector3(
-      pts[i + sRatio] ? pts[i + sRatio][0] : last(pts)[0],
-      pts[i + sRatio] ? pts[i + sRatio][1] : last(pts)[1],
-      pts[i + sRatio] ? pts[i + sRatio][2] : last(pts)[2],
-    );
-    const distance = vstart.distanceTo(vend);
-    const position = vend.clone().add(vstart).divideScalar(2);
-
-    const dStart = pts[i][3] * 2;
-    const dEnd = (pts[i + sRatio] ? pts[i + sRatio][3] : last(pts)[3]) * 2;
-
-    const geometry = new CylinderGeometry(
-      dStart,
-      dEnd,
-      distance,
-      Math.max(5, Math.ceil(24 / sRatio)),
-      1,
-      true,
-    );
-
-    const orientation = new Matrix4();
-    const offsetRotation = new Matrix4();
-    orientation.lookAt(vstart, vend, new Vector3(0, 1, 0));
-    offsetRotation.makeRotationX(HALF_PI);
-    orientation.multiply(offsetRotation);
-    geometry.applyMatrix4(orientation);
-    geometry.translate(position.x, position.y, position.z);
-
-    geometries.push(geometry);
-  }
-
-  return mergeBufferGeometries(geometries);
-}
 
 export function deserializeBufferGeometry(data) {
   const [vertices, normals, index] = data;
@@ -111,7 +77,6 @@ export function deserializeBufferGeometry(data) {
 }
 
 
-
 function getSomaPositionFromPoints(pts) {
   let position;
 
@@ -128,6 +93,7 @@ function getSomaPositionFromPoints(pts) {
   return position;
 }
 
+
 function getSomaRadiusFromPoints(pts) {
   // TODO: implement different soma types per spec.
   // See: https://morphio.readthedocs.io/en/latest/specification.html
@@ -142,7 +108,6 @@ function getSomaRadiusFromPoints(pts) {
     const thirdPt = new Vector3().fromArray(pts[2]);
     diameter = (position.distanceTo(secondPt) + position.distanceTo(thirdPt)) / 2;
   } else {
-    // diameter = pts.reduce((distance, pt) => distance + position.distanceTo(new THREE.Vector3().fromArray(pt)), 0) / pts.length;
     diameter = Math.max(...pts.map(pt => position.distanceTo(new Vector3().fromArray(pt))));
   }
 
@@ -151,6 +116,8 @@ function getSomaRadiusFromPoints(pts) {
   return originalRadius * 1.9;
 }
 
+
+// TODO: clean up
 export function createSomaGeometryFromPoints(pts) {
   const position = getSomaPositionFromPoints(pts);
   const radius = getSomaRadiusFromPoints(pts);
@@ -171,6 +138,7 @@ export function rotMatrix4x4FromArray3x3(array3x3) {
 
   return rotMatrix;
 }
+
 
 export function quatFromArray3x3(array3x3) {
   const rotationMatrix = rotMatrix4x4FromArray3x3(array3x3);
