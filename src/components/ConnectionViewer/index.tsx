@@ -6,10 +6,10 @@ import { ConnectionViewerProps } from './ConnectionViewer';
 
 const ConnectionViewerLazy = dynamic(() => import('./ConnectionViewer'), { ssr: false });
 
-const NexusImage: React.FC<ConnectionViewerProps> = (props) => {
+const ConnectionViewer: React.FC<ConnectionViewerProps> = (props) => {
   return (
     <ConnectionViewerLazy {...props} />
   );
 };
 
-export default ConnectionViewerLazy;
+export default ConnectionViewer;
