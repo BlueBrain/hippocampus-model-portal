@@ -17,6 +17,7 @@
 @import 'antd/lib/form/style/index.css';
 @import 'antd/lib/pagination/style/index.css';
 @import 'antd/lib/divider/style/index.css';
+@import 'antd/lib/spin/style/index.css';
 
 
 @import 'config/_colors';
@@ -198,6 +199,10 @@ section {
 
 .w-100 {
   width: 100%;
+}
+
+.h-100 {
+  height: 100%;
 }
 
 .block {

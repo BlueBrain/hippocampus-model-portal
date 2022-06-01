@@ -1,7 +1,8 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Spin } from 'antd';
 import Image from 'next/image';
 
+import { basePath } from '@/config';
 import { colorName } from './config';
 import Filters from '../../layouts/Filters';
 import StickyContainer from '../../components/StickyContainer';
@@ -9,11 +10,24 @@ import Title from '../../components/Title';
 import InfoBox from '../../components/InfoBox';
 import DataContainer from '../../components/DataContainer';
 import Collapsible from '../../components/Collapsible';
+import ConnectionViewer from '@/components/ConnectionViewer';
+import HttpData from '@/components/HttpData';
 
 import selectorStyle from '../../styles/selector.module.scss';
 
 
 const SynapticPathwaysView: React.FC = () => {
+  const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+
+  const onConnViewerReady = () => {
+    console.log('Conn viewer is reported ready');
+    setConnViewerReady(true);
+  };
+
+  useEffect(() => {
+    setConnViewerReady(false);
+  }, []);
+
   return (
     <>
       <Filters hasData={true}>
@@ -85,15 +99,17 @@ const SynapticPathwaysView: React.FC = () => {
           <h3 className="text-tmp">Pathway factsheet</h3>
           <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
           <h3 className="text-tmp">Exemplar connection</h3>
-          <div>
-            <div style={{ position: 'relative', paddingTop: '56.25%' }}>
-              <iframe src="https://bp.ocp.bbp.epfl.ch/viewer/rat-ca1-20211110-biom?gids=138484%2C68228"
-                frameBorder="0"
-                allowFullScreen
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
-              />
-            </div>
-          </div>
+
+          <HttpData path={`${basePath}/data/connection-viewer/SO_BP-SO_Tri.msgpack`}>
+            {(data, loading) => (
+              <div className="mt-3">
+                <h3>Exemplar connection 3D viewer: SO_BP - SO_Tri</h3>
+                <Spin spinning={!connViewerReady}>
+                  <ConnectionViewer data={data} onReady={onConnViewerReady} />
+                </Spin>
+              </div>
+            )}
+          </HttpData>
         </Collapsible>
 
         <Collapsible

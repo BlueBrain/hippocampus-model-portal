@@ -23,7 +23,6 @@ export type HistogramProps = {
 }
 
 const plotlyLayout = {
-  // height: 160,
   margin: {
     l: 16,
     t: 24,

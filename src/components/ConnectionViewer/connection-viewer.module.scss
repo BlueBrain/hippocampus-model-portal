@@ -1,0 +1,63 @@
+.fixedAspectRatio {
+  aspect-ratio: 16 / 9;
+}
+
+.containerInner {
+  position: relative;
+  height: 100%;
+
+  --color-pre-dend: #85caff;
+  --color-pre-axon: #007ee0;
+  --color-post-dend: #f21b18;
+  --color-post-axon: #f9a09f;
+}
+
+.preDendCheckbox {
+  --checkbox-color: var(--color-pre-dend);
+}
+
+.preAxonCheckbox {
+  --checkbox-color: var(--color-pre-axon);
+}
+
+.postDendCheckbox {
+  --checkbox-color: var(--color-post-dend);
+}
+
+.postAxonCheckbox {
+  --checkbox-color: var(--color-post-axon);
+}
+
+.coloredCheckbox {
+  :global(.ant-checkbox-checked) :global(.ant-checkbox-inner) {
+    background-color: var(--checkbox-color);
+    border-color: var(--checkbox-color);
+  }
+
+  :global(.ant-checkbox):hover :global(.ant-checkbox-inner) {
+    border-color: var(--checkbox-color);
+  }
+}
+
+.containerInner canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.fullscreenBtn, .legend {
+  box-shadow: 0px 0px 2px 2px #ccc;
+  position: absolute;
+}
+
+.fullscreenBtn {
+  top: 1rem;
+  right: 1rem;
+}
+
+.legend {
+  bottom: 1rem;
+  left: 1rem;
+  background-color: white;
+  padding: 8px;
+  white-space: nowrap;
+}
