@@ -110,6 +110,7 @@ const NeuronElectrophysiology: React.FC = () => {
               <div className={styles.selectorHead}>Select cell type</div>
               <div className={styles.selectorBody}>
                 <List
+                  block
                   list={etypes}
                   value={currentEtype}
                   title="e-type"
@@ -120,6 +121,7 @@ const NeuronElectrophysiology: React.FC = () => {
                 <br />
                 <br />
                 <List
+                  block
                   list={instances}
                   value={currentInstance}
                   title={`Experiment instance (${instances.length})`}
@@ -251,7 +253,7 @@ const qsEntries = [
 
 export default withQuickSelector(
   hocPreselection,
-  { 
+  {
     entries: qsEntries,
     color: colorName,
   },

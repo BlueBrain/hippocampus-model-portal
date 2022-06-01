@@ -169,6 +169,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <div className={styles.selectorHead}>2. Select reconstruction</div>
                 <div className={styles.selectorBody}>
                   <List
+                    block
                     list={mtypes}
                     value={currentMtype}
                     title="m-type"
@@ -179,6 +180,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                   <br />
                   <br />
                   <List
+                    block
                     list={instances}
                     value={currentInstance}
                     title="Reconstructed morphology"
