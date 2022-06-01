@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
-import { Button, Row, Col, Checkbox, Radio } from 'antd';
+import { Button, Row, Col, Checkbox, Radio, Divider } from 'antd';
 
 import ConnectionViewer from './connection-viewer';
 import { NeuriteType } from './constants';
@@ -15,6 +15,13 @@ export type ConnectionViewerProps = {
 
 type VisibilityType = 'full' | 'synPath';
 
+const defaultVisibilityCtrlState = {
+  preDend: true,
+  preAxon: true,
+  postDend: true,
+  postAxon: true,
+};
+
 const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
@@ -23,12 +30,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
   const [preAxonType, setPreAxonType] = useState<VisibilityType>('full');
   const [postDendType, setPostDendType] = useState<VisibilityType>('full');
 
-  const [visibilityCtrlState, setVisibilityCtrlState] = useState({
-    preDend: true,
-    preAxon: true,
-    postDend: true,
-    postAxon: true,
-  });
+  const [visibilityCtrlState, setVisibilityCtrlState] = useState(defaultVisibilityCtrlState);
 
   const updateVisibility = (visibility) => {
     connectionViewer.setNeuriteVisibility(visibility);
@@ -49,7 +51,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
   }
 
   useEffect(() => {
-    if (!containerRef || !containerRef.current) return;
+    if (!data || !containerRef || !containerRef.current) return;
 
     const containerNode = containerRef.current;
 
@@ -61,7 +63,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     return () => {
       if (connectionViewer) connectionViewer.destroy();
     };
-  }, [containerRef]);
+  }, [containerRef, data]);
 
   return (
     <div>
@@ -83,7 +85,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 <div>
                   <Checkbox
                     className={`${style.coloredCheckbox} ${style.preAxonCheckbox}`}
-                    defaultChecked={true}
+                    defaultChecked={visibilityCtrlState.preAxon}
                     onChange={(e) => {
                       const { checked: visible } = e.target;
                       setVisibilityCtrlState({
@@ -114,7 +116,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                   </Radio.Group> <br/>
                   <Checkbox
                     className={`${style.coloredCheckbox} ${style.preDendCheckbox}`}
-                    defaultChecked={true}
+                    defaultChecked={visibilityCtrlState.preDend}
                     onChange={(e) => updateVisibility({ [NeuriteType.PRE_NB_DEND]: e.target.checked })}
                   >
                     dend
@@ -126,7 +128,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 <div>
                   <Checkbox
                     className={`${style.coloredCheckbox} ${style.postDendCheckbox}`}
-                    defaultChecked={true}
+                    defaultChecked={visibilityCtrlState.postDend}
                     onChange={(e) => {
                       const { checked: visible } = e.target;
                       setVisibilityCtrlState({
@@ -157,7 +159,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                   </Radio.Group> <br/>
                   <Checkbox
                     className={`${style.coloredCheckbox} ${style.postAxonCheckbox}`}
-                    defaultChecked={true}
+                    defaultChecked={visibilityCtrlState.postAxon}
                     onChange={(e) => updateVisibility({ [NeuriteType.POST_NB_AXON]: e.target.checked })}
                   >
                     axon
@@ -165,6 +167,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 </div>
               </Col>
             </Row>
+            {/* <Divider /> */}
           </div>
         </div>
       </FullScreen>

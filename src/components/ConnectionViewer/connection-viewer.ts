@@ -7,6 +7,7 @@ import {
   Color,
   DoubleSide,
   Fog,
+  Material,
   Mesh,
   MeshLambertMaterial,
   PerspectiveCamera,
@@ -53,20 +54,6 @@ type MorphologySecData = {
   [extendedSecType: string]: SectionPts[],
 };
 
-const material = {
-  SOMA: new MeshLambertMaterial({ color: 0x000000 }),
-
-  PRE_DEND: new MeshLambertMaterial({ color: 0x85CAFF, side: DoubleSide }),
-  PRE_B_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
-  PRE_NB_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
-
-  POST_B_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
-  POST_NB_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
-  POST_AXON: new MeshLambertMaterial({ color: 0xF9A09F, side: DoubleSide }),
-
-  SYNAPSE: new MeshLambertMaterial({ color: 0xF5F749 }),
-}
-
 export default class ConnectionViewer {
   private data: any = null;
 
@@ -78,6 +65,8 @@ export default class ConnectionViewer {
   private controls: TrackballControls = null;
   private ctrl: RendererCtrl = new RendererCtrl();
   private onUserInteract: EventListener = null;
+
+  private material: Record<string, Material>;
 
   private secMesh: { [neuriteType: string]: Mesh } = {};
   private somaMesh: Mesh = null;
@@ -100,6 +89,8 @@ export default class ConnectionViewer {
     this.initCamera();
     this.initControls();
     this.initEvents();
+
+    this.initMaterials();
 
     this.initGeometryWorkerPool();
     this.indexSecData();
@@ -139,6 +130,9 @@ export default class ConnectionViewer {
 
   public destroy() {
     Object.values(this.secMesh).forEach(mesh => mesh.geometry.dispose());
+
+    Object.values(this.material).forEach(material => material.dispose());
+
     this.synMesh?.geometry.dispose();
     this.somaMesh?.geometry.dispose();
 
@@ -196,6 +190,22 @@ export default class ConnectionViewer {
     this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
   }
 
+  private initMaterials() {
+    this.material = {
+      SOMA: new MeshLambertMaterial({ color: 0x000000 }),
+
+      PRE_DEND: new MeshLambertMaterial({ color: 0x85CAFF, side: DoubleSide }),
+      PRE_B_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
+      PRE_NB_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
+
+      POST_B_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
+      POST_NB_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
+      POST_AXON: new MeshLambertMaterial({ color: 0xF9A09F, side: DoubleSide }),
+
+      SYNAPSE: new MeshLambertMaterial({ color: 0xF5F749 }),
+    }
+  }
+
   private initGeometryWorkerPool() {
     const conf = { name: 'geometry-worker' };
     const geometryWorkerFactory = () => new Worker(new URL('./workers/neuron-geometry.ts', import.meta.url), conf);
@@ -238,7 +248,7 @@ export default class ConnectionViewer {
 
     const somaGeometry = mergeBufferGeometries(somaGeometries);
 
-    this.somaMesh = new Mesh(somaGeometry, material.SOMA);
+    this.somaMesh = new Mesh(somaGeometry, this.material.SOMA);
     this.scene.add(this.somaMesh);
   }
 
@@ -286,27 +296,27 @@ export default class ConnectionViewer {
     ]) => {
       console.timeEnd('genMesh');
 
-      const preDendMesh = new Mesh(preDendGeometry, material.PRE_DEND);
+      const preDendMesh = new Mesh(preDendGeometry, this.material.PRE_DEND);
       this.secMesh[NeuriteType.PRE_NB_DEND] = preDendMesh;
       this.scene.add(preDendMesh);
 
-      const preBaseAxonMesh = new Mesh(preBaseAxonGeometry, material.PRE_B_AXON);
+      const preBaseAxonMesh = new Mesh(preBaseAxonGeometry, this.material.PRE_B_AXON);
       this.secMesh[NeuriteType.PRE_B_AXON] = preBaseAxonMesh;
       this.scene.add(preBaseAxonMesh);
 
-      const preNonBaseAxonMesh = new Mesh(preNonBaseAxonGeometry, material.PRE_NB_AXON);
+      const preNonBaseAxonMesh = new Mesh(preNonBaseAxonGeometry, this.material.PRE_NB_AXON);
       this.secMesh[NeuriteType.PRE_NB_AXON] = preNonBaseAxonMesh;
       this.scene.add(preNonBaseAxonMesh);
 
-      const postBaseDendMesh = new Mesh(postBaseDendGeometry, material.POST_B_DEND);
+      const postBaseDendMesh = new Mesh(postBaseDendGeometry, this.material.POST_B_DEND);
       this.secMesh[NeuriteType.POST_B_DEND] = postBaseDendMesh;
       this.scene.add(postBaseDendMesh);
 
-      const postNonBaseDendMesh = new Mesh(postNonBaseDendGeometry, material.POST_NB_DEND);
+      const postNonBaseDendMesh = new Mesh(postNonBaseDendGeometry, this.material.POST_NB_DEND);
       this.secMesh[NeuriteType.POST_NB_DEND] = postNonBaseDendMesh;
       this.scene.add(postNonBaseDendMesh);
 
-      const postAxonMesh = new Mesh(postAxonGeometry, material.POST_AXON);
+      const postAxonMesh = new Mesh(postAxonGeometry, this.material.POST_AXON);
       this.secMesh[NeuriteType.POST_NB_AXON] = postAxonMesh;
       this.scene.add(postAxonMesh);
     });
@@ -321,7 +331,7 @@ export default class ConnectionViewer {
     });
 
     const geometry = mergeBufferGeometries(geometries);
-    this.synMesh = new Mesh(geometry, material.SYNAPSE);
+    this.synMesh = new Mesh(geometry, this.material.SYNAPSE);
     this.scene.add(this.synMesh);
   }
 
