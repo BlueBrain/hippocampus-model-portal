@@ -54,4 +54,5 @@ def main():
     json.dump(output, file, default=np_encoder)
 
 
-main()
+if __name__ == '__main__':
+  main()

@@ -126,4 +126,5 @@ def main():
     log.info('.' * 80)
 
 
-main()
+if __name__ == '__main__':
+  main()
