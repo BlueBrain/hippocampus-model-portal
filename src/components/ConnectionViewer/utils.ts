@@ -129,6 +129,9 @@ function getSomaPositionFromPoints(pts) {
 }
 
 function getSomaRadiusFromPoints(pts) {
+  // TODO: implement different soma types per spec.
+  // See: https://morphio.readthedocs.io/en/latest/specification.html
+
   const position = getSomaPositionFromPoints(pts);
   let diameter;
 
@@ -143,9 +146,9 @@ function getSomaRadiusFromPoints(pts) {
     diameter = Math.max(...pts.map(pt => position.distanceTo(new Vector3().fromArray(pt))));
   }
 
-  const radius = diameter / 2;
+  const originalRadius = diameter / 2;
 
-  return radius;
+  return originalRadius * 1.9;
 }
 
 export function createSomaGeometryFromPoints(pts) {
