@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Row, Col, Spin } from 'antd';
-import Image from 'next/image';
+import chunk from 'lodash/chunk';
 
-import { basePath } from '@/config';
+import { Layer } from '@/types';
+import { pathwayIndexPath, connectionViewerDataPath } from '@/queries/http';
 import { colorName } from './config';
 import Filters from '../../layouts/Filters';
 import StickyContainer from '../../components/StickyContainer';
@@ -12,25 +14,106 @@ import DataContainer from '../../components/DataContainer';
 import Collapsible from '../../components/Collapsible';
 import ConnectionViewer from '@/components/ConnectionViewer';
 import HttpData from '@/components/HttpData';
+import LayerSelector from '@/components/LayerSelector';
+import List from '@/components/List';
 
 import selectorStyle from '../../styles/selector.module.scss';
 
 
+type PathwayIndex = {
+  pathways: number[];
+  mtypeIdx: string[];
+}
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
 const SynapticPathwaysView: React.FC = () => {
+  const router = useRouter();
+
+  const { prelayer, postlayer, pretype, posttype } = router.query as Record<string, string>;
+
+  const [pathwayIndex, setPathwayIndex] = useState<PathwayIndex>(null);
   const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
 
-  const onConnViewerReady = () => {
-    console.log('Conn viewer is reported ready');
-    setConnViewerReady(true);
+  const setParams = (params: Record<string, string>): void => {
+    const query = { ...router.query, ...params };
+    router.push({ query }, undefined, { shallow: true });
   };
+
+  const setPreLayerQuery = (layer: Layer) => {
+    setParams({
+      prelayer: layer,
+      postlayer: null,
+      pretype: null,
+      posttype: null,
+    });
+  };
+
+  const setPostLayerQuery = (layer: Layer) => {
+    setParams({
+      postlayer: layer,
+      posttype: null,
+    });
+  };
+
+  const setPreTypeQuery = (pretype: string) => {
+    setParams({
+      pretype,
+      posttype: null,
+    });
+  };
+
+  const setPostTypeQuery = (posttype: string) => {
+    setParams({
+      posttype,
+    });
+  };
+
+  const getPreMtypes = (prelayer) => {
+    if (!pathwayIndex || !prelayer) return [];
+
+    return chunk(pathwayIndex.pathways, 2)
+      .map(([preMtypeIdx]) => pathwayIndex.mtypeIdx[preMtypeIdx])
+      .filter(onlyUnique)
+      .filter(mtype => mtype.match(prelayer))
+      .sort();
+  };
+
+  const preMtypes = getPreMtypes(prelayer);
+
+  // TODO: move outside of the component (as well as the one above)
+  const getPostMtypes = (pretype, postlayer) => {
+    if (!pathwayIndex || !pretype || !postlayer) return [];
+
+    return chunk(pathwayIndex.pathways, 2)
+      .filter(([preMtypeIdx]) => pathwayIndex.mtypeIdx[preMtypeIdx] === pretype)
+      .map(([, postMtypeIdx]) => pathwayIndex.mtypeIdx[postMtypeIdx])
+      .filter(onlyUnique)
+      .filter(mtype => mtype.match(postlayer))
+      .sort()
+  };
+
+  const postMtypes = getPostMtypes(pretype, postlayer);
+
+  const pathway = pretype && posttype
+    ? `${pretype}-${posttype}`
+    : null;
+
+  useEffect(() => {
+    fetch(pathwayIndexPath)
+      .then(res => res.json())
+      .then(pathwayIndex => setPathwayIndex(pathwayIndex));
+  }, []);
 
   useEffect(() => {
     setConnViewerReady(false);
-  }, []);
+  }, [pretype, posttype]);
 
   return (
     <>
-      <Filters hasData={true}>
+      <Filters hasData={!!pretype && !!posttype}>
         <Row
           className="w-100"
           gutter={[0,20]}
@@ -67,16 +150,42 @@ const SynapticPathwaysView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=PathwaySelect&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
+            <div className={`${selectorStyle.head} ${selectorStyle.fullHeader}`}>1. Select a pre-synaptic layer and M-type</div>
+            <div className={selectorStyle.row}>
+              <div className={selectorStyle.column}>
+                <div className={selectorStyle.body}>
+                  <LayerSelector value={prelayer as Layer} onSelect={setPreLayerQuery} />
+                </div>
+              </div>
+              <div className={selectorStyle.column}>
+                <div className={selectorStyle.body}>
+                  <List
+                    block
+                    title="M-type pre-synaptic"
+                    list={preMtypes}
+                    value={pretype}
+                    color={colorName}
+                    onSelect={setPreTypeQuery}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={`${selectorStyle.head} ${selectorStyle.fullHeader}`}>2. Select a post-synaptic layer and M-type</div>
+            <div className={selectorStyle.row}>
+              <div className={selectorStyle.column}>
+                <div className={selectorStyle.body}>
+                  <LayerSelector value={postlayer as Layer} onSelect={setPostLayerQuery} />
+                </div>
+              </div>
+              <div className={selectorStyle.column}>
+                <div className={selectorStyle.body}>
+                  <List
+                    block
+                    title="M-type post-synaptic"
+                    list={postMtypes}
+                    value={posttype}
+                    color={colorName}
+                    onSelect={setPostTypeQuery}
                   />
                 </div>
               </div>
@@ -86,6 +195,7 @@ const SynapticPathwaysView: React.FC = () => {
       </Filters>
 
       <DataContainer
+        visible={!!pretype && !!posttype}
         navItems={[
           { id: 'pathwaySection', label: 'Pathway' },
           { id: 'synaptomesSection', label: 'Synaptomes' },
@@ -100,12 +210,12 @@ const SynapticPathwaysView: React.FC = () => {
           <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
           <h3 className="text-tmp">Exemplar connection</h3>
 
-          <HttpData path={`${basePath}/data/connection-viewer/SO_BP-SO_Tri.msgpack`}>
+          <HttpData path={connectionViewerDataPath(pretype, posttype)}>
             {(data, loading) => (
               <div className="mt-3">
-                <h3>Exemplar connection 3D viewer: SO_BP - SO_Tri</h3>
+                <h3>Exemplar connection 3D viewer: {pretype} - {posttype}</h3>
                 <Spin spinning={!connViewerReady}>
-                  <ConnectionViewer data={data} onReady={onConnViewerReady} />
+                  <ConnectionViewer data={data} onReady={() => setConnViewerReady(true)} />
                 </Spin>
               </div>
             )}

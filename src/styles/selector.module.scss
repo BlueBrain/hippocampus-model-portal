@@ -1,23 +1,42 @@
-.selector {
+@import 'config/_queries';
+
+.row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  max-width:90%;
   margin: 0 auto;
+  @media (max-width: $ant-breakpoint-xl){
+    max-width: 100%;
+  }
 }
 
-.selectorColumn {
-  margin-top: 2rem;
+.column {
   display: flex;
   flex-direction: column;
   border: 1px solid white;
 }
 
-.selectorHead {
+.head {
   text-align: center;
   background-color: white;
   color: black;
 }
 
-.selectorBody {
+.fullHeader {
+  max-width:90%;
+  margin: 0 auto;
+  @media (max-width: $ant-breakpoint-xl){
+    max-width: 100%;
+  }
+}
+
+.body {
   padding: 1.4rem;
   margin: auto 0;
+}
+
+.centeredBodyContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

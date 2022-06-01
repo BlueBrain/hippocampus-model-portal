@@ -23,24 +23,15 @@ const List: React.FC<ListProps> = ({
   value,
   onSelect = () => { },
   color,
-  anchor = '',
   className = '',
+  block = false,
 }) => {
-  const handleSelectedElement = (element: string) => {
-    const target = anchor && document.querySelector(`#${anchor}`);
-    if (target) {
-      window.setTimeout(() => target.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' }), 0);
-    }
-    onSelect(element);
-  }
-
-  const id = title ? title.replace(/\s/g, '') : 'no_title';
+  const handleSelectedElement = (element: string) => onSelect(element);
 
   return (
     <div
-      className={`${classPrefixList}basis set-accent-color--${color} ${className}`}
+      className={`${classPrefixList}basis set-accent-color--${color} ${className} ${block ? 'block' : ''}`}
       role="radiogroup"
-      aria-labelledby={`${classPrefixList}${id}`}
     >
       {title && <p>{title}</p>}
       <div className="elements">

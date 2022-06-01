@@ -538,12 +538,17 @@ $collapsible-padding: 20px 30px;
 
 // List
 .list__basis {
-  $height: 120px;
+  $height: 148px;
   $width: 250px;
   $padding: 10px 10px 10px 20px;
 
+  width: $width;
   padding: $padding;
   background-color: var(--accent-color);
+
+  &.block {
+    width: auto;
+  }
 
   p {
     font-weight: 500;
@@ -580,6 +585,7 @@ $collapsible-padding: 20px 30px;
 }
 
 .list-element__basis {
+  user-select: none;
   background-color: map-get($basePalette, "white");
   color: map-get($basePalette, "navy-1");
   margin: 8px 20px 8px 10px;
@@ -587,8 +593,7 @@ $collapsible-padding: 20px 30px;
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  padding: 6px;
-  font-weight: 700;
+  padding: 2px 0.5rem;
   cursor: pointer;
   &:hover {
     color: map-get($basePalette, "white");

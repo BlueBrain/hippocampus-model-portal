@@ -61,3 +61,12 @@ export const expMorphologyFactsheetPath = (morphologyName: string): string => {
 export const morphHistogramIndexPath = (region: string, mtype: string) => {
   return `${basePath}/data/morph-histogram/${region}_Column/${mtype}/histogram-index.json`;
 };
+
+
+// Digital Reconstructions - Pathways
+
+export const pathwayIndexPath = `${staticDataBaseUrl}/pathway-index.json`;
+
+export const connectionViewerDataPath = (preMtype: string, postMtype: string) => {
+  return `${staticDataBaseUrl}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
+};
