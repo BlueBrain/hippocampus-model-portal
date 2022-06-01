@@ -67,7 +67,7 @@ const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {
 
       if (typeof(entry.getValuesParam) === 'string') {
         return entry.getValuesFn(quickSelection[entry.getValuesParam]);
-      }      
+      }
     };
 
     const getQsQuery = (changedParam: string, entry: Entry) => {

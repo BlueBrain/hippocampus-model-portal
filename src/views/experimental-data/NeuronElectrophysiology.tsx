@@ -248,7 +248,7 @@ const qsEntries = [
     getValuesFn: getInstance,
     getValuesParam: 'etype',
     paramsToKeepOnChange: ['etype'],
-  },  
+  },
 ];
 
 export default withQuickSelector(
