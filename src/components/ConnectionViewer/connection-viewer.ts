@@ -34,7 +34,6 @@ const AMBIENT_LIGHT_COLOR = 0x555555;
 const CAMERA_LIGHT_COLOR = 0xcacaca;
 
 const BACKGROUND_COLOR = 0xfefdfb;
-// const BACKGROUND_COLOR = 0x222222;
 
 const secTypeMap = [
   'soma',
