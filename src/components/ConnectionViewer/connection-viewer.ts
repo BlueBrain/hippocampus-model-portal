@@ -138,6 +138,8 @@ export default class ConnectionViewer {
 
     this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
     this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
+    this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
+    this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
 
     this.controls.dispose();
     this.renderer.dispose();
@@ -188,6 +190,8 @@ export default class ConnectionViewer {
 
     this.canvas.addEventListener('wheel', this.onUserInteract, { capture: false, passive: true });
     this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
+    this.canvas.addEventListener('touchmove', this.onUserInteract, { capture: false, passive: true });
+    this.canvas.addEventListener('pointermove', this.onUserInteract, { capture: false, passive: true });
   }
 
   private initMaterials() {
