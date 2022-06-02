@@ -22,6 +22,9 @@ const defaultVisibilityCtrlState = {
   postAxon: true,
 };
 
+// using bracket access to make linter not complain about non-existent prop
+const isFullscreenAvailable = document.fullscreenEnabled || document['webkitFullscreenEnabled'];
+
 const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
@@ -73,11 +76,13 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
         handle={fullscreenHandle}
       >
         <div className={style.containerInner} ref={containerRef}>
-          <Button
-            className={style.fullscreenBtn}
-            onClick={toggleFullscreen}
-            icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-          />
+          {isFullscreenAvailable && (
+            <Button
+              className={style.fullscreenBtn}
+              onClick={toggleFullscreen}
+              icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            />
+          )}
           <div className={style.legend}>
             <Row gutter={18}>
               <Col span={12}>
