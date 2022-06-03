@@ -39,12 +39,6 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     connectionViewer.setNeuriteVisibility(visibility);
   };
 
-  const resize = () => {
-    if (!connectionViewer) return;
-
-    connectionViewer.resize();
-  };
-
   const toggleFullscreen = () => {
     if (fullscreenHandle.active) {
      fullscreenHandle.exit();
@@ -72,7 +66,6 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     <div>
       <FullScreen
         className={fullscreenHandle.active ? undefined : style.fixedAspectRatio}
-        onChange={resize}
         handle={fullscreenHandle}
       >
         <div className={style.containerInner} ref={containerRef}>

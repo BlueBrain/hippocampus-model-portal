@@ -58,6 +58,7 @@ export default class ConnectionViewer {
   private data: any = null;
 
   private container: HTMLDivElement = null;
+  private resizeObserver: ResizeObserver = null;
   private canvas: HTMLCanvasElement = null;
   private renderer: WebGLRenderer = null;
   private scene: Scene = null;
@@ -89,6 +90,7 @@ export default class ConnectionViewer {
     this.initCamera();
     this.initControls();
     this.initEvents();
+    this.initObservers();
 
     this.initMaterials();
 
@@ -141,6 +143,8 @@ export default class ConnectionViewer {
     this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
     this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
 
+    this.resizeObserver.unobserve(this.container);
+
     this.controls.dispose();
     this.renderer.dispose();
 
@@ -192,6 +196,12 @@ export default class ConnectionViewer {
     this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
     this.canvas.addEventListener('touchmove', this.onUserInteract, { capture: false, passive: true });
     this.canvas.addEventListener('pointermove', this.onUserInteract, { capture: false, passive: true });
+  }
+
+  private initObservers() {
+    this.resizeObserver = new ResizeObserver(() => this.resize());
+
+    this.resizeObserver.observe(this.container);
   }
 
   private initMaterials() {
