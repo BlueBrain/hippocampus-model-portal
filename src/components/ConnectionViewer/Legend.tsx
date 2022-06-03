@@ -26,8 +26,8 @@ const Legend: React.FC = () => {
 
       <div className={styles.legendDivider}></div>
 
-      <p><ColoredBox cssColor={color.SOMA} /> Soma</p>
       <p><ColoredBox cssColor={color.SYNAPSE} /> Synapse</p>
+      <p><ColoredBox cssColor={color.SOMA} /> Soma</p>
     </div>
   );
 };

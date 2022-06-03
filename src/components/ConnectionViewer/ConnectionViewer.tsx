@@ -103,7 +103,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
 
             <h4>PRE</h4>
             <div>
-            <Checkbox
+              <Checkbox
                 className={styles.coloredCheckbox}
                 style={{ '--checkbox-color': color.PRE_DEND } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.preDend}
@@ -117,7 +117,9 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 }}
               >
                 Dend
-              </Checkbox> <br />
+              </Checkbox>
+            </div>
+            <div className="mt-1">
               <Checkbox
                 className={styles.coloredCheckbox}
                 style={{ '--checkbox-color': color.PRE_AXON } as React.CSSProperties}
@@ -138,6 +140,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 Axon
               </Checkbox>
               <Segmented
+                className="ml-1"
                 size="small"
                 options={['full', 'synPath']}
                 defaultValue={preAxonType}
@@ -170,6 +173,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 Dend
               </Checkbox>
               <Segmented
+                className="ml-1"
                 size="small"
                 options={['full', 'synPath']}
                 defaultValue={postDendType}
@@ -178,6 +182,8 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                   updateVisibility({ [NeuriteType.POST_NB_DEND]: postDendType === 'full' });
                 }}
               />
+            </div>
+            <div className="mt-1">
               <Checkbox
                 className={styles.coloredCheckbox}
                 style={{ '--checkbox-color': color.POST_AXON } as React.CSSProperties}

@@ -22,11 +22,12 @@
 }
 
 .coloredBox {
-  height: 0.7rem;
-  width: 0.7rem;
+  height: 0.75rem;
+  width: 0.75rem;
   display: inline-block;
   margin-right: 0.4rem;
   background-color: var(--box-color);
+  border: 1px solid #888;
 }
 
 .container canvas {
@@ -53,7 +54,7 @@
   font-size: 14px;
   bottom: 1rem;
   left: 1rem;
-  padding: 0 0.2rem;
+  padding: 0 0.3rem;
   background-color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
   user-select: none;
