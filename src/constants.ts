@@ -38,6 +38,12 @@ export const defaultSelection = {
       mtype: 'SLM_PPA',
       instance: 'CA1_int_bAC_011127HP1_20190329115610',
     },
+    synapticPathways: {
+      prelayer: 'SP',
+      postlayer: 'SO',
+      pretype: 'SP_PC',
+      posttype: 'SO_BP',
+    },
   },
 };
 

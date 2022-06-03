@@ -4,7 +4,7 @@ import { Row, Col, Spin } from 'antd';
 import chunk from 'lodash/chunk';
 
 import { Layer } from '@/types';
-import { layers } from '@/constants';
+import { layers, defaultSelection } from '@/constants';
 import { colorName } from './config';
 import { pathwayIndexPath, connectionViewerDataPath } from '@/queries/http';
 import Filters from '@/layouts/Filters';
@@ -44,6 +44,19 @@ const SynapticPathwaysView: React.FC = () => {
     const query = { ...router.query, ...params };
     router.push({ query }, undefined, { shallow: true });
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.prelayer) {
+      const query = defaultSelection.digitalReconstruction.synapticPathways;
+      const { prelayer, pretype, postlayer, posttype } = query;
+      setQuickSelection({ prelayer, pretype, postlayer , posttype });
+      router.replace({ query }, undefined, { shallow: true });
+    } else {
+      setQuickSelection({ prelayer, postlayer, pretype, posttype });
+    }
+  }, [router.query]);
 
   const setPreLayerQuery = (layer: Layer) => {
     setParams({
