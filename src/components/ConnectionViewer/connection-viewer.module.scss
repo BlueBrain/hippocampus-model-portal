@@ -1,5 +1,7 @@
 .fixedAspectRatio {
   aspect-ratio: 16 / 9;
+  min-height: 320px;
+  max-width: 100%;
 }
 
 .containerInner {
