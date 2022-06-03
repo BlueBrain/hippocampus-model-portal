@@ -24,7 +24,7 @@ import {
   RendererCtrl,
 } from './utils';
 import { Pool } from '@/services/threads';
-import { NeuriteType } from './constants';
+import { color, NeuriteType } from './constants';
 
 
 const FOG_COLOR = 0xffffff;
@@ -46,6 +46,10 @@ const secTypeMap = [
 const CellType = {
   PRE: 0,
   POST: 1,
+}
+
+function parseCssColor(colorStr) {
+  return parseInt(colorStr.replace('#', ''), 16);
 }
 
 type SectionPts = number[][];
@@ -206,17 +210,17 @@ export default class ConnectionViewer {
 
   private initMaterials() {
     this.material = {
-      SOMA: new MeshLambertMaterial({ color: 0x000000 }),
+      SOMA: new MeshLambertMaterial({ color: parseCssColor(color.SOMA) }),
 
-      PRE_DEND: new MeshLambertMaterial({ color: 0x85CAFF, side: DoubleSide }),
-      PRE_B_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
-      PRE_NB_AXON: new MeshLambertMaterial({ color: 0x007FE0, side: DoubleSide }),
+      PRE_DEND: new MeshLambertMaterial({ color: parseCssColor(color.PRE_DEND), side: DoubleSide }),
+      PRE_B_AXON: new MeshLambertMaterial({ color: parseCssColor(color.PRE_AXON), side: DoubleSide }),
+      PRE_NB_AXON: new MeshLambertMaterial({ color: parseCssColor(color.PRE_AXON), side: DoubleSide }),
 
-      POST_B_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
-      POST_NB_DEND: new MeshLambertMaterial({ color: 0xF21B18, side: DoubleSide }),
-      POST_AXON: new MeshLambertMaterial({ color: 0xF9A09F, side: DoubleSide }),
+      POST_B_DEND: new MeshLambertMaterial({ color: parseCssColor(color.POST_DEND), side: DoubleSide }),
+      POST_NB_DEND: new MeshLambertMaterial({ color: parseCssColor(color.POST_DEND), side: DoubleSide }),
+      POST_AXON: new MeshLambertMaterial({ color: parseCssColor(color.POST_AXON), side: DoubleSide }),
 
-      SYNAPSE: new MeshLambertMaterial({ color: 0xF5F749 }),
+      SYNAPSE: new MeshLambertMaterial({ color: parseCssColor(color.SYNAPSE) }),
     }
   }
 

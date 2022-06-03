@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
-import { Button, Row, Col, Checkbox, Radio, Divider } from 'antd';
+import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Segmented, Drawer } from 'antd';
 
 import ConnectionViewer from './connection-viewer';
-import { NeuriteType } from './constants';
+import { color, NeuriteType } from './constants';
+import Legend from './Legend';
 
-import style from './connection-viewer.module.scss';
+import styles from './connection-viewer.module.scss';
 
 export type ConnectionViewerProps = {
   data: any;
@@ -28,6 +29,7 @@ const isFullscreenAvailable = document.fullscreenEnabled || document['webkitFull
 const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
+  const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const fullscreenHandle = useFullScreenHandle();
 
   const [preAxonType, setPreAxonType] = useState<VisibilityType>('full');
@@ -65,108 +67,134 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
   return (
     <div>
       <FullScreen
-        className={fullscreenHandle.active ? undefined : style.fixedAspectRatio}
+        className={fullscreenHandle.active ? undefined : styles.fixedAspectRatio}
         handle={fullscreenHandle}
       >
-        <div className={style.containerInner} ref={containerRef}>
+        <div className={styles.container} ref={containerRef}>
+          <Button
+            className={styles.settingBtn}
+            size="small"
+            onClick={() => setSettingDrawerVisible(true)}
+            icon={<SettingOutlined />}
+          />
+
           {isFullscreenAvailable && (
             <Button
-              className={style.fullscreenBtn}
+              size="small"
+              className={styles.fullscreenBtn}
               onClick={toggleFullscreen}
               icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             />
           )}
-          <div className={style.legend}>
-            <Row gutter={18}>
-              <Col span={12}>
-                <h4>PRE</h4>
-                <div>
-                  <Checkbox
-                    className={`${style.coloredCheckbox} ${style.preAxonCheckbox}`}
-                    defaultChecked={visibilityCtrlState.preAxon}
-                    onChange={(e) => {
-                      const { checked: visible } = e.target;
-                      setVisibilityCtrlState({
-                        ...visibilityCtrlState,
-                        preAxon: visible,
-                      });
 
-                      updateVisibility({
-                        [NeuriteType.PRE_B_AXON]: visible,
-                        [NeuriteType.PRE_NB_AXON]: preAxonType === 'full' ? visible : false,
-                      });
-                    }}
-                  >
-                    axon
-                  </Checkbox>
-                  <Radio.Group
-                    defaultValue="full"
-                    size="small"
-                    disabled={!visibilityCtrlState.preAxon}
-                    onChange={(e) => {
-                      const preAxonType = e.target.value;
-                      setPreAxonType(preAxonType);
-                      updateVisibility({ [NeuriteType.PRE_NB_AXON]: preAxonType === 'full' });
-                    }}
-                  >
-                    <Radio.Button value="full">Full</Radio.Button>
-                    <Radio.Button value="synPath">Syn path</Radio.Button>
-                  </Radio.Group> <br/>
-                  <Checkbox
-                    className={`${style.coloredCheckbox} ${style.preDendCheckbox}`}
-                    defaultChecked={visibilityCtrlState.preDend}
-                    onChange={(e) => updateVisibility({ [NeuriteType.PRE_NB_DEND]: e.target.checked })}
-                  >
-                    dend
-                  </Checkbox>
-                </div>
-              </Col>
-              <Col span={12}>
-                <h4>POST</h4>
-                <div>
-                  <Checkbox
-                    className={`${style.coloredCheckbox} ${style.postDendCheckbox}`}
-                    defaultChecked={visibilityCtrlState.postDend}
-                    onChange={(e) => {
-                      const { checked: visible } = e.target;
-                      setVisibilityCtrlState({
-                        ...visibilityCtrlState,
-                        postDend: visible,
-                      });
+          <Legend />
 
-                      updateVisibility({
-                        [NeuriteType.POST_B_DEND]: visible,
-                        [NeuriteType.POST_NB_DEND]: postDendType === 'full' ? visible : false,
-                      });
-                    }}
-                  >
-                    dend
-                  </Checkbox>
-                  <Radio.Group
-                    defaultValue="full"
-                    size="small"
-                    disabled={!visibilityCtrlState.postDend}
-                    onChange={(e) => {
-                      const postDendType = e.target.value;
-                      setPostDendType(postDendType);
-                      updateVisibility({ [NeuriteType.POST_NB_DEND]: postDendType === 'full' });
-                    }}
-                  >
-                    <Radio.Button value="full">Full</Radio.Button>
-                    <Radio.Button value="synPath">Syn path</Radio.Button>
-                  </Radio.Group> <br/>
-                  <Checkbox
-                    className={`${style.coloredCheckbox} ${style.postAxonCheckbox}`}
-                    defaultChecked={visibilityCtrlState.postAxon}
-                    onChange={(e) => updateVisibility({ [NeuriteType.POST_NB_AXON]: e.target.checked })}
-                  >
-                    axon
-                  </Checkbox>
-                </div>
-              </Col>
-            </Row>
-            {/* <Divider /> */}
-          </div>
+          <Drawer
+            title="Viewer settings"
+            placement="left"
+            closable={true}
+            width={240}
+            onClose={() => setSettingDrawerVisible(false)}
+            visible={settingDrawerVisible}
+            getContainer={false}
+            style={{ position: 'absolute' }}
+          >
+            <h3>Neurite visibility</h3>
+
+            <h4>PRE</h4>
+            <div>
+            <Checkbox
+                className={styles.coloredCheckbox}
+                style={{ '--checkbox-color': color.PRE_DEND } as React.CSSProperties}
+                defaultChecked={visibilityCtrlState.preDend}
+                onChange={(e) => {
+                  const { checked: visible } = e.target;
+                  setVisibilityCtrlState({
+                    ...visibilityCtrlState,
+                    preDend: visible,
+                  });
+                  updateVisibility({ [NeuriteType.PRE_NB_DEND]: visible });
+                }}
+              >
+                Dend
+              </Checkbox> <br />
+              <Checkbox
+                className={styles.coloredCheckbox}
+                style={{ '--checkbox-color': color.PRE_AXON } as React.CSSProperties}
+                defaultChecked={visibilityCtrlState.preAxon}
+                onChange={(e) => {
+                  const { checked: visible } = e.target;
+                  setVisibilityCtrlState({
+                    ...visibilityCtrlState,
+                    preAxon: visible,
+                  });
+
+                  updateVisibility({
+                    [NeuriteType.PRE_B_AXON]: visible,
+                    [NeuriteType.PRE_NB_AXON]: preAxonType === 'full' ? visible : false,
+                  });
+                }}
+              >
+                Axon
+              </Checkbox>
+              <Segmented
+                size="small"
+                options={['full', 'synPath']}
+                defaultValue={preAxonType}
+                onChange={(preAxonType) => {
+                  setPreAxonType(preAxonType as VisibilityType);
+                  updateVisibility({ [NeuriteType.PRE_NB_AXON]: preAxonType === 'full' });
+                }}
+              />
+            </div>
+
+            <h4 className="mt-2">POST</h4>
+            <div>
+              <Checkbox
+                className={styles.coloredCheckbox}
+                style={{ '--checkbox-color': color.POST_DEND } as React.CSSProperties}
+                defaultChecked={visibilityCtrlState.postDend}
+                onChange={(e) => {
+                  const { checked: visible } = e.target;
+                  setVisibilityCtrlState({
+                    ...visibilityCtrlState,
+                    postDend: visible,
+                  });
+
+                  updateVisibility({
+                    [NeuriteType.POST_B_DEND]: visible,
+                    [NeuriteType.POST_NB_DEND]: postDendType === 'full' ? visible : false,
+                  });
+                }}
+              >
+                Dend
+              </Checkbox>
+              <Segmented
+                size="small"
+                options={['full', 'synPath']}
+                defaultValue={postDendType}
+                onChange={(postDendType) => {
+                  setPostDendType(postDendType as VisibilityType);
+                  updateVisibility({ [NeuriteType.POST_NB_DEND]: postDendType === 'full' });
+                }}
+              />
+              <Checkbox
+                className={styles.coloredCheckbox}
+                style={{ '--checkbox-color': color.POST_AXON } as React.CSSProperties}
+                defaultChecked={visibilityCtrlState.postAxon}
+                onChange={(e) => {
+                  const { checked: visible } = e.target;
+                  setVisibilityCtrlState({
+                    ...visibilityCtrlState,
+                    postAxon: visible,
+                  });
+                  updateVisibility({ [NeuriteType.POST_NB_AXON]: visible });
+                }}
+              >
+                Axon
+              </Checkbox>
+            </div>
+          </Drawer>
         </div>
       </FullScreen>
     </div>

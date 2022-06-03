@@ -4,30 +4,10 @@
   max-width: 100%;
 }
 
-.containerInner {
+.container {
   position: relative;
   height: 100%;
-
-  --color-pre-dend: #85caff;
-  --color-pre-axon: #007ee0;
-  --color-post-dend: #f21b18;
-  --color-post-axon: #f9a09f;
-}
-
-.preDendCheckbox {
-  --checkbox-color: var(--color-pre-dend);
-}
-
-.preAxonCheckbox {
-  --checkbox-color: var(--color-pre-axon);
-}
-
-.postDendCheckbox {
-  --checkbox-color: var(--color-post-dend);
-}
-
-.postAxonCheckbox {
-  --checkbox-color: var(--color-post-axon);
+  overflow: hidden;
 }
 
 .coloredCheckbox {
@@ -41,14 +21,27 @@
   }
 }
 
-.containerInner canvas {
+.coloredBox {
+  height: 0.7rem;
+  width: 0.7rem;
+  display: inline-block;
+  margin-right: 0.4rem;
+  background-color: var(--box-color);
+}
+
+.container canvas {
   width: 100% !important;
   height: 100% !important;
 }
 
-.fullscreenBtn, .legend {
-  box-shadow: 0px 0px 2px 2px #ccc;
+.settingBtn, .fullscreenBtn, .config, .legend {
   position: absolute;
+  box-shadow: 0 0 1rem 1.1rem rgba(255, 255, 255, 0.8);
+}
+
+.settingBtn {
+  top: 1rem;
+  left: 1rem;
 }
 
 .fullscreenBtn {
@@ -57,6 +50,24 @@
 }
 
 .legend {
+  font-size: 14px;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0 0.2rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  user-select: none;
+
+  p {
+    margin: 0;
+  }
+}
+
+.legendDivider {
+  height: 0.5rem;
+}
+
+.config {
   bottom: 1rem;
   left: 1rem;
   background-color: white;

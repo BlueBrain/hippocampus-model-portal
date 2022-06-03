@@ -18,6 +18,8 @@
 @import 'antd/lib/pagination/style/index.css';
 @import 'antd/lib/divider/style/index.css';
 @import 'antd/lib/spin/style/index.css';
+@import 'antd/lib/drawer/style/index.css';
+@import 'antd/lib/segmented/style/index.css';
 
 
 @import 'config/_colors';
@@ -207,6 +209,10 @@ section {
 
 .block {
   display: block;
+}
+
+.v-align-middle {
+  vertical-align: middle;
 }
 
 .narrowColumn {

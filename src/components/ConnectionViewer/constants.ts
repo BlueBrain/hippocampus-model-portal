@@ -1,3 +1,15 @@
+export const color = {
+  SOMA:  '#000000',
+
+  PRE_DEND:  '#85CAFF',
+  PRE_AXON:  '#007FE0',
+
+  POST_DEND:  '#F21B18',
+  POST_AXON:  '#F9A09F',
+
+  SYNAPSE:  '#F5F749',
+};
+
 export const NeuriteType = {
   SOMA: 'soma',
 
