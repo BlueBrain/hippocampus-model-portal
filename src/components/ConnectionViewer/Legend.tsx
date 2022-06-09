@@ -16,18 +16,18 @@ const ColoredBox: React.FC<{cssColor: string}> = ({ cssColor }) => {
 const Legend: React.FC = () => {
   return (
     <div className={styles.legend}>
-      <p><ColoredBox cssColor={color.PRE_DEND} /> Pre dend</p>
-      <p><ColoredBox cssColor={color.PRE_AXON} /> Pre axon</p>
+      <div><ColoredBox cssColor={color.PRE_DEND} /> Pre dend</div>
+      <div><ColoredBox cssColor={color.PRE_AXON} /> Pre axon</div>
 
       <div className={styles.legendDivider}></div>
 
-      <p><ColoredBox cssColor={color.POST_DEND} /> Post dend</p>
-      <p><ColoredBox cssColor={color.POST_AXON} /> Post axon</p>
+      <div><ColoredBox cssColor={color.POST_DEND} /> Post dend</div>
+      <div><ColoredBox cssColor={color.POST_AXON} /> Post axon</div>
 
       <div className={styles.legendDivider}></div>
 
-      <p><ColoredBox cssColor={color.SYNAPSE} /> Synapse</p>
-      <p><ColoredBox cssColor={color.SOMA} /> Soma</p>
+      <div><ColoredBox cssColor={color.SYNAPSE} /> Synapse</div>
+      <div><ColoredBox cssColor={color.SOMA} /> Soma</div>
     </div>
   );
 };
