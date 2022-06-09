@@ -135,6 +135,20 @@ export default class ConnectionViewer {
     this.ctrl.renderOnce();
   }
 
+  public swapColors() {
+    const preDendColor = this.material.PRE_B_AXON.color;
+    this.material.PRE_B_AXON.color = this.material.PRE_DEND.color;
+    this.material.PRE_NB_AXON.color = this.material.PRE_DEND.color;
+    this.material.PRE_DEND.color = preDendColor;
+
+    const postDendColor = this.material.POST_AXON.color;
+    this.material.POST_AXON.color = this.material.POST_B_DEND.color;
+    this.material.POST_B_DEND.color = postDendColor;
+    this.material.POST_NB_DEND.color = postDendColor;
+
+    this.ctrl.renderOnce();
+  }
+
   public destroy() {
     Object.values(this.secMesh).forEach(mesh => mesh.geometry.dispose());
 
@@ -190,7 +204,7 @@ export default class ConnectionViewer {
   private initControls() {
     this.controls = new TrackballControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.zoomSpeed = 0.4;
+    this.controls.zoomSpeed = 0.5;
     this.controls.rotateSpeed = 0.8;
   }
 
@@ -343,7 +357,7 @@ export default class ConnectionViewer {
 
   private createSynMesh() {
     const geometries = this.data.synapses.map(synapse => {
-      const geometry = new SphereGeometry(4, 32, 16);
+      const geometry = new SphereGeometry(3.2, 32, 16);
       geometry.translate(...synapse.slice(0, 3));
 
       return geometry;

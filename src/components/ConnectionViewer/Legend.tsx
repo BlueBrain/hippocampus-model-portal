@@ -13,16 +13,17 @@ const ColoredBox: React.FC<{cssColor: string}> = ({ cssColor }) => {
   );
 };
 
-const Legend: React.FC = () => {
+
+const Legend: React.FC<{ colorSwapped: boolean }> = ({ colorSwapped }) => {
   return (
     <div className={styles.legend}>
-      <div><ColoredBox cssColor={color.PRE_DEND} /> Pre dend</div>
-      <div><ColoredBox cssColor={color.PRE_AXON} /> Pre axon</div>
+      <div><ColoredBox cssColor={!colorSwapped ? color.PRE_DEND : color.PRE_AXON } /> Pre dend</div>
+      <div><ColoredBox cssColor={!colorSwapped ? color.PRE_AXON: color.PRE_DEND} /> Pre axon</div>
 
       <div className={styles.legendDivider}></div>
 
-      <div><ColoredBox cssColor={color.POST_DEND} /> Post dend</div>
-      <div><ColoredBox cssColor={color.POST_AXON} /> Post axon</div>
+      <div><ColoredBox cssColor={!colorSwapped ? color.POST_DEND : color.POST_AXON} /> Post dend</div>
+      <div><ColoredBox cssColor={!colorSwapped ? color.POST_AXON : color.POST_DEND} /> Post axon</div>
 
       <div className={styles.legendDivider}></div>
 
