@@ -20,7 +20,7 @@ const defaultVisibilityCtrlState = {
   preDend: true,
   preAxon: true,
   postDend: true,
-  postAxon: true,
+  postAxon: false,
 };
 
 // using bracket access to make linter not complain about non-existent prop
@@ -57,7 +57,10 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     const connectionViewer = new ConnectionViewer(containerNode);
     setConnectionViewer(connectionViewer);
 
-    connectionViewer.init(data).then(onReady);
+    connectionViewer.init(data).then(() => {
+      connectionViewer.setNeuriteVisibility({ [NeuriteType.POST_NB_AXON]: false });
+      onReady();
+    });
 
     return () => {
       if (connectionViewer) connectionViewer.destroy();
