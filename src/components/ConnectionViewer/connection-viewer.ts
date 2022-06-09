@@ -22,6 +22,7 @@ import {
   createSomaGeometryFromPoints,
   deserializeBufferGeometry,
   RendererCtrl,
+  quatFromArray3x3,
 } from './utils';
 import { Pool } from '@/services/threads';
 import { color, NeuriteType } from './constants';
@@ -359,22 +360,47 @@ export default class ConnectionViewer {
   }
 
   private alignCamera() {
+    const preQuat = quatFromArray3x3(this.data.pre.orientation);
+    const postQuat = quatFromArray3x3(this.data.post.orientation);
+
+    const preOrientationVec = new Vector3(0, 1, 0).applyQuaternion(preQuat);
+    const postOrientationVec = new Vector3(0, 1, 0).applyQuaternion(postQuat);
+
     const preSomaPts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
     const postSomaPts = this.data.post.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
+
+    const prePostVec = new Vector3(
+      preSomaPts[0] - postSomaPts[0],
+      preSomaPts[1] - postSomaPts[1],
+      preSomaPts[2] - postSomaPts[2],
+    );
+
+    const orientationMeanVec = new Vector3()
+      .addVectors(preOrientationVec, postOrientationVec)
+      .divideScalar(2)
+      .normalize();
+
+    const camVector = new Vector3().crossVectors(orientationMeanVec, prePostVec);
 
     const preSomaVec = new Vector3(preSomaPts[0], preSomaPts[1], preSomaPts[2]);
     const postSomaVec = new Vector3(postSomaPts[0], postSomaPts[1], postSomaPts[2]);
 
-    const centerVec = new Vector3().addVectors(preSomaVec, postSomaVec).divideScalar(2);
-    const radius = centerVec.distanceTo(preSomaVec);
-
-    this.camera.position.x = centerVec.x;
-    this.camera.position.y = centerVec.y;
+    const somaMeanVec = new Vector3().addVectors(preSomaVec, postSomaVec).divideScalar(2);
+    const radius = somaMeanVec.distanceTo(preSomaVec);
 
     const distance = radius / Math.tan(Math.PI * this.camera.fov / 360) * 2;
+    camVector.setLength(distance);
 
-    this.camera.position.z = distance + centerVec.z;
-    this.controls.target = centerVec;
+    const controlsTargetVec = new Vector3().copy(somaMeanVec);
+    const cameraPositionVec = new Vector3(0, 0, 0)
+      .add(camVector)
+      .add(controlsTargetVec);
+
+      this.camera.up = orientationMeanVec;
+
+      this.camera.position.copy(cameraPositionVec);
+      this.controls.target.copy(controlsTargetVec);
+
     this.ctrl.renderOnce();
   }
 
