@@ -181,7 +181,6 @@ export default class ConnectionViewer {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
-      alpha: true,
     });
 
     const { clientWidth, clientHeight } = this.container;
