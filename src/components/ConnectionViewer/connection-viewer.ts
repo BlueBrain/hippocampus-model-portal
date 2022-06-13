@@ -4,12 +4,14 @@ import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUt
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import {
   AmbientLight,
+  Box3,
   Color,
   DoubleSide,
   Fog,
   Material,
   Mesh,
   MeshLambertMaterial,
+  Object3D,
   PerspectiveCamera,
   PointLight,
   Scene,
@@ -394,26 +396,39 @@ export default class ConnectionViewer {
       .divideScalar(2)
       .normalize();
 
+    const preSomaPos = new Vector3(preSomaPts[0], preSomaPts[1], preSomaPts[2]);
+    const postSomaPos = new Vector3(postSomaPts[0], postSomaPts[1], postSomaPts[2]);
+
+    const somaMeanPos = new Vector3().addVectors(preSomaPos, postSomaPos).divideScalar(2);
+
     const camVector = new Vector3().crossVectors(orientationMeanVec, prePostVec);
 
-    const preSomaVec = new Vector3(preSomaPts[0], preSomaPts[1], preSomaPts[2]);
-    const postSomaVec = new Vector3(postSomaPts[0], postSomaPts[1], postSomaPts[2]);
+    const dendriteObj3D = new Object3D();
+    dendriteObj3D.add(this.secMesh[NeuriteType.PRE_NB_DEND]);
+    dendriteObj3D.add(this.secMesh[NeuriteType.POST_B_DEND]);
+    dendriteObj3D.add(this.secMesh[NeuriteType.POST_NB_DEND]);
+    this.scene.add(dendriteObj3D);
 
-    const somaMeanVec = new Vector3().addVectors(preSomaVec, postSomaVec).divideScalar(2);
-    const radius = somaMeanVec.distanceTo(preSomaVec);
+    const dendriteBBox = new Box3();
+    dendriteBBox.expandByObject(dendriteObj3D);
 
-    const distance = radius / Math.tan(Math.PI * this.camera.fov / 360) * 2;
+    const center = new Vector3();
+    dendriteBBox.getCenter(center);
+
+    const bSize = new Vector3();
+    dendriteBBox.getSize(bSize);
+
+    const radius = Math.max(bSize.x, bSize.y, bSize.z) / 2;
+
+    const distance = radius / Math.tan(Math.PI * this.camera.fov / 360);
     camVector.setLength(distance);
 
-    const controlsTargetVec = new Vector3().copy(somaMeanVec);
-    const cameraPositionVec = new Vector3(0, 0, 0)
-      .add(camVector)
-      .add(controlsTargetVec);
+    const controlsTargetVec = center.clone();
+    const cameraPositionVec = somaMeanPos.clone().add(camVector);
 
-      this.camera.up = orientationMeanVec;
-
-      this.camera.position.copy(cameraPositionVec);
-      this.controls.target.copy(controlsTargetVec);
+    this.camera.position.copy(cameraPositionVec);
+    this.controls.target.copy(controlsTargetVec);
+    this.camera.up.copy(orientationMeanVec);
 
     this.ctrl.renderOnce();
   }
