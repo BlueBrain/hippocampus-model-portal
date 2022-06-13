@@ -2,6 +2,7 @@
 import {
   BufferGeometry,
   Float32BufferAttribute,
+  Matrix3,
   Matrix4,
   Quaternion,
   SphereBufferGeometry,
@@ -128,20 +129,10 @@ export function createSomaGeometryFromPoints(pts) {
   return geometry;
 }
 
-export function rotMatrix4x4FromArray3x3(array3x3) {
-  const rotMatrix = new Matrix4();
-
-  rotMatrix.set(
-    ...array3x3.reduce((acc, row) => ([...acc, ...row, 0]), []),
-    0, 0, 0, 1,
-  );
-
-  return rotMatrix;
-}
-
 
 export function quatFromArray3x3(array3x3) {
-  const rotationMatrix = rotMatrix4x4FromArray3x3(array3x3);
+  const rotMatrix3 = new Matrix3().set(...array3x3.flat());
+  const rotationMatrix = new Matrix4().setFromMatrix3(rotMatrix3);
 
   const quaternion = new Quaternion().setFromRotationMatrix(rotationMatrix);
 
