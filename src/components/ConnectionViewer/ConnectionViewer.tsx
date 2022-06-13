@@ -43,6 +43,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     connectionViewer.swapColors();
   };
 
+  // TODO: move viewer settings to a separate component
   const updateVisibility = (visibility) => {
     connectionViewer.setNeuriteVisibility(visibility);
   };

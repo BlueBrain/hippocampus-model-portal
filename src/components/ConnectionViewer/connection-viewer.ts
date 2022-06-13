@@ -197,7 +197,7 @@ export default class ConnectionViewer {
 
   private initCamera() {
     const { clientWidth, clientHeight } = this.container;
-    this.camera = new PerspectiveCamera(45, clientWidth / clientHeight, 1, 100000);
+    this.camera = new PerspectiveCamera(45, clientWidth / clientHeight, 1, 3000);
     this.scene.add(this.camera);
     this.camera.add(new PointLight(CAMERA_LIGHT_COLOR, 0.9));
   }
@@ -207,6 +207,7 @@ export default class ConnectionViewer {
     this.controls.enableDamping = true;
     this.controls.zoomSpeed = 0.5;
     this.controls.rotateSpeed = 0.8;
+    this.controls.maxDistance = 2600;
   }
 
   private initEvents() {
