@@ -36,7 +36,7 @@
   height: 100% !important;
 }
 
-.settingBtn, .fullscreenBtn, .config, .legend {
+.settingBtn, .fullscreenBtn, .config, .legend, .topRightCtrlGroup {
   position: absolute;
   box-shadow: 0 0 1rem 1.1rem rgba(255, 255, 255, 0.8);
 }
@@ -46,7 +46,7 @@
   left: 1rem;
 }
 
-.fullscreenBtn {
+.topRightCtrlGroup {
   top: 1rem;
   right: 1rem;
 }

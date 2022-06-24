@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Segmented, Drawer, Divider, Switch } from 'antd';
+import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined, CameraOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Segmented, Drawer, Tooltip } from 'antd';
 
 import ConnectionViewer from './connection-viewer';
 import { color, NeuriteType } from './constants';
@@ -31,17 +31,11 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
   const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const fullscreenHandle = useFullScreenHandle();
-  const [isColorSwapped, setIsColorSwapped] = useState(false);
 
   const [preAxonType, setPreAxonType] = useState<VisibilityType>('full');
   const [postDendType, setPostDendType] = useState<VisibilityType>('full');
 
   const [visibilityCtrlState, setVisibilityCtrlState] = useState(defaultVisibilityCtrlState);
-
-  const swapColors = () => {
-    setIsColorSwapped(!isColorSwapped);
-    connectionViewer.swapColors();
-  };
 
   // TODO: move viewer settings to a separate component
   const updateVisibility = (visibility) => {
@@ -54,7 +48,12 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     } else {
       fullscreenHandle.enter();
     }
-  }
+  };
+
+  const downloadRender = () => {
+    const imageName = `exemplar_connection_render_${data.pre.mtype}-${data.post.mtype}`;
+    connectionViewer.downloadRender(imageName);
+  };
 
   useEffect(() => {
     if (!data || !containerRef || !containerRef.current) return;
@@ -81,23 +80,36 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
         handle={fullscreenHandle}
       >
         <div className={styles.container} ref={containerRef}>
-          <Button
-            className={styles.settingBtn}
-            size="small"
-            onClick={() => setSettingDrawerVisible(true)}
-            icon={<SettingOutlined />}
-          />
-
-          {isFullscreenAvailable && (
+          <Tooltip title="Viewer settings">
             <Button
+              className={styles.settingBtn}
               size="small"
-              className={styles.fullscreenBtn}
-              onClick={toggleFullscreen}
-              icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              onClick={() => setSettingDrawerVisible(true)}
+              icon={<SettingOutlined />}
             />
-          )}
+          </Tooltip>
 
-          <Legend colorSwapped={isColorSwapped}/>
+          <div className={styles.topRightCtrlGroup}>
+            <Tooltip title="Download render as a PNG">
+              <Button
+                size="small"
+                onClick={downloadRender}
+                icon={<CameraOutlined />}
+              />
+            </Tooltip>
+            {isFullscreenAvailable && (
+              <Tooltip title="Fullscreen">
+                <Button
+                  size="small"
+                  className="ml-1"
+                  onClick={toggleFullscreen}
+                  icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                />
+              </Tooltip>
+            )}
+          </div>
+
+          <Legend />
 
           <Drawer
             title="Viewer settings"
@@ -115,7 +127,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             <div>
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': !isColorSwapped ? color.PRE_DEND: color.PRE_AXON } as React.CSSProperties}
+                style={{ '--checkbox-color': color.PRE_DEND } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.preDend}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -132,7 +144,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             <div className="mt-1">
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': !isColorSwapped ? color.PRE_AXON : color.PRE_DEND } as React.CSSProperties}
+                style={{ '--checkbox-color': color.PRE_AXON } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.preAxon}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -165,7 +177,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             <div>
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': !isColorSwapped ? color.POST_DEND : color.POST_AXON } as React.CSSProperties}
+                style={{ '--checkbox-color': color.POST_DEND } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.postDend}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -196,7 +208,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             <div className="mt-1">
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': !isColorSwapped ? color.POST_AXON : color.POST_DEND } as React.CSSProperties}
+                style={{ '--checkbox-color': color.POST_AXON } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.postAxon}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -210,11 +222,6 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 Axon
               </Checkbox>
             </div>
-
-            <Divider />
-            <h3>Colors</h3>
-
-            <p>Swap color shades <Switch style={{ marginLeft: '0.5rem' }} onChange={swapColors} /></p>
           </Drawer>
         </div>
       </FullScreen>

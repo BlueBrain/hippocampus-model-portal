@@ -1,8 +1,8 @@
 export const color = {
   SOMA:  '#000000',
 
-  PRE_DEND:  '#85CAFF',
-  PRE_AXON:  '#007FE0',
+  PRE_DEND:  '#007FE0',
+  PRE_AXON:  '#85CAFF',
 
   POST_DEND:  '#F21B18',
   POST_AXON:  '#F9A09F',

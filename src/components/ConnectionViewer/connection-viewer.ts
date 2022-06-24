@@ -26,6 +26,7 @@ import {
   RendererCtrl,
   quatFromArray3x3,
 } from './utils';
+import { saveAs } from 'file-saver';
 import { Pool } from '@/services/threads';
 import { color, NeuriteType } from './constants';
 
@@ -137,18 +138,22 @@ export default class ConnectionViewer {
     this.ctrl.renderOnce();
   }
 
-  public swapColors() {
-    const preDendColor = this.material.PRE_B_AXON.color;
-    this.material.PRE_B_AXON.color = this.material.PRE_DEND.color;
-    this.material.PRE_NB_AXON.color = this.material.PRE_DEND.color;
-    this.material.PRE_DEND.color = preDendColor;
+  public downloadRender(filename) {
+    const { clientWidth, clientHeight } = this.renderer.domElement.parentElement;
 
-    const postDendColor = this.material.POST_AXON.color;
-    this.material.POST_AXON.color = this.material.POST_B_DEND.color;
-    this.material.POST_B_DEND.color = postDendColor;
-    this.material.POST_NB_DEND.color = postDendColor;
+    const renderer = new WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      preserveDrawingBuffer: true,
+      physicallyCorrectColors: true,
+    });
 
-    this.ctrl.renderOnce();
+    renderer.setSize(clientWidth * 3, clientHeight * 3);
+
+    renderer.render(this.scene, this.camera);
+
+    renderer.domElement.toBlob(blob => saveAs(blob, `${filename}.png`));
+    renderer.dispose();
   }
 
   public destroy() {
@@ -253,10 +258,8 @@ export default class ConnectionViewer {
   }
 
   private async indexSecData() {
-    console.time('secDataIndex');
     this.extractMorphologySecData(CellType.PRE, this.data.pre.morph);
     this.extractMorphologySecData(CellType.POST, this.data.post.morph);
-    console.timeEnd('secDataIndex');
   }
 
   private extractMorphologySecData(cellType: number, sections) {
