@@ -27,7 +27,7 @@ const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {
     {},
   );
 
-  const withQuickSelectorComponent: React.FC = () => {
+  const WithQuickSelectorComponent: React.FC = () => {
     const router = useRouter();
 
     const initialStateObj = getStateObj(router);
@@ -103,7 +103,7 @@ const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {
     </>);
   };
 
-  return withQuickSelectorComponent;
+  return WithQuickSelectorComponent;
 }
 
 export default withQuickSelector;

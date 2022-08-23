@@ -198,7 +198,7 @@ const NwbTutorialView: React.FC = () => {
           <p>
             (Please note that in the code below it is assumed that for each stimulus there is a response,
             and vice versa. The tuple <code>(start_index, index_count, PatchClampSeries)</code>
-            will only contain <code>None</code>'s if a trace does not exist.)
+            will only contain <code>None</code>&apos;s if a trace does not exist.)
           </p>
 
           <small>In [13]:</small>

@@ -8,7 +8,7 @@ type PreselectionProps = {
 
 const withPreselection = (WrappedComponent, options: PreselectionProps) => {
 
-  const withPreselectionComponent: React.FC = () => {
+  const WithPreselectionComponent: React.FC = () => {
     const router = useRouter();
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const withPreselection = (WrappedComponent, options: PreselectionProps) => {
     return (<WrappedComponent />);
   };
 
-  return withPreselectionComponent;
+  return WithPreselectionComponent;
 }
 
 export default withPreselection;
