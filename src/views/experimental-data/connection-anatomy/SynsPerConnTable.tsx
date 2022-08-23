@@ -1,4 +1,5 @@
 import React from 'react';
+import { Table } from 'antd';
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
@@ -305,7 +306,96 @@ const SynsPerConnTable = () => {
         data={data}
         rowKey={({ from, to }) => `${from}_${to}`}
       />
-      <small><sup>[1]</sup> Additional calculation.</small> <br/>
+      <small><sup>[1]</sup> Additional calculations (see below).</small>
+
+      <h3 className="mt-3">Calculations</h3>
+
+      <h4><a
+        href="https://doi.org/10.1126/science.8085161"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sik et al., 1995
+      </a></h4>
+      <p>
+        Overall, 99 boutons in contact with 64 parvalbumin-immunoreactive neurons were counted (Fig. 2).
+        Thirty-five contacts were on somata and the remaining ones on thick proximal dendrites.
+        The majority of the targets were contacted by a single bouton, whereas 13 neurons received
+        two to four boutons from the biocytin filled cell.
+      </p>
+      <Table
+        size="small"
+        className="mb-1"
+        style={{ width: '420px' }}
+        dataSource={[
+          { name: '', conns: 51, nsyns: 1, totalSyns: 1, mean: 1, key: 1 },
+          { name: '', conns: 13, nsyns: '2-4', totalSyns: 48, mean: 3.6923, key: 2 }
+        ]}
+        columns={[
+          { title: '', dataIndex: 'name' },
+          { title: 'Conns', dataIndex: 'conns' },
+          { title: 'N. syns per conns', dataIndex: 'nsyns' },
+          { title: 'Total syns', dataIndex: 'totalSyns' },
+          { title: 'Mean', dataIndex: 'mean' },
+        ]}
+        pagination={false}
+        bordered
+        summary={() => (
+          <Table.Summary.Row>
+            <Table.Summary.Cell index={0}><strong>Total</strong></Table.Summary.Cell>
+            <Table.Summary.Cell index={1}><strong>64</strong></Table.Summary.Cell>
+            <Table.Summary.Cell index={2} />
+            <Table.Summary.Cell index={3}><strong>99</strong></Table.Summary.Cell>
+            <Table.Summary.Cell index={4} />
+          </Table.Summary.Row>
+        )}
+      />
+      <p>
+        Mean = 99/64 = 1.54688, SD = 1.0831.
+      </p>
+
+      <h4><a
+        href="https://doi.org/10.1016/0306-4522(96)00251-5"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Deuchars and Thomson, 1996
+      </a></h4>
+      <p>
+        Number of synapses per connection, data: 1, 1 ,1, 1, 1, 2.
+        Mean = 1.1666, std = 0.4082, n = 6, sem = 0.1666.
+      </p>
+
+      <h4><a
+        href="https://doi.org/10.1111/j.1469-7793.1998.755bv.x"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Vida et al., 1998
+      </a></h4>
+      <p>
+        Number of synapses per connection, data: 6, 6, 4.
+        Mean = 5.3333, std = 1.1547, n = 3, sem = 0.6666.
+      </p>
+
+      <h4><a
+        href="https://doi.org/10.1152/jn.00831.2010"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ali 2011
+      </a></h4>
+      <p>
+        On average 2–5 close apposition of presynaptic boutons on postsynaptic dendrites were observed
+        at the light micro-scope level. <br/>
+        Note that the range 2-5 refers to the first synaptic type described in the paper,
+        that is the one from LM-SCA to SCA cells (n=7) and SP basket cells (n=2).
+      </p>
+      <p>
+        Range, data: 2 - 5.
+        Mean = 3.5, max error = 1.5. <br/>
+        <small>We used the max error as an estimation of the std.</small>
+      </p>
     </>
   );
 };

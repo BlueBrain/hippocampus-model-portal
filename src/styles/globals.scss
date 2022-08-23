@@ -53,7 +53,7 @@ a {
   cursor: pointer;
 }
 
-p {
+p, li {
   font-weight: 300;
 }
 
@@ -235,6 +235,11 @@ section {
 
 .ant-table-thead > tr > th {
   font-weight: bold;
+}
+
+tfoot.ant-table-summary {
+  background-color: #fafafa;
+  font-weight: 500;
 }
 
 .responsiveTable.no-left-margin.nested-table.xs-column {
