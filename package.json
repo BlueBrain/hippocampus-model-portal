@@ -36,7 +36,7 @@
     "smoothscroll-polyfill": "^0.4.4",
     "swcmorphologyparser": "^0.1.11",
     "systemjs": "^6.12.1",
-    "three": "^0.141.0"
+    "three": "^0.143.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^12.0.10",

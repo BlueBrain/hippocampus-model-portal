@@ -16,7 +16,6 @@ const nextConfig = {
   basePath: basePath,
   assetPrefix: `${basePath}/`,
   trailingSlash: true,
-  webpack5: true,
   swcMinify: true,
   images: {
     path: `${basePath}/_next/image`,
@@ -29,10 +28,9 @@ const nextConfig = {
   },
   compress: false,
   productionBrowserSourceMaps: true,
+  output: 'standalone',
   experimental: {
     esmExternals: true,
-    staticPageGenerationTimeout: 240,
-    outputStandalone: true,
   },
   async redirects() {
     return [
