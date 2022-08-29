@@ -40,6 +40,7 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
             value: record[(column as ColumnType<Type>).dataIndex],
           });
         }
+
         const children = (column as GroupColumnType<Type>).children;
         if (children) {
           const childrenValue = children.map((child) => (
@@ -52,8 +53,10 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
             value: childrenValue,
           });
         }
+
         return null;
       });
+
       const nestedColumns: ColumnType<{key: any; value: any}>[] = [
         {
           dataIndex: 'key',
@@ -82,13 +85,14 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
     },
     responsive: ['xs' as Breakpoint],
   };
+
   const tableColumns = columns.map((column) => (
     {
       ...column,
       title: column.title,
       dataIndex: (column as ColumnType<Type>).dataIndex,
       responsive: ['sm' as Breakpoint],
-      render: (value: any, record: Type) => highlightValue(value, record.isHighlight),
+      render: (value: any, record: Type, index: number) => highlightValue(column.render ? column.render(value, record, index) : value, record.isHighlight),
       children: (column as GroupColumnType<Type>).children?.map(child => ({ render: (value: any, record: Type) => highlightValue(value, record.isHighlight), ...child })),
     }
   ))
