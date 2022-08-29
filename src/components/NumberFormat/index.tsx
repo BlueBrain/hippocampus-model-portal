@@ -1,7 +1,5 @@
 import React from 'react';
 
-import isNumber from 'lodash/isNumber';
-
 
 type NumberFormatProps = {
   value?: any;
@@ -12,11 +10,13 @@ type NumberFormatProps = {
 };
 
 export function formatNumber(value, significantFigures = 5, thousandSeparator = true, prefix = '', suffix = '') {
-  if (!isNumber(value)) return value;
+  const num = parseFloat(value);
+
+  if (!Number.isFinite(num)) return value;
 
   const formatted = thousandSeparator
-    ? value.toLocaleString('en', { maximumSignificantDigits: significantFigures })
-    : value.toPrecision(significantFigures);
+    ? num.toLocaleString('en', { maximumSignificantDigits: significantFigures })
+    : num.toPrecision(significantFigures);
 
   return `${prefix}${formatted}${suffix}`;
 }
