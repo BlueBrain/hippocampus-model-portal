@@ -1,0 +1,30 @@
+﻿[
+  {
+    "from": "PC",
+    "to": "PC",
+    "mean": 148.5,
+    "sd": "-",
+    "sem": "-",
+    "uom": "ms",
+    "species": "Sprague Dawley rat",
+    "ageWeight": "6-12 Weeks",
+    "region": "CA1",
+    "nAnimals": "-",
+    "nCells": 52,
+    "ref": "Andrasfalvy and Magee, 2001"
+  },
+  {
+    "from": "PC",
+    "to": "CCK+ Interneurons",
+    "mean": 298.75,
+    "sd": "-",
+    "sem": "-",
+    "uom": "ms",
+    "species": "Mus musculus",
+    "ageWeight": "P3-P8",
+    "region": "CA1",
+    "nAnimals": 9,
+    "nCells": 24,
+    "ref": "Matta et al., 2013"
+  }
+]

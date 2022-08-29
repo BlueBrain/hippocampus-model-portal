@@ -1,0 +1,44 @@
+﻿[
+  {
+    "from": "PC",
+    "to": "PC",
+    "mean": 1.22,
+    "sd": "-",
+    "sem": "-",
+    "uom": "-",
+    "species": "Wistar rat",
+    "ageWeight": "P1-P8",
+    "region": "CA1",
+    "nAnimals": "-",
+    "nCells": 23,
+    "ref": "Myme, Sugino, Turrigiano, and Nelson, 2003, data from Groc, Gustafsson, and Hanse, 2002"
+  },
+  {
+    "from": "PC",
+    "to": "CCK+ Interneurons",
+    "mean": 0.86,
+    "sd": "-",
+    "sem": "-",
+    "uom": "-",
+    "species": "Mus musculus",
+    "ageWeight": "P3-P21",
+    "region": "CA1",
+    "nAnimals": 51,
+    "nCells": 88,
+    "ref": "Matta et al., 2013"
+  },
+  {
+    "from": "PC",
+    "to": "other Interneurons",
+    "mean": 0.28,
+    "sd": 0.14,
+    "sem": 0.0404145188432738,
+    "uom": "-",
+    "species": "Mus musculus",
+    "ageWeight": "P17-P23",
+    "region": "CA1",
+    "nAnimals": "-",
+    "nCells": 12,
+    "ref": "Le Roux et al., 2013"
+  }
+]

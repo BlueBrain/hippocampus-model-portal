@@ -1,16 +1,21 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Table } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import ConductanceModelSection from './connection-physiology/ConductanceModelSection';
+import TMModelSection from './connection-physiology/TMModelSection';
+import AMPAKineticsSection from './connection-physiology/AMPAKineticsSection';
+import NMDAKineticsSection from './connection-physiology/NMDAKineticsSection';
+
+import selectorStyle from '@/styles/selector.module.scss';
 
 
 const ConnectionPhysiologyView: React.FC = () => {
@@ -73,14 +78,41 @@ const ConnectionPhysiologyView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'tbd', label: 'TBD' },
+          { id: 'conductanceModelSection', label: 'Conductance Model' },
+          { id: 'TMModelSection', label: 'TM Model' },
+          { id: 'AMPAKineticsSection', label: 'AMPA Kinetics' },
+          { id: 'NMDAKineticsSection', label: 'NMDA Kinetics' },
         ]}
       >
         <Collapsible
-          id="tbd"
-          title="TBD"
+          id="conductanceModelSection"
+          title="Conductance Model"
         >
-          <h3 className="text-tmp">TBD</h3>
+          <ConductanceModelSection />
+        </Collapsible>
+
+        <Collapsible
+          id="TMModelSection"
+          className="mt-4"
+          title="TM Model"
+        >
+          <TMModelSection />
+        </Collapsible>
+
+        <Collapsible
+          id="AMPAKineticsSection"
+          className="mt-4"
+          title="AMPA Kinetics"
+        >
+          <AMPAKineticsSection />
+        </Collapsible>
+
+        <Collapsible
+          id="NMDAKineticsSection"
+          className="mt-4"
+          title="NMDA Kinetics"
+        >
+          <NMDAKineticsSection />
         </Collapsible>
       </DataContainer>
     </>
