@@ -3,10 +3,12 @@ import React from 'react';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
+import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 
 import PSCRiseTimeData from './ampa_kinetics_-_psc_rise_time.json';
 import PSCTauDecayData from './ampa_kinetics_-_psc_tau_decay.json';
+import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
 
@@ -53,6 +55,7 @@ const PSCRiseTimeColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
@@ -99,6 +102,7 @@ const PSCTauDecayColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 

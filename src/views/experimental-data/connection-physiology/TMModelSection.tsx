@@ -3,9 +3,11 @@ import React from 'react';
 import NumberFormat from '@/components/NumberFormat';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
+import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 
 import PSCAmplitudeData from './tm_model_-_psc_amplitude.json';
+import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
 
@@ -52,6 +54,7 @@ const PSCAmplitudeColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 

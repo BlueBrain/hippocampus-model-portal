@@ -3,11 +3,13 @@ import React from 'react';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
+import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 
 import RatioData from './nmda_kinetics_-_nmda_ratio.json';
 import TauDecayData from './nmda_kinetics_-_nmda_tau_decay.json';
 import TauRiseData from './nmda_kinetics_-_nmda_tau_rise.json';
+import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
 const RatioColumns = [
@@ -62,6 +64,7 @@ const RatioColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
@@ -112,6 +115,7 @@ const TauDecayColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
@@ -162,6 +166,7 @@ const TauRiseColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 

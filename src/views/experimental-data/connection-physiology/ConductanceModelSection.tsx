@@ -4,10 +4,12 @@ import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
+import TextWithRefs from '@/components/TextWithRefs';
 
 import reversalPotentialData from './conductance_model_-_reversal_potential.json';
 import PSPAmplitudeData from './conductance_model_-_psp_amplitude.json';
 import PSPCVData from './conductance_model_-_psp_cv.json';
+import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
 const ReversalPotentialColumns = [
@@ -39,6 +41,7 @@ const ReversalPotentialColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
@@ -85,6 +88,7 @@ const PSPAmplitudeColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
@@ -131,6 +135,7 @@ const PSPCVColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
