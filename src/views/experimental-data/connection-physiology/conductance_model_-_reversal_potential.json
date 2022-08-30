@@ -11,7 +11,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Moradi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "BS",
@@ -25,7 +25,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Moradi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "CCKBC",
@@ -39,7 +39,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Prince et al., 2005"
+        "ref": "Moradi and Ascoli, 2019; data from Price et al., 2005"
     },
     {
         "from": "CCKBC",
@@ -53,7 +53,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Fuentealba et al. 2008"
+        "ref": "Moradi and Ascoli, 2019; data from Fuentealba et al. 2008"
     },
     {
         "from": "Ivy",
@@ -67,7 +67,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Fuentealba et al. 2008"
+        "ref": "Moradi and Ascoli, 2019; data from Fuentealba et al. 2008"
     },
     {
         "from": "OLM",
@@ -81,7 +81,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Moradi and Ascoli, 2019; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "OLM",
@@ -95,7 +95,7 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Elfant et al., 2008"
+        "ref": "Moradi and Ascoli, 2019; data from Elfant et al., 2008"
     },
     {
         "from": "OLM",
@@ -109,6 +109,6 @@
         "region": "CA1",
         "nAnimals": "-",
         "nCells": "-",
-        "ref": "Morandi and Ascoli, 2019; data from Elfant et al., 2008"
+        "ref": "Moradi and Ascoli, 2019; data from Elfant et al., 2008"
     }
 ]
