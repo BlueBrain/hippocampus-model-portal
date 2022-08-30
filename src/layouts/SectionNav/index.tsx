@@ -67,7 +67,7 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems }) => {
           key={navItem.id}
           onClick={() => scrollTo(navItem.id)}
         >
-          <div className={style.circle}></div>
+          <div className={style.circle} title={navItem.label} />
           <span className={style.label}>{navItem.label}</span>
         </div>
       ))}
