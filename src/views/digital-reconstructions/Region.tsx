@@ -13,7 +13,7 @@ import Collapsible from '../../components/Collapsible';
 import selectorStyle from '../../styles/selector.module.scss';
 
 
-const SynapticPathwaysView: React.FC = () => {
+const SubregionView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,8 +29,8 @@ const SynapticPathwaysView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Synaptic Pathways"
-                subtitle="Reconstruction Data"
+                title="Region"
+                subtitle="Digital Reconstructions"
               />
               <div role="information">
                 <InfoBox>
@@ -58,7 +58,7 @@ const SynapticPathwaysView: React.FC = () => {
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
                   <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
+                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Selector&font=bebas"
                     width="640"
                     height="480"
                     unoptimized
@@ -73,15 +73,14 @@ const SynapticPathwaysView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'synapticPathwaysSection', label: 'Synaptic pathways' },
+          { id: 'regionSection', label: 'Region' },
         ]}
       >
         <Collapsible
-          id="synapticPathwaysSection"
-          title="Synaptic pathways"
+          id="regionSection"
+          title="Region"
         >
-          <h3 className="text-tmp">Synaptic connectivity morphological generalisation</h3>
-          <p className="text-tmp">Text + illustration</p>
+          <h3 className="text-tmp">Text + factsheet</h3>
         </Collapsible>
       </DataContainer>
     </>
@@ -89,4 +88,4 @@ const SynapticPathwaysView: React.FC = () => {
 };
 
 
-export default SynapticPathwaysView;
+export default SubregionView;

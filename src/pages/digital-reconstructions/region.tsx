@@ -1,13 +1,13 @@
 import Head from 'next/head';
 
-import NeuronsView from '../../views/reconstruction-data/Neurons';
+import RegionView from '@/views/digital-reconstructions/Region';
 
 
-export default function RecDataNeuronsPage() {
+export default function DigRecRegionPage() {
   return (
     <>
       <Head>
-        <title>Sub-region / Reconstruction data / SSCx Portal</title>
+        <title>Region / Digital reconstructions / SSCx Portal</title>
         {/* TODO: add description */}
         <meta
           name="description"
@@ -15,7 +15,7 @@ export default function RecDataNeuronsPage() {
         />
       </Head>
 
-      <NeuronsView />
+      <RegionView />
     </>
   );
 }

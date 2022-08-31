@@ -31,7 +31,7 @@ function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
-const SynapticPathwaysView: React.FC = () => {
+const ConnectionsView: React.FC = () => {
   const router = useRouter();
 
   const { prelayer, postlayer, pretype, posttype } = router.query as Record<string, string>;
@@ -161,7 +161,7 @@ const SynapticPathwaysView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Synaptic Pathways"
+                title="Connections"
                 subtitle="Digital Reconstructions"
               />
               <div role="information">
@@ -314,4 +314,4 @@ const SynapticPathwaysView: React.FC = () => {
 };
 
 
-export default SynapticPathwaysView;
+export default ConnectionsView;

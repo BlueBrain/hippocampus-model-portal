@@ -3,17 +3,17 @@ import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import selectorStyle from '@/styles/selector.module.scss';
 
 
-const ConnectionAnatomyView: React.FC = () => {
+const SchafferCollateralsView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,8 +29,8 @@ const ConnectionAnatomyView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Sub-region"
-                subtitle="Reconstruction Data"
+                title="Schaffer collaterals"
+                subtitle="Digital Reconstructions"
               />
               <div role="information">
                 <InfoBox>
@@ -58,7 +58,7 @@ const ConnectionAnatomyView: React.FC = () => {
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
                   <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
+                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Selector&font=bebas"
                     width="640"
                     height="480"
                     unoptimized
@@ -73,14 +73,14 @@ const ConnectionAnatomyView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'subregionGeneralisationSection', label: 'Sub-region' },
+          { id: 'tbd', label: 'TBD' },
         ]}
       >
         <Collapsible
-          id="subregionGeneralisationSection"
-          title="Sub-region generalisation"
+          id="tbd"
+          title="TBD"
         >
-          <h3 className="text-tmp">Text + illustration</h3>
+          <h3 className="text-tmp">TBD</h3>
         </Collapsible>
       </DataContainer>
     </>
@@ -88,4 +88,4 @@ const ConnectionAnatomyView: React.FC = () => {
 };
 
 
-export default ConnectionAnatomyView;
+export default SchafferCollateralsView;

@@ -3,17 +3,17 @@ import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import selectorStyle from '@/styles/selector.module.scss';
 
 
-const SubregionView: React.FC = () => {
+const MorphologyLibraryView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,8 +29,8 @@ const SubregionView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Sub-region"
-                subtitle="Digital Reconstructions"
+                title="Morphology library"
+                subtitle="Reconstruction Data"
               />
               <div role="information">
                 <InfoBox>
@@ -72,29 +72,19 @@ const SubregionView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[
-          { id: 'subregionSection', label: 'Sub-region' },
-          { id: 'simulationsSection', label: 'Simulations' },
-        ]}
+        navItems={[]}
       >
         <Collapsible
-          id="subregionSection"
-          title="Sub-region"
+          id="tbd"
+          title="TBD"
         >
-          <h3 className="text-tmp">Text + subregion factsheet</h3>
+          <h3 className="text-tmp">Text description</h3>
         </Collapsible>
 
-        <Collapsible
-          id="simulationsSection"
-          title="Simulations"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
-        </Collapsible>
       </DataContainer>
     </>
   );
 };
 
 
-export default SubregionView;
+export default MorphologyLibraryView;

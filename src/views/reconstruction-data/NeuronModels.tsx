@@ -3,17 +3,17 @@ import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import selectorStyle from '@/styles/selector.module.scss';
 
 
-const NeuronsView: React.FC = () => {
+const NeuronModelsView: React.FC = () => {
   return (
     <>
       <Filters hasData={true}>
@@ -29,7 +29,7 @@ const NeuronsView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Neurons"
+                title="Neuron models"
                 subtitle="Reconstruction Data"
               />
               <div role="information">
@@ -72,41 +72,19 @@ const NeuronsView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[
-          { id: 'morphologyTypeSection', label: 'M-type' },
-          { id: 'electrophysiologyTypeSection', label: 'E-type' },
-          { id: 'morphoElectrophysiologicalInstanceSection', label: 'ME-type instance' },
-        ]}
+        navItems={[]}
       >
         <Collapsible
-          id="morphologyTypeSection"
-          title="Morphology-type"
+          id="tbd"
+          title="TBD"
         >
-          <h3 className="text-tmp">Neuron morphology generalization</h3>
-          <p className="text-tmp">Text + illustration</p>
+          <h3 className="text-tmp">Text description</h3>
         </Collapsible>
 
-        <Collapsible
-          id="electrophysiologyTypeSection"
-          title="Electrophysiology-type"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Feature-based generalization</h3>
-          <p className="text-tmp">Text + illustration</p>
-        </Collapsible>
-
-        <Collapsible
-          id="morphoElectrophysiologicalInstanceSection"
-          title="Morpho-electrophysiological instance"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Neuron morpholo-electrophysiological generalization</h3>
-          <p className="text-tmp">Text + illustration</p>
-        </Collapsible>
       </DataContainer>
     </>
   );
 };
 
 
-export default NeuronsView;
+export default NeuronModelsView;

@@ -85,16 +85,32 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-region',
-                href: '/reconstruction-data/subregion/',
+                label: 'Volume',
+                href: '/reconstruction-data/volume/',
               },
               {
-                label: 'Synaptic Pathways',
-                href: '/reconstruction-data/synaptic-pathways/',
+                label: 'Cell composition',
+                href: '/reconstruction-data/cell-composition/',
               },
               {
-                label: 'Neurons',
-                href: '/reconstruction-data/neurons/',
+                label: 'Morphology library',
+                href: '/reconstruction-data/morphology-library/',
+              },
+              {
+                label: 'Neuron models',
+                href: '/reconstruction-data/neuron-models/',
+              },
+              {
+                label: 'Neuron model library',
+                href: '/reconstruction-data/neuron-model-library/',
+              },
+              {
+                label: 'Connections',
+                href: '/reconstruction-data/connections/',
+              },
+              {
+                label: 'Synapses',
+                href: '/reconstruction-data/synapses/',
               }
             ]}
           />
@@ -126,16 +142,20 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-region',
-                href: '/digital-reconstructions/subregion/',
+                label: 'Region',
+                href: '/digital-reconstructions/region/',
               },
               {
-                label: 'Microcircuits',
-                href: '/digital-reconstructions/microcircuits/',
+                label: 'Schaffer Collaterals',
+                href: '/digital-reconstructions/schaffer-collaterals/',
               },
               {
-                label: 'Synaptic Pathways',
-                href: '/digital-reconstructions/synaptic-pathways/',
+                label: 'Connections',
+                href: '/digital-reconstructions/connections/',
+              },
+              {
+                label: 'Synapses',
+                href: '/digital-reconstructions/synapses/',
               },
               {
                 label: 'Neurons',

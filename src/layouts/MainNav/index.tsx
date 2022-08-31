@@ -201,15 +201,20 @@ const MainNav: React.FC = () => {
         </SubmenuGroup>
 
         <SubmenuGroup label="Reconstruction Data" background="grey-2">
-          <SubmenuGroupLink label="Sub-region" href="/reconstruction-data/subregion/" />
-          <SubmenuGroupLink label="Synaptic Pathways" href="/reconstruction-data/synaptic-pathways/" />
-          <SubmenuGroupLink label="Neurons" href="/reconstruction-data/neurons/" />
+          <SubmenuGroupLink label="Volume" href="/reconstruction-data/volume/" />
+          <SubmenuGroupLink label="Cell composition" href="/reconstruction-data/cell-composition/" />
+          <SubmenuGroupLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
+          <SubmenuGroupLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
+          <SubmenuGroupLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
+          <SubmenuGroupLink label="Connections" href="/reconstruction-data/connections/" />
+          <SubmenuGroupLink label="Synapses" href="/reconstruction-data/synapses/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Digital Reconstructions" background="grey-3">
-          <SubmenuGroupLink label="Sub-region" href="/digital-reconstructions/subregion/" />
-          <SubmenuGroupLink label="Microcircuits" href="/digital-reconstructions/microcircuits/" />
-          <SubmenuGroupLink label="Synaptic Pathways" href="/digital-reconstructions/synaptic-pathways/" />
+          <SubmenuGroupLink label="Region" href="/digital-reconstructions/region/" />
+          <SubmenuGroupLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
+          <SubmenuGroupLink label="Connections" href="/digital-reconstructions/connections/" />
+          <SubmenuGroupLink label="Synapses" href="/digital-reconstructions/synapses/" />
           <SubmenuGroupLink label="Neurons" href="/digital-reconstructions/neurons/" />
         </SubmenuGroup>
 
