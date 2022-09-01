@@ -8,6 +8,7 @@ import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 
 import anatomyData from './sc-anatomy.json';
+import doiIndex from './ref-doi.json';
 
 
 type TableEntry = {
@@ -100,7 +101,7 @@ const anatomyColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text) => <TextWithRefs text={text} doiIndex={{}} />
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 

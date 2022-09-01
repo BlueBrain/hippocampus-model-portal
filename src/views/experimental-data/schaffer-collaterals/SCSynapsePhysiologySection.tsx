@@ -7,6 +7,7 @@ import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 
 import synapsePhysiologyData from './sc-synaptic-physiology.json';
+import doiIndex from './ref-doi.json';
 
 
 type TableEntry = {
@@ -75,7 +76,7 @@ const synapsePhysiologyColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text) => <TextWithRefs text={text} doiIndex={{}} />
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
 ];
 
