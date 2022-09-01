@@ -103,6 +103,7 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
       className="responsiveTable no-left-margin nested-table xs-column"
       bordered
       size="small"
+      scroll={{ x: 'max-content' }}
       rowKey={(record: any) => record.key || `${record.dataIndex}__`}
       pagination={false}
       columns={tableColumns}

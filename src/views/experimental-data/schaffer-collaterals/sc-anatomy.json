@@ -1,0 +1,53 @@
+[
+  {
+    "from": "SC",
+    "to": "EXC",
+    "expFeature": "Number of afferent synapses",
+    "min": 13059,
+    "max": 28697,
+    "mean": 20878,
+    "maxError": 11058,
+    "sd": "-",
+    "sem": "-",
+    "species": "Wistar rat",
+    "ageWeight": "300 g",
+    "region": "CA1",
+    "nAnimals": 7,
+    "nSynapses": "-",
+    "ref": "Bezaire and Soltesz, 2013, data from Megias et al., 2001"
+  },
+  {
+    "from": "SC",
+    "to": "INH",
+    "expFeature": "Number of afferent synapses",
+    "min": 7952,
+    "max": 17476,
+    "mean": 12714,
+    "maxError": 6734,
+    "sd": "-",
+    "sem": "-",
+    "species": "Wistar rat",
+    "ageWeight": ">110 g",
+    "region": "CA1",
+    "nAnimals": 4,
+    "nSynapses": 70,
+    "ref": "Bezaire and Soltesz, 2013, data from Takacs et al., 2012"
+  },
+  {
+    "from": "SC",
+    "to": "PV+ Interneurons",
+    "expFeature": "Number of synapses per connection",
+    "min": 1,
+    "max": 3,
+    "mean": 1.19,
+    "maxError": "-",
+    "sd": 0.48,
+    "sem": 0.029,
+    "species": "Sprague-Dawley rat",
+    "ageWeight": "200-300 g",
+    "region": "CA3",
+    "nAnimals": "-",
+    "nSynapses": 274,
+    "ref": "Sik, Tamamaki, and Freund, 1993"
+  }
+]
