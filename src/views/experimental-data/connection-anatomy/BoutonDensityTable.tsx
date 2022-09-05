@@ -166,7 +166,7 @@ const columns = [
     dataIndex: 'specie' as keyof BoutonDensity
   },
   {
-    title: 'Age / Weight',
+    title: 'Weight',
     dataIndex: 'ageWeight' as keyof BoutonDensity
   },
   {
@@ -232,7 +232,7 @@ const BoutonDenisityTable = () => {
         <li>4.02 ± 1.5 and 4.31 ± 1.33, respectively, for first-order segments.</li>
         <li>10.04 ± 2.98 and 9.15 ± 2.56 for second-order segments.</li>
         <li>14.78 ± 3.42 and 13.51 ± 5.36 for third-order segments.</li>
-        <li>12.34 ± 2.6 and 10.04 ± 3.57 for fourth-order segments</li>
+        <li>12.34 ± 2.6 and 10.04 ± 3.57 for fourth-order segments.</li>
       </ul>
 
       <h4><a
@@ -243,26 +243,10 @@ const BoutonDenisityTable = () => {
         Bezaire and Soltesz, 2013
       </a></h4>
       <p>
-        In a representative CA1 pyramidal axonal arbor, segments of third or fourth order
-        constituted most of the axonal length; therefore we used an average of the bouton densities
-        of the third and fourth order segments (13.56 boutons per 100 lm)
+        In a representative CA1 pyramidal axonal arbor, segments of third or fourth order constituted
+        most of the axonal length; therefore we used an average of the bouton densities of the third and
+        fourth order segments that is 13.56 ± 3.01 boutons per 100 um).
       </p>
-
-      <Table
-        size="small"
-        style={{ width: '360px' }}
-        dataSource={[
-          {mean: 14.78, sem: 3.42, key: 1},
-          {mean: 12.34, sem: 2.6, key: 2},
-          {mean: 13.56, sem: 3.01, key: 3}
-        ]}
-        columns={[
-          {title: 'Mean', dataIndex: 'mean'},
-          {title: 'SEM', dataIndex: 'sem'}
-        ]}
-        pagination={false}
-        bordered
-      />
     </>
   );
 };
