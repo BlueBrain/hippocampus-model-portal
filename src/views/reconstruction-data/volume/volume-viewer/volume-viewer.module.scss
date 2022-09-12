@@ -1,0 +1,78 @@
+.fixedAspectRatio {
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  max-width: 100%;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background-color: white;
+}
+
+.coloredCheckbox {
+  :global(.ant-checkbox-checked) :global(.ant-checkbox-inner) {
+    background-color: var(--checkbox-color);
+    border-color: var(--checkbox-color);
+  }
+
+  :global(.ant-checkbox):hover :global(.ant-checkbox-inner) {
+    border-color: var(--checkbox-color);
+  }
+}
+
+.coloredBox {
+  height: 0.75rem;
+  width: 0.75rem;
+  display: inline-block;
+  margin-right: 0.4rem;
+  background-color: var(--box-color);
+  border: 1px solid #888;
+}
+
+.container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.settingBtn, .fullscreenBtn, .config, .legend, .topRightCtrlGroup {
+  position: absolute;
+  box-shadow: 0 0 1rem 1.1rem rgba(255, 255, 255, 0.8);
+}
+
+.settingBtn {
+  top: 1rem;
+  left: 1rem;
+}
+
+.topRightCtrlGroup {
+  top: 1rem;
+  right: 1rem;
+}
+
+.legend {
+  font-size: 14px;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0 0.3rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  user-select: none;
+
+  p {
+    margin: 0;
+  }
+}
+
+.legendDivider {
+  height: 0.5rem;
+}
+
+.config {
+  bottom: 1rem;
+  left: 1rem;
+  background-color: white;
+  padding: 8px;
+  white-space: nowrap;
+}

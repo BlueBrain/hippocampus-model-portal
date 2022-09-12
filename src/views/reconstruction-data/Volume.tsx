@@ -1,19 +1,39 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Spin } from 'antd';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-import { colorName } from './config';
+import { staticDataBaseUrl } from '@/config';
+import { VolumeSection } from '@/types';
+import { defaultSelection, volumeSections } from '@/constants';
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
+import VolumeSectionSelector from '@/components/VolumeSectionSelector';
+import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
+
+import { colorName } from './config';
+import VolumeViewer from './volume/volume-viewer';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
 
 const VolumeView: React.FC = () => {
+  const router = useRouter();
+
+  const [volumeViewerReady, setVolumeViewerReady] = useState<boolean>(false);
+
+  const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
+
+  const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
+    const query = { volume_section: volumeSection };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
   return (
     <>
       <Filters hasData={true}>
@@ -53,16 +73,13 @@ const VolumeView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
+            <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
+              <div className={`${selectorStyle.column} mt-3`}>
+                <div className={selectorStyle.head}>Select a volume section</div>
+                <div className={selectorStyle.body}>
+                  <VolumeSectionSelector
+                    value={volumeSection}
+                    onSelect={setVolumeSectionQuery}
                   />
                 </div>
               </div>
@@ -78,7 +95,16 @@ const VolumeView: React.FC = () => {
           id="tbd"
           title="TBD"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <h2 className="text-tmp">Text description</h2>
+
+          <h3>3D volume viewer</h3>
+          <Spin spinning={!volumeViewerReady}>
+            <VolumeViewer
+              meshPath={`${staticDataBaseUrl}/rec-data/volume/volume.obj`}
+              volumeSection={volumeSection}
+              onReady={() => setVolumeViewerReady(true)}
+            />
+          </Spin>
         </Collapsible>
 
       </DataContainer>
@@ -86,5 +112,25 @@ const VolumeView: React.FC = () => {
   );
 };
 
+const VolumeViewWithPreselection = withPreselection(
+  VolumeView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.reconstructionData.volume,
+  },
+);
 
-export default VolumeView;
+const qsEntries = [{
+  title: 'Volume section',
+  key: 'volume_section',
+  values: volumeSections,
+}];
+
+
+export default withQuickSelector(
+  VolumeViewWithPreselection,
+  {
+    entries: qsEntries,
+    color: colorName,
+  },
+);

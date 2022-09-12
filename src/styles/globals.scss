@@ -1237,6 +1237,26 @@ $collapsible-padding: 20px 30px;
   --color-text-disabled-white: #ffffff61;
 }
 
+.set-accent-color--grey-1 {
+  --accent-color: var(--color-grey-1);
+}
+
+.set-accent-color--grey-2 {
+  --accent-color: var(--color-grey-2);
+}
+
+.set-accent-color--grey-3 {
+  --accent-color: var(--color-grey-3);
+}
+
+.set-accent-color--grey-4 {
+  --accent-color: var(--color-grey-4);
+}
+
+.set-accent-color--grey-5 {
+  --accent-color: var(--color-grey-5);
+}
+
 .bg-grey-1 {
   background-color: #343846;
 }

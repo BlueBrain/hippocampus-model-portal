@@ -1,4 +1,4 @@
-import { Layer, NeuriteType } from './types';
+import { Layer, NeuriteType, VolumeSection } from './types';
 
 export const layers: Layer[] = [
   'SLM',
@@ -14,7 +14,13 @@ export const neuriteTypes: NeuriteType[] = [
   'basal',
   'dendrite',
   'soma',
-]
+];
+
+export const volumeSections: VolumeSection[] = [
+  'region',
+  'slice',
+  'cylinder',
+];
 
 export const defaultSelection = {
   experimentalData: {
@@ -29,6 +35,11 @@ export const defaultSelection = {
     neuronElectrophysiology: {
       etype: 'bAC',
       etype_instance: '95810035',
+    },
+  },
+  reconstructionData: {
+    volume: {
+      volume_section: 'slice',
     },
   },
   digitalReconstruction: {

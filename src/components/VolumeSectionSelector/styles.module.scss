@@ -1,0 +1,22 @@
+
+.volumeSection {
+  font-size: 1.2rem;
+  line-height: 3.2rem;
+  background-color: #333746;
+  border: 1px solid white;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.volumeSection.active {
+  background-color: #141317;
+}
+
+.volumeSection:last-child {
+  margin-bottom: 0;
+}
+
+.volumeSection:hover {
+  background-color: #141317;
+}

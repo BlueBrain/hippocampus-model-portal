@@ -3,24 +3,25 @@ import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Row, Col } from 'antd';
 
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
-import LayerSelector from '../../components/LayerSelector';
-import { colorName } from './config';
-import { layerAnatomyDataQuery } from '../../queries/es';
-import ESData from '../../components/ESData';
-import LayerThickness from '../../components/LayerThickness';
-import LayerAnatomySummary from '../../components/LayerAnatomySummary';
-import { Layer } from '../../types';
+import Filters from '@/layouts/Filters';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
+import LayerSelector from '@/components/LayerSelector';
+import { layerAnatomyDataQuery } from '@/queries/es';
+import ESData from '@/components/ESData';
+import LayerThickness from '@/components/LayerThickness';
+import LayerAnatomySummary from '@/components/LayerAnatomySummary';
+import { Layer } from '@/types';
 import { defaultSelection , layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import styles from '../../styles/experimental-data/neuron-morphology.module.scss';
+import { colorName } from './config';
+
+import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
 
 
 const LayerAnatomyView: React.FC = () => {
@@ -146,7 +147,7 @@ const qsEntries = [{
 
 export default withQuickSelector(
   hocPreselection,
-  { 
+  {
     entries: qsEntries,
     color: colorName,
   },
