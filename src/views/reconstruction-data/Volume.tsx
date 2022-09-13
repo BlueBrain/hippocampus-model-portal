@@ -117,7 +117,7 @@ const VolumeView: React.FC = () => {
             <div className="text-right mt-2">
               <HttpDownloadButton
                 href={volumeRasterDataPath(volumeSection)}
-                download={`rec-data-volume-raster-data_-_${volumeSection}.json`}
+                download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}
               >
                 NRRD file(s)
               </HttpDownloadButton>
