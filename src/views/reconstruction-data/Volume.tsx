@@ -5,8 +5,13 @@ import { useRouter } from 'next/router';
 
 import { staticDataBaseUrl } from '@/config';
 import { VolumeSection } from '@/types';
+import { volumeAnalysisPath } from '@/queries/http';
+import { downloadAsJson } from '@/utils';
 import { defaultSelection, volumeSections } from '@/constants';
+import HttpData from '@/components/HttpData';
+import HttpDownloadButton from '@/components/HttpDownloadButton';
 import Filters from '@/layouts/Filters';
+import Factsheet from '@/components/Factsheet';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
@@ -33,6 +38,11 @@ const VolumeView: React.FC = () => {
     const query = { volume_section: volumeSection };
     router.push({ query }, undefined, { shallow: true });
   };
+
+  const factNameR = new RegExp(volumeSection === 'region' ? 'CA1' : volumeSection, 'i');
+  const getVolumeSectionFacts = (facts) => {
+    return facts.filter(fact => factNameR.test(fact.name));
+  }
 
   return (
     <>
@@ -105,6 +115,25 @@ const VolumeView: React.FC = () => {
               onReady={() => setVolumeViewerReady(true)}
             />
           </Spin>
+
+          <HttpData path={volumeAnalysisPath}>
+            {(data) => (
+              <div className="mt-3">
+                <h3>Volume analysis</h3>
+                <Factsheet facts={getVolumeSectionFacts(data.values)} />
+                <div className="text-right mt-2">
+                  <HttpDownloadButton
+                    onClick={() => downloadAsJson(
+                      getVolumeSectionFacts(data.values),
+                      `rec-data-volume-analysis_-_${volumeSection}.json`
+                    )}
+                  >
+                    factsheet
+                  </HttpDownloadButton>
+                </div>
+              </div>
+            )}
+          </HttpData>
         </Collapsible>
 
       </DataContainer>

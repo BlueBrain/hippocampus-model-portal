@@ -70,3 +70,7 @@ export const pathwayIndexPath = `${staticDataBaseUrl}/pathway-index.json`;
 export const connectionViewerDataPath = (preMtype: string, postMtype: string) => {
   return `${staticDataBaseUrl}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
 };
+
+// Reconstruction Data - Volume
+
+export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_analysis.json`;
