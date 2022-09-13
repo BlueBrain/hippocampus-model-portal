@@ -99,11 +99,13 @@ const VolumeView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[]}
+        navItems={[
+          { id: 'volume', label: 'Volume' },
+        ]}
       >
         <Collapsible
-          id="tbd"
-          title="TBD"
+          id="volume"
+          title="Volume"
         >
           <h2 className="text-tmp">Text description</h2>
 
