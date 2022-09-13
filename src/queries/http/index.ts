@@ -1,5 +1,6 @@
 
-import { basePath, staticDataBaseUrl } from '../../config';
+import { basePath, staticDataBaseUrl } from '@/config';
+import { VolumeSection } from '@/types';
 
 // Experimental Data
 
@@ -72,5 +73,11 @@ export const connectionViewerDataPath = (preMtype: string, postMtype: string) =>
 };
 
 // Reconstruction Data - Volume
+
+export const volumeRasterDataPath = (volumeSection: VolumeSection) => {
+  const fileName = volumeSection === 'region' ? 'CA1' : volumeSection;
+
+  return `${staticDataBaseUrl}/rec-data/volume/${fileName}.xz`;
+};
 
 export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_analysis.json`;

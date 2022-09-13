@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { staticDataBaseUrl } from '@/config';
 import { VolumeSection } from '@/types';
-import { volumeAnalysisPath } from '@/queries/http';
+import { volumeAnalysisPath, volumeRasterDataPath } from '@/queries/http';
 import { downloadAsJson } from '@/utils';
 import { defaultSelection, volumeSections } from '@/constants';
 import HttpData from '@/components/HttpData';
@@ -114,6 +114,14 @@ const VolumeView: React.FC = () => {
               volumeSection={volumeSection}
               onReady={() => setVolumeViewerReady(true)}
             />
+            <div className="text-right mt-2">
+              <HttpDownloadButton
+                href={volumeRasterDataPath(volumeSection)}
+                download={`rec-data-volume-raster-data_-_${volumeSection}.json`}
+              >
+                NRRD file(s)
+              </HttpDownloadButton>
+            </div>
           </Spin>
 
           <HttpData path={volumeAnalysisPath}>
