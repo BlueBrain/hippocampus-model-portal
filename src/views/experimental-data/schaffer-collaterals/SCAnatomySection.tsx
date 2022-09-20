@@ -22,7 +22,7 @@ type TableEntry = {
   sd: number | string;
   sem: number | string;
   species: string;
-  ageWeight: string;
+  weight: string;
   region: string;
   nAnimals: number | string;
   nSynapses: number | string;
@@ -81,8 +81,8 @@ const anatomyColumns = [
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age/Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Weight',
+    dataIndex: 'weight' as keyof TableEntry,
   },
   {
     title: 'Region',

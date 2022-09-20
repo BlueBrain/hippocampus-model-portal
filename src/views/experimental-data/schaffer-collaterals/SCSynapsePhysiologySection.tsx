@@ -16,14 +16,15 @@ type TableEntry = {
   sd: number | string;
   sem: number | string;
   species: string;
-  ageWeight: string;
+  age?: string;
+  weight?: string;
   region: string;
   nAnimals: number | string;
   nCells: number | string;
   ref: string;
 }
 
-const synapsePhysiologyColumns = [
+const synapsePhysiologyAllColumns = [
   {
     title: 'Exp. feature',
     dataIndex: 'expFeature' as keyof TableEntry,
@@ -58,8 +59,13 @@ const synapsePhysiologyColumns = [
     width: 136,
   },
   {
-    title: 'Age/Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
+    width: 142,
+  },
+  {
+    title: 'Weight',
+    dataIndex: 'weight' as keyof TableEntry,
     width: 142,
   },
   {
@@ -80,6 +86,9 @@ const synapsePhysiologyColumns = [
   },
 ];
 
+const synapsePhysiologyWOWeightColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Weight');
+const synapsePhysiologyWOAgeColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Age');
+
 const SCSynapsePhysiologySection: React.FC = () => {
   return (
     <>
@@ -96,7 +105,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].PSPMagnitudeAndVariability}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOAgeColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -104,7 +113,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].PSPKinetics}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOAgeColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -112,7 +121,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].NMDAKinetics}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -120,7 +129,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].ShortTermPlasticity}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -130,7 +139,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].PSCMagnitude}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -138,7 +147,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].PSPKinetics}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -146,7 +155,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].NMDAKinetics}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
@@ -154,7 +163,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].ShortTermPlasticity}
-        columns={synapsePhysiologyColumns}
+        columns={synapsePhysiologyWOWeightColumns}
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
