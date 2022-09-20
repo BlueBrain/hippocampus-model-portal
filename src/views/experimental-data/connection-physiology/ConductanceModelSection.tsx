@@ -31,8 +31,12 @@ const ReversalPotentialColumns = [
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age / Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
+  },
+  {
+    title: 'Weight',
+    dataIndex: 'weight' as keyof TableEntry,
   },
   {
     title: 'Region',
@@ -74,8 +78,12 @@ const PSPAmplitudeColumns = [
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age / Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
+  },
+  {
+    title: 'Weight',
+    dataIndex: 'weight' as keyof TableEntry,
   },
   {
     title: 'Region',
@@ -121,8 +129,8 @@ const PSPCVColumns = [
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age / Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
   },
   {
     title: 'Region',

@@ -44,8 +44,8 @@ const RatioColumns = [
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age/Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
   },
   {
     title: 'Region',
@@ -82,23 +82,13 @@ const TauDecayColumns = [
     dataIndex: 'mean' as keyof TableEntry,
     render: (mean) => <NumberFormat value={mean} />
   },
-  // {
-  //   title: 'SD, ms',
-  //   dataIndex: 'sd' as keyof TableEntry,
-  //   render: (sd) => <NumberFormat value={sd} />
-  // },
-  // {
-  //   title: 'SEM, ms',
-  //   dataIndex: 'sem' as keyof TableEntry,
-  //   render: (sem) => <NumberFormat value={sem} />
-  // },
   {
     title: 'Species',
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age / Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
   },
   {
     title: 'Region',
@@ -133,32 +123,18 @@ const TauRiseColumns = [
     dataIndex: 'mean' as keyof TableEntry,
     render: (mean) => <NumberFormat value={mean} />
   },
-  // {
-  //   title: 'SD, ms',
-  //   dataIndex: 'sd' as keyof TableEntry,
-  //   render: (sd) => <NumberFormat value={sd} />
-  // },
-  // {
-  //   title: 'SEM, ms',
-  //   dataIndex: 'sem' as keyof TableEntry,
-  //   render: (sem) => <NumberFormat value={sem} />
-  // },
   {
     title: 'Species',
     dataIndex: 'species' as keyof TableEntry,
   },
   {
-    title: 'Age / Weight',
-    dataIndex: 'ageWeight' as keyof TableEntry,
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
   },
   {
     title: 'Region',
     dataIndex: 'region' as keyof TableEntry,
   },
-  // {
-  //   title: 'N Animals',
-  //   dataIndex: 'nAnimals' as keyof TableEntry,
-  // },
   {
     title: 'N cells',
     dataIndex: 'nCells' as keyof TableEntry,

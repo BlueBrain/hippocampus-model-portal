@@ -3,13 +3,10 @@
     "from": "PC",
     "to": "PC",
     "mean": 2.93,
-    "sd": "-",
-    "sem": "-",
     "uom": "ms",
     "species": "Sprague Dawley rat",
-    "ageWeight": "6-12 Weeks",
+    "age": "6-12 w",
     "region": "CA1",
-    "nAnimals": "-",
     "nCells": 52,
     "ref": "Andrasfalvy and Magee, 2001"
   }
