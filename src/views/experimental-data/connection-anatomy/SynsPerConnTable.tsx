@@ -1,8 +1,13 @@
 import React from 'react';
 import { Table } from 'antd';
 
+import { downloadAsJson } from '@/utils';
+
+import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
+
+import synsPerConnData from './syns-per-conn.json';
 
 
 type DataEntry = {
@@ -323,6 +328,17 @@ const SynsPerConnTable = () => {
         rowKey={({ from, to }) => `${from}_${to}`}
       />
       <small><sup>[1]</sup> Additional calculations (see below).</small>
+
+      <div className="text-right mt-2">
+        <HttpDownloadButton
+          onClick={() => downloadAsJson(
+            synsPerConnData,
+            `exp-connection-anatomy_-_syns-per-conn-table.json`
+          )}
+        >
+          table data
+        </HttpDownloadButton>
+      </div>
 
       <h3 className="mt-3">Calculations</h3>
 

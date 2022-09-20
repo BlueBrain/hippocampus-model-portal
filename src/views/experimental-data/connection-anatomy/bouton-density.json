@@ -1,0 +1,68 @@
+[
+  {
+    "mtype": "SO_BS",
+    "region": "CA1",
+    "specie": "Sprague-Dawley rat",
+    "weight": "250-350 g",
+    "mean": 0.21,
+    "nCells": 1,
+    "std": 5.6,
+    "sem": 5.6,
+    "ref": "Sik et al., 1995"
+  },
+  {
+    "mtype": "SO_BP",
+    "region": "CA1",
+    "specie": "Sprague-Dawley rat",
+    "weight": "250-350 g",
+    "mean": 0.248,
+    "nCells": 1,
+    "std": 4.13,
+    "sem": 4.13,
+    "ref": "Sik et al., 1994"
+  },
+  {
+    "mtype": "SP_PC",
+    "region": "CA1",
+    "specie": "Wistar rats",
+    "weight": "180-200 g",
+    "mean": 0.1241,
+    "nCells": 4,
+    "std": 6.02,
+    "sem": 3.01,
+    "ref": "Esclapez et al., 1999; Bezaire and Soltesz, 2013"
+  },
+  {
+    "mtype": "SO_Tri",
+    "region": "CA1",
+    "specie": "Sprague-Dawley rat",
+    "weight": "250-350 g",
+    "mean": 0.282,
+    "nCells": 1,
+    "std": 4.9,
+    "sem": 4.9,
+    "ref": "Sik et al., 1995"
+  },
+  {
+    "mtype": "SP_PVBC",
+    "region": "CA1",
+    "specie": "Sprague-Dawley rat",
+    "weight": "250-350 g",
+    "mean": 0.226,
+    "nCells": 4,
+    "std": 3.9,
+    "sem": 1.95,
+    "ref": "Sik et al., 1995"
+  },
+  {
+    "mtype": "SO_OLM",
+    "region": "CA1",
+    "specie": "Sprague-Dawley rat",
+    "weight": "250-350 g",
+    "mean": 0.266,
+    "nCells": 2,
+    "std": 4.0,
+    "sem": 2.83,
+    "ref": "Sik et al., 1995"
+  }
+]

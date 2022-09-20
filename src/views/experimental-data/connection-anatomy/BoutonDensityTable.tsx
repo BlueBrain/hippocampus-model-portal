@@ -1,8 +1,12 @@
 import React from 'react';
-import { Table } from 'antd';
 
+import { downloadAsJson } from '@/utils';
+
+import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
+
+import boutonDensityData from './bouton-density.json';
 
 
 type BoutonDensity = {
@@ -202,6 +206,7 @@ const BoutonDenisityTable = () => {
         data={data}
         rowKey={({ mtype }) => mtype}
       />
+
       <small>
         <sup>[1]</sup> The authors do not specify if this is std or SEM. Anyway,
         in a previous publication (Sik et al., 1994) they used std. We can assume they are std.
@@ -217,6 +222,17 @@ const BoutonDenisityTable = () => {
       <small>
         <sup>[4]</sup> Calculated (see below).
       </small>
+
+      <div className="text-right mt-2">
+        <HttpDownloadButton
+          onClick={() => downloadAsJson(
+            boutonDensityData,
+            `exp-connection-anatomy_-_bouton-density-table.json`
+          )}
+        >
+          table data
+        </HttpDownloadButton>
+      </div>
 
       <h3 className="mt-3">Calculations</h3>
 
