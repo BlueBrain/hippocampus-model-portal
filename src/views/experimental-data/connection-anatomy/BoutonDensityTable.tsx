@@ -9,7 +9,7 @@ type BoutonDensity = {
   mtype: string;
   region: string;
   specie: string;
-  ageWeight: string;
+  weight: string;
   mean: number;
   std: number;
   unit: string;
@@ -22,7 +22,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SO_BS',
   region: 'CA1',
   specie: 'Sprague-Dawley rat',
-  ageWeight: '250-350 g',
+  weight: '250-350 g',
   mean: 0.21,
   std: 5.6,
   unit: '/µm',
@@ -42,7 +42,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SO_BP',
   region: 'CA1',
   specie: 'Sprague-Dawley rat',
-  ageWeight: '250-350 g',
+  weight: '250-350 g',
   mean: 0.248,
   std: 4.13,
   unit: '/µm',
@@ -63,7 +63,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SP_PC',
   region: 'CA1',
   specie: 'Wistar rats',
-  ageWeight: '180-200 g',
+  weight: '180-200 g',
   mean: 0.1241,
   std: 6.02,
   unit: '/µm',
@@ -90,7 +90,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SO_Tri',
   region: 'CA1',
   specie: 'Sprague-Dawley rat',
-  ageWeight: '250-350 g',
+  weight: '250-350 g',
   mean: 0.282,
   std: 4.9,
   unit: '/µm',
@@ -111,7 +111,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SP_PVBC',
   region: 'CA1',
   specie: 'Sprague-Dawley rat',
-  ageWeight: '250-350 g',
+  weight: '250-350 g',
   mean: 0.226,
   std: 3.9,
   unit: '/µm',
@@ -132,7 +132,7 @@ const data: BoutonDensity[] = [{
   mtype: 'SO_OLM',
   region: 'CA1',
   specie: 'Sprague-Dawley rat',
-  ageWeight: '250-350 g',
+  weight: '250-350 g',
   mean: 0.266,
   std: 4.0,
   unit: '/µm',
@@ -167,7 +167,7 @@ const columns = [
   },
   {
     title: 'Weight',
-    dataIndex: 'ageWeight' as keyof BoutonDensity
+    dataIndex: 'weight' as keyof BoutonDensity
   },
   {
     title: 'Bouton Density',
