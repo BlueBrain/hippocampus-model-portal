@@ -15,6 +15,10 @@ type MEComposition = {
   bAC: number;
 };
 
+const formatValue = value => value !== 0
+  ? (<NumberFormat value={value} suffix="%" />)
+  : '-';
+
 const columns = [
   {
     title: 'M-type',
@@ -23,23 +27,17 @@ const columns = [
   {
     title: 'cNAC',
     dataIndex: 'cNAC' as keyof MEComposition,
-    render: value => value !== 0
-      ? (<NumberFormat value={value} suffix="%" />)
-      : '-'
+    render: value => formatValue(value),
   },
   {
     title: 'cAC',
     dataIndex: 'cAC' as keyof MEComposition,
-    render: value => value !== 0
-      ? (<NumberFormat value={value} suffix="%" />)
-      : '-'
+    render: value => formatValue(value),
   },
   {
     title: 'bAC',
     dataIndex: 'bAC' as keyof MEComposition,
-    render: value => value !== 0
-      ? (<NumberFormat value={value} suffix="%" />)
-      : '-'
+    render: value => formatValue(value),
   },
 ];
 
