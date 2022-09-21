@@ -25,12 +25,12 @@ const columns = [
     dataIndex: 'mtype' as keyof CellComposition,
   },
   {
-    title: 'Density',
+    title: 'Density, /mm³',
     dataIndex: 'density' as keyof CellComposition,
     render: density => <NumberFormat value={density} />
   },
   {
-    title: 'Cell count',
+    title: 'N. cells',
     dataIndex: 'count' as keyof CellComposition,
     render: count => <NumberFormat value={count} />
   },

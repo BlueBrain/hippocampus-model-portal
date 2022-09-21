@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { VolumeSection } from '@/types';

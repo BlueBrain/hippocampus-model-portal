@@ -24,21 +24,21 @@ const columns = [
     title: 'cNAC',
     dataIndex: 'cNAC' as keyof MEComposition,
     render: value => value !== 0
-      ? (<NumberFormat value={value} />)
+      ? (<NumberFormat value={value} suffix="%" />)
       : '-'
   },
   {
     title: 'cAC',
     dataIndex: 'cAC' as keyof MEComposition,
     render: value => value !== 0
-      ? (<NumberFormat value={value} />)
+      ? (<NumberFormat value={value} suffix="%" />)
       : '-'
   },
   {
     title: 'bAC',
     dataIndex: 'bAC' as keyof MEComposition,
     render: value => value !== 0
-      ? (<NumberFormat value={value} />)
+      ? (<NumberFormat value={value} suffix="%" />)
       : '-'
   },
 ];
