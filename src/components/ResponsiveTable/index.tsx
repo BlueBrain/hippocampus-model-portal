@@ -29,7 +29,7 @@ const highlightValue = (nestedValue, isHighlight) => (isHighlight ? (
   : nestedValue);
 
 function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ columns, data, ...restProps }: ResponsiveTableProps<Type>) {
-  const expandabeColumn = {
+  const expandableColumn = {
     title: null,
     dataIndex: null,
     render: (_value, record, index) => {
@@ -96,7 +96,7 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
       children: (column as GroupColumnType<Type>).children?.map(child => ({ render: (value: any, record: Type) => highlightValue(value, record.isHighlight), ...child })),
     }
   ))
-    .concat(expandabeColumn as any);
+    .concat(expandableColumn as any);
 
   const { className = '' } = restProps;
 
