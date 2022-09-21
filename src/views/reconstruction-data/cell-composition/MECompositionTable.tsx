@@ -1,5 +1,5 @@
 import React from 'react';
-import ResponsiveTable from '@/components/ResponsiveTable';
+import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
@@ -47,10 +47,13 @@ const columns = [
 const MECompositionTable: React.FC = () => {
   return (
     <>
-      <ResponsiveTable<MEComposition>
+      <Table<MEComposition>
         className="mb-2"
+        size="small"
+        bordered
+        pagination={false}
         columns={columns}
-        data={MECompositionData}
+        dataSource={MECompositionData}
         rowKey={({ mtype }) => mtype}
       />
 

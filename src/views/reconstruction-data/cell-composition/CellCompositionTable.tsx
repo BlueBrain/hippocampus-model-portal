@@ -1,5 +1,5 @@
-import React from 'react';
-import ResponsiveTable from '@/components/ResponsiveTable';
+import React, { useMemo } from 'react';
+import { Table } from 'antd';
 
 import { VolumeSection } from '@/types';
 import { downloadAsJson } from '@/utils';
@@ -32,17 +32,32 @@ const columns = [
   {
     title: 'Cell count',
     dataIndex: 'count' as keyof CellComposition,
+    render: count => <NumberFormat value={count} />
   },
 ];
 
 const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSection }) => {
+  const totalCount = useMemo(() => {
+    return cellCompositionData[volumeSection].reduce((sum, curr) => sum + curr.count, 0);
+  }, [volumeSection]);
+
   return (
     <>
-      <ResponsiveTable<CellComposition>
+      <Table<CellComposition>
         className="mb-2"
+        size="small"
+        pagination={false}
+        bordered
         columns={columns}
-        data={cellCompositionData[volumeSection]}
+        dataSource={cellCompositionData[volumeSection]}
         rowKey={({ mtype }) => mtype}
+        summary={() => (
+          <Table.Summary.Row>
+            <Table.Summary.Cell index={0}><strong>Total</strong></Table.Summary.Cell>
+            <Table.Summary.Cell index={1} />
+            <Table.Summary.Cell index={2}><strong><NumberFormat value={totalCount}/></strong></Table.Summary.Cell>
+          </Table.Summary.Row>
+        )}
       />
 
       <div className="text-right mt-2">
