@@ -98,12 +98,13 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
   ))
     .concat(expandabeColumn as any);
 
+  const { className = '' } = restProps;
+
   return (
     <Table<Type>
-      className="responsiveTable no-left-margin nested-table xs-column"
       bordered
       size="small"
-      scroll={{ x: 'max-content' }}
+      scroll={{ x: true }}
       rowKey={(record: any) => record.key || `${record.dataIndex}__`}
       pagination={false}
       columns={tableColumns}
@@ -116,6 +117,7 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
         return (index % 2 ? classes.responsiveTablEven : classes.responsiveTablOdd);
       }}
       {...restProps}
+      className={`responsiveTable no-left-margin nested-table xs-column text-nowrap ${className}`}
     />
   );
 }
