@@ -38,7 +38,9 @@ const columns = [
 
 const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSection }) => {
   const totalCount = useMemo(() => {
-    return cellCompositionData[volumeSection].reduce((sum, curr) => sum + curr.count, 0);
+    return volumeSection
+      ? cellCompositionData[volumeSection].reduce((sum, curr) => sum + curr.count, 0)
+      : 0;
   }, [volumeSection]);
 
   return (
