@@ -41,6 +41,9 @@ export const defaultSelection = {
     volume: {
       volume_section: 'slice',
     },
+    cellComposition: {
+      volume_section: 'slice',
+    },
   },
   digitalReconstruction: {
     neurons: {

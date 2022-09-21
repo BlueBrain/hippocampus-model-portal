@@ -1,0 +1,74 @@
+[
+  {
+    "mtype": "SLM_PPA",
+    "cNAC": 0,
+    "cAC": 0,
+    "bAC": 100
+  },
+  {
+    "mtype": "SR_SCA",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  },
+  {
+    "mtype": "SP_AA",
+    "cNAC": 0,
+    "cAC": 0,
+    "bAC": 100
+  },
+  {
+    "mtype": "SP_BS",
+    "cNAC": 75,
+    "cAC": 0,
+    "bAC": 25
+  },
+  {
+    "mtype": "SP_CCKBC",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  },
+  {
+    "mtype": "SP_Ivy",
+    "cNAC": 33.33,
+    "cAC": 0,
+    "bAC": 66.67
+  },
+  {
+    "mtype": "SP_PC",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  },
+  {
+    "mtype": "SP_PVBC",
+    "cNAC": 70,
+    "cAC": 0,
+    "bAC": 30
+  },
+  {
+    "mtype": "SO_BP",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  },
+  {
+    "mtype": "SO_BS",
+    "cNAC": 75,
+    "cAC": 0,
+    "bAC": 25
+  },
+  {
+    "mtype": "SO_OLM",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  },
+  {
+    "mtype": "SO_Tri",
+    "cNAC": 0,
+    "cAC": 100,
+    "bAC": 0
+  }
+]

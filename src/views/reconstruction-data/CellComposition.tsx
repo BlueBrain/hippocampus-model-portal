@@ -1,19 +1,37 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-import { colorName } from './config';
+import { VolumeSection } from '@/types';
+import { defaultSelection, volumeSections } from '@/constants';
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
+import VolumeSectionSelector from '@/components/VolumeSectionSelector';
+import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
+
+import CellCompositionTable from './cell-composition/CellCompositionTable';
+import MECompositionTable from './cell-composition/MECompositionTable';
+import { colorName } from './config';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
 
 const CellCompositionView: React.FC = () => {
+  const router = useRouter();
+
+  const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
+
+  const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
+    const query = { volume_section: volumeSection };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
   return (
     <>
       <Filters hasData={true}>
@@ -53,16 +71,13 @@ const CellCompositionView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
+            <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
+              <div className={selectorStyle.column}>
+                <div className={selectorStyle.head}>Select a volume section</div>
+                <div className={selectorStyle.body}>
+                <VolumeSectionSelector
+                    value={volumeSection}
+                    onSelect={setVolumeSectionQuery}
                   />
                 </div>
               </div>
@@ -72,19 +87,63 @@ const CellCompositionView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[]}
+        navItems={[
+          { id: 'cellCompositionSection', label: 'Cell composition' },
+          { id: 'MECompositionSection', label: 'ME-composition' },
+        ]}
       >
         <Collapsible
-          id="tbd"
-          title="TBD"
+          id="cellCompositionSection"
+          title="Cell composition"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <p className="text-tmp mb-3">
+            Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
+            sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
+            facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
+            omnis eum quasi sint nam omnis aspernatur.
+          </p>
+
+          <CellCompositionTable volumeSection={volumeSection} />
         </Collapsible>
 
+        <Collapsible
+          className="mt-4"
+          id="MECompositionSection"
+          title="ME-composition"
+        >
+          <p className="text-tmp mb-3">
+            Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
+            sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
+            facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
+            omnis eum quasi sint nam omnis aspernatur.
+          </p>
+
+          <MECompositionTable />
+        </Collapsible>
       </DataContainer>
     </>
   );
 };
 
+const CellCompositionViewWithPreselection = withPreselection(
+  CellCompositionView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.reconstructionData.volume,
+  },
+);
 
-export default CellCompositionView;
+const qsEntries = [{
+  title: 'Volume section',
+  key: 'volume_section',
+  values: volumeSections,
+}];
+
+
+export default withQuickSelector(
+  CellCompositionViewWithPreselection,
+  {
+    entries: qsEntries,
+    color: colorName,
+  },
+);

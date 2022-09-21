@@ -1,0 +1,188 @@
+{
+  "region": [
+    {
+      "mtype": "SLM_PPA",
+      "density": 313.652240296733,
+      "count": 1008
+    },
+    {
+      "mtype": "SR_SCA",
+      "density": 120.285360597003,
+      "count": 823
+    },
+    {
+      "mtype": "SP_PC",
+      "density": 264000,
+      "count": 416842
+    },
+    {
+      "mtype": "SP_Ivy",
+      "density": 11480.1665649567,
+      "count": 18127
+    },
+    {
+      "mtype": "SP_PVBC",
+      "density": 7206.05233872993,
+      "count": 11378
+    },
+    {
+      "mtype": "SP_BS",
+      "density": 2189.18045733568,
+      "count": 3457
+    },
+    {
+      "mtype": "SP_AA",
+      "density": 1915.53290016872,
+      "count": 3025
+    },
+    {
+      "mtype": "SP_CCKBC",
+      "density": 4691.10098000502,
+      "count": 7407
+    },
+    {
+      "mtype": "SO_OLM",
+      "density": 700.382123453537,
+      "count": 3374
+    },
+    {
+      "mtype": "SO_BP",
+      "density": 81.1418313757146,
+      "count": 391
+    },
+    {
+      "mtype": "SO_Tri",
+      "density": 298.943589278948,
+      "count": 1440
+    },
+    {
+      "mtype": "SO_BS",
+      "density": 226.343003311204,
+      "count": 1090
+    }
+  ],
+  "slice": [
+    {
+      "mtype": "SLM_PPA",
+      "density": 313.652240296733,
+      "count": 49
+    },
+    {
+      "mtype": "SR_SCA",
+      "density": 120.285360597003,
+      "count": 33
+    },
+    {
+      "mtype": "SP_PC",
+      "density": 264000,
+      "count": 15550
+    },
+    {
+      "mtype": "SP_Ivy",
+      "density": 11480.1665649567,
+      "count": 676
+    },
+    {
+      "mtype": "SP_PVBC",
+      "density": 7206.05233872993,
+      "count": 424
+    },
+    {
+      "mtype": "SP_BS",
+      "density": 2189.18045733568,
+      "count": 129
+    },
+    {
+      "mtype": "SP_AA",
+      "density": 1915.53290016872,
+      "count": 113
+    },
+    {
+      "mtype": "SP_CCKBC",
+      "density": 4691.10098000502,
+      "count": 276
+    },
+    {
+      "mtype": "SO_OLM",
+      "density": 700.382123453537,
+      "count": 127
+    },
+    {
+      "mtype": "SO_BP",
+      "density": 81.1418313757146,
+      "count": 15
+    },
+    {
+      "mtype": "SO_Tri",
+      "density": 298.943589278948,
+      "count": 54
+    },
+    {
+      "mtype": "SO_BS",
+      "density": 226.343003311204,
+      "count": 41
+    }
+  ],
+  "cylinder": [
+    {
+      "mtype": "SLM_PPA",
+      "density": 313.652240296733,
+      "count": 18
+    },
+    {
+      "mtype": "SR_SCA",
+      "density": 120.285360597003,
+      "count": 12
+    },
+    {
+      "mtype": "SP_PC",
+      "density": 264000,
+      "count": 5566
+    },
+    {
+      "mtype": "SP_Ivy",
+      "density": 11480.1665649567,
+      "count": 242
+    },
+    {
+      "mtype": "SP_PVBC",
+      "density": 7206.05233872993,
+      "count": 152
+    },
+    {
+      "mtype": "SP_BS",
+      "density": 2189.18045733568,
+      "count": 46
+    },
+    {
+      "mtype": "SP_AA",
+      "density": 1915.53290016872,
+      "count": 40
+    },
+    {
+      "mtype": "SP_CCKBC",
+      "density": 4691.10098000502,
+      "count": 99
+    },
+    {
+      "mtype": "SO_OLM",
+      "density": 700.382123453537,
+      "count": 44
+    },
+    {
+      "mtype": "SO_BP",
+      "density": 81.1418313757146,
+      "count": 5
+    },
+    {
+      "mtype": "SO_Tri",
+      "density": 298.943589278948,
+      "count": 19
+    },
+    {
+      "mtype": "SO_BS",
+      "density": 226.343003311204,
+      "count": 14
+    }
+  ]
+}
