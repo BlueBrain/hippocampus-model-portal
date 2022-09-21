@@ -72,7 +72,7 @@ const CellCompositionView: React.FC = () => {
             lg={12}
           >
             <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.column}>
+              <div className={`${selectorStyle.column} mt-3`}>
                 <div className={selectorStyle.head}>Select a volume section</div>
                 <div className={selectorStyle.body}>
                 <VolumeSectionSelector
