@@ -210,7 +210,8 @@ export default class VolumeViewer {
   }
 
   private initObservers() {
-    this.resizeObserver = new ResizeObserver(() => this.resize());
+    // postponing resize as Firefox for some reason detects wrong container size when executed synchronously
+    this.resizeObserver = new ResizeObserver(() => setTimeout(() => this.resize(), 0));
 
     this.resizeObserver.observe(this.container);
   }
