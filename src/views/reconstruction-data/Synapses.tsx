@@ -10,6 +10,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import SynDynamicsParamsTables from './synapses/SynDynamicsParamsTables';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 
@@ -75,10 +77,17 @@ const SynapsesView: React.FC = () => {
         navItems={[]}
       >
         <Collapsible
-          id="tbd"
-          title="TBD"
+          id="synapsesSection"
+          title="Synapses"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <p className="text-tmp mb-3">
+            Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
+            sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
+            facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
+            omnis eum quasi sint nam omnis aspernatur.
+          </p>
+
+          <SynDynamicsParamsTables />
         </Collapsible>
 
       </DataContainer>
