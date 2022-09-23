@@ -13,7 +13,7 @@ type TermProps = {
 
 type TermFormatter = (term: string) => string;
 
-export const termFactory = (termDescription: TermDescription, termFormatter: TermFormatter) => {
+export const termFactory = (termDescription: TermDescription, termFormatter?: TermFormatter) => {
   const Term: React.FC<TermProps> = ({ className, term, description }) => {
     const currentDescription = description || termDescription[term];
     const formattedTerm = termFormatter
