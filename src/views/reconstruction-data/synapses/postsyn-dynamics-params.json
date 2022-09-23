@@ -8,7 +8,7 @@
     "tdecayFast": "3 ± 0.2",
     "NMDAAMPARatio": 1.22,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SP_PC"
+    "PSPValidationPathway": "SP_PC-SP_PC"
   },
   {
     "ruleN": 2,
@@ -19,7 +19,7 @@
     "tdecayFast": "1.7 ± 0.14",
     "NMDAAMPARatio": 0.28,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SO_OLM"
+    "PSPValidationPathway": "SP_PC-SO_OLM"
   },
   {
     "ruleN": 3,
@@ -30,7 +30,7 @@
     "tdecayFast": "1.7 ± 0.14",
     "NMDAAMPARatio": 0.28,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SO_OLM"
+    "PSPValidationPathway": "SP_PC-SO_OLM"
   },
   {
     "ruleN": 4,
@@ -52,7 +52,7 @@
     "tdecayFast": "4.12 ± 0.5",
     "NMDAAMPARatio": 0.28,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SP_BS"
+    "PSPValidationPathway": "SP_PC-SP_BS"
   },
   {
     "ruleN": 6,
@@ -63,7 +63,7 @@
     "tdecayFast": "4.12 ± 0.5",
     "NMDAAMPARatio": 0.86,
     "tdecayNMDA": 298.75,
-    "PSPValidationPathway": "SP_PC→SP_CCKBC"
+    "PSPValidationPathway": "SP_PC-SP_CCKBC"
   },
   {
     "ruleN": 7,
@@ -74,7 +74,7 @@
     "tdecayFast": "4.12 ± 0.5",
     "NMDAAMPARatio": 0.28,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SP_Ivy"
+    "PSPValidationPathway": "SP_PC-SP_Ivy"
   },
   {
     "ruleN": 8,
@@ -85,7 +85,7 @@
     "tdecayFast": "4.12 ± 0.4",
     "NMDAAMPARatio": 0.28,
     "tdecayNMDA": 148.5,
-    "PSPValidationPathway": "SP_PC→SP_PVBC"
+    "PSPValidationPathway": "SP_PC-SP_PVBC"
   },
   {
     "ruleN": 9,
@@ -107,7 +107,7 @@
     "tdecayFast": "4 ± 0.8",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_PVBC→SP_PVBC"
+    "PSPValidationPathway": "SP_PVBC-SP_PVBC"
   },
   {
     "ruleN": 11,
@@ -118,7 +118,7 @@
     "tdecayFast": "11.2 ± 0.9",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_AA→SP_PC"
+    "PSPValidationPathway": "SP_AA-SP_PC"
   },
   {
     "ruleN": 12,
@@ -129,7 +129,7 @@
     "tdecayFast": "16.1 ± 1.1",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_BS→SP_PC"
+    "PSPValidationPathway": "SP_BS-SP_PC"
   },
   {
     "ruleN": 13,
@@ -140,7 +140,7 @@
     "tdecayFast": "5.94 ± 0.47",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_PVBC→SP_PC"
+    "PSPValidationPathway": "SP_PVBC-SP_PC"
   },
   {
     "ruleN": 14,
@@ -151,7 +151,7 @@
     "tdecayFast": "8.3 ± 2.2",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SO_Tri→SP_PC"
+    "PSPValidationPathway": "SO_Tri-SP_PC"
   },
   {
     "ruleN": 15,
@@ -162,7 +162,7 @@
     "tdecayFast": "7.75 ± 0.9",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SO_Tri→SP_PC"
+    "PSPValidationPathway": "SO_Tri-SP_PC"
   },
   {
     "ruleN": 16,
@@ -184,7 +184,7 @@
     "tdecayFast": "9.35 ± 1.0",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_CCKBC→SP_PC"
+    "PSPValidationPathway": "SP_CCKBC-SP_PC"
   },
   {
     "ruleN": 18,
@@ -195,7 +195,7 @@
     "tdecayFast": "8.3 ± 0.44",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SR_SCA→SP_PC"
+    "PSPValidationPathway": "SR_SCA-SP_PC"
   },
   {
     "ruleN": 19,
@@ -206,7 +206,7 @@
     "tdecayFast": "16 ± 2.5",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_Ivy→SP_PC"
+    "PSPValidationPathway": "SP_Ivy-SP_PC"
   },
   {
     "ruleN": 20,
@@ -217,7 +217,7 @@
     "tdecayFast": "2.67 ± 0.13",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_PVBC→SP_PVBC"
+    "PSPValidationPathway": "SP_PVBC-SP_PVBC"
   },
   {
     "ruleN": 21,
@@ -228,7 +228,7 @@
     "tdecayFast": "4.5 ± 0.55",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_PVBC→SP_PVBC"
+    "PSPValidationPathway": "SP_PVBC-SP_PVBC"
   },
   {
     "ruleN": 22,
@@ -239,6 +239,6 @@
     "tdecayFast": "2.67 ± 0.13",
     "NMDAAMPARatio": "-",
     "tdecayNMDA": "-",
-    "PSPValidationPathway": "SP_PVBC→SP_PVBC"
+    "PSPValidationPathway": "SP_PVBC-SP_PVBC"
   }
 ]
