@@ -4,10 +4,11 @@ import { Table } from 'antd';
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
-import { layerDescription, mtypeDescription } from '@/terms';
+import { layerDescription, mtypeDescription, etypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import MECompositionData from './me-composition.json';
+import style from './me-composition-styles.module.scss';
 
 
 type MEComposition = {
@@ -20,6 +21,7 @@ type MEComposition = {
 const termDescription = {
   ...mtypeDescription,
   ...layerDescription,
+  ...etypeDescription,
 };
 
 const Term = termFactory(termDescription);
@@ -32,9 +34,25 @@ function getMtypeDescription(fullMtype: string) {
     : null;
 }
 
-const formatValue = value => value !== 0
-  ? (<NumberFormat value={value} suffix="%" />)
-  : '-';
+const ValueBar = ({ value, barColor }) => {
+  if (!value) return (<>-</>);
+
+  return (
+    <>
+      <div className={style.valueContainer}>
+        <NumberFormat value={value} suffix="%" />
+      </div>
+
+      <div
+        className={style.barContainer}
+        style={{
+          backgroundColor: barColor,
+          height: `${value}%`,
+        }}
+      />
+    </>
+  );
+}
 
 const columns = [
   {
@@ -43,19 +61,19 @@ const columns = [
     render: mtype => (<Term term={mtype} description={getMtypeDescription(mtype)} />)
   },
   {
-    title: 'cNAC',
+    title: <Term term="cNAC" />,
     dataIndex: 'cNAC' as keyof MEComposition,
-    render: value => formatValue(value),
+    render: value => <ValueBar value={value} barColor="#C9D7F8" />
   },
   {
-    title: 'cAC',
+    title: <Term term="cAC" />,
     dataIndex: 'cAC' as keyof MEComposition,
-    render: value => formatValue(value),
+    render: value => <ValueBar value={value} barColor="#A7E2E3" />
   },
   {
-    title: 'bAC',
+    title: <Term term="bAC" />,
     dataIndex: 'bAC' as keyof MEComposition,
-    render: value => formatValue(value),
+    render: value => <ValueBar value={value} barColor="#80CFA9" />
   },
 ];
 
@@ -67,6 +85,7 @@ const MECompositionTable: React.FC = () => {
         className="mb-2"
         size="small"
         bordered
+        tableLayout="fixed"
         pagination={false}
         columns={columns}
         dataSource={MECompositionData}

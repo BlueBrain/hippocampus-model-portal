@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { Row, Col } from 'antd';
 import { useRouter } from 'next/router';
 

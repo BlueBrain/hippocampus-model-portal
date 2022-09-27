@@ -1,0 +1,16 @@
+
+.barContainer, .valueContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0 6px;
+  width: 100%;
+}
+
+.valueContainer {
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}

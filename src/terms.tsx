@@ -32,6 +32,20 @@ export const stypeDescription: TermDescription = {
   I3: 'Inhibitory pseudo linear',
 };
 
+export const etypeDescription: TermDescription = {
+  cADpyr: 'continuous Accommodating (Adapting) for pyramidal cells',
+  cAC: 'continuous Accommodating',
+  bAC: 'burst Accommodating',
+  cNAC: 'continuous Non-accommodating',
+  bNAC: 'burst Non-accommodating',
+  dNAC: 'delayed Non-accommodating',
+  cSTUT: 'continuous Stuttering',
+  bSTUT: 'burst Stuttering',
+  dSTUT: 'delayed Stuttering',
+  cIR: 'continuous Irregular',
+  bIR: 'burst Irregular',
+};
+
 export const pathwayDescription: TermDescription = {
   gsyn: 'The peak conductance (in nS) for a single synaptic contact',
   U: 'Utilization of synaptic efficacy - analogous to the transmitter release probability at a single synaptic contact',

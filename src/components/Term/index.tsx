@@ -20,9 +20,6 @@ export const termFactory = (termDescription: TermDescription, termFormatter?: Te
       ? termFormatter(term)
       : term;
 
-    console.log(term);
-    console.log(formattedTerm);
-
     if (!currentDescription) {
       return (<span className={className}>{formattedTerm}</span>);
     }
