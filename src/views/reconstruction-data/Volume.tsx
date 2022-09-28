@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Spin } from 'antd';
+import { Row, Col, Spin, Button } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -117,6 +118,18 @@ const VolumeView: React.FC = () => {
               onReady={() => setVolumeViewerReady(true)}
             />
             <div className="text-right mt-2">
+              <Button
+                className="mr-2"
+                href="https://bbp.epfl.ch/atlas#camPosition=36984.948,3938.164,5712.791&camLookat=6612.504,3938.164,5712.791&camUp=0,-1,0&srs=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fallen_ccfv3_spatial_reference_system&atlas=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fe2e500ec-fe7e-4888-88b9-b72425315dda&resources=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F20f22cc6-7ded-45bc-a2d5-9f14f3b2f6a0,bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F64ab81de-dbcc-4461-b077-f1e009a10a22"
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={<EyeOutlined />}
+                size="small"
+                type="primary"
+              >
+                CA1 in Blue Brain Atlas
+              </Button>
+
               <HttpDownloadButton
                 href={volumeRasterDataPath(volumeSection)}
                 download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}
