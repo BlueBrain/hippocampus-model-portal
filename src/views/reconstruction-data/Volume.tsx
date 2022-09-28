@@ -3,6 +3,7 @@ import { Row, Col, Spin, Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { staticDataBaseUrl } from '@/config';
 import { VolumeSection } from '@/types';
@@ -157,6 +158,10 @@ const VolumeView: React.FC = () => {
               </div>
             )}
           </HttpData>
+
+          <p className="mt-3">
+            Related: <Link href="/experimental-data/layer-anatomy/">Experimental data - Layer anatomy</Link>
+          </p>
         </Collapsible>
 
       </DataContainer>
