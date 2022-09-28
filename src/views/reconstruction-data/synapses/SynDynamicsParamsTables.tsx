@@ -161,7 +161,7 @@ const postColumns = [
     render: formatValue,
   },
   {
-    title: 'tdecay fast, ms',
+    title: 'tdecay fast (mean ± std), ms',
     dataIndex: 'tdecayFast' as keyof PostSynDynamicsParam,
     render: formatValue,
   },
