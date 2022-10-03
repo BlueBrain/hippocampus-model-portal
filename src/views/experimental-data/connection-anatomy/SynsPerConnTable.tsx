@@ -6,6 +6,8 @@ import { downloadAsJson } from '@/utils';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
+import { layerDescription, mtypeDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
 import synsPerConnData from './syns-per-conn.json';
 
@@ -23,6 +25,21 @@ type DataEntry = {
   sem: number | '-';
   reference: string | React.ReactNode;
 };
+
+const termDescription = {
+  ...mtypeDescription,
+  ...layerDescription,
+};
+
+const Term = termFactory(termDescription);
+
+function getMtypeDescription(fullMtype: string) {
+  const [layer, mtype] = fullMtype.split('_');
+
+  return layerDescription[layer] && mtypeDescription[mtype]
+    ? `${mtypeDescription[mtype]} from ${layerDescription[layer]} layer`
+    : null;
+}
 
 const data: DataEntry[] = [{
   from: 'SP_BS',
@@ -271,27 +288,29 @@ const data: DataEntry[] = [{
 const columns = [
   {
     title: 'From',
-    dataIndex: 'from' as keyof DataEntry
+    dataIndex: 'from' as keyof DataEntry,
+    render: from => (<Term term={from} description={getMtypeDescription(from)} />),
   },
   {
     title: 'To',
-    dataIndex: 'to' as keyof DataEntry
+    dataIndex: 'to' as keyof DataEntry,
+    render: to => (<Term term={to} description={getMtypeDescription(to)} />),
   },
   {
     title: 'Region',
-    dataIndex: 'region' as keyof DataEntry
+    dataIndex: 'region' as keyof DataEntry,
   },
   {
     title: 'Specie',
-    dataIndex: 'specie' as keyof DataEntry
+    dataIndex: 'specie' as keyof DataEntry,
   },
   {
     title: 'Age',
-    dataIndex: 'age' as keyof DataEntry
+    dataIndex: 'age' as keyof DataEntry,
   },
   {
     title: 'Weight',
-    dataIndex: 'weight' as keyof DataEntry
+    dataIndex: 'weight' as keyof DataEntry,
   },
   {
     title: 'Synapses per connection',

@@ -5,20 +5,26 @@ import ResponsiveTable from '@/components/ResponsiveTable';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
+import { mtypeDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
 import PSCAmplitudeData from './tm_model_-_psc_amplitude.json';
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
 
+const Term = termFactory(mtypeDescription);
+
 const PSCAmplitudeColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean, pA',

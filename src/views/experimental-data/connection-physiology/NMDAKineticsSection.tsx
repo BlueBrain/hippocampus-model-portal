@@ -5,6 +5,8 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
+import { mtypeDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
 import RatioData from './nmda_kinetics_-_nmda_ratio.json';
 import TauDecayData from './nmda_kinetics_-_nmda_tau_decay.json';
@@ -12,15 +14,20 @@ import TauRiseData from './nmda_kinetics_-_nmda_tau_rise.json';
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
+
+const Term = termFactory(mtypeDescription);
+
 const RatioColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     className: 'text-nowrap',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean',
@@ -72,10 +79,12 @@ const TauDecayColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean, ms',
@@ -113,10 +122,12 @@ const TauRiseColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean, ms',

@@ -5,9 +5,13 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
+import { termFactory } from '@/components/Term';
+import { pathwayDescription } from '@/terms';
 
 import synapsePhysiologyData from './sc-synaptic-physiology.json';
 import doiIndex from './ref-doi.json';
+
+const Term = termFactory(pathwayDescription);
 
 
 type TableEntry = {
@@ -28,6 +32,7 @@ const synapsePhysiologyAllColumns = [
   {
     title: 'Exp. feature',
     dataIndex: 'expFeature' as keyof TableEntry,
+    render: feature => (<Term term={feature}/>),
     width: 180,
   },
   {

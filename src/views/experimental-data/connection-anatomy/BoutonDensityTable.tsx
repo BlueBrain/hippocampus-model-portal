@@ -5,6 +5,8 @@ import { downloadAsJson } from '@/utils';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
+import { layerDescription, mtypeDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
 import boutonDensityData from './bouton-density.json';
 
@@ -21,6 +23,21 @@ type BoutonDensity = {
   sem: number;
   reference: string | React.ReactNode;
 };
+
+const termDescription = {
+  ...mtypeDescription,
+  ...layerDescription,
+};
+
+const Term = termFactory(termDescription);
+
+function getMtypeDescription(fullMtype: string) {
+  const [layer, mtype] = fullMtype.split('_');
+
+  return layerDescription[layer] && mtypeDescription[mtype]
+    ? `${mtypeDescription[mtype]} from ${layerDescription[layer]} layer`
+    : null;
+}
 
 const data: BoutonDensity[] = [{
   mtype: 'SO_BS',
@@ -159,19 +176,20 @@ const unit = data[0].unit;
 const columns = [
   {
     title: 'M-type',
-    dataIndex: 'mtype' as keyof BoutonDensity
+    dataIndex: 'mtype' as keyof BoutonDensity,
+    render: mtype => (<Term term={mtype} description={getMtypeDescription(mtype)} />),
   },
   {
     title: 'Region',
-    dataIndex: 'region' as keyof BoutonDensity
+    dataIndex: 'region' as keyof BoutonDensity,
   },
   {
     title: 'Specie',
-    dataIndex: 'specie' as keyof BoutonDensity
+    dataIndex: 'specie' as keyof BoutonDensity,
   },
   {
     title: 'Weight',
-    dataIndex: 'weight' as keyof BoutonDensity
+    dataIndex: 'weight' as keyof BoutonDensity,
   },
   {
     title: 'Bouton Density',

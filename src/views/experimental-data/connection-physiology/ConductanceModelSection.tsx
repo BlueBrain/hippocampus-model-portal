@@ -5,6 +5,8 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import TextWithRefs from '@/components/TextWithRefs';
+import { mtypeDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
 import reversalPotentialData from './conductance_model_-_reversal_potential.json';
 import PSPAmplitudeData from './conductance_model_-_psp_amplitude.json';
@@ -12,14 +14,19 @@ import PSPCVData from './conductance_model_-_psp_cv.json';
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
+
+const Term = termFactory(mtypeDescription);
+
 const ReversalPotentialColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean, mV',
@@ -53,10 +60,12 @@ const PSPAmplitudeColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean, mV',
@@ -104,10 +113,12 @@ const PSPCVColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
   },
   {
     title: 'Mean',
