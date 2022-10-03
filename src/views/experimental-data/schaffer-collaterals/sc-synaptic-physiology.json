@@ -112,7 +112,7 @@
     ],
     "ShortTermPlasticity": [
       {
-        "expFeature": "Use",
+        "expFeature": "U",
         "mean": 0.14,
         "sd": 0.08,
         "sem": 0.03,
@@ -125,7 +125,7 @@
         "ref": "Wierenga and Wadman, 2003"
       },
       {
-        "expFeature": "Dep",
+        "expFeature": "D",
         "mean": 186,
         "sd": 71,
         "sem": 25.10,
@@ -138,7 +138,7 @@
         "ref": "Wierenga and Wadman, 2003"
       },
       {
-        "expFeature": "Fac",
+        "expFeature": "F",
         "mean": 129,
         "sd": 68,
         "sem": 24.04,
@@ -239,7 +239,7 @@
     ],
     "ShortTermPlasticity": [
       {
-        "expFeature": "Use",
+        "expFeature": "U",
         "mean": 0.11,
         "sd": 0.04,
         "sem": 0.01,
@@ -252,7 +252,7 @@
         "ref": "Wierenga and Wadman, 2003"
       },
       {
-        "expFeature": "Dep",
+        "expFeature": "D",
         "mean": 307,
         "sd": 233,
         "sem": 52.10,
@@ -265,7 +265,7 @@
         "ref": "Wierenga and Wadman, 2003"
       },
       {
-        "expFeature": "Fac",
+        "expFeature": "F",
         "mean": 195,
         "sd": 134,
         "sem": 29.96,
