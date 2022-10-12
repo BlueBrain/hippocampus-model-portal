@@ -8,7 +8,6 @@ import { layerDescription, mtypeDescription, etypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import MECompositionData from './me-composition.json';
-import style from './me-composition-styles.module.scss';
 
 
 type MEComposition = {
@@ -34,25 +33,7 @@ function getMtypeDescription(fullMtype: string) {
     : null;
 }
 
-const ValueBar = ({ value, barColor }) => {
-  if (!value) return (<>-</>);
-
-  return (
-    <>
-      <div className={style.valueContainer}>
-        <NumberFormat value={value} suffix="%" />
-      </div>
-
-      <div
-        className={style.barContainer}
-        style={{
-          backgroundColor: barColor,
-          height: `${value}%`,
-        }}
-      />
-    </>
-  );
-}
+const formatValue = value => value ? <NumberFormat value={value} suffix="%" /> : '-';
 
 const columns = [
   {
@@ -63,17 +44,17 @@ const columns = [
   {
     title: <Term term="cNAC" />,
     dataIndex: 'cNAC' as keyof MEComposition,
-    render: value => <ValueBar value={value} barColor="#C9D7F8" />
+    render: value => formatValue(value),
   },
   {
     title: <Term term="cAC" />,
     dataIndex: 'cAC' as keyof MEComposition,
-    render: value => <ValueBar value={value} barColor="#A7E2E3" />
+    render: value => formatValue(value),
   },
   {
     title: <Term term="bAC" />,
     dataIndex: 'bAC' as keyof MEComposition,
-    render: value => <ValueBar value={value} barColor="#80CFA9" />
+    render: value => formatValue(value),
   },
 ];
 
