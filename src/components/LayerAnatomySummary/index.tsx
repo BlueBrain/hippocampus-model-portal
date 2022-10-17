@@ -1,13 +1,17 @@
 import React, { ReactNode } from 'react';
 import { ElasticSearchViewQueryResponse } from '@bbp/nexus-sdk';
 
-import ErrorBoundary from '../ErrorBoundary';
-import HttpDownloadButton from '../HttpDownloadButton';
-import { downloadAsJson } from '../../utils';
-import { layers } from '../../constants';
-import NumberFormat from '../NumberFormat';
-import ResponsiveTable from '../ResponsiveTable';
+import { downloadAsJson } from '@/utils';
+import { layers } from '@/constants';
+import NumberFormat from '@/components/NumberFormat';
+import ResponsiveTable from '@/components/ResponsiveTable';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import { layerDescription } from '@/terms';
+import { termFactory } from '@/components/Term';
 
+
+const Term = termFactory(layerDescription);
 
 const classPrefix = 'layer-anatomy-summary__';
 
@@ -64,12 +68,25 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
   const factsheetData = summary.flatMap(summaryData => ([summaryData.rawThickness]));
 
   const columns = [
-    { dataIndex: 'layer' as keyof SummaryData, title: 'Layer' },
-    { title: 'Layer thickness',
+    {
+      title: 'Layer',
+      dataIndex: 'layer' as keyof SummaryData,
+      render: layer => (<Term term={layer} />)
+    },
+    {
+      title: 'Layer thickness',
       children: [
-        { dataIndex: 'thickness' as keyof SummaryData, title: <> Mean, {thicknessUnit} </> },
-        { dataIndex: 'thicknessN' as keyof SummaryData, title: 'No. of measurements', className: 'narrowColumn' },
-      ] },
+        {
+          title: (<> Mean ± std, {thicknessUnit} </>),
+          dataIndex: 'thickness' as keyof SummaryData,
+        },
+        {
+          title: 'No. of measurements (slices)',
+          dataIndex: 'thicknessN' as keyof SummaryData,
+          className: 'narrowColumn',
+        },
+      ],
+    },
   ];
 
   return (
