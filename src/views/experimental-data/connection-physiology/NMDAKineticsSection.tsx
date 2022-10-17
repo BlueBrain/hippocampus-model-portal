@@ -167,7 +167,7 @@ const NMDAKineticsSection: React.FC = () => {
         omnis eum quasi sint nam omnis aspernatur.
       </p>
 
-      <h2>NMDA ratio</h2>
+      <h2>NMDA/AMPA ratio</h2>
       <ResponsiveTable<TableEntry>
         data={RatioData}
         columns={RatioColumns}
