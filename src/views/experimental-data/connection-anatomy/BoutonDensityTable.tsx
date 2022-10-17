@@ -171,8 +171,6 @@ const data: BoutonDensity[] = [{
   ),
 }];
 
-const unit = data[0].unit;
-
 const columns = [
   {
     title: 'M-type',
@@ -192,15 +190,15 @@ const columns = [
     dataIndex: 'weight' as keyof BoutonDensity,
   },
   {
-    title: 'Bouton Density',
+    title: 'Bouton Density, boutons/µm',
     children: [
       {
-        title: <> Mean, {unit} </>,
+        title: <> Mean ± std</>,
         dataIndex: 'mean' as keyof BoutonDensity,
         render: (mean, record) => <><NumberFormat value={mean} /> ± <NumberFormat value={record.std} /></>
       },
       {
-        title: <> SEM, {unit} </>,
+        title: <> SEM</>,
         dataIndex: 'sem' as keyof BoutonDensity,
       },
       {
