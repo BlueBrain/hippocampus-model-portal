@@ -61,12 +61,6 @@ const anatomyColumns = [
     render: (mean) => <NumberFormat value={mean} />
   },
   {
-    title: 'Max error',
-    className: 'text-nowrap',
-    dataIndex: 'maxError' as keyof TableEntry,
-    render: (maxError) => <NumberFormat value={maxError} />
-  },
-  {
     title: 'SD',
     dataIndex: 'sd' as keyof TableEntry,
     render: (sd) => <NumberFormat value={sd} />
