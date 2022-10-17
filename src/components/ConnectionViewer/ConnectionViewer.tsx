@@ -115,7 +115,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             title="Viewer settings"
             placement="left"
             closable={true}
-            width={240}
+            width={250}
             onClose={() => setSettingDrawerVisible(false)}
             visible={settingDrawerVisible}
             getContainer={false}
@@ -123,7 +123,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
           >
             <h3>Neurite visibility</h3>
 
-            <h4>PRE</h4>
+            <h4>Pre-synaptic</h4>
             <div>
               <Checkbox
                 className={styles.coloredCheckbox}
@@ -138,13 +138,13 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                   updateVisibility({ [NeuriteType.PRE_NB_DEND]: visible });
                 }}
               >
-                Dend
+                Dendrite
               </Checkbox>
             </div>
             <div className="mt-1">
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': color.PRE_AXON } as React.CSSProperties}
+                style={{ '--checkbox-color': color.PRE_AXON, minWidth: '86px' } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.preAxon}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -173,11 +173,11 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
               />
             </div>
 
-            <h4 className="mt-2">POST</h4>
+            <h4 className="mt-2">Post-synaptic</h4>
             <div>
               <Checkbox
                 className={styles.coloredCheckbox}
-                style={{ '--checkbox-color': color.POST_DEND } as React.CSSProperties}
+                style={{ '--checkbox-color': color.POST_DEND, minWidth: '86px' } as React.CSSProperties}
                 defaultChecked={visibilityCtrlState.postDend}
                 onChange={(e) => {
                   const { checked: visible } = e.target;
@@ -192,7 +192,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                   });
                 }}
               >
-                Dend
+                Dendrite
               </Checkbox>
               <Segmented
                 className="ml-1"

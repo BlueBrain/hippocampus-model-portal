@@ -17,13 +17,13 @@ const ColoredBox: React.FC<{cssColor: string}> = ({ cssColor }) => {
 const Legend: React.FC = () => {
   return (
     <div className={styles.legend}>
-      <div><ColoredBox cssColor={color.PRE_DEND } /> Pre dend</div>
-      <div><ColoredBox cssColor={color.PRE_AXON} /> Pre axon</div>
+      <div><ColoredBox cssColor={color.PRE_DEND } /> Pre-synaptic dendrite</div>
+      <div><ColoredBox cssColor={color.PRE_AXON} /> Pre-synaptic axon</div>
 
       <div className={styles.legendDivider}></div>
 
-      <div><ColoredBox cssColor={color.POST_DEND} /> Post dend</div>
-      <div><ColoredBox cssColor={color.POST_AXON} /> Post axon</div>
+      <div><ColoredBox cssColor={color.POST_DEND} /> Post-synaptic dendrite</div>
+      <div><ColoredBox cssColor={color.POST_AXON} /> Post-synaptic axon</div>
 
       <div className={styles.legendDivider}></div>
 
