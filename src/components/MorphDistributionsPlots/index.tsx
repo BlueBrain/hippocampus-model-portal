@@ -2,11 +2,14 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import capitalize from 'lodash/capitalize';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col, Collapse } from 'antd';
 
 import { NeuriteType } from '@/types';
 import { neuriteTypes, neuriteColor } from '@/constants';
 import Histogram from '@/components/Histogram';
+
+
+const { Panel } = Collapse;
 
 export type MorphDistributionPlotsProps = {
   data: {
@@ -40,37 +43,42 @@ const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data, ty
   const groupedEntries = groupBy(plotEntries, 'neuriteType');
 
   const availableNeuriteTypes = neuriteTypes.filter(neuriteType => groupedEntries[neuriteType]);
+  const defaultOpenNeuriteTypes = availableNeuriteTypes.filter(neuriteType => neuriteType !== 'all');
 
   return (
     <>
-      {availableNeuriteTypes.map(neuriteType => (
-        <div key={neuriteType} className="mt-3">
-          <Divider className="text-capitalize">{neuriteType}</Divider>
-          <Row
+      <Collapse defaultActiveKey={defaultOpenNeuriteTypes}>
+        {availableNeuriteTypes.map(neuriteType => (
+          <Panel
+            header={<strong>{capitalize(neuriteType)}</strong>}
             key={neuriteType}
-            className="w-100"
-            gutter={[16, 24]}
-            justify={type === 'singleMorphology' ? 'space-between' : undefined}
           >
-            {groupedEntries[neuriteType].map(entry => (
-              <Col
-                key={entry.key}
-                xs={12}
-                sm={8}
-                lg={6}
-              >
-                <Histogram
-                  title={histogramTitle(entry)}
-                  values={entry.values}
-                  bins={entry.bins}
-                  counts={entry.counts}
-                  color={neuriteColor[entry.neuriteType]}
-                />
-              </Col>
-            ))}
-          </Row>
-        </div>
-      ))}
+            <Row
+              key={neuriteType}
+              className="w-100 mt-1 mb-1"
+              gutter={[16, 24]}
+              justify={type === 'singleMorphology' ? 'space-between' : undefined}
+            >
+              {groupedEntries[neuriteType].map(entry => (
+                <Col
+                  key={entry.key}
+                  xs={12}
+                  sm={8}
+                  lg={6}
+                >
+                  <Histogram
+                    title={histogramTitle(entry)}
+                    values={entry.values}
+                    bins={entry.bins}
+                    counts={entry.counts}
+                    color={neuriteColor[entry.neuriteType]}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </Panel>
+        ))}
+      </Collapse>
     </>
   );
 };
