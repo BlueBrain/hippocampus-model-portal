@@ -18,7 +18,6 @@ type TableEntry = {
   min: number;
   max: number;
   mean: number;
-  maxError: number | string;
   sd: number | string;
   sem: number | string;
   species: string;
