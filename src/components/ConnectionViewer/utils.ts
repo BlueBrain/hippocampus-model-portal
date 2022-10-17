@@ -5,7 +5,7 @@ import {
   Matrix3,
   Matrix4,
   Quaternion,
-  SphereBufferGeometry,
+  SphereGeometry,
   Uint16BufferAttribute,
   Uint32BufferAttribute,
   Vector3,
@@ -123,7 +123,7 @@ export function createSomaGeometryFromPoints(pts) {
   const position = getSomaPositionFromPoints(pts);
   const radius = getSomaRadiusFromPoints(pts);
 
-  const geometry = new SphereBufferGeometry(radius, 14, 14);
+  const geometry = new SphereGeometry(radius, 14, 14);
   geometry.translate(...position.toArray());
 
   return geometry;

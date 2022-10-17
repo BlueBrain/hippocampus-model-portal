@@ -29,7 +29,7 @@ const isFullscreenAvailable = document.fullscreenEnabled || document['webkitFull
 const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
-  const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
+  const [settingDrawerOpen, setSettingDrawerOpen] = useState(false);
   const fullscreenHandle = useFullScreenHandle();
 
   const [preAxonType, setPreAxonType] = useState<VisibilityType>('full');
@@ -84,7 +84,7 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             <Button
               className={styles.settingBtn}
               size="small"
-              onClick={() => setSettingDrawerVisible(true)}
+              onClick={() => setSettingDrawerOpen(true)}
               icon={<SettingOutlined />}
             />
           </Tooltip>
@@ -116,8 +116,8 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
             placement="left"
             closable={true}
             width={250}
-            onClose={() => setSettingDrawerVisible(false)}
-            visible={settingDrawerVisible}
+            onClose={() => setSettingDrawerOpen(false)}
+            open={settingDrawerOpen}
             getContainer={false}
             style={{ position: 'absolute' }}
           >
