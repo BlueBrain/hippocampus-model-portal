@@ -11,7 +11,6 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
 import ConductanceModelSection from './connection-physiology/ConductanceModelSection';
-import TMModelSection from './connection-physiology/TMModelSection';
 import AMPAKineticsSection from './connection-physiology/AMPAKineticsSection';
 import NMDAKineticsSection from './connection-physiology/NMDAKineticsSection';
 
@@ -79,7 +78,6 @@ const ConnectionPhysiologyView: React.FC = () => {
       <DataContainer
         navItems={[
           { id: 'conductanceModelSection', label: 'Conductance Model' },
-          { id: 'TMModelSection', label: 'TM Model' },
           { id: 'AMPAKineticsSection', label: 'AMPA Kinetics' },
           { id: 'NMDAKineticsSection', label: 'NMDA Kinetics' },
         ]}
@@ -89,14 +87,6 @@ const ConnectionPhysiologyView: React.FC = () => {
           title="Conductance Model"
         >
           <ConductanceModelSection />
-        </Collapsible>
-
-        <Collapsible
-          id="TMModelSection"
-          className="mt-4"
-          title="TM Model"
-        >
-          <TMModelSection />
         </Collapsible>
 
         <Collapsible

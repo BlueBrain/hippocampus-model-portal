@@ -11,6 +11,8 @@ import { termFactory } from '@/components/Term';
 import reversalPotentialData from './conductance_model_-_reversal_potential.json';
 import PSPAmplitudeData from './conductance_model_-_psp_amplitude.json';
 import PSPCVData from './conductance_model_-_psp_cv.json';
+import PSCAmplitudeData from './conductance_model_-_psc_amplitude.json';
+
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
 
@@ -158,6 +160,59 @@ const PSPCVColumns = [
   },
 ];
 
+const PSCAmplitudeColumns = [
+  {
+    title: 'From',
+    dataIndex: 'from' as keyof TableEntry,
+    render: from => (<Term term={from} />),
+  },
+  {
+    title: 'To',
+    dataIndex: 'to' as keyof TableEntry,
+    render: to => (<Term term={to} />),
+  },
+  {
+    title: 'Mean, pA',
+    dataIndex: 'mean' as keyof TableEntry,
+    render: (mean) => <NumberFormat value={mean} />
+  },
+  {
+    title: 'SD, pA',
+    dataIndex: 'sd' as keyof TableEntry,
+    render: (sd) => <NumberFormat value={sd} />
+  },
+  {
+    title: 'SEM, pA',
+    dataIndex: 'sem' as keyof TableEntry,
+    render: (sem) => <NumberFormat value={sem} />
+  },
+  {
+    title: 'Species',
+    dataIndex: 'species' as keyof TableEntry,
+  },
+  {
+    title: 'Age',
+    dataIndex: 'age' as keyof TableEntry,
+  },
+  {
+    title: 'Weight',
+    dataIndex: 'weight' as keyof TableEntry,
+  },
+  {
+    title: 'Region',
+    dataIndex: 'region' as keyof TableEntry,
+  },
+  {
+    title: 'N cells',
+    dataIndex: 'nCells' as keyof TableEntry,
+  },
+  {
+    title: 'Reference',
+    dataIndex: 'ref' as keyof TableEntry,
+    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
+  },
+];
+
 
 const ConductanceModelSection: React.FC = () => {
   return (
@@ -214,6 +269,23 @@ const ConductanceModelSection: React.FC = () => {
           onClick={() => downloadAsJson(
             PSPCVData,
             `exp-connection-physiology_-_conductance_model_-_psp-cv-table.json`
+          )}
+        >
+          table data
+        </HttpDownloadButton>
+      </div>
+
+      <h2 className="mt-3">PSC amplitude</h2>
+      <ResponsiveTable<TableEntry>
+        data={PSCAmplitudeData}
+        columns={PSCAmplitudeColumns}
+        rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
+      />
+      <div className="text-right mt-2">
+        <HttpDownloadButton
+          onClick={() => downloadAsJson(
+            PSCAmplitudeData,
+            `exp-connection-physiology_-_conductance_model_-_psc-amplitude-table.json`
           )}
         >
           table data
