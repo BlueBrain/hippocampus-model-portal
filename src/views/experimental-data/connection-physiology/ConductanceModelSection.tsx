@@ -52,7 +52,7 @@ const ReversalPotentialColumns = [
     dataIndex: 'region' as keyof TableEntry,
   },
   {
-    title: 'Reference',
+    title: (<span>Reference<sup>*</sup></span>),
     dataIndex: 'ref' as keyof TableEntry,
     render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
   },
@@ -230,6 +230,17 @@ const ConductanceModelSection: React.FC = () => {
         columns={ReversalPotentialColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
+      <small className="mt-2 display-block">
+        <sup>*</sup> Reversal potential values were taken from <a
+          href="https://hippocampome.org/php/synaptome.php"
+          target="_blank"
+          rel="noopener noreferrer"
+        >https://hippocampome.org/php/synaptome.php</a>, where experimentally observed values were adjusted
+        to compensate for differences in recording method, bath temperature, and between bath and
+        recording pipette solution ionic compositions (for details,
+        see <TextWithRefs text="Moradi and Ascoli, 2020" doiIndex={doiIndex} />). Metadata (species, age, weight,
+        and region) were taken from the original experimental study on which these values were based.
+      </small>
       <div className="text-right mt-2">
         <HttpDownloadButton
           onClick={() => downloadAsJson(

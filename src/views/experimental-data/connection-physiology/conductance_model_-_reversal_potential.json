@@ -10,7 +10,7 @@
         "age": "6-7 m",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "BS",
@@ -23,7 +23,7 @@
         "age": "6-7 m",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "CCKBC",
@@ -36,7 +36,7 @@
         "age": "12-21 d",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Price et al., 2005"
+        "ref": "Price et al., 2005"
     },
     {
         "from": "CCKBC",
@@ -49,7 +49,7 @@
         "age": "-",
         "weight": "250-350 g",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Fuentealba et al., 2008"
+        "ref": "Fuentealba et al., 2008"
     },
     {
         "from": "Ivy",
@@ -62,7 +62,7 @@
         "age": "-",
         "weight": "250-350 g",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Fuentealba et al., 2008"
+        "ref": "Fuentealba et al., 2008"
     },
     {
         "from": "OLM",
@@ -75,7 +75,7 @@
         "age": "6-7 m",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Malerba, Krishnan, Fellous, and Bazhenov, 2016"
+        "ref": "Malerba, Krishnan, Fellous, and Bazhenov, 2016"
     },
     {
         "from": "OLM",
@@ -88,7 +88,7 @@
         "age": "18-22 d",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Elfant et al., 2008"
+        "ref": "Elfant et al., 2008"
     },
     {
         "from": "OLM",
@@ -101,6 +101,6 @@
         "age": "18-22 d",
         "weight": "-",
         "region": "CA1",
-        "ref": "Moradi and Ascoli, 2020; data from Elfant et al., 2008"
+        "ref": "Elfant et al., 2008"
     }
 ]
