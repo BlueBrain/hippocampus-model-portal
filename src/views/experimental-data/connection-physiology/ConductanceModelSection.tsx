@@ -230,7 +230,7 @@ const ConductanceModelSection: React.FC = () => {
         columns={ReversalPotentialColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <small className="mt-2 display-block">
+      <small className="mt-2 block">
         <sup>*</sup> Reversal potential values were taken from <a
           href="https://hippocampome.org/php/synaptome.php"
           target="_blank"
