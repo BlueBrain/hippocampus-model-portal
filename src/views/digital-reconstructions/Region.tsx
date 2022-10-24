@@ -91,14 +91,12 @@ const RegionView: React.FC = () => {
           id="regionSection"
           title="Factsheet"
         >
-          <p className="text-tmp">Text</p>
-
           <HttpData path={regionFactsheetPath(volumeSection)}>
             {(data, loading) => (
               <Spin spinning={loading}>
                 {data && (
-                  <div className="mt-3">
-                    <h3 className="mt-3">Neuronal anatomy</h3>
+                  <>
+                    <h3 className="mt-2">Neuronal anatomy</h3>
                     <Factsheet facts={data.neuronalAnatomy} />
 
                     <h3 className="mt-3">Neuronal physiology</h3>
@@ -124,7 +122,7 @@ const RegionView: React.FC = () => {
                         factsheet
                       </HttpDownloadButton>
                     </div>
-                  </div>
+                  </>
                 )}
               </Spin>
             )}
