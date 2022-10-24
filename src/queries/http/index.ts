@@ -82,8 +82,7 @@ export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_a
 export const regionFactsheetPath = (volumeSection: VolumeSection) => {
   if (!volumeSection) return null;
 
-  // return `${staticDataBaseUrl}/dig-rec/region/${volumeSection}/factsheet.json`;
-  return `/hippocampus-portal-dev/data/region/${volumeSection}/factsheet.json`;
+  return `${staticDataBaseUrl}/dig-rec/region/${volumeSection}/factsheet.json`;
 };
 
 // Digital Reconstructions - Pathways
