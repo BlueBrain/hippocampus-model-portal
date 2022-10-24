@@ -26,6 +26,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  sentry: {
+    hideSourceMaps: true,
+  },
   compress: false,
   productionBrowserSourceMaps: true,
   output: 'standalone',
