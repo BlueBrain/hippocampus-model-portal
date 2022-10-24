@@ -89,7 +89,7 @@ const RegionView: React.FC = () => {
       <DataContainer visible={!!volumeSection}>
         <Collapsible
           id="regionSection"
-          title="Region"
+          title="Factsheet"
         >
           <p className="text-tmp">Text</p>
 
