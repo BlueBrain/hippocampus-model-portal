@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 
 import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
@@ -160,6 +160,7 @@ const Neurons: React.FC = () => {
                 <div className={styles.selectorBody}>
                   <List
                     className="mb-2"
+                    block
                     list={mtypes}
                     value={currentMtype}
                     title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
@@ -168,6 +169,7 @@ const Neurons: React.FC = () => {
                   />
                   <List
                     className="mb-2"
+                    block
                     list={etypes}
                     value={currentEtype}
                     title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
@@ -175,6 +177,7 @@ const Neurons: React.FC = () => {
                     onSelect={setEtype}
                   />
                   <List
+                    block
                     list={instances}
                     value={currentInstance}
                     title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
@@ -251,24 +254,28 @@ const Neurons: React.FC = () => {
           className="mt-4"
           title={`E-Type ${currentEtype} Factsheet`}
         >
+          <h3 className="text-tmp">Text?</h3>
+
           <HttpData path={etypeFactsheetPath(currentInstance)}>
-            {data => (
-              <>
-                <h3 className="text-tmp">Text?</h3>
-                <EtypeFactsheet data={data} />
-                <div className="text-right mt-3 mb-3">
-                  <Button
-                    type="primary"
-                    href={etypeFactsheetPath(currentInstance)}
-                    download
-                  >
-                    Download factsheet
-                  </Button>
-                </div>
-                <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
-              </>
+            {(data, loading) => (
+              <Spin spinning={loading}>
+                {data && (
+                  <EtypeFactsheet data={data} />
+                )}
+              </Spin>
             )}
           </HttpData>
+
+          <div className="text-right mt-3 mb-3">
+            <Button
+              type="primary"
+              href={etypeFactsheetPath(currentInstance)}
+              download
+            >
+              Download factsheet
+            </Button>
+          </div>
+          <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
           {/* TODO: add experimental traces used for model fitting */}
         </Collapsible>
       </DataContainer>

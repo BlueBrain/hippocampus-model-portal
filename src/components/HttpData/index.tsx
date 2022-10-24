@@ -55,9 +55,6 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
     return null;
   }
 
-  if (state.loading || !state.data) {
-    return <p>loading...</p>;
-  }
   if (state.error) {
     return (
       <p>

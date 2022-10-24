@@ -256,15 +256,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <div className="mt-3">
                 <h3>Factsheet</h3>
                 <Spin spinning={loading}>
-                  <NeuriteTypeGroupedFactsheets id="morphometrics" facts={factsheetData.values} />
-                  <div className="text-right mt-2">
-                    <HttpDownloadButton
-                      href={expMorphFactesheetPath(currentInstance)}
-                      download={`exp-morphology-factsheet-${currentInstance}.json`}
-                    >
-                      factsheet
-                    </HttpDownloadButton>
-                  </div>
+                  {factsheetData && (
+                    <>
+                      <NeuriteTypeGroupedFactsheets id="morphometrics" facts={factsheetData.values} />
+                      <div className="text-right mt-2">
+                        <HttpDownloadButton
+                          href={expMorphFactesheetPath(currentInstance)}
+                          download={`exp-morphology-factsheet-${currentInstance}.json`}
+                        >
+                          factsheet
+                        </HttpDownloadButton>
+                      </div>
+                    </>
+                  )}
                 </Spin>
               </div>
             )}
@@ -275,15 +279,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <div className="mt-4">
                 <h3>Distributions</h3>
                 <Spin spinning={loading}>
-                  <MorphDistributionPlots type="singleMorphology" data={plotsData} />
-                  <div className="text-right mt-3">
-                    <HttpDownloadButton
-                      href={expMorphDistributionPlotsPath(currentInstance)}
-                      download={`exp-morphology-distributions-factsheet-${currentInstance}.json`}
-                    >
-                      distributions
-                    </HttpDownloadButton>
-                  </div>
+                  {plotsData && (
+                    <>
+                      <MorphDistributionPlots type="singleMorphology" data={plotsData} />
+                      <div className="text-right mt-3">
+                        <HttpDownloadButton
+                          href={expMorphDistributionPlotsPath(currentInstance)}
+                          download={`exp-morphology-distributions-factsheet-${currentInstance}.json`}
+                        >
+                          distributions
+                        </HttpDownloadButton>
+                      </div>
+                    </>
+                  )}
                 </Spin>
               </div>
             )}
@@ -300,15 +308,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <div>
                 <h3>Factsheet</h3>
                 <Spin spinning={loading}>
-                  <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
-                  <div className="text-right mt-3">
-                    <HttpDownloadButton
-                      href={expMorphPopulationFactesheetPath(currentMtype)}
-                      download={`exp-morphology-population-factsheet-${currentMtype}.json`}
-                    >
-                      factsheet
-                    </HttpDownloadButton>
-                  </div>
+                  {factsheetData && (
+                    <>
+                      <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
+                      <div className="text-right mt-3">
+                        <HttpDownloadButton
+                          href={expMorphPopulationFactesheetPath(currentMtype)}
+                          download={`exp-morphology-population-factsheet-${currentMtype}.json`}
+                        >
+                          factsheet
+                        </HttpDownloadButton>
+                      </div>
+                    </>
+                  )}
                 </Spin>
               </div>
             )}
@@ -320,15 +332,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
                 <div className="mt-4">
                   <h3>Distributions</h3>
                   <Spin spinning={loading}>
-                    <MorphDistributionPlots type="population" data={plotsData} />
-                    <div className="text-right mt-2">
-                      <HttpDownloadButton
-                        href={expMorphPopulationDistributionPlotsPath(currentMtype)}
-                        download={`exp-morphology-population-distributions-${currentMtype}.json`}
-                      >
-                        distributions
-                      </HttpDownloadButton>
-                    </div>
+                    {plotsData && (
+                      <>
+                        <MorphDistributionPlots type="population" data={plotsData} />
+                        <div className="text-right mt-2">
+                          <HttpDownloadButton
+                            href={expMorphPopulationDistributionPlotsPath(currentMtype)}
+                            download={`exp-morphology-population-distributions-${currentMtype}.json`}
+                          >
+                            distributions
+                          </HttpDownloadButton>
+                        </div>
+                      </>
+                    )}
                   </Spin>
                 </div>
               )}

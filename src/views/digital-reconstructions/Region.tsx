@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import { useRouter } from 'next/router';
 
 import { colorName } from './config';
@@ -94,35 +94,39 @@ const RegionView: React.FC = () => {
           <p className="text-tmp">Text</p>
 
           <HttpData path={regionFactsheetPath(volumeSection)}>
-            {(data) => (
-              <div className="mt-3">
-                <h3 className="mt-3">Neuronal anatomy</h3>
-                <Factsheet facts={data.neuronalAnatomy} />
+            {(data, loading) => (
+              <Spin spinning={loading}>
+                {data && (
+                  <div className="mt-3">
+                    <h3 className="mt-3">Neuronal anatomy</h3>
+                    <Factsheet facts={data.neuronalAnatomy} />
 
-                <h3 className="mt-3">Neuronal physiology</h3>
-                <Factsheet facts={data.neuronalPhysiology} />
+                    <h3 className="mt-3">Neuronal physiology</h3>
+                    <Factsheet facts={data.neuronalPhysiology} />
 
-                <h3 className="mt-3">Synaptic anatomy</h3>
-                <Factsheet facts={data.synapticAnatomy} />
+                    <h3 className="mt-3">Synaptic anatomy</h3>
+                    <Factsheet facts={data.synapticAnatomy} />
 
-                <h3 className="mt-3">Synaptic physiology</h3>
-                <Factsheet facts={data.synapticPhysiology} />
+                    <h3 className="mt-3">Synaptic physiology</h3>
+                    <Factsheet facts={data.synapticPhysiology} />
 
-                <h3 className="mt-3">Network anatomy</h3>
-                <Factsheet facts={data.networkAnatomy} />
+                    <h3 className="mt-3">Network anatomy</h3>
+                    <Factsheet facts={data.networkAnatomy} />
 
-                <h3 className="mt-3">Schaffer collaterals</h3>
-                <Factsheet facts={data.schafferCollaterals} />
+                    <h3 className="mt-3">Schaffer collaterals</h3>
+                    <Factsheet facts={data.schafferCollaterals} />
 
-                <div className="text-right mt-2">
-                  <HttpDownloadButton
-                    href={regionFactsheetPath(volumeSection)}
-                    download={`dig-rec-region-factsheet_-_${volumeSection}.json`}
-                  >
-                    factsheet
-                  </HttpDownloadButton>
-                </div>
-              </div>
+                    <div className="text-right mt-2">
+                      <HttpDownloadButton
+                        href={regionFactsheetPath(volumeSection)}
+                        download={`dig-rec-region-factsheet_-_${volumeSection}.json`}
+                      >
+                        factsheet
+                      </HttpDownloadButton>
+                    </div>
+                  </div>
+                )}
+              </Spin>
             )}
           </HttpData>
         </Collapsible>

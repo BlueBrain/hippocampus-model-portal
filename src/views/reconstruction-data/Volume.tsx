@@ -141,21 +141,27 @@ const VolumeView: React.FC = () => {
           </Spin>
 
           <HttpData path={volumeAnalysisPath}>
-            {(data) => (
-              <div className="mt-3">
-                <h3>Volume analysis</h3>
-                <Factsheet facts={getVolumeSectionFacts(data.values)} />
-                <div className="text-right mt-2">
-                  <HttpDownloadButton
-                    onClick={() => downloadAsJson(
-                      getVolumeSectionFacts(data.values),
-                      `rec-data-volume-analysis_-_${volumeSection}.json`
-                    )}
-                  >
-                    factsheet
-                  </HttpDownloadButton>
+            {(data, loading) => (
+              <Spin spinning={loading}>
+                <div className="mt-3">
+                  <h3>Volume analysis</h3>
+                  {data && (
+                    <>
+                      <Factsheet facts={getVolumeSectionFacts(data.values)} />
+                      <div className="text-right mt-2">
+                        <HttpDownloadButton
+                          onClick={() => downloadAsJson(
+                            getVolumeSectionFacts(data.values),
+                            `rec-data-volume-analysis_-_${volumeSection}.json`
+                          )}
+                        >
+                          factsheet
+                        </HttpDownloadButton>
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
+              </Spin>
             )}
           </HttpData>
 
