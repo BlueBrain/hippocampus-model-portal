@@ -3,6 +3,10 @@ import NumberFormat from '../NumberFormat';
 import isNil from 'lodash/isNil';
 
 import Unit from '../Unit';
+import { termFactory } from '@/components/Term';
+
+
+const Term = termFactory();
 
 
 const classPrefix = 'factsheet__';
@@ -33,7 +37,9 @@ const FactsheetSingleValueEntry: React.FC<{
 }) => {
   return (
     <div className="row mt-1">
-      <div className="col-xs-8 col-sm-4 name">{fact.name}</div>
+      <div className="col-xs-8 col-sm-4 name">
+        <Term term={fact.name} description={fact.description} />
+      </div>
       <div className="col-xs-4 col-sm-8 value">
         {isNil(fact.value)
           ? (<span>-</span>)
@@ -56,7 +62,9 @@ const FactsheetSingleMeanStdEntry: React.FC<{
 
   return (
     <div className="row mt-1">
-      <div className="col-xs-4 name">{fact.name}</div>
+      <div className="col-xs-4 name">
+        <Term term={fact.name} description={fact.description} />
+      </div>
       <div className="col-xs-4 value">
         <NumberFormat value={mean} />{std ? <> ± <NumberFormat value={std} /></> : ''} <Unit value={fact.unit} />
       </div>
@@ -93,7 +101,9 @@ const FactsheetMapValueEntry: React.FC<{
 
   return (
     <div className="row mt-1">
-      <div className="col-xs-4 name">{fact.name}</div>
+      <div className="col-xs-4 name">
+        <Term term={fact.name} description={fact.description} />
+      </div>
       <div className="col-xs-8">{valueColumn}</div>
     </div>
   );

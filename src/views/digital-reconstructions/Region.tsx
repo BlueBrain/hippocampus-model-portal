@@ -1,19 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col } from 'antd';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { colorName } from './config';
-import Filters from '../../layouts/Filters';
-import StickyContainer from '../../components/StickyContainer';
-import Title from '../../components/Title';
-import InfoBox from '../../components/InfoBox';
-import DataContainer from '../../components/DataContainer';
-import Collapsible from '../../components/Collapsible';
+import Filters from '@/layouts/Filters';
+import { regionFactsheetPath } from '@/queries/http';
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import Factsheet from '@/components/Factsheet';
+import HttpData from '@/components/HttpData';
+import StickyContainer from '@/components/StickyContainer';
+import Title from '@/components/Title';
+import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
+import { VolumeSection } from '@/types';
+import { defaultSelection, volumeSections } from '@/constants';
+import VolumeSectionSelector from '@/components/VolumeSectionSelector';
+import withPreselection from '@/hoc/with-preselection';
+import withQuickSelector from '@/hoc/with-quick-selector';
 
-import selectorStyle from '../../styles/selector.module.scss';
+import selectorStyle from '@/styles/selector.module.scss';
 
 
-const SubregionView: React.FC = () => {
+const RegionView: React.FC = () => {
+  const router = useRouter();
+
+  const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
+
+  const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
+    const query = { volume_section: volumeSection };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
   return (
     <>
       <Filters hasData={true}>
@@ -53,16 +71,13 @@ const SubregionView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Selector&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
+            <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
+              <div className={`${selectorStyle.column} mt-3`}>
+                <div className={selectorStyle.head}>Select a volume section</div>
+                <div className={selectorStyle.body}>
+                  <VolumeSectionSelector
+                    value={volumeSection}
+                    onSelect={setVolumeSectionQuery}
                   />
                 </div>
               </div>
@@ -71,16 +86,45 @@ const SubregionView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
-        navItems={[
-          { id: 'regionSection', label: 'Region' },
-        ]}
-      >
+      <DataContainer visible={!!volumeSection}>
         <Collapsible
           id="regionSection"
           title="Region"
         >
-          <h3 className="text-tmp">Text + factsheet</h3>
+          <p className="text-tmp">Text</p>
+
+          <HttpData path={regionFactsheetPath(volumeSection)}>
+            {(data) => (
+              <div className="mt-3">
+                <h3 className="mt-3">Neuronal anatomy</h3>
+                <Factsheet facts={data.neuronalAnatomy} />
+
+                <h3 className="mt-3">Neuronal physiology</h3>
+                <Factsheet facts={data.neuronalPhysiology} />
+
+                <h3 className="mt-3">Synaptic anatomy</h3>
+                <Factsheet facts={data.synapticAnatomy} />
+
+                <h3 className="mt-3">Synaptic physiology</h3>
+                <Factsheet facts={data.synapticPhysiology} />
+
+                <h3 className="mt-3">Network anatomy</h3>
+                <Factsheet facts={data.networkAnatomy} />
+
+                <h3 className="mt-3">Schaffer collaterals</h3>
+                <Factsheet facts={data.schafferCollaterals} />
+
+                <div className="text-right mt-2">
+                  <HttpDownloadButton
+                    href={regionFactsheetPath(volumeSection)}
+                    download={`dig-rec-region-factsheet_-_${volumeSection}.json`}
+                  >
+                    factsheet
+                  </HttpDownloadButton>
+                </div>
+              </div>
+            )}
+          </HttpData>
         </Collapsible>
       </DataContainer>
     </>
@@ -88,4 +132,25 @@ const SubregionView: React.FC = () => {
 };
 
 
-export default SubregionView;
+const RegionViewWithPreselection = withPreselection(
+  RegionView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.digitalReconstruction.region,
+  },
+);
+
+const qsEntries = [{
+  title: 'Volume section',
+  key: 'volume_section',
+  values: volumeSections,
+}];
+
+
+export default withQuickSelector(
+  RegionViewWithPreselection,
+  {
+    entries: qsEntries,
+    color: colorName,
+  },
+);

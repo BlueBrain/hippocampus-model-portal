@@ -46,6 +46,9 @@ export const defaultSelection = {
     },
   },
   digitalReconstruction: {
+    region: {
+      volume_section: 'slice',
+    },
     neurons: {
       layer: 'SLM',
       etype: 'bAC',

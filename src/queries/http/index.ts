@@ -64,14 +64,6 @@ export const morphHistogramIndexPath = (region: string, mtype: string) => {
 };
 
 
-// Digital Reconstructions - Pathways
-
-export const pathwayIndexPath = `${staticDataBaseUrl}/pathway-index.json`;
-
-export const connectionViewerDataPath = (preMtype: string, postMtype: string) => {
-  return `${staticDataBaseUrl}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
-};
-
 // Reconstruction Data - Volume
 
 export const volumeRasterDataPath = (volumeSection: VolumeSection) => {
@@ -81,3 +73,24 @@ export const volumeRasterDataPath = (volumeSection: VolumeSection) => {
 };
 
 export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_analysis.json`;
+
+
+// Digital Reconstructions
+
+// Digital Reconstructions - Region
+
+export const regionFactsheetPath = (volumeSection: VolumeSection) => {
+  if (!volumeSection) return null;
+
+  // return `${staticDataBaseUrl}/dig-rec/region/${volumeSection}/factsheet.json`;
+  return `/hippocampus-portal-dev/data/region/${volumeSection}/factsheet.json`;
+};
+
+// Digital Reconstructions - Pathways
+
+export const pathwayIndexPath = `${staticDataBaseUrl}/pathway-index.json`;
+
+export const connectionViewerDataPath = (preMtype: string, postMtype: string) => {
+  return `${staticDataBaseUrl}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
+};
+
