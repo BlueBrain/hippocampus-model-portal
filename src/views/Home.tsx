@@ -66,6 +66,14 @@ const Home: React.FC = () => (
               {
                 label: 'Schaffer Collaterals',
                 href: '/experimental-data/schaffer-collaterals/',
+              },
+              {
+                label: 'Acetylcholine',
+                href: '/experimental-data/acetylcholine/',
+              },
+              {
+                label: 'Theta',
+                href: '/experimental-data/theta/',
               }
             ]}
           />
@@ -111,6 +119,10 @@ const Home: React.FC = () => (
               {
                 label: 'Synapses',
                 href: '/reconstruction-data/synapses/',
+              },
+              {
+                label: 'Acetylcholine',
+                href: '/reconstruction-data/acetylcholine/',
               }
             ]}
           />
@@ -160,6 +172,10 @@ const Home: React.FC = () => (
               {
                 label: 'Neurons',
                 href: '/digital-reconstructions/neurons/',
+              },
+              {
+                label: 'Acetylcholine',
+                href: '/digital-reconstructions/acetylcholine/',
               }
             ]}
           />

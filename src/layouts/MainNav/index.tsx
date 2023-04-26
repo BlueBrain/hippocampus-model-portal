@@ -198,6 +198,8 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
           <SubmenuGroupLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
           <SubmenuGroupLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
+          <SubmenuGroupLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
+          <SubmenuGroupLink label="Theta" href="/experimental-data/theta/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Reconstruction Data" background="grey-2">
@@ -208,6 +210,7 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
           <SubmenuGroupLink label="Connections" href="/reconstruction-data/connections/" />
           <SubmenuGroupLink label="Synapses" href="/reconstruction-data/synapses/" />
+          <SubmenuGroupLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Digital Reconstructions" background="grey-3">
@@ -216,6 +219,7 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Connections" href="/digital-reconstructions/connections/" />
           <SubmenuGroupLink label="Synapses" href="/digital-reconstructions/synapses/" />
           <SubmenuGroupLink label="Neurons" href="/digital-reconstructions/neurons/" />
+          <SubmenuGroupLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Validations" background="grey-4">
