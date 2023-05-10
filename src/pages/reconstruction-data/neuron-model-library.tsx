@@ -8,7 +8,7 @@ export default function NeuronModelLibraryPage() {
   return (
     <>
       <Head>
-        <title>Neuron model library / Reconstruction data / SSCx Portal</title>
+        <title>Neuron model library / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

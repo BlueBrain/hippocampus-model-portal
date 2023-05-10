@@ -7,7 +7,7 @@ export default function LayerAnatomyPage() {
   return (
     <>
       <Head>
-        <title>Layer anatomy / Experimental data / SSCx Portal</title>
+        <title>Layer anatomy / Experimental data / Hippocampus Hub Explore</title>
         {/* TODO: replace with proper text */}
         <meta
           name="description"

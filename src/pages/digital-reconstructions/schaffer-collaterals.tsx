@@ -7,7 +7,7 @@ export default function SchafferCollateralsPage() {
   return (
     <>
       <Head>
-        <title>Schaffer collaterals / Digital reconstructions / SSCx Portal</title>
+        <title>Schaffer collaterals / Digital reconstructions / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

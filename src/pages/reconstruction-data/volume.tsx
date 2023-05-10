@@ -8,7 +8,7 @@ export default function VolumePage() {
   return (
     <>
       <Head>
-        <title>Volume / Reconstruction data / SSCx Portal</title>
+        <title>Volume / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

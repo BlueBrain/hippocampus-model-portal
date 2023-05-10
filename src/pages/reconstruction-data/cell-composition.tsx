@@ -8,7 +8,7 @@ export default function CellCompositionPage() {
   return (
     <>
       <Head>
-        <title>Cell composition / Reconstruction data / SSCx Portal</title>
+        <title>Cell composition / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

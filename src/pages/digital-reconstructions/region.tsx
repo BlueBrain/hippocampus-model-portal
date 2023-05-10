@@ -7,7 +7,7 @@ export default function DigRecRegionPage() {
   return (
     <>
       <Head>
-        <title>Region / Digital reconstructions / SSCx Portal</title>
+        <title>Region / Digital reconstructions / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

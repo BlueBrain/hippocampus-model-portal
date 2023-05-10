@@ -7,7 +7,7 @@ export default function AcetylcholinePage() {
   return (
     <>
       <Head>
-        <title>Acetylcholine / Experimental data / SSCx Portal</title>
+        <title>Acetylcholine / Experimental data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

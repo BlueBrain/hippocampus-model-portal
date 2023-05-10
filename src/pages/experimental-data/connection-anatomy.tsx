@@ -7,7 +7,7 @@ export default function ConnectionAnatomyPage() {
   return (
     <>
       <Head>
-        <title>Connection anatomy / Experimental data / SSCx Portal</title>
+        <title>Connection anatomy / Experimental data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

@@ -7,7 +7,7 @@ export default function ThetaPage() {
   return (
     <>
       <Head>
-        <title>Theta / Experimental data / SSCx Portal</title>
+        <title>Theta / Experimental data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

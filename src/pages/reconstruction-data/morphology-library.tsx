@@ -8,7 +8,7 @@ export default function MorphologyLibraryPage() {
   return (
     <>
       <Head>
-        <title>Morphology library / Reconstruction data / SSCx Portal</title>
+        <title>Morphology library / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

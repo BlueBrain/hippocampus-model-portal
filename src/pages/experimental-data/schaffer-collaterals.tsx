@@ -7,7 +7,7 @@ export default function ConnectionPhysiologyPage() {
   return (
     <>
       <Head>
-        <title>Schaffer collaterals / Experimental data / SSCx Portal</title>
+        <title>Schaffer collaterals / Experimental data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

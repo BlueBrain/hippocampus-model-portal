@@ -8,7 +8,7 @@ export default function SynapsesPage(){
   return (
     <>
       <Head>
-        <title>Synapses / Reconstruction data / SSCx Portal</title>
+        <title>Synapses / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

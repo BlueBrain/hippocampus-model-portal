@@ -8,7 +8,7 @@ export default function DigRecNeuronsPage() {
   return (
     <>
       <Head>
-        <title>Neurons / Digital reconstructions / SSCx Portal</title>
+        <title>Neurons / Digital reconstructions / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

@@ -8,7 +8,7 @@ export default function ConnectionsPage() {
   return (
     <>
       <Head>
-        <title>Connections / Reconstruction data / SSCx Portal</title>
+        <title>Connections / Reconstruction data / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"
