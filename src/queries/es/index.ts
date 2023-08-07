@@ -366,6 +366,7 @@ export const etypeTracesDataQuery = (
     return null;
   }
 
+  // Changes based on https://bbpteam.epfl.ch/project/issues/browse/BBPP134-341
   return {
     from: 0,
     size: 10000,
@@ -382,7 +383,7 @@ export const etypeTracesDataQuery = (
           {
             bool: {
               must: [
-                { term: { '@type': 'Trace' } },
+                { term: { '@type': 'TraceWebDataContainer' } },
               ],
             },
           },
