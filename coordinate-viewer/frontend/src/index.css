@@ -1,0 +1,57 @@
+:root {
+    --theme-color-neutral-dark-5: #00193388;
+    --theme-color-neutral-dark: #001933;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    color: #fffe;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    all: inherit;
+    background-image: linear-gradient(
+        to top,
+        hsl(40, 100%, 30%),
+        hsl(40, 100%, 45%),
+        hsl(40, 100%, 30%)
+    );
+    font-variant: small-caps;
+    border-radius: 0.25em;
+    font-weight: bolder;
+    color: #000e;
+    border: 0;
+    display: grid;
+    place-items: center;
+    height: 2em;
+    cursor: pointer;
+    box-shadow: 0 0.125em 0.25em hsla(40, 100%, 50%, 0.3);
+    transition: all 0.3s;
+}
+
+button:active {
+    box-shadow: 0 0 0.125em hsla(50, 100%, 50%, 0.4);
+    transform: translateY(0.125em);
+}
+
+a,
+a:visited {
+    color: rgb(103, 153, 238);
+}
+
+#splash-screen {
+    transition: all 0.9s;
+}
+
+#splash-screen.vanish {
+    pointer-events: none;
+    opacity: 0;
+}

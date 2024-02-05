@@ -1,0 +1,10 @@
+*.orig
+test-coverage/
+node_modules/
+build/
+dist/
+.vscode/
+.idea/
+.env
+venv/
+__pycache__/

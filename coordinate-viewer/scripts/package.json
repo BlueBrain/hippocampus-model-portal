@@ -1,0 +1,21 @@
+{
+    "name": "scripts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "start": "npm run build && node ./dist/index.js"
+    },
+    "keywords": [],
+    "author": "Fabien PETITJEAN <fabien.petitjean@epfl.ch>",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^20.4.5",
+        "typescript": "^5.1.6"
+    },
+    "dependencies": {
+        "fflate": "^0.8.0"
+    }
+}
