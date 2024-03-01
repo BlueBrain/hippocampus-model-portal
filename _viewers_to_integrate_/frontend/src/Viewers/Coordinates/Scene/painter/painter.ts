@@ -27,7 +27,7 @@ export default class Painter {
         private readonly canvas: HTMLCanvasElement,
         meshInfo: MeshInfo,
         vert: Float32Array,
-        elem: number[]
+        elem: Uint32Array
     ) {
         const scene = new ThreeScene()
         const camera = new ThreePerspectiveCamera(50, 1, 1, 1e5)
@@ -54,7 +54,7 @@ export default class Painter {
         camera.lookAt(new ThreeVector3(x, y, z))
         window.requestAnimationFrame(this.paint)
         State.axe.addListener((axe) => {
-            setUniSelector(Axes[axe] ?? Axes.L)
+            setUniSelector((Axes[axe] ?? Axes.L) as ThreeVector3)
             window.requestAnimationFrame(this.paint)
         })
     }

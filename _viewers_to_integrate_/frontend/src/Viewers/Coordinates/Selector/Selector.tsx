@@ -1,4 +1,4 @@
-import State from "../../state"
+import State from "../../../state"
 import Styles from "./Selector.module.css"
 
 export interface SelectorProps {

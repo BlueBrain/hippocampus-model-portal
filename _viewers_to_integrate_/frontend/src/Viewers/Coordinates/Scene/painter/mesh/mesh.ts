@@ -19,7 +19,7 @@ import { getGradientCanvas } from "@/utils/gradient"
 
 export function createMeshFromData(
     data: Float32Array,
-    elem: number[]
+    elem: Uint32Array
 ): [ThreeGroup, (uniSelector: ThreeVector3) => void] {
     const texture = new ThreeCanvasTexture(getGradientCanvas())
     const geometry = new ThreeBufferGeometry()
@@ -30,7 +30,7 @@ export function createMeshFromData(
      *  - 3 for coords
      */
     const interleavedBuffer = new ThreeInterleavedBuffer(data, 9)
-    geometry.setIndex(elem)
+    geometry.setIndex(Array.from(elem))
     geometry.setAttribute(
         "position",
         new ThreeInterleavedBufferAttribute(interleavedBuffer, 3, 0, false)

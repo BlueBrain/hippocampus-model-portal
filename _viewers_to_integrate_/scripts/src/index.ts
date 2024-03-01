@@ -44,7 +44,7 @@ async function start() {
     -Number.MAX_VALUE,
     -Number.MAX_VALUE,
   ];
-  await forEachLineInTextFile("scripts/data/mesh.obj", (line) => {
+  await forEachLineInTextFile("scripts/data/coordinates/mesh.obj", (line) => {
     if (line.startsWith("v ")) {
       const [x, y, z] = parseVector3(line.substring(2));
       minX = Math.min(minX, x);
@@ -75,17 +75,17 @@ async function start() {
   console.log(minX, "< X <", maxX);
   console.log(minY, "< Y <", maxY);
   console.log(minZ, "< Z <", maxZ);
-  console.log(`Saving "public/data/mesh.json"...`);
-  await saveJSON("frontend/public/data/mesh.json", {
+  console.log(`Saving "public/data/coordinates/mesh.json"...`);
+  await saveJSON("frontend/public/data/coordinates/mesh.json", {
     min: [minX, minY, minZ],
     max: [maxX, maxY, maxZ],
   });
   const oX = (minX + maxX) / 2;
   const oY = (minY + maxY) / 2;
   const oZ = (minZ + maxZ) / 2;
-  console.log(`Saving "public/data/vert.dat"...`);
+  console.log(`Saving "public/data/coordinates/vert.dat"...`);
   await saveUint32Array(
-    "frontend/public/data/elem.dat",
+    "frontend/public/data/coordinates/elem.dat",
     new Uint32Array(triangles)
   );
   console.log("Parsing the volume...");
@@ -113,8 +113,8 @@ async function start() {
     data[pointer++] = w;
     if (u > -1 || v > -1 || w > -1) good++;
   }
-  console.log(`Saving "public/data/vert.dat"...`);
-  await saveFloat32Array("frontend/public/data/vert.dat", data);
+  console.log(`Saving "public/data/coordinates/vert.dat"...`);
+  await saveFloat32Array("frontend/public/data/coordinates/vert.dat", data);
   console.log(
     "Coordinates found:",
     ((100 * good) / points.length).toFixed(2),
@@ -138,3 +138,4 @@ function parseVector3(line: string): Vector3 {
     throw Error(`Unable to parse Vector3: "${line}"!`);
   }
 }
+coordinates/

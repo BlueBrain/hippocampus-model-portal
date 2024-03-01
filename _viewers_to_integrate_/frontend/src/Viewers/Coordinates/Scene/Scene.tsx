@@ -7,10 +7,15 @@ export interface AppProps {
     className?: string
     meshInfo: MeshInfo
     vert: Float32Array
-    elem: number[]
+    elem: Uint32Array
 }
 
-export default function ({ className = "", meshInfo, vert, elem }: AppProps) {
+export default function Scene({
+    className = "",
+    meshInfo,
+    vert,
+    elem,
+}: AppProps) {
     const handleCanvasMounted = (canvas: HTMLCanvasElement | null) => {
         if (!canvas) return
 
