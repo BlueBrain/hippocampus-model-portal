@@ -23,9 +23,7 @@ const TraceLink: React.FC<{trace: NexusTrace}> = ({ trace }) => {
   });
   const href = `/experimental-data/neuronal-electrophysiology/?${searchParams.toString()}#data`;
 
-  return (
-    <Link href={href} prefetch={false}>{trace.name}</Link>
-  );
+  return <Link href={href} prefetch={false} legacyBehavior>{trace.name}</Link>;
 };
 
 const MorphologyRelatedTraces: React.FC<MorphologyRelatedTracesProps> = ({ morphology }) => {

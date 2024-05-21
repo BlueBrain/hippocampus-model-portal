@@ -38,8 +38,11 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
       dataIndex: 'name',
       render: function NameLink(value) {
         return (
-          <Link href={morphHref(value)} prefetch={false}>
-            <a className={value === currentMorphology ? 'text-bold' : undefined}>{value}</a>
+          <Link
+            href={morphHref(value)}
+            prefetch={false}
+            className={value === currentMorphology ? 'text-bold' : undefined}>
+            {value}
           </Link>
         );
       },
