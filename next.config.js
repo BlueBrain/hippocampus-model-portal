@@ -1,6 +1,6 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer') ({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
@@ -25,9 +25,6 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  sentry: {
-    hideSourceMaps: true,
   },
   compress: false,
   productionBrowserSourceMaps: true,
