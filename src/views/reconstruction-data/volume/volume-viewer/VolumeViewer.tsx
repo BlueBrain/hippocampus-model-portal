@@ -50,7 +50,7 @@ const VolumeViewerComponent: React.FC<VolumeViewerProps> = ({ meshPath, volumeSe
 
   const toggleFullscreen = () => {
     if (fullscreenHandle.active) {
-     fullscreenHandle.exit();
+      fullscreenHandle.exit();
     } else {
       fullscreenHandle.enter();
     }
@@ -130,7 +130,7 @@ const VolumeViewerComponent: React.FC<VolumeViewerProps> = ({ meshPath, volumeSe
             closable={true}
             width={240}
             onClose={() => setSettingDrawerVisible(false)}
-            visible={settingDrawerVisible}
+            open={settingDrawerVisible}
             getContainer={false}
             style={{ position: 'absolute' }}
           >
