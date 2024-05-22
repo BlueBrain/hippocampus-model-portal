@@ -30,11 +30,9 @@ const Button: React.FC<ButtonProps> = ({
     <button
       style={{ width: width }}
       onClick={onClick}
-      className={`${classPrefix}basis ${primary ? 'primary' : ''} ${
-        discrete ? 'discrete' : ''
-      } ${active ? 'active' : ''} ${large ? 'large' : ''} ${
-        uppercase ? 'uppercase' : ''
-      }`}
+      className={`${classPrefix}basis ${primary ? 'primary' : ''} ${discrete ? 'discrete' : ''
+        } ${active ? 'active' : ''} ${large ? 'large' : ''} ${uppercase ? 'uppercase' : ''
+        }`}
     >
       {children}
       {notifications && <span className="notifications">{notifications}</span>}

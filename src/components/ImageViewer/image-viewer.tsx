@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Lightbox from 'react-image-lightbox';
+//import Lightbox from 'react-image-lightbox';
 import noop from 'lodash/noop';
 
-import 'react-image-lightbox/style.css';
+//import 'react-image-lightbox/style.css';
 
 
 const classPrefix = 'image-viewer__';
@@ -69,12 +69,12 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
         onLoad={onThumbnailLoad}
         onError={onThumbnailLoadError}
       />
-      {expanded && (
+      { /* expanded && (
         <Lightbox
           mainSrc={src}
           onCloseRequest={() => setExpanded(false)}
         />
-      )}
+      ) */}
     </div>
   );
 };

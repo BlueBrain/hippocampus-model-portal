@@ -47,8 +47,8 @@ export const useExperimentalTraceTable = (etype, currentTrace) => {
           <Link
             href={instanceHref(value)}
             prefetch={false}
-          >
-            <a className={value === currentTrace ? 'text-bold' : undefined}>{value}</a>
+            className={value === currentTrace ? 'text-bold' : undefined}>
+            {value}
           </Link>
         );
       },

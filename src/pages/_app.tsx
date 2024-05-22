@@ -11,6 +11,9 @@ import Feedback from '../components/Feedback';
 
 import '../styles/globals.scss';
 
+import { register } from 'instrumentation'; // Use in jayout.jsx if using app routing
+register();
+
 
 if (typeof window === 'undefined') {
   require('abort-controller/polyfill');

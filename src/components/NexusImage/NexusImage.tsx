@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Image, { ImageProps } from 'next/image';
-import Lightbox from 'react-image-lightbox';
+// import Lightbox from 'react-image-lightbox';
 
 import { nexusAuthProxyUrl, nexusImgLoaderUrl, basePath } from '../../config';
 
 import style from './styles.module.scss';
 
-import 'react-image-lightbox/style.css';
+// import 'react-image-lightbox/style.css';
 
 
 export interface NexusImageProps extends ImageProps {
@@ -22,7 +22,7 @@ type ImgLoaderProps = {
   quality: number;
 }
 
-const imgLoader: (ImgLoaderProps) => string = ({ src, width = 1080, quality = 80}) => {
+const imgLoader: (ImgLoaderProps) => string = ({ src, width = 1080, quality = 80 }) => {
   return `${nexusImgLoaderUrl}${basePath}/_next/image/?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
 }
 
@@ -55,12 +55,12 @@ export const NexusImage = (props: NexusImageProps) => {
           alt={props.alt}
         />
       </div>
-      {isOpen && (
+      {/* isOpen && (
         <Lightbox
           mainSrc={imgLoader({ src: proxiedImgSrc, width: 3840, quality: 100 })}
           onCloseRequest={() => setIsOpen(false)}
         />
-      )}
+      )} */}
     </>
   );
 };
