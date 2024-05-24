@@ -148,9 +148,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
             />
             <InfoBox>
               <p>
-                We classified neuronal morphologies in different morphological types (m-types)
-                and created digital 3D reconstructions. Using objective classification methods,
-                we have identified 12 m-types in rat hippocampus CA1.
+                We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
               </p>
             </InfoBox>
           </div>
@@ -213,7 +211,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
+                    <p className="text-tmp">
+                      We provide visualization and morphometrics for the selected morphology.
+                    </p>
                     <Metadata nexusDocument={esDocuments[0]._source} />
+
                     <h3>3D view</h3>
                     <NexusPlugin
                       className="mt-3"

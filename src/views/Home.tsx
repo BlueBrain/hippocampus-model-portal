@@ -9,20 +9,19 @@ const Home: React.FC = () => (
   <div className={`${classPrefix}basis`}>
     <section id="section-3">
       <div className="intro">
-        <h2 className="text-white">Explore</h2>
+        <h2 className="text-white">EXPLORE</h2>
         <h3>Explore the existing Hippocampus model and all its parts!</h3>
         <p>
-          In this section, you can explore morphological reconstructions,
-          electrophysiological recordings and models of single neurons.
-          The models you find in this section are a continuation of the <a
-            href="https://www.humanbrainproject.eu/en/brain-simulation/hippocampus/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            hippocampal research
-          </a> carried out in the Human Brain Project during 2014-2020.
-          Currently we are finalising a full-scale model of the rat hippocampus CA1,
-          which will be available and freely accessible in due course, when the publication is released.
+          In this section, you can explore the different stages of our model build and simulation.
+          We began by transforming sparse experimental datasets into the dense datasets necessary for building the model.
+          Subsequently, each component of the model and the compound network model were subjected to rigorous validation,
+          after which the model was used to make predictions.
+          The models presented in this section are a continuation of the
+          &nbsp;
+          <a href="https://www.humanbrainproject.eu/en/brain-simulation/hippocampus/" target="_blank" rel="noopener noreferrer">pioneering hippocampal research</a>
+          &nbsp;
+          conducted during the 2014-2020 period as part of the Human Brain Project,
+          which was published in add reference.
         </p>
       </div>
 
@@ -33,13 +32,11 @@ const Home: React.FC = () => (
             idx="1"
             description={<div>
               <p>
-                The first step in the reconstruction of the hippocampus involves the acquisition and
-                organization of data collected from the rodent hippocampus. <br/>
-                Sparse data has been collected from our own laboratories and from published sources worldwide,
-                both of which describe the structural and functional organization of the hippocampus
-                at various anatomical levels. This ranges from individual neurons to synaptic connections and
-                network activity. The data provides constraints, rules, and the principles
-                to build computational models at specific levels of detail.
+                The first step of the reconstruction of the hippocampus involves
+                the collection of experimental datasets from our affiliated and collaborator's
+                laboratories as well as from published literature sources worldwide.
+                Available data on these brain regions are sparse and heterogeneous,
+                and much of our work concerned the curation and organization of the data.
               </p>
             </div>}
             links={[
@@ -84,12 +81,8 @@ const Home: React.FC = () => (
             idx="2"
             description={<div>
               <p>
-                Step two in the hippocampus reconstruction is the extraction of as much information as possible
-                from the previously collected sparse data and the exploitation of interdependencies
-                to build detailed and dense models of individual cells and cell-circuits.
-                From sparse experimental data sets, rules and principles of organization are identified
-                and missing information is extrapolated to fill knowledge gaps, which enables a dense data-driven
-                digital reconstruction of the hippocampus region.</p>
+                The second step of the reconstruction converts the sparse experimental datasets to dense datasets, required to fully reconstruct the hippocampus model. We applied several strategies to predict the missing data: algorithms, principles, and rules.
+              </p>
             </div>}
             links={[
               {
@@ -133,23 +126,8 @@ const Home: React.FC = () => (
             idx="3"
             description={<div>
               <p>
-                In the third step of our reconstruction workflow, digital reconstructions are built
-                based on experimental datasets taken from specimens at a specific stage of development.
-                They are therefore, digital snapshots of the structure and physiology of the brain
-                at a specific age range. These digital reconstructions integrate data and knowledge of molecular,
-                cellular and circuit anatomy, as well as their physiology.
-              </p>
-              <p>
-                Starting from individually reconstructed cell morphologies and corresponding
-                electrophysiological behaviors, they can be assembled into specific brain region circuits
-                along with their individual synaptic and connectivity models.
-              </p>
-              <p>
-                Circuit reconstructions are based on a standardized workflow enabled by
-                Blue Brain Project software tools and supercomputing infrastructure.
-                The parameterization of the tissue model is strictly based on biological data:
-                directly, where available, generalized from data obtained in other similar systems;
-                or, where unavailable, predicted from multi-constraints imposed by sparse data.
+                The third step of the reconstruction generates an instance of the hippocampus model. Most of the model parameters were sampled from the distributions defined in the dense datasets of step two. For this reason, each model instance is unique within the biological ranges and could be considered to be derived from a specific individual.
+
               </p>
             </div>}
             links={[
@@ -186,17 +164,8 @@ const Home: React.FC = () => (
             idx="4"
             description={<div>
               <p>
-                Validations are a crucial part of the data-driven modeling workflow that reduce the risk that
-                errors may lead to major inaccuracies in the reconstruction or in simulations of emergent behavior.<br/>
-                Successful validations not only enable the systematic exploration of the emergent properties
-                of the model, but also establish predictions for future <i>in vitro</i> experiments,
-                or may call into question existing experimental data. Failure in validation may also indicate errors
-                in experimental data, which allow us to identify future refinements.
-                Rigorous validation of a metric at one level of detail therefore also prevents error amplification
-                to the next level, and triggers specific experimental refinements. <br/>
-                Therefore, the Blue Brain Project validation step provides a scaffold
-                that enables the integration of available experimental data, identifies missing experimental data,
-                and facilitates the iterative refinement of constituent models.
+                We extensively validated each model component and the final network to assess the validity of the model. Successful validations support the idea that the model can go beyond the initial set of data and show emergent properties. Validation failures may indicate wrong model assumptions or incompatibility between model and validation datasets. Validation failures provide useful information for us to revise and improve the model.
+
               </p>
             </div>}
             links={[
@@ -221,12 +190,7 @@ const Home: React.FC = () => (
             idx="5"
             description={<div>
               <p>
-                The digital reconstruction of the hippocampus provides an array of predictions
-                across its many levels of organization. These predictions provide insights
-                to link underlying structure with function. In addition, predictions are also a means
-                to validate the component models of the hippocampus model and identify missing data
-                that could guide targeted experiments. In particular, we provide predictions
-                on the propagation of activity across the different sub-regions of the hippocampus.
+                Each model parameter or behavior that has not been described experimentally could be considered a prediction. We already mentioned that most of the predicted parameters and behaviors arise during the reconstruction data step. Here, we focus on the predictions derived from the simulation experiments we carried out.
               </p>
             </div>}
             links={[
