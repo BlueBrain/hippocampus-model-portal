@@ -211,7 +211,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    <p className="text-tmp">
+                    <p>
                       We provide visualization and morphometrics for the selected morphology.
                     </p>
                     <Metadata nexusDocument={esDocuments[0]._source} />
@@ -305,6 +305,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           title="Population"
           className="mt-4 mb-4"
         >
+          <p>
+            We provide morphometrics for the entire m-type group selected.
+          </p>
           <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
             {(factsheetData, loading) => (
               <div>

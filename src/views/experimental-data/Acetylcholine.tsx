@@ -17,7 +17,7 @@ const AcetylcholineView: React.FC = () => {
       <Filters>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -32,15 +32,8 @@ const AcetylcholineView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p >
+                    Acetylcholine (ACh) is one of the most studied neuromodulation, particularly important for the hippocampus. Similarly to the other neuromodulators, its effect on the network can span several time and space scales. Here, we report the effect of ACh on resting membrane potential, firing rate, synapse, and network.
                   </p>
                 </InfoBox>
               </div>

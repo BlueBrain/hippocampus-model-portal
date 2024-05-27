@@ -217,11 +217,9 @@ const PSCAmplitudeColumns = [
 const ConductanceModelSection: React.FC = () => {
   return (
     <>
-      <p className="text-tmp mb-3">
-        Id voluptas esse et laboriosam cumque qui natus nobis. Quo aperiam dignissimos At fuga galisum aut
-        blanditiis voluptatem aut autem culpa eos voluptate voluptatem non laborum cumque eos quia harum. Non
-        deserunt iusto ex asperiores beatae et sint voluptas nam fuga excepturi et sint ullam et beatae nostrum
-        rem error aliquam.
+      <p className="mb-3">
+        Basic characterization of a synaptic pathway includes the estimation of specific potentials and currents during synaptic activity. In particular, we collect data on the reversal potential of a synapse, the voltage at which there is no net flow of ions through the membrane, the peak PSP and PSC, and the coefficient of variation (CV) of the peak PSC.
+
       </p>
 
       <h2>Reversal potential</h2>

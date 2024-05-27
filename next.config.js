@@ -36,7 +36,7 @@ const nextConfig = {
     return [
       {
         source: '/experimental-data',
-        destination: '/experimental-data/neuronal-morphology',
+        destination: '/',
         permanent: false,
       },
       {

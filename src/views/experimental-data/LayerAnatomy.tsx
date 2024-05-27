@@ -100,7 +100,7 @@ const LayerAnatomyView: React.FC = () => {
                 >
                   <div>
                     <h3>Layer thickness for CA1</h3>
-                    <p className="text-tmp">
+                    <p>
                       The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
 
                     </p>

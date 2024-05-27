@@ -21,7 +21,7 @@ const ConnectionAnatomyView: React.FC = () => {
       <Filters hasData={true}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -36,15 +36,9 @@ const ConnectionAnatomyView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We collected and organized data on the local connectivity of pairs of pre- and postsynaptic morphological types (m-types). We used a subset of the data to constrain the connectome (the set of connections), namely bouton density and number of synapses per connection, and the rest to validate it.
+
                   </p>
                 </InfoBox>
               </div>
@@ -83,7 +77,8 @@ const ConnectionAnatomyView: React.FC = () => {
           id="boutonDensitySection"
           title="Bouton density"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <h3 >Synaptic boutons or simply boutons are enlargements of the axon, visible with light microscopy, that represent putative synaptic contacts. Bouton density is normally expressed as the number of boutons per 100 um.
+          </h3>
           <BoutonDenisityTable />
         </Collapsible>
 
@@ -92,7 +87,8 @@ const ConnectionAnatomyView: React.FC = () => {
           className="mt-4"
           title="Number of synapses per connection"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <h3 >Each connection between pairs of morphological types could include one or multiple synapses, which in part affects the strength of the connection.
+          </h3>
           <SynsPerConnTable />
         </Collapsible>
       </DataContainer>
