@@ -1,0 +1,200 @@
+{
+    "name": "Anatomy",
+    "values": [
+        {
+            "name": "total all width",
+            "value": 1131.6099853515625,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all height",
+            "value": 700.5700073242188,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all depth",
+            "value": 283.6499938964844,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all length",
+            "value": 31156.39691440761,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all area",
+            "value": 27401.37482448282,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total all volume",
+            "value": 3557.0437394053206,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of all",
+            "value": 0.2754914164543152,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of all sections",
+            "value": 390,
+            "unit": ""
+        },
+        {
+            "name": "number of all segments",
+            "value": 40035,
+            "unit": ""
+        },
+        {
+            "name": "average all section length",
+            "value": 79.88819721642977,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average all segment length",
+            "value": 0.7782289742834916,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "all maximum branch order",
+            "value": 21,
+            "unit": ""
+        },
+        {
+            "name": "total axon width",
+            "value": 1115.199951171875,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon height",
+            "value": 700.5700073242188,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon depth",
+            "value": 282.75,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon length",
+            "value": 25421.890494272113,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon area",
+            "value": 16938.236658444916,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total axon volume",
+            "value": 1500.0322672804045,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of axon",
+            "value": 0.2084391713142395,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of axon sections",
+            "value": 336,
+            "unit": ""
+        },
+        {
+            "name": "number of axon segments",
+            "value": 33335,
+            "unit": ""
+        },
+        {
+            "name": "average axon section length",
+            "value": 75.66038837580986,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average axon segment length",
+            "value": 0.7626185863901132,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "axon maximum branch order",
+            "value": 21,
+            "unit": ""
+        },
+        {
+            "name": "total dendrite width",
+            "value": 758.3299560546875,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total dendrite height",
+            "value": 682.1400146484375,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total dendrite depth",
+            "value": 240.60000610351562,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total dendrite length",
+            "value": 5734.506420135498,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total dendrite area",
+            "value": 10463.138166037901,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total dendrite volume",
+            "value": 2057.011472124916,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of dendrite",
+            "value": 0.5727435946464539,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of dendrite sections",
+            "value": 54,
+            "unit": ""
+        },
+        {
+            "name": "number of dendrite segments",
+            "value": 6700,
+            "unit": ""
+        },
+        {
+            "name": "average dendrite section length",
+            "value": 106.19456333584256,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average dendrite segment length",
+            "value": 0.855896478824651,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "dendrite maximum branch order",
+            "value": 5,
+            "unit": ""
+        },
+        {
+            "name": "soma diameter",
+            "value": 16.29064178466797,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "soma surface area",
+            "value": 833.7315970234675,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "soma volume",
+            "value": 2263.670465278076,
+            "unit": "\u00b5m\u00b3"
+        }
+    ]
+}

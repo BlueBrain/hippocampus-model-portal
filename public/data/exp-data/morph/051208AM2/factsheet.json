@@ -1,0 +1,260 @@
+{
+    "name": "Anatomy",
+    "values": [
+        {
+            "name": "total all width",
+            "value": 544.9000244140625,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all height",
+            "value": 697.3900146484375,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all depth",
+            "value": 235.64999389648438,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all length",
+            "value": 13790.904273986816,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total all area",
+            "value": 19427.119973700024,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total all volume",
+            "value": 3198.433087764712,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of all",
+            "value": 0.44640836119651794,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of all sections",
+            "value": 240,
+            "unit": ""
+        },
+        {
+            "name": "number of all segments",
+            "value": 20525,
+            "unit": ""
+        },
+        {
+            "name": "average all section length",
+            "value": 57.46210114161173,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average all segment length",
+            "value": 0.6719076390707827,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "all maximum branch order",
+            "value": 26,
+            "unit": ""
+        },
+        {
+            "name": "total axon width",
+            "value": 477.8800048828125,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon height",
+            "value": 211.99000549316406,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon depth",
+            "value": 208.89999389648438,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon length",
+            "value": 3148.217027902603,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total axon area",
+            "value": 1946.6942522225065,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total axon volume",
+            "value": 207.91498115326175,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of axon",
+            "value": 0.19451779127120972,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of axon sections",
+            "value": 71,
+            "unit": ""
+        },
+        {
+            "name": "number of axon segments",
+            "value": 5581,
+            "unit": ""
+        },
+        {
+            "name": "average axon section length",
+            "value": 44.34108490003666,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average axon segment length",
+            "value": 0.5640955054757042,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "axon maximum branch order",
+            "value": 8,
+            "unit": ""
+        },
+        {
+            "name": "total apical width",
+            "value": 346.46002197265625,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total apical height",
+            "value": 462.03997802734375,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total apical depth",
+            "value": 231.3000030517578,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total apical length",
+            "value": 7540.724328756332,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total apical area",
+            "value": 12786.591292230078,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total apical volume",
+            "value": 2344.1401088864254,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of apical",
+            "value": 0.5378761887550354,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of apical sections",
+            "value": 129,
+            "unit": ""
+        },
+        {
+            "name": "number of apical segments",
+            "value": 10622,
+            "unit": ""
+        },
+        {
+            "name": "average apical section length",
+            "value": 58.45522735470025,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average apical segment length",
+            "value": 0.7099156821028416,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "apical maximum branch order",
+            "value": 26,
+            "unit": ""
+        },
+        {
+            "name": "total basal width",
+            "value": 241.6300048828125,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total basal height",
+            "value": 320.79998779296875,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total basal depth",
+            "value": 168.79998779296875,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total basal length",
+            "value": 3101.962917327881,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total basal area",
+            "value": 4693.834429247439,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total basal volume",
+            "value": 646.3779977250249,
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "average diameter of basal",
+            "value": 0.47970107197761536,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "number of basal sections",
+            "value": 40,
+            "unit": ""
+        },
+        {
+            "name": "number of basal segments",
+            "value": 4322,
+            "unit": ""
+        },
+        {
+            "name": "average basal section length",
+            "value": 77.54907293319702,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average basal segment length",
+            "value": 0.7177146924043325,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "basal maximum branch order",
+            "value": 4,
+            "unit": ""
+        },
+        {
+            "name": "soma diameter",
+            "value": 17.873589531427285,
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "soma surface area",
+            "value": 1003.6295339991083,
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "soma volume",
+            "value": 2495.3734065136505,
+            "unit": "\u00b5m\u00b3"
+        }
+    ]
+}

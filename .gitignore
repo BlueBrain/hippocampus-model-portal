@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # factsheets and production artifacts
-/public/data
+/public/data/dig-rec/
+/public/data/model-info/
+/public/data/model-morphologies-asc/
+/public/data/model-morphologies-swc
+/public/data/rec-data/
 
 # dependencies
 node_modules
