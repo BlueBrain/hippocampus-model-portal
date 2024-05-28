@@ -72,6 +72,7 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
       },
       responsive: ['sm'],
     },
+    /*
     {
       title: 'M-Type',
       dataIndex: 'annotation',
@@ -85,6 +86,7 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
       },
       responsive: ['sm'],
     },
+    */
     {
       title: 'Contribution',
       dataIndex: 'contribution',

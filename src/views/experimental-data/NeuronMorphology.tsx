@@ -43,11 +43,12 @@ import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
 
 const factsheetEntryTypes = [
   'all',
-  'axon',
+  'soma',
   'dendrite',
+  'axon',
   'apical',
   'basal',
-  'soma',
+
 ];
 
 type NeuriteTypeGroupedFactsheetsProps = {
@@ -56,7 +57,7 @@ type NeuriteTypeGroupedFactsheetsProps = {
 }
 
 const NeuriteTypeGroupedFactsheets: React.FC<NeuriteTypeGroupedFactsheetsProps> = ({ facts, id }) => {
-  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.name.includes(entryType)) ?? '-');
+  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.type === entryType));
 
   return (
     <div id={id}>
@@ -357,6 +358,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           )}
 
           <h3 className="mt-4">Reconstructed morphologies</h3>
+          <p>
+            Reconstructed morphologies from the selected m-type
+          </p>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
               <>
