@@ -23,13 +23,20 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "instrumentation.js"
+    "instrumentation.js",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
