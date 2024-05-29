@@ -75,7 +75,7 @@
         },
         {
             "type": "all",
-            "name": "Average Section length",
+            "name": "Average Section Length",
             "values": [
                 23.50707928517347,
                 null
@@ -84,7 +84,7 @@
         },
         {
             "type": "all",
-            "name": "Number of Segment",
+            "name": "Number of Segments",
             "values": [
                 38168.0,
                 null
@@ -93,7 +93,7 @@
         },
         {
             "type": "all",
-            "name": "Average Segment length",
+            "name": "Average Segment Length",
             "values": [
                 0.4200332278304358,
                 null
@@ -156,21 +156,21 @@
         },
         {
             "type": "axon",
-            "name": "Average Diameter",
-            "values": [
-                0.2990398108959198,
-                null
-            ],
-            "unit": "\u00b5m"
-        },
-        {
-            "type": "axon",
             "name": "Total Volume",
             "values": [
                 1114.3003111818161,
                 null
             ],
             "unit": "\u00b5m\u00b3"
+        },
+        {
+            "type": "axon",
+            "name": "Average Diameter",
+            "values": [
+                0.2990398108959198,
+                null
+            ],
+            "unit": "\u00b5m"
         },
         {
             "type": "axon",
@@ -183,7 +183,7 @@
         },
         {
             "type": "axon",
-            "name": "Average Section length",
+            "name": "Average Section Length",
             "values": [
                 22.06643835979918,
                 null
@@ -192,7 +192,7 @@
         },
         {
             "type": "axon",
-            "name": "Number of Segment",
+            "name": "Number of Segments",
             "values": [
                 33568.0,
                 null
@@ -201,7 +201,7 @@
         },
         {
             "type": "axon",
-            "name": "Average Segment length",
+            "name": "Average Segment Length",
             "values": [
                 0.4134827785785874,
                 null
@@ -264,21 +264,21 @@
         },
         {
             "type": "dendrite",
-            "name": "Average Diameter",
-            "values": [
-                0.4188340902328491,
-                null
-            ],
-            "unit": "\u00b5m"
-        },
-        {
-            "type": "dendrite",
             "name": "Total Volume",
             "values": [
                 478.92556854898,
                 null
             ],
             "unit": "\u00b5m\u00b3"
+        },
+        {
+            "type": "dendrite",
+            "name": "Average Diameter",
+            "values": [
+                0.4188340902328491,
+                null
+            ],
+            "unit": "\u00b5m"
         },
         {
             "type": "dendrite",
@@ -291,7 +291,7 @@
         },
         {
             "type": "dendrite",
-            "name": "Average Section length",
+            "name": "Average Section Length",
             "values": [
                 40.604497059898556,
                 null
@@ -300,7 +300,7 @@
         },
         {
             "type": "dendrite",
-            "name": "Number of Segment",
+            "name": "Number of Segments",
             "values": [
                 4600.0,
                 null
@@ -309,7 +309,7 @@
         },
         {
             "type": "dendrite",
-            "name": "Average Segment length",
+            "name": "Average Segment Length",
             "values": [
                 0.4678344192404462,
                 null

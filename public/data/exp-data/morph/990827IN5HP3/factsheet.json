@@ -2,197 +2,236 @@
     "name": "Anatomy",
     "values": [
         {
-            "name": "total width, all",
+            "name": "Total Width",
+            "type": "all",
             "value": 435.6199951171875,
             "unit": "\u00b5m"
         },
         {
-            "name": "total height, all",
+            "name": "Total Height",
+            "type": "all",
             "value": 515.9199829101562,
             "unit": "\u00b5m"
         },
         {
-            "name": "total depth, all",
+            "name": "Total Depth",
+            "type": "all",
             "value": 300.04998779296875,
             "unit": "\u00b5m"
         },
         {
-            "name": "total length, all",
+            "name": "Total Length",
+            "type": "all",
             "value": 8650.858629226685,
             "unit": "\u00b5m"
         },
         {
-            "name": "total area, all",
+            "name": "Total Surface Area",
+            "type": "all",
             "value": 11462.729477847046,
             "unit": "\u00b5m\u00b2"
         },
         {
-            "name": "total volume, all",
+            "name": "Total Volume",
+            "type": "all",
             "value": 1603.7603247816448,
             "unit": "\u00b5m\u00b3"
         },
         {
-            "name": "average diameter, all",
+            "name": "Average Diameter",
+            "type": "all",
             "value": 0.41580352574529383,
             "unit": "\u00b5m"
         },
         {
-            "name": "number of sections, all",
+            "name": "Number of Sections",
+            "type": "all",
             "value": 170,
             "unit": ""
         },
         {
-            "name": "number of segments, all",
+            "name": "Number of Segments",
+            "type": "all",
             "value": 15611,
             "unit": ""
         },
         {
-            "name": "average section length, all",
+            "name": "Average Section Length",
+            "type": "all",
             "value": 50.88740370133344,
             "unit": "\u00b5m"
         },
         {
-            "name": "average segment length, all",
+            "name": "Average Segment Length",
+            "type": "all",
             "value": 0.5541514707843167,
             "unit": "\u00b5m"
         },
         {
-            "name": "maximum branch order, all",
+            "name": "Max Branch Order",
+            "type": "all",
             "value": 22,
             "unit": ""
         },
         {
-            "name": "total width, axon",
+            "name": "Total Width",
+            "type": "axon",
             "value": 435.6199951171875,
             "unit": "\u00b5m"
         },
         {
-            "name": "total height, axon",
+            "name": "Total Height",
+            "type": "axon",
             "value": 454.7799987792969,
             "unit": "\u00b5m"
         },
         {
-            "name": "total depth, axon",
+            "name": "Total Depth",
+            "type": "axon",
             "value": 229.5500030517578,
             "unit": "\u00b5m"
         },
         {
-            "name": "total length, axon",
+            "name": "Total Length",
+            "type": "axon",
             "value": 6034.869663476944,
             "unit": "\u00b5m"
         },
         {
-            "name": "total area, axon",
+            "name": "Total Surface Area",
+            "type": "axon",
             "value": 6563.693755613874,
             "unit": "\u00b5m\u00b2"
         },
         {
-            "name": "total volume, axon",
+            "name": "Total Volume",
+            "type": "axon",
             "value": 693.6095110938269,
             "unit": "\u00b5m\u00b3"
         },
         {
-            "name": "average diameter, axon",
+            "name": "Average Diameter",
+            "type": "axon",
             "value": 0.3419650172442008,
             "unit": "\u00b5m"
         },
         {
-            "name": "number of sections, axon",
+            "name": "Number of Sections",
+            "type": "axon",
             "value": 122,
             "unit": ""
         },
         {
-            "name": "number of segments, axon",
+            "name": "Number of Segments",
+            "type": "axon",
             "value": 10242,
             "unit": ""
         },
         {
-            "name": "average section length, axon",
+            "name": "Average Section Length",
+            "type": "axon",
             "value": 49.4661447825979,
             "unit": "\u00b5m"
         },
         {
-            "name": "average segment length, axon",
+            "name": "Average Segment Length",
+            "type": "axon",
             "value": 0.5892276566466901,
             "unit": "\u00b5m"
         },
         {
-            "name": "maximum branch order, axon",
+            "name": "Max Branch Order",
+            "type": "axon",
             "value": 22,
             "unit": ""
         },
         {
-            "name": "total width, dendrite",
+            "name": "Total Width",
+            "type": "dendrite",
             "value": 323.55999755859375,
             "unit": "\u00b5m"
         },
         {
-            "name": "total height, dendrite",
+            "name": "Total Height",
+            "type": "dendrite",
             "value": 515.9199829101562,
             "unit": "\u00b5m"
         },
         {
-            "name": "total depth, dendrite",
+            "name": "Total Depth",
+            "type": "dendrite",
             "value": 132.14999389648438,
             "unit": "\u00b5m"
         },
         {
-            "name": "total length, dendrite",
+            "name": "Total Length",
+            "type": "dendrite",
             "value": 2615.9889657497406,
             "unit": "\u00b5m"
         },
         {
-            "name": "total area, dendrite",
+            "name": "Total Surface Area",
+            "type": "dendrite",
             "value": 4899.035722233173,
             "unit": "\u00b5m\u00b2"
         },
         {
-            "name": "total volume, dendrite",
+            "name": "Total Volume",
+            "type": "dendrite",
             "value": 910.150813687818,
             "unit": "\u00b5m\u00b3"
         },
         {
-            "name": "average diameter, dendrite",
+            "name": "Average Diameter",
+            "type": "dendrite",
             "value": 0.5861429464148457,
             "unit": "\u00b5m"
         },
         {
-            "name": "number of sections, dendrite",
+            "name": "Number of Sections",
+            "type": "dendrite",
             "value": 48,
             "unit": ""
         },
         {
-            "name": "number of segments, dendrite",
+            "name": "Number of Segments",
+            "type": "dendrite",
             "value": 5369,
             "unit": ""
         },
         {
-            "name": "average section length, dendrite",
+            "name": "Average Section Length",
+            "type": "dendrite",
             "value": 54.49977011978626,
             "unit": "\u00b5m"
         },
         {
-            "name": "average segment length, dendrite",
+            "name": "Average Segment Length",
+            "type": "dendrite",
             "value": 0.48723951406939264,
             "unit": "\u00b5m"
         },
         {
-            "name": "maximum branch order, dendrite",
+            "name": "Max Branch Order",
+            "type": "dendrite",
             "value": 12,
             "unit": ""
         },
         {
-            "name": "soma diameter",
+            "name": "Soma Diameter",
+            "type": "soma",
             "value": 16.65842004329079,
             "unit": "\u00b5m"
         },
         {
-            "name": "soma surface area",
+            "name": "Soma Surface Area",
+            "type": "soma",
             "value": 871.801255266333,
             "unit": "\u00b5m\u00b2"
         },
         {
-            "name": "soma volume",
+            "name": "Soma Volume",
+            "type": "soma",
             "value": 2080.5569716095724,
             "unit": "\u00b5m\u00b3"
         }

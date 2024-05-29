@@ -2,259 +2,310 @@
     "name": "Anatomy",
     "values": [
         {
-            "name": "total width, all",
+            "name": "Total Width",
             "value": 225.239990234375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "total height, all",
+            "name": "Total Height",
             "value": 645.6400146484375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "total depth, all",
+            "name": "Total Depth",
             "value": 250.010009765625,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "total length, all",
+            "name": "Total Length",
             "value": 8859.044323205948,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "total area, all",
+            "name": "Total Surface Area",
             "value": 21480.93541352074,
-            "unit": "\u00b5m\u00b2"
+            "unit": "µm²",
+            "type": "all"
         },
         {
-            "name": "total volume, all",
+            "name": "Total Volume",
             "value": 5281.434164970415,
-            "unit": "\u00b5m\u00b3"
+            "unit": "µm³",
+            "type": "all"
         },
         {
-            "name": "average diameter, all",
+            "name": "Average Diameter",
             "value": 0.7637503286229222,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "number of sections, all",
+            "name": "Number of Sections",
             "value": 175,
-            "unit": ""
+            "unit": "",
+            "type": "all"
         },
         {
-            "name": "number of segments, all",
+            "name": "Number of Segments",
             "value": 7314,
-            "unit": ""
+            "unit": "",
+            "type": "all"
         },
         {
-            "name": "average section length, all",
+            "name": "Average Section Length",
             "value": 50.623110418319705,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "average segment length, all",
+            "name": "Average Segment Length",
             "value": 1.21124477983173,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "all"
         },
         {
-            "name": "maximum branch order, all",
+            "name": "Max Branch Order",
             "value": 23,
-            "unit": ""
+            "unit": "",
+            "type": "all"
         },
         {
-            "name": "total width, axon",
+            "name": "Total Width",
             "value": 25.4000244140625,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "total height, axon",
+            "name": "Total Height",
             "value": 81.03997802734375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "total depth, axon",
+            "name": "Total Depth",
             "value": 8.9000244140625,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "total length, axon",
+            "name": "Total Length",
             "value": 117.96219635009766,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "total area, axon",
+            "name": "Total Surface Area",
             "value": 287.97821496559664,
-            "unit": "\u00b5m\u00b2"
+            "unit": "µm²",
+            "type": "axon"
         },
         {
-            "name": "total volume, axon",
+            "name": "Total Volume",
             "value": 61.94176476694045,
-            "unit": "\u00b5m\u00b3"
+            "unit": "µm³",
+            "type": "axon"
         },
         {
-            "name": "average diameter, axon",
+            "name": "Average Diameter",
             "value": 0.7722990725975886,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "number of sections, axon",
+            "name": "Number of Sections",
             "value": 1,
-            "unit": ""
+            "unit": "",
+            "type": "axon"
         },
         {
-            "name": "number of segments, axon",
+            "name": "Number of Segments",
             "value": 81,
-            "unit": ""
+            "unit": "",
+            "type": "axon"
         },
         {
-            "name": "average section length, axon",
+            "name": "Average Section Length",
             "value": 117.96219635009766,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "average segment length, axon",
+            "name": "Average Segment Length",
             "value": 1.4563234087861614,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "axon"
         },
         {
-            "name": "maximum branch order, axon",
+            "name": "Max Branch Order",
             "value": 0,
-            "unit": ""
+            "unit": "",
+            "type": "axon"
         },
         {
-            "name": "total width, apical",
+            "name": "Total Width",
             "value": 225.239990234375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "total height, apical",
+            "name": "Total Height",
             "value": 615.3599853515625,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "total depth, apical",
+            "name": "Total Depth",
             "value": 250.010009765625,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "total length, apical",
+            "name": "Total Length",
             "value": 7345.819795846939,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "total area, apical",
+            "name": "Total Surface Area",
             "value": 18035.162696159987,
-            "unit": "\u00b5m\u00b2"
+            "unit": "µm²",
+            "type": "apical"
         },
         {
-            "name": "total volume, apical",
+            "name": "Total Volume",
             "value": 4544.807399348733,
-            "unit": "\u00b5m\u00b3"
+            "unit": "µm³",
+            "type": "apical"
         },
         {
-            "name": "average diameter, apical",
+            "name": "Average Diameter",
             "value": 0.7742977081445059,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "number of sections, apical",
+            "name": "Number of Sections",
             "value": 133,
-            "unit": ""
+            "unit": "",
+            "type": "apical"
         },
         {
-            "name": "number of segments, apical",
+            "name": "Number of Segments",
             "value": 5888,
-            "unit": ""
+            "unit": "",
+            "type": "apical"
         },
         {
-            "name": "average section length, apical",
+            "name": "Average Section Length",
             "value": 55.23172778832285,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "average segment length, apical",
+            "name": "Average Segment Length",
             "value": 1.2475916760563648,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "apical"
         },
         {
-            "name": "maximum branch order, apical",
+            "name": "Max Branch Order",
             "value": 23,
-            "unit": ""
+            "unit": "",
+            "type": "apical"
         },
         {
-            "name": "total width, basal",
+            "name": "Total Width",
             "value": 136.050048828125,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "total height, basal",
+            "name": "Total Height",
             "value": 123.83001708984375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "total depth, basal",
+            "name": "Total Depth",
             "value": 121.8499755859375,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "total length, basal",
+            "name": "Total Length",
             "value": 1395.2623310089111,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "total area, basal",
+            "name": "Total Surface Area",
             "value": 3157.794502395155,
-            "unit": "\u00b5m\u00b2"
+            "unit": "µm²",
+            "type": "basal"
         },
         {
-            "name": "total volume, basal",
+            "name": "Total Volume",
             "value": 674.6850008547409,
-            "unit": "\u00b5m\u00b3"
+            "unit": "µm³",
+            "type": "basal"
         },
         {
-            "name": "average diameter, basal",
+            "name": "Average Diameter",
             "value": 0.7074977851581288,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "number of sections, basal",
+            "name": "Number of Sections",
             "value": 41,
-            "unit": ""
+            "unit": "",
+            "type": "basal"
         },
         {
-            "name": "number of segments, basal",
+            "name": "Number of Segments",
             "value": 1345,
-            "unit": ""
+            "unit": "",
+            "type": "basal"
         },
         {
-            "name": "average section length, basal",
+            "name": "Average Section Length",
             "value": 34.030788561192956,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "average segment length, basal",
+            "name": "Average Segment Length",
             "value": 1.0373697657678207,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "basal"
         },
         {
-            "name": "maximum branch order, basal",
+            "name": "Max Branch Order",
             "value": 4,
-            "unit": ""
+            "unit": "",
+            "type": "basal"
         },
         {
-            "name": "soma diameter",
+            "name": "Soma Diameter",
             "value": 16.330692291259766,
-            "unit": "\u00b5m"
+            "unit": "µm",
+            "type": "soma"
         },
         {
-            "name": "soma surface area",
+            "name": "Soma Surface Area",
             "value": 837.8360908269894,
-            "unit": "\u00b5m\u00b2"
+            "unit": "µm²",
+            "type": "soma"
         },
         {
-            "name": "soma volume",
+            "name": "Soma Volume",
             "value": 2280.4072316345887,
-            "unit": "\u00b5m\u00b3"
+            "unit": "µm³",
+            "type": "soma"
         }
     ]
 }
