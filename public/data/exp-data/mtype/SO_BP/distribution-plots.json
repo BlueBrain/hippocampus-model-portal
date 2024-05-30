@@ -1,0 +1,353 @@
+{
+    "all maximum branch order": {
+        "values": [
+            45.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "all maximum branch order (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "average all section length": {
+        "values": [
+            29.972766887738057
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average all section length (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "average all segment length": {
+        "values": [
+            0.7271358487427323
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average all segment length (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "average axon section length": {
+        "values": [
+            28.484257624369004
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average axon section length (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "average axon segment length": {
+        "values": [
+            0.7366824884984706
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average axon segment length (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "average dendrite section length": {
+        "values": [
+            66.59009476661682
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average dendrite section length (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "average dendrite segment length": {
+        "values": [
+            0.6398791944320522
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average dendrite segment length (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "average diameter of all": {
+        "values": [
+            0.4023447632789612
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average diameter of all (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "average diameter of axon": {
+        "values": [
+            0.33920055627822876
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average diameter of axon (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "average diameter of dendrite": {
+        "values": [
+            1.0667978525161743
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "average diameter of dendrite (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "axon maximum branch order": {
+        "values": [
+            45.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "axon maximum branch order (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "dendrite maximum branch order": {
+        "values": [
+            9.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "dendrite maximum branch order (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "number of all sections": {
+        "values": [
+            1920.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of all sections (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "number of all segments": {
+        "values": [
+            79143.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of all segments (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "number of axon sections": {
+        "values": [
+            1845.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of axon sections (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "number of axon segments": {
+        "values": [
+            71338.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of axon segments (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "number of dendrite sections": {
+        "values": [
+            75.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of dendrite sections (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "number of dendrite segments": {
+        "values": [
+            7805.0
+        ],
+        "unit": "",
+        "n": 1,
+        "title": "number of dendrite segments (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "soma diameter": {
+        "values": [
+            19.609529495239258
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "soma diameter (SO_BP, N=1)",
+        "neuriteType": "soma"
+    },
+    "soma surface area": {
+        "values": [
+            1208.0480805507575
+        ],
+        "unit": "\u00b5m\u00b2",
+        "n": 1,
+        "title": "soma surface area (SO_BP, N=1)",
+        "neuriteType": "soma"
+    },
+    "soma volume": {
+        "values": [
+            3948.2090778712077
+        ],
+        "unit": "\u00b5m\u00b3",
+        "n": 1,
+        "title": "soma volume (SO_BP, N=1)",
+        "neuriteType": "soma"
+    },
+    "total all area": {
+        "values": [
+            74229.08965030871
+        ],
+        "unit": "\u00b5m\u00b2",
+        "n": 1,
+        "title": "total all area (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total all depth": {
+        "values": [
+            349.95001220703125
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total all depth (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total all height": {
+        "values": [
+            1036.75
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total all height (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total all length": {
+        "values": [
+            57547.71242445707
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total all length (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total all volume": {
+        "values": [
+            13809.99292369809
+        ],
+        "unit": "\u00b5m\u00b3",
+        "n": 1,
+        "title": "total all volume (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total all width": {
+        "values": [
+            1144.949951171875
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total all width (SO_BP, N=1)",
+        "neuriteType": "all"
+    },
+    "total axon area": {
+        "values": [
+            57188.98863775202
+        ],
+        "unit": "\u00b5m\u00b2",
+        "n": 1,
+        "title": "total axon area (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total axon depth": {
+        "values": [
+            349.95001220703125
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total axon depth (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total axon height": {
+        "values": [
+            1031.0999755859375
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total axon height (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total axon length": {
+        "values": [
+            52553.45531696081
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total axon length (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total axon volume": {
+        "values": [
+            7656.284170207547
+        ],
+        "unit": "\u00b5m\u00b3",
+        "n": 1,
+        "title": "total axon volume (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total axon width": {
+        "values": [
+            1144.949951171875
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total axon width (SO_BP, N=1)",
+        "neuriteType": "axon"
+    },
+    "total dendrite area": {
+        "values": [
+            17040.101012556697
+        ],
+        "unit": "\u00b5m\u00b2",
+        "n": 1,
+        "title": "total dendrite area (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "total dendrite depth": {
+        "values": [
+            265.75
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total dendrite depth (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "total dendrite height": {
+        "values": [
+            512.719970703125
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total dendrite height (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "total dendrite length": {
+        "values": [
+            4994.257107496262
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total dendrite length (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "total dendrite volume": {
+        "values": [
+            6153.708753490542
+        ],
+        "unit": "\u00b5m\u00b3",
+        "n": 1,
+        "title": "total dendrite volume (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    },
+    "total dendrite width": {
+        "values": [
+            733.0599975585938
+        ],
+        "unit": "\u00b5m",
+        "n": 1,
+        "title": "total dendrite width (SO_BP, N=1)",
+        "neuriteType": "dendrite"
+    }
+}

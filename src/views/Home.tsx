@@ -86,12 +86,8 @@ const Home: React.FC = () => (
             idx="2"
             description={<div>
               <p>
-                Step two in the hippocampus reconstruction is the extraction of as much information as possible
-                from the previously collected sparse data and the exploitation of interdependencies
-                to build detailed and dense models of individual cells and cell-circuits.
-                From sparse experimental data sets, rules and principles of organization are identified
-                and missing information is extrapolated to fill knowledge gaps, which enables a dense data-driven
-                digital reconstruction of the hippocampus region.</p>
+                The second step of the reconstruction converts the sparse experimental datasets to dense datasets, required to fully reconstruct the hippocampus model. We applied several strategies to predict the missing data: algorithms, principles, and rules.
+              </p>
             </div>}
             links={[
               {
@@ -135,23 +131,8 @@ const Home: React.FC = () => (
             idx="3"
             description={<div>
               <p>
-                In the third step of our reconstruction workflow, digital reconstructions are built
-                based on experimental datasets taken from specimens at a specific stage of development.
-                They are therefore, digital snapshots of the structure and physiology of the brain
-                at a specific age range. These digital reconstructions integrate data and knowledge of molecular,
-                cellular and circuit anatomy, as well as their physiology.
-              </p>
-              <p>
-                Starting from individually reconstructed cell morphologies and corresponding
-                electrophysiological behaviors, they can be assembled into specific brain region circuits
-                along with their individual synaptic and connectivity models.
-              </p>
-              <p>
-                Circuit reconstructions are based on a standardized workflow enabled by
-                Blue Brain Project software tools and supercomputing infrastructure.
-                The parameterization of the tissue model is strictly based on biological data:
-                directly, where available, generalized from data obtained in other similar systems;
-                or, where unavailable, predicted from multi-constraints imposed by sparse data.
+                The third step of the reconstruction generates an instance of the hippocampus model. Most of the model parameters were sampled from the distributions defined in the dense datasets of step two. For this reason, each model instance is unique within the biological ranges and could be considered to be derived from a specific individual.
+
               </p>
             </div>}
             links={[
@@ -223,12 +204,7 @@ const Home: React.FC = () => (
             idx="5"
             description={<div>
               <p>
-                The digital reconstruction of the hippocampus provides an array of predictions
-                across its many levels of organization. These predictions provide insights
-                to link underlying structure with function. In addition, predictions are also a means
-                to validate the component models of the hippocampus model and identify missing data
-                that could guide targeted experiments. In particular, we provide predictions
-                on the propagation of activity across the different sub-regions of the hippocampus.
+                Each model parameter or behavior that has not been described experimentally could be considered a prediction. We already mentioned that most of the predicted parameters and behaviors arise during the reconstruction data step. Here, we focus on the predictions derived from the simulation experiments we carried out.
               </p>
             </div>}
             links={[

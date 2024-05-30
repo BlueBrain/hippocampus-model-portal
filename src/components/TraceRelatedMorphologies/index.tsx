@@ -14,7 +14,7 @@ type TraceRelatedMorphologiesProps = {
 const compareByName = getCompareByFn('name');
 const annotationMtypeRe = /(\w+)_(.+)/;
 
-const MorphologyLink: React.FC<{morphology: NexusMorphology}> = ({ morphology }) => {
+const MorphologyLink: React.FC<{ morphology: NexusMorphology }> = ({ morphology }) => {
   const [, layer, mtype] = annotationMtypeRe.exec(morphology.annotation.hasBody.label);
   const instance = morphology.name;
 
@@ -44,13 +44,13 @@ const TraceRelatedMorphologies: React.FC<TraceRelatedMorphologiesProps> = ({ tra
           <span>Cell&apos;s reconstructed morphology: </span>
           {esDocuments
             ? esDocuments
-                .map(esDocument => esDocument._source as NexusMorphology)
-                .sort(compareByName)
-                .map((morphology, idx) => (
-                  <>
-                    {idx > 0 && ', '}<MorphologyLink key={trace.name} morphology={morphology} />
-                  </>
-                ))
+              .map(esDocument => esDocument._source as NexusMorphology)
+              .sort(compareByName)
+              .map((morphology, idx) => (
+                <>
+                  {idx > 0 && ', '}<MorphologyLink key={trace.name} morphology={morphology} />
+                </>
+              ))
             : '...'
           }.
         </>

@@ -32,7 +32,7 @@ const synapsePhysiologyAllColumns = [
   {
     title: 'Exp. feature',
     dataIndex: 'expFeature' as keyof TableEntry,
-    render: feature => (<Term term={feature}/>),
+    render: feature => (<Term term={feature} />),
     width: 180,
   },
   {
@@ -97,11 +97,8 @@ const synapsePhysiologyWOAgeColumns = synapsePhysiologyAllColumns.filter(column 
 const SCSynapsePhysiologySection: React.FC = () => {
   return (
     <>
-      <p className="text-tmp">
-        Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
-        sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
-        facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
-        omnis eum quasi sint nam omnis aspernatur.
+      <p>
+        Data about synapse physiology are divided into two main groups, one where we report data on connections between Schaffer collaterals and excitatory neurons (SC→Exc) and between Schaffer collaterals and inhibitory neurons  (SC→Inh). Similarly to the connection physiology section [hyperlink], data consists of postsynaptic potentials and currents, and receptors properties. The dataset also includes the EPSP-IPSP latency, which is particularly important to reproduce the feedforward inhibition of the SC.
       </p>
 
       <h2 className="mt-3">SC → Exc</h2>

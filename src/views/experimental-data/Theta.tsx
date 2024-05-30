@@ -17,7 +17,7 @@ const ThetaView: React.FC = () => {
       <Filters>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -32,15 +32,8 @@ const ThetaView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    Extracellular electrical recordings of region CA1 display different types of oscillatory activity related to behavioral states. One of the most prominent and well-studied is the theta rhythm, a 4-12 Hz regular oscillation that occurs during locomotion and rapid eye movement (REM) sleep. Theta rhythms are believed to coordinate the encoding and retrieval of episodic memory during spatial navigation. Here, we report on phase and rate of spiking during network theta rhythmic activity.
                   </p>
                 </InfoBox>
               </div>

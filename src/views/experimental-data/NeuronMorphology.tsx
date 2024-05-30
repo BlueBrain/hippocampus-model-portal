@@ -43,11 +43,12 @@ import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
 
 const factsheetEntryTypes = [
   'all',
-  'axon',
+  'soma',
   'dendrite',
+  'axon',
   'apical',
   'basal',
-  'soma',
+
 ];
 
 type NeuriteTypeGroupedFactsheetsProps = {
@@ -56,7 +57,7 @@ type NeuriteTypeGroupedFactsheetsProps = {
 }
 
 const NeuriteTypeGroupedFactsheets: React.FC<NeuriteTypeGroupedFactsheetsProps> = ({ facts, id }) => {
-  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.name.includes(entryType)) ?? '-');
+  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.type === entryType));
 
   return (
     <div id={id}>
@@ -148,9 +149,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
             />
             <InfoBox>
               <p>
-                We classified neuronal morphologies in different morphological types (m-types)
-                and created digital 3D reconstructions. Using objective classification methods,
-                we have identified 12 m-types in rat hippocampus CA1.
+                We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
               </p>
             </InfoBox>
           </div>
@@ -213,7 +212,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
+                    <p>
+                      We provide visualization and morphometrics for the selected morphology.
+                    </p>
                     <Metadata nexusDocument={esDocuments[0]._source} />
+
                     <h3>3D view</h3>
                     <NexusPlugin
                       className="mt-3"
@@ -303,6 +306,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           title="Population"
           className="mt-4 mb-4"
         >
+          <p>
+            We provide morphometrics for the entire m-type group selected.
+          </p>
           <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
             {(factsheetData, loading) => (
               <div>
@@ -352,6 +358,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           )}
 
           <h3 className="mt-4">Reconstructed morphologies</h3>
+          <p>
+            Reconstructed morphologies from the selected m-type
+          </p>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
               <>

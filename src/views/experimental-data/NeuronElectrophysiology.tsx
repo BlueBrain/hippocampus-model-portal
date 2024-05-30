@@ -97,10 +97,7 @@ const NeuronElectrophysiology: React.FC = () => {
             />
             <InfoBox color="grey-1">
               <p>
-                We recorded electrical traces from neurons using single-cell recording experiments
-                in brain slices. Then, we classified the traces in different electrical types (e-types)
-                based on their firing patterns. We have identified one e-type for excitatory cells
-                and four e-types for inhibitory cells.
+                We recorded electrical traces from neurons using single-cell recording experiments in brain slices. Then, we classified the traces in different electrical types (e-types) based on their firing patterns. We identified one e-type for excitatory cells and four e-types for inhibitory cells.
               </p>
             </InfoBox>
           </div>
