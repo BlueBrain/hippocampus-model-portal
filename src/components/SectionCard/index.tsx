@@ -30,7 +30,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   const [infoOpened, setInfoOpened] = useState(false);
 
   return (
-    <div className={`${styles.container} bg-grey-${idx} ${infoOpened ? 'show' : ''}`}>
+    <div className={`${styles.container} bg-card-gradiant-${idx} ${infoOpened ? 'show' : ''}`}>
       <div className={styles.head}>
         <div className={styles.title}>
           <Row justify="space-between" align="middle">

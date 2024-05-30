@@ -3,6 +3,11 @@
 @import 'antd/lib/style/index.css';
 @import 'flexboxgrid';
 
+@import 'config/_colors';
+@import 'config/_fonts';
+@import 'config/_queries';
+
+
 
 @import 'antd/lib/button/style/index.css';
 @import 'antd/lib/select/style/index.css';
@@ -23,9 +28,6 @@
 @import 'antd/lib/tooltip/style/index.css';
 
 
-@import 'config/_colors';
-@import 'config/_fonts';
-@import 'config/_queries';
 
 
 // Pages
@@ -64,6 +66,8 @@ a {
 p,
 li {
   font-weight: 300;
+  line-height: 2rem;
+  font-size: map-get($fontSize, "medium");
 }
 
 section {
@@ -223,6 +227,10 @@ section {
 
 .text-bbp-blue {
   color: map-get($basePalette, "bbp-blue");
+}
+
+.text-epfl-red {
+  color: map-get($basePalette, "epfl-red");
 }
 
 .text-tmp {
@@ -1044,9 +1052,11 @@ $collapsible-padding: 20px 30px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
   position: fixed;
   width: 100%;
+  height: 90px;
   transition: all 0.1s ease-in-out;
 
   padding: 30px 60px;
@@ -1059,7 +1069,8 @@ $collapsible-padding: 20px 30px;
   }
 
   &.scrolled {
-    padding: 15px 60px;
+    height: 70px;
+
     background-color: rgba(black, .75);
   }
 }
@@ -1232,6 +1243,28 @@ $collapsible-padding: 20px 30px;
 .bg-grey-5 {
   background-color: #c3cce7;
 }
+
+.bg-card-gradiant-1 {
+  background: linear-gradient(90deg, rgba(32, 91, 132, 0.9) 0%, rgba(32, 91, 132, 0.7) 100%);
+}
+
+.bg-card-gradiant-2 {
+  background: linear-gradient(90deg, rgba(166, 27, 38, 1) 0%, rgba(166, 27, 38, 0.7) 100%);
+}
+
+.bg-card-gradiant-3 {
+  background: linear-gradient(90deg, rgba(156, 161, 172, 0.9) 0%, rgba(156, 161, 172, 0.7) 100%);
+}
+
+.bg-card-gradiant-4 {
+  background: linear-gradient(90deg, rgba(91, 143, 174, 0.9) 0%, rgba(91, 143, 174, 0.7) 100%);
+}
+
+.bg-card-gradiant-5 {
+  background: linear-gradient(90deg, rgba(75, 47, 116, 0.9) 0%, rgba(75, 47, 116, 0.7) 100%);
+}
+
+
 
 .bg-white {
   background-color: white;

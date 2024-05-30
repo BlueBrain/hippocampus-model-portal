@@ -1,16 +1,27 @@
-
 .footer {
-  background-color: rgb(248,249,253);
+  //background-color: rgb(248,249,253);
+  background-color: black;
   padding: 4rem 0;
-  color: #17151A;
 
-  a, h3, a:hover {
-    color: #17151A;
+
+  h3,
+  h4 {
+    font-size: 1.3rem;
+  }
+
+  h3,
+  h4,
+  p,
+  a,
+  a:hover {
+    color: white;
   }
 
   a {
     text-decoration: underline;
   }
+
+
 }
 
 .sectionContent {
