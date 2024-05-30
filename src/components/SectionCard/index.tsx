@@ -20,6 +20,7 @@ type SectionCardProps = {
   }[];
 };
 
+
 const SectionCard: React.FC<SectionCardProps> = ({
   title,
   description,
