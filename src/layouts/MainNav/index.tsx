@@ -198,8 +198,9 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
           <SubmenuGroupLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
           <SubmenuGroupLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
-          <SubmenuGroupLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
           <SubmenuGroupLink label="Minis" href="/experimental-data/minis/" />
+          <SubmenuGroupLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
+
           <SubmenuGroupLink label="Theta" href="/experimental-data/theta/" />
         </SubmenuGroup>
 
