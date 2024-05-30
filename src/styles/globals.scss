@@ -51,11 +51,12 @@ html,
 body {
   @include font-default;
   color: map-get($basePalette, "white");
-  background-color: #17151A;
+  background-color: #050A30;
   scroll-behavior: smooth;
   width: auto;
   height: auto;
   min-height: 100vh;
+
 }
 
 button,
@@ -159,6 +160,10 @@ section {
 
 .ml-4 {
   margin-left: 4rem;
+}
+
+.mt-5 {
+  margin-top: 5rem;
 }
 
 .p-1 {
@@ -1070,7 +1075,7 @@ $collapsible-padding: 20px 30px;
   &.scrolled {
     height: 70px;
 
-    background-color: rgba(black, .75);
+    background-color: rgba(#050A30, .8);
   }
 }
 

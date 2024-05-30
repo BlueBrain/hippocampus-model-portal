@@ -34,11 +34,15 @@ const SectionCard: React.FC<SectionCardProps> = ({
     <div className={`${styles.container} bg-card-gradiant-${idx} ${infoOpened ? 'show' : ''}`}>
       <div className={styles.head}>
         <div className={styles.title}>
+          {/*
+
+          Icon & Count
+
           <Row justify="space-between" align="middle">
             <Col>{icon && <img src={icon} alt="icon" className={styles.icon} />}</Col>
             <Col><div className={styles.idx}>0{idx}</div></Col>
           </Row>
-
+          */}
           <h3 className="text-white">{title}</h3>
         </div>
       </div>

@@ -1,6 +1,6 @@
 .footer {
   /* background-color: rgb(248,249,253); */
-  background-color: black;
+  background-color: #050A30;
   padding: 3rem 0;
   position: relative;
   /* Ensure the pseudo-element is positioned relative to the footer */
@@ -26,14 +26,27 @@
     padding: 0;
   }
 
-  ul li::before {
-    content: "–";
-    margin-right: 8px;
+  li {
+
+    margin-bottom: .5rem;
   }
 
   a:hover {
     text-decoration: underline;
 
+  }
+
+  a {
+    line-height: 1.5rem;
+  }
+
+  p {
+    line-height: 1.5;
+  }
+
+  p,
+  li {
+    color: #9B9DAC;
   }
 
   h4 {
@@ -55,7 +68,6 @@
 }
 
 .sectionContent {
-
-  margin: 0 30px;
-  padding: 0 2rem;
+  width: 1400px;
+  margin: 0 auto;
 }

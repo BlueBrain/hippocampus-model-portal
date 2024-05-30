@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import NextLink from 'next/link';
-import { HomeFilled, GlobalOutlined, ToolFilled  } from '@ant-design/icons';
+import { HomeFilled, GlobalOutlined, ToolFilled } from '@ant-design/icons';
 
 import { basePath } from '../../config';
 
@@ -97,7 +97,7 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, back
   return (
     <div className={styles.submenuGroup}>
       {href ? (
-        <Link className={styles.submenuLink} label={label} href={href} external={external}/>
+        <Link className={styles.submenuLink} label={label} href={href} external={external} />
       ) : (
         <span className={styles.submenuDisabledLink}>{label}</span>
       )}
@@ -124,7 +124,7 @@ const SubmenuGroupLink: React.FC<SubmenuGroupLinkProps> = ({ label, href, extern
   );
 
   return href
-    ? (<Link className={styles.submenuGroupLink} label={labelWithCircle} href={href} external={external}/>)
+    ? (<Link className={styles.submenuGroupLink} label={labelWithCircle} href={href} external={external} />)
     : (<span className={styles.submenuGroupDisabledLink}>{labelWithCircle}</span>);
 };
 
@@ -140,7 +140,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
   return (
     <li className={`${styles.menuItem} ${className}`}>
       <div className={`${styles.menuLink} bg-${background}`}>
-        <Link label={label} href={href} external={external}/>
+        <Link label={label} href={href} external={external} />
       </div>
       <div className={styles.hoverBar}></div>
       {children && (
@@ -199,6 +199,7 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
           <SubmenuGroupLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
           <SubmenuGroupLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
+          <SubmenuGroupLink label="Minis" href="/experimental-data/minis/" />
           <SubmenuGroupLink label="Theta" href="/experimental-data/theta/" />
         </SubmenuGroup>
 
