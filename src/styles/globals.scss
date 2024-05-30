@@ -3,6 +3,11 @@
 @import 'antd/lib/style/index.css';
 @import 'flexboxgrid';
 
+@import 'config/_colors';
+@import 'config/_fonts';
+@import 'config/_queries';
+
+
 
 @import 'antd/lib/button/style/index.css';
 @import 'antd/lib/select/style/index.css';
@@ -23,9 +28,11 @@
 @import 'antd/lib/tooltip/style/index.css';
 
 
-@import 'config/_colors';
-@import 'config/_fonts';
-@import 'config/_queries';
+
+
+// Pages
+@import './home';
+
 
 
 // colors
@@ -38,14 +45,18 @@
 }
 
 
-html, body {
+
+
+html,
+body {
   @include font-default;
   color: map-get($basePalette, "white");
-  background-color: #17151A;
+  background-color: #050A30;
   scroll-behavior: smooth;
   width: auto;
   height: auto;
   min-height: 100vh;
+
 }
 
 button,
@@ -53,8 +64,11 @@ a {
   cursor: pointer;
 }
 
-p, li {
+p,
+li {
   font-weight: 300;
+  line-height: 2rem;
+  font-size: map-get($fontSize, "medium");
 }
 
 section {
@@ -148,6 +162,10 @@ section {
   margin-left: 4rem;
 }
 
+.mt-5 {
+  margin-top: 5rem;
+}
+
 .p-1 {
   padding: 0.5rem;
 }
@@ -212,6 +230,14 @@ section {
   color: rgba(247, 248, 252, 0.5);
 }
 
+.text-bbp-blue {
+  color: map-get($basePalette, "bbp-blue");
+}
+
+.text-epfl-red {
+  color: map-get($basePalette, "epfl-red");
+}
+
 .text-tmp {
   color: rgb(250, 173, 20);
 }
@@ -239,17 +265,19 @@ section {
 .spin {
   animation: spin 2s infinite linear;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(359deg);
   }
 }
 
 
-.ant-table-thead > tr > th {
+.ant-table-thead>tr>th {
   font-weight: bold;
 }
 
@@ -260,13 +288,13 @@ tfoot.ant-table-summary {
 
 .responsiveTable.no-left-margin.nested-table.xs-column {
   .ant-table.ant-table-layout-fixed {
-      margin:0;
+    margin: 0;
   }
 }
 
 .responsiveTable {
   @media (max-width: $ant-breakpoint-sm) {
-    .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+    .ant-table-tbody>tr.ant-table-row-level-0:hover>td {
       background: unset;
     }
   }
@@ -311,6 +339,7 @@ tfoot.ant-table-summary {
 
   &.large {
     font-size: 1.5rem;
+
     @media (max-width: $small) {
       border-width: $borderWidth;
       height: $height;
@@ -348,11 +377,9 @@ tfoot.ant-table-summary {
     border: none;
     line-height: $height + (2 * $borderWidth);
     background: map-get($basePalette, "yellow-2");
-    background: linear-gradient(
-      90deg,
-      map-get($basePalette, "yellow-1"),
-      map-get($basePalette, "yellow-2")
-    );
+    background: linear-gradient(90deg,
+        map-get($basePalette, "yellow-1"),
+        map-get($basePalette, "yellow-2"));
 
     .active &,
     &:active,
@@ -394,6 +421,7 @@ $collapsible-padding: 20px 30px;
 @mixin collapsible__basis {
   border-radius: 3px;
   overflow: hidden;
+
   .header {
     position: relative;
     overflow: hidden;
@@ -402,17 +430,20 @@ $collapsible-padding: 20px 30px;
     font-size: map-get($fontSize, "large");
     font-weight: 400;
     padding: 20px 60px 20px 30px;
+
     &:hover {
       cursor: pointer;
       background-color: #545A70;
     }
   }
+
   .arrow {
     position: absolute;
     top: calc(50% - 17px);
     right: 30px;
     transition: transform 0.5s;
   }
+
   .content {
     background-color: map-get($basePalette, "white");
     color: map-get($basePalette, "navy-4");
@@ -430,6 +461,7 @@ $collapsible-padding: 20px 30px;
 
 .collapsible__expanded {
   @include collapsible__basis;
+
   .content {
     max-height: 20000px;
     transition: max-height 1s, padding 0.3s;
@@ -438,9 +470,11 @@ $collapsible-padding: 20px 30px;
 
 .collapsible__collapsed {
   @include collapsible__basis;
+
   .arrow {
     transform: rotate(180deg);
   }
+
   .content {
     max-height: 0;
     padding-top: 0;
@@ -450,7 +484,7 @@ $collapsible-padding: 20px 30px;
 }
 
 .dark-collapsible .header {
-    background-color: #83b9f6;
+  background-color: #83b9f6;
 }
 
 .dark-collapsible .content {
@@ -544,8 +578,10 @@ $collapsible-padding: 20px 30px;
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     padding: 0.5rem 1rem;
+
     @media (max-width: $ant-breakpoint-sm) {
       padding: 0;
     }
@@ -593,7 +629,8 @@ $collapsible-padding: 20px 30px;
 
   ::-webkit-scrollbar-track {
     width: 10px;
-    background-color: #f1f1f1;;
+    background-color: #f1f1f1;
+    ;
   }
 
   ::-webkit-scrollbar {
@@ -624,16 +661,20 @@ $collapsible-padding: 20px 30px;
   text-overflow: ellipsis;
   padding: 2px 0.5rem;
   cursor: pointer;
+
   &:hover {
     color: map-get($basePalette, "white");
     background-color: #999ba2;
   }
+
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
+
   &.selected {
     color: map-get($basePalette, "white");
     background-color: #17151a !important;
@@ -643,18 +684,23 @@ $collapsible-padding: 20px 30px;
     .yellow & {
       background-color: map-get($accentPalette, "yellow");
     }
+
     .blue & {
       background-color: map-get($accentPalette, "blue");
     }
+
     .lavender & {
       background-color: map-get($accentPalette, "lavender");
     }
+
     .green & {
       background-color: map-get($accentPalette, "green");
     }
+
     .grey & {
       background-color: map-get($accentPalette, "grey");
     }
+
     .orange & {
       background-color: map-get($accentPalette, "orange");
     }
@@ -678,11 +724,12 @@ $collapsible-padding: 20px 30px;
   font-size: map-get($fontSize, "large");
   background-color: #343846;
   color: map-get($basePalette, "white");
-  box-shadow: 0 -8px 12px 0px rgba(0,0,0,0.3);
+  box-shadow: 0 -8px 12px 0px rgba(0, 0, 0, 0.3);
   text-decoration: none;
   text-align: center;
   padding: 15px;
   cursor: pointer;
+
   &:hover {
     background-color: #545A70;
   }
@@ -695,15 +742,19 @@ $collapsible-padding: 20px 30px;
   &.yellow {
     background-color: map-get($accentPalette, "yellow");
   }
+
   &.blue {
     background-color: map-get($accentPalette, "blue");
   }
+
   &.lavender {
     background-color: map-get($accentPalette, "lavender");
   }
+
   &.green {
     background-color: map-get($accentPalette, "green");
   }
+
   &.grey {
     background-color: map-get($accentPalette, "grey");
   }
@@ -820,6 +871,7 @@ $collapsible-padding: 20px 30px;
       border-left: 4px solid map-get($accentPalette, "yellow");
       margin: 1rem 1rem 1rem 0;
       padding-left: 12px;
+
       @media (max-width: $small) {
         margin-left: 1rem;
       }
@@ -850,7 +902,9 @@ $collapsible-padding: 20px 30px;
     display: block;
     font-size: 1.2rem;
   }
-  a, a:active {
+
+  a,
+  a:active {
     color: white;
   }
 
@@ -875,7 +929,6 @@ $collapsible-padding: 20px 30px;
   }
 
   .hub {
-    font-weight: bold;
     vertical-align: middle;
 
     @media (max-width: 75em) {
@@ -992,147 +1045,45 @@ $collapsible-padding: 20px 30px;
   padding: 160px 60px;
   min-height: 100vh;
   background-color: #17151A;
+
   @media (max-width: $small) {
     padding: 90px 30px 60px;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // layout / Navigation
 .nav__basis {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
-  position: absolute;
-  top: 30px;
-  left: 60px;
-  right: 60px;
+  position: fixed;
+  width: 100%;
+  height: 90px;
+  transition: all 0.1s ease-in-out;
+
+  padding: 30px 60px;
   z-index: 10;
+
+
   @media (max-width: $small) {
     justify-content: center;
     top: 5px;
   }
-}
 
+  &.scrolled {
+    height: 70px;
 
-
-
-
-
-
-
-
-
-
-
-// pages / Home
-.Home__basis {
-  background-color: map-get($basePalette, "grey-1");
-
-  section {
-    padding: 30px 30px 80px;
-    overflow: hidden;
-  }
-
-  .accent-border {
-    display: inline-block;
-    width: 50px;
-    height: 4px;
-    border-radius: 4px;
-    margin: 0 10px;
-    background-color: map-get($accentPalette, "yellow");
-  }
-
-  .nowrap {
-    white-space: nowrap;
-  }
-
-  .content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    @media (max-width: $small) {
-      flex-direction: column;
-    }
-  }
-
-  #section-3 {
-    min-height: 100vh;
-    padding-top: 90px;
-    background-color: #17151A;
-
-    .intro {
-      text-align: center;
-      margin: 0 auto 2rem auto;
-      max-width: 860px;
-
-      h2 {
-        text-transform: uppercase;
-        margin-bottom: 1rem;
-      }
-
-      h3 {
-        color: map-get($accentPalette, "yellow");
-        font-weight: 300;
-        font-size: 120%;
-      }
-
-      p {
-        opacity: 0.5;
-      }
-
-      a {
-        text-decoration: underline;
-        color: white;
-
-        &:hover  {
-          color: white;
-        }
-      }
-    }
+    background-color: rgba(#050A30, .8);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // pages / Glossary
 .glossary__container {
   max-width: 1080px;
   margin: 0 auto;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // NeuronMorphology plugin, romove after Nexus integration
 .morpho-viewer,
@@ -1193,7 +1144,7 @@ $collapsible-padding: 20px 30px;
   margin-left: 10px;
 }
 
-.morpho-wrapper > .actions {
+.morpho-wrapper>.actions {
   position: relative;
   z-index: 2;
 }
@@ -1208,12 +1159,12 @@ $collapsible-padding: 20px 30px;
   backdrop-filter: blur(1px);
 }
 
-.morpho-legend > ul {
+.morpho-legend>ul {
   list-style: none;
   padding: none;
 }
 
-.morpho-legend > ul li::before {
+.morpho-legend>ul li::before {
   content: '\2022';
   font-weight: bold;
   display: inline-block;
@@ -1223,16 +1174,19 @@ $collapsible-padding: 20px 30px;
   font-size: 1.5em;
 }
 
-.morpho-legend > ul li.axon::before {
+.morpho-legend>ul li.axon::before {
   color: var(--axon);
 }
-.morpho-legend > ul li.basal-dendrites::before {
+
+.morpho-legend>ul li.basal-dendrites::before {
   color: var(--basal-dendrites);
 }
-.morpho-legend > ul li.apical-dendrites::before {
+
+.morpho-legend>ul li.apical-dendrites::before {
   color: var(--apical-dendrites);
 }
-.morpho-legend > ul li.soma::before {
+
+.morpho-legend>ul li.soma::before {
   color: var(--soma);
 }
 
@@ -1277,18 +1231,44 @@ $collapsible-padding: 20px 30px;
 .bg-grey-1 {
   background-color: #343846;
 }
+
 .bg-grey-2 {
   background-color: #545a70;
 }
+
 .bg-grey-3 {
   background-color: #8690b3;
 }
+
 .bg-grey-4 {
   background-color: #9fa9d0;
 }
+
 .bg-grey-5 {
   background-color: #c3cce7;
 }
+
+.bg-card-gradiant-1 {
+  background: linear-gradient(90deg, rgba(32, 91, 132, 0.9) 0%, rgba(32, 91, 132, 0.7) 100%);
+}
+
+.bg-card-gradiant-2 {
+  background: linear-gradient(90deg, rgba(166, 27, 38, 1) 0%, rgba(166, 27, 38, 0.7) 100%);
+}
+
+.bg-card-gradiant-3 {
+  background: linear-gradient(90deg, rgba(156, 161, 172, 0.9) 0%, rgba(156, 161, 172, 0.7) 100%);
+}
+
+.bg-card-gradiant-4 {
+  background: linear-gradient(90deg, rgba(91, 143, 174, 0.9) 0%, rgba(91, 143, 174, 0.7) 100%);
+}
+
+.bg-card-gradiant-5 {
+  background: linear-gradient(90deg, rgba(75, 47, 116, 0.9) 0%, rgba(75, 47, 116, 0.7) 100%);
+}
+
+
 
 .bg-white {
   background-color: white;

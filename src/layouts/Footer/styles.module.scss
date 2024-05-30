@@ -1,20 +1,73 @@
-
 .footer {
-  background-color: rgb(248,249,253);
-  padding: 4rem 0;
-  color: #17151A;
+  /* background-color: rgb(248,249,253); */
+  background-color: #050A30;
+  padding: 3rem 0;
+  position: relative;
+  /* Ensure the pseudo-element is positioned relative to the footer */
 
-  a, h3, a:hover {
-    color: #17151A;
+
+  h3,
+  h4 {
+    font-size: 1.3rem;
+  }
+
+
+  h2,
+  h3,
+  h4,
+  a,
+  a:hover {
+    color: white;
+  }
+
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+
+    margin-bottom: .5rem;
+  }
+
+  a:hover {
+    text-decoration: underline;
+
   }
 
   a {
-    text-decoration: underline;
+    line-height: 1.5rem;
   }
+
+  p {
+    line-height: 1.5;
+  }
+
+  p,
+  li {
+    color: #9B9DAC;
+  }
+
+  h4 {
+    margin-bottom: 1rem;
+    font-size: 14px;
+
+  }
+
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(-90deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }
 
 .sectionContent {
-  max-width: 1280px;
+  width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
 }

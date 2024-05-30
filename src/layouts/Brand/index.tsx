@@ -12,11 +12,11 @@ const Brand: React.FC = () => {
       <a href="/">
         <img
           className="logo"
-          src={`${basePath}/assets/images/epfl-logo.svg`}
+          src={`${basePath}/assets/images/epfl-logo-red.svg`}
           alt="EPFL logo"
         />
         <div className="divider"></div>
-        <span className="text-grey">Blue Brain Project</span>
+        <span className="text-bbp-blue">Blue Brain Project</span>
         <div className="divider second-divider"></div>
         <span className="hub">The Hippocampus Hub</span>
       </a>
