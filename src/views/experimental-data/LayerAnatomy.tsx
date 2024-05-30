@@ -28,6 +28,9 @@ const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
+  const theme = 1;
+
+
   const { layer } = router.query as { layer: Layer };
 
   const setLayerQuery = (layer: Layer) => {
@@ -52,10 +55,11 @@ const LayerAnatomyView: React.FC = () => {
                 primaryColor={colorName}
                 title="Layer Anatomy"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
+                  <p>
                     The rat hippocampus CA1 is organized into four layers: stratum lacunoso-moleculare (SLM), stratum radiatum (SR), stratum pyramidal (SP), stratum oriens (SO). This section shows the data used to estimate the layer thicknesses.
 
                   </p>

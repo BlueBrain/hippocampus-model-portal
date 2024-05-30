@@ -12,6 +12,8 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const AcetylcholineView: React.FC = () => {
+  const theme = 1;
+
   return (
     <>
       <Filters>
@@ -29,6 +31,7 @@ const AcetylcholineView: React.FC = () => {
                 primaryColor={colorName}
                 title="Acetylcholine"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>

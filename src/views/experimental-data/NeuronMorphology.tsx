@@ -90,6 +90,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
+  const theme = 1;
+
   const { query } = router;
 
   const setQuery = (query: any): void => {
@@ -146,6 +148,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
               primaryColor={colorName}
               title={<span>Neuronal <br /> Morphology</span>}
               subtitle="Experimental Data"
+              theme={theme}
             />
             <InfoBox>
               <p>

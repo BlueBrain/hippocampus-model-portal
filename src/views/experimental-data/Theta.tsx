@@ -12,6 +12,9 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const ThetaView: React.FC = () => {
+
+  const theme = 1;
+
   return (
     <>
       <Filters>
@@ -29,6 +32,7 @@ const ThetaView: React.FC = () => {
                 primaryColor={colorName}
                 title="Theta"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>

@@ -16,6 +16,7 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const ConnectionAnatomyView: React.FC = () => {
+  const theme = 1;
   return (
     <>
       <Filters hasData={true}>
@@ -33,6 +34,7 @@ const ConnectionAnatomyView: React.FC = () => {
                 primaryColor={colorName}
                 title="Connection Anatomy"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>

@@ -17,6 +17,9 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const SchafferCollateralsView: React.FC = () => {
+
+  const theme = 1;
+
   return (
     <>
       <Filters hasData={true}>
@@ -34,6 +37,7 @@ const SchafferCollateralsView: React.FC = () => {
                 primaryColor={colorName}
                 title="Schaffer Collaterals"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>

@@ -25,6 +25,8 @@ import selectorStyle from '@/styles/selector.module.scss';
 const RegionView: React.FC = () => {
   const router = useRouter();
 
+  const theme = 3;
+
   const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
 
   const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
@@ -37,7 +39,7 @@ const RegionView: React.FC = () => {
       <Filters hasData={true}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -49,15 +51,16 @@ const RegionView: React.FC = () => {
                 primaryColor={colorName}
                 title="Region"
                 subtitle="Digital Reconstructions"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
                   <p className="text-tmp">
                     Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
+                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
                     Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
                     Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
+                    vitae ornare arcu sagittis. <br />
                     Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
                     nec pulvinar enim ligula non lorem. Aliquam ut orci est.
                     Praesent tempus sollicitudin ante varius feugiat.

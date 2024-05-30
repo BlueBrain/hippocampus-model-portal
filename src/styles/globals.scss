@@ -1249,23 +1249,84 @@ $collapsible-padding: 20px 30px;
 }
 
 .bg-card-gradiant-1 {
-  background: linear-gradient(90deg, rgba(32, 91, 132, 0.9) 0%, rgba(32, 91, 132, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(map-get($theme, "experimental-data"), 0.9) 0%, rgba(map-get($theme, "experimental-data"), .7) 100%);
 }
 
 .bg-card-gradiant-2 {
-  background: linear-gradient(90deg, rgba(166, 27, 38, 1) 0%, rgba(166, 27, 38, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(map-get($theme, "reconstruction-data"), 0.9) 0%, rgba(map-get($theme, "reconstruction-data"), 0.7) 100%);
 }
 
 .bg-card-gradiant-3 {
-  background: linear-gradient(90deg, rgba(156, 161, 172, 0.9) 0%, rgba(156, 161, 172, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(map-get($theme, "digital-reconstruction"), 0.9) 0%, rgba(map-get($theme, "digital-reconstruction"), 0.7) 100%);
 }
 
 .bg-card-gradiant-4 {
-  background: linear-gradient(90deg, rgba(91, 143, 174, 0.9) 0%, rgba(91, 143, 174, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(map-get($theme, "validations"), 0.9) 0%, rgba(map-get($theme, "validations"), 0.7) 100%);
 }
 
 .bg-card-gradiant-5 {
-  background: linear-gradient(90deg, rgba(75, 47, 116, 0.9) 0%, rgba(75, 47, 116, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(map-get($theme, "predictions"), 0.9) 0%, rgba(map-get($theme, "predictions"), 0.7) 100%);
+}
+
+.text-theme-1 {
+  color: map-get($theme, "experimental-data");
+}
+
+.text-theme-2 {
+  color: map-get($theme, "reconstruction-data");
+}
+
+.text-theme-3 {
+  color: map-get($theme, "digital-reconstruction");
+}
+
+.text-theme-4 {
+  color: map-get($theme, "validations");
+}
+
+.text-theme-5 {
+  color: map-get($theme, "predictions");
+}
+
+.border-theme-1 {
+  border-color: map-get($theme, "experimental-data") !important;
+}
+
+.border-theme-2 {
+  border-color: map-get($theme, "reconstruction-data") !important;
+}
+
+.border-theme-3 {
+  border-color: map-get($theme, "digital-reconstruction") !important;
+}
+
+.border-theme-4 {
+  border-color: map-get($theme, "validations") !important;
+}
+
+.border-theme-5 {
+  border-color: map-get($theme, "predictions") !important;
+}
+
+
+.bg-theme-1 {
+  background: map-get($theme, "experimental-data") !important;
+}
+
+.bg-theme-2 {
+  background: map-get($theme, "reconstruction-data");
+}
+
+.bg-theme-3 {
+  background: map-get($theme, "digital-reconstruction");
+}
+
+.bg-theme-4 {
+  background: map-get($theme, "validations");
+}
+
+.bg-theme-5 {
+  background: map-get($theme, "predictions");
 }
 
 

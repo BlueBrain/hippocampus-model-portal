@@ -61,6 +61,8 @@ const getInstances = (mtype, etype) => {
 const Neurons: React.FC = () => {
   const router = useRouter();
 
+  const theme = 3;
+
   const { query } = router;
 
   const currentLayer: Layer = query.layer as Layer;
@@ -131,6 +133,7 @@ const Neurons: React.FC = () => {
               primaryColor={colorName}
               title={<span>Neurons</span>}
               subtitle="Digital Reconstructions"
+              theme={theme}
             />
             <InfoBox
               color={colorName}

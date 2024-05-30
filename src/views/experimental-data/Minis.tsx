@@ -12,6 +12,7 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const MinisView: React.FC = () => {
+    const theme = 1;
     return (
         <>
             <Filters>
@@ -29,6 +30,7 @@ const MinisView: React.FC = () => {
                                 primaryColor={colorName}
                                 title="Minis"
                                 subtitle="Experimental Data"
+                                theme={theme}
                             />
                             <div role="information">
                                 <InfoBox>

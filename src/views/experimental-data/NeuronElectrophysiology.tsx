@@ -46,6 +46,8 @@ const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
+  const theme = 1;
+
   const { query } = router;
 
   const setQuery = (query: any) => {
@@ -94,6 +96,7 @@ const NeuronElectrophysiology: React.FC = () => {
               primaryColor={colorName}
               title={<span>Neuron <br /> Electrophysiology</span>}
               subtitle="Experimental Data"
+              theme={theme}
             />
             <InfoBox color="grey-1">
               <p>
