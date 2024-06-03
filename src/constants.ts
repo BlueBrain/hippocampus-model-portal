@@ -7,6 +7,8 @@ export const layers: Layer[] = [
   'SO',
 ];
 
+
+
 export const neuriteTypes: NeuriteType[] = [
   'axon',
   'apical',

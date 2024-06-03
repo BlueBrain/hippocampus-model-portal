@@ -719,20 +719,27 @@ $collapsible-padding: 20px 30px;
 
 // ScrollTo
 .scroll-to__basis {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+
+  padding: 1rem 0;
   font-weight: 400;
-  font-size: map-get($fontSize, "large");
-  background-color: #343846;
+  font-size: map-get($fontSize, "medium");
+
   color: map-get($basePalette, "white");
-  box-shadow: 0 -8px 12px 0px rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-  text-align: center;
-  padding: 15px;
+
   cursor: pointer;
 
-  &:hover {
-    background-color: #545A70;
+  text-decoration: none;
+  text-align: center;
+
+  &.black {
+    color: black;
   }
+
 
   &.animated svg {
     animation: arrow-down 1s infinite;
@@ -758,6 +765,24 @@ $collapsible-padding: 20px 30px;
   &.grey {
     background-color: map-get($accentPalette, "grey");
   }
+}
+
+@keyframes yoyo {
+  0% {
+    transform: translateY(-5px);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+.yoyo-arrow {
+  animation: yoyo 2s linear infinite;
 }
 
 .scroll-to__direction {
@@ -953,6 +978,7 @@ $collapsible-padding: 20px 30px;
   position: sticky;
   bottom: 0;
   width: 100%;
+
 }
 
 

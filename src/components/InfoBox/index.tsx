@@ -13,7 +13,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
   children,
 }) => {
   return (
-    <div className={`${styles.container} bg-${color}`}>
+    <div className={`${styles.container}`}>
       {children}
     </div>
   );

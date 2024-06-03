@@ -9,7 +9,7 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D';
 import { layerAnatomyDataQuery } from '@/queries/es';
 import ESData from '@/components/ESData';
 import LayerThickness from '@/components/LayerThickness';
@@ -76,7 +76,7 @@ const LayerAnatomyView: React.FC = () => {
               <div className={styles.selectorColumn}>
                 <div className={styles.selectorHead}>Choose a layer</div>
                 <div className={styles.selectorBody}>
-                  <LayerSelector
+                  <LayerSelector3D
                     value={layer as Layer}
                     onSelect={setLayerQuery}
                   />
