@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Select } from 'antd';
 import throttle from 'lodash/throttle';
 
-import style from  './styles.module.scss';
+import style from './styles.module.scss';
 
 import { Color } from '@/types';
 

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { Layer } from '../../types';
-import { layers } from '../../constants';
+import { layers } from '../../constants'; // Import layers
 import styles from './styles.module.scss';
 
 type LayerSelectProps3D = {
@@ -9,62 +11,31 @@ type LayerSelectProps3D = {
     onSelect?: (layer: Layer) => void;
 };
 
-const createCurvedRectangle = (bottomWidth, topWidth, height, depth) => {
-    const shape = new THREE.Shape();
+const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
+    const mountRef = useRef<HTMLDivElement | null>(null);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [trapezoids, setTrapezoids] = useState<THREE.Mesh[]>([]);
+    const [sceneReady, setSceneReady] = useState(false);
+    const distance = 0.035; // Set the distance between the trapezoids
+    const angle = 25; // Angle in degrees for the trapezoids
+    const initialTopWidth = 1.5; // Initial top width of the first trapezoid
 
-    // Curved bottom (inward)
-    const bottomCurve = new THREE.QuadraticBezierCurve(
-        new THREE.Vector2(-bottomWidth / 2, 0),
-        new THREE.Vector2(0, height / 8),  // Adjusted control point for smoother curve
-        new THREE.Vector2(bottomWidth / 2, 0)
-    );
-    const bottomPoints = bottomCurve.getPoints(20);
-    bottomPoints.forEach((point, index) => {
-        if (index === 0) {
-            shape.moveTo(point.x, point.y);
-        } else {
-            shape.lineTo(point.x, point.y);
-        }
-    });
-
-    // Curved top (outward)
-    const topCurve = new THREE.QuadraticBezierCurve(
-        new THREE.Vector2(topWidth / 2, height),
-        new THREE.Vector2(0, height + height / 4),  // Adjusted control point for smoother curve
-        new THREE.Vector2(-topWidth / 2, height)
-    );
-    const topPoints = topCurve.getPoints(20);
-    topPoints.forEach(point => shape.lineTo(point.x, point.y));
-
-    shape.lineTo(-bottomWidth / 2, 0);
-
-    const extrudeSettings = {
-        steps: 1,
-        depth: depth,
-        bevelEnabled: false
+    const trapezoidHeights = {
+        SLM: 0.224 * 1.3,
+        SR: 0.42791 * 1.3,
+        SP: 0.090 * 1.3,
+        SO: 0.258 * 1.3,
     };
 
-    return new THREE.ExtrudeGeometry(shape, extrudeSettings);
-};
-
-
-const LayerSelector3D: React.FC<LayerSelectProps3D> = ({
-    value: currentLayer,
-    onSelect = () => { },
-}) => {
-    const canvasRef = useRef<HTMLDivElement>(null);
-    const shapesRef = useRef<THREE.Mesh[]>([]);
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-    const selectLayer = (layer: Layer): void => onSelect(layer);
-
     useEffect(() => {
-        if (!canvasRef.current) return;
+        if (!mountRef.current) return;
 
-        // Scene, Camera, Renderer
+        // Scene setup
         const scene = new THREE.Scene();
-        const aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
-        const frustumSize = 10;
+
+        // Create an orthographic camera
+        const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+        const frustumSize = 5;
         const camera = new THREE.OrthographicCamera(
             (frustumSize * aspect) / -2,
             (frustumSize * aspect) / 2,
@@ -74,170 +45,217 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({
             1000
         );
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
-        renderer.setClearColor(0x111111);
-        canvasRef.current.appendChild(renderer.domElement);
-
-        // Lights
-        scene.add(new THREE.AmbientLight(0x888888, 1));
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight1.position.set(10, 10, 10).normalize();
-        scene.add(directionalLight1);
-
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, .5);
-        directionalLight2.position.set(-10, -10, 60).normalize();
-        scene.add(directionalLight2);
-
-        // Rectangles with Arc
-        const distanceBetweenShapes = 0.05;
-        const shapeHeights = [0.896, 1.71164, 0.36, 1.032];
-        const initialBottomWidth = 2.0;
-        const depth = 1;
-        const customAngle = 0.3;
-
-        let cumulativeHeight = 0;
-        let bottomWidth = initialBottomWidth;
-
-        const angle = customAngle;
-        const reversedHeights = [...shapeHeights].reverse();
-
-        shapesRef.current = layers.map((layer, index) => {
-            const height = reversedHeights[index];
-            const topWidth = bottomWidth + 2 * height * Math.tan(angle);
-            const geometry = createCurvedRectangle(bottomWidth, topWidth, height, depth);
-            const material = new THREE.MeshPhongMaterial({ color: 0xBEC9D7 });
-            const shape = new THREE.Mesh(geometry, material);
-
-            shape.position.y = cumulativeHeight;
-            shape.position.x = depth / 2;
-            cumulativeHeight += height + distanceBetweenShapes;
-
-            bottomWidth = topWidth;
-
-            shape.userData = { layer, index };
-            shape.onClick = () => selectLayer(layer);
-
-            scene.add(shape);
-            return shape;
-        });
-
-        const totalHeight = cumulativeHeight - distanceBetweenShapes;
-        scene.position.y = -totalHeight / 2;
-
-        camera.position.set(10, 5, 15);
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-        camera.zoom = 1.75;
+        // Position the camera
+        camera.position.set(10, 5, 20);
+        camera.lookAt(0, 0, 0);
+        camera.zoom = 2.5;
         camera.updateProjectionMatrix();
 
+        let renderer: THREE.WebGLRenderer;
+
+        try {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+            renderer.shadowMap.enabled = true; // Enable shadows
+            mountRef.current.appendChild(renderer.domElement);
+        } catch (error) {
+            console.error("Error creating WebGL context:", error);
+            return;
+        }
+
+        // Create lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.castShadow = true; // Enable shadows for the light
+        scene.add(directionalLight);
+
+        // Create trapezoids
+        const material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // White material with standard shading
+
+        const trapezoidArray: THREE.Mesh[] = [];
+        const texts: THREE.Mesh[] = [];
+        const numTrapezoids = layers.length; // Number of trapezoids based on layers length
+        let yOffset = 0;
+        let topWidth = initialTopWidth;
+
+        // Compute the total height of all trapezoids plus the distances between them
+        const totalHeight = layers.reduce((acc, layer) => acc + (trapezoidHeights[layer] || 1) + distance, -distance);
+        yOffset = totalHeight / 2;
+
+        // Load font
+        const loader = new FontLoader();
+
+        loader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', function (font) {
+            for (let i = 0; i < numTrapezoids; i++) {
+                const height = trapezoidHeights[layers[i]] || 1; // Get the height for the current layer or default to 1
+                const angleRad = THREE.MathUtils.degToRad(angle); // Convert angle to radians
+                const bottomWidth = topWidth - 2 * height * Math.tan(angleRad); // Calculate the bottom width based on the angle
+
+                // Define the curves for the top and bottom edges of the trapezoid
+                const topCurve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-topWidth / 2, height / 2, 0),
+                    new THREE.Vector3(0, height / 2 + 0.055, 0), // Less pronounced curve upwards
+                    new THREE.Vector3(topWidth / 2, height / 2, 0),
+                ]);
+
+                let bottomCurve;
+
+                bottomCurve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-bottomWidth / 2, -height / 2, 0),
+                    new THREE.Vector3(0, -height / 2 + 0.055, 0), // Less pronounced curve inwards
+                    new THREE.Vector3(bottomWidth / 2, -height / 2, 0),
+                ]);
+
+                const topPoints = topCurve.getPoints(20);
+                const bottomPoints = bottomCurve.getPoints(20);
+
+                const shape = new THREE.Shape();
+                shape.moveTo(topPoints[0].x, topPoints[0].y);
+                topPoints.forEach(point => shape.lineTo(point.x, point.y));
+                bottomPoints.reverse().forEach(point => shape.lineTo(point.x, point.y));
+                shape.lineTo(topPoints[0].x, topPoints[0].y);
+
+                const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.3, bevelEnabled: false });
+                const trapezoid = new THREE.Mesh(geometry, material.clone()); // Clone the material for each trapezoid
+                trapezoid.castShadow = true; // Enable shadows for the trapezoid
+                trapezoid.receiveShadow = true; // Allow the trapezoid to receive shadows
+                trapezoid.userData.layer = layers[i]; // Store the layer type in userData
+                trapezoid.userData.index = i; // Store the index in userData
+
+                // Position each trapezoid taking into account the height and distance
+                trapezoid.position.set(0, yOffset - height / 2, -.05); // Center trapezoid based on its height
+                scene.add(trapezoid);
+                trapezoidArray.push(trapezoid);
+
+                // Create text for the layer
+                const textGeometry = new TextGeometry(layers[i], {
+                    font: font,
+                    size: 0.06,
+                    height: 0.01,
+                });
+                const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }); // White color and always on top
+                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+                // Position text at the same location as the trapezoid
+                textMesh.position.set(0, yOffset - height + .21 / 2, 0.33); // Same position as the trapezoid
+                textMesh.renderOrder = 999; // Ensure text renders on top
+                scene.add(textMesh);
+                texts.push(textMesh);
+
+                yOffset -= height + distance; // Decrease offset by height and distance
+                topWidth = bottomWidth; // The top width of the next trapezoid is the bottom width of the current trapezoid
+            }
+
+            setTrapezoids(trapezoidArray);
+            setSceneReady(true); // Mark the scene as ready
+        });
+
+        // Create a plane to catch shadows
+        const planeGeometry = new THREE.PlaneGeometry(20, 20);
+        const planeMaterial = new THREE.ShadowMaterial({ opacity: 0.5 });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = -5;
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        // Raycaster setup
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
+        let hoveredTrapezoid: THREE.Mesh | null = null;
 
         const onMouseMove = (event: MouseEvent) => {
-            if (!canvasRef.current) return;
-
-            const rect = canvasRef.current.getBoundingClientRect();
+            const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-
-            const intersects = raycaster.intersectObjects(shapesRef.current);
-
-            if (intersects.length > 0) {
-                const hoveredShape = intersects[0].object as THREE.Mesh;
-                setHoveredIndex(hoveredShape.userData.index);
-                canvasRef.current.style.cursor = 'pointer';
-            } else {
-                setHoveredIndex(null);
-                canvasRef.current.style.cursor = 'default';
-            }
         };
 
         const onClick = (event: MouseEvent) => {
-            if (!canvasRef.current) return;
-
-            const rect = canvasRef.current.getBoundingClientRect();
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
             raycaster.setFromCamera(mouse, camera);
-
-            const intersects = raycaster.intersectObjects(shapesRef.current);
+            const intersects = raycaster.intersectObjects(trapezoids);
 
             if (intersects.length > 0) {
-                const clickedShape = intersects[0].object as THREE.Mesh;
-                const layer = clickedShape.userData.layer as Layer;
-                selectLayer(layer);
+                const intersectedTrapezoid = intersects[0].object as THREE.Mesh;
+                const selectedLayer = intersectedTrapezoid.userData.layer;
+                if (onSelect && selectedLayer) {
+                    onSelect(selectedLayer);
+                }
+            }
+        };
+
+        const onHover = () => {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(trapezoids);
+
+            if (intersects.length > 0) {
+                document.body.style.cursor = 'pointer';
+                const intersectedTrapezoid = intersects[0].object as THREE.Mesh;
+                const index = intersectedTrapezoid.userData.index;
+                if (hoveredTrapezoid !== intersectedTrapezoid) {
+                    setHoveredIndex(index);
+                    hoveredTrapezoid = intersectedTrapezoid;
+                }
+            } else {
+                document.body.style.cursor = 'default';
+                if (hoveredTrapezoid) {
+                    setHoveredIndex(null);
+                    hoveredTrapezoid = null;
+                }
             }
         };
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('click', onClick);
 
+        // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
+            onHover();
+
             renderer.render(scene, camera);
         };
+
         animate();
-
-        const handleResize = () => {
-            if (canvasRef.current) {
-                const aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
-                camera.left = (frustumSize * aspect) / -2;
-                camera.right = (frustumSize * aspect) / 2;
-                camera.top = frustumSize / 2;
-                camera.bottom = frustumSize / -2;
-                camera.updateProjectionMatrix();
-                renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
-            }
-        };
-        window.addEventListener('resize', handleResize);
-
+        // Clean up
         return () => {
-            window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('click', onClick);
-            if (canvasRef.current) {
-                canvasRef.current.removeChild(renderer.domElement);
+            if (mountRef.current) {
+                mountRef.current.removeChild(renderer.domElement);
             }
         };
-    }, [selectLayer]);
+    }, [distance, onSelect, value]);
 
     useEffect(() => {
-        shapesRef.current.forEach((shape, index) => {
-            const material = shape.material as THREE.MeshPhongMaterial;
+        if (sceneReady && trapezoids.length > 0) { // Ensure scene is ready before updating trapezoids
+            trapezoids.forEach((trapezoid, index) => {
+                const material = trapezoid.material as THREE.MeshStandardMaterial;
 
-            if (index === hoveredIndex && currentLayer !== layers[index]) {
-                material.color.set(0x5CC4EE);
-                material.transparent = true;
-                material.opacity = 0.95;
-            } else if (currentLayer === layers[index]) {
-                material.color.set(0x5CC4EE);
-                material.transparent = false;
-                material.opacity = 1;
-            } else {
-                material.color.set(0xBEC9D7);
-                material.transparent = false;
-                material.opacity = 1;
-            }
+                if (index === hoveredIndex && value !== layers[index]) {
+                    material.color.set(0x778CA9); // Blue color for hover
+                    material.transparent = false;
+                    material.opacity = 1;
+                } else if (value === layers[index]) {
+                    material.color.set(0x5BC4EE); // Yellow color for selected
+                    material.transparent = false;
+                    material.opacity = 1;
+                } else if (index !== hoveredIndex) {
+                    material.color.set(0x96A7BE); // White color for default
+                    material.transparent = false;
+                    material.opacity = 1;
+                }
 
-            material.needsUpdate = true;
-        });
-    }, [currentLayer, hoveredIndex]);
+                material.needsUpdate = true;
+            });
+        }
+    }, [hoveredIndex, value, trapezoids, sceneReady]);
 
     return (
-        <div style={{ width: '100%', height: '400px' }}>
-            <div ref={canvasRef} style={{ width: '100%', height: '100%' }} />
-            {layers.map(layer => (
-                <div
-                    key={layer.name}
-                    className={`${styles.layer} ${layer === currentLayer ? styles.active : ''}`}
-                    onClick={() => onSelect(layer)}
-                >
-                    {layer.name}
-                </div>
-            ))}
+        <div className={styles.container} style={{ width: '100%', height: '400px' }}>
+            <div ref={mountRef} style={{ width: '100%', height: '100%' }}></div>
         </div>
     );
 };

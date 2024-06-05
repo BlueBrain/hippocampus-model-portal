@@ -13,7 +13,7 @@ const ScrollTop: React.FC<ScrollTopProps> = () => {
 
   return (
     <div className={styles.scrollTtop} onClick={scrollTop}>
-      <IoIosArrowUp />
+      <IoIosArrowUp size={20} />
     </div>
   );
 };

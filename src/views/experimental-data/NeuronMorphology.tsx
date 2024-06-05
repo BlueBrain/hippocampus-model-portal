@@ -11,7 +11,7 @@ import { Layer } from '@/types';
 import ESData from '@/components/ESData';
 import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
 import {
   expMorphFactesheetPath,
@@ -161,7 +161,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <div className={styles.selectorColumn}>
                 <div className={styles.selectorHead}>1. Choose a layer</div>
                 <div className={styles.selectorBody}>
-                  <LayerSelector
+                  <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                   />
@@ -178,9 +178,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     color={colorName}
                     onSelect={setMtype}
                   />
-                  <br />
-                  <br />
-                  <br />
+
                   <List
                     block
                     list={instances}
