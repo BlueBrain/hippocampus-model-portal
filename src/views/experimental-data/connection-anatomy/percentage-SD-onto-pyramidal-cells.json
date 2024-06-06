@@ -1,0 +1,42 @@
+[
+    {
+        "m-type": "PC",
+        "Specie": "Sprague–Dawley rat",
+        "Age": null,
+        "Weight": "250-350 g",
+        "PC": 42.151,
+        "INT": 57.849,
+        "n": 130,
+        "Reference": "Takacs et al., 2012"
+    },
+    {
+        "m-type": "OLM",
+        "Specie": "Wistar rat",
+        "Age": "2 m",
+        "Weight": null,
+        "PC": 89.157,
+        "INT": 10.843,
+        "n": 34,
+        "Reference": "Katona et al., 1999"
+    },
+    {
+        "m-type": "Tri",
+        "Specie": "Wistar rat",
+        "Age": null,
+        "Weight": "300-400 g",
+        "PC": 40,
+        "INT": 60,
+        "n": 52,
+        "Reference": "Ferraguti et al., 2005"
+    },
+    {
+        "m-type": "AA",
+        "Specie": null,
+        "Age": null,
+        "Weight": null,
+        "PC": 100,
+        "INT": 0,
+        "n": null,
+        "Reference": "AA.VV."
+    }
+]

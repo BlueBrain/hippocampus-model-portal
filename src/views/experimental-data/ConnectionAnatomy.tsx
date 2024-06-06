@@ -13,6 +13,7 @@ import BoutonDenisityTable from './connection-anatomy/BoutonDensityTable';
 import SynsPerConnTable from './connection-anatomy/SynsPerConnTable';
 import ConnectionProbabilityTable from './connection-anatomy/ConnectionProbabilityTable';
 import SDPerPrenapticTypeTable from './connection-anatomy/SDPerPrenapticTypeTable';
+import PercentageSDOntoPyramidalCells from './connection-anatomy/PercentageSDOntoPyramidalCells';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -126,6 +127,7 @@ const ConnectionAnatomyView: React.FC = () => {
           title="Percentage of synapse divergence onto pyramidal cells and interneurons"
         >
           <h3>We can express the synapse divergence also in relation to the postsynaptic target. Here, we calculate the percentage of synapses made by a morphological type onto pyramidal cells or interneurons.</h3>
+          <PercentageSDOntoPyramidalCells />
         </Collapsible>
 
 
