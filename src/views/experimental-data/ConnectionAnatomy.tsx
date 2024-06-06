@@ -73,6 +73,10 @@ const ConnectionAnatomyView: React.FC = () => {
         navItems={[
           { id: 'boutonDensitySection', label: 'Bouton density' },
           { id: 'synNumPerConnectionSection', label: 'N syns/cons' },
+          { id: 'connectionProbabilitySection', label: 'Connection probability' },
+          { id: 'synapseDivergencePerTypeSection', label: 'Synapse divergence per presynaptic type' },
+          { id: 'synapseDivergenceOntoPyramidalCellsSection', label: 'Percentage of synapse divergence onto pyramidal cells and interneurons' },
+          { id: 'synapseDivergencePerLayerSection', label: 'Percentage of synapse divergence per layer' },
         ]}
       >
         <Collapsible
@@ -93,6 +97,43 @@ const ConnectionAnatomyView: React.FC = () => {
           </h3>
           <SynsPerConnTable />
         </Collapsible>
+
+        <Collapsible
+          id="connectionProbabilitySection"
+          className="mt-4"
+          title="Connection probability"
+        >
+          <h3>Connection probability
+            Connection probability is the number of connected pairs among all the tested pairs. Available experimental data suffers from at least two important limitations. First, the data often come from slice experiments where a subset of connections may have been cut. Second, the method usually does not report precise distance of the pairs and this does not allow an accurate replica in the model.</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="synapseDivergencePerTypeSection"
+          className="mt-4"
+          title="Synapse divergence per presynaptic type"
+        >
+          <h3>Synapse divergence or outdegree is the number of synapses made by a presynaptic neuron or neuron type.</h3>
+        </Collapsible>
+
+
+        <Collapsible
+          id="synapseDivergenceOntoPyramidalCellsSection"
+          className="mt-4"
+          title="Percentage of synapse divergence onto pyramidal cells and interneurons"
+        >
+          <h3>We can express the synapse divergence also in relation to the postsynaptic target. Here, we calculate the percentage of synapses made by a morphological type onto pyramidal cells or interneurons.</h3>
+        </Collapsible>
+
+
+        <Collapsible
+          id="synapseDivergencePerLayerSection"
+          className="mt-4"
+          title="Percentage of synapse divergence per layer"
+        >
+          <h3>We consider here the distribution of synapse divergence per morphological type across the different layers.</h3>
+        </Collapsible>
+
+
       </DataContainer>
     </>
   );
