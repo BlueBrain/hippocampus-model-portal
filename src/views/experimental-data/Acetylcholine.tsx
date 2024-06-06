@@ -12,6 +12,7 @@ import Collapsible from '@/components/Collapsible';
 
 import SynapsesTable from './acetylcholine/synapses';
 import NetworkTable from './acetylcholine/network';
+import FiringRateTable from './acetylcholine/FiringRate';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -92,6 +93,7 @@ const AcetylcholineView: React.FC = () => {
           title="Firing rate"
         >
           <h3>The data below shows that ACh tends to increase the firing rates of CA1 neurons.</h3>
+          <FiringRateTable />
         </Collapsible>
 
         <Collapsible
