@@ -11,6 +11,7 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import BoutonDenisityTable from './connection-anatomy/BoutonDensityTable';
 import SynsPerConnTable from './connection-anatomy/SynsPerConnTable';
+import ConnectionProbabilityTable from './connection-anatomy/ConnectionProbabilityTable';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -105,6 +106,7 @@ const ConnectionAnatomyView: React.FC = () => {
         >
           <h3>Connection probability
             Connection probability is the number of connected pairs among all the tested pairs. Available experimental data suffers from at least two important limitations. First, the data often come from slice experiments where a subset of connections may have been cut. Second, the method usually does not report precise distance of the pairs and this does not allow an accurate replica in the model.</h3>
+          <ConnectionProbabilityTable />
         </Collapsible>
 
         <Collapsible
