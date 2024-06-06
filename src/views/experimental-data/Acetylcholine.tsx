@@ -10,9 +10,13 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+
+
+import RestingMembranePotentialTable from './acetylcholine/RestingMembranePotential';
+import FiringRateTable from './acetylcholine/FiringRate';
 import SynapsesTable from './acetylcholine/synapses';
 import NetworkTable from './acetylcholine/network';
-import FiringRateTable from './acetylcholine/FiringRate';
+
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -85,6 +89,7 @@ const AcetylcholineView: React.FC = () => {
           title="Resting membrane potential"
         >
           <h3>The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</h3>
+          <RestingMembranePotentialTable />
         </Collapsible>
 
         <Collapsible
