@@ -609,7 +609,7 @@ $collapsible-padding: 20px 30px;
 
   width: $width;
   padding: $padding;
-  background-color: var(--accent-color);
+  background-color: black;
 
   &.block {
     width: auto;
@@ -652,7 +652,8 @@ $collapsible-padding: 20px 30px;
 
 .list-element__basis {
   user-select: none;
-  background-color: map-get($basePalette, "white");
+  background-color: #A1B3CB;
+  color: white !important;
   color: map-get($basePalette, "navy-1");
   margin: 8px 20px 8px 10px;
   text-align: center;
@@ -664,7 +665,7 @@ $collapsible-padding: 20px 30px;
 
   &:hover {
     color: map-get($basePalette, "white");
-    background-color: #999ba2;
+    background-color: #8096B5;
   }
 
   &:first-child {
