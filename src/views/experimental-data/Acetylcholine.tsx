@@ -7,6 +7,8 @@ import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -63,6 +65,49 @@ const AcetylcholineView: React.FC = () => {
           </Col>
         </Row>
       </Filters>
+
+      <DataContainer
+        navItems={[
+          { id: 'restingPembranePotentialSection', label: 'Resting membrane potential' },
+          { id: 'firingRateSection', label: 'Firing rate' },
+          { id: 'synapseSection', label: 'Synapse' },
+          { id: 'networkSection', label: 'Network' }
+        ]}
+      >
+
+        <Collapsible
+          id="restingPembranePotentialSection"
+          className="mt-4"
+          title="Resting membrane potential"
+        >
+          <h3>The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="firingRateSection"
+          className="mt-4"
+          title="Firing rate"
+        >
+          <h3>The data below shows that ACh tends to increase the firing rates of CA1 neurons.</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="synapseSection"
+          className="mt-4"
+          title="Synapse"
+        >
+          <h3>The data below shows that ACh tends to increase the postsynaptic response (potential or current) in CA1.</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="networkSection"
+          className="mt-4"
+          title="Network"
+        >
+          <h3>Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</h3>
+        </Collapsible>
+
+      </DataContainer>
     </>
   );
 };
