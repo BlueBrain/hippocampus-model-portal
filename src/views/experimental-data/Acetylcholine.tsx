@@ -10,6 +10,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import Network from './acetylcholine/network';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 
@@ -105,6 +107,7 @@ const AcetylcholineView: React.FC = () => {
           title="Network"
         >
           <h3>Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</h3>
+          <Network />
         </Collapsible>
 
       </DataContainer>
