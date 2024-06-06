@@ -12,6 +12,7 @@ import Collapsible from '@/components/Collapsible';
 import BoutonDenisityTable from './connection-anatomy/BoutonDensityTable';
 import SynsPerConnTable from './connection-anatomy/SynsPerConnTable';
 import ConnectionProbabilityTable from './connection-anatomy/ConnectionProbabilityTable';
+import SDPerPrenapticTypeTable from './connection-anatomy/SDPerPrenapticTypeTable';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -115,6 +116,7 @@ const ConnectionAnatomyView: React.FC = () => {
           title="Synapse divergence per presynaptic type"
         >
           <h3>Synapse divergence or outdegree is the number of synapses made by a presynaptic neuron or neuron type.</h3>
+          <SDPerPrenapticTypeTable />
         </Collapsible>
 
 

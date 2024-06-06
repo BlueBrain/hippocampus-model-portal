@@ -408,7 +408,6 @@ const ConnectionProbabilityTable = () => {
                 data={data}
                 rowKey={({ from, to }) => `${from}_${to}`}
             />
-            <small><sup>[1]</sup> Additional calculations (see below).</small>
 
             <div className="text-right mt-2">
                 <HttpDownloadButton
