@@ -330,7 +330,7 @@ const Network = () => {
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
                         networkData,
-                        `exp-connection-anatomy_-_percentage-SD-onto-pyramidal-cells.json`
+                        `exp-connection-anatomy_-_network.json`
                     )}
                 >
                     table data
