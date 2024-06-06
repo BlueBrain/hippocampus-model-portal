@@ -137,7 +137,7 @@ const PercentageSDOntoPyramidalCells = () => {
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
                         connectionProbabilityData,
-                        `exp-connection-anatomy_-_sd-per-trenaptic-type-table.json`
+                        `exp-connection-anatomy_-_percentage-SD-onto-pyramidal-cells.json`
                     )}
                 >
                     table data
