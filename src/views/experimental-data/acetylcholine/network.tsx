@@ -289,9 +289,25 @@ const columns = [
     },
     {
         title: 'ACSF (mM)',
-        dataIndex: 'ACSF (mM)' as keyof DataEntry,
-        render: acsf => `Ca: ${acsf.Ca}, Mg: ${acsf.Mg}, K: ${acsf.K}`,
+        children: [
+            {
+                title: 'Ca',
+                dataIndex: ['ACSF (mM)', 'Ca'],
+                render: (Ca: number | null) => <>{Ca !== null ? Ca : '-'}</>,
+            },
+            {
+                title: 'Mg',
+                dataIndex: ['ACSF (mM)', 'Mg'],
+                render: (Mg: number | null) => <>{Mg !== null ? Mg : '-'}</>,
+            },
+            {
+                title: 'K',
+                dataIndex: ['ACSF (mM)', 'K'],
+                render: (K: number | null) => <>{K !== null ? K : '-'}</>,
+            },
+        ],
     },
+
     {
         title: 'Measurement',
         dataIndex: 'Measurement' as keyof DataEntry,
