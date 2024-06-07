@@ -10,6 +10,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import MinisTable from './minis/minis';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 
@@ -77,12 +79,15 @@ const MinisView: React.FC = () => {
                     { id: 'minisSection', label: 'Minis' },
 
                 ]}
+
             >
                 <Collapsible
                     id="minisSection"
                     title="Minis"
                 >
                     <h3>Single cell recordings with or without TTX, which blocks the action potentials allowing to estimate the spontaneous or miniature events in different pathways.</h3>
+
+                    <MinisTable />
                 </Collapsible>
 
 
