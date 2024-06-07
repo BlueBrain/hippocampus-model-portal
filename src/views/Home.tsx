@@ -74,6 +74,10 @@ const Home: React.FC = () => (
                 href: '/experimental-data/acetylcholine/',
               },
               {
+                label: 'Minis',
+                href: '/experimental-data/minis/',
+              },
+              {
                 label: 'Theta',
                 href: '/experimental-data/theta/',
               }
