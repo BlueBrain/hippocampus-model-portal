@@ -105,7 +105,7 @@ const NeuronElectrophysiology: React.FC = () => {
             </InfoBox>
           </div>
 
-          <div className="col-xs-12 col-lg-4 col-lg-offset-1">
+          <div className="col-xs-12 col-lg-3 col-lg-offset-1">
             <div className={styles.selector}>
               <div className={styles.selectorHead}>Select cell type</div>
               <div className={styles.selectorBody}>
@@ -117,9 +117,6 @@ const NeuronElectrophysiology: React.FC = () => {
                   color={colorName}
                   onSelect={setEtype}
                 />
-                <br />
-                <br />
-                <br />
                 <List
                   block
                   list={instances}
@@ -208,6 +205,7 @@ const NeuronElectrophysiology: React.FC = () => {
           title="Population"
         >
           <h3 className="mt-3">Experimental instances</h3>
+          <p>We provide features for the entire e-type group selected.</p>
 
           <ESData query={etypeTracesDataQueryObj}>
             {esDocuments => (

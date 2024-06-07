@@ -63,7 +63,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
         </div>
 
         <div
-          className={styles.info}
+          className={styles.info + ' bg-card-gradiant-' + idx}
         >
           {description}
         </div>
