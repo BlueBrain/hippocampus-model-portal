@@ -56,6 +56,7 @@ const ConnectionPhysiologyView: React.FC = () => {
               <div className={selectorStyle.selectorColumn}>
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
+                  {/*}
                   <Image
                     src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
                     width="640"
@@ -63,6 +64,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     unoptimized
                     alt=""
                   />
+  */}
                 </div>
               </div>
             </div>
