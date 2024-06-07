@@ -8,7 +8,7 @@ const classPrefix = 'Home__';
 
 const Home: React.FC = () => (
   <div className={`${classPrefix}basis`}>
-    <section id="home-section" style={{ backgroundImage: `url(${basePath}/assets/images/placeholder-bg.png)` }}>
+    <section id="home-section" style={{ backgroundImage: `url(${basePath}/assets/images/bg.png)` }}>
       <div className="intro">
         <h2 className="text-white">Explore</h2>
         <h3 className='text-bbp-blue'>Explore the existing Hippocampus model and all its parts!</h3>
