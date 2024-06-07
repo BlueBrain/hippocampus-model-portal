@@ -46,5 +46,21 @@
     "nAnimals": "-",
     "nSynapses": 274,
     "ref": "Sik, Tamamaki, and Freund, 1993"
+  },
+  {
+    "from": "SC",
+    "to": "All",
+    "expFeature": "Number of efferent synapses",
+    "min": 15295,
+    "max": 27440,
+    "mean": 21368,
+    "sd": "-",
+    "sem": "-",
+    "species": "Sprague-Dawley rat",
+    "weight": "200-300 g",
+    "region": "CA1",
+    "nAnimals": 6,
+    "nSynapses": "-",
+    "ref": "Bezaire and Soltesz, 2013"
   }
 ]
