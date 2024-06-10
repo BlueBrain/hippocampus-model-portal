@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { colorName } from './config';
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 
@@ -66,6 +68,36 @@ const ThetaView: React.FC = () => {
           </Col>
         </Row>
       </Filters>
+
+      <DataContainer
+        navItems={[
+          { id: 'phaseSection', label: 'Phase' },
+          { id: 'rateSection', label: 'Rate' },
+        ]}
+      >
+
+        <Collapsible
+          id="phaseSection"
+          className="mt-3"
+          title="Phase"
+        >
+          <h3>
+            Different morphological types of CA1 neuron respond preferentially at specific phases of theta rhythmic activity.
+          </h3>
+        </Collapsible>
+
+        <Collapsible
+          id="rateSection"
+          className="mt-3"
+          title="Rate"
+        >
+          <h3>
+            During periods of theta rhythmic activity, each morphological type of CA1 neuron tends to respond with a different average spiking rate.
+          </h3>
+        </Collapsible>
+
+
+      </DataContainer>
     </>
   );
 };
