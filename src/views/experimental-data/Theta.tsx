@@ -9,6 +9,8 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
+import PhaseTable from './theta/Phase';
+import RateTable from './theta/Rate';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -75,7 +77,6 @@ const ThetaView: React.FC = () => {
           { id: 'rateSection', label: 'Rate' },
         ]}
       >
-
         <Collapsible
           id="phaseSection"
           className="mt-3"
@@ -84,6 +85,7 @@ const ThetaView: React.FC = () => {
           <h3>
             Different morphological types of CA1 neuron respond preferentially at specific phases of theta rhythmic activity.
           </h3>
+          <PhaseTable />
         </Collapsible>
 
         <Collapsible
@@ -94,9 +96,8 @@ const ThetaView: React.FC = () => {
           <h3>
             During periods of theta rhythmic activity, each morphological type of CA1 neuron tends to respond with a different average spiking rate.
           </h3>
+          <RateTable />
         </Collapsible>
-
-
       </DataContainer>
     </>
   );

@@ -1,31 +1,29 @@
-{
-    "data": [
-        {
-            "neuron_type": "pyramidal cells",
-            "mean_rate_Hz": 1.4,
-            "SE_rate_Hz": 0.1,
-            "n": 246,
-            "SD_rate_Hz": 1.6,
-            "recording_condition": "in vivo, behaving",
-            "source": "Csicsvari et al., 1999"
-        },
-        {
-            "neuron_type": "str pyramidale interneurons",
-            "mean_rate_Hz": 16.3,
-            "SE_rate_Hz": 1.52,
-            "n": 55,
-            "SD_rate_Hz": 11.3,
-            "recording_condition": "in vivo, behaving",
-            "source": "Csicsvari et al., 1999"
-        },
-        {
-            "neuron_type": "alveus/oriens (a/o) interneurons",
-            "mean_rate_Hz": 11.9,
-            "SE_rate_Hz": 1.5,
-            "n": 68,
-            "SD_rate_Hz": 12.4,
-            "recording_condition": "in vivo, behaving",
-            "source": "Csicsvari et al., 1999"
-        }
-    ]
-}
+[
+    {
+        "neuron_type": "pyramidal cells",
+        "mean_rate_Hz": 1.4,
+        "SE_rate_Hz": 0.1,
+        "n": 246,
+        "SD_rate_Hz": 1.6,
+        "recording_condition": "in vivo, behaving",
+        "source": "Csicsvari et al., 1999"
+    },
+    {
+        "neuron_type": "str pyramidale interneurons",
+        "mean_rate_Hz": 16.3,
+        "SE_rate_Hz": 1.52,
+        "n": 55,
+        "SD_rate_Hz": 11.3,
+        "recording_condition": "in vivo, behaving",
+        "source": "Csicsvari et al., 1999"
+    },
+    {
+        "neuron_type": "alveus/oriens (a/o) interneurons",
+        "mean_rate_Hz": 11.9,
+        "SE_rate_Hz": 1.5,
+        "n": 68,
+        "SD_rate_Hz": 12.4,
+        "recording_condition": "in vivo, behaving",
+        "source": "Csicsvari et al., 1999"
+    }
+]
