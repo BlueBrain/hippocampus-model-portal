@@ -224,7 +224,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
                 if (index === hoveredIndex && value !== layers[index]) {
                     material.color.set(0x778CA9); // Hovered
                 } else if (value === layers[index]) {
-                    material.color.set(0x5BC4EE); // Selected
+                    material.color.set(0xEFAE97); // Selected
                 } else if (index !== hoveredIndex) {
                     material.color.set(0x96A7BE); // Default
                 }

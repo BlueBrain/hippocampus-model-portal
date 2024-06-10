@@ -78,11 +78,11 @@ const ConnectionAnatomyView: React.FC = () => {
       <DataContainer
         navItems={[
           { id: 'boutonDensitySection', label: 'Bouton density' },
-          { id: 'synNumPerConnectionSection', label: 'N syns/cons' },
-          { id: 'connectionProbabilitySection', label: 'Connection probability' },
-          { id: 'synapseDivergencePerTypeSection', label: 'Synapse divergence per presynaptic type' },
-          { id: 'synapseDivergenceOntoPyramidalCellsSection', label: 'Percentage of synapse divergence onto pyramidal cells and interneurons' },
-          { id: 'synapseDivergencePerLayerSection', label: 'Percentage of synapse divergence per layer' },
+          { id: 'synNumPerConnectionSection', label: 'Syn./Conn.' },
+          { id: 'connectionProbabilitySection', label: 'Conn. Probability' },
+          { id: 'synapseDivergencePerTypeSection', label: 'Syn. Divergence' },
+          { id: 'synapseDivergenceOntoPyramidalCellsSection', label: 'Syn. Divergence over E/I' },
+          { id: 'synapseDivergencePerLayerSection', label: 'Syn. Divergence/layer' },
         ]}
       >
         <Collapsible
