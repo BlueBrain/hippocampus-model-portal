@@ -40,7 +40,7 @@ const LayerAnatomyView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!layer}>
+      <Filters theme={theme} hasData={!!layer}>
         <Row
           className="w-100"
           gutter={[0, 20]}
