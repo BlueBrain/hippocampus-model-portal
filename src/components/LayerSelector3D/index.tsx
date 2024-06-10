@@ -9,9 +9,10 @@ import styles from './styles.module.scss';
 type LayerSelectProps3D = {
     value?: Layer;
     onSelect?: (layer: Layer) => void;
+    theme?: number;
 };
 
-const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
+const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme: themeProp }) => {
     const mountRef = useRef<HTMLDivElement | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [trapezoids, setTrapezoids] = useState<THREE.Mesh[]>([]);
@@ -20,6 +21,14 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
     const distance = 0.025;
     const angle = 20;
     const initialTopWidth = 1.5;
+
+    const theme = {
+        1: "#EFAE97",
+        2: "#EA9088",
+        3: "#CC8A99",
+        4: "#9E98AE",
+        5: "#8398B5"
+    };
 
     // Heights of different trapezoids
     const trapezoidHeights = {
@@ -127,7 +136,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
                 trapezoidArray.push(trapezoid);
 
                 // Create text for the layer
-                // Create text for the layer
                 const textGeometry = new TextGeometry(layers[i], { font: font, size: 0.06, height: 0.01 });
                 textGeometry.computeBoundingBox(); // Compute the bounding box of the text
                 const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x; // Calculate the width of the text
@@ -224,7 +232,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
                 if (index === hoveredIndex && value !== layers[index]) {
                     material.color.set(0x778CA9); // Hovered
                 } else if (value === layers[index]) {
-                    material.color.set(0xEFAE97); // Selected
+                    material.color.set(themeProp ? theme[themeProp] : 0xEFAE97); // Selected
                 } else if (index !== hoveredIndex) {
                     material.color.set(0x96A7BE); // Default
                 }
