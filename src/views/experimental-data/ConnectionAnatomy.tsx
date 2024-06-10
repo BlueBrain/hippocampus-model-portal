@@ -14,6 +14,7 @@ import SynsPerConnTable from './connection-anatomy/SynsPerConnTable';
 import ConnectionProbabilityTable from './connection-anatomy/ConnectionProbabilityTable';
 import SDPerPrenapticTypeTable from './connection-anatomy/SDPerPrenapticTypeTable';
 import PercentageSDOntoPyramidalCells from './connection-anatomy/PercentageSDOntoPyramidalCells';
+import SynDivLayTable from './connection-anatomy/SynDivLay';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -139,6 +140,7 @@ const ConnectionAnatomyView: React.FC = () => {
           title="Percentage of synapse divergence per layer"
         >
           <h3>We consider here the distribution of synapse divergence per morphological type across the different layers.</h3>
+          <SynDivLayTable />
         </Collapsible>
 
 
