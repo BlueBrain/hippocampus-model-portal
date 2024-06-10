@@ -38,15 +38,8 @@ const MinisView: React.FC = () => {
                             />
                             <div role="information">
                                 <InfoBox>
-                                    <p className="text-tmp">
-                                        Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                                        per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                                        Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                                        vitae ornare arcu sagittis. <br />
-                                        Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                                        nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                                        Praesent tempus sollicitudin ante varius feugiat.
+                                    <p>
+                                        The spontaneous synaptic events are due to the spontaneous release of a vesicle (miniature events, minis) or also due to a spontaneous action potential (spontaneous events). These events normally produce small voltage deflection of the membrane, but given the multitude of synaptic contacts in a network, their role in the network computation can be significant.
                                     </p>
                                 </InfoBox>
                             </div>

@@ -3,6 +3,8 @@ import React from 'react';
 import ScrollTo from '../../components/ScrollTo';
 import { Color } from '../../types';
 
+import { basePath } from '../../config';
+
 import styles from './styles.module.scss';
 
 
@@ -20,7 +22,7 @@ const Filters: React.FC<FiltersProps> = ({
 }) => {
   return (
     <div>
-      <div id={id} className={styles.container}>
+      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/assets/images/filter-section-bg.png)` }}>
         {children}
       </div>
       {!!hasData && (

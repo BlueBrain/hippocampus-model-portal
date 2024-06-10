@@ -127,10 +127,16 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect }) => {
                 trapezoidArray.push(trapezoid);
 
                 // Create text for the layer
+                // Create text for the layer
                 const textGeometry = new TextGeometry(layers[i], { font: font, size: 0.06, height: 0.01 });
+                textGeometry.computeBoundingBox(); // Compute the bounding box of the text
+                const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x; // Calculate the width of the text
+
                 const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.position.set(0, yOffset - height + 0.22 / 2, 0.33);
+
+                // Center the text
+                textMesh.position.set(-textWidth / 2, yOffset - height + 0.18 / 2, 0.25);
                 scene.add(textMesh);
                 texts.push(textMesh);
 
