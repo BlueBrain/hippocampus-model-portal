@@ -79,6 +79,7 @@ const LayerAnatomyView: React.FC = () => {
                   <LayerSelector3D
                     value={layer as Layer}
                     onSelect={setLayerQuery}
+                    theme={theme}
                   />
                 </div>
               </div>
