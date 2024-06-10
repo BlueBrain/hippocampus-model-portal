@@ -12,17 +12,19 @@ type FiltersProps = {
   hasData?: boolean;
   primaryColor?: Color;
   id?: string;
+  theme?: number;
 };
 
 const Filters: React.FC<FiltersProps> = ({
   primaryColor,
   children,
   hasData,
+  theme,
   id = 'filters',
 }) => {
   return (
     <div>
-      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/assets/images/filter-section-bg.png)` }}>
+      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/assets/images/backgrounds/theme-bg-${theme}.png)` }}>
         {children}
       </div>
       {!!hasData && (
