@@ -632,7 +632,7 @@ $collapsible-padding: 20px 30px;
 .list__basis {
   $height: 148px;
   $width: 250px;
-  $padding: 10px 10px 10px 20px;
+  $padding: 10px 20px;
 
   width: $width;
   padding: $padding;
@@ -652,11 +652,12 @@ $collapsible-padding: 20px 30px;
     margin: 8px 0;
     height: $height;
     overflow-y: scroll;
+    background-color: #17151A;
   }
 
   ::-webkit-scrollbar-track {
     width: 10px;
-    background-color: #f1f1f1;
+    background-color: #242128;
     ;
   }
 
@@ -666,8 +667,8 @@ $collapsible-padding: 20px 30px;
 
   ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 8px;
-    border-radius: 8px;
-    background: #51576f;
+
+    background: #8096B5;
     border: 1px solid transparent;
     background-clip: content-box;
   }
@@ -679,15 +680,14 @@ $collapsible-padding: 20px 30px;
 
 .list-element__basis {
   user-select: none;
-  background-color: #A1B3CB;
+
   color: white !important;
   color: map-get($basePalette, "navy-1");
-  margin: 8px 20px 8px 10px;
-  text-align: center;
+
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  padding: 2px 0.5rem;
+  padding: .25rem 0.5rem;
   cursor: pointer;
 
   &:hover {
@@ -709,40 +709,27 @@ $collapsible-padding: 20px 30px;
     cursor: initial;
     outline-style: none;
 
-    .yellow & {
-      background-color: map-get($accentPalette, "yellow");
+    & .theme-1 {
+      background-color: map-get($theme, "experimental-data");
     }
 
-    .blue & {
-      background-color: map-get($accentPalette, "blue");
+    & .theme-2 {
+      background-color: map-get($theme, "reconstruction-data");
     }
 
-    .lavender & {
-      background-color: map-get($accentPalette, "lavender");
+    & .theme-3 {
+      background-color: map-get($theme, "digital-reconstruction");
     }
 
-    .green & {
-      background-color: map-get($accentPalette, "green");
+    & .theme-4 {
+      background-color: map-get($theme, "validations");
     }
 
-    .grey & {
-      background-color: map-get($accentPalette, "grey");
-    }
-
-    .orange & {
-      background-color: map-get($accentPalette, "orange");
+    & .theme-5 {
+      background-color: map-get($theme, "predictions");
     }
   }
 }
-
-
-
-
-
-
-
-
-
 
 
 // ScrollTo
