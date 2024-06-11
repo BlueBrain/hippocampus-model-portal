@@ -21,7 +21,7 @@ const SynapsesView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={true}>
+      <Filters theme={theme} hasData={true}>
         <Row
           className="w-100"
           gutter={[0, 20]}

@@ -150,7 +150,7 @@ const ConnectionsView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!pretype && !!posttype}>
+      <Filters theme={theme} hasData={!!pretype && !!posttype}>
         <Row
           className="w-100"
           gutter={[0, 20]}

@@ -26,7 +26,7 @@ const AcetylcholineView: React.FC = () => {
 
   return (
     <>
-      <Filters>
+      <Filters theme={theme}>
         <Row
           className="w-100"
           gutter={[0, 20]}
