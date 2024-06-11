@@ -23,7 +23,7 @@ const ConnectionAnatomyView: React.FC = () => {
   const theme = 1;
   return (
     <>
-      <Filters hasData={true}>
+      <Filters theme={theme} hasData={true}>
         <Row
           className="w-100"
           gutter={[0, 20]}

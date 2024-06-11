@@ -19,7 +19,7 @@ const MinisView: React.FC = () => {
     const theme = 1;
     return (
         <>
-            <Filters>
+            <Filters theme={theme}>
                 <Row
                     className="w-100"
                     gutter={[0, 20]}
