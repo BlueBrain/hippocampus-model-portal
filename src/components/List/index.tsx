@@ -15,6 +15,7 @@ type ListProps = {
   anchor?: string;
   block?: boolean;
   className?: string;
+  theme?: number;
 };
 
 const List: React.FC<ListProps> = ({
@@ -23,6 +24,7 @@ const List: React.FC<ListProps> = ({
   value,
   onSelect = () => { },
   color,
+  theme = 1,
   className = '',
   block = false,
 }) => {
@@ -30,10 +32,10 @@ const List: React.FC<ListProps> = ({
 
   return (
     <div
-      className={`${classPrefixList}basis set-accent-color--${color} ${className} ${block ? 'block' : ''}`}
+      className={`${classPrefixList}basis set-accent-color--${color} selected theme-${theme} ${className} ${block ? 'block' : ''}`}
       role="radiogroup"
     >
-      {title && <p>{title}</p>}
+      {title && <p className={`theme-${theme}`}>{title}</p>}
       <div className="elements">
         {list.map(element => (
           <div
@@ -41,7 +43,7 @@ const List: React.FC<ListProps> = ({
             role="radio"
             aria-checked={value === element}
             tabIndex={0}
-            className={`${classPrefixListElement}basis ${value === element ? 'selected' : ''}`}
+            className={`${classPrefixListElement}basis theme-${theme} ${value === element ? 'selected ' : ''}`}
             onClick={() => handleSelectedElement(element)}
             title={element}
           >

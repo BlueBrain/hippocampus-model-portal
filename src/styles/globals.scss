@@ -615,28 +615,127 @@ $collapsible-padding: 20px 30px;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // List
 .list__basis {
   $height: 148px;
   $width: 250px;
-  $padding: 10px 20px;
+  $padding: 30px;
+
+
+
 
   width: $width;
   padding: $padding;
-  background-color: black;
+  padding-top: 0px;
+
+  &:first-of-type {
+    padding: $padding;
+  }
+
+  &.theme-1 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "experimental-data"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "experimental-data"), .1);
+      border-left: 1px solid rgba(map-get($theme, "experimental-data"), .5);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "experimental-data"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "experimental-data"), 0.05);
+      border: 1px solid rgba(map-get($theme, "experimental-data"), .5);
+    }
+  }
+
+  &.theme-2 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "reconstruction-data"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "reconstruction-data"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "reconstruction-data"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "reconstruction-data"), 0.05);
+      border: 1px solid rgba(map-get($theme, "reconstruction-data"), .5);
+    }
+  }
+
+  &.theme-3 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), 0.05);
+      border: 1px solid rgba(map-get($theme, "digital-reconstruction"), .5);
+    }
+
+
+  }
+
+  &.theme-4 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "validations"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "validations"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "validations"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "validations"), 0.05);
+      border: 1px solid rgba(map-get($theme, "validations"), .2);
+    }
+  }
+
+  &.theme-5 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "predictions"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "predictions"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "predictions"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "predictions"), 0.05);
+      border: 1px solid rgba(map-get($theme, "predictions"), .2);
+    }
+  }
+
+
 
   &.block {
     width: auto;
@@ -644,21 +743,43 @@ $collapsible-padding: 20px 30px;
 
   p {
     font-weight: 500;
-    margin: 0 0 0 5px;
-    color: map-get($basePalette, "white");
+    margin: 0px;
+    color: white;
+
+
+
+    /*
+
+    &.theme-1 {
+      color: rgba(map-get($theme, "experimental-data"), 1);
+    }
+
+    &.theme-2 {
+      color: map-get($theme, "reconstruction-data");
+    }
+
+    &.theme-3 {
+      color: map-get($theme, "digital-reconstruction");
+    }
+
+    &.theme-4 {
+      color: map-get($theme, "validations");
+    }
+
+    &.theme-5 {
+      color: map-get($theme, "predictions")
+    }
+
+    */
   }
 
   .elements {
-    margin: 8px 0;
     height: $height;
     overflow-y: scroll;
-    background-color: #17151A;
   }
 
   ::-webkit-scrollbar-track {
     width: 10px;
-    background-color: #242128;
-    ;
   }
 
   ::-webkit-scrollbar {
@@ -666,7 +787,6 @@ $collapsible-padding: 20px 30px;
   }
 
   ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 8px;
 
     background: #8096B5;
     border: 1px solid transparent;
@@ -680,19 +800,62 @@ $collapsible-padding: 20px 30px;
 
 .list-element__basis {
   user-select: none;
-
-  color: white !important;
-  color: map-get($basePalette, "navy-1");
-
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  padding: .25rem 0.5rem;
+  padding: 0rem 0.5rem;
   cursor: pointer;
 
-  &:hover {
-    color: map-get($basePalette, "white");
-    background-color: #8096B5;
+  color: white;
+
+  &.theme-1 {
+    color: rgba(map-get($theme, "experimental-data"), .6);
+
+    &.selected,
+    &:hover {
+      background-color: rgba(map-get($theme, "experimental-data"), .2);
+      // color: map-get($theme, "experimental-data");
+    }
+  }
+
+  &.theme-2 {
+    color: rgba(map-get($theme, "reconstruction-data"), .6);
+
+    &.selected,
+    &:hover {
+      background-color: map-get($theme, "reconstruction-data");
+      //color: map-get($theme, "reconstruction-data");
+    }
+  }
+
+  &.theme-3 {
+    color: rgba(map-get($theme, "digital-reconstruction"), .6);
+
+    &.selected,
+    &:hover {
+      background-color: map-get($theme, "digital-reconstruction");
+      //color: map-get($theme, "digital-reconstruction");
+    }
+  }
+
+  &.theme-4 {
+    color: rgba(map-get($theme, "validations"), .6);
+
+    &.selected,
+    &:hover {
+      background-color: map-get($theme, "validations");
+      //color: map-get($theme, "validations");
+    }
+  }
+
+  &.theme-5 {
+    color: rgba(map-get($theme, "predictions"), .6);
+
+    &.selected,
+    &:hover {
+      background-color: map-get($theme, "predictions");
+      //color: map-get($theme, "predictions");
+    }
   }
 
   &:first-child {
@@ -705,31 +868,11 @@ $collapsible-padding: 20px 30px;
 
   &.selected {
     color: map-get($basePalette, "white");
-    background-color: #17151a !important;
     cursor: initial;
     outline-style: none;
-
-    & .theme-1 {
-      background-color: map-get($theme, "experimental-data");
-    }
-
-    & .theme-2 {
-      background-color: map-get($theme, "reconstruction-data");
-    }
-
-    & .theme-3 {
-      background-color: map-get($theme, "digital-reconstruction");
-    }
-
-    & .theme-4 {
-      background-color: map-get($theme, "validations");
-    }
-
-    & .theme-5 {
-      background-color: map-get($theme, "predictions");
-    }
   }
 }
+
 
 
 // ScrollTo
@@ -760,26 +903,6 @@ $collapsible-padding: 20px 30px;
   &.animated svg {
     animation: arrow-down 1s infinite;
     animation-timing-function: ease-out;
-  }
-
-  &.yellow {
-    background-color: map-get($accentPalette, "yellow");
-  }
-
-  &.blue {
-    background-color: map-get($accentPalette, "blue");
-  }
-
-  &.lavender {
-    background-color: map-get($accentPalette, "lavender");
-  }
-
-  &.green {
-    background-color: map-get($accentPalette, "green");
-  }
-
-  &.grey {
-    background-color: map-get($accentPalette, "grey");
   }
 
 

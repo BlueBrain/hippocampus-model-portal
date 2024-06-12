@@ -158,8 +158,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
           </div>
           <div className="col-xs-12 col-lg-6">
             <div className={styles.selector}>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>1. Choose a layer</div>
+              <div className={`${styles.selectorColumn} theme-${theme}`}>
+                <div className={`${styles.selectorHead} `}>Choose a layer</div>
                 <div className={styles.selectorBody}>
                   <LayerSelector3D
                     value={currentLayer}
@@ -167,8 +167,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>2. Select reconstruction</div>
+              <div className={`${styles.selectorColumn} theme-${theme}`}>
+                <div className={`${styles.selectorHead} `}>Select reconstruction</div>
                 <div className={styles.selectorBody}>
                   <List
                     block
@@ -177,6 +177,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     title="m-type"
                     color={colorName}
                     onSelect={setMtype}
+                    theme={theme}
                   />
 
                   <List
@@ -187,6 +188,7 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
+                    theme={theme}
                   />
                 </div>
               </div>
