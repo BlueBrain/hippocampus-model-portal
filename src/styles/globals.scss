@@ -75,6 +75,33 @@ section {
   padding: 40px 0;
 }
 
+.link {
+  &.theme-1 {
+    color: map-get($theme, "experimental-data");
+  }
+
+  &.theme-2 {
+    color: map-get($theme, "reconstruction-data");
+  }
+
+  &.theme-3 {
+    color: map-get($theme, "digital-reconstruction");
+  }
+
+  &.theme-4 {
+    color: map-get($theme, "validations");
+  }
+
+  &.theme-5 {
+    color: map-get($theme, "predictions");
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+}
+
 
 // common, utils
 
@@ -933,6 +960,7 @@ $collapsible-padding: 20px 30px;
     text-align: center;
     display: block;
     font-size: 1.2rem;
+
   }
 
   a,

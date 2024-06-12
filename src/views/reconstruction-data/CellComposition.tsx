@@ -2,6 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { Row, Col } from 'antd';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { VolumeSection } from '@/types';
 import { defaultSelection, volumeSections } from '@/constants';
@@ -56,7 +57,7 @@ const CellCompositionView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined information on available morphological reconstructions [hyperlink], electrophysiological recordings [hyperlink], cell density [hyperlink], volume [hyperlink], and the estimation from Bezaire and Soltesz (2013) [hyperlink] to predict the number of neuron types.
+                    We combined information on available <Link className={`link theme-${theme}`} href="./">morphological reconstructions</Link>, <Link className={`link theme-${theme}`} href="./">electrophysiological recordings</Link>, <Link className={`link theme-${theme}`} href="./">cell density</Link>, <Link className={`link theme-${theme}`} href="./">volume</Link>, and the <Link className={`link theme-${theme}`} href="./">estimation from Bezaire and Soltesz (2013)</Link> to predict the number of neuron types.
                   </p>
                 </InfoBox>
               </div>
@@ -80,7 +81,7 @@ const CellCompositionView: React.FC = () => {
             </div>
           </Col>
         </Row>
-      </Filters>
+      </Filters >
 
       <DataContainer
         navItems={[
