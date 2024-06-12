@@ -188,19 +188,28 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-region',
-              },
-              {
-                label: 'Microcircuits',
-              },
-              {
-                label: 'Synaptic Pathways',
-              },
-              {
                 label: 'Neurons',
+                href: '/validations/neurons/'
+              },
+              {
+                label: 'Connection anatomy',
+                href: '/validations/connection-anatomy/'
+              },
+              {
+                label: 'Connection physiology',
+                href: '/validations/connection-physiology/'
+              },
+              {
+                label: 'Schaffer collaterals',
+                href: '/validations/schaffer-collaterals/'
+              },
+              {
+                label: 'Acetylcholine',
+                href: '/validations/acetylcholine/'
               }
             ]}
           />
+
         </div>
         <div className="col-xs-12 col-sm-4 col-lg mb-2">
           <SectionCard
