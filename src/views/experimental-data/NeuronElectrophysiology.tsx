@@ -116,6 +116,7 @@ const NeuronElectrophysiology: React.FC = () => {
                   title="e-type"
                   color={colorName}
                   onSelect={setEtype}
+                  theme={theme}
                 />
                 <List
                   block
@@ -125,6 +126,7 @@ const NeuronElectrophysiology: React.FC = () => {
                   color={colorName}
                   onSelect={setInstance}
                   anchor="data"
+                  theme={theme}
                 />
               </div>
             </div>

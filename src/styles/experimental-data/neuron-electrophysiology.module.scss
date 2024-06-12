@@ -2,20 +2,22 @@
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  border: 1px solid white;
+  border: 2px solid #313254;
 }
 
 .selectorColumn {
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  border: 1px solid white;
+  border: 2px solid #313254;
 }
 
 .selectorHead {
-  text-align: center;
-  background-color: white;
-  color: black;
+  text-align: left;
+
+  background-color: #313354;
+  color: #16153d;
+  padding: .5rem 1rem;
 }
 
 .selectorBody {
