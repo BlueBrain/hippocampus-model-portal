@@ -225,11 +225,13 @@ const MainNav: React.FC = () => {
         </SubmenuGroup>
 
         <SubmenuGroup label="Validations" background="grey-4">
-          <SubmenuGroupLink label="Sub-region" />
-          <SubmenuGroupLink label="Microcircuits" />
-          <SubmenuGroupLink label="Synaptic Pathways" />
-          <SubmenuGroupLink label="Neurons" />
+          <SubmenuGroupLink label="Neurons" href='/validations/neurons/' />
+          <SubmenuGroupLink label="Connection anatomy" href='/validations/connection-anatomy/' />
+          <SubmenuGroupLink label="Connection physiology" href='/validations/connection-physiology/' />
+          <SubmenuGroupLink label="Schaffer collaterals" href='/validations/schaffer-collaterals/' />
+          <SubmenuGroupLink label="Acetylcholine" href='/validations/acetylcholine/' />
         </SubmenuGroup>
+
 
         <SubmenuGroup label="Predictions" background="grey-5">
           <SubmenuGroupLink label="Sub-region" />

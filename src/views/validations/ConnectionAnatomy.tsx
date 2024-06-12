@@ -11,7 +11,7 @@ import InfoBox from '@/components/InfoBox';
 import selectorStyle from '@/styles/selector.module.scss';
 
 
-const AcetylcholineView: React.FC = () => {
+const ConnectionAnatomyView: React.FC = () => {
 
     const theme = 4;
 
@@ -29,7 +29,7 @@ const AcetylcholineView: React.FC = () => {
                     >
                         <StickyContainer>
                             <Title
-                                title="Acetylcholine"
+                                title="Connection Anatomy"
                                 subtitle="Validations"
                                 theme={theme}
                             />
@@ -63,4 +63,4 @@ const AcetylcholineView: React.FC = () => {
 };
 
 
-export default AcetylcholineView;
+export default ConnectionAnatomyView;
