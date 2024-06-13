@@ -157,19 +157,19 @@ const NeuronExperimentalMorphology: React.FC = () => {
             </InfoBox>
           </div>
           <div className="col-xs-12 col-lg-6">
-            <div className={styles.selector}>
-              <div className={`${styles.selectorColumn} theme-${theme}`}>
-                <div className={`${styles.selectorHead} `}>Choose a layer</div>
-                <div className={styles.selectorBody}>
-                  <LayerSelector3D
+            <div className="selector">
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__body"}>
+                  < LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                   />
                 </div>
               </div>
-              <div className={`${styles.selectorColumn} theme-${theme}`}>
-                <div className={`${styles.selectorHead} `}>Select reconstruction</div>
-                <div className={styles.selectorBody}>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
+                <div className={"selector__body"}>
                   <List
                     block
                     list={mtypes}
@@ -194,8 +194,8 @@ const NeuronExperimentalMorphology: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </Filters>
+        </div >
+      </Filters >
 
       <DataContainer
         visible={!!currentInstance}
