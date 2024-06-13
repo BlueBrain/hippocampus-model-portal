@@ -719,10 +719,7 @@ $collapsible-padding: 20px 30px;
     margin: 0px;
     color: white;
 
-
-
     /*
-
     &.theme-1 {
       color: rgba(map-get($theme, "experimental-data"), 1);
     }
@@ -742,7 +739,6 @@ $collapsible-padding: 20px 30px;
     &.theme-5 {
       color: map-get($theme, "predictions")
     }
-
     */
   }
 
@@ -771,6 +767,56 @@ $collapsible-padding: 20px 30px;
   }
 }
 
+
+
+// Selector Container
+.selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 0 auto;
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1px solid rgba(grey, .8);
+
+    @for $i from 1 through length($theme) {
+      $key: nth(map-keys($theme), $i);
+      $value: map-get($theme, $key);
+
+      &.theme-#{$i} {
+        border-color: $value;
+      }
+    }
+  }
+
+  &__head {
+    background-color: rgba(grey, .6);
+    color: white;
+    padding: .5rem 2rem;
+    border-bottom: 1px solid rgba(grey, .8);
+
+    @for $i from 1 through length($theme) {
+      $key: nth(map-keys($theme), $i);
+      $value: map-get($theme, $key);
+
+      &.theme-#{$i} {
+        background-color: rgba($value, .6);
+        border-color: rgba($value, .8);
+      }
+    }
+  }
+
+  &__body {
+    margin: auto 0;
+    background-color: #313354;
+
+  }
+}
+
+// List Element
 .list-element__basis {
   user-select: none;
   white-space: nowrap;
@@ -778,58 +824,23 @@ $collapsible-padding: 20px 30px;
   text-overflow: ellipsis;
   padding: 0rem 0.5rem;
   cursor: pointer;
-
   color: white;
 
-  &.theme-1 {
-    color: rgba(map-get($theme, "experimental-data"), .6);
+  @for $i from 1 through length($theme) {
+    $key: nth(map-keys($theme), $i);
+    $value: map-get($theme, $key);
 
-    &.selected,
-    &:hover {
-      background-color: rgba(map-get($theme, "experimental-data"), .2);
-      // color: map-get($theme, "experimental-data");
+    &.theme-#{$i} {
+      color: rgba($value, .6);
+
+      &.selected,
+      &:hover {
+        background-color: rgba($value, .2);
+        // color: $value;
+      }
     }
   }
 
-  &.theme-2 {
-    color: rgba(map-get($theme, "reconstruction-data"), .6);
-
-    &.selected,
-    &:hover {
-      background-color: map-get($theme, "reconstruction-data");
-      //color: map-get($theme, "reconstruction-data");
-    }
-  }
-
-  &.theme-3 {
-    color: rgba(map-get($theme, "digital-reconstruction"), .6);
-
-    &.selected,
-    &:hover {
-      background-color: map-get($theme, "digital-reconstruction");
-      //color: map-get($theme, "digital-reconstruction");
-    }
-  }
-
-  &.theme-4 {
-    color: rgba(map-get($theme, "validations"), .6);
-
-    &.selected,
-    &:hover {
-      background-color: map-get($theme, "validations");
-      //color: map-get($theme, "validations");
-    }
-  }
-
-  &.theme-5 {
-    color: rgba(map-get($theme, "predictions"), .6);
-
-    &.selected,
-    &:hover {
-      background-color: map-get($theme, "predictions");
-      //color: map-get($theme, "predictions");
-    }
-  }
 
   &:first-child {
     margin-top: 0;
@@ -1020,22 +1031,6 @@ $collapsible-padding: 20px 30px;
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // layout / Brand
 .brand__basis {
@@ -1371,108 +1366,28 @@ $collapsible-padding: 20px 30px;
   --accent-color: var(--color-grey-5);
 }
 
-.bg-grey-1 {
-  background-color: #343846;
+
+
+@for $i from 1 through length($theme) {
+  $key: nth(map-keys($theme), $i);
+  $value: map-get($theme, $key);
+
+  .bg-card-gradiant-#{$i} {
+    background: linear-gradient(90deg, rgba($value, 0.9) 0%, rgba($value, 0.7) 100%);
+  }
+
+  .text-theme-#{$i} {
+    color: $value;
+  }
+
+  .border-theme-#{$i} {
+    border-color: $value !important;
+  }
+
+  .bg-theme-#{$i} {
+    background: $value !important;
+  }
 }
-
-.bg-grey-2 {
-  background-color: #545a70;
-}
-
-.bg-grey-3 {
-  background-color: #8690b3;
-}
-
-.bg-grey-4 {
-  background-color: #9fa9d0;
-}
-
-.bg-grey-5 {
-  background-color: #c3cce7;
-}
-
-.bg-card-gradiant-1 {
-  background: linear-gradient(90deg, rgba(map-get($theme, "experimental-data"), 0.9) 0%, rgba(map-get($theme, "experimental-data"), .7) 100%);
-}
-
-.bg-card-gradiant-2 {
-  background: linear-gradient(90deg, rgba(map-get($theme, "reconstruction-data"), 0.9) 0%, rgba(map-get($theme, "reconstruction-data"), 0.7) 100%);
-}
-
-.bg-card-gradiant-3 {
-  background: linear-gradient(90deg, rgba(map-get($theme, "digital-reconstruction"), 0.9) 0%, rgba(map-get($theme, "digital-reconstruction"), 0.7) 100%);
-}
-
-.bg-card-gradiant-4 {
-  background: linear-gradient(90deg, rgba(map-get($theme, "validations"), 0.9) 0%, rgba(map-get($theme, "validations"), 0.7) 100%);
-}
-
-.bg-card-gradiant-5 {
-  background: linear-gradient(90deg, rgba(map-get($theme, "predictions"), 0.9) 0%, rgba(map-get($theme, "predictions"), 0.7) 100%);
-}
-
-.text-theme-1 {
-  color: map-get($theme, "experimental-data");
-}
-
-.text-theme-2 {
-  color: map-get($theme, "reconstruction-data");
-}
-
-.text-theme-3 {
-  color: map-get($theme, "digital-reconstruction");
-}
-
-.text-theme-4 {
-  color: map-get($theme, "validations");
-}
-
-.text-theme-5 {
-  color: map-get($theme, "predictions");
-}
-
-.border-theme-1 {
-  border-color: map-get($theme, "experimental-data") !important;
-}
-
-.border-theme-2 {
-  border-color: map-get($theme, "reconstruction-data") !important;
-}
-
-.border-theme-3 {
-  border-color: map-get($theme, "digital-reconstruction") !important;
-}
-
-.border-theme-4 {
-  border-color: map-get($theme, "validations") !important;
-}
-
-.border-theme-5 {
-  border-color: map-get($theme, "predictions") !important;
-}
-
-
-.bg-theme-1 {
-  background: map-get($theme, "experimental-data") !important;
-}
-
-.bg-theme-2 {
-  background: map-get($theme, "reconstruction-data");
-}
-
-.bg-theme-3 {
-  background: map-get($theme, "digital-reconstruction");
-}
-
-.bg-theme-4 {
-  background: map-get($theme, "validations");
-}
-
-.bg-theme-5 {
-  background: map-get($theme, "predictions");
-}
-
-
 
 .bg-white {
   background-color: white;
