@@ -12,6 +12,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import AnatomyTable from './schaffer-collaterals/Anatomy';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 
@@ -77,7 +79,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     title="Anatomy"
                 >
                     <h3>We combined the reported number of CA3 PCs from Bezaire and Soltesz (2013) (TBC) and <Link href={"#"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</h3>
-
+                    <AnatomyTable />
                 </Collapsible>
 
                 <Collapsible
@@ -87,7 +89,6 @@ const ConnectionPhysiologyView: React.FC = () => {
                 >
                     <h3>With a specific optimization protocol, we defined a set of parameters and rules to describe the three pathways. These parameters include the ones defining the short-term plasticity model using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling), the maximum synaptic conductance (gsyn), rise and decay time
                         constant of the fast ionotropic AMPA receptors, rise and decay time constant of the slow ionotropic receptors NMDA, and NMDA/AMPA ratio.</h3>
-
                 </Collapsible>
 
             </DataContainer>
