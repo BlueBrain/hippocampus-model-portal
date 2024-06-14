@@ -226,7 +226,7 @@ const Home: React.FC = () => (
                 href: '/predictions/spontaneouns-activity',
               },
               {
-                label: 'Voltage - Calcium scan',
+                label: 'Voltage - Calcium Scan',
                 href: '/predictions/voltage',
               },
               {

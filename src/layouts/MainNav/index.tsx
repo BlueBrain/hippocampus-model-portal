@@ -234,10 +234,10 @@ const MainNav: React.FC = () => {
 
 
         <SubmenuGroup label="Predictions" background="grey-5">
-          <SubmenuGroupLink label="Sub-region" />
-          <SubmenuGroupLink label="Microcircuits" />
-          <SubmenuGroupLink label="Synaptic Pathways" />
-          <SubmenuGroupLink label="Neurons" />
+          <SubmenuGroupLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
+          <SubmenuGroupLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
+          <SubmenuGroupLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
+          <SubmenuGroupLink label="Theta - MS input" href='/predictions/theta-ms-input' />
         </SubmenuGroup>
 
         <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external grey />
