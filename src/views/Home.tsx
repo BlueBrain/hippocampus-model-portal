@@ -222,16 +222,20 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-region',
+                label: 'Spontaneous Activity',
+                href: '/predictions/spontaneouns-activity',
               },
               {
-                label: 'Microcircuits',
+                label: 'Voltage - Calcium scan',
+                href: '/predictions/voltage',
               },
               {
-                label: 'Synaptic Pathways',
+                label: 'Theta - Oscillatory input',
+                href: '/predictions/theta-oscillatory-input',
               },
               {
-                label: 'Neurons',
+                label: 'Theta - MS input',
+                href: '/predictions/theta-ms-input',
               }
             ]}
           />
