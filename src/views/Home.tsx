@@ -123,6 +123,10 @@ const Home: React.FC = () => (
                 href: '/reconstruction-data/synapses/',
               },
               {
+                label: 'Schaffer Collaterals',
+                href: '/reconstruction-data/schaffer-collaterals/',
+              },
+              {
                 label: 'Acetylcholine',
                 href: '/reconstruction-data/acetylcholine/',
               }

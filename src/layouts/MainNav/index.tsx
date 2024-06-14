@@ -212,6 +212,7 @@ const MainNav: React.FC = () => {
           <SubmenuGroupLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
           <SubmenuGroupLink label="Connections" href="/reconstruction-data/connections/" />
           <SubmenuGroupLink label="Synapses" href="/reconstruction-data/synapses/" />
+          <SubmenuGroupLink label="Schaffer Collaterlas" href="/reconstruction-data/schaffer-collaterals/" />
           <SubmenuGroupLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
         </SubmenuGroup>
 
