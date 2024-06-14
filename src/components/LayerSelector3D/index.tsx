@@ -16,37 +16,38 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const mountRef = useRef<HTMLDivElement | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [trapezoids, setTrapezoids] = useState<THREE.Mesh[]>([]);
+    const [edges, setEdges] = useState<THREE.LineSegments[]>([]);
     const [sceneReady, setSceneReady] = useState(false);
 
-    const distance = 0.025;
-    const angle = 20;
-    const initialTopWidth = 1.5;
+    const distance = 0;
+    const angle = 17.5;
+    const initialTopWidth = 1.8;
+    const edgeThickness = .5; // Variable to control the thickness of the edges
 
     const theme = {
-        1: "#EFAE97",
+        1: 0xA37E7C,
         2: "#EA9088",
         3: "#CC8A99",
         4: "#9E98AE",
         5: "#8398B5"
     };
 
-    // Heights of different trapezoids
     const trapezoidHeights = {
-        SLM: 0.224 * 1.3,
-        SR: 0.42791 * 1.3,
-        SP: 0.090 * 1.3,
-        SO: 0.258 * 1.3,
+        SLM: 0.224 * 1.6,
+        SR: 0.42791 * 1.6,
+        SP: 0.090 * 1.6,
+        SO: 0.258 * 1.6,
     };
 
     useEffect(() => {
         if (!mountRef.current) return;
 
-        // Scene setup
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x313354);
+
         const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
         const frustumSize = 5;
 
-        // Orthographic camera setup
         const camera = new THREE.OrthographicCamera(
             (frustumSize * aspect) / -2,
             (frustumSize * aspect) / 2,
@@ -55,12 +56,11 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             0.1,
             1000
         );
-        camera.position.set(5, 2, 10);
-        camera.lookAt(0, 0, 0);
+        camera.position.set(0, -10, 90);
+        camera.lookAt(0, 0, 1);
         camera.zoom = 2.5;
         camera.updateProjectionMatrix();
 
-        // Renderer setup
         let renderer: THREE.WebGLRenderer;
         try {
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -72,19 +72,18 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             return;
         }
 
-        // Lighting setup
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.position.set(0, 0, -  7.5);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
-        // Material for trapezoids
         const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
         const trapezoidArray: THREE.Mesh[] = [];
+        const edgeArray: THREE.LineSegments[] = [];
         const texts: THREE.Mesh[] = [];
         const numTrapezoids = layers.length;
         let yOffset = 0;
@@ -93,7 +92,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         const totalHeight = layers.reduce((acc, layer) => acc + (trapezoidHeights[layer] || 1) + distance, -distance);
         yOffset = totalHeight / 2;
 
-        // Load font for text
         const loader = new FontLoader();
         loader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
             for (let i = 0; i < numTrapezoids; i++) {
@@ -101,20 +99,18 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 const angleRad = THREE.MathUtils.degToRad(angle);
                 const bottomWidth = topWidth - 2 * height * Math.tan(angleRad);
 
-                // Define top and bottom edges of the trapezoid
                 const topCurve = new THREE.CatmullRomCurve3([
                     new THREE.Vector3(-topWidth / 2, height / 2, 0),
-                    new THREE.Vector3(0, height / 2 + 0.065, 0),
+                    new THREE.Vector3(0, height / 2 + 0.02, 0),
                     new THREE.Vector3(topWidth / 2, height / 2, 0),
                 ]);
 
                 const bottomCurve = new THREE.CatmullRomCurve3([
                     new THREE.Vector3(-bottomWidth / 2, -height / 2, 0),
-                    new THREE.Vector3(0, -height / 2 + 0.065, 0),
+                    new THREE.Vector3(0, -height / 2 + 0.02, 0),
                     new THREE.Vector3(bottomWidth / 2, -height / 2, 0),
                 ]);
 
-                // Create trapezoid shape
                 const topPoints = topCurve.getPoints(20);
                 const bottomPoints = bottomCurve.getPoints(20);
 
@@ -124,10 +120,10 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 bottomPoints.reverse().forEach((point) => shape.lineTo(point.x, point.y));
                 shape.lineTo(topPoints[0].x, topPoints[0].y);
 
-                const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.2, bevelEnabled: false });
+                const geometry = new THREE.ExtrudeGeometry(shape, { depth: 1, bevelEnabled: false });
                 const trapezoid = new THREE.Mesh(geometry, material.clone());
-                trapezoid.castShadow = true;
-                trapezoid.receiveShadow = true;
+                trapezoid.castShadow = false;
+                trapezoid.receiveShadow = false;
                 trapezoid.userData.layer = layers[i];
                 trapezoid.userData.index = i;
 
@@ -135,16 +131,21 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 scene.add(trapezoid);
                 trapezoidArray.push(trapezoid);
 
-                // Create text for the layer
-                const textGeometry = new TextGeometry(layers[i], { font: font, size: 0.06, height: 0.01 });
-                textGeometry.computeBoundingBox(); // Compute the bounding box of the text
-                const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x; // Calculate the width of the text
+                const edgeGeometry = new THREE.EdgesGeometry(geometry);
+                const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: edgeThickness });
+                const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+                edges.position.set(0, yOffset - height / 2, 0.05);
+                scene.add(edges);
+                edgeArray.push(edges);
 
-                const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false });
+                const textGeometry = new TextGeometry(layers[i], { font: font, size: 0.06, height: 0.001 });
+                textGeometry.computeBoundingBox();
+                const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+
+                const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: true });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
-                // Center the text
-                textMesh.position.set(-textWidth / 2, yOffset - height + 0.18 / 2, 0.25);
+                textMesh.position.set(-textWidth / 2, yOffset - height + 0.12 / 2, 1.05);
                 scene.add(textMesh);
                 texts.push(textMesh);
 
@@ -153,22 +154,20 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             }
 
             setTrapezoids(trapezoidArray);
+            setEdges(edgeArray);
             setSceneReady(true);
         });
 
-        // Raycaster setup
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let hoveredTrapezoid: THREE.Mesh | null = null;
 
-        // Mouse move handler
         const onMouseMove = (event: MouseEvent) => {
             const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
         };
 
-        // Click handler
         const onClick = (event: MouseEvent) => {
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
@@ -181,7 +180,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             }
         };
 
-        // Hover handler
         const onHover = () => {
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
@@ -202,11 +200,9 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             }
         };
 
-        // Add event listeners
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('click', onClick);
 
-        // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
             onHover();
@@ -214,7 +210,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         };
         animate();
 
-        // Clean up on component unmount
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('click', onClick);
@@ -224,22 +219,34 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         };
     }, [distance, onSelect, value]);
 
-    // Update trapezoid colors based on state
     useEffect(() => {
         if (sceneReady && trapezoids.length > 0) {
             trapezoids.forEach((trapezoid, index) => {
                 const material = trapezoid.material as THREE.MeshStandardMaterial;
+                const edgeMaterial = edges[index].material as THREE.LineBasicMaterial;
+
+                material.transparent = false;
+
+                material.opacity = 0.2;
+
+
                 if (index === hoveredIndex && value !== layers[index]) {
-                    material.color.set(0x778CA9); // Hovered
+                    material.color.set(themeProp && theme[themeProp]); // hover
+                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
                 } else if (value === layers[index]) {
-                    material.color.set(themeProp ? theme[themeProp] : 0xEFAE97); // Selected
+                    material.color.set(themeProp ? theme[themeProp] : 0xA37E7C); // Selected
+                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
                 } else if (index !== hoveredIndex) {
-                    material.color.set(0x96A7BE); // Default
+                    material.color.set(0x000000); // Default
+                    material.emissive.set(0x44405B); // Set emission to black
+                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
                 }
                 material.needsUpdate = true;
+                edgeMaterial.needsUpdate = true;
             });
         }
-    }, [hoveredIndex, value, trapezoids, sceneReady]);
+    }, [hoveredIndex, value, trapezoids, edges, sceneReady]);
+
 
     return (
         <div className={styles.container} style={{ width: '100%', height: '400px' }}>

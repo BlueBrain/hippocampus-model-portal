@@ -648,7 +648,7 @@ $collapsible-padding: 20px 30px;
     }
 
     .elements {
-      background-color: rgba(map-get($theme, "experimental-data"), 0.05);
+      background-color: rgba(map-get($theme, "experimental-data"), 0.1);
       border: 1px solid rgba(map-get($theme, "experimental-data"), .5);
     }
   }
@@ -668,7 +668,7 @@ $collapsible-padding: 20px 30px;
     }
 
     .elements {
-      background-color: rgba(map-get($theme, "reconstruction-data"), 0.05);
+      background-color: rgba(map-get($theme, "reconstruction-data"), 0.1);
       border: 1px solid rgba(map-get($theme, "reconstruction-data"), .5);
     }
   }
@@ -688,7 +688,7 @@ $collapsible-padding: 20px 30px;
     }
 
     .elements {
-      background-color: rgba(map-get($theme, "digital-reconstruction"), 0.05);
+      background-color: rgba(map-get($theme, "digital-reconstruction"), 0.1);
       border: 1px solid rgba(map-get($theme, "digital-reconstruction"), .5);
     }
 
@@ -710,7 +710,7 @@ $collapsible-padding: 20px 30px;
     }
 
     .elements {
-      background-color: rgba(map-get($theme, "validations"), 0.05);
+      background-color: rgba(map-get($theme, "validations"), 0.1);
       border: 1px solid rgba(map-get($theme, "validations"), .2);
     }
   }
@@ -730,7 +730,7 @@ $collapsible-padding: 20px 30px;
     }
 
     .elements {
-      background-color: rgba(map-get($theme, "predictions"), 0.05);
+      background-color: rgba(map-get($theme, "predictions"), 0.1);
       border: 1px solid rgba(map-get($theme, "predictions"), .2);
     }
   }
@@ -802,6 +802,7 @@ $collapsible-padding: 20px 30px;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
   margin: 0 auto;
+  background-color: #313354;
 
   &__column {
     display: flex;
