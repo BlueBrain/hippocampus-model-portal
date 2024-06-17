@@ -73,9 +73,9 @@ const LayerAnatomyView: React.FC = () => {
             lg={12}
           >
             <div className={styles.selector} style={{ maxWidth: '26rem' }}>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>Choose a layer</div>
-                <div className={styles.selectorBody}>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__body"}>
                   <LayerSelector3D
                     value={layer as Layer}
                     onSelect={setLayerQuery}
