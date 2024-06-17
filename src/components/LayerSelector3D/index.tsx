@@ -167,7 +167,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         if (!sceneReady || !scene || !camera || !renderer || trapezoids.length === 0) return;
 
         const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
+        const mouse = new THREE.Vector2(-10, -10); // Initialize to a point outside the view
         let hoveredTrapezoid: THREE.Mesh | null = null;
 
         const updateMousePosition = (event: MouseEvent) => {
@@ -223,6 +223,10 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             renderer.render(scene, camera);
         };
         animate();
+
+        // Initial hover check
+        raycaster.setFromCamera(mouse, camera);
+        onHover();
 
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
