@@ -72,8 +72,7 @@ const Anatomy: React.FC = () => {
                 className="mt-3"
                 data={PhysiologyData}
                 columns={PhysiolgyColumns}
-
-                x§            />
+            />
             <div className="text-right mt-2">
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
