@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -19,7 +19,9 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const [edges, setEdges] = useState<THREE.LineSegments[]>([]);
     const [texts, setTexts] = useState<THREE.Mesh[]>([]);
     const [sceneReady, setSceneReady] = useState(false);
-    const [shouldUpdateHover, setShouldUpdateHover] = useState(true);
+    const [scene, setScene] = useState<THREE.Scene | null>(null);
+    const [camera, setCamera] = useState<THREE.OrthographicCamera | null>(null);
+    const [renderer, setRenderer] = useState<THREE.WebGLRenderer | null>(null);
 
     const distance = 0;
     const angle = 13;
@@ -27,12 +29,12 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const edgeThickness = 1;
 
     const theme = {
-        1: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        2: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        3: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        4: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        5: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-    }
+        1: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        2: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        3: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        4: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        5: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+    };
 
     const trapezoidHeights = {
         SLM: 0.224 * 1.6,
@@ -44,13 +46,13 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     useEffect(() => {
         if (!mountRef.current) return;
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x313354);
+        const newScene = new THREE.Scene();
+        newScene.background = new THREE.Color(0x313354);
 
         const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
         const frustumSize = 5;
 
-        const camera = new THREE.OrthographicCamera(
+        const newCamera = new THREE.OrthographicCamera(
             (frustumSize * aspect) / -2,
             (frustumSize * aspect) / 2,
             frustumSize / 2,
@@ -58,24 +60,26 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             0.1,
             1000
         );
-        camera.position.set(0, -10, 90);
-        camera.lookAt(0, 0, 1);
-        camera.zoom = 2.5;
-        camera.updateProjectionMatrix();
+        newCamera.position.set(0, -10, 90);
+        newCamera.lookAt(0, 0, 1);
+        newCamera.zoom = 2.5;
+        newCamera.updateProjectionMatrix();
 
-        let renderer: THREE.WebGLRenderer;
-        try {
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-            mountRef.current.appendChild(renderer.domElement);
-        } catch (error) {
-            console.error('Error creating WebGL context:', error);
-            return;
-        }
+        const newRenderer = new THREE.WebGLRenderer({ antialias: true });
+        newRenderer.setPixelRatio(window.devicePixelRatio);
+        newRenderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+        mountRef.current.appendChild(newRenderer.domElement);
+
+        setScene(newScene);
+        setCamera(newCamera);
+        setRenderer(newRenderer);
+        setSceneReady(true);
+    }, []);
+
+    useEffect(() => {
+        if (!sceneReady || !scene || !camera || !renderer) return;
 
         const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-
         const trapezoidArray: THREE.Mesh[] = [];
         const edgeArray: THREE.LineSegments[] = [];
         const textArray: THREE.Mesh[] = [];
@@ -88,8 +92,8 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
 
         const loader = new FontLoader();
         loader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
-            for (let I = 0; I < numTrapezoids; I++) {
-                const height = trapezoidHeights[layers[I]] || 1;
+            for (let i = 0; i < numTrapezoids; i++) {
+                const height = trapezoidHeights[layers[i]] || 1;
                 const angleRad = THREE.MathUtils.degToRad(angle);
                 const bottomWidth = topWidth - 2 * height * Math.tan(angleRad);
 
@@ -116,8 +120,8 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
 
                 const geometry = new THREE.ExtrudeGeometry(shape, { depth: 1, bevelEnabled: false });
                 const trapezoid = new THREE.Mesh(geometry, material.clone());
-                trapezoid.userData.layer = layers[I];
-                trapezoid.userData.index = I;
+                trapezoid.userData.layer = layers[i];
+                trapezoid.userData.index = i;
 
                 trapezoid.position.set(0, yOffset - height / 2, 0.05);
                 scene.add(trapezoid);
@@ -130,7 +134,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 scene.add(edges);
                 edgeArray.push(edges);
 
-                const textGeometry = new TextGeometry(layers[I], {
+                const textGeometry = new TextGeometry(layers[i], {
                     font: font,
                     size: 0.06,
                     height: 0.001,
@@ -156,8 +160,11 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             setTrapezoids(trapezoidArray);
             setEdges(edgeArray);
             setTexts(textArray);
-            setSceneReady(true);
         });
+    }, [sceneReady, scene, camera, renderer]);
+
+    useEffect(() => {
+        if (!sceneReady || !scene || !camera || !renderer || trapezoids.length === 0) return;
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
@@ -171,7 +178,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
 
         const onMouseMove = (event: MouseEvent) => {
             updateMousePosition(event);
-            setShouldUpdateHover(true);
         };
 
         const onClick = (event: MouseEvent) => {
@@ -184,14 +190,11 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 if (onSelect && selectedLayer) {
                     onSelect(selectedLayer);
                     setHoveredIndex(null); // Clear hover state
-                    setShouldUpdateHover(false); // Prevent hover update until mouse moves
                 }
             }
         };
 
         const onHover = () => {
-            if (!shouldUpdateHover) return;
-
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
             if (intersects.length > 0) {
@@ -228,36 +231,36 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 mountRef.current.removeChild(renderer.domElement);
             }
         };
-    }, [onSelect, shouldUpdateHover]);
+    }, [sceneReady, scene, camera, renderer, trapezoids]);
 
     useEffect(() => {
-        if (sceneReady && trapezoids.length > 0) {
-            trapezoids.forEach((trapezoid, index) => {
-                const material = trapezoid.material as THREE.MeshBasicMaterial;
-                const edgeMaterial = edges[index].material as THREE.LineBasicMaterial;
-                const textMaterial = texts[index].material as THREE.MeshBasicMaterial;
+        if (!sceneReady || trapezoids.length === 0) return;
 
-                const currentTheme = theme[themeProp || 1];
+        trapezoids.forEach((trapezoid, index) => {
+            const material = trapezoid.material as THREE.MeshBasicMaterial;
+            const edgeMaterial = edges[index].material as THREE.LineBasicMaterial;
+            const textMaterial = texts[index].material as THREE.MeshBasicMaterial;
 
-                if (index === hoveredIndex && value !== layers[index]) {
-                    material.color.set(currentTheme.hover); // hover
-                    edgeMaterial.color.set(currentTheme.selected);
-                    textMaterial.color.set(currentTheme.selected); // non-selected
-                } else if (value === layers[index]) {
-                    material.color.set(currentTheme.selected); // Selected
-                    edgeMaterial.color.set(currentTheme.selectedEdges);
-                    textMaterial.color.set(0xffffff); // text same color as edge
-                } else {
-                    material.color.set(currentTheme.default); // Default
-                    edgeMaterial.color.set(currentTheme.selected);
-                    textMaterial.color.set(currentTheme.selected); // non-selected
-                }
-                material.needsUpdate = true;
-                edgeMaterial.needsUpdate = true;
-                textMaterial.needsUpdate = true;
-            });
-        }
-    }, [hoveredIndex, value, trapezoids, edges, texts, sceneReady, themeProp]);
+            const currentTheme = theme[themeProp || 1];
+
+            if (index === hoveredIndex && value !== layers[index]) {
+                material.color.set(currentTheme.hover); // hover
+                edgeMaterial.color.set(currentTheme.selected);
+                textMaterial.color.set(currentTheme.selected); // non-selected
+            } else if (value === layers[index]) {
+                material.color.set(currentTheme.selected); // Selected
+                edgeMaterial.color.set(currentTheme.selectedEdges);
+                textMaterial.color.set(0xffffff); // text same color as edge
+            } else {
+                material.color.set(currentTheme.default); // Default
+                edgeMaterial.color.set(currentTheme.selected);
+                textMaterial.color.set(currentTheme.selected); // non-selected
+            }
+            material.needsUpdate = true;
+            edgeMaterial.needsUpdate = true;
+            textMaterial.needsUpdate = true;
+        });
+    }, [hoveredIndex, value, themeProp, sceneReady, trapezoids, edges, texts]);
 
     return (
         <div className={styles.container} style={{ width: '100%', height: '400px' }}>
