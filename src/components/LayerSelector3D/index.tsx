@@ -22,14 +22,37 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const distance = 0;
     const angle = 17.5;
     const initialTopWidth = 1.8;
-    const edgeThickness = .5; // Variable to control the thickness of the edges
+    const edgeThickness = 0.5; // Variable to control the thickness of the edges
+
+
+    console.log(themeProp)
 
     const theme = {
-        1: 0xA37E7C,
-        2: "#EA9088",
-        3: "#CC8A99",
-        4: "#9E98AE",
-        5: "#8398B5"
+        1: {
+            default: 0x000000,
+            hover: 0xEFAE97,
+            selected: 0xA37E7C
+        },
+        2: {
+            default: 0x000000,
+            hover: 0xEFAE97,
+            selected: 0xA37E7C
+        },
+        3: {
+            default: 0x000000,
+            hover: 0xEFAE97,
+            selected: 0xA37E7C
+        },
+        4: {
+            default: 0x000000,
+            hover: 0xEFAE97,
+            selected: 0xA37E7C
+        },
+        5: {
+            default: 0x000000,
+            hover: 0xEFAE97,
+            selected: 0xA37E7C
+        },
     };
 
     const trapezoidHeights = {
@@ -76,7 +99,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(0, 0, -  7.5);
+        directionalLight.position.set(0, 0, -7.5);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
@@ -180,6 +203,8 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             }
         };
 
+
+
         const onHover = () => {
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
@@ -217,7 +242,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 mountRef.current.removeChild(renderer.domElement);
             }
         };
-    }, [distance, onSelect, value]);
+    }, [distance, onSelect, value, themeProp]);
 
     useEffect(() => {
         if (sceneReady && trapezoids.length > 0) {
@@ -225,28 +250,27 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 const material = trapezoid.material as THREE.MeshStandardMaterial;
                 const edgeMaterial = edges[index].material as THREE.LineBasicMaterial;
 
-                material.transparent = false;
+                material.transparent = true;
+                material.opacity = 1;
 
-                material.opacity = 0.2;
-
+                const currentTheme = theme[themeProp || 1];
 
                 if (index === hoveredIndex && value !== layers[index]) {
-                    material.color.set(themeProp && theme[themeProp]); // hover
-                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
+                    material.color.set(currentTheme.hover); // hover
+                    edgeMaterial.color.set(currentTheme.hover);
                 } else if (value === layers[index]) {
-                    material.color.set(themeProp ? theme[themeProp] : 0xA37E7C); // Selected
-                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
-                } else if (index !== hoveredIndex) {
-                    material.color.set(0x000000); // Default
+                    material.color.set(currentTheme.selected); // Selected
+                    edgeMaterial.color.set(currentTheme.hover);
+                } else {
+                    material.color.set(currentTheme.default); // Default
                     material.emissive.set(0x44405B); // Set emission to black
-                    edgeMaterial.color.set(themeProp ? theme[themeProp] : 0xEFAE97);
+                    edgeMaterial.color.set(0xffffff);
                 }
                 material.needsUpdate = true;
                 edgeMaterial.needsUpdate = true;
             });
         }
-    }, [hoveredIndex, value, trapezoids, edges, sceneReady]);
-
+    }, [hoveredIndex, value, trapezoids, edges, sceneReady, themeProp]);
 
     return (
         <div className={styles.container} style={{ width: '100%', height: '400px' }}>
