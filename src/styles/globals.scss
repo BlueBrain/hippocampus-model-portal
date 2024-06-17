@@ -863,7 +863,7 @@ $collapsible-padding: 20px 30px;
 
       &.selected,
       &:hover {
-        background-color: rgba($value, .2);
+        background-color: rgba($value, .4);
         // color: $value;
       }
     }

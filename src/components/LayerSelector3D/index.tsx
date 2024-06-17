@@ -19,6 +19,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const [edges, setEdges] = useState<THREE.LineSegments[]>([]);
     const [texts, setTexts] = useState<THREE.Mesh[]>([]);
     const [sceneReady, setSceneReady] = useState(false);
+    const [shouldUpdateHover, setShouldUpdateHover] = useState(true);
 
     const distance = 0;
     const angle = 13;
@@ -26,12 +27,12 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const edgeThickness = 1;
 
     const theme = {
-        1: { default: 0x44405B, hover: 0x0745F6C, selected: 0xA37D7C },
-        2: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
-        3: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
-        4: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
-        5: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
-    };
+        1: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        2: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        3: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        4: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+        5: { default: 0x44405B, hover: 0x0745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
+    }
 
     const trapezoidHeights = {
         SLM: 0.224 * 1.6,
@@ -65,10 +66,11 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         let renderer: THREE.WebGLRenderer;
         try {
             renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
             mountRef.current.appendChild(renderer.domElement);
         } catch (error) {
-            console.error("Error creating WebGL context:", error);
+            console.error('Error creating WebGL context:', error);
             return;
         }
 
@@ -122,15 +124,23 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 trapezoidArray.push(trapezoid);
 
                 const edgeGeometry = new THREE.EdgesGeometry(geometry);
-                const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: edgeThickness });
+                const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: edgeThickness, linecap: 'round', linejoin: 'round' });
                 const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
                 edges.position.set(0, yOffset - height / 2, 0.05);
                 scene.add(edges);
                 edgeArray.push(edges);
 
-                const textGeometry = new TextGeometry(layers[I], { font: font, size: 0.06, height: 0.001 });
+                const textGeometry = new TextGeometry(layers[I], {
+                    font: font,
+                    size: 0.06,
+                    height: 0.001,
+                    curveSegments: 24,
+                    bevelEnabled: true,
+                    bevelThickness: 0.005,
+                    bevelSize: 0.002,
+                });
                 textGeometry.computeBoundingBox();
-                const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+                const textWidth = textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
 
                 const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -153,13 +163,19 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         const mouse = new THREE.Vector2();
         let hoveredTrapezoid: THREE.Mesh | null = null;
 
-        const onMouseMove = (event: MouseEvent) => {
+        const updateMousePosition = (event: MouseEvent) => {
             const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
         };
 
+        const onMouseMove = (event: MouseEvent) => {
+            updateMousePosition(event);
+            setShouldUpdateHover(true);
+        };
+
         const onClick = (event: MouseEvent) => {
+            updateMousePosition(event);
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
             if (intersects.length > 0) {
@@ -167,12 +183,15 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 const selectedLayer = intersectedTrapezoid.userData.layer;
                 if (onSelect && selectedLayer) {
                     onSelect(selectedLayer);
-                    setHoveredIndex(null); // Force re-render
+                    setHoveredIndex(null); // Clear hover state
+                    setShouldUpdateHover(false); // Prevent hover update until mouse moves
                 }
             }
         };
 
         const onHover = () => {
+            if (!shouldUpdateHover) return;
+
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(trapezoids);
             if (intersects.length > 0) {
@@ -209,7 +228,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                 mountRef.current.removeChild(renderer.domElement);
             }
         };
-    }, [distance, onSelect, value, themeProp]);
+    }, [onSelect, shouldUpdateHover]);
 
     useEffect(() => {
         if (sceneReady && trapezoids.length > 0) {
@@ -226,7 +245,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                     textMaterial.color.set(currentTheme.selected); // non-selected
                 } else if (value === layers[index]) {
                     material.color.set(currentTheme.selected); // Selected
-                    edgeMaterial.color.set(currentTheme.hover);
+                    edgeMaterial.color.set(currentTheme.selectedEdges);
                     textMaterial.color.set(0xffffff); // text same color as edge
                 } else {
                     material.color.set(currentTheme.default); // Default
