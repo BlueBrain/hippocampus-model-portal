@@ -26,7 +26,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const edgeThickness = 1;
 
     const theme = {
-        1: { default: 0x44405B, hover: 0x44405B, selected: 0xA37D7C },
+        1: { default: 0x44405B, hover: 0x0745F6C, selected: 0xA37D7C },
         2: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
         3: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
         4: { default: 0x000000, hover: 0xEFAE97, selected: 0xA37E7C },
@@ -222,16 +222,16 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
 
                 if (index === hoveredIndex && value !== layers[index]) {
                     material.color.set(currentTheme.hover); // hover
-                    edgeMaterial.color.set(0xffffff);
-                    textMaterial.color.set(0xffffff); // non-selected
+                    edgeMaterial.color.set(currentTheme.selected);
+                    textMaterial.color.set(currentTheme.selected); // non-selected
                 } else if (value === layers[index]) {
                     material.color.set(currentTheme.selected); // Selected
-                    edgeMaterial.color.set(0xffffff);
+                    edgeMaterial.color.set(currentTheme.hover);
                     textMaterial.color.set(0xffffff); // text same color as edge
                 } else {
                     material.color.set(currentTheme.default); // Default
-                    edgeMaterial.color.set(0xffffff);
-                    textMaterial.color.set(0xffffff); // non-selected
+                    edgeMaterial.color.set(currentTheme.selected);
+                    textMaterial.color.set(currentTheme.selected); // non-selected
                 }
                 material.needsUpdate = true;
                 edgeMaterial.needsUpdate = true;
