@@ -42,7 +42,7 @@ const Anatomy: React.FC = () => {
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
                         AnatomyData,
-                        `exp-minis-table.json`
+                        `anatomy-table.json`
                     )}
                 >
                     table data
