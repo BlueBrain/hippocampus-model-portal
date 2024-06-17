@@ -123,6 +123,10 @@ const Home: React.FC = () => (
                 href: '/reconstruction-data/synapses/',
               },
               {
+                label: 'Schaffer Collaterals',
+                href: '/reconstruction-data/schaffer-collaterals/',
+              },
+              {
                 label: 'Acetylcholine',
                 href: '/reconstruction-data/acetylcholine/',
               }
@@ -222,16 +226,20 @@ const Home: React.FC = () => (
             </div>}
             links={[
               {
-                label: 'Sub-region',
+                label: 'Spontaneous Activity',
+                href: '/predictions/spontaneouns-activity',
               },
               {
-                label: 'Microcircuits',
+                label: 'Voltage - Calcium Scan',
+                href: '/predictions/voltage',
               },
               {
-                label: 'Synaptic Pathways',
+                label: 'Theta - Oscillatory input',
+                href: '/predictions/theta-oscillatory-input',
               },
               {
-                label: 'Neurons',
+                label: 'Theta - MS input',
+                href: '/predictions/theta-ms-input',
               }
             ]}
           />

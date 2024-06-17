@@ -1,0 +1,14 @@
+[
+    {
+        "Pathway": "SC-PC",
+        "Convergence": 20.878
+    },
+    {
+        "Pathway": "SC-CB1R+",
+        "Convergence": 12.714
+    },
+    {
+        "Pathway": "SC-CB1R-",
+        "Convergence": 12.714
+    }
+]
