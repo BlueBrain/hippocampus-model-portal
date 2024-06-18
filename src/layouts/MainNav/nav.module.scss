@@ -1,3 +1,54 @@
+.main-navigation {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+
+  margin: 0;
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--color-text);
+
+    & .arrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    &--active {}
+  }
+
+  &__button {
+    // Resets
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    //Styling
+    padding: .5rem 1.2rem;
+    background-color: #313354;
+    border: 1px solid rgba(white, .05);
+
+    &:hover {
+      background-color: #3B3D5D;
+    }
+  }
+}
+
+/*
 .menu {
   list-style: none;
   margin: 0;
@@ -333,3 +384,4 @@
     display: flex;
   }
 }
+*/

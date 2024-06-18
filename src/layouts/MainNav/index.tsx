@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import NextLink from 'next/link';
 import { HomeFilled, GlobalOutlined, ToolFilled } from '@ant-design/icons';
+import { IoIosArrowDown } from "react-icons/io";
 
 import { basePath } from '../../config';
 
-import styles from './nav.module.scss';
-
+import styles from './nav.module.scss'
 
 const Menu: React.FC = ({ children }) => {
   const [openMobileMenuGroup, setOpenMobileMenuGroup] = useState<string>('');
@@ -156,7 +156,43 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
 
 const MainNav: React.FC = () => {
   return (
-    <Menu>
+    <ul className={styles['main-navigation']}>
+
+      { /* Home */}
+      <li className={styles['main-navigation__item']}>
+        <span>Home</span>
+        <div className={styles["arrow"]}>
+          <IoIosArrowDown />
+        </div>
+      </li>
+
+      { /* Build Models */}
+      <li className={styles['main-navigation__item']}>
+        <span>Build Models</span>
+        <div className={styles["arrow"]}>
+          <IoIosArrowDown />
+        </div>
+      </li>
+
+      { /* Explore Models */}
+      <li className={styles['main-navigation__item']}>
+        <span>Explore Models</span>
+        <div className={styles["arrow"]}>
+          <IoIosArrowDown />
+        </div>
+      </li>
+
+      <button className={styles['main-navigation__button']}>
+        Contact Us
+      </button>
+
+    </ul>
+
+  );
+  { /*
+    return (
+  {/* 
+    <Menu className>
       <MenuItem
         label="Home"
         className="menu-group-home"
@@ -246,7 +282,7 @@ const MainNav: React.FC = () => {
 
       <MenuItem label="Contact us" external href="/#contact-us" />
     </Menu>
-  );
+    */}
 };
 
 export default MainNav;
