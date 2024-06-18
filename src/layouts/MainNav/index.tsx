@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NextLink from 'next/link';
+import Link from 'next/link';
 import { HomeFilled, GlobalOutlined, ToolFilled } from '@ant-design/icons';
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -45,7 +45,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
   return (
     <li onMouseEnter={() => MouseEnter(menuGroup)} onMouseLeave={() => MouseLeave(menuGroup)} className={styles['main-navigation__item']}>
       <span>{label}</span>
-      <div className={styles["arrow"]}>
+      <div className={`${styles["arrow"]} ${isMenuOpened ? styles["arrow--active"] : ""}`}>
         <IoIosArrowDown />
       </div>
       {children && isMenuOpened && (openMenuGroup === menuGroup) && (
@@ -54,6 +54,27 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
         </div>
       )}
     </li>
+  );
+};
+
+type SubmenuLinkProps = {
+  href: string;
+  label: string;
+  external: boolean;
+  highlight?: boolean
+};
+
+const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false, highlight = false }) => {
+  return (
+    <Link
+      className={styles["submenu__link"] + " " + (highlight && " highlight")}
+      href={href}
+      external={external}
+      highlight={highlight}
+    >
+      {label}
+    </Link>
+
   );
 };
 
@@ -116,25 +137,7 @@ type LinkProps = {
 const Link: React.FC<LinkProps> = ({ href, label, external = false, className = '' }) => {
   return external
     ? (<a className={className} href={href}>{label}</a>)
-    : (<NextLink href={href} prefetch={false} className={className}>{label}</NextLink>);
-};
-
-type SubmenuLinkProps = {
-  href: string;
-  label: string;
-  external: boolean;
-  grey?: boolean;
-};
-
-const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false, grey = false }) => {
-  return (
-    <Link
-      className={`${styles.submenuLink} ${grey ? styles.submenuLinkGrey : ''}`}
-      label={label}
-      href={href}
-      external={external}
-    />
-  );
+    : (<NextLink href={href} prefetch={false} className={className} label={label}>{label}</NextLink>);
 };
 
 type SubmenuGroupProps = {
@@ -179,31 +182,6 @@ const SubmenuGroupLink: React.FC<SubmenuGroupLinkProps> = ({ label, href, extern
     : (<span className={styles.submenuGroupDisabledLink}>{labelWithCircle}</span>);
 };
 
-type MenuItemProps = {
-  label: string;
-  href: string;
-  external?: boolean;
-  background?: string;
-  className?: string;
-};
-
-const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, background = '', className = '' }) => {
-  return (
-    <li className={`${styles.menuItem} ${className}`}>
-      <div className={`${styles.menuLink} bg-${background}`}>
-        <Link label={label} href={href} external={external} />
-      </div>
-      <div className={styles.hoverBar}></div>
-      {children && (
-        <div className={styles.submenu}>
-          <div className="pos-relative">
-            {children}
-          </div>
-        </div>
-      )}
-    </li>
-  );
-};
 
 */}
 
@@ -220,9 +198,11 @@ const MainNav: React.FC = () => {
           external
           menuGroup='menu-group-home'
         >
-          <span>a</span>
-          <span>b</span>
-          <span>c</span>
+          <SubmenuLink label="About the Hub" href="/#about" external />
+          <SubmenuLink label="About Build models" href="/#build" external />
+          <SubmenuLink label="About Explore models" href="/#explore" external />
+          <SubmenuLink label="Resources" href="/#resources" external />
+          <SubmenuLink label="Terms and conditions" href="/#terms" external />
         </MenuItem>
 
         { /* Build Models */}
@@ -232,7 +212,9 @@ const MainNav: React.FC = () => {
           external
           menuGroup='menu-group-build'
         >
-
+          { /* !!! Add Group Here */}
+          <SubmenuLink label="Models" href="/build/models" external />
+          <SubmenuLink label="Workflows" href="/build/workflows" external />
         </MenuItem>
 
         { /* Explore Models */}
@@ -241,9 +223,7 @@ const MainNav: React.FC = () => {
           href='/'
           menuGroup='menu-group-explore'
         >
-          <span>a</span>
-          <span>b</span>
-          <span>c</span>
+          <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external highlight />
         </MenuItem>
 
         <button className={styles['main-navigation__button']}>
