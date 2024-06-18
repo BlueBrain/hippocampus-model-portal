@@ -802,13 +802,14 @@ $collapsible-padding: 20px 30px;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
   margin: 0 auto;
-  background-color: #313354;
+
 
   &__column {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     border: 1px solid rgba(grey, .8);
+    background-color: #313354;
 
     @for $i from 1 through length($theme) {
       $key: nth(map-keys($theme), $i);
@@ -839,6 +840,8 @@ $collapsible-padding: 20px 30px;
 
   &__body {
     margin: auto 0;
+    width: 100%;
+    height: 100%;
     background-color: #313354;
 
   }
@@ -968,56 +971,6 @@ $collapsible-padding: 20px 30px;
   overflow: hidden;
 
 
-  &.yellow {
-    & h2 {
-      border-color: map-get($accentPalette, "yellow");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "yellow");
-    }
-  }
-
-  &.blue {
-    & h2 {
-      border-color: map-get($accentPalette, "blue");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "blue");
-    }
-  }
-
-  &.lavender {
-    & h2 {
-      border-color: map-get($accentPalette, "lavender");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "lavender");
-    }
-  }
-
-  &.green {
-    & h2 {
-      border-color: map-get($accentPalette, "green");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "green");
-    }
-  }
-
-  &.grey {
-    & h2 {
-      border-color: map-get($accentPalette, "grey");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "grey");
-    }
-  }
-
   h2 {
     text-transform: uppercase;
     line-height: 1;
@@ -1049,7 +1002,6 @@ $collapsible-padding: 20px 30px;
     }
 
     p {
-      border-left: 4px solid map-get($accentPalette, "yellow");
       margin: 1rem 1rem 1rem 0;
       padding-left: 12px;
 
@@ -1360,40 +1312,6 @@ $collapsible-padding: 20px 30px;
 
 
 
-
-
-
-:root {
-  --color-grey-1: #343846;
-  --color-grey-2: #545a70;
-  --color-grey-3: #8690b3;
-  --color-grey-4: #9fa9d0;
-  --color-grey-5: #c3cce7;
-
-  --color-text-high-white: #ffffffdd;
-  --color-text-medium-white: #ffffffa8;
-  --color-text-disabled-white: #ffffff61;
-}
-
-.set-accent-color--grey-1 {
-  --accent-color: var(--color-grey-1);
-}
-
-.set-accent-color--grey-2 {
-  --accent-color: var(--color-grey-2);
-}
-
-.set-accent-color--grey-3 {
-  --accent-color: var(--color-grey-3);
-}
-
-.set-accent-color--grey-4 {
-  --accent-color: var(--color-grey-4);
-}
-
-.set-accent-color--grey-5 {
-  --accent-color: var(--color-grey-5);
-}
 
 
 

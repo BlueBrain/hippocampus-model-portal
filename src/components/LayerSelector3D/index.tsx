@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -24,8 +24,8 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const [renderer, setRenderer] = useState<THREE.WebGLRenderer | null>(null);
 
     const distance = 0;
-    const angle = 13;
-    const initialTopWidth = 1.6;
+    const angle = 10;
+    const initialTopWidth = 1.5;
     const edgeThickness = 1;
 
     const theme = {
@@ -62,7 +62,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         );
         newCamera.position.set(0, -10, 90);
         newCamera.lookAt(0, 0, 1);
-        newCamera.zoom = 2.5;
+        newCamera.zoom = 2.2;
         newCamera.updateProjectionMatrix();
 
         const newRenderer = new THREE.WebGLRenderer({ antialias: true });
@@ -74,6 +74,31 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         setCamera(newCamera);
         setRenderer(newRenderer);
         setSceneReady(true);
+
+        const handleResize = () => {
+            if (mountRef.current && newRenderer && newCamera) {
+                const width = mountRef.current.clientWidth;
+                const height = mountRef.current.clientHeight;
+
+                newRenderer.setSize(width, height);
+
+                const aspect = width / height;
+                newCamera.left = (-frustumSize * aspect) / 2;
+                newCamera.right = (frustumSize * aspect) / 2;
+                newCamera.top = frustumSize / 2;
+                newCamera.bottom = -frustumSize / 2;
+                newCamera.updateProjectionMatrix();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (mountRef.current) {
+                mountRef.current.removeChild(newRenderer.domElement);
+            }
+        };
     }, []);
 
     useEffect(() => {
@@ -267,8 +292,8 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     }, [hoveredIndex, value, themeProp, sceneReady, trapezoids, edges, texts]);
 
     return (
-        <div className={styles.container} style={{ width: '100%', height: '400px' }}>
-            <div ref={mountRef} style={{ width: '100%', height: '100%' }}></div>
+        <div className={styles.container} style={{ width: '100%', height: '100%', minHeight: '400px' }}>
+            <div ref={mountRef} style={{ width: '100%', height: '100%', minHeight: '400px' }}></div>
         </div>
     );
 };
