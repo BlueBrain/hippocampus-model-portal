@@ -106,9 +106,9 @@ const NeuronElectrophysiology: React.FC = () => {
           </div>
 
           <div className="col-xs-12 col-lg-3 col-lg-offset-1">
-            <div className={styles.selector}>
-              <div className={styles.selectorHead}>Select cell type</div>
-              <div className={styles.selectorBody}>
+            <div className={"selector__column theme-" + theme}>
+              <div className={"selector__head theme-" + theme}>Choose a layer</div>
+              <div className={"selector__body"}>
                 <List
                   block
                   list={etypes}

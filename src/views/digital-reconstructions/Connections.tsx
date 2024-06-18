@@ -16,6 +16,7 @@ import Collapsible from '@/components/Collapsible';
 import ConnectionViewer from '@/components/ConnectionViewer';
 import HttpData from '@/components/HttpData';
 import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D/index';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
 
@@ -192,7 +193,7 @@ const ConnectionsView: React.FC = () => {
             <div className={selectorStyle.row}>
               <div className={selectorStyle.column}>
                 <div className={selectorStyle.body}>
-                  <LayerSelector value={prelayer as Layer} onSelect={setPreLayerQuery} />
+                  <LayerSelector3D value={prelayer as Layer} onSelect={setPreLayerQuery} />
                 </div>
               </div>
               <div className={selectorStyle.column}>
@@ -212,7 +213,7 @@ const ConnectionsView: React.FC = () => {
             <div className={selectorStyle.row}>
               <div className={selectorStyle.column}>
                 <div className={selectorStyle.body}>
-                  <LayerSelector value={postlayer as Layer} onSelect={setPostLayerQuery} />
+                  <LayerSelector3D value={postlayer as Layer} onSelect={setPostLayerQuery} />
                 </div>
               </div>
               <div className={selectorStyle.column}>
