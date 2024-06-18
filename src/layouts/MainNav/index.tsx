@@ -8,6 +8,57 @@ import { basePath } from '../../config';
 import styles from './nav.module.scss'
 
 const Menu: React.FC = ({ children }) => {
+  const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
+  const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
+
+  return (
+    <>
+      {children}
+    </>
+  )
+}
+
+type MenuItemProps = {
+  label: string;
+  href: string;
+  external?: boolean;
+  menuGroup: string
+};
+
+const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, menuGroup }) => {
+  const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
+  const [isMenuOpened, setIsMenuOpened] = useState(true);
+
+  const MouseEnter = (menuGroup: string) => {
+    setOpenMenuGroup(menuGroup);
+    setIsMenuOpened(true);
+
+    console.log("Enter: " + openMenuGroup + " " + isMenuOpened);
+  }
+
+  const MouseLeave = (menuGroup: string) => {
+    setIsMenuOpened(false);
+    setOpenMenuGroup(menuGroup);
+    console.log("Leave: " + openMenuGroup + " " + isMenuOpened);
+  }
+
+  return (
+    <li onMouseEnter={() => MouseEnter(menuGroup)} onMouseLeave={() => MouseLeave(menuGroup)} className={styles['main-navigation__item']}>
+      <span>{label}</span>
+      <div className={styles["arrow"]}>
+        <IoIosArrowDown />
+      </div>
+      {children && isMenuOpened && (openMenuGroup === menuGroup) && (
+        <div className={styles["submenu"]}>
+          {children}
+        </div>
+      )}
+    </li>
+  );
+};
+
+{/* 
+const Menu: React.FC = ({ children }) => {
   const [openMobileMenuGroup, setOpenMobileMenuGroup] = useState<string>('');
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
 
@@ -154,40 +205,53 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
   );
 };
 
+*/}
+
 const MainNav: React.FC = () => {
   return (
-    <ul className={styles['main-navigation']}>
+    <Menu>
 
-      { /* Home */}
-      <li className={styles['main-navigation__item']}>
-        <span>Home</span>
-        <div className={styles["arrow"]}>
-          <IoIosArrowDown />
-        </div>
-      </li>
+      <ul className={styles['main-navigation']}>
 
-      { /* Build Models */}
-      <li className={styles['main-navigation__item']}>
-        <span>Build Models</span>
-        <div className={styles["arrow"]}>
-          <IoIosArrowDown />
-        </div>
-      </li>
+        { /* Home */}
+        <MenuItem
+          label="Home"
+          href='/'
+          external
+          menuGroup='menu-group-home'
+        >
+          <span>a</span>
+          <span>b</span>
+          <span>c</span>
+        </MenuItem>
 
-      { /* Explore Models */}
-      <li className={styles['main-navigation__item']}>
-        <span>Explore Models</span>
-        <div className={styles["arrow"]}>
-          <IoIosArrowDown />
-        </div>
-      </li>
+        { /* Build Models */}
+        <MenuItem
+          label="Build Models"
+          href='/build/'
+          external
+          menuGroup='menu-group-build'
+        >
 
-      <button className={styles['main-navigation__button']}>
-        Contact Us
-      </button>
+        </MenuItem>
 
-    </ul>
+        { /* Explore Models */}
+        <MenuItem
+          label="Explore Models"
+          href='/'
+          menuGroup='menu-group-explore'
+        >
+          <span>a</span>
+          <span>b</span>
+          <span>c</span>
+        </MenuItem>
 
+        <button className={styles['main-navigation__button']}>
+          Contact Us
+        </button>
+
+      </ul>
+    </Menu>
   );
   { /*
     return (

@@ -6,12 +6,12 @@
   margin: 0;
 
   &__item {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    color: var(--color-text);
 
     & .arrow {
       display: flex;
@@ -24,7 +24,6 @@
 
     &:hover {
       text-decoration: underline;
-      cursor: pointer;
     }
 
     &--active {}
@@ -46,6 +45,23 @@
       background-color: #3B3D5D;
     }
   }
+}
+
+.submenu {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: #313354;
+  min-width: 250px;
+  border: 1px solid rgba(white, .05);
+  border-radius: 1px;
+
+  transform: translateY(100%);
+
 }
 
 /*
