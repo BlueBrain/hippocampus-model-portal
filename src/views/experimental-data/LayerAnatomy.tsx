@@ -21,8 +21,6 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 
 import { colorName } from './config';
 
-import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
-
 
 const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
@@ -72,7 +70,7 @@ const LayerAnatomyView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={styles.selector} style={{ maxWidth: '26rem' }}>
+            <div style={{ maxWidth: '26rem' }}>
               <div className={"selector__column theme-" + theme}>
                 <div className={"selector__head theme-" + theme}>Choose a layer</div>
                 <div className={"selector__body"}>
@@ -86,7 +84,7 @@ const LayerAnatomyView: React.FC = () => {
             </div>
           </Col>
         </Row>
-      </Filters>
+      </Filters >
 
       <DataContainer
         visible={!!layer}
