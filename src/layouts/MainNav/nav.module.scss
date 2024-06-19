@@ -79,10 +79,16 @@
 
   transform: translateY(100%);
 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+
   &__link {
     cursor: pointer;
     padding: .5rem 1rem;
-    color: white;
+    color: rgba(white, .5);
 
     & .highlight {
       background-color: red;
@@ -92,6 +98,34 @@
       //text-decoration: underline;
       color: white;
       background-color: rgba(white, .1);
+    }
+  }
+
+  &__group-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: .5rem 1rem;
+
+    &:hover {
+      background-color: rgba(white, .1);
+    }
+  }
+
+  &__group-list {
+    display: flex;
+    flex-direction: column;
+    background-color: #031437;
+
+    height: 0;
+    overflow: hidden;
+
+    //transition: all 100ms ease-in-out;
+
+    &--active {
+      height: auto;
     }
   }
 }

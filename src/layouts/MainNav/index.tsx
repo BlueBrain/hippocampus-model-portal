@@ -32,14 +32,11 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
   const MouseEnter = (menuGroup: string) => {
     setOpenMenuGroup(menuGroup);
     setIsMenuOpened(true);
-
-    console.log("Enter: " + openMenuGroup + " " + isMenuOpened);
   }
 
   const MouseLeave = (menuGroup: string) => {
     setIsMenuOpened(false);
     setOpenMenuGroup(menuGroup);
-    console.log("Leave: " + openMenuGroup + " " + isMenuOpened);
   }
 
   return (
@@ -60,7 +57,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
 type SubmenuLinkProps = {
   href: string;
   label: string;
-  external: boolean;
+  external?: boolean;
   highlight?: boolean
 };
 
@@ -78,112 +75,42 @@ const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false
   );
 };
 
-{/* 
-const Menu: React.FC = ({ children }) => {
-  const [openMobileMenuGroup, setOpenMobileMenuGroup] = useState<string>('');
-  const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
-
-  const onMobileMenuGroupClick = (menuGroup) => {
-    if (mobileMenuOpened) {
-      if (openMobileMenuGroup === menuGroup) {
-        setMobileMenuOpened(false);
-      } else {
-        setOpenMobileMenuGroup(menuGroup);
-      }
-    } else {
-      if (openMobileMenuGroup !== menuGroup) {
-        setOpenMobileMenuGroup(menuGroup);
-      }
-
-      setMobileMenuOpened(true);
-    }
-  }
-
-  const isMobileMenuGroupActive = (menuGroup) => {
-    return openMobileMenuGroup === menuGroup && mobileMenuOpened;
-  }
-
-  return (
-    <>
-      <ul className={`${styles.menu} menu-group-${openMobileMenuGroup}-open ${mobileMenuOpened ? styles.mobileShow : ''}`}>
-        {children}
-      </ul>
-
-      <div className={styles.bottomMobileMenuBar}>
-        <HomeFilled
-          className={isMobileMenuGroupActive('home') ? styles.active : ''}
-          onClick={() => onMobileMenuGroupClick('home')}
-        />
-        <GlobalOutlined
-          className={isMobileMenuGroupActive('explore') ? styles.active : ''}
-          onClick={() => onMobileMenuGroupClick('explore')}
-        />
-        <ToolFilled
-          className={isMobileMenuGroupActive('build') ? styles.active : ''}
-          onClick={() => onMobileMenuGroupClick('build')}
-        />
-      </div>
-    </>
-  );
-};
-
-type LinkProps = {
-  label: React.ReactElement | string;
-  href: string;
-  external: boolean;
-  className?: string;
-};
-
-const Link: React.FC<LinkProps> = ({ href, label, external = false, className = '' }) => {
-  return external
-    ? (<a className={className} href={href}>{label}</a>)
-    : (<NextLink href={href} prefetch={false} className={className} label={label}>{label}</NextLink>);
-};
 
 type SubmenuGroupProps = {
   label: string;
   href?: string;
   external?: boolean;
-  background?: string;
+  color?: string;
+  menuGroup?: 'menu-group-build'
 };
 
-const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, background, external = false }) => {
+
+const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "" }) => {
+  const [isOpened, setIsOpened] = useState<Boolean>(false);
+  const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
+
+  const Click = () => {
+    setIsOpened(prevState => !prevState);
+    setOpenMenuGroup(menuGroup);
+  }
+
   return (
-    <div className={styles.submenuGroup}>
-      {href ? (
-        <Link className={styles.submenuLink} label={label} href={href} external={external} />
-      ) : (
-        <span className={styles.submenuDisabledLink}>{label}</span>
-      )}
-      <div className={`${styles.submenuGroupContainer} bg-${background}`}>
+    <>
+      <div onClick={Click} className={`${styles["submenu__group-link"]}`}>
+        <span>{label}</span>
+        <div className={`${styles["arrow"]} ${isOpened ? styles["arrow--active"] : ""}`}>
+          <IoIosArrowDown />
+        </div>
+      </div>
+
+      <div className={`${styles["submenu__group-list"]}  ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-list--active"] : ""}`}>
         {children}
       </div>
-      <div className={`${styles.submenuGroupColorLabel} bg-${background}`}></div>
-    </div>
-  );
-};
 
-type SubmenuGroupLinkProps = {
-  label: string;
-  href?: string;
-  external?: boolean;
-};
-
-const SubmenuGroupLink: React.FC<SubmenuGroupLinkProps> = ({ label, href, external = false }) => {
-  const labelWithCircle = (
-    <>
-      <div className={styles.groupLinkCircle}></div>
-      <span className={styles.groupLinkLabel}>{label}</span>
     </>
-  );
+  )
+}
 
-  return href
-    ? (<Link className={styles.submenuGroupLink} label={labelWithCircle} href={href} external={external} />)
-    : (<span className={styles.submenuGroupDisabledLink}>{labelWithCircle}</span>);
-};
-
-
-*/}
 
 const MainNav: React.FC = () => {
   return (
@@ -212,7 +139,11 @@ const MainNav: React.FC = () => {
           external
           menuGroup='menu-group-build'
         >
-          { /* !!! Add Group Here */}
+          <SubmenuGroup label='Data' href="/build/data" external menuGroup='menu-group-build'>
+            <SubmenuLink label="Connections" external href="/build/data/connection" />
+            <SubmenuLink label="Electrophysiology" external href="/build/data/electrophysiology" />
+            <SubmenuLink label="Morphologies" external href="/build/data/morphology" />
+          </SubmenuGroup>
           <SubmenuLink label="Models" href="/build/models" external />
           <SubmenuLink label="Workflows" href="/build/workflows" external />
         </MenuItem>
@@ -223,6 +154,57 @@ const MainNav: React.FC = () => {
           href='/'
           menuGroup='menu-group-explore'
         >
+
+          <SubmenuGroup label="Experimental Data" menuGroup='menu-group-experimental-data'>
+            <SubmenuLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
+            <SubmenuLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
+            <SubmenuLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
+            <SubmenuLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
+            <SubmenuLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
+            <SubmenuLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
+            <SubmenuLink label="Minis" href="/experimental-data/minis/" />
+            <SubmenuLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
+
+            <SubmenuLink label="Theta" href="/experimental-data/theta/" />
+          </SubmenuGroup>
+
+          <SubmenuGroup label="Reconstruction Data" menuGroup='menu-group-reconstruction-data'>
+            <SubmenuLink label="Volume" href="/reconstruction-data/volume/" />
+            <SubmenuLink label="Cell composition" href="/reconstruction-data/cell-composition/" />
+            <SubmenuLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
+            <SubmenuLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
+            <SubmenuLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
+            <SubmenuLink label="Connections" href="/reconstruction-data/connections/" />
+            <SubmenuLink label="Synapses" href="/reconstruction-data/synapses/" />
+            <SubmenuLink label="Schaffer Collaterlas" href="/reconstruction-data/schaffer-collaterals/" />
+            <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
+          </SubmenuGroup>
+
+          <SubmenuGroup label="Digital Reconstructions" menuGroup='menu-group-digital-reconstructions'>
+            <SubmenuLink label="Region" href="/digital-reconstructions/region/" />
+            <SubmenuLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
+            <SubmenuLink label="Connections" href="/digital-reconstructions/connections/" />
+            <SubmenuLink label="Synapses" href="/digital-reconstructions/synapses/" />
+            <SubmenuLink label="Neurons" href="/digital-reconstructions/neurons/" />
+            <SubmenuLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
+          </SubmenuGroup>
+
+          <SubmenuGroup label="Validations" menuGroup='menu-group-validations'>
+            <SubmenuLink label="Neurons" href='/validations/neurons/' />
+            <SubmenuLink label="Connection anatomy" href='/validations/connection-anatomy/' />
+            <SubmenuLink label="Connection physiology" href='/validations/connection-physiology/' />
+            <SubmenuLink label="Schaffer collaterals" href='/validations/schaffer-collaterals/' />
+            <SubmenuLink label="Acetylcholine" href='/validations/acetylcholine/' />
+          </SubmenuGroup>
+
+
+          <SubmenuGroup label="Predictions" menuGroup='menu-group-predictions'>
+            <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
+            <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
+            <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
+            <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />
+          </SubmenuGroup>
+
           <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external highlight />
         </MenuItem>
 
@@ -231,7 +213,7 @@ const MainNav: React.FC = () => {
         </button>
 
       </ul>
-    </Menu>
+    </Menu >
   );
   { /*
     return (
@@ -257,9 +239,9 @@ const MainNav: React.FC = () => {
         href="/build/"
       >
         <SubmenuGroup label="Data" href="/build/data" external background="white">
-          <SubmenuGroupLink label="Connections" external href="/build/data/connection" />
-          <SubmenuGroupLink label="Electrophysiology" external href="/build/data/electrophysiology" />
-          <SubmenuGroupLink label="Morphologies" external href="/build/data/morphology" />
+          <SubmenuLink label="Connections" external href="/build/data/connection" />
+          <SubmenuLink label="Electrophysiology" external href="/build/data/electrophysiology" />
+          <SubmenuLink label="Morphologies" external href="/build/data/morphology" />
         </SubmenuGroup>
         <SubmenuLink label="Models" href="/build/models" external />
         <SubmenuLink label="Workflows" href="/build/workflows" external />
@@ -272,53 +254,53 @@ const MainNav: React.FC = () => {
         href="/"
       >
         <SubmenuGroup label="Experimental Data" background="grey-1">
-          <SubmenuGroupLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
-          <SubmenuGroupLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
-          <SubmenuGroupLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
-          <SubmenuGroupLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
-          <SubmenuGroupLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
-          <SubmenuGroupLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
-          <SubmenuGroupLink label="Minis" href="/experimental-data/minis/" />
-          <SubmenuGroupLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
+          <SubmenuLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
+          <SubmenuLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
+          <SubmenuLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
+          <SubmenuLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
+          <SubmenuLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
+          <SubmenuLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
+          <SubmenuLink label="Minis" href="/experimental-data/minis/" />
+          <SubmenuLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
 
-          <SubmenuGroupLink label="Theta" href="/experimental-data/theta/" />
+          <SubmenuLink label="Theta" href="/experimental-data/theta/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Reconstruction Data" background="grey-2">
-          <SubmenuGroupLink label="Volume" href="/reconstruction-data/volume/" />
-          <SubmenuGroupLink label="Cell composition" href="/reconstruction-data/cell-composition/" />
-          <SubmenuGroupLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
-          <SubmenuGroupLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
-          <SubmenuGroupLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
-          <SubmenuGroupLink label="Connections" href="/reconstruction-data/connections/" />
-          <SubmenuGroupLink label="Synapses" href="/reconstruction-data/synapses/" />
-          <SubmenuGroupLink label="Schaffer Collaterlas" href="/reconstruction-data/schaffer-collaterals/" />
-          <SubmenuGroupLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
+          <SubmenuLink label="Volume" href="/reconstruction-data/volume/" />
+          <SubmenuLink label="Cell composition" href="/reconstruction-data/cell-composition/" />
+          <SubmenuLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
+          <SubmenuLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
+          <SubmenuLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
+          <SubmenuLink label="Connections" href="/reconstruction-data/connections/" />
+          <SubmenuLink label="Synapses" href="/reconstruction-data/synapses/" />
+          <SubmenuLink label="Schaffer Collaterlas" href="/reconstruction-data/schaffer-collaterals/" />
+          <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Digital Reconstructions" background="grey-3">
-          <SubmenuGroupLink label="Region" href="/digital-reconstructions/region/" />
-          <SubmenuGroupLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
-          <SubmenuGroupLink label="Connections" href="/digital-reconstructions/connections/" />
-          <SubmenuGroupLink label="Synapses" href="/digital-reconstructions/synapses/" />
-          <SubmenuGroupLink label="Neurons" href="/digital-reconstructions/neurons/" />
-          <SubmenuGroupLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
+          <SubmenuLink label="Region" href="/digital-reconstructions/region/" />
+          <SubmenuLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
+          <SubmenuLink label="Connections" href="/digital-reconstructions/connections/" />
+          <SubmenuLink label="Synapses" href="/digital-reconstructions/synapses/" />
+          <SubmenuLink label="Neurons" href="/digital-reconstructions/neurons/" />
+          <SubmenuLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
         </SubmenuGroup>
 
         <SubmenuGroup label="Validations" background="grey-4">
-          <SubmenuGroupLink label="Neurons" href='/validations/neurons/' />
-          <SubmenuGroupLink label="Connection anatomy" href='/validations/connection-anatomy/' />
-          <SubmenuGroupLink label="Connection physiology" href='/validations/connection-physiology/' />
-          <SubmenuGroupLink label="Schaffer collaterals" href='/validations/schaffer-collaterals/' />
-          <SubmenuGroupLink label="Acetylcholine" href='/validations/acetylcholine/' />
+          <SubmenuLink label="Neurons" href='/validations/neurons/' />
+          <SubmenuLink label="Connection anatomy" href='/validations/connection-anatomy/' />
+          <SubmenuLink label="Connection physiology" href='/validations/connection-physiology/' />
+          <SubmenuLink label="Schaffer collaterals" href='/validations/schaffer-collaterals/' />
+          <SubmenuLink label="Acetylcholine" href='/validations/acetylcholine/' />
         </SubmenuGroup>
 
 
         <SubmenuGroup label="Predictions" background="grey-5">
-          <SubmenuGroupLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
-          <SubmenuGroupLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
-          <SubmenuGroupLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
-          <SubmenuGroupLink label="Theta - MS input" href='/predictions/theta-ms-input' />
+          <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
+          <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
+          <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
+          <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />
         </SubmenuGroup>
 
         <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external grey />
