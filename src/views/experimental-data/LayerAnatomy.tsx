@@ -19,6 +19,8 @@ import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
+import LayerThicknessTable from "./layer-anatomy/thickness";
+
 import { colorName } from './config';
 
 import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
@@ -111,7 +113,8 @@ const LayerAnatomyView: React.FC = () => {
                     </p>
                   </div>
 
-                  <LayerThickness layer={layer as Layer} data={data} />
+                  <LayerThicknessTable layer={layer as Layer} />
+
                 </Collapsible>
 
                 <Collapsible

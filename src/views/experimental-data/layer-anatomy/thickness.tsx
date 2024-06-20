@@ -12,7 +12,7 @@ import SPData from './sp.json';
 import SOData from './so.json';
 
 type TableEntry = {
-    cellId: string;
+    cell_Id: string;
     imageLink: string;
     layerThickness: number;
     noMeasurements: number;
@@ -22,7 +22,7 @@ type TableEntry = {
 const ThicknessColumns = [
     {
         title: 'Cell ID',
-        dataIndex: 'cellId' as keyof TableEntry,
+        dataIndex: 'cell_id' as keyof TableEntry,
         fixed: 'left' as FixedType,
     },
     {
@@ -33,13 +33,14 @@ const ThicknessColumns = [
     },
     {
         title: 'Layer Thickness',
-        dataIndex: 'layerThickness' as keyof TableEntry,
+        dataIndex: 'layer_thickness' as keyof TableEntry,
         render: (value: number) => <NumberFormat value={value} />
     },
     {
         title: 'No. of Measurements',
-        dataIndex: 'noMeasurements' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
+        dataIndex: 'no_mesurement' as keyof TableEntry,
+        render: (value: number) => <NumberFormat value={value} />,
+
     },
     {
         title: 'Contribution',
@@ -48,51 +49,30 @@ const ThicknessColumns = [
     },
 ];
 
+type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
+
 type ThicknessProps = {
-    layer: 'slm' | 'sr' | 'sp' | 'so';
+    layer: Layer;
 };
 
 const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
-    let data: TableEntry[] = [];
+    let data: TableEntry[];
 
     switch (layer) {
-        case 'slm':
-            data = SLMData.map(item => ({
-                cellId: item.cell_id,
-                imageLink: item.image_link,
-                layerThickness: item.layer_thickness,
-                noMeasurements: item.no_mesurement,
-                contribution: item.contribution,
-            }));
+        case 'SML':
+            data = SLMData;
             break;
-        case 'sr':
-            data = SRData.map(item => ({
-                cellId: item.cell_id,
-                imageLink: item.image_link,
-                layerThickness: item.layer_thickness,
-                noMeasurements: item.no_mesurement,
-                contribution: item.contribution,
-            }));
+        case 'SR':
+            data = SRData;
             break;
-        case 'sp':
-            data = SPData.map(item => ({
-                cellId: item.cell_id,
-                imageLink: item.image_link,
-                layerThickness: item.layer_thickness,
-                noMeasurements: item.no_mesurement,
-                contribution: item.contribution,
-            }));
+        case 'SP':
+            data = SPData;
             break;
-        case 'so':
-            data = SOData.map(item => ({
-                cellId: item.cell_id,
-                imageLink: item.image_link,
-                layerThickness: item.layer_thickness,
-                noMeasurements: item.no_mesurement,
-                contribution: item.contribution,
-            }));
+        case 'SO':
+            data = SOData;
             break;
         default:
+            data = [];
             break;
     }
 
