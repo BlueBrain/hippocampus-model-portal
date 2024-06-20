@@ -429,7 +429,7 @@ $collapsible-padding: 20px 30px;
 
   .content {
     background-color: map-get($basePalette, "white");
-    color: map-get($basePalette, "navy-4");
+    color: black;
     padding: $collapsible-padding;
     overflow: hidden;
   }
@@ -448,6 +448,7 @@ $collapsible-padding: 20px 30px;
   .content {
     max-height: 20000px;
     transition: max-height 1s, padding 0.3s;
+
   }
 }
 
