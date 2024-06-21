@@ -64,7 +64,7 @@ const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
     let data: TableEntry[];
 
     switch (layer) {
-        case 'SML':
+        case 'SLM':
             data = SLMData;
             break;
         case 'SR':
