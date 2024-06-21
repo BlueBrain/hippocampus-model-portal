@@ -38,9 +38,6 @@ import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 
 import morphologies from '@/exp-morphology-list.json';
 
-import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
-
-
 const factsheetEntryTypes = [
   'all',
   'soma',
