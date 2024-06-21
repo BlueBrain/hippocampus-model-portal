@@ -16,7 +16,7 @@ const Brand: React.FC = () => {
           alt="EPFL logo"
         />
         <div className="divider"></div>
-        <span className="text-bbp-blue">Blue Brain Project</span>
+        <span className="text-bbp">Blue Brain Project</span>
         <div className="divider second-divider"></div>
         <span className="hub">The Hippocampus Hub</span>
       </a>

@@ -3,19 +3,11 @@ $basePalette: (
   "grey": #e5e9f4,
   "grey-1": #f8f9fd,
   "grey-2": #b1b2b2,
-  "navy-0": #52617d,
   "navy-1": #3b4165,
   "navy-2": #303354,
-  "navy-3": #16153d,
-  "navy-4": #050a30,
   "yellow-1": #ffc500,
   "yellow-2": #ff7a1b,
-  "bbp-blue": #5CC4EE,
-  "epfl-red": #FF0000
 );
-
-
-
 
 $theme: (
   "experimental-data": #EFAE97,
@@ -23,4 +15,9 @@ $theme: (
   "digital-reconstruction": #CC8A99,
   "validations": #9E98AE,
   "predictions": #8398B5,
-  )
+);
+
+$brand: (
+  "bbp": #5CC4EE,
+  "epfl": #FF0000
+);
