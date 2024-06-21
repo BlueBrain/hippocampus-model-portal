@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import { FixedType } from 'rc-table/lib/interface';
+import { hippocampus, basePath, nexusImgLoaderUrl } from "../../../config";
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
@@ -11,25 +13,30 @@ import SRData from './sr.json';
 import SPData from './sp.json';
 import SOData from './so.json';
 
+type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
+
 type TableEntry = {
     cell_Id: string;
-    imageLink: string;
     layerThickness: number;
     noMeasurements: number;
     contribution: string;
 };
 
-const ThicknessColumns = [
+const ThicknessColumns = (layer) => [
     {
         title: 'Cell ID',
         dataIndex: 'cell_id' as keyof TableEntry,
         fixed: 'left' as FixedType,
+        render: (link: string) => <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${layer}&mtype=SLM_PPA&instance=${link}`} target="_blank" rel="noopener noreferrer">{link}</a>,
     },
     {
-        title: 'Image Link',
-        dataIndex: 'imageLink' as keyof TableEntry,
-        fixed: 'left' as FixedType,
-        render: (link: string) => <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>,
+        title: 'Slice Image',
+        dataIndex: 'cell_id' as keyof TableEntry,
+        render: (link: string) => {
+            return (
+                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`} alt={`slice image ${link}`} width={150} height={100} />
+            );
+        },
     },
     {
         title: 'Layer Thickness',
@@ -48,8 +55,6 @@ const ThicknessColumns = [
         fixed: 'left' as FixedType,
     },
 ];
-
-type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
 type ThicknessProps = {
     layer: Layer;
@@ -81,7 +86,7 @@ const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
             <ResponsiveTable<TableEntry>
                 className="mt-3"
                 data={data}
-                columns={ThicknessColumns}
+                columns={ThicknessColumns(layer)}
             />
             <div className="text-right mt-2">
                 <HttpDownloadButton onClick={() => downloadAsJson(data, `exp-${layer}-table.json`)}>
