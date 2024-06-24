@@ -41,7 +41,7 @@ const ConnectionPhysiologyView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p >
-                    Each synapse between pairs of pre and postsynaptic morphological types (m-types) shows unique properties in terms of strength and kinetics. We used data from literature to estimate the postsynaptic potential (PSP) and current (PSC), and the kinetics of the postsynaptic receptor (AMPA, NMDA, GABAA. GABAB is not considered).
+                    Each synapse between pairs of pre- and postsynaptic morphological types (m-types) shows unique properties in terms of strength and kinetics. We used data from literature to estimate the postsynaptic potential (PSP) and postsynaptic current (PSC), and the kinetics of the postsynaptic receptor (i.e. AMPA, NMDA, GABAA. Please note that GABAB was not included in our dataset).
                   </p>
                 </InfoBox>
               </div>

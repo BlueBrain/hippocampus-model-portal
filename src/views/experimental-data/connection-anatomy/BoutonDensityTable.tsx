@@ -226,15 +226,15 @@ const BoutonDenisityTable = () => {
       <small>
         <sup>[1]</sup> The authors do not specify if this is std or SEM. Anyway,
         in a previous publication (Sik et al., 1994) they used std. We can assume they are std.
-      </small> <br/>
+      </small> <br />
       <small>
         <sup>[2]</sup> The authors define the sample size (n) probably as the number of sampled segments
         rather than the number of animals.
-      </small> <br/>
+      </small> <br />
       <small>
         <sup>[3]</sup> The authors do not mention specie and age in the paper. Anyway,
         a later paper (Sik et al., 1995) mentions the result so we assume they use the same method.
-        </small> <br/>
+      </small> <br />
       <small>
         <sup>[4]</sup> Calculated (see below).
       </small>

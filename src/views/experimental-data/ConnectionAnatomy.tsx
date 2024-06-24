@@ -89,7 +89,7 @@ const ConnectionAnatomyView: React.FC = () => {
           id="boutonDensitySection"
           title="Bouton density"
         >
-          <h3 >Synaptic boutons or simply boutons are enlargements of the axon, visible with light microscopy, that represent putative synaptic contacts. Bouton density is normally expressed as the number of boutons per 100 um.
+          <h3 >Synaptic boutons or simply boutons are enlargements of the axon, visible with light microscopy, that represent putative synaptic contacts. Bouton density is normally expressed as the number of boutons per 100 μm.
           </h3>
           <BoutonDenisityTable />
         </Collapsible>
@@ -139,7 +139,7 @@ const ConnectionAnatomyView: React.FC = () => {
           className="mt-4"
           title="Percentage of synapse divergence per layer"
         >
-          <h3>We consider here the distribution of synapse divergence per morphological type across the different layers.</h3>
+          <h3>We present here the distribution of synapse divergence per morphological type across the different layers.</h3>
           <SynDivLayTable />
         </Collapsible>
 
