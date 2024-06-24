@@ -72,7 +72,6 @@ const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false
   );
 };
 
-
 type SubmenuGroupProps = {
   label: string;
   href?: string;
@@ -80,7 +79,6 @@ type SubmenuGroupProps = {
   color?: string;
   menuGroup?: 'menu-group-build'
 };
-
 
 const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color }) => {
   const [isOpened, setIsOpened] = useState<Boolean>(false);
@@ -107,7 +105,6 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
     </>
   )
 }
-
 
 const MainNav: React.FC = () => {
   return (

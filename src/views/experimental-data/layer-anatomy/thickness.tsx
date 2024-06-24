@@ -34,7 +34,7 @@ const ThicknessColumns = (layer) => [
         dataIndex: 'cell_id' as keyof TableEntry,
         render: (link: string) => {
             return (
-                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`} alt={`slice image ${link}`} width={150} height={100} />
+                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`} alt={`slice image ${link}`} width={400} height={300} />
             );
         },
     },
