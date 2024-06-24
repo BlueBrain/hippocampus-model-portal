@@ -16,10 +16,14 @@ import SOData from './so.json';
 type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
 type TableEntry = {
-    cell_Id: string;
-    layerThickness: number;
-    noMeasurements: number;
-    contribution: string;
+    cell_id: string;
+    layer_thickness: number;
+    no_mesurement: number;
+    m_type: string;
+    contribution: {
+        name: string;
+        institution: string;
+    };
 };
 
 const ThicknessColumns = (layer) => [
@@ -27,7 +31,11 @@ const ThicknessColumns = (layer) => [
         title: 'Cell ID',
         dataIndex: 'cell_id' as keyof TableEntry,
         fixed: 'left' as FixedType,
-        render: (link: string) => <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${layer}&mtype=SLM_PPA&instance=${link}`} target="_blank" rel="noopener noreferrer">{link}</a>,
+        render: (text: string, record: TableEntry) => (
+            <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${layer}&mtype=${record.m_type}&instance=${record.cell_id}`} target="_blank" rel="noopener noreferrer">
+                {record.cell_id}
+            </a>
+        ),
     },
     {
         title: 'Slice Image',
@@ -47,7 +55,6 @@ const ThicknessColumns = (layer) => [
         title: 'No. of Measurements',
         dataIndex: 'no_mesurement' as keyof TableEntry,
         render: (value: number) => <NumberFormat value={value} />,
-
     },
     {
         title: 'Contribution',
