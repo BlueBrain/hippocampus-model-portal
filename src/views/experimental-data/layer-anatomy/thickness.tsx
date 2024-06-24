@@ -34,7 +34,7 @@ const ThicknessColumns = (layer) => [
         dataIndex: 'cell_id' as keyof TableEntry,
         render: (link: string) => {
             return (
-                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`} alt={`slice image ${link}`} width={400} height={300} />
+                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/thumbnails/${link}.jpeg`} alt={`slice image ${link}`} width={200} height={150} />
             );
         },
     },
@@ -53,6 +53,12 @@ const ThicknessColumns = (layer) => [
         title: 'Contribution',
         dataIndex: 'contribution' as keyof TableEntry,
         fixed: 'left' as FixedType,
+        render: (contribution: { name: string; institution: string }) => (
+            <div>
+                <span>{contribution.name}</span><br />
+                <span>{contribution.institution}</span>
+            </div>
+        ),
     },
 ];
 

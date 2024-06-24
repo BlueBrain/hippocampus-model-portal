@@ -2,73 +2,109 @@
     {
         "cell_id": "011017HP2",
         "layer_thickness": 150,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "011127HP1",
         "layer_thickness": 176,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "050921AM2",
         "layer_thickness": 182,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "050921AM2",
         "layer_thickness": 128,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "060919AM2",
         "layer_thickness": 173,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "970428A1",
         "layer_thickness": 131,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "970627BHP1",
         "layer_thickness": 150,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "970911C",
         "layer_thickness": 120,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "980120A",
         "layer_thickness": 89,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "980205AB",
         "layer_thickness": 152,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "990611HP2",
         "layer_thickness": 135,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     },
     {
         "cell_id": "990803",
         "layer_thickness": 165,
-        "contribution": "Armando Romani Blue Brain Project (EPFL)",
+        "contribution": {
+            "name": "Armando Romani",
+            "institution": "Blue Brain Project (EPFL)"
+        },
         "no_mesurement": 1
     }
 ]
