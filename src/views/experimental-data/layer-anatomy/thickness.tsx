@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { FixedType } from 'rc-table/lib/interface';
 import { hippocampus, basePath, nexusImgLoaderUrl } from "../../../config";
@@ -7,6 +8,15 @@ import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
+
+// Dynamically import Lightbox
+const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
+    ssr: false,
+    loading: () => <p>Loading...</p>,
+});
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+
 
 import SLMData from './slm.json';
 import SRData from './sr.json';
@@ -27,7 +37,7 @@ type TableEntry = {
     };
 };
 
-const ThicknessColumns = (layer) => [
+const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxIndex) => [
     {
         title: 'Cell ID',
         dataIndex: 'cell_id' as keyof TableEntry,
@@ -41,9 +51,21 @@ const ThicknessColumns = (layer) => [
     {
         title: 'Slice Image',
         dataIndex: 'cell_id' as keyof TableEntry,
-        render: (link: string) => {
+        render: (link: string, record: TableEntry, index: number) => {
+            const imageUrl = `${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`;
             return (
-                <Image src={`${nexusImgLoaderUrl}/exp-morph-images/thumbnails/${link}.jpeg`} alt={`slice image ${link}`} width={200} height={150} />
+                <Image
+                    src={`${nexusImgLoaderUrl}/exp-morph-images/thumbnails/${link}.jpeg`}
+                    alt={`slice image ${link}`}
+                    width={200}
+                    height={150}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                        setLightboxSlides(data.map(entry => ({ src: `${nexusImgLoaderUrl}/exp-morph-images/${entry.cell_id}.jpeg` })));
+                        setLightboxIndex(index);
+                        setLightboxOpen(true);
+                    }}
+                />
             );
         },
     },
@@ -75,6 +97,10 @@ type ThicknessProps = {
 };
 
 const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxSlides, setLightboxSlides] = useState([]);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
     let data: TableEntry[];
 
     switch (layer) {
@@ -100,13 +126,23 @@ const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
             <ResponsiveTable<TableEntry>
                 className="mt-3"
                 data={data}
-                columns={ThicknessColumns(layer)}
+                columns={ThicknessColumns(data, setLightboxOpen, setLightboxSlides, setLightboxIndex)}
             />
             <div className="text-right mt-2">
                 <HttpDownloadButton onClick={() => downloadAsJson(data, `exp-${layer}-table.json`)}>
                     Download table data
                 </HttpDownloadButton>
             </div>
+            {lightboxOpen && (
+                <Lightbox
+                    open={lightboxOpen}
+                    close={() => setLightboxOpen(false)}
+                    slides={lightboxSlides}
+                    index={lightboxIndex}
+                    onIndexChange={setLightboxIndex}
+
+                />
+            )}
         </>
     );
 };
