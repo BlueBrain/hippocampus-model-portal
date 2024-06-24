@@ -32,17 +32,14 @@ const anatomyColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'Exp. feature',
     dataIndex: 'expFeature' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'Min',

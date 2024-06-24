@@ -13,7 +13,7 @@
     "region": "CA1",
     "nAnimals": 7,
     "nSynapses": "-",
-    "ref": "Bezaire and Soltesz, 2013, data from Megias et al., 2001"
+    "ref": "Bezaire and Soltesz, 2013"
   },
   {
     "from": "SC",
@@ -29,7 +29,7 @@
     "region": "CA1",
     "nAnimals": 4,
     "nSynapses": 70,
-    "ref": "Bezaire and Soltesz, 2013, data from Takacs et al., 2012"
+    "ref": "Bezaire and Soltesz, 2013"
   },
   {
     "from": "SC",
