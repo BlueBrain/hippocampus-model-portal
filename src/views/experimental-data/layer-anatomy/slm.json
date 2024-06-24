@@ -1,6 +1,7 @@
 [
     {
         "cell_id": "011017HP2",
+        "layer": "SO",
         "layer_thickness": 150,
         "m_type": "SO_OLM",
         "contribution": {
@@ -11,6 +12,7 @@
     },
     {
         "cell_id": "011127HP1",
+        "layer": "SLM",
         "layer_thickness": 176,
         "m_type": "SLM_PPA",
         "contribution": {
@@ -21,6 +23,7 @@
     },
     {
         "cell_id": "050921AM2",
+        "layer": "SP",
         "layer_thickness": 182,
         "m_type": "SP_PC",
         "contribution": {
@@ -31,6 +34,7 @@
     },
     {
         "cell_id": "050921AM2",
+        "layer": "SP",
         "layer_thickness": 128,
         "m_type": "SP_PC",
         "contribution": {
@@ -41,6 +45,7 @@
     },
     {
         "cell_id": "060919AM2",
+        "layer": "SP",
         "layer_thickness": 173,
         "m_type": "SP_PC",
         "contribution": {
@@ -51,6 +56,7 @@
     },
     {
         "cell_id": "970428A1",
+        "layer": "SO",
         "layer_thickness": 131,
         "m_type": "SO_OLM",
         "contribution": {
@@ -61,6 +67,7 @@
     },
     {
         "cell_id": "970627BHP1",
+        "layer": "SP",
         "layer_thickness": 150,
         "m_type": "SP_PVBC",
         "contribution": {
@@ -71,6 +78,7 @@
     },
     {
         "cell_id": "970911C",
+        "layer": "SP",
         "layer_thickness": 120,
         "m_type": "SP_AA",
         "contribution": {
@@ -81,6 +89,7 @@
     },
     {
         "cell_id": "980120A",
+        "layer": "SO",
         "layer_thickness": 89,
         "m_type": "SO_BP",
         "contribution": {
@@ -91,6 +100,7 @@
     },
     {
         "cell_id": "980205AB",
+        "layer": "SP",
         "layer_thickness": 152,
         "m_type": "SP_PC",
         "contribution": {
@@ -101,6 +111,7 @@
     },
     {
         "cell_id": "990611HP2",
+        "layer": "SR",
         "layer_thickness": 135,
         "m_type": "SR_SCA",
         "contribution": {
@@ -111,6 +122,7 @@
     },
     {
         "cell_id": "990803",
+        "layer": "SP",
         "layer_thickness": 165,
         "m_type": "SP_PC",
         "contribution": {

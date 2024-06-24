@@ -17,6 +17,7 @@ type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
 type TableEntry = {
     cell_id: string;
+    layer: string;
     layer_thickness: number;
     no_mesurement: number;
     m_type: string;
@@ -32,7 +33,7 @@ const ThicknessColumns = (layer) => [
         dataIndex: 'cell_id' as keyof TableEntry,
         fixed: 'left' as FixedType,
         render: (text: string, record: TableEntry) => (
-            <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${layer}&mtype=${record.m_type}&instance=${record.cell_id}`} target="_blank" rel="noopener noreferrer">
+            <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${record.layer}&mtype=${record.m_type}&instance=${record.cell_id}`} rel="noopener noreferrer">
                 {record.cell_id}
             </a>
         ),
