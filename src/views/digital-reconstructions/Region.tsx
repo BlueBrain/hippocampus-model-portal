@@ -55,15 +55,8 @@ const RegionView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    Reconstruction data are combined to produce an instance of the CA1 network model.
                   </p>
                 </InfoBox>
               </div>
@@ -94,6 +87,15 @@ const RegionView: React.FC = () => {
           id="regionSection"
           title="Factsheet"
         >
+          <h3>
+            {volumeSection === 'region' ? (
+              <span>Region CA1. The image shows soma positions.</span>
+            ) : volumeSection === 'cylinder' ? (
+              <span>Coronal slice of 400 um from the dorsal CA1. The image shows soma positions.</span>
+            ) : volumeSection === 'slice' ? (
+              <span> Cylindrical subvolume of radius 300 um from the dorsal CA1. The image shows soma positions.</span>
+            ) : null}
+          </h3>
           <HttpData path={regionFactsheetPath(volumeSection)}>
             {(data, loading) => (
               <Spin spinning={loading}>
