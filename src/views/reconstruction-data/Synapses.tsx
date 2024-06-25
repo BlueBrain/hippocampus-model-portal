@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { colorName } from './config';
 import Filters from '@/layouts/Filters';
@@ -40,15 +41,9 @@ const SynapsesView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    Starting from literature <Link href={"../experimental-data/connection-physiology/"} className={"link theme-" + theme}>data</Link> and pair recordings (<Link href="https://pubmed.ncbi.nlm.nih.gov/27038232/" className={"link theme-" + theme}>Kohus et al., 2016</Link>), we define a set of parameters and 22 rules to describe all possible pathways. We divide the parameters in two groups: presynaptic and postsynaptic.
+
                   </p>
                 </InfoBox>
               </div>
@@ -63,6 +58,7 @@ const SynapsesView: React.FC = () => {
               <div className={selectorStyle.selectorColumn}>
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
+                  {/* 
                   <Image
                     src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
                     width="640"
@@ -70,6 +66,7 @@ const SynapsesView: React.FC = () => {
                     unoptimized
                     alt=""
                   />
+                  */}
                 </div>
               </div>
             </div>
