@@ -11,6 +11,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import SynsPerConnectionTable from './connections/synapsesPerConnection';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 
@@ -73,14 +75,38 @@ const ConnectionsView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[]}
+        navItems={[
+          { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
+          { id: 'boutonDensitySection', label: 'Bouton density' },
+        ]}
       >
+
         <Collapsible
-          id="tbd"
-          title="TBD"
+          id="nbSynapsesPerConnectionSection"
+          title="Number of synapses per connection"
         >
-          <h3 className="text-tmp">Text description</h3>
+          <p>
+            For <u>characterized pathways</u> we can use data from literature (see <Link href={"/experimental-data/connection-anatomy/"}> connection anatomy</Link>)
+          </p>
+          <p>For <u>uncharacterized pathways</u> we can use the following plot to extrapolate the ratio between appositions and synapses per connection. </p>
+
+          <SynsPerConnectionTable />
+
+          <p>For each pathway, the standard deviation is computed multiplying the mean and the coefficient of variation (CV) which is set to 0.5.</p>
         </Collapsible>
+
+        <Collapsible
+          id="boutonDensitySection"
+          title="Bouton density"
+        >
+
+          <p>For <u>characterized pathways</u> we can use data from literature (see <Link href={"/experimental-data/connection-anatomy/"}>connection anatomy</Link>)</p>
+          <p>For <u>uncharacterized pathways</u> we can use the average of the values from the characterized pathways (0.2260 μm-1).</p>
+        </Collapsible>
+
+
+
+
 
       </DataContainer>
     </>
