@@ -293,7 +293,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
 
     return (
         <div className={styles.container} style={{ width: '100%', minHeight: '400px' }}>
-            <div ref={mountRef} style={{ width: '100%', minHeight: '400px' }}></div>
+            <div ref={mountRef} style={{ width: 'calc(100% - 2px)', minHeight: '400px' }}></div>
         </div>
     );
 };
