@@ -796,11 +796,20 @@ $collapsible-padding: 20px 30px;
   }
 
   &__body {
-    margin: auto 0;
+
     width: 100%;
     height: 100%;
     background-color: #313354;
 
+  }
+
+  &__selector-container {
+
+    width: 100%;
+    height: 100%;
+    background-color: #313354;
+    display: flex;
+    align-items: center;
   }
 }
 
