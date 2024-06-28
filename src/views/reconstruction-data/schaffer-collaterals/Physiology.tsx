@@ -77,7 +77,7 @@ const Anatomy: React.FC = () => {
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
                         PhysiologyData,
-                        `physiology-table.json`
+                        `Physiology-table.json`
                     )}
                 >
                     table data
