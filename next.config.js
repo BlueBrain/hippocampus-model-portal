@@ -44,9 +44,26 @@ const nextConfig = {
         destination: '/digital-reconstructions/neurons',
         permanent: false,
       },
-    ]
+    ];
+  },
+  webpack: (config, { isServer }) => {
+    // Add .frag and .vert file extensions to the resolver
+    config.resolve.extensions.push('.frag', '.vert');
+
+    // Add GLSL loader rules
+    config.module.rules.push(
+      {
+        test: /\.(glsl|frag|vert)$/,
+        exclude: /node_modules/,
+        use: [
+          'raw-loader',
+          'webpack-glsl-loader'
+        ],
+      }
+    );
+
+    return config;
   },
 };
-
 
 module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, SentryWebpackPluginOptions));

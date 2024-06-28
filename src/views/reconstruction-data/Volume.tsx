@@ -24,7 +24,9 @@ import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
 import { colorName } from './config';
+
 import VolumeViewer from './volume/volume-viewer';
+import VectorViewer from './volume/vectors-viewer/VectorViewer';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -180,6 +182,7 @@ const VolumeView: React.FC = () => {
           className="mt-4"
         >
           <h3>e define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
+          <VectorViewer />
         </Collapsible>
 
         <Collapsible

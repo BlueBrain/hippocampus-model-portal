@@ -1,7 +1,0 @@
-**/*.test.ts
-**/*.test.tsx
-**/*.spec.ts
-**/*.spec.tsx
-node_modules/
-**/node_modules/
-**/*.js
