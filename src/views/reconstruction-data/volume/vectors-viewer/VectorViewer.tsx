@@ -1,14 +1,13 @@
-import React from "react";
-
+import React, { useState } from "react";
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined, CameraOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Drawer, Tooltip } from 'antd';
-
+import { FullscreenOutlined, FullscreenExitOutlined, CameraOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
+import { saveAs } from 'file-saver';
+import { WebGLRenderer } from 'three'; // Ensure WebGLRenderer is imported
 import Scene from "./Scene";
 import { MeshInfo } from "./types";
 import { getGradientCanvas } from "./utils";
 import Selector from "./Selector";
-
 import Styles from "./vector-viewer.module.scss";
 
 export interface AppProps {
@@ -26,9 +25,9 @@ const defaultMeshInfo: MeshInfo = {
 const defaultVert = new Float32Array([0, 0, 0, 1, 1, 1]);
 const defaultElem = [0, 1, 2];
 
-
 export default function ({ className, meshInfo = defaultMeshInfo, vert = defaultVert, elem = defaultElem }: AppProps) {
     const fullscreenHandle = useFullScreenHandle();
+    const [painter, setPainter] = useState<Painter | null>(null);
 
     const toggleFullscreen = () => {
         if (fullscreenHandle.active) {
@@ -38,17 +37,39 @@ export default function ({ className, meshInfo = defaultMeshInfo, vert = default
         }
     };
 
+    const downloadRender = (filename: string) => {
+        if (!painter) return;
+
+        const { clientWidth, clientHeight } = painter.renderer.domElement.parentElement as HTMLElement;
+
+        const renderer = new WebGLRenderer({
+            antialias: true,
+            alpha: true,
+            preserveDrawingBuffer: true,
+            physicallyCorrectColors: true,
+        });
+
+        renderer.setSize(clientWidth * 3, clientHeight * 3);
+        renderer.render(painter.scene, painter.camera);
+
+        renderer.domElement.toBlob(blob => {
+            if (blob) {
+                saveAs(blob, `${filename}.png`);
+            }
+        });
+        renderer.dispose();
+    };
+
     return (
         <FullScreen
             className={fullscreenHandle.active ? undefined : Styles.fixedAspectRatio}
             handle={fullscreenHandle}
         >
-
             <div className={Styles.topRightCtrlGroup}>
                 <Tooltip title="Download render as a PNG">
                     <Button
                         size="small"
-                        //onClick={downloadRender}
+                        onClick={() => downloadRender(`volume_render_CA1`)}
                         icon={<CameraOutlined />}
                     />
                 </Tooltip>
@@ -61,7 +82,6 @@ export default function ({ className, meshInfo = defaultMeshInfo, vert = default
                         icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     />
                 </Tooltip>
-
             </div>
 
             <div className={getClassName(className)}>
@@ -70,6 +90,7 @@ export default function ({ className, meshInfo = defaultMeshInfo, vert = default
                     meshInfo={meshInfo}
                     vert={vert}
                     elem={elem}
+                    onPainterInit={setPainter}
                 />
                 <div className={Styles.colorrampContainer}>
                     <div style={{ color: "white" }}>0.0</div>

@@ -1,27 +1,34 @@
-import React from "react"
-import Styles from "./Scene.module.css"
-import Painter from "./painter"
-import { MeshInfo } from "../types"
+import React, { useRef, useEffect } from "react";
+import Styles from "./Scene.module.css";
+import Painter from "./painter";
+import { MeshInfo } from "../types";
 
-export interface AppProps {
-    className?: string
-    meshInfo: MeshInfo
-    vert: Float32Array
-    elem: number[]
+export interface SceneProps {
+    className?: string;
+    meshInfo: MeshInfo;
+    vert: Float32Array;
+    elem: number[];
+    onPainterInit?: (painter: Painter) => void;  // Add this prop to pass Painter instance
 }
 
-export default function ({ className = "", meshInfo, vert, elem }: AppProps) {
-    console.log("Scene - meshInfo:", meshInfo);
+export default function Scene({ className = "", meshInfo, vert, elem, onPainterInit }: SceneProps) {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const painterRef = useRef<Painter | null>(null);
 
-    const handleCanvasMounted = (canvas: HTMLCanvasElement | null) => {
-        if (!canvas) return
+    useEffect(() => {
+        if (canvasRef.current) {
+            const painter = new Painter(canvasRef.current, meshInfo, vert, elem);
+            painterRef.current = painter;
+            if (onPainterInit) {
+                onPainterInit(painter);  // Pass the painter instance
+            }
+        }
+    }, [meshInfo, vert, elem, onPainterInit]);
 
-        new Painter(canvas, meshInfo, vert, elem)
-    }
     return (
         <canvas
             className={`${className} ${Styles.Scene}`}
-            ref={handleCanvasMounted}
+            ref={canvasRef}
         ></canvas>
-    )
+    );
 }
