@@ -3,6 +3,9 @@
 @import 'antd/lib/style/index.css';
 @import 'flexboxgrid';
 
+@import 'config/_colors';
+@import 'config/_fonts';
+@import 'config/_queries';
 
 @import 'antd/lib/button/style/index.css';
 @import 'antd/lib/select/style/index.css';
@@ -22,10 +25,9 @@
 @import 'antd/lib/segmented/style/index.css';
 @import 'antd/lib/tooltip/style/index.css';
 
+// Pages
+@import './explore-models';
 
-@import 'config/_colors';
-@import 'config/_fonts';
-@import 'config/_queries';
 
 
 // colors
@@ -38,14 +40,18 @@
 }
 
 
-html, body {
+
+
+html,
+body {
   @include font-default;
   color: map-get($basePalette, "white");
-  background-color: #17151A;
+  background-color: #050A30;
   scroll-behavior: smooth;
   width: auto;
   height: auto;
   min-height: 100vh;
+
 }
 
 button,
@@ -53,131 +59,94 @@ a {
   cursor: pointer;
 }
 
-p, li {
+p,
+li {
   font-weight: 300;
+  line-height: 2rem;
+  font-size: map-get($fontSize, "medium");
 }
 
 section {
   padding: 40px 0;
 }
 
+.link {
+  &.theme-1 {
+    color: map-get($theme, "experimental-data");
+  }
+
+  &.theme-2 {
+    color: map-get($theme, "reconstruction-data");
+  }
+
+  &.theme-3 {
+    color: map-get($theme, "digital-reconstruction");
+  }
+
+  &.theme-4 {
+    color: map-get($theme, "validations");
+  }
+
+  &.theme-5 {
+    color: map-get($theme, "predictions");
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+}
+
 
 // common, utils
 
-.pos-relative {
-  position: relative;
+
+
+// --------- Spacing classes ---------
+
+@mixin spacing-classes($direction, $property) {
+  @for $i from 0 through 5 {
+    .#{$direction}-#{$i} {
+      #{$property}: if($i ==0, 0 !important, $i * 0.5rem);
+    }
+  }
 }
 
-.mt-0 {
-  margin-top: 0 !important;
-}
+// Generating margin classes
+@include spacing-classes(m, margin);
 
-.mb-0 {
-  margin-bottom: 0 !important;
-}
+// Generating margin-top classes
+@include spacing-classes(mt, margin-top);
 
-.mr-0 {
-  margin-bottom: 0 !important;
-}
+// Generating margin-bottom classes
+@include spacing-classes(mb, margin-bottom);
 
-.ml-0 {
-  margin-left: 0 !important;
-}
+// Generating margin-right classes
+@include spacing-classes(mr, margin-right);
 
-.mt-1 {
-  margin-top: 0.5rem;
-}
+// Generating margin-left classes
+@include spacing-classes(ml, margin-left);
 
-.mb-1 {
-  margin-bottom: 0.5rem;
-}
+// Generating padding classes
+@include spacing-classes(p, padding);
 
-.mr-1 {
-  margin-right: 0.5rem;
-}
+// Generating padding-top classes
+@include spacing-classes(pt, padding-top);
 
-.ml-1 {
-  margin-left: 0.5rem;
-}
+// Generating padding-bottom classes
+@include spacing-classes(pb, padding-bottom);
 
-.mt-2 {
-  margin-top: 1rem;
-}
+// Generating padding-right classes
+@include spacing-classes(pr, padding-right);
 
-.mb-2 {
-  margin-bottom: 1rem;
-}
+// Generating padding-left classes
+@include spacing-classes(pl, padding-left);
 
-.mr-2 {
-  margin-right: 1rem;
-}
 
-.ml-2 {
-  margin-left: 1rem;
-}
+// --------- Text align  classes ---------
 
-.mt-3 {
-  margin-top: 2rem;
-}
-
-.mb-3 {
-  margin-bottom: 2rem;
-}
-
-.mr-3 {
-  margin-right: 2rem;
-}
-
-.ml-3 {
-  margin-left: 2rem;
-}
-
-.mt-4 {
-  margin-top: 4rem;
-}
-
-.mb-4 {
-  margin-bottom: 4rem;
-}
-
-.mr-4 {
-  margin-right: 4rem;
-}
-
-.ml-4 {
-  margin-left: 4rem;
-}
-
-.p-1 {
-  padding: 0.5rem;
-}
-
-.p-2 {
-  padding: 1rem;
-}
-
-.p-3 {
-  padding: 2rem;
-}
-
-.p-4 {
-  padding: 4rem;
-}
-
-.pt-1 {
-  padding-top: 0.5rem;
-}
-
-.pb-1 {
-  padding-bottom: 0.5rem;
-}
-
-.pt-2 {
-  padding-top: 1rem;
-}
-
-.pb-2 {
-  padding-bottom: 1rem;
+.text-left {
+  text-align: left;
 }
 
 .text-right {
@@ -187,6 +156,8 @@ section {
 .text-center {
   text-align: center;
 }
+
+// --------- Text tranform classes ---------
 
 .text-uppercase {
   text-transform: uppercase;
@@ -204,17 +175,27 @@ section {
   font-weight: bold;
 }
 
+// --------- Text color classes ---------
+
 .text-white {
   color: white;
-}
-
-.text-grey {
-  color: rgba(247, 248, 252, 0.5);
 }
 
 .text-tmp {
   color: rgb(250, 173, 20);
 }
+
+// Brand colors
+
+.text-bbp {
+  color: map-get($brand, "bbp");
+}
+
+.text-epfl {
+  color: map-get($brand, "epfl");
+}
+
+// --------- 100% width and height classes
 
 .w-100 {
   width: 100%;
@@ -224,32 +205,62 @@ section {
   height: 100%;
 }
 
+// --------- Display classes ---------
+
+.inline-block {
+  display: inline-block;
+}
+
 .block {
   display: block;
 }
 
-.v-align-middle {
-  vertical-align: middle;
+.inline {
+  display: inline;
 }
 
-.narrowColumn {
-  max-width: 75px;
+// --------- Position classes ---------
+
+.pos-relative {
+  position: relative;
 }
+
+.pos-absolute {
+  position: absolute;
+}
+
+.pos-fixed {
+  position: fixed;
+}
+
+.pos-sticky {
+  position: sticky;
+}
+
+
 
 .spin {
   animation: spin 2s infinite linear;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(359deg);
   }
 }
 
 
-.ant-table-thead > tr > th {
+
+.narrowColumn {
+  max-width: 75px;
+}
+
+
+.ant-table-thead>tr>th {
   font-weight: bold;
 }
 
@@ -260,13 +271,13 @@ tfoot.ant-table-summary {
 
 .responsiveTable.no-left-margin.nested-table.xs-column {
   .ant-table.ant-table-layout-fixed {
-      margin:0;
+    margin: 0;
   }
 }
 
 .responsiveTable {
   @media (max-width: $ant-breakpoint-sm) {
-    .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+    .ant-table-tbody>tr.ant-table-row-level-0:hover>td {
       background: unset;
     }
   }
@@ -311,6 +322,7 @@ tfoot.ant-table-summary {
 
   &.large {
     font-size: 1.5rem;
+
     @media (max-width: $small) {
       border-width: $borderWidth;
       height: $height;
@@ -348,11 +360,9 @@ tfoot.ant-table-summary {
     border: none;
     line-height: $height + (2 * $borderWidth);
     background: map-get($basePalette, "yellow-2");
-    background: linear-gradient(
-      90deg,
-      map-get($basePalette, "yellow-1"),
-      map-get($basePalette, "yellow-2")
-    );
+    background: linear-gradient(90deg,
+        map-get($basePalette, "yellow-1"),
+        map-get($basePalette, "yellow-2"));
 
     .active &,
     &:active,
@@ -394,6 +404,7 @@ $collapsible-padding: 20px 30px;
 @mixin collapsible__basis {
   border-radius: 3px;
   overflow: hidden;
+
   .header {
     position: relative;
     overflow: hidden;
@@ -402,20 +413,23 @@ $collapsible-padding: 20px 30px;
     font-size: map-get($fontSize, "large");
     font-weight: 400;
     padding: 20px 60px 20px 30px;
+
     &:hover {
       cursor: pointer;
       background-color: #545A70;
     }
   }
+
   .arrow {
     position: absolute;
     top: calc(50% - 17px);
     right: 30px;
     transition: transform 0.5s;
   }
+
   .content {
     background-color: map-get($basePalette, "white");
-    color: map-get($basePalette, "navy-4");
+    color: black;
     padding: $collapsible-padding;
     overflow: hidden;
   }
@@ -430,17 +444,21 @@ $collapsible-padding: 20px 30px;
 
 .collapsible__expanded {
   @include collapsible__basis;
+
   .content {
     max-height: 20000px;
     transition: max-height 1s, padding 0.3s;
+
   }
 }
 
 .collapsible__collapsed {
   @include collapsible__basis;
+
   .arrow {
     transform: rotate(180deg);
   }
+
   .content {
     max-height: 0;
     padding-top: 0;
@@ -450,7 +468,7 @@ $collapsible-padding: 20px 30px;
 }
 
 .dark-collapsible .header {
-    background-color: #83b9f6;
+  background-color: #83b9f6;
 }
 
 .dark-collapsible .content {
@@ -544,36 +562,137 @@ $collapsible-padding: 20px 30px;
     width: 100%;
   }
 
-  th, td {
+  th,
+  td {
     padding: 0.5rem 1rem;
+
     @media (max-width: $ant-breakpoint-sm) {
       padding: 0;
     }
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // List
 .list__basis {
   $height: 148px;
   $width: 250px;
-  $padding: 10px 10px 10px 20px;
+  $padding: 30px;
+
+
+
 
   width: $width;
   padding: $padding;
-  background-color: var(--accent-color);
+  padding-top: 0px;
+
+  &:first-of-type {
+    padding: $padding;
+  }
+
+  &.theme-1 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "experimental-data"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "experimental-data"), .1);
+      border-left: 1px solid rgba(map-get($theme, "experimental-data"), .5);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "experimental-data"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "experimental-data"), 0.1);
+      border: 1px solid rgba(map-get($theme, "experimental-data"), .5);
+    }
+  }
+
+  &.theme-2 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "reconstruction-data"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "reconstruction-data"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "reconstruction-data"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "reconstruction-data"), 0.1);
+      border: 1px solid rgba(map-get($theme, "reconstruction-data"), .5);
+    }
+  }
+
+  &.theme-3 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), 0.1);
+      border: 1px solid rgba(map-get($theme, "digital-reconstruction"), .5);
+    }
+
+
+  }
+
+  &.theme-4 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "validations"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "validations"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "validations"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "validations"), 0.1);
+      border: 1px solid rgba(map-get($theme, "validations"), .2);
+    }
+  }
+
+  &.theme-5 {
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(map-get($theme, "predictions"), .8);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(map-get($theme, "predictions"), .1);
+      ;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(map-get($theme, "predictions"), 1);
+    }
+
+    .elements {
+      background-color: rgba(map-get($theme, "predictions"), 0.1);
+      border: 1px solid rgba(map-get($theme, "predictions"), .2);
+    }
+  }
+
+
 
   &.block {
     width: auto;
@@ -581,19 +700,39 @@ $collapsible-padding: 20px 30px;
 
   p {
     font-weight: 500;
-    margin: 0 0 0 5px;
-    color: map-get($basePalette, "white");
+    margin: 0px;
+    color: white;
+
+    /*
+    &.theme-1 {
+      color: rgba(map-get($theme, "experimental-data"), 1);
+    }
+
+    &.theme-2 {
+      color: map-get($theme, "reconstruction-data");
+    }
+
+    &.theme-3 {
+      color: map-get($theme, "digital-reconstruction");
+    }
+
+    &.theme-4 {
+      color: map-get($theme, "validations");
+    }
+
+    &.theme-5 {
+      color: map-get($theme, "predictions")
+    }
+    */
   }
 
   .elements {
-    margin: 8px 0;
     height: $height;
     overflow-y: scroll;
   }
 
   ::-webkit-scrollbar-track {
     width: 10px;
-    background-color: #f1f1f1;;
   }
 
   ::-webkit-scrollbar {
@@ -601,9 +740,8 @@ $collapsible-padding: 20px 30px;
   }
 
   ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
-    background: #51576f;
+
+    background: #8096B5;
     border: 1px solid transparent;
     background-clip: content-box;
   }
@@ -613,100 +751,163 @@ $collapsible-padding: 20px 30px;
   }
 }
 
+
+
+// Selector Container
+.selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 0 auto;
+
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1px solid rgba(grey, .8);
+    background-color: #313354;
+
+    @for $i from 1 through length($theme) {
+      $key: nth(map-keys($theme), $i);
+      $value: map-get($theme, $key);
+
+      &.theme-#{$i} {
+        border-color: $value;
+      }
+    }
+  }
+
+  &__head {
+    background-color: rgba(grey, .6);
+    color: white;
+    padding: .5rem 2rem;
+    border-bottom: 1px solid rgba(grey, .8);
+
+    @for $i from 1 through length($theme) {
+      $key: nth(map-keys($theme), $i);
+      $value: map-get($theme, $key);
+
+      &.theme-#{$i} {
+        background-color: rgba($value, .6);
+        border-color: rgba($value, .8);
+      }
+    }
+  }
+
+  &__body {
+
+    width: 100%;
+    height: 100%;
+    background-color: #313354;
+
+  }
+
+  &__selector-container {
+
+    width: 100%;
+    height: 100%;
+    background-color: #313354;
+    display: flex;
+    align-items: center;
+  }
+}
+
+// List Element
 .list-element__basis {
   user-select: none;
-  background-color: map-get($basePalette, "white");
-  color: map-get($basePalette, "navy-1");
-  margin: 8px 20px 8px 10px;
-  text-align: center;
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  padding: 2px 0.5rem;
+  padding: 0rem 0.5rem;
   cursor: pointer;
-  &:hover {
-    color: map-get($basePalette, "white");
-    background-color: #999ba2;
+  color: white;
+
+  @for $i from 1 through length($theme) {
+    $key: nth(map-keys($theme), $i);
+    $value: map-get($theme, $key);
+
+    &.theme-#{$i} {
+      color: rgba($value, .6);
+
+      &.selected,
+      &:hover {
+        background-color: rgba($value, .4);
+        // color: $value;
+      }
+    }
   }
+
+
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
+
   &.selected {
     color: map-get($basePalette, "white");
-    background-color: #17151a !important;
     cursor: initial;
     outline-style: none;
-
-    .yellow & {
-      background-color: map-get($accentPalette, "yellow");
-    }
-    .blue & {
-      background-color: map-get($accentPalette, "blue");
-    }
-    .lavender & {
-      background-color: map-get($accentPalette, "lavender");
-    }
-    .green & {
-      background-color: map-get($accentPalette, "green");
-    }
-    .grey & {
-      background-color: map-get($accentPalette, "grey");
-    }
-    .orange & {
-      background-color: map-get($accentPalette, "orange");
-    }
   }
 }
 
 
 
-
-
-
-
-
-
-
-
 // ScrollTo
 .scroll-to__basis {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+
+
+
+
+  padding: 1rem 0;
   font-weight: 400;
-  font-size: map-get($fontSize, "large");
-  background-color: #343846;
+  font-size: map-get($fontSize, "medium");
+
   color: map-get($basePalette, "white");
-  box-shadow: 0 -8px 12px 0px rgba(0,0,0,0.3);
+  background-color: #313354;
+
+
+  transition: filter 0.1s linear;
+  cursor: pointer;
+
   text-decoration: none;
   text-align: center;
-  padding: 15px;
-  cursor: pointer;
-  &:hover {
-    background-color: #545A70;
-  }
 
   &.animated svg {
     animation: arrow-down 1s infinite;
     animation-timing-function: ease-out;
   }
 
-  &.yellow {
-    background-color: map-get($accentPalette, "yellow");
+
+  &:hover {
+    filter: brightness(0.8);
   }
-  &.blue {
-    background-color: map-get($accentPalette, "blue");
+}
+
+@keyframes yoyo {
+  0% {
+    transform: translateY(-2px);
   }
-  &.lavender {
-    background-color: map-get($accentPalette, "lavender");
+
+  50% {
+    transform: translateY(2px);
   }
-  &.green {
-    background-color: map-get($accentPalette, "green");
+
+  100% {
+    transform: translateY(-2px);
   }
-  &.grey {
-    background-color: map-get($accentPalette, "grey");
-  }
+}
+
+.yoyo-arrow {
+  animation: yoyo 2s linear infinite;
 }
 
 .scroll-to__direction {
@@ -735,56 +936,6 @@ $collapsible-padding: 20px 30px;
   max-width: 100%;
   overflow: hidden;
 
-
-  &.yellow {
-    & h2 {
-      border-color: map-get($accentPalette, "yellow");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "yellow");
-    }
-  }
-
-  &.blue {
-    & h2 {
-      border-color: map-get($accentPalette, "blue");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "blue");
-    }
-  }
-
-  &.lavender {
-    & h2 {
-      border-color: map-get($accentPalette, "lavender");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "lavender");
-    }
-  }
-
-  &.green {
-    & h2 {
-      border-color: map-get($accentPalette, "green");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "green");
-    }
-  }
-
-  &.grey {
-    & h2 {
-      border-color: map-get($accentPalette, "grey");
-    }
-
-    & h4 {
-      color: map-get($accentPalette, "grey");
-    }
-  }
 
   h2 {
     text-transform: uppercase;
@@ -817,9 +968,9 @@ $collapsible-padding: 20px 30px;
     }
 
     p {
-      border-left: 4px solid map-get($accentPalette, "yellow");
       margin: 1rem 1rem 1rem 0;
       padding-left: 12px;
+
       @media (max-width: $small) {
         margin-left: 1rem;
       }
@@ -827,30 +978,17 @@ $collapsible-padding: 20px 30px;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // layout / Brand
 .brand__basis {
   a {
     text-align: center;
     display: block;
     font-size: 1.2rem;
+
   }
-  a, a:active {
+
+  a,
+  a:active {
     color: white;
   }
 
@@ -875,7 +1013,6 @@ $collapsible-padding: 20px 30px;
   }
 
   .hub {
-    font-weight: bold;
     vertical-align: middle;
 
     @media (max-width: 75em) {
@@ -900,6 +1037,7 @@ $collapsible-padding: 20px 30px;
   position: sticky;
   bottom: 0;
   width: 100%;
+
 }
 
 
@@ -954,7 +1092,7 @@ $collapsible-padding: 20px 30px;
     height: 27px;
     width: 27px;
     border-radius: 30px;
-    background-color: map-get($basePalette, "navy-0");
+    background-color: map-get($basePalette, "navy-1");
     color: map-get($basePalette, "navy-4");
     text-align: center;
   }
@@ -992,147 +1130,45 @@ $collapsible-padding: 20px 30px;
   padding: 160px 60px;
   min-height: 100vh;
   background-color: #17151A;
+
   @media (max-width: $small) {
     padding: 90px 30px 60px;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // layout / Navigation
 .nav__basis {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
-  position: absolute;
-  top: 30px;
-  left: 60px;
-  right: 60px;
+  position: fixed;
+  width: 100%;
+  height: 90px;
+  transition: all 0.1s ease-in-out;
+
+  padding: 30px 60px;
   z-index: 10;
+
+
   @media (max-width: $small) {
     justify-content: center;
     top: 5px;
   }
-}
 
+  &.scrolled {
+    height: 70px;
 
-
-
-
-
-
-
-
-
-
-
-// pages / Home
-.Home__basis {
-  background-color: map-get($basePalette, "grey-1");
-
-  section {
-    padding: 30px 30px 80px;
-    overflow: hidden;
-  }
-
-  .accent-border {
-    display: inline-block;
-    width: 50px;
-    height: 4px;
-    border-radius: 4px;
-    margin: 0 10px;
-    background-color: map-get($accentPalette, "yellow");
-  }
-
-  .nowrap {
-    white-space: nowrap;
-  }
-
-  .content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    @media (max-width: $small) {
-      flex-direction: column;
-    }
-  }
-
-  #section-3 {
-    min-height: 100vh;
-    padding-top: 90px;
-    background-color: #17151A;
-
-    .intro {
-      text-align: center;
-      margin: 0 auto 2rem auto;
-      max-width: 860px;
-
-      h2 {
-        text-transform: uppercase;
-        margin-bottom: 1rem;
-      }
-
-      h3 {
-        color: map-get($accentPalette, "yellow");
-        font-weight: 300;
-        font-size: 120%;
-      }
-
-      p {
-        opacity: 0.5;
-      }
-
-      a {
-        text-decoration: underline;
-        color: white;
-
-        &:hover  {
-          color: white;
-        }
-      }
-    }
+    background-color: rgba(#313354, .9);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // pages / Glossary
 .glossary__container {
   max-width: 1080px;
   margin: 0 auto;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // NeuronMorphology plugin, romove after Nexus integration
 .morpho-viewer,
@@ -1193,7 +1229,7 @@ $collapsible-padding: 20px 30px;
   margin-left: 10px;
 }
 
-.morpho-wrapper > .actions {
+.morpho-wrapper>.actions {
   position: relative;
   z-index: 2;
 }
@@ -1208,12 +1244,12 @@ $collapsible-padding: 20px 30px;
   backdrop-filter: blur(1px);
 }
 
-.morpho-legend > ul {
+.morpho-legend>ul {
   list-style: none;
   padding: none;
 }
 
-.morpho-legend > ul li::before {
+.morpho-legend>ul li::before {
   content: '\2022';
   font-weight: bold;
   display: inline-block;
@@ -1223,16 +1259,19 @@ $collapsible-padding: 20px 30px;
   font-size: 1.5em;
 }
 
-.morpho-legend > ul li.axon::before {
+.morpho-legend>ul li.axon::before {
   color: var(--axon);
 }
-.morpho-legend > ul li.basal-dendrites::before {
+
+.morpho-legend>ul li.basal-dendrites::before {
   color: var(--basal-dendrites);
 }
-.morpho-legend > ul li.apical-dendrites::before {
+
+.morpho-legend>ul li.apical-dendrites::before {
   color: var(--apical-dendrites);
 }
-.morpho-legend > ul li.soma::before {
+
+.morpho-legend>ul li.soma::before {
   color: var(--soma);
 }
 
@@ -1242,52 +1281,25 @@ $collapsible-padding: 20px 30px;
 
 
 
-:root {
-  --color-grey-1: #343846;
-  --color-grey-2: #545a70;
-  --color-grey-3: #8690b3;
-  --color-grey-4: #9fa9d0;
-  --color-grey-5: #c3cce7;
+@for $i from 1 through length($theme) {
+  $key: nth(map-keys($theme), $i);
+  $value: map-get($theme, $key);
 
-  --color-text-high-white: #ffffffdd;
-  --color-text-medium-white: #ffffffa8;
-  --color-text-disabled-white: #ffffff61;
-}
+  .bg-card-gradiant-#{$i} {
+    background: linear-gradient(90deg, rgba($value, 0.9) 0%, rgba($value, 0.7) 100%);
+  }
 
-.set-accent-color--grey-1 {
-  --accent-color: var(--color-grey-1);
-}
+  .text-theme-#{$i} {
+    color: $value;
+  }
 
-.set-accent-color--grey-2 {
-  --accent-color: var(--color-grey-2);
-}
+  .border-theme-#{$i} {
+    border-color: $value !important;
+  }
 
-.set-accent-color--grey-3 {
-  --accent-color: var(--color-grey-3);
-}
-
-.set-accent-color--grey-4 {
-  --accent-color: var(--color-grey-4);
-}
-
-.set-accent-color--grey-5 {
-  --accent-color: var(--color-grey-5);
-}
-
-.bg-grey-1 {
-  background-color: #343846;
-}
-.bg-grey-2 {
-  background-color: #545a70;
-}
-.bg-grey-3 {
-  background-color: #8690b3;
-}
-.bg-grey-4 {
-  background-color: #9fa9d0;
-}
-.bg-grey-5 {
-  background-color: #c3cce7;
+  .bg-theme-#{$i} {
+    background: $value !important;
+  }
 }
 
 .bg-white {

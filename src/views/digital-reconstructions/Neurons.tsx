@@ -6,6 +6,7 @@ import { Button, Spin } from 'antd';
 import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
 import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
 import HttpData from '@/components/HttpData';
@@ -60,6 +61,8 @@ const getInstances = (mtype, etype) => {
 
 const Neurons: React.FC = () => {
   const router = useRouter();
+
+  const theme = 3;
 
   const { query } = router;
 
@@ -124,13 +127,14 @@ const Neurons: React.FC = () => {
 
   return (
     <>
-      <Filters>
+      <Filters theme={theme}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
               primaryColor={colorName}
               title={<span>Neurons</span>}
               subtitle="Digital Reconstructions"
+              theme={theme}
             />
             <InfoBox
               color={colorName}
@@ -144,6 +148,7 @@ const Neurons: React.FC = () => {
               </p>
             </InfoBox>
           </div>
+          {/* 
           <div className="col-xs-12 col-lg-6">
             <div className={styles.selector}>
               <div className={styles.selectorColumn}>
@@ -184,6 +189,57 @@ const Neurons: React.FC = () => {
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          */}
+          <div className="col-xs-12 col-lg-6">
+            <div className="selector">
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__body"}>
+                  < LayerSelector3D
+                    value={currentLayer}
+                    onSelect={setLayer}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
+                <div className={"selector__body"}>
+                  <List
+                    className="mb-2"
+                    block
+                    list={mtypes}
+                    value={currentMtype}
+                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                    color={colorName}
+                    onSelect={setMtype}
+                    theme={theme}
+                  />
+
+                  <List
+                    className="mb-2"
+                    block
+                    list={etypes}
+                    value={currentEtype}
+                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
+                    color={colorName}
+                    onSelect={setEtype}
+                    theme={theme}
+                  />
+                  <List
+                    block
+                    list={instances}
+                    value={currentInstance}
+                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                    color={colorName}
+                    onSelect={setInstance}
+                    anchor="data"
+                    theme={theme}
                   />
                 </div>
               </div>

@@ -1,0 +1,98 @@
+[
+    {
+        "m-type": "SP_BS",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 47.6,
+        "SP": 9.85,
+        "SR": 42.55,
+        "SLM": 0,
+        "n.neurons": 2,
+        "n.boutons": 8070,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SO_BS",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 48.1,
+        "SP": 12.4,
+        "SR": 39.5,
+        "SLM": 0,
+        "n.neurons": 1,
+        "n.boutons": 2027,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SP_CCKBC",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 29.4,
+        "SP": 62.85,
+        "SR": 7.75,
+        "SLM": 0,
+        "n.neurons": 2,
+        "n.boutons": 3036,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SR_CCKBC",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 9.1,
+        "SP": 57.7,
+        "SR": 31.75,
+        "SLM": 1.45,
+        "n.neurons": 2,
+        "n.boutons": 1878,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SR_Tri",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 27,
+        "SP": 23,
+        "SR": 50,
+        "SLM": 0,
+        "n.neurons": 1,
+        "n.boutons": 649,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SR_SCA",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 0,
+        "SP": 0.2,
+        "SR": 97.4,
+        "SLM": 2.4,
+        "n.neurons": 1,
+        "n.boutons": 4137,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SLM_PPA",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 0,
+        "SP": 0,
+        "SR": 37.7,
+        "SLM": 62.3,
+        "n.neurons": 1,
+        "n.boutons": 891,
+        "Reference": "Pawelzik et al., 2002"
+    },
+    {
+        "m-type": "SO_Tri",
+        "Specie": "Sprague-Dawley rat",
+        "Weight": "120-200 g",
+        "SO": 58.12,
+        "SP": 18.11,
+        "SR": 23.77,
+        "SLM": 0,
+        "n.neurons": 1,
+        "n.boutons": 4627,
+        "Reference": "Unpublished data from A. Thomson"
+    }
+]

@@ -16,6 +16,7 @@ import Collapsible from '@/components/Collapsible';
 import ConnectionViewer from '@/components/ConnectionViewer';
 import HttpData from '@/components/HttpData';
 import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D/index';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
 
@@ -40,6 +41,8 @@ const ConnectionsView: React.FC = () => {
   const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ prelayer, postlayer, pretype, posttype });
   const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
 
+  const theme = 3;
+
   const setParams = (params: Record<string, string>): void => {
     const query = { ...router.query, ...params };
     router.push({ query }, undefined, { shallow: true });
@@ -51,7 +54,7 @@ const ConnectionsView: React.FC = () => {
     if (!router.query.prelayer) {
       const query = defaultSelection.digitalReconstruction.synapticPathways;
       const { prelayer, pretype, postlayer, posttype } = query;
-      setQuickSelection({ prelayer, pretype, postlayer , posttype });
+      setQuickSelection({ prelayer, pretype, postlayer, posttype });
       router.replace({ query }, undefined, { shallow: true });
     } else {
       setQuickSelection({ prelayer, postlayer, pretype, posttype });
@@ -148,10 +151,10 @@ const ConnectionsView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!pretype && !!posttype}>
+      <Filters theme={theme} hasData={!!pretype && !!posttype}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -163,15 +166,16 @@ const ConnectionsView: React.FC = () => {
                 primaryColor={colorName}
                 title="Connections"
                 subtitle="Digital Reconstructions"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
                   <p className="text-tmp">
                     Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
+                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
                     Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
                     Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
+                    vitae ornare arcu sagittis. <br />
                     Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
                     nec pulvinar enim ligula non lorem. Aliquam ut orci est.
                     Praesent tempus sollicitudin ante varius feugiat.
@@ -189,7 +193,7 @@ const ConnectionsView: React.FC = () => {
             <div className={selectorStyle.row}>
               <div className={selectorStyle.column}>
                 <div className={selectorStyle.body}>
-                  <LayerSelector value={prelayer as Layer} onSelect={setPreLayerQuery} />
+                  <LayerSelector3D value={prelayer as Layer} onSelect={setPreLayerQuery} />
                 </div>
               </div>
               <div className={selectorStyle.column}>
@@ -209,7 +213,7 @@ const ConnectionsView: React.FC = () => {
             <div className={selectorStyle.row}>
               <div className={selectorStyle.column}>
                 <div className={selectorStyle.body}>
-                  <LayerSelector value={postlayer as Layer} onSelect={setPostLayerQuery} />
+                  <LayerSelector3D value={postlayer as Layer} onSelect={setPostLayerQuery} />
                 </div>
               </div>
               <div className={selectorStyle.column}>

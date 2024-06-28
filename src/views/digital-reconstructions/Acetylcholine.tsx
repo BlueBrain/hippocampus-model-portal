@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, theme } from 'antd';
 import Image from 'next/image';
 
 import { colorName } from './config';
@@ -12,12 +12,14 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const AcetylcholineView: React.FC = () => {
+  const theme = 3;
+
   return (
     <>
-      <Filters>
+      <Filters theme={theme}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -29,15 +31,16 @@ const AcetylcholineView: React.FC = () => {
                 primaryColor={colorName}
                 title="Acetylcholine"
                 subtitle="Digital Reconstructions"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
                   <p className="text-tmp">
                     Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
+                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
                     Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
                     Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
+                    vitae ornare arcu sagittis. <br />
                     Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
                     nec pulvinar enim ligula non lorem. Aliquam ut orci est.
                     Praesent tempus sollicitudin ante varius feugiat.

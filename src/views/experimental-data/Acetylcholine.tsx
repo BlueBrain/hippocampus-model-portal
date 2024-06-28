@@ -7,17 +7,29 @@ import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
+
+
+
+import RestingMembranePotentialTable from './acetylcholine/RestingMembranePotential';
+import FiringRateTable from './acetylcholine/FiringRate';
+import SynapsesTable from './acetylcholine/synapses';
+import NetworkTable from './acetylcholine/network';
+
 
 import selectorStyle from '@/styles/selector.module.scss';
 
 
 const AcetylcholineView: React.FC = () => {
+  const theme = 1;
+
   return (
     <>
-      <Filters>
+      <Filters theme={theme}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -29,18 +41,12 @@ const AcetylcholineView: React.FC = () => {
                 primaryColor={colorName}
                 title="Acetylcholine"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p >
+                    Acetylcholine (ACh) is one of the most studied neuromodulation, particularly important for the hippocampus. Similarly to the other neuromodulators, its effect on the network can span several time and space scales. Here, we report the effect of ACh on resting membrane potential, firing rate, synapse, and network.
                   </p>
                 </InfoBox>
               </div>
@@ -54,6 +60,7 @@ const AcetylcholineView: React.FC = () => {
             <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
               <div className={selectorStyle.selectorColumn}>
                 <div className={selectorStyle.selectorBody}>
+                  {/*}
                   <Image
                     src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
                     width="640"
@@ -61,12 +68,60 @@ const AcetylcholineView: React.FC = () => {
                     unoptimized
                     alt=""
                   />
+  */}
                 </div>
               </div>
             </div>
           </Col>
         </Row>
       </Filters>
+
+      <DataContainer
+        navItems={[
+          { id: 'restingPembranePotentialSection', label: 'Resting membrane potential' },
+          { id: 'firingRateSection', label: 'Firing rate' },
+          { id: 'synapseSection', label: 'Synapse' },
+          { id: 'networkSection', label: 'Network' }
+        ]}
+      >
+
+        <Collapsible
+          id="restingPembranePotentialSection"
+          className="mt-4"
+          title="Resting membrane potential"
+        >
+          <h3>The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</h3>
+          <RestingMembranePotentialTable />
+        </Collapsible>
+
+        <Collapsible
+          id="firingRateSection"
+          className="mt-4"
+          title="Firing rate"
+        >
+          <h3>The data below shows that ACh tends to increase the firing rates of CA1 neurons.</h3>
+          <FiringRateTable />
+        </Collapsible>
+
+        <Collapsible
+          id="synapseSection"
+          className="mt-4"
+          title="Synapse"
+        >
+          <h3>The data below shows that ACh tends to increase the postsynaptic response (potential or current) in CA1.</h3>
+          <SynapsesTable />
+        </Collapsible>
+
+        <Collapsible
+          id="networkSection"
+          className="mt-4"
+          title="Network"
+        >
+          <h3>Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</h3>
+          <NetworkTable />
+        </Collapsible>
+
+      </DataContainer>
     </>
   );
 };

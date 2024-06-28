@@ -32,17 +32,14 @@ const anatomyColumns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'Exp. feature',
     dataIndex: 'expFeature' as keyof TableEntry,
-    fixed: 'left' as FixedType,
   },
   {
     title: 'Min',
@@ -101,11 +98,8 @@ const anatomyColumns = [
 const SCAnatomySection: React.FC = () => {
   return (
     <>
-      <p className="text-tmp">
-        Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
-        sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
-        facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
-        omnis eum quasi sint nam omnis aspernatur.
+      <p>
+        Here we report the anatomical measurements on the connectivity established by Schaffer collaterals with excitatory (Exc) and inhibitory (Inh) neurons in CA1.
       </p>
 
       <ResponsiveTable<TableEntry>

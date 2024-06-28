@@ -46,6 +46,8 @@ const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
+  const theme = 1;
+
   const { query } = router;
 
   const setQuery = (query: any) => {
@@ -87,28 +89,26 @@ const NeuronElectrophysiology: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!currentInstance}>
+      <Filters theme={theme} hasData={!!currentInstance}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
               primaryColor={colorName}
               title={<span>Neuron <br /> Electrophysiology</span>}
               subtitle="Experimental Data"
+              theme={theme}
             />
             <InfoBox color="grey-1">
               <p>
-                We recorded electrical traces from neurons using single-cell recording experiments
-                in brain slices. Then, we classified the traces in different electrical types (e-types)
-                based on their firing patterns. We have identified one e-type for excitatory cells
-                and four e-types for inhibitory cells.
+                We recorded electrical traces from neurons using single-cell recording experiments in brain slices. Then, we classified the traces in different electrical types (e-types) based on their firing patterns. We identified one e-type for excitatory cells and four e-types for inhibitory cells.
               </p>
             </InfoBox>
           </div>
 
-          <div className="col-xs-12 col-lg-4 col-lg-offset-1">
-            <div className={styles.selector}>
-              <div className={styles.selectorHead}>Select cell type</div>
-              <div className={styles.selectorBody}>
+          <div className="col-xs-12 col-lg-3 col-lg-offset-1">
+            <div className={"selector__column theme-" + theme}>
+              <div className={"selector__head theme-" + theme}>Choose a layer</div>
+              <div className={"selector__body"}>
                 <List
                   block
                   list={etypes}
@@ -116,10 +116,8 @@ const NeuronElectrophysiology: React.FC = () => {
                   title="e-type"
                   color={colorName}
                   onSelect={setEtype}
+                  theme={theme}
                 />
-                <br />
-                <br />
-                <br />
                 <List
                   block
                   list={instances}
@@ -128,6 +126,7 @@ const NeuronElectrophysiology: React.FC = () => {
                   color={colorName}
                   onSelect={setInstance}
                   anchor="data"
+                  theme={theme}
                 />
               </div>
             </div>
@@ -151,6 +150,7 @@ const NeuronElectrophysiology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
+                    {JSON.stringify(esDocuments[0]._source)}
                     <Metadata nexusDocument={esDocuments[0]._source} />
                     <h3 className="mt-3">Patch clamp recording</h3>
                     <div className="row start-xs end-sm mt-2 mb-2">
@@ -208,6 +208,7 @@ const NeuronElectrophysiology: React.FC = () => {
           title="Population"
         >
           <h3 className="mt-3">Experimental instances</h3>
+          <p>We provide features for the entire e-type group selected.</p>
 
           <ESData query={etypeTracesDataQueryObj}>
             {esDocuments => (

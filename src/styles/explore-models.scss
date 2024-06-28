@@ -1,0 +1,81 @@
+// pages / Home
+.Home__basis {
+    background-color: map-get($basePalette, "grey-1");
+
+    section {
+        padding: 30px 30px 80px;
+        overflow: hidden;
+    }
+
+    .accent-border {
+        display: inline-block;
+        width: 50px;
+        height: 4px;
+        border-radius: 4px;
+        margin: 0 10px;
+
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+
+        @media (max-width: $small) {
+            flex-direction: column;
+        }
+    }
+
+    .card-container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 1400px;
+    }
+
+    #home-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        vertical-align: middle;
+
+        padding: 10rem 0;
+        background-color: #17151A;
+        background-image: url("/hippocampus/images/epfl-logo.svg/bg.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+
+        .intro {
+            text-align: center;
+            margin: 0 auto 5rem auto;
+            max-width: 860px;
+
+            h2 {
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+                font-size: map-get($fontSize, "large")
+            }
+
+            h3 {
+
+                font-weight: 300;
+                font-size: map-get($fontSize, "large")
+            }
+
+            a {
+                text-decoration: underline;
+                color: white;
+
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+    }
+}

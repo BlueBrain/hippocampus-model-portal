@@ -1,0 +1,90 @@
+[
+    {
+        "Neuron Type": "OLM",
+        "Dose (µM)": 10,
+        "Drug": "Muscarine and ACh",
+        "Region": "CA1",
+        "Layer": "SO",
+        "Species": "Mouse",
+        "Age": "14-21 d",
+        "Weight": null,
+        "FR control (Hz)": {
+            "mean": 20,
+            "std": null
+        },
+        "FR ACh (Hz)": {
+            "mean": 25,
+            "std": null
+        },
+        "∆FR (Hz)": 5,
+        "Current (nA)": 0.02,
+        "n. cells": 43,
+        "Reference": "Lawrence et al., 2006"
+    },
+    {
+        "Neuron Type": "other ADP-containing",
+        "Dose (µM)": 10,
+        "Drug": "Muscarine and ACh",
+        "Region": "CA1",
+        "Layer": "SO",
+        "Species": "Mouse",
+        "Age": "14-21 d",
+        "Weight": null,
+        "FR control (Hz)": {
+            "mean": 20,
+            "std": null
+        },
+        "FR ACh (Hz)": {
+            "mean": 37,
+            "std": null
+        },
+        "∆FR (Hz)": 17,
+        "Current (nA)": 0.12,
+        "n. cells": 43,
+        "Reference": "Lawrence et al., 2006"
+    },
+    {
+        "Neuron Type": "PC",
+        "Dose (µM)": 3,
+        "Drug": "Carbachol",
+        "Region": "CA1",
+        "Layer": "SP",
+        "Species": "Sprague-Dawley rat",
+        "Age": "Adult",
+        "Weight": null,
+        "FR control (Hz)": {
+            "mean": 6,
+            "std": null
+        },
+        "FR ACh (Hz)": {
+            "mean": 9,
+            "std": null
+        },
+        "∆FR (Hz)": 3,
+        "Current (nA)": 0.06,
+        "n. cells": 4,
+        "Reference": "Sheridan and Sutor, 1990"
+    },
+    {
+        "Neuron Type": "CCKSCA",
+        "Dose (µM)": 10,
+        "Drug": "Muscarine",
+        "Region": "CA1",
+        "Layer": "SR",
+        "Species": "Mouse",
+        "Age": "15-20 d",
+        "Weight": null,
+        "FR control (Hz)": {
+            "mean": 12.7,
+            "std": 1.7
+        },
+        "FR ACh (Hz)": {
+            "mean": 32,
+            "std": 1.9
+        },
+        "∆FR (Hz)": 19.3,
+        "Current (nA)": 0.07,
+        "n. cells": 21,
+        "Reference": "Cea-del Rio et al., 2011"
+    }
+]

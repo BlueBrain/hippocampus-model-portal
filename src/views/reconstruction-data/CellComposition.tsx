@@ -2,6 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { Row, Col } from 'antd';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { VolumeSection } from '@/types';
 import { defaultSelection, volumeSections } from '@/constants';
@@ -25,6 +26,8 @@ import selectorStyle from '@/styles/selector.module.scss';
 const CellCompositionView: React.FC = () => {
   const router = useRouter();
 
+  const theme = 2;
+
   const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
 
   const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
@@ -34,10 +37,10 @@ const CellCompositionView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={true}>
+      <Filters theme={theme} hasData={true}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -49,18 +52,12 @@ const CellCompositionView: React.FC = () => {
                 primaryColor={colorName}
                 title="Cell composition"
                 subtitle="Reconstruction Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We combined information on available <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphological reconstructions</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-electrophysiology/">electrophysiological recordings</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/cell-density">cell density</Link>, <Link className={`link theme-${theme}`} href="/reconstruction-data/volume/">volume</Link>, and the <Link className={`link theme-${theme}`} href="https://pubmed.ncbi.nlm.nih.gov/23674373/">estimation from Bezaire and Soltesz (2013)</Link> to predict the number of neuron types.
                   </p>
                 </InfoBox>
               </div>
@@ -75,7 +72,7 @@ const CellCompositionView: React.FC = () => {
               <div className={`${selectorStyle.column} mt-3`}>
                 <div className={selectorStyle.head}>Select a volume section</div>
                 <div className={selectorStyle.body}>
-                <VolumeSectionSelector
+                  <VolumeSectionSelector
                     value={volumeSection}
                     onSelect={setVolumeSectionQuery}
                   />
@@ -84,7 +81,7 @@ const CellCompositionView: React.FC = () => {
             </div>
           </Col>
         </Row>
-      </Filters>
+      </Filters >
 
       <DataContainer
         navItems={[
@@ -96,11 +93,8 @@ const CellCompositionView: React.FC = () => {
           id="cellCompositionSection"
           title="Cell composition"
         >
-          <p className="text-tmp mb-3">
-            Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
-            sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
-            facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
-            omnis eum quasi sint nam omnis aspernatur.
+          <p className="mb-3">
+            Density and number of cells for each morphological type (m-type).
           </p>
 
           <CellCompositionTable volumeSection={volumeSection} />
@@ -111,11 +105,8 @@ const CellCompositionView: React.FC = () => {
           id="MECompositionSection"
           title="ME-composition"
         >
-          <p className="text-tmp mb-3">
-            Et quibusdam sunt et accusamus nihil aut officia alias vel galisum laudantium et consequatur adipisci ut
-            sint quaerat? Aut mollitia excepturi id adipisci internos et aliquam repellat aut aperiam odit rem earum
-            facere vel sequi consequatur ut soluta obcaecati. Non galisum accusantium ut iusto eius aut doloribus
-            omnis eum quasi sint nam omnis aspernatur.
+          <p className="mb-3">
+            Each morphological type (m-type) can show one or more electrical types (e-types) giving rise to different morpho-electrical types (me-types).
           </p>
 
           <MECompositionTable />

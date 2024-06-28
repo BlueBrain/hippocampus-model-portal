@@ -18,12 +18,13 @@ import selectorStyle from '@/styles/selector.module.scss';
 
 
 const ConnectionPhysiologyView: React.FC = () => {
+  const theme = 1;
   return (
     <>
-      <Filters hasData={true}>
+      <Filters theme={theme} hasData={true}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -35,18 +36,12 @@ const ConnectionPhysiologyView: React.FC = () => {
                 primaryColor={colorName}
                 title="Connection Physiology"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p >
+                    Each synapse between pairs of pre- and postsynaptic morphological types (m-types) shows unique properties in terms of strength and kinetics. We used data from literature to estimate the postsynaptic potential (PSP) and postsynaptic current (PSC), and the kinetics of the postsynaptic receptor (i.e. AMPA, NMDA, GABAA. Please note that GABAB was not included in our dataset).
                   </p>
                 </InfoBox>
               </div>
@@ -61,6 +56,7 @@ const ConnectionPhysiologyView: React.FC = () => {
               <div className={selectorStyle.selectorColumn}>
                 {/* <div className={selectorStyle.selectorHead}></div> */}
                 <div className={selectorStyle.selectorBody}>
+                  {/*}
                   <Image
                     src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
                     width="640"
@@ -68,6 +64,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     unoptimized
                     alt=""
                   />
+  */}
                 </div>
               </div>
             </div>
@@ -78,7 +75,7 @@ const ConnectionPhysiologyView: React.FC = () => {
       <DataContainer
         navItems={[
           { id: 'conductanceModelSection', label: 'Conductance Model' },
-          { id: 'AMPAKineticsSection', label: 'AMPA Kinetics' },
+          { id: 'AMPAKineticsSection', label: 'PSC kinetics' },
           { id: 'NMDAKineticsSection', label: 'NMDA Kinetics' },
         ]}
       >
@@ -92,7 +89,7 @@ const ConnectionPhysiologyView: React.FC = () => {
         <Collapsible
           id="AMPAKineticsSection"
           className="mt-4"
-          title="AMPA Kinetics"
+          title="PSC kinetics"
         >
           <AMPAKineticsSection />
         </Collapsible>

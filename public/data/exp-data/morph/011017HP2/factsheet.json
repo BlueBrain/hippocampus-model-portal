@@ -1,0 +1,239 @@
+{
+    "name": "Anatomy",
+    "values": [
+        {
+            "type": "all",
+            "name": "Total Width",
+            "value": 985.739990234375,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Total Height",
+            "value": 832.4599609375,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Total Depth",
+            "value": 248.0,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Total Length",
+            "value": 58057.53653097153,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Total Surface Area",
+            "value": 82768.5641539853,
+            "unit": "µm²"
+        },
+        {
+            "type": "all",
+            "name": "Total Volume",
+            "value": 12105.032640766778,
+            "unit": "µm³"
+        },
+        {
+            "type": "all",
+            "name": "Average Diameter",
+            "value": 0.4487019981730284,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Number of Sections",
+            "value": 2758,
+            "unit": ""
+        },
+        {
+            "type": "all",
+            "name": "Average Section Length",
+            "value": 21.050593375986775,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Number of Segments",
+            "value": 149486,
+            "unit": ""
+        },
+        {
+            "type": "all",
+            "name": "Average Segment Length",
+            "value": 0.388381096265699,
+            "unit": "µm"
+        },
+        {
+            "type": "all",
+            "name": "Max Branch Order",
+            "value": 62,
+            "unit": ""
+        },
+        {
+            "type": "axon",
+            "name": "Total Width",
+            "value": 985.739990234375,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Total Height",
+            "value": 626.2999877929688,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Total Depth",
+            "value": 213.3000030517578,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Total Length",
+            "value": 50959.026205182076,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Total Surface Area",
+            "value": 64374.74339010701,
+            "unit": "µm²"
+        },
+        {
+            "type": "axon",
+            "name": "Total Volume",
+            "value": 7301.046010518608,
+            "unit": "µm³"
+        },
+        {
+            "type": "axon",
+            "name": "Average Diameter",
+            "value": 0.39852200074219524,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Number of Sections",
+            "value": 2324,
+            "unit": ""
+        },
+        {
+            "type": "axon",
+            "name": "Average Section Length",
+            "value": 21.927291826670427,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Number of Segments",
+            "value": 131753,
+            "unit": ""
+        },
+        {
+            "type": "axon",
+            "name": "Average Segment Length",
+            "value": 0.38677697080514195,
+            "unit": "µm"
+        },
+        {
+            "type": "axon",
+            "name": "Max Branch Order",
+            "value": 62,
+            "unit": ""
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Width",
+            "value": 614.2000122070312,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Height",
+            "value": 234.3300018310547,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Depth",
+            "value": 129.25,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Length",
+            "value": 7098.510325789452,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Surface Area",
+            "value": 18393.82076387829,
+            "unit": "µm²"
+        },
+        {
+            "type": "dendrite",
+            "name": "Total Volume",
+            "value": 4803.98663024817,
+            "unit": "µm³"
+        },
+        {
+            "type": "dendrite",
+            "name": "Average Diameter",
+            "value": 0.8089359385389868,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Number of Sections",
+            "value": 434,
+            "unit": ""
+        },
+        {
+            "type": "dendrite",
+            "name": "Average Section Length",
+            "value": 16.356014575551733,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Number of Segments",
+            "value": 17733,
+            "unit": ""
+        },
+        {
+            "type": "dendrite",
+            "name": "Average Segment Length",
+            "value": 0.4002994598705473,
+            "unit": "µm"
+        },
+        {
+            "type": "dendrite",
+            "name": "Max Branch Order",
+            "value": 24,
+            "unit": ""
+        },
+        {
+            "type": "soma",
+            "name": "Soma Diameter",
+            "value": 16.1899131098232,
+            "unit": "µm"
+        },
+        {
+            "type": "soma",
+            "name": "Soma Surface Area",
+            "value": 823.4531752880653,
+            "unit": "µm²"
+        },
+        {
+            "type": "soma",
+            "name": "Soma Volume",
+            "value": 2050.1571628411425,
+            "unit": "µm³"
+        }
+    ]
+}

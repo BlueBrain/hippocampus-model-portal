@@ -32,6 +32,8 @@ import selectorStyle from '@/styles/selector.module.scss';
 const VolumeView: React.FC = () => {
   const router = useRouter();
 
+  const theme = 2;
+
   const [volumeViewerReady, setVolumeViewerReady] = useState<boolean>(false);
 
   const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
@@ -48,10 +50,10 @@ const VolumeView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={true}>
+      <Filters theme={theme} hasData={true}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -63,18 +65,12 @@ const VolumeView: React.FC = () => {
                 primaryColor={colorName}
                 title="Volume"
                 subtitle="Reconstruction Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br/>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br/>
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}> atlas</Link> with a process of coordinate extraction and estimation of layer thicknesses to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
                   </p>
                 </InfoBox>
               </div>
@@ -109,7 +105,15 @@ const VolumeView: React.FC = () => {
           id="volume"
           title="Volume"
         >
-          <h2 className="text-tmp">Text description</h2>
+          <h2>
+            {volumeSection === 'region' ? (
+              <span>Region CA1</span>
+            ) : volumeSection === 'cylinder' ? (
+              <span>Coronal slice of 400 um from the dorsal CA1.</span>
+            ) : volumeSection === 'slice' ? (
+              <span>Cylindrical subvolume of radius 300 um from the dorsal CA1.</span>
+            ) : null}
+          </h2>
 
           <h3>3D volume viewer</h3>
           <Spin spinning={!volumeViewerReady}>
@@ -168,6 +172,22 @@ const VolumeView: React.FC = () => {
           <p className="mt-3">
             Related: <Link href="/experimental-data/layer-anatomy/">Experimental data - Layer anatomy</Link>
           </p>
+        </Collapsible>
+
+        <Collapsible
+          id="vectorsSection"
+          title="Vectors"
+          className="mt-4"
+        >
+          <h3>e define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
+        </Collapsible>
+
+        <Collapsible
+          id="coordinatesSection"
+          title="Coordinates"
+          className="mt-4"
+        >
+          <h3>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</h3>
         </Collapsible>
 
       </DataContainer>

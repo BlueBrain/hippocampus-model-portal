@@ -1,4 +1,3 @@
-
 @import '../../styles/config/_queries';
 
 .container {
@@ -7,7 +6,8 @@
 
   display: flex;
   align-items: center;
-  background-color: #17151A;
+
+  background-image: url("/hippocampus/images/epfl-logo.svg/bg.png");
 
   @media (max-width: $ant-breakpoint-md) {
     padding: 80px 20px 2rem;

@@ -3,22 +3,24 @@
 @import '@/styles/config/_colors';
 @import '@/styles/config/_fonts';
 
-$size: 6rem;
+$size: 4rem;
 
 .scrollTtop {
-  display: inline-block;
-  background-color: map-get($basePalette, "navy-2");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: map-get($basePalette, "navy-1");
+
   color: map-get($basePalette, "white");
-  text-decoration: none;
-  text-align: center;
-  border-radius: $size;
+
   width: $size;
   height: $size;
   font-size: math.div(2, 3) * $size;
-  & svg {
-    padding-top: 0.75rem;
-  }
+
+  cursor: pointer;
+
+
   &:hover {
-    background-color: map-get($basePalette, "navy-1");
+    background-color: map-get($basePalette, "navy-2");
   }
 }

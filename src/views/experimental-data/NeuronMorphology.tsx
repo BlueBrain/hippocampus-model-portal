@@ -11,7 +11,7 @@ import { Layer } from '@/types';
 import ESData from '@/components/ESData';
 import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D';
 import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
 import {
   expMorphFactesheetPath,
@@ -38,16 +38,14 @@ import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 
 import morphologies from '@/exp-morphology-list.json';
 
-import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
-
-
 const factsheetEntryTypes = [
   'all',
-  'axon',
+  'soma',
   'dendrite',
+  'axon',
   'apical',
   'basal',
-  'soma',
+
 ];
 
 type NeuriteTypeGroupedFactsheetsProps = {
@@ -56,7 +54,7 @@ type NeuriteTypeGroupedFactsheetsProps = {
 }
 
 const NeuriteTypeGroupedFactsheets: React.FC<NeuriteTypeGroupedFactsheetsProps> = ({ facts, id }) => {
-  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.name.includes(entryType)) ?? '-');
+  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.type === entryType));
 
   return (
     <div id={id}>
@@ -88,6 +86,8 @@ const getInstances = (mtype) => {
 const NeuronExperimentalMorphology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
+
+  const theme = 1;
 
   const { query } = router;
 
@@ -138,36 +138,35 @@ const NeuronExperimentalMorphology: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!currentInstance}>
+      <Filters theme={theme} hasData={!!currentInstance}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
               primaryColor={colorName}
               title={<span>Neuronal <br /> Morphology</span>}
               subtitle="Experimental Data"
+              theme={theme}
             />
             <InfoBox>
               <p>
-                We classified neuronal morphologies in different morphological types (m-types)
-                and created digital 3D reconstructions. Using objective classification methods,
-                we have identified 12 m-types in rat hippocampus CA1.
+                We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
               </p>
             </InfoBox>
           </div>
           <div className="col-xs-12 col-lg-6">
-            <div className={styles.selector}>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>1. Choose a layer</div>
-                <div className={styles.selectorBody}>
-                  <LayerSelector
+            <div className="selector">
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__body"}>
+                  < LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                   />
                 </div>
               </div>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>2. Select reconstruction</div>
-                <div className={styles.selectorBody}>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
+                <div className={"selector__body"}>
                   <List
                     block
                     list={mtypes}
@@ -175,10 +174,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     title="m-type"
                     color={colorName}
                     onSelect={setMtype}
+                    theme={theme}
                   />
-                  <br />
-                  <br />
-                  <br />
+
                   <List
                     block
                     list={instances}
@@ -187,13 +185,14 @@ const NeuronExperimentalMorphology: React.FC = () => {
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
+                    theme={theme}
                   />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Filters>
+        </div >
+      </Filters >
 
       <DataContainer
         visible={!!currentInstance}
@@ -213,7 +212,11 @@ const NeuronExperimentalMorphology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
+                    <p>
+                      We provide visualization and morphometrics for the selected morphology.
+                    </p>
                     <Metadata nexusDocument={esDocuments[0]._source} />
+
                     <h3>3D view</h3>
                     <NexusPlugin
                       className="mt-3"
@@ -303,6 +306,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           title="Population"
           className="mt-4 mb-4"
         >
+          <p>
+            We provide morphometrics for the entire m-type group selected.
+          </p>
           <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
             {(factsheetData, loading) => (
               <div>
@@ -352,6 +358,9 @@ const NeuronExperimentalMorphology: React.FC = () => {
           )}
 
           <h3 className="mt-4">Reconstructed morphologies</h3>
+          <p>
+            Reconstructed morphologies from the selected m-type
+          </p>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {esDocuments => (
               <>

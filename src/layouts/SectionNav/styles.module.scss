@@ -1,13 +1,13 @@
-
 @import '@/styles/config/_queries';
 
 .container {
   position: sticky;
   float: left;
-  margin-top: 4rem;
+
+  padding-bottom: 4rem;
   color: #313254;
   top: 50vh;
-  transform: translate3d(-50%, -50%, 0);
+
   left: calc((100vw - $full-hd) / 4);
   z-index: 1;
 
@@ -18,12 +18,12 @@
 
 .sectionItem {
   cursor: pointer;
-  line-height: 2.4rem;
+
 }
 
 .circle {
-  height: 1.2rem;
-  width: 1.2rem;
+  height: .7rem;
+  width: .7rem;
   background-color: #aeb2c3;
   border-radius: 1.2rem;
   display: inline-block;
@@ -32,7 +32,7 @@
 }
 
 .label {
-  font-size: 1.2rem;
+  font-size: .9rem;
   margin-left: 0.6rem;
   color: grey;
   user-select: none;

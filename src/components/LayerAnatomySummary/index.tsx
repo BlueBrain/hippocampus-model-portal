@@ -36,8 +36,8 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
   const summary: SummaryData[] = layers.map((layer) => {
     const thicknessEntity = entities.find((entity) => (
       entity['@type'].toString().includes('Thickness')
-        && entity.name === `Hippocampal layer thickness - CA1_${layer}`
-        && entity.derivation?.length > 1
+      && entity.name === `Hippocampal layer thickness - CA1_${layer}`
+      && entity.derivation?.length > 1
     ));
 
     const thicknessMean = thicknessEntity?.series.find((s: any) => s.statistic === 'mean')?.value;

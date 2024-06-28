@@ -1,4 +1,3 @@
-
 .selector {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -8,12 +7,12 @@
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  border: 1px solid white;
+  border: 1px solid #313254;
 }
 
 .selectorHead {
   text-align: center;
-  background-color: white;
+  background-color: #313254;
   color: black;
 }
 

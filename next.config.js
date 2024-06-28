@@ -1,6 +1,6 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer') ({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
@@ -26,9 +26,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  sentry: {
-    hideSourceMaps: true,
-  },
   compress: false,
   productionBrowserSourceMaps: true,
   output: 'standalone',
@@ -39,7 +36,7 @@ const nextConfig = {
     return [
       {
         source: '/experimental-data',
-        destination: '/experimental-data/neuronal-morphology',
+        destination: '/',
         permanent: false,
       },
       {

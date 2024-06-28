@@ -9,26 +9,29 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import LayerSelector from '@/components/LayerSelector';
+import LayerSelector3D from '@/components/LayerSelector3D';
 import { layerAnatomyDataQuery } from '@/queries/es';
 import ESData from '@/components/ESData';
 import LayerThickness from '@/components/LayerThickness';
 import LayerAnatomySummary from '@/components/LayerAnatomySummary';
 import { Layer } from '@/types';
-import { defaultSelection , layers } from '@/constants';
+import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import { colorName } from './config';
+import LayerThicknessTable from "./layer-anatomy/thickness";
 
-import styles from '@/styles/experimental-data/neuron-morphology.module.scss';
+import { colorName } from './config';
 
 
 const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
-  const { layer } = router.query as { layer: Layer};
+  const theme = 1;
+
+
+  const { layer } = router.query as { layer: Layer };
 
   const setLayerQuery = (layer: Layer) => {
     const query = { layer };
@@ -37,10 +40,10 @@ const LayerAnatomyView: React.FC = () => {
 
   return (
     <>
-      <Filters hasData={!!layer}>
+      <Filters theme={theme} hasData={!!layer}>
         <Row
           className="w-100"
-          gutter={[0,20]}
+          gutter={[0, 20]}
         >
           <Col
             className="mb-2"
@@ -52,16 +55,13 @@ const LayerAnatomyView: React.FC = () => {
                 primaryColor={colorName}
                 title="Layer Anatomy"
                 subtitle="Experimental Data"
+                theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    The rat primary somatosensory cortex (SSCx) is responsible for the processing of sensory information
-                    such as touch from the entire body. <br/>
-                    It has a laminar structure where neurons are organized across six distinct layers - with layer 1
-                    at the surface and layer 6 at the bottom. <br/>
-                    This section showcases the data we have acquired and organized on the anatomy of SSCx
-                    from cortical slices in developing rats.
+                  <p>
+                    The rat hippocampus CA1 is organized into four layers: stratum lacunoso-moleculare (SLM), stratum radiatum (SR), stratum pyramidal (SP), stratum oriens (SO). This section shows the data used to estimate the layer thicknesses.
+
                   </p>
                 </InfoBox>
               </div>
@@ -72,20 +72,21 @@ const LayerAnatomyView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={styles.selector} style={{ maxWidth: '26rem' }}>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>Choose a layer</div>
-                <div className={styles.selectorBody}>
-                  <LayerSelector
+            <div style={{ maxWidth: '26rem' }}>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__body"}>
+                  <LayerSelector3D
                     value={layer as Layer}
                     onSelect={setLayerQuery}
+                    theme={theme}
                   />
                 </div>
               </div>
             </div>
           </Col>
         </Row>
-      </Filters>
+      </Filters >
 
       <DataContainer
         visible={!!layer}
@@ -104,14 +105,14 @@ const LayerAnatomyView: React.FC = () => {
                 >
                   <div>
                     <h3>Layer thickness for CA1</h3>
-                    <p className="text-tmp">
-                      Data are provided in the form of raw microscopy images of NeuN
-                      (neuron-specific nuclear protein) stained coronal slices with annotations of individual layer extents,
-                      and spreadsheets summarizing measurements of layer thicknesses.
+                    <p>
+                      The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
+
                     </p>
                   </div>
 
-                  <LayerThickness layer={layer as Layer} data={data} />
+                  <LayerThicknessTable layer={layer as Layer} />
+
                 </Collapsible>
 
                 <Collapsible

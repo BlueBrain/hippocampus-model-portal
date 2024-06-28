@@ -31,12 +31,13 @@ const ScrollTo: React.FC<ScrollToProps> = ({
   };
 
   return (
-    <div onClick={scroll} className={`${classPrefix}basis ${color} ${animated ? 'animated' : ''}`}>
+    <div onClick={scroll} className={`${classPrefix}basis ${color} ${animated ? 'animated' : ''} ${direction === 'up' && 'black'}`}>
+      {direction === 'up' && <div className="yoyo-arrow"><IoIosArrowUp size={20} /></div>}
       {children}
-      <span className={`${classPrefix}direction`}>
-        {direction === 'up' && <IoIosArrowUp />}
-        {direction === 'down' && <IoIosArrowDown />}
-      </span>
+
+      {direction === 'down' && <div className="yoyo-arrow"> <IoIosArrowDown size={20} /></div>}
+
+
     </div>
   );
 };

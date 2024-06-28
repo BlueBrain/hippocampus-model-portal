@@ -65,7 +65,7 @@ const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {
         return entry.getValuesFn(...args);
       }
 
-      if (typeof(entry.getValuesParam) === 'string') {
+      if (typeof (entry.getValuesParam) === 'string') {
         return entry.getValuesFn(quickSelection[entry.getValuesParam]);
       }
     };
