@@ -1,4 +1,9 @@
 import React from "react";
+
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined, CameraOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Drawer, Tooltip } from 'antd';
+
 import Scene from "./Scene";
 import { MeshInfo } from "./types";
 import { getGradientCanvas } from "./utils";
@@ -21,24 +26,59 @@ const defaultMeshInfo: MeshInfo = {
 const defaultVert = new Float32Array([0, 0, 0, 1, 1, 1]);
 const defaultElem = [0, 1, 2];
 
+
 export default function ({ className, meshInfo = defaultMeshInfo, vert = defaultVert, elem = defaultElem }: AppProps) {
-    console.log("VectorViewer - meshInfo:", meshInfo);
+    const fullscreenHandle = useFullScreenHandle();
+
+    const toggleFullscreen = () => {
+        if (fullscreenHandle.active) {
+            fullscreenHandle.exit();
+        } else {
+            fullscreenHandle.enter();
+        }
+    };
 
     return (
-        <div className={getClassName(className)}>
-            <Scene
-                className={Styles.canvas}
-                meshInfo={meshInfo}
-                vert={vert}
-                elem={elem}
-            />
-            <div className={Styles.colorrampContainer}>
-                <div>0.0</div>
-                <Gradient />
-                <div>1.0</div>
+        <FullScreen
+            className={fullscreenHandle.active ? undefined : Styles.fixedAspectRatio}
+            handle={fullscreenHandle}
+        >
+
+            <div className={Styles.topRightCtrlGroup}>
+                <Tooltip title="Download render as a PNG">
+                    <Button
+                        size="small"
+                        //onClick={downloadRender}
+                        icon={<CameraOutlined />}
+                    />
+                </Tooltip>
+
+                <Tooltip title="Fullscreen">
+                    <Button
+                        size="small"
+                        className="ml-1"
+                        onClick={toggleFullscreen}
+                        icon={fullscreenHandle.active ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                    />
+                </Tooltip>
+
             </div>
-            <Selector className={Styles.selector} />
-        </div>
+
+            <div className={getClassName(className)}>
+                <Scene
+                    className={Styles.canvas}
+                    meshInfo={meshInfo}
+                    vert={vert}
+                    elem={elem}
+                />
+                <div className={Styles.colorrampContainer}>
+                    <div style={{ color: "white" }}>0.0</div>
+                    <Gradient />
+                    <div style={{ color: "white" }}>1.0</div>
+                </div>
+                <Selector className={Styles.selector} />
+            </div>
+        </FullScreen>
     );
 }
 
@@ -51,7 +91,7 @@ function getClassName(className?: string) {
 function Gradient() {
     return (
         <div
-            style={{ width: "200px", height: "200px" }}
+            style={{ width: "100px", height: "100px" }}
             className={Styles.colorramp}
             ref={(div) => {
                 div?.appendChild(getGradientCanvas());

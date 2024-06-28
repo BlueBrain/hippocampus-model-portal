@@ -182,7 +182,9 @@ const VolumeView: React.FC = () => {
           className="mt-4"
         >
           <h3>e define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
-          <VectorViewer />
+          <Spin spinning={!volumeViewerReady}>
+            <VectorViewer onReady={() => setVolumeViewerReady(true)} />
+          </Spin>
         </Collapsible>
 
         <Collapsible
