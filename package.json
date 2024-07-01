@@ -37,11 +37,14 @@
     "systemjs": "^6.12.1",
     "three": "^0.145.0",
     "troika-three-text": "^0.49.1",
-    "yet-another-react-lightbox": "^1.14.0"
+    "yet-another-react-lightbox": "^1.14.0",
+    "webpack-glsl-loader": "^1.0.1",
+    "raw-loader": "^4.0.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^12.0.10",
     "@sentry/cli": "^2.0.4",
+    "@sentry/nextjs": "^8.2.1",
     "@types/node": "^16.11.24",
     "@types/react": "^17.0.39",
     "@typescript-eslint/eslint-plugin": "^5.11.0",

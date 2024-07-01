@@ -1,5 +1,4 @@
 const { withSentryConfig } = require('@sentry/nextjs');
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -44,9 +43,17 @@ const nextConfig = {
         destination: '/digital-reconstructions/neurons',
         permanent: false,
       },
-    ]
+    ];
+  },
+  webpack: (config, { isServer }) => {
+    // Extend Webpack configuration to handle frag and vert files
+    config.module.rules.push({
+      test: /\.(vert|frag)$/i,
+      type: 'asset/source',
+    });
+
+    return config;
   },
 };
-
 
 module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, SentryWebpackPluginOptions));
