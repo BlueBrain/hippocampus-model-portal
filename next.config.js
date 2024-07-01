@@ -1,5 +1,4 @@
 const { withSentryConfig } = require('@sentry/nextjs');
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -47,20 +46,11 @@ const nextConfig = {
     ];
   },
   webpack: (config, { isServer }) => {
-    // Add .frag and .vert file extensions to the resolver
-    config.resolve.extensions.push('.frag', '.vert');
-
-    // Add GLSL loader rules
-    config.module.rules.push(
-      {
-        test: /\.(glsl|frag|vert)$/,
-        exclude: /node_modules/,
-        use: [
-          'raw-loader',
-          'webpack-glsl-loader'
-        ],
-      }
-    );
+    // Extend Webpack configuration to handle frag and vert files
+    config.module.rules.push({
+      test: /\.(vert|frag)$/i,
+      type: 'asset/source',
+    });
 
     return config;
   },

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Spin, Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import VolumeViewer from './volume/volume-viewer'; // Ensure this path is correct
+import CoordinatesViewer from './volume/coordinates-viewer/CoordinatesViewer'; // Ensure this path is correct
 
 import { staticDataBaseUrl } from '@/config';
-import { VolumeSection } from '@/types';
 import { volumeAnalysisPath, volumeRasterDataPath } from '@/queries/http';
 import { downloadAsJson } from '@/utils';
 import { defaultSelection, volumeSections } from '@/constants';
@@ -23,21 +23,14 @@ import VolumeSectionSelector from '@/components/VolumeSectionSelector';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import { colorName } from './config';
-
-import VolumeViewer from './volume/volume-viewer';
-import VectorViewer from './volume/vectors-viewer/VectorViewer';
-
 import selectorStyle from '@/styles/selector.module.scss';
-
+import { VolumeSection } from '@/types';
+import { colorName } from './config';
 
 const VolumeView: React.FC = () => {
   const router = useRouter();
-
   const theme = 2;
-
   const [volumeViewerReady, setVolumeViewerReady] = useState<boolean>(false);
-
   const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
 
   const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
@@ -53,44 +46,25 @@ const VolumeView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+        <Row className="w-100" gutter={[0, 20]}>
+          <Col className="mb-2" xs={24} lg={12}>
             <StickyContainer>
-              <Title
-                primaryColor={colorName}
-                title="Volume"
-                subtitle="Reconstruction Data"
-                theme={theme}
-              />
+              <Title primaryColor={colorName} title="Volume" subtitle="Reconstruction Data" theme={theme} />
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}> atlas</Link> with a process of coordinate extraction and estimation of layer thicknesses to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
+                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}>atlas</Link> with a process of coordinate extraction and estimation of layer thicknesses to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
           </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
+          <Col className={`set-accent-color--grey mb-2`} xs={24} lg={12}>
             <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
               <div className={`${selectorStyle.column} mt-3`}>
                 <div className={selectorStyle.head}>Select a volume section</div>
                 <div className={selectorStyle.body}>
-                  <VolumeSectionSelector
-                    value={volumeSection}
-                    onSelect={setVolumeSectionQuery}
-                  />
+                  <VolumeSectionSelector value={volumeSection} onSelect={setVolumeSectionQuery} />
                 </div>
               </div>
             </div>
@@ -98,15 +72,8 @@ const VolumeView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
-        navItems={[
-          { id: 'volume', label: 'Volume' },
-        ]}
-      >
-        <Collapsible
-          id="volume"
-          title="Volume"
-        >
+      <DataContainer navItems={[{ id: 'volume', label: 'Volume' }]}>
+        <Collapsible id="volume" title="Volume">
           <h2>
             {volumeSection === 'region' ? (
               <span>Region CA1</span>
@@ -119,28 +86,13 @@ const VolumeView: React.FC = () => {
 
           <h3>3D volume viewer</h3>
           <Spin spinning={!volumeViewerReady}>
-            <VolumeViewer
-              meshPath={`${staticDataBaseUrl}/rec-data/volume/volume.obj`}
-              volumeSection={volumeSection}
-              onReady={() => setVolumeViewerReady(true)}
-            />
+            <VolumeViewer meshPath={`${staticDataBaseUrl}/rec-data/volume/volume.obj`} volumeSection={volumeSection} onReady={() => setVolumeViewerReady(true)} />
             <div className="text-right mt-2">
-              <Button
-                className="mr-2"
-                href="https://bbp.epfl.ch/atlas#camPosition=36984.948,3938.164,5712.791&camLookat=6612.504,3938.164,5712.791&camUp=0,-1,0&srs=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fallen_ccfv3_spatial_reference_system&atlas=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fe2e500ec-fe7e-4888-88b9-b72425315dda&resources=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F20f22cc6-7ded-45bc-a2d5-9f14f3b2f6a0,bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F64ab81de-dbcc-4461-b077-f1e009a10a22"
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={<EyeOutlined />}
-                size="small"
-                type="primary"
-              >
+              <Button className="mr-2" href="https://bbp.epfl.ch/atlas#camPosition=36984.948,3938.164,5712.791&camLookat=6612.504,3938.164,5712.791&camUp=0,-1,0&srs=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fallen_ccfv3_spatial_reference_system&atlas=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fe2e500ec-fe7e-4888-88b9-b72425315dda&resources=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F20f22cc6-7ded-45bc-a2d5-9f14f3b2f6a0,bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F64ab81de-dbcc-4461-b077-f1e009a10a22" target="_blank" rel="noopener noreferrer" icon={<EyeOutlined />} size="small" type="primary">
                 CA1 in Blue Brain Atlas
               </Button>
 
-              <HttpDownloadButton
-                href={volumeRasterDataPath(volumeSection)}
-                download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}
-              >
+              <HttpDownloadButton href={volumeRasterDataPath(volumeSection)} download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}>
                 NRRD file(s)
               </HttpDownloadButton>
             </div>
@@ -155,12 +107,7 @@ const VolumeView: React.FC = () => {
                     <>
                       <Factsheet facts={getVolumeSectionFacts(data.values)} />
                       <div className="text-right mt-2">
-                        <HttpDownloadButton
-                          onClick={() => downloadAsJson(
-                            getVolumeSectionFacts(data.values),
-                            `rec-data-volume-analysis_-_${volumeSection}.json`
-                          )}
-                        >
+                        <HttpDownloadButton onClick={() => downloadAsJson(getVolumeSectionFacts(data.values), `rec-data-volume-analysis_-_${volumeSection}.json`)}>
                           factsheet
                         </HttpDownloadButton>
                       </div>
@@ -176,29 +123,25 @@ const VolumeView: React.FC = () => {
           </p>
         </Collapsible>
 
-        <Collapsible
-          id="vectorsSection"
-          title="Vectors"
-          className="mt-4"
-        >
-          <h3>e define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
+        <Collapsible id="vectorsSection" title="Vectors" className="mt-4">
+          <h3>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
           <Spin spinning={!volumeViewerReady}>
-            <VectorViewer onReady={() => setVolumeViewerReady(true)} />
+            <CoordinatesViewer onReady={() => setVolumeViewerReady(true)} />
           </Spin>
         </Collapsible>
 
-        <Collapsible
-          id="coordinatesSection"
-          title="Coordinates"
-          className="mt-4"
-        >
+        <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
           <h3>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</h3>
+          <Spin spinning={!volumeViewerReady}>
+            <CoordinatesViewer onReady={() => setVolumeViewerReady(true)} />
+          </Spin>
         </Collapsible>
-
       </DataContainer>
     </>
   );
 };
+
+
 
 const VolumeViewWithPreselection = withPreselection(
   VolumeView,

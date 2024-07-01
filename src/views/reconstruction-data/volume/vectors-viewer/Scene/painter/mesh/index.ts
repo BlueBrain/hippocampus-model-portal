@@ -1,1 +1,0 @@
-export { createMeshFromData } from "./mesh"
