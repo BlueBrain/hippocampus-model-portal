@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Spin } from 'antd';
+import { Row, Col } from 'antd'; // Import Row and Col from antd
 
 import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
@@ -25,9 +26,7 @@ import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
-
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
-
 
 const getMtypes = (layer) => {
   return layer
@@ -60,9 +59,7 @@ const getInstances = (mtype, etype) => {
 
 const Neurons: React.FC = () => {
   const router = useRouter();
-
   const theme = 3;
-
   const { query } = router;
 
   const currentLayer: Layer = query.layer as Layer;
@@ -109,9 +106,7 @@ const Neurons: React.FC = () => {
   };
 
   const mtypes = getMtypes(currentLayer);
-
   const etypes = getEtypes(currentMtype);
-
   const instances = getInstances(currentMtype, currentEtype);
 
   const getMorphologyDistribution = (morphologyResource: any) => {
@@ -127,46 +122,26 @@ const Neurons: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
-            <StickyContainer>
-              <Title
-                primaryColor={colorName}
-                title="Neuron model library"
-                subtitle="Reconstruction Data"
-                theme={theme}
-              />
-              <div role="information">
-                <InfoBox>
-                  <p>
-                    Initial set of single <Link className={"link theme-" + theme} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> [link morphology library to experimental-data/neuronal-morphology/] to produce a library of neuron models.
-
+        <Row className="w-100" gutter={[0, 20]}>
+          <Col className="mb-2" xs={24} lg={12}>
             <Title
               primaryColor={colorName}
               title="Neuron model library"
               subtitle="Reconstruction Data"
               theme={theme}
             />
-            <InfoBox
-              color={colorName}
-            >
-              <p className='text-tmp'>Initial set of single <Link className={"link theme-" + theme} href="#">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> to produce a library of neuron models.</p>
-            </InfoBox>
-          </div>
-
-          <div className="col-xs-12 col-lg-6">
+            <div role="information">
+              <InfoBox>
+                <p>
+                  Initial set of single <Link className={"link theme-" + theme} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> to produce a library of neuron models.
+                </p>
+              </InfoBox>
+            </div>
             <div className="selector">
               <div className={"selector__column theme-" + theme}>
                 <div className={"selector__head theme-" + theme}>Choose a layer</div>
                 <div className={"selector__selector-container"}>
-                  < LayerSelector3D
+                  <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                     theme={theme}
@@ -185,7 +160,6 @@ const Neurons: React.FC = () => {
                     onSelect={setMtype}
                     theme={theme}
                   />
-
                   <List
                     block
                     list={etypes}
@@ -208,20 +182,13 @@ const Neurons: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </Filters>
-
-      <DataContainer
-        navItems={[]}
-      >
-        <Collapsible
-          id="tbd"
-          title="TBD"
-        >
+      <DataContainer navItems={[]}>
+        <Collapsible id="tbd" title="TBD">
           <h3 className="text-tmp">Text description</h3>
         </Collapsible>
-
       </DataContainer>
     </>
   );
@@ -255,7 +222,6 @@ const qsEntries = [
     getValuesParam: 'mtype',
     paramsToKeepOnChange: ['layer', 'mtype'],
   },
-
   {
     title: 'Instance',
     key: 'instance',

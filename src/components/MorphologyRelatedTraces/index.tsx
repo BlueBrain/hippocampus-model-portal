@@ -13,7 +13,7 @@ type MorphologyRelatedTracesProps = {
 
 const compareByName = getCompareByFn('name');
 
-const TraceLink: React.FC<{trace: NexusTrace}> = ({ trace }) => {
+const TraceLink: React.FC<{ trace: NexusTrace }> = ({ trace }) => {
   const etype = trace.annotation.hasBody.label;
   const instance = trace.name;
 
@@ -42,13 +42,13 @@ const MorphologyRelatedTraces: React.FC<MorphologyRelatedTracesProps> = ({ morph
           <span>Electrophysiology recordings from the same cell: </span>
           {esDocuments
             ? esDocuments
-                .map(esDocument => esDocument._source as NexusTrace)
-                .sort(compareByName)
-                .map((trace, idx) => (
-                  <>
-                    {idx > 0 && ', '}<TraceLink key={trace.name} trace={trace} />
-                  </>
-                ))
+              .map(esDocument => esDocument._source as NexusTrace)
+              .sort(compareByName)
+              .map((trace, idx) => (
+                <>
+                  {idx > 0 && ', '}<TraceLink key={trace.name} trace={trace} />
+                </>
+              ))
             : '...'
           }.
         </>

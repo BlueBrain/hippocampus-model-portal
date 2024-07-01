@@ -35,13 +35,8 @@ const Home: React.FC = () => (
             idx="1"
             description={<div>
               <p>
-                The first step in the reconstruction of the hippocampus involves the acquisition and
-                organization of data collected from the rodent hippocampus. <br />
-                Sparse data has been collected from our own laboratories and from published sources worldwide,
-                both of which describe the structural and functional organization of the hippocampus
-                at various anatomical levels. This ranges from individual neurons to synaptic connections and
-                network activity. The data provides constraints, rules, and the principles
-                to build computational models at specific levels of detail.
+                The first step of the reconstruction of the hippocampus involves the collection of experimental datasets from our affiliated and collaborators’ laboratories as well as from published literature sources worldwide. Available data on these brain regions are sparse and heterogeneous, and much of our work concerned the curation and organization of the data.
+
               </p>
             </div>}
             links={[
