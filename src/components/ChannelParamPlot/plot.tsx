@@ -47,7 +47,11 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
     let maxValue = 0.012;
     let textBottom = '';
 
-    return new Chart(canvasEl?.current, {
+    if (!canvasEl.current) {
+      return;
+    }
+
+    return new Chart(canvasEl.current, {
       type: 'line',
       data: {
         datasets: [{
@@ -95,34 +99,32 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
       },
     });
 
-    function getXAxes () {
+    function getXAxes() {
       // generate scale with steps
-      return Array.apply(null, {
-        length: plotLength,
-      }).map(Function.call, x => x * 100);
+      return Array.from({ length: plotLength }, (_, x) => x * 100);
     }
 
-    function getData (parameter) {
+    function getData(parameter: ChannelParam) {
       let arrayValues = [];
       switch (parameter.distribution) {
-      case 'uniform':
-        const UNIFORM_CONST = 1;
-        arrayValues = new Array(plotLength).fill(UNIFORM_CONST);
-        maxValue = UNIFORM_CONST;
-        textBottom = UNIFORM_CONST.toString();
-        break;
-      default:
-        const parser = new Parser();
-        const equation = parameter.formula
-          .replace(/math\.exp/g, 'exp')
-          .replace(/\{/g, '(')
-          .replace(/\}/g, ')');
+        case 'uniform':
+          const UNIFORM_CONST = 1;
+          arrayValues = new Array(plotLength).fill(UNIFORM_CONST);
+          maxValue = UNIFORM_CONST;
+          textBottom = UNIFORM_CONST.toString();
+          break;
+        default:
+          const parser = new Parser();
+          const equation = parameter.formula
+            .replace(/math\.exp/g, 'exp')
+            .replace(/\{/g, '(')
+            .replace(/\}/g, ')');
 
-        const expr = parser.parse(equation);
-        arrayValues = getXAxes().map(xVal => expr.evaluate({ distance: xVal, value: 1 }));
-        maxValue = Math.max.apply(null, arrayValues);
-        textBottom = parameter.formula;
-        break;
+          const expr = parser.parse(equation);
+          arrayValues = getXAxes().map(xVal => expr.evaluate({ distance: xVal, value: 1 }));
+          maxValue = Math.max(...arrayValues);
+          textBottom = parameter.formula;
+          break;
       }
 
       return arrayValues;
@@ -130,14 +132,14 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
   };
 
   useEffect(() => {
-    if (!canvasEl) return;
+    if (!canvasEl.current) return;
 
     const plot = createPlot();
 
     return () => {
       if (plot) plot.destroy();
     };
-  }, [canvasEl]);
+  }, [canvasEl, channelParam]);
 
   return (
     <div className={styles.plotContainer}>
@@ -145,6 +147,5 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
     </div>
   );
 };
-
 
 export default ChannelParamPlot;
