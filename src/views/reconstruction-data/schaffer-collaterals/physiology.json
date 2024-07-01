@@ -1,55 +1,53 @@
-{
-    "rules": [
-        {
-            "ruleN": 1,
-            "from": "SC (CA3 PC)",
-            "to": "CA1 PC",
-            "ruleType": "E2",
-            "u": "0.14 ± 0.03",
-            "d": "186 ± 25",
-            "f": "129 ± 24",
-            "nrrp": 12,
-            "hillScaling": 2.79,
-            "gsyn": "0.85 ± 0.05",
-            "triseAMPA": 0.4,
-            "tdecayAMPA": "12 ± 0.5",
-            "triseNMDA": 2.93,
-            "tdecayNMDA": 148.5,
-            "NMDAAMPARatio": 1.23
-        },
-        {
-            "ruleN": 2,
-            "from": "SC (CA3 PC)",
-            "to": "CA1 CB1R+",
-            "ruleType": "E2",
-            "u": "0.11 ± 0.01",
-            "d": "307 ± 52",
-            "f": "195 ± 30",
-            "nrrp": 4,
-            "hillScaling": 2.79,
-            "gsyn": "1.5 ± 0.1",
-            "triseAMPA": 0.1,
-            "tdecayAMPA": "1.0 ± 0.1",
-            "triseNMDA": 2.93,
-            "tdecayNMDA": 154.6,
-            "NMDAAMPARatio": 0.16
-        },
-        {
-            "ruleN": 3,
-            "from": "SC (CA3 PC)",
-            "to": "CA1 CB1R-",
-            "ruleType": "E2",
-            "u": "0.11 ± 0.01",
-            "d": "307 ± 52",
-            "f": "195 ± 30",
-            "nrrp": 8,
-            "hillScaling": 2.79,
-            "gsyn": "15.0 ± 1.0",
-            "triseAMPA": 0.1,
-            "tdecayAMPA": "1.0 ± 0.1",
-            "triseNMDA": 2.93,
-            "tdecayNMDA": 154.6,
-            "NMDAAMPARatio": 0.16
-        }
-    ]
-}
+[
+    {
+        "ruleN": 1,
+        "from": "SC (CA3 PC)",
+        "to": "CA1 PC",
+        "ruleType": "E2",
+        "u": "0.14 ± 0.03",
+        "d": "186 ± 25",
+        "f": "129 ± 24",
+        "nrrp": 12,
+        "hillScaling": 2.79,
+        "gsyn": "0.85 ± 0.05",
+        "triseAMPA": 0.4,
+        "tdecayAMPA": "12 ± 0.5",
+        "triseNMDA": 2.93,
+        "tdecayNMDA": 148.5,
+        "NMDAAMPARatio": 1.23
+    },
+    {
+        "ruleN": 2,
+        "from": "SC (CA3 PC)",
+        "to": "CA1 CB1R+",
+        "ruleType": "E2",
+        "u": "0.11 ± 0.01",
+        "d": "307 ± 52",
+        "f": "195 ± 30",
+        "nrrp": 4,
+        "hillScaling": 2.79,
+        "gsyn": "1.5 ± 0.1",
+        "triseAMPA": 0.1,
+        "tdecayAMPA": "1.0 ± 0.1",
+        "triseNMDA": 2.93,
+        "tdecayNMDA": 154.6,
+        "NMDAAMPARatio": 0.16
+    },
+    {
+        "ruleN": 3,
+        "from": "SC (CA3 PC)",
+        "to": "CA1 CB1R-",
+        "ruleType": "E2",
+        "u": "0.11 ± 0.01",
+        "d": "307 ± 52",
+        "f": "195 ± 30",
+        "nrrp": 8,
+        "hillScaling": 2.79,
+        "gsyn": "15.0 ± 1.0",
+        "triseAMPA": 0.1,
+        "tdecayAMPA": "1.0 ± 0.1",
+        "triseNMDA": 2.93,
+        "tdecayNMDA": 154.6,
+        "NMDAAMPARatio": 0.16
+    }
+]
