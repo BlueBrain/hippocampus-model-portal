@@ -40,7 +40,7 @@ const NeuronModelLibraryView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    Initial set of single <Link className={"link theme-" + theme} href="#">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> [link morphology library to experimental-data/neuronal-morphology/] to produce a library of neuron models.
+                    Initial set of single <Link className={"link theme-" + theme} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> [link morphology library to experimental-data/neuronal-morphology/] to produce a library of neuron models.
 
                   </p>
                 </InfoBox>

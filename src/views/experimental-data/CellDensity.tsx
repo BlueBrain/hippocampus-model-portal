@@ -10,6 +10,11 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import selectorStyle from '@/styles/selector.module.scss';
 
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
+
+import CellDensityTable from './cell-density/CellDensity';
+
 
 const CellDensityView: React.FC = () => {
 
@@ -57,7 +62,22 @@ const CellDensityView: React.FC = () => {
                     </Col>
                 </Row>
             </Filters>
+            <DataContainer
+                navItems={[
+                    { id: 'cellDensitySection', label: 'Cell Density' },
+                ]}
+            >
 
+                <Collapsible
+                    id="cellDensitySection"
+                    className="mt-4"
+                    title="Cell Density"
+                >
+                    <CellDensityTable />
+                </Collapsible>
+
+
+            </DataContainer>
         </>
     );
 };
