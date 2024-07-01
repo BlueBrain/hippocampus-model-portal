@@ -153,6 +153,7 @@ const MainNav: React.FC = () => {
             <SubmenuLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
             <SubmenuLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
             <SubmenuLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
+            <SubmenuLink label="Cell Density" href="/experimental-data/cell-density" />
             <SubmenuLink label="Connection Anatomy" href="/experimental-data/connection-anatomy/" />
             <SubmenuLink label="Connection Physiology" href="/experimental-data/connection-physiology/" />
             <SubmenuLink label="Schaffer Collaterals" href="/experimental-data/schaffer-collaterals/" />
