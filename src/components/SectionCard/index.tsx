@@ -1,14 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaMinus, FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { IoMdClose } from "react-icons/io";
-
-
 import styles from './styles.module.scss';
-
 import { Row, Col } from 'antd';
-
 
 type SectionCardProps = {
   title: string;
@@ -22,7 +18,6 @@ type SectionCardProps = {
   }[];
 };
 
-
 const SectionCard: React.FC<SectionCardProps> = ({
   title,
   description,
@@ -31,6 +26,25 @@ const SectionCard: React.FC<SectionCardProps> = ({
   icon,
 }) => {
   const [infoOpened, setInfoOpened] = useState(false);
+
+  useEffect(() => {
+    if (infoOpened) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Clean up by removing the class when the component unmounts
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [infoOpened]);
+
+  const handlePopupClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget) {
+      setInfoOpened(false);
+    }
+  };
 
   return (
     <>
@@ -42,7 +56,9 @@ const SectionCard: React.FC<SectionCardProps> = ({
                 <h3 className="text-white">{title}</h3>
               </div>
             </Col>
-            <Col><FaInfoCircle className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} /></Col>
+            <Col>
+              <FaInfoCircle className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
+            </Col>
           </Row>
         </div>
         <div className={styles.body}>
@@ -55,10 +71,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
           ))}
         </div>
       </div>
-      <div className={`${styles.popup} ${infoOpened ? styles.show : ''}`}>
-        <div className={`${styles.popup__window}`}>
+      <div className={`${styles.popup} ${infoOpened ? styles.show : ''}`} onClick={handlePopupClick}>
+        <div className={`${styles.popup__window} ${styles[`popup__window--${idx}`]}`}>
           <div className={`${styles.popup__header} ${styles[`popup__header--${idx}`]}`}>
-            <h3 className="text-white">{title}</h3>
+            <span className="text-white">{title}</span>
             <IoMdClose className={`${styles.popup__close}`} onClick={() => setInfoOpened(!infoOpened)} />
           </div>
           <div className={`${styles.popup__content}`}>{description}</div>
@@ -68,4 +84,4 @@ const SectionCard: React.FC<SectionCardProps> = ({
   );
 };
 
-export default SectionCard
+export default SectionCard;

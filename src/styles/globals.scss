@@ -99,7 +99,9 @@ section {
 
 
 // common, utils
-
+.no-scroll {
+  overflow: hidden;
+}
 
 
 // --------- Spacing classes ---------
