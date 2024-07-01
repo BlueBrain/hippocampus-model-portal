@@ -92,7 +92,7 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection }) =>
                 dataSource={dataSource}
                 rowKey={({ Cell_type, Region }) => `${Cell_type}-${Region}`}
                 summary={() => {
-                    const totalAnimals = dataSource.reduce((sum, record) => sum + record["n. animals"], 0);
+                    const totalAnimals = dataSource.reduce((sum, record) => sum + record.mean, 0);
                     return (
                         <Table.Summary.Row>
                             <Table.Summary.Cell index={0}><strong>Total</strong></Table.Summary.Cell>
@@ -113,7 +113,7 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection }) =>
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
                         dataSource,
-                        `rec-data-cell-density.json`
+                        `cell-density-table.json`
                     )}
                 >
                     table data
