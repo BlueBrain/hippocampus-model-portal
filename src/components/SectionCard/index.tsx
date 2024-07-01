@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaMinus, FaPlus, FaInfoCircle } from 'react-icons/fa';
+import { IoMdClose } from "react-icons/io";
 
 
 import styles from './styles.module.scss';
@@ -52,28 +53,17 @@ const SectionCard: React.FC<SectionCardProps> = ({
           ) : (
             <p key={link.label}>{link.label}<sup>*</sup></p>
           ))}
-          {/*
-          <div
-            className={styles.infoBtn}
-            onClick={() => setInfoOpened(!infoOpened)}
-          >
-            {infoOpened ? (<FaMinus size={14} />) : (<FaPlus size={14} />)}
-          </div>
-
-          <div
-            className={styles.info + ' bg-card-gradiant-' + idx}
-          >
-            {description}
-          </div>
-          <div className={styles.infoBottomGradient}></div>
-           */}
         </div>
       </div>
       <div className={`${styles.popup} ${infoOpened ? styles.show : ''}`}>
-
+        <div className={`${styles.popup__window}`}>
+          <div className={`${styles.popup__header} ${styles[`popup__header--${idx}`]}`}>
+            <h3 className="text-white">{title}</h3>
+            <IoMdClose className={`${styles.popup__close}`} onClick={() => setInfoOpened(!infoOpened)} />
+          </div>
+          <div className={`${styles.popup__content}`}>{description}</div>
+        </div>
       </div>
-
-
     </>
   );
 };

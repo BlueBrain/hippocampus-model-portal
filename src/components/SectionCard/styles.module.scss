@@ -1,3 +1,5 @@
+@import '../../styles/config/colors';
+
 .container {
   text-align: left;
   border: 1px solid transparent;
@@ -129,7 +131,7 @@
 }
 
 .popup {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -142,5 +144,39 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__window {
+    max-width: 50rem;
+    background-color: #313254;
+
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: .5rem 2rem;
+    background-color: grey;
+
+    & h3 {
+      margin: 0;
+    }
+
+    @each $name, $color in $theme {
+      &--#{$name} {
+        background-color: $color;
+      }
+    }
+  }
+
+  &__content {
+    text-align: left;
+    padding: 1rem 2rem 1.5rem 2rem;
+  }
+
+  &__close {
+    cursor: pointer;
   }
 }
