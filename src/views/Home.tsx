@@ -58,6 +58,10 @@ const Home: React.FC = () => (
                 href: '/experimental-data/neuronal-electrophysiology/',
               },
               {
+                label: 'Cell Density',
+                href: '/experimental-data/cell-density/',
+              },
+              {
                 label: 'Connection Anatomy',
                 href: '/experimental-data/connection-anatomy/',
               },

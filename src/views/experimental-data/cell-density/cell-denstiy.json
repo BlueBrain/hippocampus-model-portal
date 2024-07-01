@@ -1,0 +1,57 @@
+[
+    {
+        "Cell_type": "All",
+        "Region": "CA1",
+        "Specie": "Wistar rats",
+        "Age": "9-10 w",
+        "mean": 35.2,
+        "n_animals": 5,
+        "std": 1.1,
+        "SEM": 0.5,
+        "Reference": "Aika et al., 1994"
+    },
+    {
+        "Cell_type": "SO",
+        "Region": "SO",
+        "Specie": "Wistar rats",
+        "Age": "9-10 w",
+        "mean": 11.3,
+        "n_animals": 5,
+        "std": 2,
+        "SEM": 0.9,
+        "Reference": "Aika et al., 1994"
+    },
+    {
+        "Cell_type": "SP",
+        "Region": "SP",
+        "Specie": "Wistar rats",
+        "Age": "9-10 w",
+        "mean": 272.4,
+        "n_animals": 5,
+        "std": 32,
+        "SEM": 14.3,
+        "Reference": "Aika et al., 1994"
+    },
+    {
+        "Cell_type": "SR-SLM",
+        "Region": "SR+SLM",
+        "Specie": "Wistar rats",
+        "Age": "9-10 w",
+        "mean": 1.9,
+        "n_animals": 5,
+        "std": 0.7,
+        "SEM": 0.3,
+        "Reference": "Aika et al., 1994"
+    },
+    {
+        "Cell_type": "SP_PC",
+        "Region": "SP",
+        "Specie": "Wistar rats",
+        "Age": "9-10 w",
+        "mean": 264,
+        "n_animals": 5,
+        "std": 32.6,
+        "SEM": 14.6,
+        "Reference": "Aika et al., 1994"
+    }
+]

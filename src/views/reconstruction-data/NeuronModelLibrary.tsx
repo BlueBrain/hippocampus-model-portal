@@ -126,9 +126,27 @@ const Neurons: React.FC = () => {
 
   return (
     <>
-      <Filters theme={theme}>
-        <div className="row bottom-xs w-100">
-          <div className="col-xs-12 col-lg-6">
+      <Filters theme={theme} hasData={true}>
+        <Row
+          className="w-100"
+          gutter={[0, 20]}
+        >
+          <Col
+            className="mb-2"
+            xs={24}
+            lg={12}
+          >
+            <StickyContainer>
+              <Title
+                primaryColor={colorName}
+                title="Neuron model library"
+                subtitle="Reconstruction Data"
+                theme={theme}
+              />
+              <div role="information">
+                <InfoBox>
+                  <p>
+                    Initial set of single <Link className={"link theme-" + theme} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> [link morphology library to experimental-data/neuronal-morphology/] to produce a library of neuron models.
 
             <Title
               primaryColor={colorName}
