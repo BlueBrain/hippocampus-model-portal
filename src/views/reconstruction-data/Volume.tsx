@@ -72,7 +72,11 @@ const VolumeView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer navItems={[{ id: 'volume', label: 'Volume' }]}>
+      <DataContainer navItems={[
+        { id: 'volumeSection', label: 'Volume' },
+        { id: 'vectorsSection', label: 'Vectors' },
+        { id: 'coordinatesSection', label: 'Coordinates' }
+      ]}>
         <Collapsible id="volume" title="Volume">
           <h2>
             {volumeSection === 'region' ? (
@@ -125,9 +129,7 @@ const VolumeView: React.FC = () => {
 
         <Collapsible id="vectorsSection" title="Vectors" className="mt-4">
           <h3>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
-          <Spin spinning={!volumeViewerReady}>
-            <CoordinatesViewer onReady={() => setVolumeViewerReady(true)} />
-          </Spin>
+
         </Collapsible>
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">

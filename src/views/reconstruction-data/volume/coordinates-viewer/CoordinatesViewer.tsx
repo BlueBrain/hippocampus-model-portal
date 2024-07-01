@@ -16,25 +16,7 @@ const CoordinatesViewer: React.FC = () => {
             const container = document.getElementById('root') as HTMLElement;
             const root = createRoot(container);
             root.render(<Viewer meshInfo={info} vert={vertData} elem={Array.from(elemData)} />);
-            const img = new Image();
-            img.src = 'background.jpg';
-            img.onload = () => {
-                const splash = document.getElementById('splash-screen');
-                if (!splash) return;
 
-                splash.classList.add('vanish');
-                window.setTimeout(() => {
-                    try {
-                        const parent = splash.parentNode;
-                        if (parent) {
-                            parent.removeChild(splash);
-                        }
-                    } catch (ex) {
-                        console.error("Error removing splash screen:", ex);
-                    }
-                }, 1000);
-            };
-            setLoading(false);
         };
 
         start();
