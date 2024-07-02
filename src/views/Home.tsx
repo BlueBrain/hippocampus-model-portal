@@ -177,13 +177,16 @@ const Home: React.FC = () => (
             description={<div>
               <p>
                 Validations are a crucial part of the data-driven modeling workflow that reduce the risk that
-                errors may lead to major inaccuracies in the reconstruction or in simulations of emergent behavior.<br />
+                errors may lead to major inaccuracies in the reconstruction or in simulations of emergent behavior.
+              </p>
+              <p>
                 Successful validations not only enable the systematic exploration of the emergent properties
                 of the model, but also establish predictions for future <i>in vitro</i> experiments,
                 or may call into question existing experimental data. Failure in validation may also indicate errors
                 in experimental data, which allow us to identify future refinements.
                 Rigorous validation of a metric at one level of detail therefore also prevents error amplification
-                to the next level, and triggers specific experimental refinements. <br />
+                to the next level, and triggers specific experimental refinements.</p>
+              <p>
                 Therefore, the Blue Brain Project validation step provides a scaffold
                 that enables the integration of available experimental data, identifies missing experimental data,
                 and facilitates the iterative refinement of constituent models.
@@ -244,8 +247,8 @@ const Home: React.FC = () => (
           />
         </div>
       </div>
-    </section>
-  </div>
+    </section >
+  </div >
 );
 
 export default Home;

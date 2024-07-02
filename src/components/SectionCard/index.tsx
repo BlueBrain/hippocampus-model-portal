@@ -1,12 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaMinus, FaPlus } from 'react-icons/fa';
-
+import { FaMinus, FaPlus, FaInfoCircle } from 'react-icons/fa';
+import { IoMdClose } from "react-icons/io";
 import styles from './styles.module.scss';
-
 import { Row, Col } from 'antd';
-
 
 type SectionCardProps = {
   title: string;
@@ -20,7 +18,6 @@ type SectionCardProps = {
   }[];
 };
 
-
 const SectionCard: React.FC<SectionCardProps> = ({
   title,
   description,
@@ -30,47 +27,61 @@ const SectionCard: React.FC<SectionCardProps> = ({
 }) => {
   const [infoOpened, setInfoOpened] = useState(false);
 
+  useEffect(() => {
+    if (infoOpened) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Clean up by removing the class when the component unmounts
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [infoOpened]);
+
+  const handlePopupClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget) {
+      setInfoOpened(false);
+    }
+  };
+
   return (
-    <div className={`${styles.container} bg-card-gradiant-${idx} ${infoOpened ? 'show' : ''}`}>
-      <div className={styles.head}>
-        <div className={styles.title}>
-          {/*
-
-          Icon & Count
-
+    <>
+      <div className={`${styles.container} bg-card-gradiant-${idx} ${infoOpened ? 'show' : ''}`}>
+        <div className={styles.head}>
           <Row justify="space-between" align="middle">
-            <Col>{icon && <img src={icon} alt="icon" className={styles.icon} />}</Col>
-            <Col><div className={styles.idx}>0{idx}</div></Col>
+            <Col>
+              <div className={styles.title}>
+                <h3 className="text-white">{title}</h3>
+              </div>
+            </Col>
+            <Col>
+              <FaInfoCircle className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
+            </Col>
           </Row>
-          */}
-          <h3 className="text-white">{title}</h3>
+        </div>
+        <div className={styles.body}>
+          {links.map(link => link.href ? (
+            <Link key={link.label} href={link.href} prefetch={false} legacyBehavior>
+              {link.label}
+            </Link>
+          ) : (
+            <p key={link.label}>{link.label}<sup>*</sup></p>
+          ))}
         </div>
       </div>
-      <div className={styles.body}>
-        {links.map(link => link.href ? (
-          <Link key={link.label} href={link.href} prefetch={false} legacyBehavior>
-            {link.label}
-          </Link>
-        ) : (
-          <p key={link.label}>{link.label}<sup>*</sup></p>
-        ))}
-
-        <div
-          className={styles.infoBtn}
-          onClick={() => setInfoOpened(!infoOpened)}
-        >
-          {infoOpened ? (<FaMinus size={14} />) : (<FaPlus size={14} />)}
+      <div className={`${styles.popup} ${infoOpened ? styles.show : ''}`} onClick={handlePopupClick}>
+        <div className={`${styles.popup__window} ${styles[`popup__window--${idx}`]}`}>
+          <div className={`${styles.popup__header} ${styles[`popup__header--${idx}`]}`}>
+            <span className="text-white">{title}</span>
+            <IoMdClose className={`${styles.popup__close}`} onClick={() => setInfoOpened(!infoOpened)} />
+          </div>
+          <div className={`${styles.popup__content}`}>{description}</div>
         </div>
-
-        <div
-          className={styles.info + ' bg-card-gradiant-' + idx}
-        >
-          {description}
-        </div>
-        <div className={styles.infoBottomGradient}></div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default SectionCard
+export default SectionCard;

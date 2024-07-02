@@ -1,3 +1,5 @@
+@import '../../styles/config/colors';
+
 .container {
   text-align: left;
   border: 1px solid transparent;
@@ -7,16 +9,27 @@
 
 .head {
   position: relative;
+  padding: 0 1.2rem;
 }
 
 .title {
-  height: 5rem;
-  padding: 0 1.2rem;
+
 
   h3 {
     font-size: 1.2rem;
   }
 }
+
+.icon {
+  cursor: pointer;
+  opacity: .7;
+  transition: all 100ms ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 
 .idx {
   color: #f7f8fc;
@@ -25,7 +38,7 @@
 
 .body {
   padding: 1.2rem 1.2rem 4rem 0;
-  height: 30rem;
+  height: 32rem;
   position: relative;
   overflow: hidden;
 
@@ -114,5 +127,96 @@
   &.container {
     background-color: #161419 !important;
     border: 1px solid white;
+  }
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  display: none;
+
+  &.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__window {
+    max-width: 40rem;
+    background-color: #313254;
+    margin-bottom: 2rem;
+
+    &--1 {
+
+      border: map-get($theme, "experimental-data") 1px solid;
+    }
+
+    &--2 {
+      border: map-get($theme, "reconstruction-data") 1px solid;
+    }
+
+    &--3 {
+      border: map-get($theme, "digital-reconstruction") 1px solid;
+    }
+
+    &--4 {
+      border: map-get($theme, "validations") 1px solid;
+    }
+
+    &--5 {
+      border: map-get($theme, "predictions") 1px solid;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: .5rem 2rem;
+    background-color: grey;
+
+    & h3 {
+      margin: 0;
+    }
+
+    &--1 {
+      background-color: rgba(map-get($theme, "experimental-data"), .6);
+      border-bottom: map-get($theme, "experimental-data") 1px solid;
+    }
+
+    &--2 {
+      background-color: rgba(map-get($theme, "reconstruction-data"), .6);
+      border-bottom: map-get($theme, "reconstruction-data") 1px solid;
+    }
+
+    &--3 {
+      background-color: rgba(map-get($theme, "digital-reconstruction"), .6);
+      border-bottom: map-get($theme, "digital-reconstruction") 1px solid;
+    }
+
+    &--4 {
+      background-color: rgba(map-get($theme, "validations"), .6);
+      border-bottom: map-get($theme, "validations") 1px solid;
+    }
+
+    &--5 {
+      background-color: rgba(map-get($theme, "predictions"), .6);
+      border-bottom: map-get($theme, "predictions") 1px solid;
+    }
+  }
+
+  &__content {
+    text-align: left;
+    padding: 1rem 2rem;
+  }
+
+  &__close {
+    cursor: pointer;
   }
 }
