@@ -88,11 +88,10 @@ const ExpMorphologyTable: React.FC<ExpMorphologyTableProps> = ({
         dataSource={morphologies}
         size="small"
         rowKey={(record) => record.name}
-        rowClassName={morphology => morphology.name === currentMorphology ? styles.highlightedRowBg : undefined}
+        rowClassName={morphology => morphology.name === currentMorphology ? styles.highlightedRowBg : ''}
       />
     </div>
   );
 };
-
 
 export default ExpMorphologyTable;

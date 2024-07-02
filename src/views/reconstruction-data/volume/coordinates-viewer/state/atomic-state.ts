@@ -46,9 +46,7 @@ export default class AtomicState<T> {
             if (storage) window.localStorage.setItem(this.id, JSON.stringify(value));
             else this.saveSession(value);
         }
-        for (const listener of this.listeners) {
-            listener(value);
-        }
+        this.listeners.forEach(listener => listener(value));
     }
 
     addListener(listener: (value: T) => void) {

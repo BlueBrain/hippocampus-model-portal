@@ -9,8 +9,6 @@ import { downloadAsJson } from '@/utils';
 import PhysiologyData from './physiology.json';
 
 type TableEntry = {
-    pathway: string;
-    convergence: number;
     ruleN: number;
     from: string;
     to: string;
@@ -30,48 +28,47 @@ type TableEntry = {
 
 const PhysiolgyColumns = [
     {
-        title: 'ruleN',
+        title: 'Rule N',
         dataIndex: 'ruleN' as keyof TableEntry,
     },
     {
-        title: 'from',
+        title: 'From',
         dataIndex: 'from' as keyof TableEntry,
     },
     {
-        title: 'to',
+        title: 'To',
         dataIndex: 'to' as keyof TableEntry,
     },
     {
-        title: 'ruleType',
+        title: 'Rule Type',
         dataIndex: 'ruleType' as keyof TableEntry,
     },
     {
-        title: 'u',
+        title: 'U',
         dataIndex: 'u' as keyof TableEntry,
     },
     {
-        title: 'd',
+        title: 'D',
         dataIndex: 'd' as keyof TableEntry,
     },
     {
-        title: 'f',
+        title: 'F',
         dataIndex: 'f' as keyof TableEntry,
     },
     {
-        title: 'nrrp',
+        title: 'NRRP',
         dataIndex: 'nrrp' as keyof TableEntry,
     },
 ];
 
-
 const Anatomy: React.FC = () => {
     return (
         <>
-
             <ResponsiveTable<TableEntry>
                 className="mt-3"
                 data={PhysiologyData}
                 columns={PhysiolgyColumns}
+                rowKey={(record) => `${record.ruleN}_${record.from}_${record.to}`}
             />
             <div className="text-right mt-2">
                 <HttpDownloadButton

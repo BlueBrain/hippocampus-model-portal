@@ -10,7 +10,6 @@ import { useExperimentalTraceTable } from './expTraceTableUtils';
 
 import styles from './styles.module.scss'
 
-
 type ExpTraceTableProps = {
   etype: string;
   traces: NexusTrace[];
@@ -77,18 +76,17 @@ const ExpTraceTable: React.FC<ExpTraceTableProps> = ({ etype, currentTrace, trac
 
   return (
     <div
-      id={traces.length && agentMap ? 'expTraceTable' : null}
+      id={traces.length && agentMap ? 'expTraceTable' : undefined}
       className="layer-anatomy-summary__basis mt-2"
     >
       <Table<NexusTrace>
         columns={columns}
         dataSource={traces}
         rowKey={({ name }) => name}
-        rowClassName={trace => isCurrent(trace) ? styles.highlightedRowBg : undefined}
+        rowClassName={trace => isCurrent(trace) ? styles.highlightedRowBg : ''}
       />
     </div>
   );
 };
-
 
 export default ExpTraceTable;

@@ -1,18 +1,22 @@
-import State from "../state"
-import Styles from "./Selector.module.css"
+// Selector.tsx
+import React from "react";
+import State from "../state";
+import { useAtomicState } from "../state/atomic-state"; // Adjust the import path accordingly
+import Styles from "./Selector.module.css";
 
 export interface SelectorProps {
-    className?: string
+    className?: string;
 }
 
 const Labels = {
     L: "Longitudinal",
     T: "Transverse",
     R: "Radial",
-}
+};
 
 export default function Selector({ className }: SelectorProps) {
-    const [value, setValue] = State.axe.useState()
+    const [value, setValue] = useAtomicState(State.axe);
+
     return (
         <div className={`${Styles.Selector} ${className ?? ""}`}>
             <button
@@ -34,5 +38,5 @@ export default function Selector({ className }: SelectorProps) {
                 {Labels.R}
             </button>
         </div>
-    )
+    );
 }

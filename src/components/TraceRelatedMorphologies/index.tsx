@@ -6,7 +6,6 @@ import { entriesByIdsQuery } from '../../queries/es';
 import { entryToArray, getCompareByFn } from '../../utils';
 import { NexusMorphology, NexusTrace } from '../../types';
 
-
 type TraceRelatedMorphologiesProps = {
   trace: NexusTrace;
 };
@@ -15,7 +14,10 @@ const compareByName = getCompareByFn('name');
 const annotationMtypeRe = /(\w+)_(.+)/;
 
 const MorphologyLink: React.FC<{ morphology: NexusMorphology }> = ({ morphology }) => {
-  const [, layer, mtype] = annotationMtypeRe.exec(morphology.annotation.hasBody.label);
+  const match = annotationMtypeRe.exec(morphology.annotation.hasBody.label);
+  if (!match) return null;
+
+  const [, layer, mtype] = match;
   const instance = morphology.name;
 
   const searchParams = new URLSearchParams({
@@ -25,14 +27,16 @@ const MorphologyLink: React.FC<{ morphology: NexusMorphology }> = ({ morphology 
   });
   const href = `/experimental-data/neuronal-morphology/?${searchParams.toString()}#data`;
 
-  return <Link href={href} prefetch={false} legacyBehavior>{morphology.name}</Link>;
+  return (
+    <Link href={href} prefetch={false} legacyBehavior>
+      {morphology.name}
+    </Link>
+  );
 };
 
 const TraceRelatedMorphologies: React.FC<TraceRelatedMorphologiesProps> = ({ trace }) => {
   if (!trace.isRelatedTo) {
-    return (
-      <span>No morphology reconstruction found for this cell.</span>
-    );
+    return <span>No morphology reconstruction found for this cell.</span>;
   }
 
   const morphologyIds = entryToArray(trace.isRelatedTo).map(trace => trace['@id']);
@@ -47,17 +51,17 @@ const TraceRelatedMorphologies: React.FC<TraceRelatedMorphologiesProps> = ({ tra
               .map(esDocument => esDocument._source as NexusMorphology)
               .sort(compareByName)
               .map((morphology, idx) => (
-                <>
-                  {idx > 0 && ', '}<MorphologyLink key={trace.name} morphology={morphology} />
-                </>
+                <React.Fragment key={morphology.name}>
+                  {idx > 0 && ', '}
+                  <MorphologyLink morphology={morphology} />
+                </React.Fragment>
               ))
-            : '...'
-          }.
+            : '...'}
+          .
         </>
       )}
     </ESData>
   );
 };
-
 
 export default TraceRelatedMorphologies;

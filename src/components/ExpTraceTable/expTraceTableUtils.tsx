@@ -28,7 +28,7 @@ const getTraceDistribution = (trace) => {
 };
 
 export const useExperimentalTraceTable = (etype, currentTrace) => {
-  const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
+  const [agentMap, setAgentMap] = useState<Record<string, any>>({});
 
   const instanceHref = (instanceName: string) => {
     const searchParams = new URLSearchParams({
@@ -141,14 +141,14 @@ export const useExperimentalTraceTable = (etype, currentTrace) => {
         return (
           <div className={styles.traceImageContainer}>
             <div className="text-center mb-1">{name}</div>
-              <NexusImage
-                src={getStepImageNexusUrl(trace)}
-                width={1657}
-                height={1270}
-                sizes="640px"
-                layout="responsive"
-                alt="Response trace"
-              />
+            <NexusImage
+              src={getStepImageNexusUrl(trace)}
+              width={1657}
+              height={1270}
+              sizes="640px"
+              layout="responsive"
+              alt="Response trace"
+            />
             <div className={styles.detailsLink}>
               <Link
                 href={instanceHref(name)}

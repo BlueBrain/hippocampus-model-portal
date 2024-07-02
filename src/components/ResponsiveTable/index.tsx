@@ -5,17 +5,16 @@ import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 import classes from './styles.module.scss';
 
-interface ColumnType<Type extends object & {isHighlight?: boolean}> extends Omit<AntColumnType<Type>, 'dataIndex'> {
-    dataIndex?: keyof Type;
+interface ColumnType<Type extends object & { isHighlight?: boolean }> extends Omit<AntColumnType<Type>, 'dataIndex'> {
+  dataIndex?: keyof Type;
 }
-interface GroupColumnType<Type extends object & {isHighlight?: boolean}> extends AntColumnGroupType<Type>{
-}
-
-interface ResponsiveTableProps<Type extends object & {isHighlight?: boolean}> extends Omit<TableProps<Type>, 'columns'> {
-    data: Type[];
-    columns: (ColumnType<Type> | GroupColumnType<Type>)[];
+interface GroupColumnType<Type extends object & { isHighlight?: boolean }> extends AntColumnGroupType<Type> {
 }
 
+interface ResponsiveTableProps<Type extends object & { isHighlight?: boolean }> extends Omit<TableProps<Type>, 'columns'> {
+  data: Type[];
+  columns: (any)[]; // I MIGHT NEED TO CHANGE THIS TO ColumnType<Type> | GroupColumnType<Type>
+}
 
 const renderHighlightValue = (record) => (nestedValue, _value) => (
   highlightValue(nestedValue, record.isHighlight)
@@ -25,10 +24,9 @@ const highlightValue = (nestedValue, isHighlight) => (isHighlight ? (
   <div className="text-bold">
     {nestedValue}
   </div>
-)
-  : nestedValue);
+) : nestedValue);
 
-function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ columns, data, ...restProps }: ResponsiveTableProps<Type>) {
+function ResponsiveTable<Type extends object & { isHighlight?: boolean }>({ columns, data, ...restProps }: ResponsiveTableProps<Type>) {
   const expandableColumn = {
     title: null,
     dataIndex: null,
@@ -55,9 +53,9 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
         }
 
         return null;
-      });
+      }).filter(item => item !== null); // Filter out null values
 
-      const nestedColumns: ColumnType<{key: any; value: any}>[] = [
+      const nestedColumns: ColumnType<{ key: any; value: any }>[] = [
         {
           dataIndex: 'key',
           title: 'Field',
@@ -74,11 +72,11 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
         <Table
           className="responsiveTable no-left-margin nested-table xs-column"
           rowClassName={index % 2 ? classes.responsiveTablEven : classes.responsiveTablOdd}
-          rowKey={(record: any, index) => `${record.dataIndex}__${index}`}
+          rowKey={(record: any, index) => `${record.key}__${index}`}
           showHeader={false}
           columns={nestedColumns}
           tableLayout="fixed"
-          dataSource={nestedTableData}
+          dataSource={nestedTableData as object[]} // Ensure dataSource does not contain null values
           pagination={false}
         />
       );
@@ -86,17 +84,14 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
     responsive: ['xs' as Breakpoint],
   };
 
-  const tableColumns = columns.map((column) => (
-    {
-      ...column,
-      title: column.title,
-      dataIndex: (column as ColumnType<Type>).dataIndex,
-      responsive: ['sm' as Breakpoint],
-      render: (value: any, record: Type, index: number) => highlightValue(column.render ? column.render(value, record, index) : value, record.isHighlight),
-      children: (column as GroupColumnType<Type>).children?.map(child => ({ render: (value: any, record: Type) => highlightValue(value, record.isHighlight), ...child })),
-    }
-  ))
-    .concat(expandableColumn as any);
+  const tableColumns = columns.map((column) => ({
+    ...column,
+    title: column.title,
+    dataIndex: (column as ColumnType<Type>).dataIndex,
+    responsive: ['sm' as Breakpoint],
+    render: (value: any, record: Type, index: number) => highlightValue(column.render ? column.render(value, record, index) : value, record.isHighlight),
+    children: (column as GroupColumnType<Type>).children?.map(child => ({ render: (value: any, record: Type) => highlightValue(value, record.isHighlight), ...child })),
+  })).concat(expandableColumn as any);
 
   const { className = '' } = restProps;
 
@@ -110,10 +105,6 @@ function ResponsiveTable<Type extends object & {isHighlight?: boolean}>({ column
       columns={tableColumns}
       dataSource={data}
       rowClassName={(record: Type, index: number) => {
-        // TODO: find better solution to support striped sub-rows on mobile
-        // if (record.isHighlight) {
-        //   return classes.highlightBackground;
-        // }
         return (index % 2 ? classes.responsiveTablEven : classes.responsiveTablOdd);
       }}
       {...restProps}

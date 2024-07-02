@@ -5,21 +5,21 @@ import { IoIosArrowDown } from "react-icons/io";
 
 import { basePath } from '../../config';
 
-import styles from './nav.module.scss'
+import styles from './nav.module.scss';
 
 const Menu: React.FC = ({ children }) => {
   return (
     <>
       {children}
     </>
-  )
-}
+  );
+};
 
 type MenuItemProps = {
   label: string;
   href: string;
   external?: boolean;
-  menuGroup: string
+  menuGroup: string;
 };
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, menuGroup }) => {
@@ -29,12 +29,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
   const MouseEnter = (menuGroup: string) => {
     setOpenMenuGroup(menuGroup);
     setIsMenuOpened(true);
-  }
+  };
 
   const MouseLeave = (menuGroup: string) => {
     setIsMenuOpened(false); // keep the menu open for
     setOpenMenuGroup(menuGroup);
-  }
+  };
 
   return (
     <li onMouseEnter={() => MouseEnter(menuGroup)} onMouseLeave={() => MouseLeave(menuGroup)} className={styles['main-navigation__item']}>
@@ -55,20 +55,26 @@ type SubmenuLinkProps = {
   href: string;
   label: string;
   external?: boolean;
-  highlight?: boolean
+  highlight?: boolean;
 };
 
 const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false, highlight = false }) => {
-  return (
+  return external ? (
+    <a
+      className={`${styles["submenu__link"]} ${highlight ? styles["submenu__link--highlight"] : ""}`}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {label}
+    </a>
+  ) : (
     <Link
       className={`${styles["submenu__link"]} ${highlight ? styles["submenu__link--highlight"] : ""}`}
       href={href}
-      external={external}
-      highlight={highlight}
     >
       {label}
     </Link>
-
   );
 };
 
@@ -77,7 +83,7 @@ type SubmenuGroupProps = {
   href?: string;
   external?: boolean;
   color?: string;
-  menuGroup?: 'menu-group-build'
+  menuGroup?: string;
 };
 
 const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color }) => {
@@ -87,7 +93,7 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
   const Click = () => {
     setIsOpened(prevState => !prevState);
     setOpenMenuGroup(menuGroup);
-  }
+  };
 
   return (
     <>
@@ -101,15 +107,13 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
       <div className={`${styles["submenu__group-list"]}  ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-list--active"] : ""}`}>
         {children}
       </div>
-
     </>
-  )
-}
+  );
+};
 
 const MainNav: React.FC = () => {
   return (
     <Menu>
-
       <ul className={styles['main-navigation']}>
 
         { /* Home */}
@@ -148,7 +152,6 @@ const MainNav: React.FC = () => {
           href='/'
           menuGroup='menu-group-explore'
         >
-
           <SubmenuGroup label="Experimental Data" menuGroup='menu-group-experimental-data' color='#EFAE97'>
             <SubmenuLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
             <SubmenuLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />

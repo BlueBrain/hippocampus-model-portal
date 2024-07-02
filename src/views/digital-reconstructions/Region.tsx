@@ -21,18 +21,23 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
-
 const RegionView: React.FC = () => {
   const router = useRouter();
 
   const theme = 3;
 
-  const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection };
+  const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection | undefined };
 
   const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
     const query = { volume_section: volumeSection };
     router.push({ query }, undefined, { shallow: true });
   };
+
+  const validVolumeSection: VolumeSection = volumeSection ?? defaultSelection.digitalReconstruction.region.volume_section as VolumeSection;
+
+  if (!validVolumeSection) {
+    return null; // Or handle this case appropriately
+  }
 
   return (
     <>
@@ -72,7 +77,7 @@ const RegionView: React.FC = () => {
                 <div className={selectorStyle.head}>Select a volume section</div>
                 <div className={selectorStyle.body}>
                   <VolumeSectionSelector
-                    value={volumeSection}
+                    value={validVolumeSection}
                     onSelect={setVolumeSectionQuery}
                   />
                 </div>
@@ -88,56 +93,57 @@ const RegionView: React.FC = () => {
           title="Factsheet"
         >
           <h3>
-            {volumeSection === 'region' ? (
+            {validVolumeSection === 'region' ? (
               <span>Region CA1. The image shows soma positions.</span>
-            ) : volumeSection === 'cylinder' ? (
+            ) : validVolumeSection === 'cylinder' ? (
               <span>Coronal slice of 400 um from the dorsal CA1. The image shows soma positions.</span>
-            ) : volumeSection === 'slice' ? (
+            ) : validVolumeSection === 'slice' ? (
               <span> Cylindrical subvolume of radius 300 um from the dorsal CA1. The image shows soma positions.</span>
             ) : null}
           </h3>
-          <HttpData path={regionFactsheetPath(volumeSection)}>
-            {(data, loading) => (
-              <Spin spinning={loading}>
-                {data && (
-                  <>
-                    <h3 className="mt-2">Neuronal anatomy</h3>
-                    <Factsheet facts={data.neuronalAnatomy} />
+          {validVolumeSection && (
+            <HttpData path={regionFactsheetPath(validVolumeSection ?? '')}>
+              {(data, loading) => (
+                <Spin spinning={loading}>
+                  {data && (
+                    <>
+                      <h3 className="mt-2">Neuronal anatomy</h3>
+                      <Factsheet facts={data.neuronalAnatomy} />
 
-                    <h3 className="mt-3">Neuronal physiology</h3>
-                    <Factsheet facts={data.neuronalPhysiology} />
+                      <h3 className="mt-3">Neuronal physiology</h3>
+                      <Factsheet facts={data.neuronalPhysiology} />
 
-                    <h3 className="mt-3">Synaptic anatomy</h3>
-                    <Factsheet facts={data.synapticAnatomy} />
+                      <h3 className="mt-3">Synaptic anatomy</h3>
+                      <Factsheet facts={data.synapticAnatomy} />
 
-                    <h3 className="mt-3">Synaptic physiology</h3>
-                    <Factsheet facts={data.synapticPhysiology} />
+                      <h3 className="mt-3">Synaptic physiology</h3>
+                      <Factsheet facts={data.synapticPhysiology} />
 
-                    <h3 className="mt-3">Network anatomy</h3>
-                    <Factsheet facts={data.networkAnatomy} />
+                      <h3 className="mt-3">Network anatomy</h3>
+                      <Factsheet facts={data.networkAnatomy} />
 
-                    <h3 className="mt-3">Schaffer collaterals</h3>
-                    <Factsheet facts={data.schafferCollaterals} />
+                      <h3 className="mt-3">Schaffer collaterals</h3>
+                      <Factsheet facts={data.schafferCollaterals} />
 
-                    <div className="text-right mt-2">
-                      <HttpDownloadButton
-                        href={regionFactsheetPath(volumeSection)}
-                        download={`dig-rec-region-factsheet_-_${volumeSection}.json`}
-                      >
-                        factsheet
-                      </HttpDownloadButton>
-                    </div>
-                  </>
-                )}
-              </Spin>
-            )}
-          </HttpData>
+                      <div className="text-right mt-2">
+                        <HttpDownloadButton
+                          href={regionFactsheetPath(validVolumeSection)}
+                          download={`dig-rec-region-factsheet_-_${validVolumeSection}.json`}
+                        >
+                          factsheet
+                        </HttpDownloadButton>
+                      </div>
+                    </>
+                  )}
+                </Spin>
+              )}
+            </HttpData>
+          )}
         </Collapsible>
       </DataContainer>
     </>
   );
 };
-
 
 const RegionViewWithPreselection = withPreselection(
   RegionView,
@@ -152,7 +158,6 @@ const qsEntries = [{
   key: 'volume_section',
   values: volumeSections,
 }];
-
 
 export default withQuickSelector(
   RegionViewWithPreselection,

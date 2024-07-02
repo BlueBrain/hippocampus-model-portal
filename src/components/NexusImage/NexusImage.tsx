@@ -8,7 +8,6 @@ import style from './styles.module.scss';
 
 // import 'react-image-lightbox/style.css';
 
-
 export interface NexusImageProps extends ImageProps {
   src: string; // Nexus selfUrl
   alt: string;
@@ -20,13 +19,13 @@ type ImgLoaderProps = {
   src: string;
   width: 640 | 750 | 828 | 1080 | 1200 | 1920 | 2048 | 3840;
   quality: number;
-}
+};
 
-const imgLoader: (ImgLoaderProps) => string = ({ src, width = 1080, quality = 80 }) => {
+const imgLoader = ({ src, width = 1080, quality = 80 }: ImgLoaderProps): string => {
   return `${nexusImgLoaderUrl}${basePath}/_next/image/?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
-}
+};
 
-const authProxyUrl = new URL(nexusAuthProxyUrl);
+const authProxyUrl = new URL(nexusAuthProxyUrl || 'https://default-proxy-url.com');
 
 export const NexusImage = (props: NexusImageProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +63,5 @@ export const NexusImage = (props: NexusImageProps) => {
     </>
   );
 };
-
 
 export default NexusImage;

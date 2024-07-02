@@ -17,7 +17,6 @@ const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
-
 import SLMData from './slm.json';
 import SRData from './sr.json';
 import SPData from './sp.json';
@@ -139,8 +138,6 @@ const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
                     close={() => setLightboxOpen(false)}
                     slides={lightboxSlides}
                     index={lightboxIndex}
-                    onIndexChange={setLightboxIndex}
-
                 />
             )}
         </>

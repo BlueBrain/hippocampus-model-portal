@@ -398,7 +398,7 @@ const Synapses = () => {
                 className="mb-2"
                 columns={columns}
                 data={data}
-                rowKey={({ from, to }) => `${from}_${to}`}
+                rowKey={({ 'Pre Neuron Type': pre, 'Post Neuron Type': post }) => `${pre}-${post}`}
             />
 
             <div className="text-right mt-2">

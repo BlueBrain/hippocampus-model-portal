@@ -11,7 +11,7 @@ import styles from './connection-viewer.module.scss';
 
 export type ConnectionViewerProps = {
   data: any;
-  onReady: () => void
+  onReady: () => void;
 };
 
 type VisibilityType = 'full' | 'synPath';
@@ -28,7 +28,7 @@ const isFullscreenAvailable = document.fullscreenEnabled || document['webkitFull
 
 const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer>(null);
+  const [connectionViewer, setConnectionViewer] = useState<ConnectionViewer | null>(null);
   const [settingDrawerOpen, setSettingDrawerOpen] = useState(false);
   const fullscreenHandle = useFullScreenHandle();
 
@@ -38,38 +38,42 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
   const [visibilityCtrlState, setVisibilityCtrlState] = useState(defaultVisibilityCtrlState);
 
   // TODO: move viewer settings to a separate component
-  const updateVisibility = (visibility) => {
-    connectionViewer.setNeuriteVisibility(visibility);
+  const updateVisibility = (visibility: Record<string, boolean>) => {
+    if (connectionViewer) {
+      connectionViewer.setNeuriteVisibility(visibility);
+    }
   };
 
   const toggleFullscreen = () => {
     if (fullscreenHandle.active) {
-     fullscreenHandle.exit();
+      fullscreenHandle.exit();
     } else {
       fullscreenHandle.enter();
     }
   };
 
   const downloadRender = () => {
-    const imageName = `exemplar_connection_render_${data.pre.mtype}-${data.post.mtype}`;
-    connectionViewer.downloadRender(imageName);
+    if (connectionViewer) {
+      const imageName = `exemplar_connection_render_${data.pre.mtype}-${data.post.mtype}`;
+      connectionViewer.downloadRender(imageName);
+    }
   };
 
   useEffect(() => {
-    if (!data || !containerRef || !containerRef.current) return;
+    if (!data || !containerRef.current) return;
 
     const containerNode = containerRef.current;
 
-    const connectionViewer = new ConnectionViewer(containerNode);
-    setConnectionViewer(connectionViewer);
+    const viewer = new ConnectionViewer(containerNode);
+    setConnectionViewer(viewer);
 
-    connectionViewer.init(data).then(() => {
-      connectionViewer.setNeuriteVisibility({ [NeuriteType.POST_NB_AXON]: false });
+    viewer.init(data).then(() => {
+      viewer.setNeuriteVisibility({ [NeuriteType.POST_NB_AXON]: false });
       onReady();
     });
 
     return () => {
-      if (connectionViewer) connectionViewer.destroy();
+      if (viewer) viewer.destroy();
     };
   }, [containerRef, data]);
 
@@ -166,9 +170,10 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 size="small"
                 options={['full', 'synPath']}
                 defaultValue={preAxonType}
-                onChange={(preAxonType) => {
-                  setPreAxonType(preAxonType as VisibilityType);
-                  updateVisibility({ [NeuriteType.PRE_NB_AXON]: preAxonType === 'full' });
+                onChange={(value) => {
+                  const newValue = value as VisibilityType;
+                  setPreAxonType(newValue);
+                  updateVisibility({ [NeuriteType.PRE_NB_AXON]: newValue === 'full' });
                 }}
               />
             </div>
@@ -199,9 +204,10 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
                 size="small"
                 options={['full', 'synPath']}
                 defaultValue={postDendType}
-                onChange={(postDendType) => {
-                  setPostDendType(postDendType as VisibilityType);
-                  updateVisibility({ [NeuriteType.POST_NB_DEND]: postDendType === 'full' });
+                onChange={(value) => {
+                  const newValue = value as VisibilityType;
+                  setPostDendType(newValue);
+                  updateVisibility({ [NeuriteType.POST_NB_DEND]: newValue === 'full' });
                 }}
               />
             </div>
@@ -228,6 +234,5 @@ const ConnectionViewerComponent: React.FC<ConnectionViewerProps> = ({ data, onRe
     </div>
   );
 };
-
 
 export default ConnectionViewerComponent;

@@ -1,10 +1,9 @@
 import range from 'lodash/range';
 
-
 const $transferable = Symbol('thread.transferable');
 const $worker = Symbol('thread.worker');
 
-function isTransferable(thing)  {
+function isTransferable(thing) {
   return thing && typeof thing === 'object';
 }
 
@@ -12,7 +11,7 @@ export function expose(moduleObj) {
   addEventListener('message', async (e) => {
     const { args, module, taskId } = e.data;
 
-    if(!moduleObj[module]) {
+    if (!moduleObj[module]) {
       return postMessage({ taskId, error: `Module ${module} is not available` });
     }
 
@@ -28,16 +27,19 @@ export function expose(moduleObj) {
 
 export class WebWorker {
   _nextTaskId = 0;
-  worker = null;
+  worker: Worker | null = null;
   busy = false;
-  onTaskDone = () => {};
+  onTaskDone: () => void = () => { };
 
   constructor(workerFactory) {
     this.worker = workerFactory();
   }
 
   terminate() {
-    this.worker.terminate();
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
+    }
   }
 
   nextTaskId() {
@@ -53,64 +55,68 @@ export class Thread {
   constructor(workerFactory) {
     this[$worker] = new WebWorker(workerFactory);
 
-    return new Proxy(this, { get: (target, name) => {
-      if (name === $worker) {
-        return this[$worker];
+    return new Proxy(this, {
+      get: (target, name) => {
+        if (name === $worker) {
+          return this[$worker];
+        }
+
+        return (...args) => {
+          const transferables = args.flatMap(arg => (typeof arg === 'object' && arg[$transferable] ? arg.transferables : []));
+
+          const taskId = this[$worker].nextTaskId();
+
+          return new Promise((resolve, reject) => {
+            const eventHandler = (e) => {
+              if (e.data.taskId !== taskId) return;
+
+              if (e.data.error) {
+                return reject(e.data.error);
+              }
+
+              this[$worker].worker.removeEventListener('message', eventHandler);
+              this[$worker].busy = false;
+              resolve(e.data.payload);
+              this[$worker].onTaskDone();
+            };
+            this[$worker].worker.addEventListener('message', eventHandler);
+            this[$worker].worker.postMessage({ module: name, taskId, args }, transferables);
+            this[$worker].busy = true;
+          });
+        };
       }
-
-      return (...args) => {
-        const transferables = args
-          .flatMap(arg => typeof arg === 'object' && arg[$transferable] ? arg.transferables : []);
-
-        const taskId = this[$worker].nextTaskId();
-
-        return new Promise((resolve, reject) => {
-          const eventHandler = (e) => {
-            if (e.data.taskId !== taskId) return;
-
-            if (e.data.error) {
-              return reject(e.data.error);
-            }
-
-            this[$worker].worker.removeEventListener('message', eventHandler);
-            this[$worker].busy = false;
-            resolve(e.data.payload);
-            this[$worker].onTaskDone();
-          };
-          this[$worker].worker.addEventListener('message', eventHandler);
-          this[$worker].worker.postMessage({ module: name, taskId, args } , transferables);
-          this[$worker].busy = true;
-        });
-      };
-    }});
+    });
   }
 }
 
 export class Pool {
-  threads = [];
-  _tasks = [];
-  _onCompleteResolvers = [];
+  threads: Thread[] = [];
+  _tasks: [Function, Function][] = [];
+  _onCompleteResolvers: Function[] = [];
 
   constructor(workerFactory, size = 4) {
     this.threads = range(size).map(() => new Thread(workerFactory));
 
-    this.threads.map(thread => {
-      thread[$worker].onTaskDone = this._onTaskDone.bind(this);
+    this.threads.forEach(thread => {
+      (thread[$worker] as WebWorker).onTaskDone = this._onTaskDone.bind(this);
     });
   }
 
   _idleThread() {
-    return this.threads.find(thread => !thread[$worker].busy);
+    return this.threads.find(thread => !(thread[$worker] as WebWorker).busy);
   }
 
   async _onTaskDone() {
     const idleThread = this._idleThread();
 
     if (this._tasks.length && idleThread) {
-      const [taskExecutor, resolve] = this._tasks.shift();
-      const taskResult = await taskExecutor(idleThread);
+      const task = this._tasks.shift();
+      if (task) {
+        const [taskExecutor, resolve] = task;
+        const taskResult = await taskExecutor(idleThread);
 
-      return resolve(taskResult);
+        return resolve(taskResult);
+      }
     }
 
     this._onCompleteResolvers.forEach(onCompleteResolver => onCompleteResolver());

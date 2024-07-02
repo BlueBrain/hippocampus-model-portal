@@ -4,7 +4,6 @@ import noop from 'lodash/noop';
 
 //import 'react-image-lightbox/style.css';
 
-
 const classPrefix = 'image-viewer__';
 
 export type ImageViewerProps = {
@@ -30,7 +29,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
   canExpand = true,
   border = false,
   loading = 'eager',
-  aspectRatio = null,
+  aspectRatio,
   onThumbnailLoad = noop,
   onThumbnailError = noop,
 }) => {
@@ -54,7 +53,10 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
   }, [src]);
 
   return (
-    <div className={`${classPrefix}basis ${className}`} style={{ aspectRatio }}>
+    <div
+      className={`${classPrefix}basis ${className}`}
+      style={{ aspectRatio: aspectRatio || undefined }}
+    >
       <img
         key={src}
         src={thumbnailSrc || src}
@@ -62,7 +64,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
         alt={alt}
         onClick={(e: React.MouseEvent) => onThumbnailClick(e)}
         style={{
-          aspectRatio,
+          aspectRatio: aspectRatio || undefined,
           border: border ? '1px solid grey' : 'none',
           display: thumbnailLoadError ? 'none' : 'block',
         }}

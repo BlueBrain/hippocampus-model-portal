@@ -22,7 +22,6 @@ import QuickSelector from '@/components/QuickSelector';
 
 import selectorStyle from '../../styles/selector.module.scss';
 
-
 type PathwayIndex = {
   pathways: number[];
   mtypeIdx: string[];
@@ -37,7 +36,7 @@ const ConnectionsView: React.FC = () => {
 
   const { prelayer, postlayer, pretype, posttype } = router.query as Record<string, string>;
 
-  const [pathwayIndex, setPathwayIndex] = useState<PathwayIndex>(null);
+  const [pathwayIndex, setPathwayIndex] = useState<PathwayIndex | null>(null);
   const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ prelayer, postlayer, pretype, posttype });
   const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
 
@@ -64,9 +63,9 @@ const ConnectionsView: React.FC = () => {
   const setPreLayerQuery = (layer: Layer) => {
     setParams({
       prelayer: layer,
-      postlayer: null,
-      pretype: null,
-      posttype: null,
+      postlayer: "",
+      pretype: "",
+      posttype: "",
     });
   };
   const setQsPreLayer = (prelayer) => {
@@ -77,7 +76,7 @@ const ConnectionsView: React.FC = () => {
   const setPostLayerQuery = (layer: Layer) => {
     setParams({
       postlayer: layer,
-      posttype: null,
+      posttype: "",
     });
   };
   const setQsPostLayer = (postlayer) => {
@@ -88,7 +87,7 @@ const ConnectionsView: React.FC = () => {
   const setPreTypeQuery = (pretype: string) => {
     setParams({
       pretype,
-      posttype: null,
+      posttype: "",
     });
   };
   const setQsPreType = (pretype) => {
@@ -120,7 +119,6 @@ const ConnectionsView: React.FC = () => {
   const preMtypes = getPreMtypes(prelayer);
   const qsPreMtypes = getPreMtypes(quickSelection.prelayer);
 
-  // TODO: move outside of the component (as well as the one above)
   const getPostMtypes = (pretype, postlayer) => {
     if (!pathwayIndex || !pretype || !postlayer) return [];
 
@@ -266,7 +264,6 @@ const ConnectionsView: React.FC = () => {
           },
         ]}
       />
-
       <DataContainer
         visible={!!pretype && !!posttype}
         navItems={[
@@ -316,6 +313,5 @@ const ConnectionsView: React.FC = () => {
     </>
   );
 };
-
 
 export default ConnectionsView;

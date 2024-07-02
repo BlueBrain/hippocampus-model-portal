@@ -80,7 +80,7 @@ export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_a
 // Digital Reconstructions - Region
 
 export const regionFactsheetPath = (volumeSection: VolumeSection) => {
-  if (!volumeSection) return null;
+  if (!volumeSection) return "";
 
   return `${staticDataBaseUrl}/dig-rec/region/${volumeSection}/factsheet.json`;
 };

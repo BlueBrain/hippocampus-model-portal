@@ -5,31 +5,22 @@ import sortBy from 'lodash/sortBy';
 
 import { hippocampus } from '../../config';
 
-
 function entryToArray(entry) {
   if (Array.isArray(entry)) return entry;
-
   return [entry];
 }
 
 function getAgentRoleLabel(agent) {
   if (!agent.role) return '';
-
-  return ': ' + agent.role
-    .replace(/^neuron\s/, '')
-    .replace(/\srole$/, '');
+  return ': ' + agent.role.replace(/^neuron\s/, '').replace(/\srole$/, '');
 }
 
 function getAgentName(agent) {
-  return agent.name
-    ? agent.name
-    : `${agent.givenName} ${agent.familyName}`;
+  return agent.name ? agent.name : `${agent.givenName} ${agent.familyName}`;
 }
 
 function getAgentType(agent) {
-  return agent.name
-    ? 'institution'
-    : 'person';
+  return agent.name ? 'institution' : 'person';
 }
 
 export type MetadataProps = {
@@ -38,19 +29,18 @@ export type MetadataProps = {
 
 const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
   const nexus = useNexusContext();
-
-  const [agents, setAgents] = useState<Record<string, any>[]>(null);
+  const [agents, setAgents] = useState<Record<string, any>[]>([]);
 
   const contributions = entryToArray(nexusDocument.contribution).filter(Boolean);
-  const roleByAgentId = contributions.reduce((acc, contribution) => ({
-    ...acc,
-    [contribution.agent['@id']]: get(contribution, 'hadRole.label'),
-  }), {});
+  const roleByAgentId = contributions.reduce(
+    (acc, contribution) => ({
+      ...acc,
+      [contribution.agent['@id']]: get(contribution, 'hadRole.label'),
+    }),
+    {}
+  );
 
-
-  const agentIds = contributions
-    .map(contribution => contribution.agent?.['@id'])
-    .filter(Boolean);
+  const agentIds = contributions.map(contribution => contribution.agent?.['@id']).filter(Boolean);
 
   useEffect(() => {
     if (!agentIds.length) return;
@@ -61,9 +51,9 @@ const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
       query: {
         terms: {
           '_id': agentIds,
-        }
-      }
-    }
+        },
+      },
+    };
 
     nexus.View
       // query ElesticSearch endpoint to get agents by their ids
@@ -73,12 +63,14 @@ const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
       // extract Nexus original documents
       .then(esDocuments => esDocuments.map(esDocument => esDocument._source))
       // pick only agent ids and labels
-      .then(agents => agents.map(agent => ({
-        id: agent['@id'],
-        name: getAgentName(agent),
-        type: getAgentType(agent),
-        role: roleByAgentId[agent['@id']],
-      })))
+      .then(agents =>
+        agents.map(agent => ({
+          id: agent['@id'],
+          name: getAgentName(agent),
+          type: getAgentType(agent),
+          role: roleByAgentId[agent['@id']],
+        }))
+      )
       .then(agents => agents.filter(agent => !agent?.role || !agent?.role.match(/transformation/i))) // filter out data transformation
       .then(agents => sortBy(agents, 'name'))
       .then(agents => sortBy(agents, 'type')) // brings institutions first
@@ -86,20 +78,15 @@ const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
   }, [nexusDocument]);
 
   const contributionStr = agents
-    ? agents.map(agent => `${agent.name}${getAgentRoleLabel(agent)}`)
-      .join(', ')
+    ? agents.map(agent => `${agent.name}${getAgentRoleLabel(agent)}`).join(', ')
     : '...';
 
   return (
     <>
       <h3>Contribution</h3>
-      <p id={agents ? 'metadata' : undefined}>
-        {contributionStr}.
-      </p>
+      <p id={agents ? 'metadata' : undefined}>{contributionStr}.</p>
     </>
   );
-
 };
-
 
 export default Metadata;

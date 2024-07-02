@@ -23,33 +23,31 @@ import { RendererCtrl } from './utils';
 import { saveAs } from 'file-saver';
 import { color } from './constants';
 
-
 const AMBIENT_LIGHT_COLOR = 0x555555;
 const CAMERA_LIGHT_COLOR = 0xcacaca;
-
 const BACKGROUND_COLOR = 0xfefdfb;
 
-function parseCssColor(colorStr) {
+function parseCssColor(colorStr: string) {
   return parseInt(colorStr.replace('#', ''), 16);
 }
 
 export default class VolumeViewer {
-  private meshPath: string = null;
-  private volumeSection: VolumeSection = null;
+  private meshPath: string | null = null;
+  private volumeSection: VolumeSection | null = null;
 
-  private container: HTMLDivElement = null;
-  private resizeObserver: ResizeObserver = null;
-  private canvas: HTMLCanvasElement = null;
-  private renderer: WebGLRenderer = null;
-  private scene: Scene = null;
-  private camera: PerspectiveCamera = null;
-  private controls: TrackballControls = null;
+  private container: HTMLDivElement | null = null;
+  private resizeObserver: ResizeObserver | null = null;
+  private canvas: HTMLCanvasElement | null = null;
+  private renderer: WebGLRenderer | null = null;
+  private scene: Scene | null = null;
+  private camera: PerspectiveCamera | null = null;
+  private controls: TrackballControls | null = null;
   private ctrl: RendererCtrl = new RendererCtrl();
-  private onUserInteract: EventListener = null;
+  private onUserInteract: EventListener = () => { };
 
   private material: Record<string, Material> = {};
-  private regionMesh: Mesh = null;
-  private group: Group = null;
+  private regionMesh: Mesh | null = null;
+  private group: Group | null = null;
   private layerMesh: { [meshName: string]: Mesh } = {};
 
   private regionMeshVisible = true;
@@ -81,10 +79,10 @@ export default class VolumeViewer {
   }
 
   public resize() {
-    const { clientWidth, clientHeight } = this.container;
-    this.camera.aspect = clientWidth / clientHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(clientWidth, clientHeight);
+    const { clientWidth, clientHeight } = this.container!;
+    this.camera!.aspect = clientWidth / clientHeight;
+    this.camera!.updateProjectionMatrix();
+    this.renderer!.setSize(clientWidth, clientHeight);
 
     this.ctrl.renderOnce();
   }
@@ -93,7 +91,7 @@ export default class VolumeViewer {
     this.volumeSection = volumeSection;
 
     Object.entries(this.layerMesh).forEach(([meshKey, mesh]) => {
-      const [, meshVolumeSection, layer] = meshKey.match(/(\w+)\_(\w+)/);
+      const [, meshVolumeSection, layer] = meshKey.match(/(\w+)\_(\w+)/)!;
       mesh.visible = meshVolumeSection === volumeSection && visibility[layer];
     });
 
@@ -104,18 +102,20 @@ export default class VolumeViewer {
     this.ctrl.renderOnce();
   }
 
-  public setRegionMaskVisibility(visible) {
+  public setRegionMaskVisibility(visible: boolean) {
     this.regionMeshVisible = visible;
-    this.regionMesh.visible = visible && this.canRenderRegionMesh();
+    if (this.regionMesh) {
+      this.regionMesh.visible = visible && this.canRenderRegionMesh();
+    }
     this.ctrl.renderOnce();
   }
 
-  public setLayerVisibility(visibility) {
+  public setLayerVisibility(visibility: Record<string, boolean>) {
     Object.entries(visibility).forEach(([layer, visible]) => {
       const meshKey = `${this.volumeSection}_${layer}`;
 
-      if(!this.layerMesh[meshKey]) {
-        throw new Error(`Mesh for ${meshKey} is not found}`);
+      if (!this.layerMesh[meshKey]) {
+        throw new Error(`Mesh for ${meshKey} is not found`);
       }
 
       this.layerMesh[meshKey].visible = visible;
@@ -124,8 +124,8 @@ export default class VolumeViewer {
     this.ctrl.renderOnce();
   }
 
-  public downloadRender(filename) {
-    const { clientWidth, clientHeight } = this.renderer.domElement.parentElement;
+  public downloadRender(filename: string) {
+    const { clientWidth, clientHeight } = this.renderer!.domElement.parentElement!;
 
     const renderer = new WebGLRenderer({
       antialias: true,
@@ -136,9 +136,9 @@ export default class VolumeViewer {
 
     renderer.setSize(clientWidth * 3, clientHeight * 3);
 
-    renderer.render(this.scene, this.camera);
+    renderer.render(this.scene!, this.camera!);
 
-    renderer.domElement.toBlob(blob => saveAs(blob, `${filename}.png`));
+    renderer.domElement.toBlob(blob => saveAs(blob!, `${filename}.png`));
     renderer.dispose();
   }
 
@@ -146,33 +146,45 @@ export default class VolumeViewer {
     Object.values(this.material).forEach(material => material.dispose());
     Object.values(this.layerMesh).forEach(mesh => mesh.geometry.dispose());
 
-    this.regionMesh.geometry.dispose();
+    if (this.regionMesh) {
+      this.regionMesh.geometry.dispose();
+    }
 
-    this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
+    if (this.renderer) {
+      this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
+    }
 
-    this.resizeObserver.unobserve(this.container);
+    if (this.resizeObserver) {
+      this.resizeObserver.unobserve(this.container!);
+    }
 
-    this.controls.dispose();
-    this.renderer.dispose();
+    if (this.controls) {
+      this.controls.dispose();
+    }
+    if (this.renderer) {
+      this.renderer.dispose();
+    }
 
-    this.container.removeChild(this.canvas);
+    if (this.container && this.canvas) {
+      this.container.removeChild(this.canvas);
+    }
   }
 
   private initCanvas() {
     this.canvas = document.createElement('canvas');
-    this.container.appendChild(this.canvas);
+    this.container!.appendChild(this.canvas);
   }
 
   private initRenderer() {
     this.renderer = new WebGLRenderer({
-      canvas: this.canvas,
+      canvas: this.canvas!,
       antialias: true,
     });
 
-    const { clientWidth, clientHeight } = this.container;
+    const { clientWidth, clientHeight } = this.container!;
     this.renderer.setSize(clientWidth, clientHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
   }
@@ -184,14 +196,14 @@ export default class VolumeViewer {
   }
 
   private initCamera() {
-    const { clientWidth, clientHeight } = this.container;
+    const { clientWidth, clientHeight } = this.container!;
     this.camera = new PerspectiveCamera(45, clientWidth / clientHeight, 1, 30000);
-    this.scene.add(this.camera);
+    this.scene!.add(this.camera);
     this.camera.add(new PointLight(CAMERA_LIGHT_COLOR, 0.9));
   }
 
   private initControls() {
-    this.controls = new TrackballControls(this.camera, this.renderer.domElement);
+    this.controls = new TrackballControls(this.camera!, this.renderer!.domElement);
     this.controls.enableDamping = true;
     this.controls.zoomSpeed = 0.5;
     this.controls.rotateSpeed = 0.8;
@@ -199,21 +211,21 @@ export default class VolumeViewer {
   }
 
   private initEvents() {
-    const params  = { capture: false, passive: true };
+    const params = { capture: false, passive: true };
 
     this.onUserInteract = throttle(() => this.ctrl.renderFor(4000), 100).bind(this);
 
-    this.canvas.addEventListener('wheel', this.onUserInteract, params);
-    this.canvas.addEventListener('mousemove', this.onUserInteract, params);
-    this.canvas.addEventListener('touchmove', this.onUserInteract, params);
-    this.canvas.addEventListener('pointermove', this.onUserInteract, params);
+    this.canvas!.addEventListener('wheel', this.onUserInteract, params);
+    this.canvas!.addEventListener('mousemove', this.onUserInteract, params);
+    this.canvas!.addEventListener('touchmove', this.onUserInteract, params);
+    this.canvas!.addEventListener('pointermove', this.onUserInteract, params);
   }
 
   private initObservers() {
     // postponing resize as Firefox for some reason detects wrong container size when executed synchronously
     this.resizeObserver = new ResizeObserver(() => setTimeout(() => this.resize(), 0));
 
-    this.resizeObserver.observe(this.container);
+    this.resizeObserver.observe(this.container!);
   }
 
   private initMaterials() {
@@ -236,7 +248,7 @@ export default class VolumeViewer {
     const loader = new OBJLoader();
 
     return new Promise<void>((resolve) => {
-      loader.load(this.meshPath, (obj) => {
+      loader.load(this.meshPath!, (obj) => {
         obj.traverse(mesh => {
           if (!mesh.isMesh) return;
 
@@ -250,17 +262,17 @@ export default class VolumeViewer {
 
             this.regionMesh = mesh;
           } else {
-            const [, volumeSection, layer] = name.match(/(\w+)_(\w+)/);
+            const [, volumeSection, layer] = name.match(/(\w+)_(\w+)/)!;
 
             const material = this.material[layer];
             mesh.material = material;
-            mesh.visible = volumeSection === this.volumeSection;;
+            mesh.visible = volumeSection === this.volumeSection;
 
             this.layerMesh[`${volumeSection}_${layer}`] = mesh;
           }
         });
 
-        this.scene.add(obj);
+        this.scene!.add(obj);
         this.group = obj;
         resolve();
       });
@@ -268,7 +280,7 @@ export default class VolumeViewer {
   }
 
   private alignCamera() {
-    const boundingBox = new Box3().setFromObject(this.group);
+    const boundingBox = new Box3().setFromObject(this.group!);
 
     const centerVec = new Vector3();
     boundingBox.getCenter(centerVec);

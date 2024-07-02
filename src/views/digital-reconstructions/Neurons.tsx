@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { useRouter } from 'next/router';
 import { Button, Spin } from 'antd';
 
@@ -16,7 +15,6 @@ import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 import EtypeFactsheet from '@/components/EtypeFactsheet';
 import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-// import NeuronMorphology from '@/components/NeuronMorphology';
 import { basePath } from '@/config';
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
@@ -26,38 +24,36 @@ import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
-
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
-
-const getMtypes = (layer) => {
+const getMtypes = (layer: Layer) => {
   return layer
     ? models
       .filter(model => model.layer === layer)
       .map(model => model.mtype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce<string[]>((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
-}
+};
 
-const getEtypes = (mtype) => {
+const getEtypes = (mtype: string) => {
   return mtype
     ? models
       .filter(model => model.mtype === mtype)
       .map(model => model.etype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce<string[]>((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
-}
+};
 
-const getInstances = (mtype, etype) => {
+const getInstances = (mtype: string, etype: string) => {
   return etype
     ? models
       .filter(model => model.mtype === mtype && model.etype === etype)
       .map(model => model.name)
       .sort()
     : [];
-}
+};
 
 const Neurons: React.FC = () => {
   const router = useRouter();
@@ -87,32 +83,30 @@ const Neurons: React.FC = () => {
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
-      mtype: null,
-      etype: null,
-      instance: null,
-    })
+      mtype: '',
+      etype: '',
+      instance: '',
+    });
   };
   const setMtype = (mtype: string) => {
     setParams({
       mtype,
-      etype: null,
-      instance: null,
-    })
+      etype: '',
+      instance: '',
+    });
   };
   const setEtype = (etype: string) => {
     setParams({
       etype,
-      instance: null,
-    })
+      instance: '',
+    });
   };
   const setInstance = (instance: string) => {
-    setParams({ instance })
+    setParams({ instance });
   };
 
   const mtypes = getMtypes(currentLayer);
-
   const etypes = getEtypes(currentMtype);
-
   const instances = getInstances(currentMtype, currentEtype);
 
   const getMorphologyDistribution = (morphologyResource: any) => {
@@ -122,8 +116,8 @@ const Neurons: React.FC = () => {
   const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
 
   const morphologyName = currentInstance
-    ? currentInstance.match(modelMorphologyRe)[1]
-    : null;
+    ? currentInstance.match(modelMorphologyRe)?.[1] ?? ''
+    : '';
 
   return (
     <>
@@ -148,59 +142,12 @@ const Neurons: React.FC = () => {
               </p>
             </InfoBox>
           </div>
-          {/* 
-          <div className="col-xs-12 col-lg-6">
-            <div className={styles.selector}>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>1. Choose a layer</div>
-                <div className={styles.selectorBody}>
-                  <LayerSelector
-                    value={currentLayer}
-                    onSelect={setLayer}
-                  />
-                </div>
-              </div>
-              <div className={styles.selectorColumn}>
-                <div className={styles.selectorHead}>2. Select model</div>
-                <div className={styles.selectorBody}>
-                  <List
-                    className="mb-2"
-                    block
-                    list={mtypes}
-                    value={currentMtype}
-                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setMtype}
-                  />
-                  <List
-                    className="mb-2"
-                    block
-                    list={etypes}
-                    value={currentEtype}
-                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setEtype}
-                  />
-                  <List
-                    block
-                    list={instances}
-                    value={currentInstance}
-                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setInstance}
-                    anchor="data"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          */}
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
               <div className={"selector__column theme-" + theme}>
                 <div className={"selector__head theme-" + theme}>Choose a layer</div>
                 <div className={"selector__body"}>
-                  < LayerSelector3D
+                  <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                     theme={theme}
@@ -220,7 +167,6 @@ const Neurons: React.FC = () => {
                     onSelect={setMtype}
                     theme={theme}
                   />
-
                   <List
                     className="mb-2"
                     block
@@ -277,7 +223,6 @@ const Neurons: React.FC = () => {
           </div>
 
           <h3 className="mb-3">Morphology</h3>
-          {/* <NeuronMorphology path={`${basePath}/data/model-morphologies-swc/${morphologyName}.swc`} /> */}
           <div className="row end-xs mt-3 mb-3">
             <div className="col">
               <Button
@@ -332,7 +277,6 @@ const Neurons: React.FC = () => {
             </Button>
           </div>
           <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
-          {/* TODO: add experimental traces used for model fitting */}
         </Collapsible>
       </DataContainer>
     </>
@@ -367,7 +311,6 @@ const qsEntries = [
     getValuesParam: 'mtype',
     paramsToKeepOnChange: ['layer', 'mtype'],
   },
-
   {
     title: 'Instance',
     key: 'instance',
