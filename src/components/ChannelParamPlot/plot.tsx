@@ -14,7 +14,6 @@ import { Parser } from 'expr-eval';
 
 import styles from './styles.module.scss';
 
-
 export type ChannelParam = {
   channel: string;
   parameter: string;
@@ -104,8 +103,8 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
       return Array.from({ length: plotLength }, (_, x) => x * 100);
     }
 
-    function getData(parameter: ChannelParam) {
-      let arrayValues = [];
+    function getData(parameter: ChannelParam): number[] {
+      let arrayValues: number[] = [];
       switch (parameter.distribution) {
         case 'uniform':
           const UNIFORM_CONST = 1;
