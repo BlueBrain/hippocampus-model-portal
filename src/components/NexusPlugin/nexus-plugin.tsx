@@ -1,6 +1,3 @@
-/**
- * This component requires SystemJS to be available globally (in window)
- */
 import * as React from 'react';
 import invariant from 'ts-invariant';
 import isFunction from 'lodash/isFunction';
@@ -9,7 +6,6 @@ import { NexusClient, Resource } from '@bbp/nexus-sdk';
 
 // import Loading from '../components/Loading';
 import { nexusPluginBaseUrl } from '../../config';
-
 
 const PluginError: React.FC<{ error: Error }> = ({ error }) => {
   return (
@@ -115,7 +111,7 @@ export class NexusPlugin extends React.Component<
   }
 
   componentWillUnmount() {
-    if (isFunction(this.destroyPlugin)) {
+    if (this.destroyPlugin && isFunction(this.destroyPlugin)) {
       this.destroyPlugin();
     }
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import { captureException } from '@sentry/nextjs';
 import { decodeAsync } from "@msgpack/msgpack";
 
-
 type HttpDataProps = {
   path: string;
   label?: string;
@@ -35,7 +34,12 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
         // TODO: remove when factesheets don't longer contain NaN values
         if (res.ok) {
           if (msgpackEncoded) {
-            return decodeAsync(res.body);
+            if (res.body) {
+              return decodeAsync(res.body);
+            }
+            const err = new Error(`Response body is null for ${path}`);
+            captureException(err);
+            return Promise.reject(err);
           }
 
           const resBody = await res.text();

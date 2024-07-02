@@ -10,6 +10,7 @@ import { MeshInfo } from '../types';
 import { getGradientCanvas } from '../utils';
 import Selector from '../Selector';
 import Styles from './viewer.module.scss';
+import Painter from '../Scene/painter';
 
 export interface VectorsViewerProps {
     className?: string;

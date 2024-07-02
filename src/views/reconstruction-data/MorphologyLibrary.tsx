@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Spin } from 'antd';
@@ -27,31 +26,29 @@ import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
-
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
-
-const getMtypes = (layer) => {
+const getMtypes = (layer: Layer): string[] => {
   return layer
     ? models
       .filter(model => model.layer === layer)
       .map(model => model.mtype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getEtypes = (mtype) => {
+const getEtypes = (mtype: string): string[] => {
   return mtype
     ? models
       .filter(model => model.mtype === mtype)
       .map(model => model.etype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getInstances = (mtype, etype) => {
+const getInstances = (mtype: string, etype: string): string[] => {
   return etype
     ? models
       .filter(model => model.mtype === mtype && model.etype === etype)
@@ -62,18 +59,16 @@ const getInstances = (mtype, etype) => {
 
 const Neurons: React.FC = () => {
   const router = useRouter();
-
   const theme = 3;
 
   const { query } = router;
-
   const currentLayer: Layer = query.layer as Layer;
   const currentMtype: string = query.mtype as string;
   const currentEtype: string = query.etype as string;
   const currentInstance: string = query.instance as string;
 
   const setParams = (params: Record<string, string>): void => {
-    const query = {
+    const newQuery = {
       ...{
         layer: currentLayer,
         mtype: currentMtype,
@@ -82,28 +77,28 @@ const Neurons: React.FC = () => {
       },
       ...params,
     };
-    router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
+    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
-      mtype: null,
-      etype: null,
-      instance: null,
+      mtype: '',
+      etype: '',
+      instance: '',
     })
   };
   const setMtype = (mtype: string) => {
     setParams({
       mtype,
-      etype: null,
-      instance: null,
+      etype: '',
+      instance: '',
     })
   };
   const setEtype = (etype: string) => {
     setParams({
       etype,
-      instance: null,
+      instance: '',
     })
   };
   const setInstance = (instance: string) => {
@@ -111,20 +106,17 @@ const Neurons: React.FC = () => {
   };
 
   const mtypes = getMtypes(currentLayer);
-
   const etypes = getEtypes(currentMtype);
-
   const instances = getInstances(currentMtype, currentEtype);
-
-  const getMorphologyDistribution = (morphologyResource: any) => {
-    return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
-  };
 
   const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
 
+  /*
+  Not Used
   const morphologyName = currentInstance
     ? currentInstance.match(modelMorphologyRe)[1]
     : null;
+    */
 
   return (
     <>
@@ -140,11 +132,10 @@ const Neurons: React.FC = () => {
             <InfoBox
               color={colorName}
             >
-              <p >
+              <p>
                 We scale and clone <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphologies</Link> to produce a morphology library.
               </p>
             </InfoBox>
-
           </div>
 
           <div className="col-xs-12 col-lg-6">
@@ -241,7 +232,6 @@ const qsEntries = [
     getValuesParam: 'mtype',
     paramsToKeepOnChange: ['layer', 'mtype'],
   },
-
   {
     title: 'Instance',
     key: 'instance',

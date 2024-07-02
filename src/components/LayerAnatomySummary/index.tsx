@@ -10,7 +10,6 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { layerDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
-
 const Term = termFactory(layerDescription);
 
 const classPrefix = 'layer-anatomy-summary__';
@@ -31,7 +30,7 @@ type SummaryData = {
 const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], highlightLayer = '' }) => {
   const entities = data.map(document => document._source);
 
-  let thicknessUnit: string;
+  let thicknessUnit: string = '';
 
   const summary: SummaryData[] = layers.map((layer) => {
     const thicknessEntity = entities.find((entity) => (
@@ -41,7 +40,7 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
     ));
 
     const thicknessMean = thicknessEntity?.series.find((s: any) => s.statistic === 'mean')?.value;
-    thicknessUnit = thicknessEntity?.series.find((s: any) => s.statistic === 'mean')?.unitCode;
+    thicknessUnit = thicknessEntity?.series.find((s: any) => s.statistic === 'mean')?.unitCode || thicknessUnit;
     const thicknessN = thicknessEntity?.series.find((s: any) => s.statistic === 'N')?.value;
     const thicknessStd = thicknessEntity?.series.find((s: any) => s.statistic === 'standard deviation')?.value;
 
@@ -49,7 +48,7 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
 
     return {
       layer,
-      thicknessEntityDescription: thicknessEntity.description,
+      thicknessEntityDescription: thicknessEntity?.description,
       thickness: (<>
         <NumberFormat
           value={thicknessMean}

@@ -339,7 +339,7 @@ const Network = () => {
                 className="mb-2"
                 columns={columns}
                 data={data}
-                rowKey={({ from, to }) => `${from}_${to}`}
+                rowKey={(record) => record.Reference}
             />
 
             <div className="text-right mt-2">

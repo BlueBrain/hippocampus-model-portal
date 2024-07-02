@@ -11,9 +11,8 @@ import Feedback from '../components/Feedback';
 
 import '../styles/globals.scss';
 
-import { register } from 'instrumentation'; // Use in jayout.jsx if using app routing
+import { register } from 'instrumentation'; // Use in layout.jsx if using app routing
 register();
-
 
 if (typeof window === 'undefined') {
   require('abort-controller/polyfill');
@@ -23,11 +22,13 @@ if (typeof window === 'undefined') {
   require('systemjs/dist/extras/amd');
 }
 
-const nexusClient = createNexusClient({
-  uri: nexus.url,
-  token: nexus.token,
-});
+const nexusUrl = nexus.url || 'default-url'; // Replace 'default-url' with an actual default value or handle the error
+const nexusToken = nexus.token || 'default-token'; // Replace 'default-token' with an actual default value or handle the error
 
+const nexusClient = createNexusClient({
+  uri: nexusUrl,
+  token: nexusToken,
+});
 
 function App({ Component, pageProps }) {
   return (
@@ -43,8 +44,7 @@ function App({ Component, pageProps }) {
         <Component {...pageProps} />
       </MainLayout>
     </NexusProvider>
-  )
+  );
 }
 
-
-export default App
+export default App;

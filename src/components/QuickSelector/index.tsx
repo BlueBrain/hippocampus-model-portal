@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import throttle from 'lodash/throttle';
 
 import style from './styles.module.scss';
 
 import { Color } from '@/types';
-
 
 const { Option } = Select;
 
@@ -23,10 +22,12 @@ type QuickSelectorProps = {
 const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, color = '' }) => {
   const [visible, setVisible] = useState<boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const scrollHandler = () => {
-      const { pageTop, height } = window.visualViewport;
-      setVisible(pageTop > (height + 84));
+      if (window.visualViewport) {
+        const { pageTop, height } = window.visualViewport;
+        setVisible(pageTop > (height + 84));
+      }
     }
 
     const scrollHandlerThrottled = throttle(scrollHandler, 200);
@@ -43,7 +44,6 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, color = '' }) =>
       className={`${style.quickSelectorContainer} set-accent-color--${color} ${visible ? style.show : ''}`}
     >
       {entries.map(({ title, currentValue, values, onChange, width = '200px' }) => {
-
         return (
           <div className={style.quickSelectorItem} key={title}>
             <label>{title}:</label>
@@ -54,7 +54,7 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, color = '' }) =>
               placeholder={title}
               onChange={(value) => onChange(value)}
               value={currentValue}
-              getPopupContainer={() => document.getElementById('quickSelector')}
+              getPopupContainer={() => document.getElementById('quickSelector') || document.body}
             >
               {values.map(value => (
                 <Option value={value} key={value}>{value}</Option>
@@ -66,6 +66,5 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, color = '' }) =>
     </div>
   );
 };
-
 
 export default QuickSelector;

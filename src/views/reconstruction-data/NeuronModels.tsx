@@ -29,27 +29,28 @@ import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
 
-const getMtypes = (layer) => {
+
+const getMtypes = (layer: Layer): string[] => {
   return layer
     ? models
       .filter(model => model.layer === layer)
       .map(model => model.mtype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getEtypes = (mtype) => {
+const getEtypes = (mtype: string): string[] => {
   return mtype
     ? models
       .filter(model => model.mtype === mtype)
       .map(model => model.etype)
-      .reduce((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
+      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
       .sort()
     : [];
 }
 
-const getInstances = (mtype, etype) => {
+const getInstances = (mtype: string, etype: string): string[] => {
   return etype
     ? models
       .filter(model => model.mtype === mtype && model.etype === etype)
@@ -86,28 +87,27 @@ const Neurons: React.FC = () => {
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
-      mtype: null,
-      etype: null,
-      instance: null,
+      mtype: '',
+      etype: '',
+      instance: '',
     })
   };
   const setMtype = (mtype: string) => {
     setParams({
       mtype,
-      etype: null,
-      instance: null,
+      etype: '',
+      instance: '',
     })
   };
   const setEtype = (etype: string) => {
     setParams({
       etype,
-      instance: null,
+      instance: '',
     })
   };
   const setInstance = (instance: string) => {
     setParams({ instance })
   };
-
   const mtypes = getMtypes(currentLayer);
 
   const etypes = getEtypes(currentMtype);
@@ -119,11 +119,11 @@ const Neurons: React.FC = () => {
   };
 
   const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
-
-  const morphologyName = currentInstance
-    ? currentInstance.match(modelMorphologyRe)[1]
-    : null;
-
+  /*
+    const morphologyName = currentInstance
+      ? currentInstance.match(modelMorphologyRe)[1]
+      : null;
+  */
   return (
     <>
       <Filters theme={theme}>

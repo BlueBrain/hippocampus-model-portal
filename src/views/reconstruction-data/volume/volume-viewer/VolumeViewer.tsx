@@ -12,11 +12,10 @@ import Legend from './Legend';
 
 import styles from './volume-viewer.module.scss';
 
-
 export type VolumeViewerProps = {
   meshPath: string;
   volumeSection: VolumeSection;
-  onReady?: () => void
+  onReady?: () => void;
 };
 
 const defaultLayerVisibilityState: Record<Layer, boolean> = {
@@ -31,22 +30,22 @@ const isFullscreenAvailable = document.fullscreenEnabled || document['webkitFull
 
 const VolumeViewerComponent: React.FC<VolumeViewerProps> = ({ meshPath, volumeSection, onReady }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [volumeViewer, setVolumeViewer] = useState<VolumeViewer>(null);
+  const [volumeViewer, setVolumeViewer] = useState<VolumeViewer | null>(null);
   const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
   const fullscreenHandle = useFullScreenHandle();
 
   const [layerVisibilityState, setLayerVisibilityState] = useState(defaultLayerVisibilityState);
   const [regionMaskVisible, setRegionMaskVisible] = useState(true);
 
-  const updateLayerVisibility = (layerVisibilityState) => {
+  const updateLayerVisibility = (layerVisibilityState: Record<Layer, boolean>) => {
     setLayerVisibilityState(layerVisibilityState);
-    volumeViewer.setLayerVisibility(layerVisibilityState);
+    volumeViewer?.setLayerVisibility(layerVisibilityState);
   };
 
-  const updateRegionMaskVisibility = (visible) => {
+  const updateRegionMaskVisibility = (visible: boolean) => {
     setRegionMaskVisible(visible);
-    volumeViewer.setRegionMaskVisibility(visible);
-  }
+    volumeViewer?.setRegionMaskVisibility(visible);
+  };
 
   const toggleFullscreen = () => {
     if (fullscreenHandle.active) {
@@ -58,33 +57,32 @@ const VolumeViewerComponent: React.FC<VolumeViewerProps> = ({ meshPath, volumeSe
 
   const downloadRender = () => {
     const imageName = `volume_render_CA1_${volumeSection}`;
-    volumeViewer.downloadRender(imageName);
+    volumeViewer?.downloadRender(imageName);
   };
 
   useEffect(() => {
-    if (!meshPath || !containerRef || !containerRef.current) return;
+    if (!meshPath || !containerRef.current) return;
 
     const containerNode = containerRef.current;
+    const viewer = new VolumeViewer(containerNode);
+    setVolumeViewer(viewer);
 
-    const volumeViewer = new VolumeViewer(containerNode);
-    setVolumeViewer(volumeViewer);
-
-    volumeViewer.init(meshPath, volumeSection).then(() => {
+    viewer.init(meshPath, volumeSection).then(() => {
       if (onReady) {
         onReady();
       }
     });
 
     return () => {
-      if (volumeViewer) volumeViewer.destroy();
+      viewer.destroy();
     };
-  }, [containerRef, meshPath]);
+  }, [meshPath, containerRef, volumeSection, onReady]);
 
   useEffect(() => {
-    if (!volumeViewer || !volumeSection) return;
-
-    volumeViewer.setVolumeSection(volumeSection, layerVisibilityState);
-  }, [volumeSection]);
+    if (volumeViewer && volumeSection) {
+      volumeViewer.setVolumeSection(volumeSection, layerVisibilityState);
+    }
+  }, [volumeViewer, volumeSection, layerVisibilityState]);
 
   return (
     <div>
@@ -171,6 +169,5 @@ const VolumeViewerComponent: React.FC<VolumeViewerProps> = ({ meshPath, volumeSe
     </div>
   );
 };
-
 
 export default VolumeViewerComponent;

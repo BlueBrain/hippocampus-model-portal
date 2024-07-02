@@ -7,7 +7,7 @@ import style from './styles.module.scss';
 
 type TermProps = {
   term: string;
-  description?: string;
+  description?: any;
   className?: string;
 };
 

@@ -195,7 +195,7 @@ const ConnectionProbabilityTable = () => {
                 className="mb-2"
                 columns={columns}
                 data={data}
-                rowKey={({ from, to }) => `${from}_${to}`}
+            //rowKey={({ from, to }) => `${from}_${to}`}
             />
 
             <div className="text-right mt-2">

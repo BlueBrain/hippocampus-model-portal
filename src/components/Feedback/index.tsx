@@ -7,27 +7,25 @@ import { basePath, feedbackUrl, deploymentUrl } from '../../config';
 
 import styles from './styles.module.scss';
 
-
 const { TextArea } = Input;
 const { Option } = Select;
 
 const FEEDBACK_CONTACT_KEY = 'feedbackContact';
-const storage = typeof (window) !== 'undefined' ? window.sessionStorage : null;
-
+const storage = typeof window !== 'undefined' ? window.sessionStorage : null;
 
 const Feedback: React.FC = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const [formVisible, setFormVisible] = useState(false);
   const issueSelectRef = useRef<HTMLSelectElement>(null);
 
-  const [type, setType] = useState(null);
+  const [type, setType] = useState<string | null>(null);
   const [component, setComponent] = useState('');
   const [details, setDetails] = useState('');
   const [contact, setContact] = useState(storage?.getItem(FEEDBACK_CONTACT_KEY) ?? '');
 
   const [sending, setSending] = useState(false);
-  const [responseStatus, setResponseStatus] = useState<'success' | 'error'>(null)
+  const [responseStatus, setResponseStatus] = useState<'success' | 'error' | null>(null);
 
   const onContactChange = (value: string) => {
     storage?.setItem(FEEDBACK_CONTACT_KEY, value);
@@ -46,22 +44,23 @@ const Feedback: React.FC = () => {
       setType(null);
       setComponent('');
       setDetails('');
-
-      setResponseStatus(null)
+      setResponseStatus(null);
     }, 200);
-  }
+  };
 
   const sendFeedback = async () => {
-    setResponseStatus(null)
+    setResponseStatus(null);
     setSending(true);
 
-    const pageUrl = `${deploymentUrl}${router.basePath}${router.asPath}`;
+    const pageUrl = `${deploymentUrl}${router.basePath ?? ''}${router.asPath}`;
 
     const labels = ['triage'];
+    const basePathSafe = basePath ?? '';
+    const routerBasePathSafe = router.basePath ?? '';
 
-    if (router.basePath.startsWith(basePath)) {
+    if (routerBasePathSafe.startsWith(basePathSafe)) {
       labels.push('section: explore');
-    } else if (router.basePath.startsWith('/build')) {
+    } else if (routerBasePathSafe.startsWith('/build')) {
       labels.push('section: build');
     }
 
@@ -86,26 +85,24 @@ const Feedback: React.FC = () => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-      })
+      });
       if (res.ok) {
         setResponseStatus('success');
         setTimeout(closeForm, 1000);
-      } else setResponseStatus('error')
-
+      } else {
+        setResponseStatus('error');
+      }
       setSending(false);
     } catch (e) {
-      setResponseStatus('error')
+      setResponseStatus('error');
     } finally {
-      setSending(false)
+      setSending(false);
     }
-  }
+  };
 
   return (
     <div className={`${formVisible ? styles.formVisible : ''}`}>
-      <div
-        className={styles.feedbackButton}
-        onClick={showForm}
-      >
+      <div className={styles.feedbackButton} onClick={showForm}>
         Feedback
       </div>
       <div id="feedbackForm" className={styles.form}>
@@ -124,7 +121,7 @@ const Feedback: React.FC = () => {
               placeholder="Feedback type (optional)"
               ref={issueSelectRef as any}
               disabled={sending}
-              getPopupContainer={() => document.getElementById('feedbackForm')}
+              getPopupContainer={() => document.getElementById('feedbackForm')!}
               value={type}
               onChange={(value) => setType(value as string)}
             >
@@ -139,7 +136,7 @@ const Feedback: React.FC = () => {
               prefix={<GatewayOutlined />}
               disabled={sending}
               value={component}
-              onChange={e => setComponent(e.target.value)}
+              onChange={(e) => setComponent(e.target.value)}
             />
           </Form.Item>
           <Form.Item>
@@ -149,7 +146,7 @@ const Feedback: React.FC = () => {
               disabled={sending}
               autoSize={{ minRows: 4, maxRows: 4 }}
               value={details}
-              onChange={e => setDetails(e.target.value)}
+              onChange={(e) => setDetails(e.target.value)}
             />
           </Form.Item>
           <Form.Item>
@@ -158,17 +155,13 @@ const Feedback: React.FC = () => {
               prefix={<UserOutlined />}
               disabled={sending}
               value={contact}
-              onChange={e => onContactChange(e.target.value)}
+              onChange={(e) => onContactChange(e.target.value)}
               onPressEnter={sendFeedback}
             />
           </Form.Item>
           <Form.Item className="text-right mb-0">
-            {responseStatus === 'success' && (
-              <span className="mr-1">Sent, thank you!</span>
-            )}
-            {responseStatus === 'error' && (
-              <span className="mr-1 text-red">Oops, something went wrong</span>
-            )}
+            {responseStatus === 'success' && <span className="mr-1">Sent, thank you!</span>}
+            {responseStatus === 'error' && <span className="mr-1 text-red">Oops, something went wrong</span>}
             <Button
               className={styles.sendBtn}
               type="primary"
@@ -185,6 +178,5 @@ const Feedback: React.FC = () => {
     </div>
   );
 };
-
 
 export default Feedback;

@@ -10,7 +10,6 @@ import { NexusMorphology } from '../../types';
 
 import styles from './styles.module.scss';
 
-
 const getMorphologyDistribution = (morphologyResource: any) => (
   morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i))
 );
@@ -21,7 +20,7 @@ export function entryToArray(entry) {
 }
 
 export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
-  const [agentMap, setAgentMap] = useState<Record<string, any>>(null);
+  const [agentMap, setAgentMap] = useState<Record<string, any>>({}); // Initialize with an empty object
 
   const morphHref = (morphologyName: string) => {
     const searchParams = new URLSearchParams({
@@ -72,21 +71,6 @@ export const useExpMorphologyColumns = (layer, mtype, currentMorphology) => {
       },
       responsive: ['sm'],
     },
-    /*
-    {
-      title: 'M-Type',
-      dataIndex: 'annotation',
-      align: 'center',
-      render: function Link(annotation, morphology: any) {
-        return (
-          <span className={morphology.name === currentMorphology ? 'text-bold' : undefined}>
-            {annotation?.hasBody?.label}
-          </span>
-        );
-      },
-      responsive: ['sm'],
-    },
-    */
     {
       title: 'Contribution',
       dataIndex: 'contribution',

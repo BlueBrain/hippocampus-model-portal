@@ -113,16 +113,20 @@ const ChannelParamPlot: React.FC<ChannelParamPlotProps> = ({ channelParam }) => 
           textBottom = UNIFORM_CONST.toString();
           break;
         default:
-          const parser = new Parser();
-          const equation = parameter.formula
-            .replace(/math\.exp/g, 'exp')
-            .replace(/\{/g, '(')
-            .replace(/\}/g, ')');
+          if (parameter.formula) {
+            const parser = new Parser();
+            const equation = parameter.formula
+              .replace(/math\.exp/g, 'exp')
+              .replace(/\{/g, '(')
+              .replace(/\}/g, ')');
 
-          const expr = parser.parse(equation);
-          arrayValues = getXAxes().map(xVal => expr.evaluate({ distance: xVal, value: 1 }));
-          maxValue = Math.max(...arrayValues);
-          textBottom = parameter.formula;
+            const expr = parser.parse(equation);
+            arrayValues = getXAxes().map(xVal => expr.evaluate({ distance: xVal, value: 1 }));
+            maxValue = Math.max(...arrayValues);
+            textBottom = parameter.formula;
+          } else {
+            console.error('Formula is undefined');
+          }
           break;
       }
 

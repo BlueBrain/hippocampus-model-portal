@@ -17,7 +17,8 @@ import {
   Scene,
   SphereGeometry,
   Vector3,
-  WebGLRenderer
+  WebGLRenderer,
+  BufferGeometry
 } from 'three';
 
 import {
@@ -29,7 +30,6 @@ import {
 import { saveAs } from 'file-saver';
 import { Pool } from '@/services/threads';
 import { color, NeuriteType } from './constants';
-
 
 const FOG_COLOR = 0xffffff;
 const FOG_NEAR = 1;
@@ -50,9 +50,9 @@ const secTypeMap = [
 const CellType = {
   PRE: 0,
   POST: 1,
-}
+};
 
-function parseCssColor(colorStr) {
+function parseCssColor(colorStr: string): number {
   return parseInt(colorStr.replace('#', ''), 16);
 }
 
@@ -62,34 +62,41 @@ type MorphologySecData = {
   [extendedSecType: string]: SectionPts[],
 };
 
+type Data = {
+  pre: {
+    morph: number[][],
+    orientation: number[][]
+  },
+  post: {
+    morph: number[][],
+    orientation: number[][]
+  },
+  synapses: number[][]
+};
+
 export default class ConnectionViewer {
-  private data: any = null;
-
-  private container: HTMLDivElement = null;
-  private resizeObserver: ResizeObserver = null;
-  private canvas: HTMLCanvasElement = null;
-  private renderer: WebGLRenderer = null;
-  private scene: Scene = null;
-  private camera: PerspectiveCamera = null;
-  private controls: TrackballControls = null;
+  private data: Data | null = null;
+  private container: HTMLDivElement;
+  private resizeObserver: ResizeObserver | null = null;
+  private canvas: HTMLCanvasElement | null = null;
+  private renderer: WebGLRenderer | null = null;
+  private scene: Scene | null = null;
+  private camera: PerspectiveCamera | null = null;
+  private controls: TrackballControls | null = null;
   private ctrl: RendererCtrl = new RendererCtrl();
-  private onUserInteract: EventListener = null;
-
-  private material: Record<string, Material>;
-
+  private onUserInteract: EventListener | null = null;
+  private material: Record<string, Material> = {};
   private secMesh: { [neuriteType: string]: Mesh } = {};
-  private somaMesh: Mesh = null;
-  private synMesh: Mesh = null;
-
-  private geometryWorkerPool: Pool = null;
+  private somaMesh: Mesh | null = null;
+  private synMesh: Mesh | null = null;
+  private geometryWorkerPool: Pool | null = null;
   private morphologySecData: MorphologySecData = {};
 
   constructor(container: HTMLDivElement) {
     this.container = container;
   }
 
-  // TODO: add type decrlaration for `data`
-  public async init(data: any) {
+  public async init(data: Data) {
     this.data = data;
 
     this.initCanvas();
@@ -117,6 +124,7 @@ export default class ConnectionViewer {
   }
 
   public resize() {
+    if (!this.container || !this.camera || !this.renderer) return;
     const { clientWidth, clientHeight } = this.container;
     this.camera.aspect = clientWidth / clientHeight;
     this.camera.updateProjectionMatrix();
@@ -125,10 +133,10 @@ export default class ConnectionViewer {
     this.ctrl.renderOnce();
   }
 
-  public setNeuriteVisibility(visibility) {
+  public setNeuriteVisibility(visibility: Record<string, boolean>) {
     Object.entries(visibility).forEach(([neuriteType, visible]) => {
-      if(!this.secMesh[neuriteType]) {
-        throw new Error(`Mesh for ${neuriteType} is not found}`);
+      if (!this.secMesh[neuriteType]) {
+        throw new Error(`Mesh for ${neuriteType} is not found`);
       }
 
       const { material } = this.secMesh[neuriteType];
@@ -138,22 +146,27 @@ export default class ConnectionViewer {
     this.ctrl.renderOnce();
   }
 
-  public downloadRender(filename) {
-    const { clientWidth, clientHeight } = this.renderer.domElement.parentElement;
+  public downloadRender(filename: string) {
+    if (!this.renderer || !this.scene || !this.camera) return;
+    const { clientWidth, clientHeight } = this.renderer.domElement.parentElement!;
 
     const renderer = new WebGLRenderer({
       antialias: true,
       alpha: true,
       preserveDrawingBuffer: true,
-      physicallyCorrectColors: true,
+      physicallyCorrectLights: true,
     });
 
     renderer.setSize(clientWidth * 3, clientHeight * 3);
 
     renderer.render(this.scene, this.camera);
 
-    renderer.domElement.toBlob(blob => saveAs(blob, `${filename}.png`));
-    renderer.dispose();
+    renderer.domElement.toBlob(blob => {
+      if (blob) {
+        saveAs(blob, `${filename}.png`);
+      }
+      renderer.dispose();
+    });
   }
 
   public destroy() {
@@ -164,17 +177,21 @@ export default class ConnectionViewer {
     this.synMesh?.geometry.dispose();
     this.somaMesh?.geometry.dispose();
 
-    this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
-    this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
+    if (this.renderer && this.onUserInteract) {
+      this.renderer.domElement.removeEventListener('wheel', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('mousemove', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('touchmove', this.onUserInteract);
+      this.renderer.domElement.removeEventListener('pointermove', this.onUserInteract);
+    }
 
-    this.resizeObserver.unobserve(this.container);
+    this.resizeObserver?.unobserve(this.container);
 
-    this.controls.dispose();
-    this.renderer.dispose();
+    this.controls?.dispose();
+    this.renderer?.dispose();
 
-    this.container.removeChild(this.canvas);
+    if (this.canvas) {
+      this.container.removeChild(this.canvas);
+    }
   }
 
   private initCanvas() {
@@ -203,11 +220,12 @@ export default class ConnectionViewer {
   private initCamera() {
     const { clientWidth, clientHeight } = this.container;
     this.camera = new PerspectiveCamera(45, clientWidth / clientHeight, 1, 3000);
-    this.scene.add(this.camera);
+    this.scene?.add(this.camera);
     this.camera.add(new PointLight(CAMERA_LIGHT_COLOR, 0.9));
   }
 
   private initControls() {
+    if (!this.renderer || !this.camera) return;
     this.controls = new TrackballControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.zoomSpeed = 0.5;
@@ -218,10 +236,12 @@ export default class ConnectionViewer {
   private initEvents() {
     this.onUserInteract = throttle(() => this.ctrl.renderFor(4000), 100).bind(this);
 
-    this.canvas.addEventListener('wheel', this.onUserInteract, { capture: false, passive: true });
-    this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
-    this.canvas.addEventListener('touchmove', this.onUserInteract, { capture: false, passive: true });
-    this.canvas.addEventListener('pointermove', this.onUserInteract, { capture: false, passive: true });
+    if (this.canvas && this.onUserInteract) {
+      this.canvas.addEventListener('wheel', this.onUserInteract, { capture: false, passive: true });
+      this.canvas.addEventListener('mousemove', this.onUserInteract, { capture: false, passive: true });
+      this.canvas.addEventListener('touchmove', this.onUserInteract, { capture: false, passive: true });
+      this.canvas.addEventListener('pointermove', this.onUserInteract, { capture: false, passive: true });
+    }
   }
 
   private initObservers() {
@@ -254,22 +274,27 @@ export default class ConnectionViewer {
   }
 
   private disposeGeometryWorkerPool() {
-    this.geometryWorkerPool.terminate();
+    this.geometryWorkerPool?.terminate();
     this.geometryWorkerPool = null;
   }
 
   private async indexSecData() {
+    if (!this.data) return;
     this.extractMorphologySecData(CellType.PRE, this.data.pre.morph);
     this.extractMorphologySecData(CellType.POST, this.data.post.morph);
   }
 
-  private extractMorphologySecData(cellType: number, sections) {
+  private extractMorphologySecData(cellType: number, sections: number[][]) {
     const morphSecData = this.morphologySecData;
     sections.forEach((section) => {
       const secTypeStr = secTypeMap[section[0]];
       const isBaseSec = Boolean(section[1]);
+      const ptsFlat: SectionPts = [];
 
-      const ptsFlat = section.slice(-(section.length - 2));
+      // Assuming section points start from index 2, and they are in the form of flat array
+      for (let i = 2; i < section.length; i += 4) {
+        ptsFlat.push(section.slice(i, i + 4));
+      }
 
       const secDataKey = `${cellType === CellType.PRE ? 'pre' : 'post'}_${isBaseSec ? 'b' : 'nb'}_${secTypeStr}`;
 
@@ -282,9 +307,9 @@ export default class ConnectionViewer {
   }
 
   private createSomaMesh() {
-    const somaGeometries = this.morphologySecData.pre_nb_soma.concat(this.morphologySecData.post_nb_soma)
+    if (!this.morphologySecData || !this.scene) return;
+    const somaGeometries = (this.morphologySecData.pre_nb_soma || []).concat(this.morphologySecData.post_nb_soma || [])
       .map(pts => createSomaGeometryFromPoints(chunk(pts, 4)));
-
     const somaGeometry = mergeBufferGeometries(somaGeometries);
 
     this.somaMesh = new Mesh(somaGeometry, this.material.SOMA);
@@ -292,6 +317,7 @@ export default class ConnectionViewer {
   }
 
   private createSecMeshes() {
+    if (!this.geometryWorkerPool) return;
     const preDendGeometryPromise = this.geometryWorkerPool
       .queue(thread => thread.createNeuriteGeometry(this.morphologySecData.pre_nb_dend))
       .then(deserializeBufferGeometry);
@@ -337,35 +363,35 @@ export default class ConnectionViewer {
 
       const preDendMesh = new Mesh(preDendGeometry, this.material.PRE_DEND);
       this.secMesh[NeuriteType.PRE_NB_DEND] = preDendMesh;
-      this.scene.add(preDendMesh);
+      this.scene?.add(preDendMesh);
 
       const preBaseAxonMesh = new Mesh(preBaseAxonGeometry, this.material.PRE_B_AXON);
       this.secMesh[NeuriteType.PRE_B_AXON] = preBaseAxonMesh;
-      this.scene.add(preBaseAxonMesh);
+      this.scene?.add(preBaseAxonMesh);
 
       const preNonBaseAxonMesh = new Mesh(preNonBaseAxonGeometry, this.material.PRE_NB_AXON);
       this.secMesh[NeuriteType.PRE_NB_AXON] = preNonBaseAxonMesh;
-      this.scene.add(preNonBaseAxonMesh);
+      this.scene?.add(preNonBaseAxonMesh);
 
       const postBaseDendMesh = new Mesh(postBaseDendGeometry, this.material.POST_B_DEND);
       this.secMesh[NeuriteType.POST_B_DEND] = postBaseDendMesh;
-      this.scene.add(postBaseDendMesh);
+      this.scene?.add(postBaseDendMesh);
 
       const postNonBaseDendMesh = new Mesh(postNonBaseDendGeometry, this.material.POST_NB_DEND);
       this.secMesh[NeuriteType.POST_NB_DEND] = postNonBaseDendMesh;
-      this.scene.add(postNonBaseDendMesh);
+      this.scene?.add(postNonBaseDendMesh);
 
       const postAxonMesh = new Mesh(postAxonGeometry, this.material.POST_AXON);
       this.secMesh[NeuriteType.POST_NB_AXON] = postAxonMesh;
-      this.scene.add(postAxonMesh);
+      this.scene?.add(postAxonMesh);
     });
   }
 
   private createSynMesh() {
-    const geometries = this.data.synapses.map(synapse => {
+    if (!this.data || !this.scene) return;
+    const geometries: BufferGeometry[] = this.data.synapses.map(synapse => {
       const geometry = new SphereGeometry(3.2, 32, 16);
-      geometry.translate(...synapse.slice(0, 3));
-
+      geometry.translate(synapse[0], synapse[1], synapse[2]);
       return geometry;
     });
 
@@ -376,18 +402,19 @@ export default class ConnectionViewer {
 
   private cleanup() {
     this.data = null;
-    this.morphologySecData = null;
+    this.morphologySecData = {};
   }
 
   private alignCamera() {
+    if (!this.data || !this.camera || !this.controls) return;
     const preQuat = quatFromArray3x3(this.data.pre.orientation);
     const postQuat = quatFromArray3x3(this.data.post.orientation);
 
     const preOrientationVec = new Vector3(0, 1, 0).applyQuaternion(preQuat);
     const postOrientationVec = new Vector3(0, 1, 0).applyQuaternion(postQuat);
 
-    const preSomaPts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
-    const postSomaPts = this.data.post.morph.find(section => secTypeMap[section[0]] === 'soma').slice(2, 6);
+    const preSomaPts = this.data.pre.morph.find(section => secTypeMap[section[0]] === 'soma')?.slice(2, 6) || [0, 0, 0];
+    const postSomaPts = this.data.post.morph.find(section => secTypeMap[section[0]] === 'soma')?.slice(2, 6) || [0, 0, 0];
 
     const prePostVec = new Vector3(
       preSomaPts[0] - postSomaPts[0],
@@ -408,10 +435,10 @@ export default class ConnectionViewer {
     const camVector = new Vector3().crossVectors(orientationMeanVec, prePostVec);
 
     const dendriteObj3D = new Object3D();
-    dendriteObj3D.add(this.secMesh[NeuriteType.PRE_NB_DEND]);
-    dendriteObj3D.add(this.secMesh[NeuriteType.POST_B_DEND]);
-    dendriteObj3D.add(this.secMesh[NeuriteType.POST_NB_DEND]);
-    this.scene.add(dendriteObj3D);
+    if (this.secMesh[NeuriteType.PRE_NB_DEND]) dendriteObj3D.add(this.secMesh[NeuriteType.PRE_NB_DEND]);
+    if (this.secMesh[NeuriteType.POST_B_DEND]) dendriteObj3D.add(this.secMesh[NeuriteType.POST_B_DEND]);
+    if (this.secMesh[NeuriteType.POST_NB_DEND]) dendriteObj3D.add(this.secMesh[NeuriteType.POST_NB_DEND]);
+    this.scene?.add(dendriteObj3D);
 
     const dendriteBBox = new Box3();
     dendriteBBox.expandByObject(dendriteObj3D);
@@ -439,8 +466,7 @@ export default class ConnectionViewer {
 
   private startRenderLoop() {
     if (this.ctrl.stopped) return;
-
-    if (this.ctrl.render) {
+    if (this.ctrl.render && this.controls && this.renderer && this.scene && this.camera) {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
     }

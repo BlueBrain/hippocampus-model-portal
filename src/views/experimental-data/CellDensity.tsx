@@ -73,7 +73,7 @@ const CellDensityView: React.FC = () => {
                     className="mt-4"
                     title="Cell Density"
                 >
-                    <CellDensityTable />
+
                 </Collapsible>
 
 

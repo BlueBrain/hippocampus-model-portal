@@ -6,43 +6,75 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
-import AnatomyData from './anatomy.json';
+import PhysiologyData from './physiology.json';
 
 type TableEntry = {
-    pathway: string;
-    convergence: number;
+    ruleN: number;
+    from: string;
+    to: string;
+    ruleType: string;
+    u: string;
+    d: string;
+    f: string;
+    nrrp: number;
+    hillScaling: number;
+    gsyn: string;
+    triseAMPA: number;
+    tdecayAMPA: string;
+    triseNMDA: number;
+    tdecayNMDA: number;
+    NMDAAMPARatio: number;
 };
 
-const MinisColumns = [
+const PhysiolgyColumns = [
     {
-        title: 'pathway',
-        dataIndex: 'Pathway' as keyof TableEntry,
-        fixed: 'left' as FixedType,
+        title: 'Rule N',
+        dataIndex: 'ruleN' as keyof TableEntry,
     },
     {
-        title: 'convergence',
-        dataIndex: 'Convergence' as keyof TableEntry,
-        fixed: 'left' as FixedType,
+        title: 'From',
+        dataIndex: 'from' as keyof TableEntry,
     },
-
+    {
+        title: 'To',
+        dataIndex: 'to' as keyof TableEntry,
+    },
+    {
+        title: 'Rule Type',
+        dataIndex: 'ruleType' as keyof TableEntry,
+    },
+    {
+        title: 'U',
+        dataIndex: 'u' as keyof TableEntry,
+    },
+    {
+        title: 'D',
+        dataIndex: 'd' as keyof TableEntry,
+    },
+    {
+        title: 'F',
+        dataIndex: 'f' as keyof TableEntry,
+    },
+    {
+        title: 'NRRP',
+        dataIndex: 'nrrp' as keyof TableEntry,
+    },
 ];
-
 
 const Anatomy: React.FC = () => {
     return (
         <>
-
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                data={AnatomyData}
-                columns={MinisColumns}
-                rowKey={({ pathway, convergence }) => `${pathway}_${convergence}`}
+                data={PhysiologyData}
+                columns={PhysiolgyColumns}
+                rowKey={(record) => `${record.ruleN}_${record.from}_${record.to}`}
             />
             <div className="text-right mt-2">
                 <HttpDownloadButton
                     onClick={() => downloadAsJson(
-                        AnatomyData,
-                        `anatomy-table.json`
+                        PhysiologyData,
+                        `Physiology-table.json`
                     )}
                 >
                     table data

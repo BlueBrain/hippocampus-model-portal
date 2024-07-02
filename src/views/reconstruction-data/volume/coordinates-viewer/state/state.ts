@@ -1,11 +1,14 @@
-import AtomicState from "./atomic-state"
+// state.ts
+import AtomicState from "./atomic-state";
 
-export default {
+function isString(data: unknown): data is string {
+    return typeof data === "string";
+}
+
+const State = {
     axe: new AtomicState<string>("L", {
         storage: { id: "axe", guard: isString },
     }),
-}
+};
 
-function isString(data: unknown): data is string {
-    return typeof data === "string"
-}
+export default State;

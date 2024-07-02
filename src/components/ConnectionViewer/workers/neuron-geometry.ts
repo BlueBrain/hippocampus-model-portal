@@ -2,24 +2,21 @@ import chunk from 'lodash/chunk';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { Vector3 } from 'three/src/math/Vector3';
 import { Matrix4 } from 'three/src/math/Matrix4';
-import { CylinderGeometry } from 'three/src/geometries/CylinderGeometry';
-
+import { CylinderGeometry, BufferGeometry } from 'three/src/geometries/CylinderGeometry';
 import { expose, transfer } from '@/services/threads';
-
 
 const HALF_PI = Math.PI * 0.5;
 
 const SIMPLIFICATION_DISTANCE_THRESHOLD = 6;
 const SIMPLIFICATION_DIAMETER_STD_THRESHOLD = 0.1;
 
-function getStandardDeviation(array) {
+function getStandardDeviation(array: number[]): number {
   const n = array.length;
   const mean = array.reduce((a, b) => a + b) / n;
   return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 }
 
-
-function simplify(pts) {
+function simplify(pts: number[][]): void {
   let i = 0;
   while (i < pts.length - 2) {
     const vStart = new Vector3(...pts[i]);
@@ -36,33 +33,21 @@ function simplify(pts) {
   }
 }
 
-
-function _createSecGeometryFromPoints(pts) {
+function _createSecGeometryFromPoints(pts: number[][]): BufferGeometry {
   simplify(pts);
 
-  const geometries = [];
+  const geometries: BufferGeometry[] = [];
 
   for (let i = 0; i < pts.length - 1; i += 1) {
     const vstart = new Vector3(pts[i][0], pts[i][1], pts[i][2]);
-    const vend = new Vector3(
-      pts[i + 1][0],
-      pts[i + 1][1],
-      pts[i + 1][2],
-    );
+    const vend = new Vector3(pts[i + 1][0], pts[i + 1][1], pts[i + 1][2]);
     const distance = vstart.distanceTo(vend);
     const position = vend.clone().add(vstart).divideScalar(2);
 
     const dStart = pts[i][3] / 2;
     const dEnd = pts[i + 1][3] / 2;
 
-    const geometry = new CylinderGeometry(
-      dStart,
-      dEnd,
-      distance,
-      12,
-      1,
-      true,
-    );
+    const geometry = new CylinderGeometry(dStart, dEnd, distance, 12, 1, true);
 
     const orientation = new Matrix4();
     const offsetRotation = new Matrix4();
@@ -81,35 +66,49 @@ function _createSecGeometryFromPoints(pts) {
   return secGeometry;
 }
 
-
-function _getGeometryBuffers(geometry) {
+function _getGeometryBuffers(geometry: BufferGeometry): ArrayBuffer[] {
   const vertices = geometry.getAttribute('position').array.buffer;
   const normals = geometry.getAttribute('normal').array.buffer;
+  const index = geometry.index ? geometry.index.array.buffer : new ArrayBuffer(0);
 
-  const index = geometry.index.array.buffer;
-
-  return [ vertices, normals, index ];
+  return [vertices, normals, index];
 }
 
+interface TransferResult {
+  payload: ArrayBuffer[];
+  transferable: boolean;
+  transferables: any;
+}
 
-function createNeuriteGeometry(ptsList) {
-  const geometries = ptsList.map(pts => _createSecGeometryFromPoints(chunk(pts, 4)));
+function createNeuriteGeometry(ptsList: number[][][]): ArrayBuffer[] {
+  const geometries = ptsList.map(pts => _createSecGeometryFromPoints(chunk(pts, 4) as number[][]));
 
   const geometry = mergeBufferGeometries(geometries);
   const buffers = _getGeometryBuffers(geometry);
 
   geometries.forEach(geometry => geometry.dispose());
 
-  return transfer(buffers, buffers);
+  // Ensure buffers is an array of ArrayBuffer before calling transfer
+  if (buffers.every(buffer => buffer instanceof ArrayBuffer)) {
+    const transferResult = transfer(buffers, buffers) as unknown as TransferResult;
+    return transferResult.payload;
+  } else {
+    throw new Error('Buffers should be an array of ArrayBuffer');
+  }
 }
 
-function createSecGeometry(pts) {
+function createSecGeometry(pts: number[][]): ArrayBuffer[] {
   const geometry = _createSecGeometryFromPoints(pts);
   const buffers = _getGeometryBuffers(geometry);
 
-  return transfer(buffers, buffers);
+  // Ensure buffers is an array of ArrayBuffer before calling transfer
+  if (buffers.every(buffer => buffer instanceof ArrayBuffer)) {
+    const transferResult = transfer(buffers, buffers) as unknown as TransferResult;
+    return transferResult.payload;
+  } else {
+    throw new Error('Buffers should be an array of ArrayBuffer');
+  }
 }
-
 
 expose({
   createNeuriteGeometry,
