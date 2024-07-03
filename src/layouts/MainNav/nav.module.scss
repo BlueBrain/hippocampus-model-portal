@@ -1,7 +1,9 @@
 .main-navigation {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 2.5rem;
+  height: 100%;
 
   margin: 0;
 
@@ -64,7 +66,7 @@
     border-radius: 1px;
 
     //Styling
-    padding: .3rem .6rem;
+    padding: .4rem .6rem;
     background-color: #52617d;
     border: 1px solid rgba(#313354, .05);
     color: white;
