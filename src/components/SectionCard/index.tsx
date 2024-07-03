@@ -1,7 +1,8 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaMinus, FaPlus, FaInfoCircle } from 'react-icons/fa';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { MdInfoOutline } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import styles from './styles.module.scss';
 import { Row, Col } from 'antd';
@@ -45,7 +46,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
               </div>
             </Col>
             <Col>
-              <FaInfoCircle className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
+              <MdInfoOutline className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
             </Col>
           </Row>
         </div>

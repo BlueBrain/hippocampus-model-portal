@@ -27,6 +27,8 @@ body.no-scroll {
   cursor: pointer;
   opacity: .7;
   transition: all 100ms ease-in-out;
+  width: 18px;
+  height: 18px;
 
   &:hover {
     opacity: 1;
