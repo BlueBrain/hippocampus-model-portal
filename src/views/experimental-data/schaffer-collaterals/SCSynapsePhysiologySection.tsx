@@ -97,10 +97,6 @@ const synapsePhysiologyWOAgeColumns = synapsePhysiologyAllColumns.filter(column 
 const SCSynapsePhysiologySection: React.FC = () => {
   return (
     <>
-      <p>
-        Data about synapse physiology are divided into two main groups, one where we report data on connections between Schaffer collaterals and excitatory neurons (SC→Exc) and between Schaffer collaterals and inhibitory neurons  (SC→Inh). Similarly to the connection physiology section [hyperlink], data consists of postsynaptic potentials and currents, and receptors properties. The dataset also includes the EPSP-IPSP latency, which is particularly important to reproduce the feedforward inhibition of the SC.
-      </p>
-
       <h2 className="mt-3">SC → Exc</h2>
 
       <h3 className="mt-3">PSP Magnitude and Variability</h3>

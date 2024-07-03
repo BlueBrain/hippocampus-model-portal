@@ -41,7 +41,7 @@ const ThetaView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    Extracellular electrical recordings of region CA1 display different types of oscillatory activity related to behavioral states. One of the most prominent and well-studied is the theta rhythm, a 4-12 Hz regular oscillation that occurs during locomotion and rapid eye movement (REM) sleep. Theta rhythms are believed to coordinate the encoding and retrieval of episodic memory during spatial navigation. Here, we report on phase and rate of spiking during network theta rhythmic activity.
+                    Extracellular electrical recordings of region CA1 display different types of oscillatory activity related to behavioral states. One of the most prominent and well-studied is the theta rhythm, a 4-12 Hz regular oscillation that occurs during locomotion and rapid eye movement (REM) sleep. Theta rhythms are believed to coordinate the encoding and retrieval of episodic memory during spatial navigation. Here, we report on phases and rates of spiking during network theta rhythmic activity.
                   </p>
                 </InfoBox>
               </div>
@@ -82,9 +82,9 @@ const ThetaView: React.FC = () => {
           className="mt-3"
           title="Phase"
         >
-          <h3>
+          <p>
             Different morphological types of CA1 neuron respond preferentially at specific phases of theta rhythmic activity.
-          </h3>
+          </p>
           <PhaseTable />
         </Collapsible>
 
@@ -93,9 +93,9 @@ const ThetaView: React.FC = () => {
           className="mt-3"
           title="Rate"
         >
-          <h3>
+          <p>
             During periods of theta rhythmic activity, each morphological type of CA1 neuron tends to respond with a different average spiking rate.
-          </h3>
+          </p>
           <RateTable />
         </Collapsible>
       </DataContainer>

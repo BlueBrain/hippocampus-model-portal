@@ -39,7 +39,7 @@ const MinisView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        The spontaneous synaptic events are due to the spontaneous release of a vesicle (miniature events, minis) or also due to a spontaneous action potential (spontaneous events). These events normally produce small voltage deflection of the membrane, but given the multitude of synaptic contacts in a network, their role in the network computation can be significant.
+                                        The spontaneous synaptic events are due to the spontaneous release of a vesicle (miniature events known as minis) or also due to a spontaneous action potential (spontaneous events). These events normally produce small voltage deflection of the membrane, but given the multitude of synaptic contacts in a network, their role in the network computation can be significant.
                                     </p>
                                 </InfoBox>
                             </div>
@@ -80,7 +80,7 @@ const MinisView: React.FC = () => {
                     id="minisSection"
                     title="Minis"
                 >
-                    <h3>Single cell recordings with or without TTX, which blocks the action potentials allowing to estimate the spontaneous or miniature events in different pathways.</h3>
+                    <p>Single cell recordings with or without the neurotoxin tetrodotoxin (TTX), which blocks the action potentials, allow the estimation of frequency and amplitude of the spontaneous or miniature events in different pathways.</p>
 
                     <MinisTable />
                 </Collapsible>

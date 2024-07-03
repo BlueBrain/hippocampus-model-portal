@@ -46,7 +46,7 @@ const AcetylcholineView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p >
-                    Acetylcholine (ACh) is one of the most studied neuromodulation, particularly important for the hippocampus. Similarly to the other neuromodulators, its effect on the network can span several time and space scales. Here, we report the effect of ACh on resting membrane potential, firing rate, synapse, and network.
+                    Acetylcholine (ACh) is one of the most studied neuromodulators, particularly important for the hippocampus. Like other neuromodulators, its effect on the network can span several time and space scales. Here, we report the effect of ACh on resting membrane potential, firing rate, synaptic function, and network activity.
                   </p>
                 </InfoBox>
               </div>
@@ -90,7 +90,7 @@ const AcetylcholineView: React.FC = () => {
           className="mt-4"
           title="Resting membrane potential"
         >
-          <h3>The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</h3>
+          <p>The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</p>
           <RestingMembranePotentialTable />
         </Collapsible>
 
@@ -99,7 +99,7 @@ const AcetylcholineView: React.FC = () => {
           className="mt-4"
           title="Firing rate"
         >
-          <h3>The data below shows that ACh tends to increase the firing rates of CA1 neurons.</h3>
+          <p>The data below shows that ACh tends to increase the firing rates of CA1 neurons.</p>
           <FiringRateTable />
         </Collapsible>
 
@@ -108,7 +108,7 @@ const AcetylcholineView: React.FC = () => {
           className="mt-4"
           title="Synapse"
         >
-          <h3>The data below shows that ACh tends to increase the postsynaptic response (potential or current) in CA1.</h3>
+          <p>The data below shows that ACh tends to increase the postsynaptic response (potential or current) in CA1.</p>
           <SynapsesTable />
         </Collapsible>
 
@@ -117,7 +117,7 @@ const AcetylcholineView: React.FC = () => {
           className="mt-4"
           title="Network"
         >
-          <h3>Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</h3>
+          <p>Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</p>
           <NetworkTable />
         </Collapsible>
 

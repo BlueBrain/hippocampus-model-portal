@@ -125,10 +125,6 @@ const PSCTauDecayColumns = [
 const AMPAKineticsSection: React.FC = () => {
   return (
     <>
-      <p className="mb-3">
-        PSC shows a specific rise and decay which depends on the synapse and the set of synaptic receptors. The rise time are usually measured as the time taken by the PSC trace to go from 10% to 90% of its amplitude, while the time constant of the decay (tau decay) is estimated fitting an exponential decay function (e-t/decay) after the PSC peak and identifying its time constant. When slow receptors (i.e. NMDA and GABAB) are inactive or blocked in the experiments, the measures are due to mainly the fast receptors, AMPA or GABAA, respectively for excitatory or inhibitory synapses.
-      </p>
-
       <h2>PSC rise time</h2>
       <ResponsiveTable<TableEntry>
         data={PSCRiseTimeData}

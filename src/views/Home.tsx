@@ -36,7 +36,6 @@ const Home: React.FC = () => (
             description={<div>
               <p>
                 The first step of the reconstruction of the hippocampus involves the collection of experimental datasets from our affiliated and collaborators’ laboratories as well as from published literature sources worldwide. Available data on these brain regions are sparse and heterogeneous, and much of our work concerned the curation and organization of the data.
-
               </p>
             </div>}
             links={[
@@ -139,7 +138,6 @@ const Home: React.FC = () => (
             description={<div>
               <p>
                 The third step of the reconstruction generates an instance of the hippocampus model. Most of the model parameters were sampled from the distributions defined in the dense datasets of step two. For this reason, each model instance is unique within the biological ranges and could be considered to be derived from a specific individual.
-
               </p>
             </div>}
             links={[
@@ -176,20 +174,7 @@ const Home: React.FC = () => (
             idx="4"
             description={<div>
               <p>
-                Validations are a crucial part of the data-driven modeling workflow that reduce the risk that
-                errors may lead to major inaccuracies in the reconstruction or in simulations of emergent behavior.
-              </p>
-              <p>
-                Successful validations not only enable the systematic exploration of the emergent properties
-                of the model, but also establish predictions for future <i>in vitro</i> experiments,
-                or may call into question existing experimental data. Failure in validation may also indicate errors
-                in experimental data, which allow us to identify future refinements.
-                Rigorous validation of a metric at one level of detail therefore also prevents error amplification
-                to the next level, and triggers specific experimental refinements.</p>
-              <p>
-                Therefore, the Blue Brain Project validation step provides a scaffold
-                that enables the integration of available experimental data, identifies missing experimental data,
-                and facilitates the iterative refinement of constituent models.
+                We extensively validated each model component and the final network to assess the validity of the model. Successful validations support the idea that the model can go beyond the initial set of data and show emergent properties. Validation failures may indicate wrong model assumptions or incompatibility between model and validation datasets. Validation failures provide useful information for us to revise and improve the model.
               </p>
             </div>}
             links={[

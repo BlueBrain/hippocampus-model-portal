@@ -94,7 +94,7 @@ const CellCompositionView: React.FC = () => {
           title="Cell composition"
         >
           <p className="mb-3">
-            Density and number of cells for each morphological type (m-type).
+            Here we provide the density and number of cells for each morphological type (m-type).
           </p>
 
           <CellCompositionTable volumeSection={volumeSection} />

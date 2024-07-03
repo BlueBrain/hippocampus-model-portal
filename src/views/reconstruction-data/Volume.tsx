@@ -53,7 +53,7 @@ const VolumeView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}>atlas</Link> with a process of coordinate extraction and estimation of layer thicknesses to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
+                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}>atlas</Link> with a process of coordinate extraction and <Link href="/experimental-data/layer-anatomy/  " className={`link theme-${theme}`}>layer thickness estimation</Link> to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
                   </p>
                 </InfoBox>
               </div>
@@ -128,12 +128,12 @@ const VolumeView: React.FC = () => {
         </Collapsible>
 
         <Collapsible id="vectorsSection" title="Vectors" className="mt-4">
-          <h3>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</h3>
+          <p>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</p>
 
         </Collapsible>
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
-          <h3>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</h3>
+          <p>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</p>
           <Spin spinning={!volumeViewerReady}>
             <CoordinatesViewer />
           </Spin>

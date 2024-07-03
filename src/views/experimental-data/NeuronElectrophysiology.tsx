@@ -145,6 +145,8 @@ const NeuronElectrophysiology: React.FC = () => {
           id="instanceSection"
           title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
         >
+          <p>We provide visualization and features for the selected recording.</p>
+
           <ESData query={fullElectroPhysiologyDataQueryObj} >
             {esDocuments => (
               <>
@@ -207,7 +209,6 @@ const NeuronElectrophysiology: React.FC = () => {
           className="mt-4"
           title="Population"
         >
-          <h3 className="mt-3">Experimental instances</h3>
           <p>We provide features for the entire e-type group selected.</p>
 
           <ESData query={etypeTracesDataQueryObj}>

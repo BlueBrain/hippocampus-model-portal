@@ -98,10 +98,6 @@ const anatomyColumns = [
 const SCAnatomySection: React.FC = () => {
   return (
     <>
-      <p>
-        Here we report the anatomical measurements on the connectivity established by Schaffer collaterals with excitatory (Exc) and inhibitory (Inh) neurons in CA1.
-      </p>
-
       <ResponsiveTable<TableEntry>
         className="mt-3"
         data={anatomyData}

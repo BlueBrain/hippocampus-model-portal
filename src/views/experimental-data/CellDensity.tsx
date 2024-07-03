@@ -63,9 +63,7 @@ const CellDensityView: React.FC = () => {
                 </Row>
             </Filters>
             <DataContainer
-                navItems={[
-                    { id: 'cellDensitySection', label: 'Cell Density' },
-                ]}
+
             >
 
                 <Collapsible
@@ -73,7 +71,8 @@ const CellDensityView: React.FC = () => {
                     className="mt-4"
                     title="Cell Density"
                 >
-
+                    <p>Cell density is the number of cells per unitary volume.</p>
+                    <CellDensityTable />
                 </Collapsible>
 
 

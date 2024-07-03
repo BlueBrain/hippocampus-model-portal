@@ -61,7 +61,6 @@ const LayerAnatomyView: React.FC = () => {
                 <InfoBox>
                   <p>
                     The rat hippocampus CA1 is organized into four layers: stratum lacunoso-moleculare (SLM), stratum radiatum (SR), stratum pyramidal (SP), stratum oriens (SO). This section shows the data used to estimate the layer thicknesses.
-
                   </p>
                 </InfoBox>
               </div>
@@ -107,7 +106,6 @@ const LayerAnatomyView: React.FC = () => {
                     <h3>Layer thickness for CA1</h3>
                     <p>
                       The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
-
                     </p>
                   </div>
 

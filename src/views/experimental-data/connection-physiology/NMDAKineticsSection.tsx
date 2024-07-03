@@ -160,11 +160,6 @@ const TauRiseColumns = [
 const NMDAKineticsSection: React.FC = () => {
   return (
     <>
-      <p className="mb-3">
-        Excitatory synapses have two types of ionotropic receptors, AMPA and NMDA. Contribution of NMDA receptors to the synaptic response is expressed as a ratio between peak conductance of NMDA and AMPA (NMDA/AMPA ratio). NMDA has slower kinetics and rise and decay time constants are usually computed by fitting exponential rise (et/rise) and decay (e-t/decay) functions.
-
-      </p>
-
       <h2>NMDA/AMPA ratio</h2>
       <ResponsiveTable<TableEntry>
         data={RatioData}

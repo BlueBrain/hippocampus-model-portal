@@ -12,7 +12,7 @@ const Brand: React.FC = () => {
       <a href="/">
         <img
           className="logo"
-          src={`${basePath}/assets/images/epfl-logo-red.svg`}
+          src={`${basePath}/data/epfl-logo-red.svg`}
           alt="EPFL logo"
         />
         <div className="divider"></div>

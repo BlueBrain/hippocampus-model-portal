@@ -78,7 +78,7 @@ const columns = [
     },
 ];
 
-const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection }) => {
+const CellDensityTable: React.FC<CellDensityTableProps> = () => {
     const dataSource = useMemo(() => cellDensityData, []);
 
     return (

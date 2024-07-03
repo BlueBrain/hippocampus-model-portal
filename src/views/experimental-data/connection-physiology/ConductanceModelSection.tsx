@@ -217,10 +217,7 @@ const PSCAmplitudeColumns = [
 const ConductanceModelSection: React.FC = () => {
   return (
     <>
-      <p className="mb-3">
-        Basic characterization of a synaptic pathway includes the estimation of specific potentials and currents during synaptic activity. In particular, we collect data on the reversal potential of a synapse, the voltage at which there is no net flow of ions through the membrane, the peak PSP and PSC, and the coefficient of variation (CV) of the peak PSC.
 
-      </p>
 
       <h2>Reversal potential</h2>
       <ResponsiveTable<TableEntry>
