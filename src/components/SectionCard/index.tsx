@@ -64,7 +64,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
         <div className={styles.body}>
           {links.map(link => link.href ? (
             <Link key={link.label} href={link.href} prefetch={false} legacyBehavior>
-              {link.label}
+              <a>{link.label}</a>
             </Link>
           ) : (
             <p key={link.label}>{link.label}<sup>*</sup></p>
