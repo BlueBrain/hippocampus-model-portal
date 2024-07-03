@@ -36,7 +36,7 @@ const Glossary: React.FC = () => {
 
         <img
           className="w-100 mt-2"
-          src={`${basePath}/assets/images/etypes.png`}
+          src={`${basePath}/data/etypes.png`}
           alt="etype"
         />
       </div>
