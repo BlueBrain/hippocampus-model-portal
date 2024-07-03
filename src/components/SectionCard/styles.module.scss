@@ -133,7 +133,7 @@ body.no-scroll {
 @keyframes popupShow {
   0% {
     opacity: 0;
-    transform: translateY(100%);
+    transform: translateY(100px);
   }
 
   100% {
@@ -169,7 +169,6 @@ body.no-scroll {
   &__window {
     max-width: 40rem;
     background-color: #313254;
-    margin-bottom: 2rem;
 
     &--1 {
       border: map-get($theme, "experimental-data") 1px solid;
@@ -232,6 +231,7 @@ body.no-scroll {
   &__content {
     text-align: left;
     padding: 1rem 2rem;
+
   }
 
   &__close {

@@ -27,18 +27,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
 }) => {
   const [infoOpened, setInfoOpened] = useState(false);
 
-  useEffect(() => {
-    if (infoOpened) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-
-    // Clean up by removing the class when the component unmounts
-    return () => {
-      document.body.classList.remove('no-scroll');
-    };
-  }, [infoOpened]);
 
   const handlePopupClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
