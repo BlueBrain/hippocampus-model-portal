@@ -12,6 +12,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import NeuronsGraph from './acetylcholine/NeuronsGraph';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 const AcetylcholineView: React.FC = () => {
@@ -75,6 +77,7 @@ const AcetylcholineView: React.FC = () => {
 
         <Collapsible id="neuronsSection" title="Neurons">
           <p>The net effect of ACh on CA1 neurons results in a depolarising current. The dose-effect relationship can be described with a Hill function.</p>
+          <NeuronsGraph />
         </Collapsible>
 
         <Collapsible id="synapsesSection" title="Synapses">
