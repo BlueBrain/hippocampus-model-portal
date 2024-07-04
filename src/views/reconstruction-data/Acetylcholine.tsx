@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { colorName } from './config';
 import Filters from '@/layouts/Filters';
@@ -8,8 +9,10 @@ import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 
-import selectorStyle from '@/styles/selector.module.scss';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
+import selectorStyle from '@/styles/selector.module.scss';
 
 const AcetylcholineView: React.FC = () => {
 
@@ -36,15 +39,8 @@ const AcetylcholineView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    Using data from <Link className={"link theme-" + theme} href={"/experimental-data/acetylcholine/"}>literature</Link>, we derive a dose-effect behavior of a tonic application of ACh on neurons and synapses.
                   </p>
                 </InfoBox>
               </div>
@@ -71,9 +67,23 @@ const AcetylcholineView: React.FC = () => {
           </Col>
         </Row>
       </Filters>
+
+      <DataContainer navItems={[
+        { id: 'neuronsSection', label: 'Neurons' },
+        { id: 'synapsesSection', label: 'Synapses' },
+      ]}>
+
+        <Collapsible id="neuronsSection" title="Neurons">
+          <p>The net effect of ACh on CA1 neurons results in a depolarising current. The dose-effect relationship can be described with a Hill function.</p>
+        </Collapsible>
+
+        <Collapsible id="synapsesSection" title="Synapses">
+          <p>The net effect of ACh on CA1 synapses results in an increase of the initial release probability (i.e. U parameter of TM synapse model). The dose-effect relationship can be described with a Hill function.</p>
+        </Collapsible>
+
+      </DataContainer>
     </>
   );
 };
-
 
 export default AcetylcholineView;

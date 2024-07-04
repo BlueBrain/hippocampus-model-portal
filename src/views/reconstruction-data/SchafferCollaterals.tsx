@@ -79,7 +79,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     className="mt-4"
                     title="Anatomy"
                 >
-                    <h3>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> (TBC) and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</h3>
+                    <p>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> (TBC) and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</p>
                     <AnatomyTable />
                 </Collapsible>
 
@@ -88,8 +88,11 @@ const ConnectionPhysiologyView: React.FC = () => {
                     className="mt-4"
                     title="Physiology"
                 >
-                    <h3>With a specific optimization protocol, we defined a set of parameters and rules to describe the three pathways. These parameters include the ones defining the short-term plasticity model using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling), the maximum synaptic conductance (gsyn), rise and decay time
-                        constant of the  ionotropic AMPA receptors, rise and decay time constant of the slow ionotropic receptors NMDA, and NMDA/AMPA ratio.</h3>
+                    <p>
+                        With a specific optimization protocol, we defined a set of parameters and rules to describe the three pathways. These parameters include the ones defining the short-term plasticity model using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling), the maximum synaptic conductance (gsyn), rise and decay time
+                        constant of the fast ionotropic AMPA receptors, rise and decay time constant of the slow ionotropic receptors NMDA, and NMDA/AMPA ratio.
+
+                    </p>
                     <PhysiologyTable />
                 </Collapsible>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 import { downloadAsJson } from '@/utils';
 import ResponsiveTable from '@/components/ResponsiveTable';
@@ -6,6 +7,8 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { termFactory } from '@/components/Term';
 import { stypeDescription, mtypeDescription, layerDescription, pathwayDescription, formattedTerm } from '@/terms';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
 import preSynDynamicsParamsData from './presyn-dynamics-params.json';
 import postSynDynamicsParamsData from './postsyn-dynamics-params.json';
@@ -84,7 +87,7 @@ const preColumns = [
     render: from => from
       .split(',')
       .map(mtype => mtype.trim())
-      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br/></span>))
+      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>))
   },
   {
     title: 'To',
@@ -92,7 +95,7 @@ const preColumns = [
     render: from => from
       .split(',')
       .map(mtype => mtype.trim())
-      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br/></span>))
+      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>))
   },
   {
     title: 'Rule type',
@@ -140,7 +143,7 @@ const postColumns = [
     render: from => from
       .split(',')
       .map(mtype => mtype.trim())
-      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br/></span>))
+      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>))
   },
   {
     title: 'To',
@@ -148,7 +151,7 @@ const postColumns = [
     render: to => to
       .split(',')
       .map(mtype => mtype.trim())
-      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br/></span>))
+      .map(mtype => (<span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>))
   },
   {
     title: 'Rule type',
@@ -193,40 +196,64 @@ function formatValue(value) {
 const SynDynamicsParamsTables: React.FC = () => {
   return (
     <>
-      <h3>Presynaptic dynamics parameters</h3>
-      <ResponsiveTable<PreSynDynamicsParam>
-        columns={preColumns}
-        data={preSynDynamicsParamsData}
-        rowKey={({ from, to }) => `${from}_${to}`}
-      />
-      <div className="text-right mt-2 mb-4">
-        <HttpDownloadButton
-          onClick={() => downloadAsJson(
-            preSynDynamicsParamsData,
-            `rec-data-synapses_-_presynaptic-dynamics-parameters.json`
-          )}
+      <DataContainer
+        navItems={[
+          { id: 'presynapsesSection', label: 'Presynaptic dynamics parameters' },
+          { id: 'postsynapsesSection', label: 'Postsynaptic dynamics parameters' },
+        ]}
+      >
+        <Collapsible
+          id="presynapsesSection"
+          title="Presynaptic dynamics parameters"
         >
-          table data
-        </HttpDownloadButton>
-      </div>
+          <p>
+            Presynaptic parameters include short-term plasticity modeled using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling).  The coefficient of variation (CV) of postsynaptic current (PSC), mainly depending on the presynaptic mechanism, is validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link>.
+          </p>
+          <ResponsiveTable<PreSynDynamicsParam>
+            columns={preColumns}
+            data={preSynDynamicsParamsData}
+            rowKey={({ from, to }) => `${from}_${to}`}
+          />
+          <div className="text-right mt-2 mb-4">
+            <HttpDownloadButton
+              onClick={() => downloadAsJson(
+                preSynDynamicsParamsData,
+                `rec-data-synapses_-_presynaptic-dynamics-parameters.json`
+              )}
+            >
+              table data
+            </HttpDownloadButton>
+          </div>
 
-      <h3>Postsynaptic dynamics parameters</h3>
-      <ResponsiveTable<PostSynDynamicsParam>
-        className="mt-3"
-        columns={postColumns}
-        data={postSynDynamicsParamsData}
-        rowKey={({ from, to }) => `${from}_${to}`}
-      />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
-          onClick={() => downloadAsJson(
-            postSynDynamicsParamsData,
-            `rec-data-synapses_-_postsynaptic-dynamics-parameters.json`
-          )}
+
+
+        </Collapsible>
+
+        <Collapsible
+          id="postsynapsesSection"
+          title="Postsynaptic dynamics parameters"
         >
-          table data
-        </HttpDownloadButton>
-      </div>
+          <p>Postsynaptic parameters include the maximum synaptic conductance (gsyn), rise and decay time constant of the fast ionotropic receptors (AMPA, GABAA), rise and decay time constant of the slow ionotropic receptors (NMDA), and NMDA/AMPA ratio. Note that we set rise time constant to 0.2 and 2.95 ms respectively for fast and slow receptors. We do not consider the slow ionotropic receptor GABAA. The somatic postsynaptic potentials (PSPs) are validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link></p>
+          <ResponsiveTable<PostSynDynamicsParam>
+            className="mt-3"
+            columns={postColumns}
+            data={postSynDynamicsParamsData}
+            rowKey={({ from, to }) => `${from}_${to}`}
+          />
+          <div className="text-right mt-2">
+            <HttpDownloadButton
+              onClick={() => downloadAsJson(
+                postSynDynamicsParamsData,
+                `rec-data-synapses_-_postsynaptic-dynamics-parameters.json`
+              )}
+            >
+              table data
+            </HttpDownloadButton>
+          </div>
+
+        </Collapsible>
+
+      </DataContainer>
     </>
   );
 };
