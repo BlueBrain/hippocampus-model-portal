@@ -13,6 +13,7 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
 import NeuronsGraph from './acetylcholine/NeuronsGraph';
+import SynapsesGraph from './acetylcholine/SynapsesGraph';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
@@ -82,6 +83,7 @@ const AcetylcholineView: React.FC = () => {
 
         <Collapsible id="synapsesSection" title="Synapses">
           <p>The net effect of ACh on CA1 synapses results in an increase of the initial release probability (i.e. U parameter of TM synapse model). The dose-effect relationship can be described with a Hill function.</p>
+          <SynapsesGraph />
         </Collapsible>
 
       </DataContainer>
