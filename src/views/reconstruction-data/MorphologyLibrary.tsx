@@ -190,13 +190,17 @@ const Neurons: React.FC = () => {
       </Filters>
 
       <DataContainer
-        navItems={[]}
-      >
-        <Collapsible
-          id="tbd"
-          title="TBD"
-        >
-          <h3 className="text-tmp">Text description</h3>
+        navItems={[
+          { id: 'morphologySection', label: 'Neuron Morphology' },
+          { id: 'populationSection', label: 'Population' },
+        ]}>
+
+        <Collapsible id="morphologySection" title={`Neuron Morphology ${currentMtype} ${currentEtype} ${currentInstance}`}>
+          <p>We provide visualization and morphometrics for the selected morphology.</p>
+        </Collapsible>
+
+        <Collapsible id="populationSection" title={`Population`}>
+          <p>We provide morphometrics for the entire m-type group selected.</p>
         </Collapsible>
 
       </DataContainer>

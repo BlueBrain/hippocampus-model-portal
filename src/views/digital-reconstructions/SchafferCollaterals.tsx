@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { colorName } from './config';
 import Filters from '@/layouts/Filters';
@@ -38,15 +39,8 @@ const SchafferCollateralsView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    Reconstruction of the Schaffer collaterals, the major input to the CA1. This massive innervation accounts for 9,122 M synapses, and most of the synapses considered in the model (92%).
                   </p>
                 </InfoBox>
               </div>
@@ -77,15 +71,18 @@ const SchafferCollateralsView: React.FC = () => {
 
       <DataContainer
         navItems={[
-          { id: 'tbd', label: 'TBD' },
+          { id: 'anatomySection', label: 'Anatomy' },
+          { id: 'physiologySection', label: 'Physiology' }
         ]}
       >
-        <Collapsible
-          id="tbd"
-          title="TBD"
-        >
-          <h3 className="text-tmp">TBD</h3>
+        <Collapsible id="anatomySection" title="Anatomy">
+          <p>We used available <Link href={"/reconstruction-data/schaffer-collaterals"}>data</Link> to predict the anatomy of the SC. The connections between CA3 and CA1 can be analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.</p>
         </Collapsible>
+
+        <Collapsible id="physiologySection" title="Physiology">
+          <p>We used available <Link href={"/reconstruction-data/schaffer-collaterals"}>data</Link> to predict the physiology of the SC. The synapses between CA3 and CA1 can be analyzed in terms of PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.</p>
+        </Collapsible>
+
       </DataContainer>
     </>
   );
