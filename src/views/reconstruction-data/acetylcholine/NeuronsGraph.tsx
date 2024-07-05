@@ -40,6 +40,23 @@ const generateLineData = () => {
     return lineData;
 };
 
+// Split the line data into solid and dotted segments
+const splitLineData = (data) => {
+    const solidData = [];
+    const dottedData = [];
+    const splitPoint = 100;
+
+    data.forEach(point => {
+        if (point.x <= splitPoint) {
+            solidData.push(point);
+        } else {
+            dottedData.push(point);
+        }
+    });
+
+    return { solidData, dottedData };
+};
+
 const NeuronsGraph: React.FC = () => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -47,6 +64,9 @@ const NeuronsGraph: React.FC = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
+                const lineData = generateLineData();
+                const { solidData, dottedData } = splitLineData(lineData);
+
                 new Chart(ctx, {
                     type: 'scatter',
                     data: {
@@ -86,17 +106,28 @@ const NeuronsGraph: React.FC = () => {
 
                                 ],
                                 backgroundColor: 'rgba(3, 20, 55, 1)',
-                                pointRadius: 8
+                                pointRadius: 5
                             },
                             {
-                                label: 'Formula Line',
-                                data: generateLineData(),
+                                label: 'Formula Line (Solid)',
+                                data: solidData,
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
                                 borderWidth: 2
+                            },
+                            {
+                                label: 'Formula Line (Dotted)',
+                                data: dottedData,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                type: 'line',
+                                fill: false,
+                                pointRadius: 0,
+                                borderWidth: 2,
+                                borderDash: [6, 6]
                             }
                         ]
                     },
