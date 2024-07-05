@@ -74,7 +74,6 @@ const NeuronsGraph: React.FC = () => {
                             {
                                 label: 'Neurons Data',
                                 data: [
-
                                     { x: 10.0, y: 0.12 },
                                     { x: 5.0, y: 0.17 },
                                     { x: 5.0, y: 0.07 },
@@ -103,7 +102,6 @@ const NeuronsGraph: React.FC = () => {
                                     { x: 10.0, y: 0.12 },
                                     { x: 3.0, y: 0.06 },
                                     { x: 10.0, y: 0.07 }
-
                                 ],
                                 backgroundColor: 'rgba(3, 20, 55, 1)',
                                 pointRadius: 5
@@ -111,8 +109,7 @@ const NeuronsGraph: React.FC = () => {
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidData,
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(5, 10, 48, 1)',
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
@@ -121,8 +118,7 @@ const NeuronsGraph: React.FC = () => {
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedData,
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(5, 10, 48, 1)',
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
@@ -138,6 +134,10 @@ const NeuronsGraph: React.FC = () => {
                                 position: 'bottom',
                                 min: 0.01,
                                 max: 1000,
+                                title: {
+                                    display: true,
+                                    text: 'ACh Concentration (µM)'
+                                },
                                 ticks: {
                                     callback: function (value) {
                                         const logValue = Math.log10(value);
@@ -154,6 +154,10 @@ const NeuronsGraph: React.FC = () => {
                                 type: 'linear',
                                 min: 0,
                                 max: 0.4,
+                                title: {
+                                    display: true,
+                                    text: 'Current (nA)'
+                                },
                                 ticks: {
                                     stepSize: 0.1
                                 }

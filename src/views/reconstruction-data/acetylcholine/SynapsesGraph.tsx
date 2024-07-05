@@ -101,7 +101,7 @@ const SynapsesGraph: React.FC = () => {
                                 label: 'Formula Line (Solid)',
                                 data: solidPoints,
                                 type: 'line',
-                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderColor: 'rgba(5, 10, 48, 1)',
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
@@ -112,7 +112,7 @@ const SynapsesGraph: React.FC = () => {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedPoints,
                                 type: 'line',
-                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderColor: 'rgba(5, 10, 48, 1)',
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
@@ -129,6 +129,10 @@ const SynapsesGraph: React.FC = () => {
                                 position: 'bottom',
                                 min: 0.01,
                                 max: 1000,
+                                title: {
+                                    display: true,
+                                    text: 'ACh Concentration (µM)'
+                                },
                                 ticks: {
                                     callback: function (value) {
                                         const logValue = Math.log10(value);
@@ -145,6 +149,10 @@ const SynapsesGraph: React.FC = () => {
                                 type: 'linear',
                                 min: 0,
                                 max: 1.2,
+                                title: {
+                                    display: true,
+                                    text: 'Use scaling'
+                                },
                                 ticks: {
                                     stepSize: 0.2
                                 }
