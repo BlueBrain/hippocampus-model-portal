@@ -25,12 +25,28 @@ Chart.register(
 
 const calculateFormulaPoints = () => {
     const points = [];
-    for (let x = 0.01; x <= 1000; x *= 10) {
+    for (let x = 0.01; x <= 1000; x *= 1.1) { // Increase the granularity of points
         const ACh = x;
         const y = (1.0 * Math.pow(ACh, -0.576)) / (Math.pow(4.541, -0.576) + Math.pow(ACh, -0.576));
         points.push({ x: ACh, y: y });
     }
     return points;
+};
+
+const splitFormulaPoints = (points) => {
+    const solidPoints = [];
+    const dottedPoints = [];
+    const splitPoint = 500;
+
+    points.forEach(point => {
+        if (point.x <= splitPoint) {
+            solidPoints.push(point);
+        } else {
+            dottedPoints.push(point);
+        }
+    });
+
+    return { solidPoints, dottedPoints };
 };
 
 const SynapsesGraph: React.FC = () => {
@@ -40,6 +56,9 @@ const SynapsesGraph: React.FC = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
+                const formulaPoints = calculateFormulaPoints();
+                const { solidPoints, dottedPoints } = splitFormulaPoints(formulaPoints);
+
                 new Chart(ctx, {
                     type: 'scatter',
                     data: {
@@ -76,17 +95,29 @@ const SynapsesGraph: React.FC = () => {
                                     { x: 0, y: 1 }
                                 ],
                                 backgroundColor: 'rgba(3, 20, 55, 1)',
-                                pointRadius: 8
+                                pointRadius: 5
                             },
                             {
-                                label: 'Formula Line',
-                                data: calculateFormulaPoints(),
+                                label: 'Formula Line (Solid)',
+                                data: solidPoints,
                                 type: 'line',
                                 borderColor: 'rgba(255, 99, 132, 1)',
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
                                 pointRadius: 0, // Make the points invisible
+                                tension: 0.4 // Smooth the line to make it a curve
+                            },
+                            {
+                                label: 'Formula Line (Dotted)',
+                                data: dottedPoints,
+                                type: 'line',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 2,
+                                fill: false,
+                                showLine: true,
+                                pointRadius: 0, // Make the points invisible
+                                borderDash: [6, 6], // Make the line dotted
                                 tension: 0.4 // Smooth the line to make it a curve
                             }
                         ]
