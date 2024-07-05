@@ -12,6 +12,9 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import NeuronsGraph from './acetylcholine/NeuronsGraph';
+import SynapsesGraph from './acetylcholine/SynapsesGraph';
+
 import selectorStyle from '@/styles/selector.module.scss';
 
 const AcetylcholineView: React.FC = () => {
@@ -54,13 +57,7 @@ const AcetylcholineView: React.FC = () => {
             <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
               <div className={selectorStyle.selectorColumn}>
                 <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
-                  />
+
                 </div>
               </div>
             </div>
@@ -75,10 +72,12 @@ const AcetylcholineView: React.FC = () => {
 
         <Collapsible id="neuronsSection" title="Neurons">
           <p>The net effect of ACh on CA1 neurons results in a depolarising current. The dose-effect relationship can be described with a Hill function.</p>
+          <NeuronsGraph />
         </Collapsible>
 
         <Collapsible id="synapsesSection" title="Synapses">
           <p>The net effect of ACh on CA1 synapses results in an increase of the initial release probability (i.e. U parameter of TM synapse model). The dose-effect relationship can be described with a Hill function.</p>
+          <SynapsesGraph />
         </Collapsible>
 
       </DataContainer>
