@@ -4,8 +4,10 @@ import {
     ScatterController,
     CategoryScale,
     LinearScale,
+    LineController,
     LogarithmicScale,
     PointElement,
+    LineElement,
     Tooltip,
 } from 'chart.js';
 
@@ -14,10 +16,29 @@ Chart.register(
     ScatterController,
     CategoryScale,
     LinearScale,
+    LineController,
     LogarithmicScale,
     PointElement,
+    LineElement,
     Tooltip,
 );
+
+// Function to calculate y-values based on the formula
+const calculateY = (x) => {
+    const ACH = x;
+    const numerator = 0.567 * Math.pow(ACH, 0.436);
+    const denominator = Math.pow(100, 0.436) + Math.pow(ACH, 0.436);
+    return numerator / denominator;
+};
+
+// Generate data points for the formula line
+const generateLineData = () => {
+    const lineData = [];
+    for (let i = 0.01; i <= 1000; i *= 1.1) {
+        lineData.push({ x: i, y: calculateY(i) });
+    }
+    return lineData;
+};
 
 const NeuronsGraph: React.FC = () => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
@@ -29,18 +50,30 @@ const NeuronsGraph: React.FC = () => {
                 new Chart(ctx, {
                     type: 'scatter',
                     data: {
-                        datasets: [{
-                            label: 'Neurons Data',
-                            data: [
-                                { x: 10.0, y: 0.12 },
-                                { x: 5.0, y: 0.17 },
-                                { x: 5.0, y: 0.07 },
-                                { x: 5.0, y: 0.13 },
-                                { x: 10.0, y: 0.37 }
-                            ],
-                            backgroundColor: 'rgba(3, 20, 55, 1)',
-                            pointRadius: 8
-                        }]
+                        datasets: [
+                            {
+                                label: 'Neurons Data',
+                                data: [
+                                    { x: 10.0, y: 0.12 },
+                                    { x: 5.0, y: 0.17 },
+                                    { x: 5.0, y: 0.07 },
+                                    { x: 5.0, y: 0.13 },
+                                    { x: 10.0, y: 0.37 }
+                                ],
+                                backgroundColor: 'rgba(3, 20, 55, 1)',
+                                pointRadius: 8
+                            },
+                            {
+                                label: 'Formula Line',
+                                data: generateLineData(),
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                type: 'line',
+                                fill: false,
+                                pointRadius: 0,
+                                borderWidth: 2
+                            }
+                        ]
                     },
                     options: {
                         scales: {
