@@ -54,11 +54,36 @@ const NeuronsGraph: React.FC = () => {
                             {
                                 label: 'Neurons Data',
                                 data: [
+
                                     { x: 10.0, y: 0.12 },
                                     { x: 5.0, y: 0.17 },
                                     { x: 5.0, y: 0.07 },
                                     { x: 5.0, y: 0.13 },
-                                    { x: 10.0, y: 0.37 }
+                                    { x: 10.0, y: 0.37 },
+                                    { x: 3.0, y: 0.16 },
+                                    { x: 10.0, y: 0.17 },
+                                    { x: 1.0, y: 0.09 },
+                                    { x: 50.0, y: 0.23 },
+                                    { x: 100.0, y: 0.3 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 0.0, y: 0.0 },
+                                    { x: 10.0, y: 0.02 },
+                                    { x: 10.0, y: 0.12 },
+                                    { x: 3.0, y: 0.06 },
+                                    { x: 10.0, y: 0.07 }
+
                                 ],
                                 backgroundColor: 'rgba(3, 20, 55, 1)',
                                 pointRadius: 8
@@ -86,7 +111,7 @@ const NeuronsGraph: React.FC = () => {
                                     callback: function (value) {
                                         const logValue = Math.log10(value);
                                         if (logValue === -2 || logValue === -1 || logValue === 0 || logValue === 1 || logValue === 2 || logValue === 3) {
-                                            return `10^${logValue.toFixed(0)}`;
+                                            return `10 ^ ${logValue.toFixed(0)}`;
                                         }
                                         return '';
                                     },
