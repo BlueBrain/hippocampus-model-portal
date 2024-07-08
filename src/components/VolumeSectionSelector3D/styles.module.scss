@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  width: 100%;
+
+  /* Ensure the canvas fills the viewport height */
+  position: relative;
+  /* Ensure the volume list is positioned correctly */
+}
+
+.volumeSelector {
+  width: 100%;
+  aspect-ratio: auto 16/9;
+  /* Ensure the Three.js canvas takes up the remaining space */
+}
+
+.volumeList {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1;
+  /* Ensure the volume list is above the canvas */
+}
+
+.volumeSection {
+  font-size: 1.2rem;
+  line-height: 3.2rem;
+  background-color: #333746;
+  border: 1px solid white;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding: 0 1rem;
+
+}
+
+.volumeSection.active {
+  background-color: #141317;
+}
+
+.volumeSection:last-child {
+  margin-bottom: 0;
+}
+
+.volumeSection:hover {
+  background-color: #141317;
+}
