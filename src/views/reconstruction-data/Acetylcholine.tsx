@@ -70,12 +70,12 @@ const AcetylcholineView: React.FC = () => {
         { id: 'synapsesSection', label: 'Synapses' },
       ]}>
 
-        <Collapsible id="neuronsSection" title="Neurons">
+        <Collapsible id="neuronsSection" title="Neurons" className="mt-4">
           <p>The net effect of ACh on CA1 neurons results in a depolarising current. The dose-effect relationship can be described with a Hill function.</p>
           <NeuronsGraph />
         </Collapsible>
 
-        <Collapsible id="synapsesSection" title="Synapses">
+        <Collapsible id="synapsesSection" title="Synapses" className="mt-4">
           <p>The net effect of ACh on CA1 synapses results in an increase of the initial release probability (i.e. U parameter of TM synapse model). The dose-effect relationship can be described with a Hill function.</p>
           <SynapsesGraph />
         </Collapsible>
