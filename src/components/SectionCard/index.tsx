@@ -1,7 +1,8 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaMinus, FaPlus, FaInfoCircle } from 'react-icons/fa';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { MdInfoOutline } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import styles from './styles.module.scss';
 import { Row, Col } from 'antd';
@@ -27,18 +28,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
 }) => {
   const [infoOpened, setInfoOpened] = useState(false);
 
-  useEffect(() => {
-    if (infoOpened) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-
-    // Clean up by removing the class when the component unmounts
-    return () => {
-      document.body.classList.remove('no-scroll');
-    };
-  }, [infoOpened]);
 
   const handlePopupClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -57,14 +46,14 @@ const SectionCard: React.FC<SectionCardProps> = ({
               </div>
             </Col>
             <Col>
-              <FaInfoCircle className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
+              <MdInfoOutline className={styles.icon} onClick={() => setInfoOpened(!infoOpened)} />
             </Col>
           </Row>
         </div>
         <div className={styles.body}>
           {links.map(link => link.href ? (
             <Link key={link.label} href={link.href} prefetch={false} legacyBehavior>
-              {link.label}
+              <a>{link.label}</a>
             </Link>
           ) : (
             <p key={link.label}>{link.label}<sup>*</sup></p>
