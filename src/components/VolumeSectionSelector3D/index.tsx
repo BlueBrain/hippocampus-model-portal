@@ -10,10 +10,12 @@ import styles from './styles.module.scss';
 type VolumeSectionSelectProps = {
   value?: VolumeSection;
   onSelect?: (volumeSection: VolumeSection) => void;
+  theme?: number;
 };
 
 const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   onSelect = () => { },
+  theme = 1,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [selectedVolumeSection, setSelectedVolumeSection] = useState<VolumeSection | null>(null);
@@ -29,6 +31,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     }
 
     scene.current = new THREE.Scene();
+    scene.current.background = new THREE.Color('#313354');  // Set the background color here
 
     const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
     camera.current = new THREE.OrthographicCamera(-aspect * 200, aspect * 200, 200, -200, 0.1, 1000);
@@ -66,7 +69,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 (index === 2 && child.name === 'cylinder')
               ) {
                 material = new THREE.MeshBasicMaterial({
-                  color: 0xff0000,
+                  color: 0xCC8A99,
                   transparent: true,
                   opacity: 1,
                   depthWrite: false, // Prevents depth writing for transparent objects
@@ -81,9 +84,9 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 });
                 const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
                 const wireframeMaterial = new THREE.LineBasicMaterial({
-                  color: 0x0000ff,
+                  color: 0x715970,
                   transparent: true,
-                  opacity: .5, // Adjust opacity as needed
+                  opacity: .1, // Adjust opacity as needed
                   depthWrite: false, // Prevents depth writing for wireframe
                 });
                 const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);

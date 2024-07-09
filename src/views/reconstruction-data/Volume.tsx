@@ -61,9 +61,9 @@ const VolumeView: React.FC = () => {
           </Col>
           <Col className={`set-accent-color--grey mb-2`} xs={24} lg={12}>
             <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
-              <div className={`${selectorStyle.column} mt-3`}>
-                <div className={selectorStyle.head}>Select a volume section</div>
-                <div className={selectorStyle.body}>
+              <div className={"selector__column mt-3 theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select a volume section</div>
+                <div className={"selector__body"}>
                   <VolumeSectionSelector value={volumeSection} onSelect={setVolumeSectionQuery} />
                 </div>
               </div>

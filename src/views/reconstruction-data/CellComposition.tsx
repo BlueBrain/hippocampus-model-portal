@@ -69,12 +69,13 @@ const CellCompositionView: React.FC = () => {
             lg={12}
           >
             <div className={selectorStyle.row}>
-              <div className={`${selectorStyle.column} mt-3`}>
-                <div className={selectorStyle.head}>Select a volume section</div>
-                <div className={selectorStyle.body}>
+              <div className={"selector__column mt-3 theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select a volume section</div>
+                <div className={"selector__body"}>
                   <VolumeSectionSelector3D
                     value={volumeSection}
                     onSelect={setVolumeSectionQuery}
+                    theme={theme}
                   />
                 </div>
               </div>
