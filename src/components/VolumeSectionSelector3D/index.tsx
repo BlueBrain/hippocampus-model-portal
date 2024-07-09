@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 import { VolumeSection } from '@/types';
-import { volumeSections } from '@/constants';
+import { volumeSections, theme } from '@/constants'; // Import theme
 
 import styles from './styles.module.scss';
 
@@ -15,7 +20,7 @@ type VolumeSectionSelectProps = {
 
 const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   onSelect = () => { },
-  theme = 1,
+  theme: themeProp = 1,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [selectedVolumeSection, setSelectedVolumeSection] = useState<VolumeSection | null>(null);
@@ -23,6 +28,12 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
   const camera = useRef<THREE.OrthographicCamera | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
+  const composer = useRef<EffectComposer | null>(null);
+  const outlinePass = useRef<OutlinePass | null>(null);
+
+  const obj1Ref = useRef<THREE.Object3D | null>(null);
+  const obj2Ref = useRef<THREE.Object3D | null>(null);
+  const obj3Ref = useRef<THREE.Object3D | null>(null);
 
   useEffect(() => {
     if (!mountRef.current) {
@@ -38,11 +49,29 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     camera.current.zoom = 1.25;
     camera.current.updateProjectionMatrix();
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
     mountRef.current.appendChild(renderer.domElement);
 
     camera.current.position.z = 100;
+
+    // Set up post-processing
+    composer.current = new EffectComposer(renderer);
+    const renderPass = new RenderPass(scene.current, camera.current);
+    composer.current.addPass(renderPass);
+
+    outlinePass.current = new OutlinePass(
+      new THREE.Vector2(mountRef.current.clientWidth, mountRef.current.clientHeight),
+      scene.current,
+      camera.current
+    );
+    outlinePass.current.edgeStrength = 2.5;
+    outlinePass.current.edgeGlow = 0.0;
+    outlinePass.current.edgeThickness = 2.0;
+    outlinePass.current.pulsePeriod = 0;
+    outlinePass.current.visibleEdgeColor.set(theme[themeProp].hover);
+    outlinePass.current.hiddenEdgeColor.set(theme[themeProp].hover);
+    composer.current.addPass(outlinePass.current);
 
     const loader = new OBJLoader();
     loader.load(
@@ -55,9 +84,15 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         const obj2 = obj.clone();
         const obj3 = obj.clone();
 
+        obj1Ref.current = obj1;
+        obj2Ref.current = obj2;
+        obj3Ref.current = obj3;
+
         obj1.position.set(-offset, 0, 0);
         obj2.position.set(0, 0, 0);
         obj3.position.set(offset, 0, 0);
+
+        const currentTheme = theme[themeProp];
 
         const applyMaterial = (obj, index) => {
           obj.traverse((child) => {
@@ -69,7 +104,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 (index === 2 && child.name === 'cylinder')
               ) {
                 material = new THREE.MeshBasicMaterial({
-                  color: 0xCC8A99,
+                  color: currentTheme.selected, // Apply selected color from theme
                   transparent: true,
                   opacity: 1,
                   depthWrite: false, // Prevents depth writing for transparent objects
@@ -77,14 +112,14 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 child.renderOrder = 999; // Ensure opaque object is rendered on top
               } else {
                 material = new THREE.MeshBasicMaterial({
-                  color: 0x44405B,
+                  color: currentTheme.default, // Apply default color from theme
                   transparent: true,
                   opacity: 0.1,
                   depthWrite: false, // Prevents depth writing for transparent objects
                 });
                 const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
                 const wireframeMaterial = new THREE.LineBasicMaterial({
-                  color: 0x715970,
+                  color: currentTheme.hover, // Apply hover color from theme
                   transparent: true,
                   opacity: .1, // Adjust opacity as needed
                   depthWrite: false, // Prevents depth writing for wireframe
@@ -104,6 +139,38 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
           scene.current.add(obj);
         });
 
+        // Add text labels
+        const fontLoader = new FontLoader();
+        fontLoader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
+          const createText = (text, position) => {
+            const textGeometry = new TextGeometry(text, {
+              font: font,
+              size: 10,
+              height: 1,
+              curveSegments: 12,
+              bevelEnabled: true,
+              bevelThickness: 0.5,
+              bevelSize: 0.25,
+              bevelOffset: 0,
+              bevelSegments: 3,
+            });
+
+            const textMaterial = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: 0.8,
+              depthWrite: false,
+            });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            textMesh.position.set(position.x - 10, position.y - 10, position.z + 20); // Adjust position to ensure visibility
+            scene.current.add(textMesh);
+          };
+
+          createText('OBJ1', obj1.position);
+          createText('OBJ2', obj2.position);
+          createText('OBJ3', obj3.position);
+        });
+
         animate();
       },
       (xhr) => {
@@ -116,7 +183,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const animate = () => {
       requestAnimationFrame(animate);
-      renderer.render(scene.current!, camera.current!);
+      composer.current!.render();
     };
 
     const handleResize = () => {
@@ -131,6 +198,8 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         camera.current.top = 200;
         camera.current.bottom = -200;
         camera.current.updateProjectionMatrix();
+
+        composer.current!.setSize(width, height);
       }
     };
 
@@ -142,7 +211,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         mountRef.current.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [themeProp]);
 
   useEffect(() => {
     if (!mountRef.current || !camera.current || !scene.current) {
@@ -164,11 +233,13 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         const intersectedObject = intersects[0].object;
         if (intersectedObject !== hoveredObject) {
           setHoveredObject(intersectedObject);
+          outlinePass.current!.selectedObjects
           document.body.style.cursor = 'pointer';
         }
       } else {
         if (hoveredObject) {
           setHoveredObject(null);
+          outlinePass.current!.selectedObjects = [];
           document.body.style.cursor = 'default';
         }
       }

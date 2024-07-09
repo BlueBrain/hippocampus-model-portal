@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { Layer } from '../../types';
-import { layers } from '../../constants';
+import { layers, theme } from '../../constants'; // Import theme
 import styles from './styles.module.scss';
 
 type LayerSelectProps3D = {
@@ -12,7 +12,7 @@ type LayerSelectProps3D = {
     theme?: number;
 };
 
-const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme: themeProp }) => {
+const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme: themeProp = 1 }) => {
     const mountRef = useRef<HTMLDivElement | null>(null);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [trapezoids, setTrapezoids] = useState<THREE.Mesh[]>([]);
@@ -27,14 +27,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     const angle = 10;
     const initialTopWidth = 1.5;
     const edgeThickness = 1;
-
-    const theme = {
-        1: { default: 0x44405B, hover: 0x745F6C, selected: 0xA37E7C, selectedEdges: 0xEFAE97 }, //ok
-        2: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        3: { default: 0x413C5B, hover: 0x715970, selected: 0x8E677D, selectedEdges: 0xCC8A99 }, //ok
-        4: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-        5: { default: 0x44405B, hover: 0x745F6C, selected: 0x886C73, selectedEdges: 0xEFAE97 },
-    };
 
     const trapezoidHeights = {
         SLM: 0.224 * 1.6,
@@ -133,7 +125,6 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
                     new THREE.Vector3(0, -height / 2 + 0.02, 0),
                     new THREE.Vector3(bottomWidth / 2, -height / 2, 0),
                 ]);
-
                 const topPoints = topCurve.getPoints(20);
                 const bottomPoints = bottomCurve.getPoints(20);
 
@@ -270,7 +261,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
             const edgeMaterial = edges[index].material as THREE.LineBasicMaterial;
             const textMaterial = texts[index].material as THREE.MeshBasicMaterial;
 
-            const currentTheme = theme[themeProp || 1];
+            const currentTheme = theme[themeProp];
 
             if (index === hoveredIndex && value !== layers[index]) {
                 material.color.set(currentTheme.hover); // hover

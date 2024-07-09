@@ -128,3 +128,15 @@ export type NexusTrace = {
     '@type': 'NeuronMorphology';
   };
 };
+
+
+export type ThemeKeys = 1 | 2 | 3 | 4 | 5;
+
+export interface ThemeEntry {
+  default: number;
+  hover: number;
+  selected: number;
+  selectedEdges: number;
+}
+
+export type Theme = Record<ThemeKeys, ThemeEntry>;
