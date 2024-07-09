@@ -46,14 +46,15 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
     camera.current = new THREE.OrthographicCamera(-aspect * 200, aspect * 200, 200, -200, 0.1, 1000);
-    camera.current.zoom = 1.25;
+    camera.current.zoom = 12;
     camera.current.updateProjectionMatrix();
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio); // Ensure high DPI rendering
     mountRef.current.appendChild(renderer.domElement);
 
-    camera.current.position.z = 100;
+    camera.current.position.z = 10;
 
     // Set up post-processing
     composer.current = new EffectComposer(renderer);
@@ -75,11 +76,11 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const loader = new OBJLoader();
     loader.load(
-      '/hippocampus-portal-dev/data/3d/volume-selector2.obj',
+      '/hippocampus-portal-dev/data/3d/volume-selector3.obj',
       (obj) => {
         console.log('OBJ loaded successfully');
 
-        const offset = 180;
+        const offset = 18;
         const obj1 = obj.clone();
         const obj2 = obj.clone();
         const obj3 = obj.clone();
@@ -140,35 +141,33 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         });
 
         // Add text labels
+        // Add text labels
         const fontLoader = new FontLoader();
         fontLoader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
-          const createText = (text, position) => {
+          const createText = (text, obj) => {
             const textGeometry = new TextGeometry(text, {
               font: font,
-              size: 10,
-              height: 1,
-              curveSegments: 12,
+              size: .8, // Increase size for better resolution
+              height: .2, // Increase height for better depth
+              curveSegments: 32, // Increase curve segments for smoother text
               bevelEnabled: true,
-              bevelThickness: 0.5,
-              bevelSize: 0.25,
-              bevelOffset: 0,
-              bevelSegments: 3,
+              bevelThickness: 0.02,
+              bevelSize: 0.02,
             });
 
             const textMaterial = new THREE.MeshBasicMaterial({
-              color: 0xffffff,
-              transparent: true,
-              opacity: 0.8,
-              depthWrite: false,
+              color: 0xffffff, // Pure white color
+              transparent: false, // Ensure no transparency
+              opacity: 1, // Fully opaque
             });
             const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(position.x - 10, position.y - 10, position.z + 20); // Adjust position to ensure visibility
-            scene.current.add(textMesh);
+            textMesh.position.set(0, 0, 0); // Position text at the origin of the object
+            obj.add(textMesh);
           };
 
-          createText('OBJ1', obj1.position);
-          createText('OBJ2', obj2.position);
-          createText('OBJ3', obj3.position);
+          createText('Region', obj1);
+          createText('Slice', obj2);
+          createText('Cylinder', obj3);
         });
 
         animate();
@@ -237,6 +236,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
           document.body.style.cursor = 'pointer';
         }
       } else {
+
         if (hoveredObject) {
           setHoveredObject(null);
           outlinePass.current!.selectedObjects = [];
