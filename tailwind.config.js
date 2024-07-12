@@ -7,7 +7,12 @@ module.exports = {
     "./src/styles/**/*.{css,scss}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xl: '1400px', // Set the xl breakpoint to 1400px
+        'xs': '480px'
+      },
+    },
   },
   plugins: [],
 };
