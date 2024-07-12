@@ -17,12 +17,6 @@ body.no-scroll {
   padding: 0 1.2rem;
 }
 
-.title {
-  h3 {
-    font-size: 1.2rem;
-  }
-}
-
 .icon {
   cursor: pointer;
   opacity: .7;
@@ -51,12 +45,12 @@ body.no-scroll {
     color: #efefef;
     display: block;
     padding-left: 1.2rem;
-    font-size: 0.9rem;
+    //font-size: 0.9rem;
     line-height: 2.8rem;
     margin-bottom: 0;
     white-space: nowrap;
     position: relative;
-    transition: 1000ms all ease-in-out;
+    //transition: 1000ms all ease-in-out;
     /* Required for positioning the pseudo-element */
   }
 

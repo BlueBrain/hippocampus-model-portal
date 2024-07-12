@@ -9,7 +9,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        xl: '1400px', // Set the xl breakpoint to 1400px
+        lg: '1200px',
+        xl: '1400px',
         'xs': '480px'
       },
     },

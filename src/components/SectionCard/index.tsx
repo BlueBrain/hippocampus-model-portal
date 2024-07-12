@@ -42,7 +42,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
           <Row justify="space-between" align="middle">
             <Col>
               <div className={styles.title}>
-                <h3 className="text-white">{title}</h3>
+                <h3 className="text-white sm:text-l  ">{title}</h3>
               </div>
             </Col>
             <Col>
@@ -53,7 +53,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
         <div className={styles.body}>
           {links.map(link => link.href ? (
             <Link key={link.label} href={link.href} prefetch={false} legacyBehavior>
-              <a>{link.label}</a>
+              <a className='sm:text-sm xs:text-lg'>{link.label}</a>
             </Link>
           ) : (
             <p key={link.label}>{link.label}<sup>*</sup></p>
@@ -63,7 +63,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
       <div className={`${styles.popup} ${infoOpened ? styles.show : ''}`} onClick={handlePopupClick}>
         <div className={`${styles.popup__window} ${styles[`popup__window--${idx}`]}`}>
           <div className={`${styles.popup__header} ${styles[`popup__header--${idx}`]}`}>
-            <span className="text-white">{title}</span>
+            <span className="text-white text-base ">{title}</span>
             <IoMdClose className={`${styles.popup__close}`} onClick={() => setInfoOpened(!infoOpened)} />
           </div>
           <div className={`${styles.popup__content}`}>{description}</div>
