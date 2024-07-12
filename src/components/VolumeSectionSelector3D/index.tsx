@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -28,8 +25,9 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
   const camera = useRef<THREE.OrthographicCamera | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
-  const composer = useRef<EffectComposer | null>(null);
-  const outlinePass = useRef<OutlinePass | null>(null);
+  const renderer = useRef<THREE.WebGLRenderer | null>(null);
+  const raycaster = useRef<THREE.Raycaster | null>(null);
+  const mouse = useRef(new THREE.Vector2());
 
   const obj1Ref = useRef<THREE.Object3D | null>(null);
   const obj2Ref = useRef<THREE.Object3D | null>(null);
@@ -49,34 +47,18 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     camera.current.zoom = 12;
     camera.current.updateProjectionMatrix();
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio); // Ensure high DPI rendering
-    mountRef.current.appendChild(renderer.domElement);
+    renderer.current = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.current.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    renderer.current.setPixelRatio(window.devicePixelRatio); // Ensure high DPI rendering
+    mountRef.current.appendChild(renderer.current.domElement);
 
     camera.current.position.z = 10;
 
-    // Set up post-processing
-    composer.current = new EffectComposer(renderer);
-    const renderPass = new RenderPass(scene.current, camera.current);
-    composer.current.addPass(renderPass);
-
-    outlinePass.current = new OutlinePass(
-      new THREE.Vector2(mountRef.current.clientWidth, mountRef.current.clientHeight),
-      scene.current,
-      camera.current
-    );
-    outlinePass.current.edgeStrength = 2.5;
-    outlinePass.current.edgeGlow = 0.0;
-    outlinePass.current.edgeThickness = 2.0;
-    outlinePass.current.pulsePeriod = 0;
-    outlinePass.current.visibleEdgeColor.set(theme[themeProp].hover);
-    outlinePass.current.hiddenEdgeColor.set(theme[themeProp].hover);
-    composer.current.addPass(outlinePass.current);
+    raycaster.current = new THREE.Raycaster();
 
     const loader = new OBJLoader();
     loader.load(
-      '/hippocampus-portal-dev/data/3d/volume-selector3.obj',
+      '/hippocampus-portal-dev/data/3d/volume-selector-with-skeleton.obj',
       (obj) => {
         console.log('OBJ loaded successfully');
 
@@ -93,43 +75,63 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         obj2.position.set(0, 0, 0);
         obj3.position.set(offset, 0, 0);
 
-        const currentTheme = theme[themeProp];
+        const originalMaterials = [new Map(), new Map(), new Map()];
 
         const applyMaterial = (obj, index) => {
           obj.traverse((child) => {
             if (child instanceof THREE.Mesh) {
               let material;
+              let wireframeMaterial;
+              let wireframe;
+
               if (
                 (index === 0 && child.name === 'region') ||
                 (index === 1 && child.name === 'slice') ||
                 (index === 2 && child.name === 'cylinder')
               ) {
+                // Store the original material
+                const originalMaterial = new THREE.MeshBasicMaterial({
+                  color: theme[themeProp].hover,
+                  transparent: false,
+                  opacity: 1,
+                  depthWrite: true,
+                });
+                originalMaterials[index].set(child, originalMaterial);
+
+                // Apply initial material
+                material = originalMaterial;
+                child.renderOrder = 2;
+
+              } else if (child.name === 'skeleton') {
+                // Skeleton's material
                 material = new THREE.MeshBasicMaterial({
-                  color: currentTheme.selected, // Apply selected color from theme
+                  color: 0x000000,
+                  transparent: true,
+                  opacity: 0,
+                  depthWrite: false,
+                });
+
+                const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
+                wireframeMaterial = new THREE.LineBasicMaterial({
+                  color: theme[themeProp].default,
                   transparent: true,
                   opacity: 1,
-                  depthWrite: false, // Prevents depth writing for transparent objects
+                  depthWrite: false,
                 });
-                child.renderOrder = 999; // Ensure opaque object is rendered on top
-              } else {
-                material = new THREE.MeshBasicMaterial({
-                  color: currentTheme.default, // Apply default color from theme
-                  transparent: true,
-                  opacity: 0.1,
-                  depthWrite: false, // Prevents depth writing for transparent objects
-                });
-                const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
-                const wireframeMaterial = new THREE.LineBasicMaterial({
-                  color: currentTheme.hover, // Apply hover color from theme
-                  transparent: true,
-                  opacity: .1, // Adjust opacity as needed
-                  depthWrite: false, // Prevents depth writing for wireframe
-                });
-                const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
-                wireframe.renderOrder = 1; // Ensures wireframe is rendered on top
+
+                wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+                wireframe.renderOrder = 1; // Ensure wireframe renders below other objects
                 child.add(wireframe);
+
+              } else {
+                child.visible = false;
               }
-              child.material = material;
+
+              // Only assign material if it has been defined
+              if (material) {
+                child.material = material;
+              }
+
               child.userData.volumeSection = volumeSections[index];
             }
           });
@@ -141,33 +143,37 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         });
 
         // Add text labels
-        // Add text labels
         const fontLoader = new FontLoader();
         fontLoader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
-          const createText = (text, obj) => {
+          const createText = (text, obj, childName) => {
             const textGeometry = new TextGeometry(text, {
               font: font,
-              size: .8, // Increase size for better resolution
-              height: .2, // Increase height for better depth
-              curveSegments: 32, // Increase curve segments for smoother text
+              size: 0.8,
+              height: 0.2,
+              curveSegments: 32,
               bevelEnabled: true,
               bevelThickness: 0.02,
               bevelSize: 0.02,
             });
 
             const textMaterial = new THREE.MeshBasicMaterial({
-              color: 0xffffff, // Pure white color
-              transparent: false, // Ensure no transparency
-              opacity: 1, // Fully opaque
+              color: 0xffffff,
+              transparent: false,
+              opacity: 1,
             });
             const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(0, 0, 0); // Position text at the origin of the object
-            obj.add(textMesh);
+
+            obj.traverse((child) => {
+              if (child instanceof THREE.Mesh && child.name === childName) {
+                textMesh.position.set(0, 0, 0);
+                child.add(textMesh);
+              }
+            });
           };
 
-          createText('Region', obj1);
-          createText('Slice', obj2);
-          createText('Cylinder', obj3);
+          createText('Region', obj1, 'region');
+          createText('Slice', obj2, 'slice');
+          createText('Cylinder', obj3, 'cylinder');
         });
 
         animate();
@@ -182,14 +188,14 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const animate = () => {
       requestAnimationFrame(animate);
-      composer.current!.render();
+      renderer.current!.render(scene.current!, camera.current!);
     };
 
     const handleResize = () => {
-      if (mountRef.current && renderer && camera.current) {
+      if (mountRef.current && renderer.current && camera.current) {
         const width = mountRef.current.clientWidth;
         const height = mountRef.current.clientHeight;
-        renderer.setSize(width, height);
+        renderer.current.setSize(width, height);
 
         const aspect = width / height;
         camera.current.left = -aspect * 200;
@@ -197,82 +203,74 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         camera.current.top = 200;
         camera.current.bottom = -200;
         camera.current.updateProjectionMatrix();
+      }
+    };
 
-        composer.current!.setSize(width, height);
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!raycaster.current || !camera.current || !mountRef.current) return;
+
+      const rect = mountRef.current.getBoundingClientRect();
+      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.current.setFromCamera(mouse.current, camera.current);
+
+      if (obj1Ref.current && obj2Ref.current && obj3Ref.current) {
+        const intersects = raycaster.current.intersectObjects([obj1Ref.current, obj2Ref.current, obj3Ref.current], true);
+
+        if (intersects.length > 0) {
+          const intersectedObject = intersects[0].object;
+          if (intersectedObject !== hoveredObject) {
+            if (hoveredObject) {
+              // Reset previous hovered object's material
+              hoveredObject.traverse((child: any) => {
+                if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
+                  const index = [obj1Ref.current, obj2Ref.current, obj3Ref.current].indexOf(hoveredObject);
+                  child.material = originalMaterials[index].get(child);
+                }
+              });
+            }
+            // Set new hovered object's material
+            intersectedObject.traverse((child: any) => {
+              if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
+                child.material = new THREE.MeshBasicMaterial({
+                  color: 0xff0000, // Red color
+                  transparent: false,
+                  opacity: 1,
+                  depthWrite: true,
+                });
+              }
+            });
+            setHoveredObject(intersectedObject);
+            mountRef.current!.style.cursor = 'pointer';
+          }
+        } else {
+          if (hoveredObject) {
+            // Reset previous hovered object's material
+            hoveredObject.traverse((child: any) => {
+              if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
+                const index = [obj1Ref.current, obj2Ref.current, obj3Ref.current].indexOf(hoveredObject);
+                child.material = originalMaterials[index].get(child);
+              }
+            });
+            setHoveredObject(null);
+            mountRef.current!.style.cursor = 'auto';
+          }
+        }
       }
     };
 
     window.addEventListener('resize', handleResize);
+    mountRef.current.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      mountRef.current?.removeEventListener('mousemove', handleMouseMove);
       if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+        mountRef.current.removeChild(renderer.current!.domElement);
       }
     };
   }, [themeProp]);
-
-  useEffect(() => {
-    if (!mountRef.current || !camera.current || !scene.current) {
-      return;
-    }
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    const onMouseMove = (event: MouseEvent) => {
-      const rect = mountRef.current!.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera.current!);
-
-      const intersects = raycaster.intersectObjects(scene.current!.children, true);
-      if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        if (intersectedObject !== hoveredObject) {
-          setHoveredObject(intersectedObject);
-          outlinePass.current!.selectedObjects
-          document.body.style.cursor = 'pointer';
-        }
-      } else {
-
-        if (hoveredObject) {
-          setHoveredObject(null);
-          outlinePass.current!.selectedObjects = [];
-          document.body.style.cursor = 'default';
-        }
-      }
-    };
-
-    const onClick = (event: MouseEvent) => {
-      const rect = mountRef.current!.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera.current!);
-
-      const intersects = raycaster.intersectObjects(scene.current!.children, true);
-      if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        const volumeSection = intersectedObject.userData.volumeSection;
-        setSelectedVolumeSection(volumeSection);
-        if (onSelect) {
-          onSelect(volumeSection);
-        }
-      }
-    };
-
-    mountRef.current.addEventListener('mousemove', onMouseMove);
-    mountRef.current.addEventListener('click', onClick);
-
-    return () => {
-      if (mountRef.current) {
-        mountRef.current.removeEventListener('mousemove', onMouseMove);
-        mountRef.current.removeEventListener('click', onClick);
-      }
-    };
-  }, [hoveredObject, onSelect]);
 
   return (
     <div className={styles.container}>
