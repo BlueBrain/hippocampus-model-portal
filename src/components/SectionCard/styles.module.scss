@@ -153,6 +153,8 @@ body.no-scroll {
   align-items: center;
   justify-content: center;
 
+
+
   &.show {
     visibility: visible;
     opacity: 1;
@@ -165,6 +167,10 @@ body.no-scroll {
   &__window {
     max-width: 40rem;
     background-color: #313254;
+
+    @media screen and (max-width: 768px) {
+      max-width: 25rem;
+    }
 
     &--1 {
       border: map-get($theme, "experimental-data") 1px solid;
