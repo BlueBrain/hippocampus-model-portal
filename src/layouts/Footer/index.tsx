@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.sectionContent}>
-        <h2 >The Hippocampus Hub Explorer</h2>
+        <h2 className='text-red-500'>The Hippocampus Hub Explorer</h2>
         <div className="row between-xs mt-4">
           <div className="col-xs-12  col-sm-4" style={{ paddingRight: "3rem" }}>
             <a

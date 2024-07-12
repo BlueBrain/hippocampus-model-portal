@@ -1,5 +1,10 @@
 @use "sass:math";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @import 'antd/lib/style/index.css';
 @import 'flexboxgrid';
 
@@ -24,10 +29,6 @@
 @import 'antd/lib/drawer/style/index.css';
 @import 'antd/lib/segmented/style/index.css';
 @import 'antd/lib/tooltip/style/index.css';
-
-//Tailwind CSS
-@import './tailwind.scss';
-
 
 // Pages
 @import './explore-models';
