@@ -25,6 +25,10 @@
 @import 'antd/lib/segmented/style/index.css';
 @import 'antd/lib/tooltip/style/index.css';
 
+//Tailwind CSS
+@import './tailwind.scss';
+
+
 // Pages
 @import './explore-models';
 
@@ -51,7 +55,6 @@ body {
   width: auto;
   height: auto;
   min-height: 100vh;
-
 }
 
 button,
