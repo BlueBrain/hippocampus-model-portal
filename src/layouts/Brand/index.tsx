@@ -8,7 +8,7 @@ const classPrefix = 'brand__';
 
 const Brand: React.FC = () => {
   return (
-    <div className={`${classPrefix}basis`}>
+    <div className={`${classPrefix}basis`} style={{ zIndex: "9999" }}>
       <a href="/">
         <img
           className="logo"

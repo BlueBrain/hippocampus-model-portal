@@ -80,7 +80,7 @@ type SubmenuLinkProps = {
 const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false, highlight = false }) => {
   return external ? (
     <a
-      className={`${styles["submenu__link"]} ${highlight ? styles["submenu__link--highlight"] : ""}`}
+      className={`${styles["submenu__link"]} md:text-base xs:text-2xl ${highlight ? styles["submenu__link--highlight"] : ""}`}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
@@ -89,7 +89,7 @@ const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false
     </a>
   ) : (
     <Link
-      className={`${styles["submenu__link"]} ${highlight ? styles["submenu__link--highlight"] : ""}`}
+      className={`${styles["submenu__link"]}  md:text-base xs:text-2xl ${highlight ? styles["submenu__link--highlight"] : ""}`}
       href={href}
     >
       {label}
@@ -234,7 +234,7 @@ const MainNav: React.FC = () => {
             <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external highlight />
           </MenuItem>
 
-          <button className={styles['main-navigation__button']}>
+          <button className={`${styles["main-navigation__button"]}`}>
             Contact Us
           </button>
         </ul>
