@@ -11,7 +11,14 @@
     align-items: flex-start;
     gap: 0;
     width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: red;
+    justify-content: center;
     display: none;
+    z-index: 999;
 
     &.main-navigation--open {
       display: flex;
@@ -28,6 +35,7 @@
 
     @media (max-width: 1200px) {
       width: 100%;
+      justify-content: center;
     }
 
     & a {
@@ -109,12 +117,26 @@
 
     span {
       display: block;
-      width: 15px;
-      height: 1px;
+      width: 25px;
+      height: 2px; // Height adjusted to 2px
       margin: 5px;
-
-      background: rgba(white, .8);
+      border-radius: 99px;
+      background: rgba(white, 1);
       transition: all 0.3s ease-in-out;
+    }
+
+    &.hamburger--open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+      transform-origin: center;
+    }
+
+    &.hamburger--open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    &.hamburger--open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+      transform-origin: center;
     }
   }
 }

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { HomeFilled, GlobalOutlined, ToolFilled } from '@ant-design/icons';
 import { IoIosArrowDown } from "react-icons/io";
 
 import { basePath } from '../../config';
@@ -24,22 +23,42 @@ type MenuItemProps = {
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, menuGroup }) => {
   const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
-  const [isMenuOpened, setIsMenuOpened] = useState(true);
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
 
-  const MouseEnter = (menuGroup: string) => {
-    setOpenMenuGroup(menuGroup);
-    setIsMenuOpened(true);
+  const handleMenuToggle = (menuGroup: string) => {
+    setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
+    setIsMenuOpened(prevState => !prevState);
   };
 
-  const MouseLeave = (menuGroup: string) => {
-    setIsMenuOpened(false);
-    setOpenMenuGroup(menuGroup);
+  const handleMouseEnter = (menuGroup: string) => {
+    if (window.innerWidth > 1200) {
+      setOpenMenuGroup(menuGroup);
+      setIsMenuOpened(true);
+    }
+  };
+
+  const handleMouseLeave = (menuGroup: string) => {
+    if (window.innerWidth > 1200) {
+      setIsMenuOpened(false);
+      setOpenMenuGroup('');
+    }
+  };
+
+  const handleClick = (menuGroup: string) => {
+    if (window.innerWidth <= 1200) {
+      handleMenuToggle(menuGroup);
+    }
   };
 
   return (
-    <li onMouseEnter={() => MouseEnter(menuGroup)} onMouseLeave={() => MouseLeave(menuGroup)} className={styles['main-navigation__item']}>
+    <li
+      onMouseEnter={() => handleMouseEnter(menuGroup)}
+      onMouseLeave={() => handleMouseLeave(menuGroup)}
+      onClick={() => handleClick(menuGroup)}
+      className={styles['main-navigation__item']}
+    >
       <Link href={href}>{label}</Link>
-      <div className={`${styles["arrow"]} ${isMenuOpened ? styles["arrow--active"] : ""}`}>
+      <div className={`${styles["arrow"]} ${isMenuOpened && openMenuGroup === menuGroup ? styles["arrow--active"] : ""}`}>
         <IoIosArrowDown />
       </div>
       {children && isMenuOpened && (openMenuGroup === menuGroup) && (
@@ -90,21 +109,21 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
   const [isOpened, setIsOpened] = useState<Boolean>(false);
   const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
 
-  const Click = () => {
+  const handleMenuToggle = () => {
     setIsOpened(prevState => !prevState);
-    setOpenMenuGroup(menuGroup);
+    setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
   };
 
   return (
     <>
-      <div onClick={Click} className={`${styles["submenu__group-link"]}  ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-link--active"] : ""}`} style={color ? { borderLeft: "8px solid " + color } : {}}>
+      <div onClick={handleMenuToggle} className={`${styles["submenu__group-link"]} ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-link--active"] : ""}`} style={color ? { borderLeft: "8px solid " + color } : {}}>
         {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
         <div className={`${styles["arrow"]} ${isOpened ? styles["arrow--active"] : ""}`}>
           <IoIosArrowDown />
         </div>
-      </div >
+      </div>
 
-      <div className={`${styles["submenu__group-list"]}  ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-list--active"] : ""}`}>
+      <div className={`${styles["submenu__group-list"]} ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-list--active"] : ""}`}>
         {children}
       </div>
     </>
