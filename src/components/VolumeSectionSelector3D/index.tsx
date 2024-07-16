@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
@@ -20,8 +20,9 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   theme: themeProp = 1,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [selectedVolumeSection, setSelectedVolumeSection] = useState<VolumeSection | null>(null);
-  const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
+  const hoveredObjectRef = useRef<THREE.Object3D | null>(null);
+  const selectedVolumeSectionRef = useRef<VolumeSection | null>(null);
+  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
 
   const camera = useRef<THREE.OrthographicCamera | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -32,6 +33,67 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   const obj1Ref = useRef<THREE.Object3D | null>(null);
   const obj2Ref = useRef<THREE.Object3D | null>(null);
   const obj3Ref = useRef<THREE.Object3D | null>(null);
+
+  const handleClick = useCallback((event) => {
+    console.log('Click event detected');
+    const rect = mountRef.current!.getBoundingClientRect();
+    mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    console.log('Mouse coordinates:', mouse.current);
+
+    raycaster.current!.setFromCamera(mouse.current, camera.current!);
+    const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
+
+    console.log('Intersected objects:', intersects);
+
+    if (intersects.length > 0) {
+      let intersectedObject = intersects[0].object;
+      while (intersectedObject.parent && ![obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
+        intersectedObject = intersectedObject.parent;
+      }
+
+      if ([obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
+        const volumeSection = intersectedObject.userData.volumeSection;
+        console.log('Intersected volume section:', volumeSection);
+        if (volumeSection) {
+          // Reset the color of the previously selected object
+          if (selectedObjectRef.current) {
+            selectedObjectRef.current.traverse((child: any) => {
+              if (child instanceof THREE.Mesh) {
+                if (
+                  (child.name === 'region' && selectedObjectRef.current === obj1Ref.current) ||
+                  (child.name === 'slice' && selectedObjectRef.current === obj2Ref.current) ||
+                  (child.name === 'cylinder' && selectedObjectRef.current === obj3Ref.current)
+                ) {
+                  child.material.color.set(theme[themeProp].default);
+                }
+              }
+            });
+          }
+
+          // Set the color of the newly selected object
+          intersectedObject.traverse((child: any) => {
+            if (child instanceof THREE.Mesh) {
+              if (
+                (child.name === 'region' && intersectedObject === obj1Ref.current) ||
+                (child.name === 'slice' && intersectedObject === obj2Ref.current) ||
+                (child.name === 'cylinder' && intersectedObject === obj3Ref.current)
+              ) {
+                child.material.color.set(theme[themeProp].selected);
+              }
+            }
+          });
+
+          selectedVolumeSectionRef.current = volumeSection;
+          selectedObjectRef.current = intersectedObject;
+          onSelect(volumeSection);
+        }
+      } else {
+        console.log('Intersected object is not a main volume section object');
+      }
+    }
+  }, [onSelect, themeProp]);
 
   useEffect(() => {
     if (!mountRef.current) {
@@ -75,31 +137,27 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         obj2.position.set(0, 0, 0);
         obj3.position.set(offset, 0, 0);
 
-        const originalMaterials = [new Map(), new Map(), new Map()];
+        obj1.userData.volumeSection = 'region';
+        obj2.userData.volumeSection = 'slice';
+        obj3.userData.volumeSection = 'cylinder';
 
         const applyMaterial = (obj, index) => {
           obj.traverse((child) => {
             if (child instanceof THREE.Mesh) {
               let material;
-              let wireframeMaterial;
-              let wireframe;
 
               if (
                 (index === 0 && child.name === 'region') ||
                 (index === 1 && child.name === 'slice') ||
                 (index === 2 && child.name === 'cylinder')
               ) {
-                // Store the original material
-                const originalMaterial = new THREE.MeshBasicMaterial({
-                  color: theme[themeProp].hover,
+                // Apply initial material
+                material = new THREE.MeshBasicMaterial({
+                  color: theme[themeProp].default,
                   transparent: false,
                   opacity: 1,
                   depthWrite: true,
                 });
-                originalMaterials[index].set(child, originalMaterial);
-
-                // Apply initial material
-                material = originalMaterial;
                 child.renderOrder = 2;
 
               } else if (child.name === 'skeleton') {
@@ -112,14 +170,14 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 });
 
                 const wireframeGeometry = new THREE.EdgesGeometry(child.geometry);
-                wireframeMaterial = new THREE.LineBasicMaterial({
+                const wireframeMaterial = new THREE.LineBasicMaterial({
                   color: theme[themeProp].default,
                   transparent: true,
                   opacity: 1,
                   depthWrite: false,
                 });
 
-                wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+                const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
                 wireframe.renderOrder = 1; // Ensure wireframe renders below other objects
                 child.add(wireframe);
 
@@ -131,8 +189,6 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
               if (material) {
                 child.material = material;
               }
-
-              child.userData.volumeSection = volumeSections[index];
             }
           });
         };
@@ -206,66 +262,36 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
       }
     };
 
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!raycaster.current || !camera.current || !mountRef.current) return;
-
-      const rect = mountRef.current.getBoundingClientRect();
+    const handleMouseMove = (event) => {
+      const rect = mountRef.current!.getBoundingClientRect();
       mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      raycaster.current.setFromCamera(mouse.current, camera.current);
+      raycaster.current!.setFromCamera(mouse.current, camera.current!);
+      const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
 
-      if (obj1Ref.current && obj2Ref.current && obj3Ref.current) {
-        const intersects = raycaster.current.intersectObjects([obj1Ref.current, obj2Ref.current, obj3Ref.current], true);
-
-        if (intersects.length > 0) {
-          const intersectedObject = intersects[0].object;
-          if (intersectedObject !== hoveredObject) {
-            if (hoveredObject) {
-              // Reset previous hovered object's material
-              hoveredObject.traverse((child: any) => {
-                if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
-                  const index = [obj1Ref.current, obj2Ref.current, obj3Ref.current].indexOf(hoveredObject);
-                  child.material = originalMaterials[index].get(child);
-                }
-              });
-            }
-            // Set new hovered object's material
-            intersectedObject.traverse((child: any) => {
-              if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
-                child.material = new THREE.MeshBasicMaterial({
-                  color: 0xff0000, // Red color
-                  transparent: false,
-                  opacity: 1,
-                  depthWrite: true,
-                });
-              }
-            });
-            setHoveredObject(intersectedObject);
-            mountRef.current!.style.cursor = 'pointer';
-          }
-        } else {
-          if (hoveredObject) {
-            // Reset previous hovered object's material
-            hoveredObject.traverse((child: any) => {
-              if (child instanceof THREE.Mesh && child.name !== 'skeleton') {
-                const index = [obj1Ref.current, obj2Ref.current, obj3Ref.current].indexOf(hoveredObject);
-                child.material = originalMaterials[index].get(child);
-              }
-            });
-            setHoveredObject(null);
-            mountRef.current!.style.cursor = 'auto';
-          }
+      if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+        if (hoveredObjectRef.current !== intersectedObject) {
+          hoveredObjectRef.current = intersectedObject;
+          mountRef.current!.style.cursor = 'pointer';
+        }
+      } else {
+        if (hoveredObjectRef.current) {
+          hoveredObjectRef.current = null;
+          mountRef.current!.style.cursor = 'default';
         }
       }
     };
 
     window.addEventListener('resize', handleResize);
     mountRef.current.addEventListener('mousemove', handleMouseMove);
+    mountRef.current.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      mountRef.current?.removeEventListener('mousemove', handleMouseMove);
+      mountRef.current!.removeEventListener('mousemove', handleMouseMove);
+      mountRef.current!.removeEventListener('click', handleClick);
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.current!.domElement);
       }
