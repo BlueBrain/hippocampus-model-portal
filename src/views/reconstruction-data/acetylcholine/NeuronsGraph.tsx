@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+
 import {
     Chart,
     ScatterController,
@@ -10,6 +11,11 @@ import {
     LineElement,
     Tooltip,
 } from 'chart.js';
+
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import { downloadAsJson } from '@/utils';
+import NeuronGraphData from './neuron-graph-data.json'
+
 
 // Register necessary components
 Chart.register(
@@ -172,6 +178,9 @@ const NeuronsGraph: React.FC = () => {
     return (
         <div>
             <canvas ref={chartRef} />
+            <HttpDownloadButton onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
+                table data
+            </HttpDownloadButton>
         </div>
     );
 };
