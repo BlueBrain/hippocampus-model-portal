@@ -75,7 +75,7 @@ const CellCompositionView: React.FC = () => {
                   <VolumeSectionSelector3D
                     value={volumeSection}
                     onSelect={setVolumeSectionQuery}
-                    theme={1}
+                    theme={theme}
                   />
                 </div>
               </div>
