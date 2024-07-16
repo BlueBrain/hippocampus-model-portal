@@ -312,11 +312,33 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
       if (intersects.length > 0) {
         const intersectedObject = intersects[0].object;
         if (hoveredObjectRef.current !== intersectedObject) {
+          if (hoveredObjectRef.current) {
+            // Revert the color of the previously hovered object
+            hoveredObjectRef.current.traverse((child: any) => {
+              if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
+                child.material.color.set(theme[themeProp].default);
+              }
+            });
+          }
+
           hoveredObjectRef.current = intersectedObject;
+          hoveredObjectRef.current.traverse((child: any) => {
+            if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
+              child.material.color.set('blue');
+            }
+          });
+
           mountRef.current!.style.cursor = 'pointer';
         }
       } else {
         if (hoveredObjectRef.current) {
+          // Revert the color of the previously hovered object
+          hoveredObjectRef.current.traverse((child: any) => {
+            if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
+              child.material.color.set(theme[themeProp].default);
+            }
+          });
+
           hoveredObjectRef.current = null;
           mountRef.current!.style.cursor = 'default';
         }
