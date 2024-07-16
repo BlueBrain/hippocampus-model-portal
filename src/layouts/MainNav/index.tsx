@@ -23,30 +23,26 @@ type MenuItemProps = {
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, menuGroup }) => {
   const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
-  const [isMenuOpened, setIsMenuOpened] = useState(false);
 
   const handleMenuToggle = (menuGroup: string) => {
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
-    setIsMenuOpened(prevState => !prevState);
   };
 
   const handleMouseEnter = (menuGroup: string) => {
     if (window.innerWidth > 1200) {
       setOpenMenuGroup(menuGroup);
-      setIsMenuOpened(true);
     }
   };
 
   const handleMouseLeave = (menuGroup: string) => {
     if (window.innerWidth > 1200) {
-      setIsMenuOpened(false);
       setOpenMenuGroup('');
     }
   };
 
   const handleClick = (menuGroup: string) => {
     if (window.innerWidth <= 1200) {
-      handleMenuToggle(menuGroup);
+      setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
     }
   };
 
@@ -58,10 +54,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
       className={styles['main-navigation__item']}
     >
       <Link href={href}>{label}</Link>
-      <div className={`${styles["arrow"]} ${isMenuOpened && openMenuGroup === menuGroup ? styles["arrow--active"] : ""}`}>
+      <div className={`${styles["arrow"]} ${openMenuGroup === menuGroup ? styles["arrow--active"] : ""}`}>
         <IoIosArrowDown />
       </div>
-      {children && isMenuOpened && (openMenuGroup === menuGroup) && (
+      {children && openMenuGroup === menuGroup && (
         <div className={styles["submenu"]}>
           {children}
         </div>
@@ -89,7 +85,7 @@ const SubmenuLink: React.FC<SubmenuLinkProps> = ({ href, label, external = false
     </a>
   ) : (
     <Link
-      className={`${styles["submenu__link"]}  md:text-base xs:text-2xl ${highlight ? styles["submenu__link--highlight"] : ""}`}
+      className={`${styles["submenu__link"]} md:text-base xs:text-2xl ${highlight ? styles["submenu__link--highlight"] : ""}`}
       href={href}
     >
       {label}
@@ -103,27 +99,27 @@ type SubmenuGroupProps = {
   external?: boolean;
   color?: string;
   menuGroup?: string;
+  openMenuGroup: string;
+  setOpenMenuGroup: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color }) => {
-  const [isOpened, setIsOpened] = useState<Boolean>(false);
-  const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
+const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color, openMenuGroup, setOpenMenuGroup }) => {
+  const isOpened = openMenuGroup === menuGroup;
 
   const handleMenuToggle = () => {
-    setIsOpened(prevState => !prevState);
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
   };
 
   return (
     <>
-      <div onClick={handleMenuToggle} className={`${styles["submenu__group-link"]} ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-link--active"] : ""}`} style={color ? { borderLeft: "8px solid " + color } : {}}>
+      <div onClick={handleMenuToggle} className={`${styles["submenu__group-link"]} ${isOpened ? styles["submenu__group-link--active"] : ""}`} style={color ? { borderLeft: "8px solid " + color } : {}}>
         {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
         <div className={`${styles["arrow"]} ${isOpened ? styles["arrow--active"] : ""}`}>
           <IoIosArrowDown />
         </div>
       </div>
 
-      <div className={`${styles["submenu__group-list"]} ${isOpened && openMenuGroup === menuGroup ? styles["submenu__group-list--active"] : ""}`}>
+      <div className={`${styles["submenu__group-list"]} ${isOpened ? styles["submenu__group-list--active"] : ""}`}>
         {children}
       </div>
     </>
@@ -132,9 +128,13 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
 
 const MainNav: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
 
   const toggleMenu = () => {
     setMenuOpen(prevState => !prevState);
+    if (menuOpen) {
+      setOpenMenuGroup('');
+    }
   };
 
   return (
@@ -167,7 +167,14 @@ const MainNav: React.FC = () => {
             external
             menuGroup='menu-group-build'
           >
-            <SubmenuGroup label='Data' href="/build/data" external menuGroup='menu-group-build'>
+            <SubmenuGroup
+              label='Data'
+              href="/build/data"
+              external
+              menuGroup='menu-group-build'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Connections" external href="/build/data/connection" />
               <SubmenuLink label="Electrophysiology" external href="/build/data/electrophysiology" />
               <SubmenuLink label="Morphologies" external href="/build/data/morphology" />
@@ -182,7 +189,13 @@ const MainNav: React.FC = () => {
             href='/'
             menuGroup='menu-group-explore'
           >
-            <SubmenuGroup label="Experimental Data" menuGroup='menu-group-experimental-data' color='#EFAE97'>
+            <SubmenuGroup
+              label="Experimental Data"
+              menuGroup='menu-group-experimental-data'
+              color='#EFAE97'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Layer Anatomy" href="/experimental-data/layer-anatomy/" />
               <SubmenuLink label="Neuronal Morphology" href="/experimental-data/neuronal-morphology/" />
               <SubmenuLink label="Neuronal Electrophysiology" href="/experimental-data/neuronal-electrophysiology/" />
@@ -195,7 +208,13 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Theta" href="/experimental-data/theta/" />
             </SubmenuGroup>
 
-            <SubmenuGroup label="Reconstruction Data" menuGroup='menu-group-reconstruction-data' color='#EA9088'>
+            <SubmenuGroup
+              label="Reconstruction Data"
+              menuGroup='menu-group-reconstruction-data'
+              color='#EA9088'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Volume" href="/reconstruction-data/volume/" />
               <SubmenuLink label="Cell composition" href="/reconstruction-data/cell-composition/" />
               <SubmenuLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
@@ -207,7 +226,13 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
             </SubmenuGroup>
 
-            <SubmenuGroup label="Digital Reconstructions" menuGroup='menu-group-digital-reconstructions' color='#CC8A99'>
+            <SubmenuGroup
+              label="Digital Reconstructions"
+              menuGroup='menu-group-digital-reconstructions'
+              color='#CC8A99'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Region" href="/digital-reconstructions/region/" />
               <SubmenuLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
               <SubmenuLink label="Connections" href="/digital-reconstructions/connections/" />
@@ -216,7 +241,13 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
             </SubmenuGroup>
 
-            <SubmenuGroup label="Validations" menuGroup='menu-group-validations' color='#9E98AE'>
+            <SubmenuGroup
+              label="Validations"
+              menuGroup='menu-group-validations'
+              color='#9E98AE'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Neurons" href='/validations/neurons/' />
               <SubmenuLink label="Connection anatomy" href='/validations/connection-anatomy/' />
               <SubmenuLink label="Connection physiology" href='/validations/connection-physiology/' />
@@ -224,7 +255,13 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Acetylcholine" href='/validations/acetylcholine/' />
             </SubmenuGroup>
 
-            <SubmenuGroup label="Predictions" menuGroup='menu-group-predictions' color='#8398B5'>
+            <SubmenuGroup
+              label="Predictions"
+              menuGroup='menu-group-predictions'
+              color='#8398B5'
+              openMenuGroup={openMenuGroup}
+              setOpenMenuGroup={setOpenMenuGroup}
+            >
               <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
               <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
               <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
