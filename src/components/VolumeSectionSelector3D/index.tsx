@@ -16,12 +16,13 @@ type VolumeSectionSelectProps = {
 };
 
 const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
+  value = null,
   onSelect = () => { },
   theme: themeProp = 1,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const hoveredObjectRef = useRef<THREE.Object3D | null>(null);
-  const selectedVolumeSectionRef = useRef<VolumeSection | null>(null);
+  const selectedVolumeSectionRef = useRef<VolumeSection | null>(value);
   const selectedObjectRef = useRef<THREE.Object3D | null>(null);
 
   const camera = useRef<THREE.OrthographicCamera | null>(null);
@@ -34,18 +35,17 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   const obj2Ref = useRef<THREE.Object3D | null>(null);
   const obj3Ref = useRef<THREE.Object3D | null>(null);
 
+  const objectsLoadedRef = useRef(false);
+
   const handleClick = useCallback((event) => {
-    console.log('Click event detected');
+    if (!objectsLoadedRef.current) return;
+
     const rect = mountRef.current!.getBoundingClientRect();
     mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    console.log('Mouse coordinates:', mouse.current);
-
     raycaster.current!.setFromCamera(mouse.current, camera.current!);
     const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
-
-    console.log('Intersected objects:', intersects);
 
     if (intersects.length > 0) {
       let intersectedObject = intersects[0].object;
@@ -55,7 +55,6 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
       if ([obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
         const volumeSection = intersectedObject.userData.volumeSection;
-        console.log('Intersected volume section:', volumeSection);
         if (volumeSection) {
           // Reset the color of the previously selected object
           if (selectedObjectRef.current) {
@@ -89,8 +88,6 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
           selectedObjectRef.current = intersectedObject;
           onSelect(volumeSection);
         }
-      } else {
-        console.log('Intersected object is not a main volume section object');
       }
     }
   }, [onSelect, themeProp]);
@@ -122,8 +119,6 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     loader.load(
       '/hippocampus-portal-dev/data/3d/volume-selector-with-skeleton.obj',
       (obj) => {
-        console.log('OBJ loaded successfully');
-
         const offset = 18;
         const obj1 = obj.clone();
         const obj2 = obj.clone();
@@ -232,6 +227,48 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
           createText('Cylinder', obj3, 'cylinder');
         });
 
+        objectsLoadedRef.current = true; // Set objectsLoaded to true once objects are fully loaded
+
+        // Set the initial selected volume section based on the value prop
+        const setInitialSelection = (initialVolumeSection: VolumeSection) => {
+          let initialObjectRef: React.MutableRefObject<THREE.Object3D | null> | null = null;
+
+          switch (initialVolumeSection) {
+            case 'region':
+              initialObjectRef = obj1Ref;
+              break;
+            case 'slice':
+              initialObjectRef = obj2Ref;
+              break;
+            case 'cylinder':
+              initialObjectRef = obj3Ref;
+              break;
+            default:
+              initialObjectRef = obj1Ref;
+              break;
+          }
+
+          if (initialObjectRef?.current) {
+            initialObjectRef.current.traverse((child: any) => {
+              if (child instanceof THREE.Mesh) {
+                if (
+                  (child.name === 'region' && initialObjectRef === obj1Ref) ||
+                  (child.name === 'slice' && initialObjectRef === obj2Ref) ||
+                  (child.name === 'cylinder' && initialObjectRef === obj3Ref)
+                ) {
+                  child.material.color.set(theme[themeProp].selected);
+                }
+              }
+            });
+            selectedObjectRef.current = initialObjectRef.current;
+            selectedVolumeSectionRef.current = initialVolumeSection;
+          }
+        };
+
+        if (value) {
+          setInitialSelection(value);
+        }
+
         animate();
       },
       (xhr) => {
@@ -263,6 +300,8 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     };
 
     const handleMouseMove = (event) => {
+      if (!objectsLoadedRef.current) return;
+
       const rect = mountRef.current!.getBoundingClientRect();
       mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -290,13 +329,55 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      mountRef.current!.removeEventListener('mousemove', handleMouseMove);
-      mountRef.current!.removeEventListener('click', handleClick);
       if (mountRef.current) {
+        mountRef.current.removeEventListener('mousemove', handleMouseMove);
+        mountRef.current.removeEventListener('click', handleClick);
         mountRef.current.removeChild(renderer.current!.domElement);
       }
     };
   }, [themeProp]);
+
+  useEffect(() => {
+    if (objectsLoadedRef.current && value) {
+      // Update the initial selected volume section if the value prop changes
+      const setInitialSelection = (initialVolumeSection: VolumeSection) => {
+        let initialObjectRef: React.MutableRefObject<THREE.Object3D | null> | null = null;
+
+        switch (initialVolumeSection) {
+          case 'region':
+            initialObjectRef = obj1Ref;
+            break;
+          case 'slice':
+            initialObjectRef = obj2Ref;
+            break;
+          case 'cylinder':
+            initialObjectRef = obj3Ref;
+            break;
+          default:
+            initialObjectRef = obj1Ref;
+            break;
+        }
+
+        if (initialObjectRef?.current) {
+          initialObjectRef.current.traverse((child: any) => {
+            if (child instanceof THREE.Mesh) {
+              if (
+                (child.name === 'region' && initialObjectRef === obj1Ref) ||
+                (child.name === 'slice' && initialObjectRef === obj2Ref) ||
+                (child.name === 'cylinder' && initialObjectRef === obj3Ref)
+              ) {
+                child.material.color.set(theme[themeProp].selected);
+              }
+            }
+          });
+          selectedObjectRef.current = initialObjectRef.current;
+          selectedVolumeSectionRef.current = initialVolumeSection;
+        }
+      };
+
+      setInitialSelection(value);
+    }
+  }, [value, themeProp]);
 
   return (
     <div className={styles.container}>
