@@ -12,7 +12,7 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import VolumeSectionSelector from '@/components/VolumeSectionSelector';
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
@@ -68,13 +68,14 @@ const CellCompositionView: React.FC = () => {
             xs={24}
             lg={12}
           >
-            <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
-              <div className={`${selectorStyle.column} mt-3`}>
-                <div className={selectorStyle.head}>Select a volume section</div>
-                <div className={selectorStyle.body}>
-                  <VolumeSectionSelector
+            <div className={selectorStyle.row}>
+              <div className={"selector__column mt-3 theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select a volume section</div>
+                <div className={"selector__body"}>
+                  <VolumeSectionSelector3D
                     value={volumeSection}
                     onSelect={setVolumeSectionQuery}
+                    theme={theme}
                   />
                 </div>
               </div>

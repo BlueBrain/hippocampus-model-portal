@@ -1,4 +1,4 @@
-import { Layer, NeuriteType, VolumeSection } from './types';
+import { Layer, NeuriteType, VolumeSection, Theme } from './types';
 
 export const layers: Layer[] = [
   'SLM',
@@ -7,6 +7,13 @@ export const layers: Layer[] = [
   'SO',
 ];
 
+export const theme: Theme = {
+  1: { default: 0x44405B, hover: 0x7D656F, selected: 0xB68983, selectedEdges: 0xEFAE97 },
+  2: { default: 0x44405B, hover: 0x7B5B6A, selected: 0xB37579, selectedEdges: 0xEA9088 },
+  3: { default: 0x44405B, hover: 0x715970, selected: 0x9F7184, selectedEdges: 0xCC8A99 },
+  4: { default: 0x44405B, hover: 0x625D77, selected: 0x807B92, selectedEdges: 0x9E98AE },
+  5: { default: 0x44405B, hover: 0x595D79, selected: 0x6E7B97, selectedEdges: 0x8398B5 },
+};
 
 
 export const neuriteTypes: NeuriteType[] = [
