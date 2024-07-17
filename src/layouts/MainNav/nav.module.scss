@@ -6,8 +6,6 @@
   height: 100%;
   margin: 0;
 
-
-
   @media (max-width: 1200px) {
     flex-direction: column;
     align-items: center;
@@ -132,7 +130,7 @@
     span {
       display: block;
       width: 25px;
-      height: 2px; // Height adjusted to 2px
+      height: 2px;
       margin: 5px;
       border-radius: 99px;
       background: rgba(white, 1);
@@ -216,7 +214,6 @@
     justify-content: space-between;
     opacity: .8;
     width: 100%;
-    background-color: red;
     padding: .5rem 1rem;
 
     &:hover,
@@ -235,17 +232,17 @@
     flex-direction: column;
     align-items: flex-start;
     background-color: #031437;
-    max-height: 0;
+    height: 0;
     overflow: hidden;
     width: 100%;
-    transition: max-height 0.3s linear;
+    transition: height 0.3s ease;
 
     @media (max-width: 1200px) {
       background-color: none;
     }
 
     &--active {
-      max-height: 400px; // Adjust as needed
+      height: auto; // Adjust as needed
     }
   }
 }

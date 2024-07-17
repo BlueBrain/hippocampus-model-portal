@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -105,10 +105,19 @@ type SubmenuGroupProps = {
 
 const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color, openMenuGroup, setOpenMenuGroup }) => {
   const isOpened = openMenuGroup === menuGroup;
+  const contentRef = useRef(null);
 
   const handleMenuToggle = () => {
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
   };
+
+  useEffect(() => {
+    if (isOpened && contentRef.current) {
+      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
+    } else if (contentRef.current) {
+      contentRef.current.style.height = '0';
+    }
+  }, [isOpened]);
 
   return (
     <>
@@ -119,7 +128,7 @@ const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, exte
         </div>
       </div>
 
-      <div className={`${styles["submenu__group-list"]} ${isOpened ? styles["submenu__group-list--active"] : ""}`}>
+      <div ref={contentRef} className={`${styles["submenu__group-list"]} ${isOpened ? styles["submenu__group-list--active"] : ""}`}>
         {children}
       </div>
     </>
