@@ -327,13 +327,58 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
       const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
 
       if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        if (hoveredObjectRef.current !== intersectedObject) {
+        let intersectedObject = intersects[0].object;
+        while (intersectedObject.parent && ![obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
+          intersectedObject = intersectedObject.parent;
+        }
+
+        if (hoveredObjectRef.current !== intersectedObject && selectedObjectRef.current !== intersectedObject) {
+          // Reset the previous hovered object color
+          if (hoveredObjectRef.current && hoveredObjectRef.current !== selectedObjectRef.current) {
+            hoveredObjectRef.current.traverse((child: any) => {
+              if (child instanceof THREE.Mesh) {
+                if (
+                  (child.name === 'region' && hoveredObjectRef.current === obj1Ref.current) ||
+                  (child.name === 'slice' && hoveredObjectRef.current === obj2Ref.current) ||
+                  (child.name === 'cylinder' && hoveredObjectRef.current === obj3Ref.current)
+                ) {
+                  child.material.color.set(theme[themeProp].default);
+                }
+              }
+            });
+          }
+
+          // Set the new hovered object color to hover color
+          intersectedObject.traverse((child: any) => {
+            if (child instanceof THREE.Mesh) {
+              if (
+                (child.name === 'region' && intersectedObject === obj1Ref.current) ||
+                (child.name === 'slice' && intersectedObject === obj2Ref.current) ||
+                (child.name === 'cylinder' && intersectedObject === obj3Ref.current)
+              ) {
+                child.material.color.set(theme[themeProp].hover);
+              }
+            }
+          });
+
           hoveredObjectRef.current = intersectedObject;
           mountRef.current!.style.cursor = 'pointer';
         }
       } else {
-        if (hoveredObjectRef.current) {
+        if (hoveredObjectRef.current && hoveredObjectRef.current !== selectedObjectRef.current) {
+          // Reset the previous hovered object color
+          hoveredObjectRef.current.traverse((child: any) => {
+            if (child instanceof THREE.Mesh) {
+              if (
+                (child.name === 'region' && hoveredObjectRef.current === obj1Ref.current) ||
+                (child.name === 'slice' && hoveredObjectRef.current === obj2Ref.current) ||
+                (child.name === 'cylinder' && hoveredObjectRef.current === obj3Ref.current)
+              ) {
+                child.material.color.set(theme[themeProp].default);
+              }
+            }
+          });
+
           hoveredObjectRef.current = null;
           mountRef.current!.style.cursor = 'default';
         }
