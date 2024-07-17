@@ -37,60 +37,71 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
   const objectsLoadedRef = useRef(false);
 
-  const handleClick = useCallback((event) => {
-    if (!objectsLoadedRef.current) return;
+  const handleClick = useCallback(
+    (event) => {
+      if (!objectsLoadedRef.current) return;
 
-    const rect = mountRef.current!.getBoundingClientRect();
-    mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      const rect = mountRef.current!.getBoundingClientRect();
+      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    raycaster.current!.setFromCamera(mouse.current, camera.current!);
-    const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
+      raycaster.current!.setFromCamera(mouse.current, camera.current!);
+      const intersects = raycaster.current!.intersectObjects([obj1Ref.current!, obj2Ref.current!, obj3Ref.current!], true);
 
-    if (intersects.length > 0) {
-      let intersectedObject = intersects[0].object;
-      while (intersectedObject.parent && ![obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
-        intersectedObject = intersectedObject.parent;
-      }
+      if (intersects.length > 0) {
+        let intersectedObject = intersects[0].object;
+        while (intersectedObject.parent && ![obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
+          intersectedObject = intersectedObject.parent;
+        }
 
-      if ([obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
-        const volumeSection = intersectedObject.userData.volumeSection;
-        if (volumeSection) {
-          // Reset the color of the previously selected object
-          if (selectedObjectRef.current) {
-            selectedObjectRef.current.traverse((child: any) => {
+        if ([obj1Ref.current, obj2Ref.current, obj3Ref.current].includes(intersectedObject)) {
+          const volumeSection = intersectedObject.userData.volumeSection;
+          if (volumeSection) {
+            // Reset the color of the previously selected object and its text
+            if (selectedObjectRef.current) {
+              selectedObjectRef.current.traverse((child: any) => {
+                if (child instanceof THREE.Mesh) {
+                  if (
+                    (child.name === 'region' && selectedObjectRef.current === obj1Ref.current) ||
+                    (child.name === 'slice' && selectedObjectRef.current === obj2Ref.current) ||
+                    (child.name === 'cylinder' && selectedObjectRef.current === obj3Ref.current)
+                  ) {
+                    child.material.color.set(theme[themeProp].default);
+                  }
+                  // Reset the text color
+                  if (child.geometry && child.geometry.type === 'TextGeometry') {
+                    child.material.color.set(theme[themeProp].hover); // Use the hover color for deselected text
+                  }
+                }
+              });
+            }
+
+            // Set the color of the newly selected object and its text
+            intersectedObject.traverse((child: any) => {
               if (child instanceof THREE.Mesh) {
                 if (
-                  (child.name === 'region' && selectedObjectRef.current === obj1Ref.current) ||
-                  (child.name === 'slice' && selectedObjectRef.current === obj2Ref.current) ||
-                  (child.name === 'cylinder' && selectedObjectRef.current === obj3Ref.current)
+                  (child.name === 'region' && intersectedObject === obj1Ref.current) ||
+                  (child.name === 'slice' && intersectedObject === obj2Ref.current) ||
+                  (child.name === 'cylinder' && intersectedObject === obj3Ref.current)
                 ) {
-                  child.material.color.set(theme[themeProp].default);
+                  child.material.color.set(theme[themeProp].selected);
+                }
+                // Set the text color to white
+                if (child.geometry && child.geometry.type === 'TextGeometry') {
+                  child.material.color.set(0xffffff);
                 }
               }
             });
+
+            selectedVolumeSectionRef.current = volumeSection;
+            selectedObjectRef.current = intersectedObject;
+            onSelect(volumeSection);
           }
-
-          // Set the color of the newly selected object
-          intersectedObject.traverse((child: any) => {
-            if (child instanceof THREE.Mesh) {
-              if (
-                (child.name === 'region' && intersectedObject === obj1Ref.current) ||
-                (child.name === 'slice' && intersectedObject === obj2Ref.current) ||
-                (child.name === 'cylinder' && intersectedObject === obj3Ref.current)
-              ) {
-                child.material.color.set(theme[themeProp].selected);
-              }
-            }
-          });
-
-          selectedVolumeSectionRef.current = volumeSection;
-          selectedObjectRef.current = intersectedObject;
-          onSelect(volumeSection);
         }
       }
-    }
-  }, [onSelect, themeProp]);
+    },
+    [onSelect, themeProp]
+  );
 
   useEffect(() => {
     if (!mountRef.current) {
@@ -99,7 +110,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     }
 
     scene.current = new THREE.Scene();
-    scene.current.background = new THREE.Color('#313354');  // Set the background color here
+    scene.current.background = new THREE.Color('#313354'); // Set the background color here
 
     const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
     camera.current = new THREE.OrthographicCamera(-aspect * 200, aspect * 200, 200, -200, 0.1, 1000);
@@ -154,11 +165,10 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                   depthWrite: true,
                 });
                 child.renderOrder = 2;
-
               } else if (child.name === 'skeleton') {
                 // Skeleton's material
                 material = new THREE.MeshBasicMaterial({
-                  color: 0x000000,
+                  color: theme[themeProp].selectedEdges,
                   transparent: true,
                   opacity: 0,
                   depthWrite: false,
@@ -175,7 +185,6 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
                 wireframe.renderOrder = 1; // Ensure wireframe renders below other objects
                 child.add(wireframe);
-
               } else {
                 child.visible = false;
               }
@@ -207,8 +216,12 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
               bevelSize: 0.02,
             });
 
+            // Determine the color of the text based on the initial selection
+            const textMaterialColor =
+              selectedVolumeSectionRef.current === childName ? 0xffffff : theme[themeProp].hover;
+
             const textMaterial = new THREE.MeshBasicMaterial({
-              color: 0xffffff,
+              color: textMaterialColor,
               transparent: false,
               opacity: 1,
             });
@@ -257,6 +270,10 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                   (child.name === 'cylinder' && initialObjectRef === obj3Ref)
                 ) {
                   child.material.color.set(theme[themeProp].selected);
+                }
+                // Set the text color to white if it's the selected object
+                if (child.geometry && child.geometry.type === 'TextGeometry') {
+                  child.material.color.set(0xffffff);
                 }
               }
             });
@@ -312,33 +329,11 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
       if (intersects.length > 0) {
         const intersectedObject = intersects[0].object;
         if (hoveredObjectRef.current !== intersectedObject) {
-          if (hoveredObjectRef.current) {
-            // Revert the color of the previously hovered object
-            hoveredObjectRef.current.traverse((child: any) => {
-              if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
-                child.material.color.set(theme[themeProp].default);
-              }
-            });
-          }
-
           hoveredObjectRef.current = intersectedObject;
-          hoveredObjectRef.current.traverse((child: any) => {
-            if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
-              child.material.color.set('blue');
-            }
-          });
-
           mountRef.current!.style.cursor = 'pointer';
         }
       } else {
         if (hoveredObjectRef.current) {
-          // Revert the color of the previously hovered object
-          hoveredObjectRef.current.traverse((child: any) => {
-            if (child instanceof THREE.Mesh && child !== selectedObjectRef.current) {
-              child.material.color.set(theme[themeProp].default);
-            }
-          });
-
           hoveredObjectRef.current = null;
           mountRef.current!.style.cursor = 'default';
         }
@@ -389,6 +384,10 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
                 (child.name === 'cylinder' && initialObjectRef === obj3Ref)
               ) {
                 child.material.color.set(theme[themeProp].selected);
+              }
+              // Set the text color to white if it's the selected object
+              if (child.geometry && child.geometry.type === 'TextGeometry') {
+                child.material.color.set(0xffffff);
               }
             }
           });
