@@ -11,6 +11,11 @@ import {
     Tooltip,
 } from 'chart.js';
 
+
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import { downloadAsJson } from '@/utils';
+import SynapsesGraphData from './synapses-graph-data.json'
+
 // Register necessary components
 Chart.register(
     ScatterController,
@@ -167,6 +172,9 @@ const SynapsesGraph: React.FC = () => {
     return (
         <div>
             <canvas ref={chartRef} />
+            <HttpDownloadButton onClick={() => downloadAsJson(SynapsesGraph, `synapses-graph-data.json`)}>
+                table data
+            </HttpDownloadButton>
         </div>
     );
 };
