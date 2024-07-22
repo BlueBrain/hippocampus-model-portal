@@ -14,7 +14,13 @@ const compareByName = getCompareByFn('name');
 const annotationMtypeRe = /(\w+)_(.+)/;
 
 const MorphologyLink: React.FC<{ morphology: NexusMorphology }> = ({ morphology }) => {
-  const match = annotationMtypeRe.exec(morphology.annotation.hasBody.label);
+  const annotation = morphology.annotation;
+  const hasBody = annotation ? annotation.hasBody : null;
+  const label = hasBody ? hasBody.label : null;
+
+  if (!label) return null;
+
+  const match = annotationMtypeRe.exec(label);
   if (!match) return null;
 
   const [, layer, mtype] = match;
