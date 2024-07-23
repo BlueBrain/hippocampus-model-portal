@@ -45,20 +45,26 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
         const errorValues = labels.map(label => {
             const variance = chartData[label].variance;
             const error = Math.sqrt(variance);
-            return {
+            return variance > 0 ? {
                 yMin: chartData[label].mean - error,
                 yMax: chartData[label].mean + error
-            };
+            } : null;
         });
 
+        // Calculate the maximum value considering the error bars
+        const maxYValue = Math.max(...meanValues.map((mean, index) => {
+            const errorValue = errorValues[index];
+            return errorValue ? errorValue.yMax : mean;
+        }));
+
         const data = {
-            labels,
+            labels: labels.map(label => parseFloat(label)),
             datasets: [{
                 label: 'Mean',
-                data: meanValues,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                data: labels.map((label, index) => ({ x: parseFloat(label), y: meanValues[index] })),
+                borderColor: '#313354',
+                borderWidth: 2,
+                pointBackgroundColor: '#313354',
                 showLine: true,
             }]
         };
@@ -76,21 +82,32 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                     tooltip: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.dataset.label || '';
+                                const value = context.raw.y.toFixed(3); // Round to 3 decimal places
+                                const originalLabel = labels[context.dataIndex]; // Use original labels array
+                                const variance = chartData[originalLabel].variance;
+                                return `${label}: ${value} (Variance: ${variance.toFixed(3)})`; // Round variance too
+                            }
+                        }
                     },
                 },
                 scales: {
                     x: {
-                        type: 'category',
+                        type: 'linear',
                         title: {
                             display: true,
-                            text: 'Frequency'
-                        }
+                            text: 'Current (nA)'
+                        },
+                        position: 'bottom',
                     },
                     y: {
                         title: {
                             display: true,
                             text: 'Mean'
-                        }
+                        },
+                        max: maxYValue * 1.1 // Add some padding above the maximum error bar
                     }
                 }
             },
@@ -99,32 +116,35 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                 beforeDraw: (chart) => {
                     const ctx = chart.ctx;
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
-                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = '#313354';
+                    ctx.lineWidth = 2;
 
                     chart.getDatasetMeta(0).data.forEach((point, index) => {
                         const { x, y } = point;
-                        const { yMin, yMax } = errorValues[index];
-                        const yMinPixel = chart.scales.y.getPixelForValue(yMin);
-                        const yMaxPixel = chart.scales.y.getPixelForValue(yMax);
+                        const errorValue = errorValues[index];
+                        if (errorValue) {
+                            const { yMin, yMax } = errorValue;
+                            const yMinPixel = chart.scales.y.getPixelForValue(yMin);
+                            const yMaxPixel = chart.scales.y.getPixelForValue(yMax);
 
-                        // Draw the main line
-                        ctx.beginPath();
-                        ctx.moveTo(x, yMinPixel);
-                        ctx.lineTo(x, yMaxPixel);
-                        ctx.stroke();
+                            // Draw the main line
+                            ctx.beginPath();
+                            ctx.moveTo(x, yMinPixel);
+                            ctx.lineTo(x, yMaxPixel);
+                            ctx.stroke();
 
-                        // Draw the top cap
-                        ctx.beginPath();
-                        ctx.moveTo(x - 5, yMaxPixel);
-                        ctx.lineTo(x + 5, yMaxPixel);
-                        ctx.stroke();
+                            // Draw the top cap
+                            ctx.beginPath();
+                            ctx.moveTo(x - 5, yMaxPixel);
+                            ctx.lineTo(x + 5, yMaxPixel);
+                            ctx.stroke();
 
-                        // Draw the bottom cap
-                        ctx.beginPath();
-                        ctx.moveTo(x - 5, yMinPixel);
-                        ctx.lineTo(x + 5, yMinPixel);
-                        ctx.stroke();
+                            // Draw the bottom cap
+                            ctx.beginPath();
+                            ctx.moveTo(x - 5, yMinPixel);
+                            ctx.lineTo(x + 5, yMinPixel);
+                            ctx.stroke();
+                        }
                     });
 
                     ctx.restore();
@@ -135,7 +155,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
 
     return (
         <div>
-            {eType}
             <canvas ref={chartRef} />
             <HttpDownloadButton onClick={() => downloadAsJson(IfCurvePerETypeData, `if-curve-per-e-type-data.json`)}>
                 Download table data

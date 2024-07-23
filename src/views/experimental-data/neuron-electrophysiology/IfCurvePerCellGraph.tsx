@@ -48,6 +48,9 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                 }))
             );
 
+        // Calculate the maximum x value
+        const maxXValue = filteredData.reduce((max, point) => Math.max(max, point.x), 0);
+
         // Destroy previous chart instance if it exists
         if (chartInstance.current) {
             chartInstance.current.destroy();
@@ -62,7 +65,8 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                         label: 'IF Curve per Cell',
                         data: filteredData,
                         borderColor: '#031437',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        backgroundColor: '#031437',
                         showLine: true,
                         fill: false,
                         tension: 0.1,
@@ -77,6 +81,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                             display: true,
                             text: 'Amplitude (Na)',
                         },
+                        max: maxXValue, // Set the max value for the x axis
                     },
                     y: {
                         type: 'linear',
@@ -95,8 +100,8 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                             },
                             label: function (context) {
                                 return [
-                                    `Amplitude: ${context.raw.x}`,
-                                    `Mean Frequency: ${context.raw.y}`
+                                    `Amplitude: ${context.raw.x.toFixed(3)}`, // Round to 3 decimal places
+                                    `Mean Frequency: ${context.raw.y.toFixed(3)}` // Round to 3 decimal places
                                 ];
                             }
                         },
@@ -108,7 +113,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
 
     return (
         <div>
-            {instance}
             <canvas ref={chartRef} />
             <HttpDownloadButton onClick={() => downloadAsJson(IfCurvePerCellData, `if-curve-per-cell-data.json`)}>
                 Download table data
