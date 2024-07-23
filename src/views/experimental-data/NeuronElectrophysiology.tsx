@@ -24,7 +24,9 @@ import { defaultSelection } from '@/constants';
 import { basePath } from '../../config';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
+
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
+import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -221,15 +223,19 @@ const NeuronElectrophysiology: React.FC = () => {
             {esDocuments => (
               <>
                 {!!esDocuments && (
-                  <ExpTraceTable
-                    etype={currentEtype}
-                    traces={getAndSortTraces(esDocuments)}
-                    currentTrace={currentInstance}
-                  />
+                  <>
+                    <IfCurvePerETypeGraph eType={currentEtype} />
+                    <ExpTraceTable
+                      etype={currentEtype}
+                      traces={getAndSortTraces(esDocuments)}
+                      currentTrace={currentInstance} />
+                  </>
+
                 )}
               </>
             )}
           </ESData>
+
         </Collapsible>
       </DataContainer>
     </>
