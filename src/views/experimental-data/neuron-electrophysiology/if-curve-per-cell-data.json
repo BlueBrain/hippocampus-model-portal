@@ -1,13 +1,13 @@
 {
     "95808021.nwb": {
-        "ic__Step__10": {
-            "amplitude": 0.800000011920929,
-            "mean_frequency": 33.44481605351264,
-            "spikecount": 4
-        },
         "ic__Step__11": {
             "amplitude": 1.0000001192092896,
             "mean_frequency": 49.8132004981327,
+            "spikecount": 4
+        },
+        "ic__Step__10": {
+            "amplitude": 0.800000011920929,
+            "mean_frequency": 33.44481605351264,
             "spikecount": 4
         },
         "ic__Step__9": {

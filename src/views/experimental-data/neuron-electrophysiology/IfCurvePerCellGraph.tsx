@@ -61,7 +61,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                     {
                         label: 'IF Curve per Cell',
                         data: filteredData,
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderColor: '#031437',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         showLine: true,
                         fill: false,
@@ -75,21 +75,30 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                         type: 'linear',
                         title: {
                             display: true,
-                            text: 'Amplitude',
+                            text: 'Amplitude (Na)',
                         },
                     },
                     y: {
                         type: 'linear',
                         title: {
                             display: true,
-                            text: 'Mean Frequency',
+                            text: 'Mean Frequency (Hz)',
                         },
                     },
                 },
                 plugins: {
                     tooltip: {
+                        enabled: true,
                         callbacks: {
-                            label: (context) => `Amplitude: ${context.raw.x}, Mean Frequency: ${context.raw.y}`,
+                            title: function () {
+                                return '';
+                            },
+                            label: function (context) {
+                                return [
+                                    `Amplitude: ${context.raw.x}`,
+                                    `Mean Frequency: ${context.raw.y}`
+                                ];
+                            }
                         },
                     },
                 },
