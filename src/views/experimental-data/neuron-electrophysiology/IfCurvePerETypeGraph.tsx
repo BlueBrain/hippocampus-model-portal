@@ -42,10 +42,14 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
 
         const labels = Object.keys(chartData);
         const meanValues = labels.map(label => chartData[label].mean);
-        const errorValues = labels.map(label => ({
-            min: chartData[label].mean - Math.sqrt(chartData[label].variance),
-            max: chartData[label].mean + Math.sqrt(chartData[label].variance)
-        }));
+        const errorValues = labels.map(label => {
+            const variance = chartData[label].variance;
+            const error = Math.sqrt(variance);
+            return {
+                yMin: chartData[label].mean - error,
+                yMax: chartData[label].mean + error
+            };
+        });
 
         const data = {
             labels,
@@ -56,10 +60,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                 borderWidth: 1,
                 pointBackgroundColor: 'rgba(75, 192, 192, 1)',
                 showLine: true,
-                errorBar: {
-                    data: errorValues,
-                    width: 1
-                }
             }]
         };
 
@@ -80,8 +80,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                 },
                 scales: {
                     x: {
-                        type: 'linear',
-                        position: 'bottom',
+                        type: 'category',
                         title: {
                             display: true,
                             text: 'Frequency'
@@ -94,7 +93,43 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                         }
                     }
                 }
-            }
+            },
+            plugins: [{
+                id: 'customErrorBars',
+                beforeDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
+                    ctx.lineWidth = 1;
+
+                    chart.getDatasetMeta(0).data.forEach((point, index) => {
+                        const { x, y } = point;
+                        const { yMin, yMax } = errorValues[index];
+                        const yMinPixel = chart.scales.y.getPixelForValue(yMin);
+                        const yMaxPixel = chart.scales.y.getPixelForValue(yMax);
+
+                        // Draw the main line
+                        ctx.beginPath();
+                        ctx.moveTo(x, yMinPixel);
+                        ctx.lineTo(x, yMaxPixel);
+                        ctx.stroke();
+
+                        // Draw the top cap
+                        ctx.beginPath();
+                        ctx.moveTo(x - 5, yMaxPixel);
+                        ctx.lineTo(x + 5, yMaxPixel);
+                        ctx.stroke();
+
+                        // Draw the bottom cap
+                        ctx.beginPath();
+                        ctx.moveTo(x - 5, yMinPixel);
+                        ctx.lineTo(x + 5, yMinPixel);
+                        ctx.stroke();
+                    });
+
+                    ctx.restore();
+                }
+            }]
         });
     }, [eType]);
 
