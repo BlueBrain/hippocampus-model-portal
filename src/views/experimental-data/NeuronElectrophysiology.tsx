@@ -24,6 +24,7 @@ import { defaultSelection } from '@/constants';
 import { basePath } from '../../config';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
+import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 
 import styles from '../../styles/experimental-data/neuron-electrophysiology.module.scss';
 
@@ -152,7 +153,9 @@ const NeuronElectrophysiology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    {JSON.stringify(esDocuments[0]._source)}
+                    {
+                      //JSON.stringify(esDocuments[0]._source)
+                    }
                     <Metadata nexusDocument={esDocuments[0]._source} />
                     <h3 className="mt-3">Patch clamp recording</h3>
                     <div className="row start-xs end-sm mt-2 mb-2">
@@ -195,7 +198,10 @@ const NeuronElectrophysiology: React.FC = () => {
                       </Button>
                     </div>
                     <div className="mt-3">
+
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
+
+                      <IfCurvePerCellGraph instance={currentInstance} />
                     </div>
                   </>
                 )}
