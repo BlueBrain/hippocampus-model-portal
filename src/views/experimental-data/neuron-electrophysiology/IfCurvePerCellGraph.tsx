@@ -9,6 +9,7 @@ import {
     PointElement,
     LineElement,
     Tooltip,
+
 } from 'chart.js';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
@@ -28,6 +29,11 @@ Chart.register(
 
 interface NeuronsGraphProps {
     instance: string;
+}
+
+interface DataPoint {
+    x: number;
+    y: number;
 }
 
 const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
@@ -94,9 +100,10 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                                 return '';
                             },
                             label: function (context) {
+                                const raw = context.raw as DataPoint;
                                 return [
-                                    `Amplitude: ${context.raw.x}`,
-                                    `Mean Frequency: ${context.raw.y}`
+                                    `Amplitude: ${raw.x}`,
+                                    `Mean Frequency: ${raw.y}`
                                 ];
                             }
                         },

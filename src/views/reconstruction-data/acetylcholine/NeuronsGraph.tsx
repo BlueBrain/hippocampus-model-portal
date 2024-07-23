@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-
 import {
     Chart,
     ScatterController,
@@ -11,11 +10,9 @@ import {
     LineElement,
     Tooltip,
 } from 'chart.js';
-
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-import NeuronGraphData from './neuron-graph-data.json'
-
+import NeuronGraphData from './neuron-graph-data.json';
 
 // Register necessary components
 Chart.register(
@@ -29,8 +26,14 @@ Chart.register(
     Tooltip,
 );
 
+// Define the type for the data points
+interface DataPoint {
+    x: number;
+    y: number;
+}
+
 // Function to calculate y-values based on the formula
-const calculateY = (x) => {
+const calculateY = (x: number): number => {
     const ACH = x;
     const numerator = 0.567 * Math.pow(ACH, 0.436);
     const denominator = Math.pow(100, 0.436) + Math.pow(ACH, 0.436);
@@ -38,8 +41,8 @@ const calculateY = (x) => {
 };
 
 // Generate data points for the formula line
-const generateLineData = () => {
-    const lineData = [];
+const generateLineData = (): DataPoint[] => {
+    const lineData: DataPoint[] = [];
     for (let i = 0.01; i <= 1000; i *= 1.1) {
         lineData.push({ x: i, y: calculateY(i) });
     }
@@ -47,9 +50,9 @@ const generateLineData = () => {
 };
 
 // Split the line data into solid and dotted segments
-const splitLineData = (data) => {
-    const solidData = [];
-    const dottedData = [];
+const splitLineData = (data: DataPoint[]): { solidData: DataPoint[], dottedData: DataPoint[] } => {
+    const solidData: DataPoint[] = [];
+    const dottedData: DataPoint[] = [];
     const splitPoint = 100;
 
     data.forEach(point => {
@@ -146,7 +149,7 @@ const NeuronsGraph: React.FC = () => {
                                 },
                                 ticks: {
                                     callback: function (value) {
-                                        const logValue = Math.log10(value);
+                                        const logValue = Math.log10(value as number);
                                         if (logValue === -2 || logValue === -1 || logValue === 0 || logValue === 1 || logValue === 2 || logValue === 3) {
                                             return `10 ^ ${logValue.toFixed(0)}`;
                                         }
