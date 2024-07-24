@@ -24,7 +24,7 @@ const Filters: React.FC<FiltersProps> = ({
 }) => {
   return (
     <div>
-      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.png)` }}>
+      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.svg)` }}>
         {children}
       </div>
       {!!hasData && (
