@@ -84,8 +84,9 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                         intersect: false,
                         callbacks: {
                             label: function (context) {
+                                const raw = context.raw as { x: number, y: number }; // Type assertion
                                 const label = context.dataset.label || '';
-                                const value = context.raw.y.toFixed(3); // Round to 3 decimal places
+                                const value = raw.y.toFixed(3); // Round to 3 decimal places
                                 const originalLabel = labels[context.dataIndex]; // Use original labels array
                                 const variance = chartData[originalLabel].variance;
                                 return `${label}: ${value} (Variance: ${variance.toFixed(3)})`; // Round variance too
