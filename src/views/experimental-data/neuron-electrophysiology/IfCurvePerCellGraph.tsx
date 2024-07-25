@@ -9,7 +9,6 @@ import {
     PointElement,
     LineElement,
     Tooltip,
-
 } from 'chart.js';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
@@ -105,10 +104,10 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                                 return '';
                             },
                             label: function (context) {
-                                const raw = context.raw as DataPoint;
+                                const raw = context.raw as DataPoint; // Type assertion
                                 return [
-                                    `Amplitude: ${context.raw.x.toFixed(3)}`, // Round to 3 decimal places
-                                    `Mean Frequency: ${context.raw.y.toFixed(3)}` // Round to 3 decimal places
+                                    `Amplitude: ${raw.x.toFixed(3)}`, // Round to 3 decimal places
+                                    `Mean Frequency: ${raw.y.toFixed(3)}` // Round to 3 decimal places
                                 ];
                             }
                         },
