@@ -42,24 +42,30 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
 
         const labels = Object.keys(chartData);
         const meanValues = labels.map(label => chartData[label].mean);
-        const errorValues = labels.map(label => ({
-            min: chartData[label].mean - Math.sqrt(chartData[label].variance),
-            max: chartData[label].mean + Math.sqrt(chartData[label].variance)
+        const errorValues = labels.map(label => {
+            const variance = chartData[label].variance;
+            const error = Math.sqrt(variance);
+            return variance > 0 ? {
+                yMin: chartData[label].mean - error,
+                yMax: chartData[label].mean + error
+            } : null;
+        });
+
+        // Calculate the maximum value considering the error bars
+        const maxYValue = Math.max(...meanValues.map((mean, index) => {
+            const errorValue = errorValues[index];
+            return errorValue ? errorValue.yMax : mean;
         }));
 
         const data = {
-            labels,
+            labels: labels.map(label => parseFloat(label)),
             datasets: [{
                 label: 'Mean',
-                data: meanValues,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                data: labels.map((label, index) => ({ x: parseFloat(label), y: meanValues[index] })),
+                borderColor: '#313354',
+                borderWidth: 2,
+                pointBackgroundColor: '#313354',
                 showLine: true,
-                errorBar: {
-                    data: errorValues,
-                    width: 1
-                }
             }]
         };
 
@@ -76,31 +82,79 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ eType }) => {
                     tooltip: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.dataset.label || '';
+                                const value = context.raw.y.toFixed(3); // Round to 3 decimal places
+                                const originalLabel = labels[context.dataIndex]; // Use original labels array
+                                const variance = chartData[originalLabel].variance;
+                                return `${label}: ${value} (Variance: ${variance.toFixed(3)})`; // Round variance too
+                            }
+                        }
                     },
                 },
                 scales: {
                     x: {
                         type: 'linear',
-                        position: 'bottom',
                         title: {
                             display: true,
-                            text: 'Frequency'
-                        }
+                            text: 'Current (nA)'
+                        },
+                        position: 'bottom',
                     },
                     y: {
                         title: {
                             display: true,
                             text: 'Mean'
-                        }
+                        },
+                        max: maxYValue * 1.1 // Add some padding above the maximum error bar
                     }
                 }
-            }
+            },
+            plugins: [{
+                id: 'customErrorBars',
+                beforeDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.strokeStyle = '#313354';
+                    ctx.lineWidth = 2;
+
+                    chart.getDatasetMeta(0).data.forEach((point, index) => {
+                        const { x, y } = point;
+                        const errorValue = errorValues[index];
+                        if (errorValue) {
+                            const { yMin, yMax } = errorValue;
+                            const yMinPixel = chart.scales.y.getPixelForValue(yMin);
+                            const yMaxPixel = chart.scales.y.getPixelForValue(yMax);
+
+                            // Draw the main line
+                            ctx.beginPath();
+                            ctx.moveTo(x, yMinPixel);
+                            ctx.lineTo(x, yMaxPixel);
+                            ctx.stroke();
+
+                            // Draw the top cap
+                            ctx.beginPath();
+                            ctx.moveTo(x - 5, yMaxPixel);
+                            ctx.lineTo(x + 5, yMaxPixel);
+                            ctx.stroke();
+
+                            // Draw the bottom cap
+                            ctx.beginPath();
+                            ctx.moveTo(x - 5, yMinPixel);
+                            ctx.lineTo(x + 5, yMinPixel);
+                            ctx.stroke();
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            }]
         });
     }, [eType]);
 
     return (
         <div>
-            {eType}
             <canvas ref={chartRef} />
             <HttpDownloadButton onClick={() => downloadAsJson(IfCurvePerETypeData, `if-curve-per-e-type-data.json`)}>
                 Download table data

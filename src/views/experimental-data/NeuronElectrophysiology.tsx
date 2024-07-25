@@ -203,13 +203,14 @@ const NeuronElectrophysiology: React.FC = () => {
 
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
 
-                      <IfCurvePerCellGraph instance={currentInstance} />
+
                     </div>
                   </>
                 )}
               </>
             )}
           </ESData>
+          <IfCurvePerCellGraph instance={currentInstance} />
         </Collapsible>
 
         <Collapsible
@@ -224,7 +225,7 @@ const NeuronElectrophysiology: React.FC = () => {
               <>
                 {!!esDocuments && (
                   <>
-                    <IfCurvePerETypeGraph eType={currentEtype} />
+
                     <ExpTraceTable
                       etype={currentEtype}
                       traces={getAndSortTraces(esDocuments)}
@@ -235,6 +236,7 @@ const NeuronElectrophysiology: React.FC = () => {
               </>
             )}
           </ESData>
+          <IfCurvePerETypeGraph eType={currentEtype} />
 
         </Collapsible>
       </DataContainer>
