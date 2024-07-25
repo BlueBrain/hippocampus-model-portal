@@ -7,7 +7,6 @@ import { basePath } from '../../config';
 
 import styles from './styles.module.scss';
 
-
 type FiltersProps = {
   hasData?: boolean;
   primaryColor?: Color;
@@ -23,12 +22,27 @@ const Filters: React.FC<FiltersProps> = ({
   id = 'filters',
 }) => {
   return (
-    <div>
-      <div id={id} className={styles.container} style={{ backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.svg)` }}>
+    <div className={styles.wrapper}>
+      <div
+        className={styles.solidBackground}
+        style={{
+          backgroundColor: '#050A30', // Solid background color
+        }}
+      />
+      <div
+        className={`${styles.background} ${styles[`background--${theme}`]}`}
+        style={{
+          backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.svg)`,
+        }}
+      />
+      <div
+        id={id}
+        className={styles.container}
+      >
         {children}
       </div>
       {!!hasData && (
-        <div className="scroll-to">
+        <div className={styles.scrollTo}>
           <ScrollTo
             anchor="data"
             color={primaryColor}
