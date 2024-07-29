@@ -1,4 +1,3 @@
-
 @import '../../styles/config/_queries';
 
 
@@ -8,6 +7,10 @@
   margin-top: auto;
   // fix Firefox behave differently on collapsing margins
   display: table;
+
+  & &--center {
+    margin-bottom: auto;
+  }
 }
 
 .flexWrapper {
