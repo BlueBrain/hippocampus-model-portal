@@ -145,6 +145,47 @@ const ConnectionsView: React.FC = () => {
         </div>
       </Filters>
 
+      <DataContainer
+        visible={!!volume_section && !!prelayer && !!postlayer}
+        navItems={[
+          { id: 'boutonDensitySection', label: 'Bouton density of the presynaptic cells' },
+          { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
+          { id: 'diversionConnectionsDistributionSection', label: 'Divergence (connections) distribution + mean and std' },
+          { id: 'diversionSynapsesDistributionSection', label: 'Divergence (synapses) distribution + mean and std' },
+          { id: 'LaminarDistributionSynapsesSection', label: 'Laminar distribution of synapses' },
+          { id: 'convergenceConnectionsDistribution', label: 'Convergence (connections) distribution + mean and std' },
+          { id: 'convergenceSynapsesDistribution', label: 'Convergence (synapses) distribution + mean and std' },
+          { id: 'connectionProbabilityDistributionSection', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
+        ]}
+      >
+
+        <Collapsible title="Bouton density of the presynaptic cells" id="boutonDensitySection" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Number of synapses per connection" id="nbSynapsesPerConnectionSection" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Divergence (connections) distribution + mean and std" id="diversionConnectionsDistributionSection" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Divergence (synapses) distribution + mean and std" id="diversionSynapsesDistributionSection" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Laminar distribution of synapses" id="LaminarDistributionSynapsesSection" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Convergence (connections) distribution + mean and std" id="convergenceConnectionsDistribution" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Convergence (synapses) distribution + mean and std" id="convergenceSynapsesDistribution" className="mt-4" children={''}>
+        </Collapsible>
+
+        <Collapsible title="Connection probability distribution vs inter-somatic distance + mean and std" id="connectionProbabilityDistributionSection" className="mt-4" children={''}>
+        </Collapsible>
+
+      </DataContainer>
+
+
       <QuickSelector
         color={colorName}
         entries={[
@@ -171,52 +212,6 @@ const ConnectionsView: React.FC = () => {
           },
         ]}
       />
-      <DataContainer
-        visible={!!prelayer && !!postlayer}
-        navItems={[
-          { id: 'pathwaySection', label: 'Pathway' },
-          { id: 'synaptomesSection', label: 'Synaptomes' },
-          { id: 'simulationsSection', label: 'Simulations' },
-        ]}
-      >
-        <Collapsible
-          id="pathwaySection"
-          title={`Pathway ${prelayer}-${postlayer}`}
-        >
-          <h3 className="text-tmp">Pathway factsheet</h3>
-          <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
-          <h3 className="text-tmp">Exemplar connection</h3>
-
-          <HttpData path={connectionViewerDataPath(prelayer, postlayer)}>
-            {(data) => (
-              <div className="mt-3">
-                <h3>Exemplar connection 3D viewer</h3>
-                <Spin spinning={!connViewerReady}>
-                  <ConnectionViewer data={data} onReady={() => setConnViewerReady(true)} />
-                </Spin>
-              </div>
-            )}
-          </HttpData>
-        </Collapsible>
-
-        <Collapsible
-          id="synaptomesSection"
-          title="Synaptomes"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Text</h3>
-          <h3 className="text-tmp">Pre-synaptic Synaptome plots + render</h3>
-          <h3 className="text-tmp">Post-synaptic Synaptome plots + render</h3>
-        </Collapsible>
-
-        <Collapsible
-          id="simulationsSection"
-          title="Simulations"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
-        </Collapsible>
-      </DataContainer>
     </>
   );
 };
