@@ -42,7 +42,7 @@ const Filters: React.FC<FiltersProps> = ({
         {children}
       </div>
       {!!hasData && (
-        <div className={styles.scrollTo}>
+        <div className="scroll-to">
           <ScrollTo
             anchor="data"
             color={primaryColor}
