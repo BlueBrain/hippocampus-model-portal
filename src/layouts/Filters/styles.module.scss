@@ -1,15 +1,69 @@
 @import '../../styles/config/_queries';
 
+.wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.solidBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: repeat;
+  background-blend-mode: normal;
+  z-index: 2;
+}
+
+.background--1 {
+  mask-image: linear-gradient(to bottom, #00000000, #EFAE9715);
+}
+
+.background--2 {
+  mask-image: linear-gradient(to bottom, #00000000, #EA908815);
+}
+
+.background--3 {
+  mask-image: linear-gradient(to bottom, #00000000, #CC8A9915);
+}
+
+.background--4 {
+  mask-image: linear-gradient(to bottom, #00000000, #9E98AE15);
+}
+
+.background--5 {
+  mask-image: linear-gradient(to bottom, #00000000, #8398B515);
+}
+
 .container {
+  position: relative;
   padding: 100px 60px 3rem;
   min-height: 100vh;
 
   display: flex;
   align-items: center;
-
-  background-image: url("/hippocampus/images/epfl-logo.svg/bg.png");
+  z-index: 3;
 
   @media (max-width: $ant-breakpoint-md) {
     padding: 80px 20px 2rem;
   }
+}
+
+
+.scroll-to {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 4;
 }
