@@ -29,7 +29,7 @@ const AcetylcholineView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Acetylcholine"
+                title="Acetylcholine - Effects on Synapses"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />
