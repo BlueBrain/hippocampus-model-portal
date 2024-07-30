@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Row, Col, Spin } from 'antd';
 
 import { Layer, VolumeSection } from '@/types';
 import { layers, cellGroup, defaultSelection } from '@/constants';
@@ -49,18 +48,27 @@ const ConnectionsView: React.FC = () => {
   }, [router.query]);
 
   const setVolumeSectionQuery = (volume_section: VolumeSection) => {
-    setParams({ volume_section, prelayer, postlayer });
-    setQuickSelection(prev => ({ ...prev, volume_section }));
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, volume_section };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
   };
 
   const setPreLayerQuery = (prelayer: Layer) => {
-    setParams({ volume_section, prelayer, postlayer });
-    setQuickSelection(prev => ({ ...prev, prelayer }));
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, prelayer };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
   };
 
   const setPostLayerQuery = (postlayer: Layer) => {
-    setParams({ volume_section, prelayer, postlayer });
-    setQuickSelection(prev => ({ ...prev, postlayer }));
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, postlayer };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
   };
 
   useEffect(() => {
