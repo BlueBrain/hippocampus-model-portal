@@ -1,7 +1,5 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { Color } from '../../types';
-
 
 const classPrefix = 'title__';
 
@@ -22,15 +20,26 @@ const Title: React.FC<TitleProps> = ({
   primaryColor = 'yellow' as Color,
   primary,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
     <div
-      className={`${classPrefix}basis ${primary ? 'primary' : ''
-        } ${theme}`}
+      className={`${classPrefix}basis ${primary ? 'primary' : ''} ${theme}`}
     >
-      {subtitle && !primary && <h4 className={"text-theme-" + theme}>{subtitle}</h4>}
-      {title && <h2 role="title" className={"text-white text-xl	leading-7  border-theme-" + theme}>{title}</h2>}
-      {subtitle && primary && <h4 className="text-white mb-8">{subtitle}</h4>}
-      {hint && <p dangerouslySetInnerHTML={{ __html: hint }} />}
+      {subtitle && !primary && (
+        <h4 className={`text-xl text-theme-${theme} m duration-1000 delay-200 transition-opacity transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} >
+          {subtitle}
+        </h4>
+      )}
+      {title && (
+        <h2 role="title" className={`text-white text-3xl border-theme-${theme} transition-transform duration-1000  ${isVisible ? 'translate-y-0' : 'translate-y-20'}`} >
+          {title}
+        </h2>
+      )}
     </div>
   );
 };

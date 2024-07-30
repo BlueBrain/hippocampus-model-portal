@@ -8,7 +8,7 @@ type CollapsibleColor = 'red';
 type CollapsibleProps = {
   collapsed?: boolean;
   title: string;
-  properties?: string[];
+  properties?: any[];
   children: ReactChild | ReactFragment;
   color?: CollapsibleColor;
   id?: string;
