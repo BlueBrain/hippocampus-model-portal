@@ -99,8 +99,10 @@ const LayerAnatomyView: React.FC = () => {
                 <>
                   <Collapsible
                     id="layerSection"
-                    title={`Layer ${layer}`}
+                    title="Layer"
+                    properties={[layer]} // Assuming 'layer' is a string
                   >
+
                     <div>
                       <h3 className='text-xl mt-2'>Layer thickness for CA1</h3>
                       <p className='text-base mt-2 mb-5'>

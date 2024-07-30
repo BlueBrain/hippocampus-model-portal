@@ -25,7 +25,7 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
 
   useEffect(() => {
     const scrollHandler = () => {
-      const inTheViewThreshold = window.innerHeight / 2;
+      const inTheViewThreshold = 64;
 
       const currentNavItem = navItems
         .map(navItem => ({ ...navItem, element: document.getElementById(navItem.id) }))
@@ -42,7 +42,7 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
       setCurrentItemIdx(itemIdx);
     };
 
-    const scrollHandlerThrottled = throttle(scrollHandler, 500);
+    const scrollHandlerThrottled = throttle(scrollHandler, 0);
 
     document.addEventListener('scroll', scrollHandlerThrottled, { passive: true });
 
@@ -53,6 +53,8 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
 
   return (
     <div className={style.container} ref={container}>
+      <h3 className='text-xs font-semibold text-gray-600 mb-1'>Sections</h3>
+      <hr className={style.line} />
       {navItems.map((navItem, idx) => (
         <div
           className={`${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
