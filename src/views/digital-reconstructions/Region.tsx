@@ -87,7 +87,7 @@ const RegionView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer visible={!!volumeSection}>
+      <DataContainer theme={theme} visible={!!volumeSection}>
         <Collapsible
           id="regionSection"
           title="Factsheet"
@@ -140,7 +140,7 @@ const RegionView: React.FC = () => {
             </HttpData>
           )}
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

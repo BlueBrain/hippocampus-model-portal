@@ -137,7 +137,7 @@ const NeuronElectrophysiology: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         visible={!!currentInstance}
         navItems={[
           { id: 'instanceSection', label: 'Instance' },
@@ -239,7 +239,7 @@ const NeuronElectrophysiology: React.FC = () => {
           <IfCurvePerETypeGraph eType={currentEtype} />
 
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

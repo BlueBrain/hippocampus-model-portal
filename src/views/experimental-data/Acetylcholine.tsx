@@ -76,7 +76,7 @@ const AcetylcholineView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'restingPembranePotentialSection', label: 'Resting membrane potential' },
           { id: 'firingRateSection', label: 'Firing rate' },
@@ -121,7 +121,7 @@ const AcetylcholineView: React.FC = () => {
           <NetworkTable />
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

@@ -15,30 +15,37 @@ type DataContainerProps = {
   visible?: boolean;
   children: React.ReactNode;
   navItems?: NavItem[];
+  theme?: number;
 };
+
 
 const DataContainer: React.FC<DataContainerProps> = ({
   visible = true,
   children,
   navItems,
+  theme
 }) => {
   return (
     <>
       {visible && (
-        <div id="data" className={styles.dataContainer}>
+        <><div id="data" className={styles.dataContainer}>
           {navItems && (
-            <SectionNav navItems={navItems} />
+            <SectionNav theme={theme} navItems={navItems} />
           )}
+
           <div className={styles.scrollTop}>
             <ScrollTop />
           </div>
+
+
           <div className={styles.center}>{children}</div>
+
+        </div>
           <div className={styles.scrollTo}>
             <ScrollTo anchor="filters" direction="up">
               Return to selectors
             </ScrollTo>
-          </div>
-        </div>
+          </div></>
       )}
     </>
   );

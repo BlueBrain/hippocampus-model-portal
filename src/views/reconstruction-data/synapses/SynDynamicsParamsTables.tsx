@@ -196,7 +196,7 @@ function formatValue(value) {
 const SynDynamicsParamsTables: React.FC = () => {
   return (
     <>
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'presynapsesSection', label: 'Presynaptic dynamics parameters' },
           { id: 'postsynapsesSection', label: 'Postsynaptic dynamics parameters' },
@@ -253,7 +253,7 @@ const SynDynamicsParamsTables: React.FC = () => {
 
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

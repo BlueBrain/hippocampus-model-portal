@@ -75,7 +75,7 @@ const SynapsesView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'tbd', label: 'TBD' },
         ]}
@@ -86,7 +86,7 @@ const SynapsesView: React.FC = () => {
         >
           <h3 className="text-tmp">TBD</h3>
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

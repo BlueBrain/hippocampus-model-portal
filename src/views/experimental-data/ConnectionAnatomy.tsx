@@ -74,7 +74,7 @@ const ConnectionAnatomyView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'boutonDensitySection', label: 'Bouton density' },
           { id: 'synNumPerConnectionSection', label: 'Syn./Conn.' },
@@ -148,7 +148,7 @@ const ConnectionAnatomyView: React.FC = () => {
         </Collapsible>
 
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

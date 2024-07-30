@@ -4,33 +4,35 @@
 .dataContainer {
   background-color: map-get($basePalette, "grey");
   //min-height: 100vh;
+  padding: 4rem 0 0 0;
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 4rem 0 6rem 0;
 }
 
 .center {
   background-color: map-get($basePalette, "grey");
   margin: 0 auto;
   max-width: $full-hd;
-  margin-bottom: 4rem;
 }
 
 .scrollTo {
-  position: absolute;
   left: 0;
   width: 100%;
   bottom: 0;
+  padding-top: 4rem;
+  background-color: map-get($basePalette, "grey");
 }
 
 .scrollTop {
+
   position: sticky;
   float: right;
-  padding-bottom: 4rem;
+  margin-bottom: 4rem;
   color: map-get($basePalette, "navy-1");
   top: 85vh;
   right: calc((85vw - $full-hd) / 4);
+  display: none;
 
   @media (max-width: $ant-breakpoint-xl) {
     display: none;

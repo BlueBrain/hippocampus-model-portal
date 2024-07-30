@@ -80,7 +80,7 @@ const VolumeView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer navItems={[
+      <DataContainer theme={theme} navItems={[
         { id: 'volumeSection', label: 'Volume' },
         { id: 'vectorsSection', label: 'Vectors' },
         { id: 'coordinatesSection', label: 'Coordinates' }
@@ -146,7 +146,7 @@ const VolumeView: React.FC = () => {
             <CoordinatesViewer />
           </Spin>
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

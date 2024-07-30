@@ -51,10 +51,10 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         title: 'Slice Image',
         dataIndex: 'cell_id' as keyof TableEntry,
         render: (link: string, record: TableEntry, index: number) => {
-            const imageUrl = `${nexusImgLoaderUrl}/exp-morph-images/${link}.jpeg`;
+            const imageUrl = `${nexusImgLoaderUrl}exp-morph-images/${link}.jpeg`;
             return (
                 <Image
-                    src={`${nexusImgLoaderUrl}/exp-morph-images/thumbnails/${link}.jpeg`}
+                    src={`${nexusImgLoaderUrl}exp-morph-images/thumbnails/${link}.jpeg`}
                     alt={`slice image ${link}`}
                     width={200}
                     height={150}

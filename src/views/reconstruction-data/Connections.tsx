@@ -64,7 +64,7 @@ const ConnectionsView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer navItems={[
+      <DataContainer theme={theme} navItems={[
         { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
         { id: 'boutonDensitySection', label: 'Bouton density' },
       ]}>
@@ -83,7 +83,7 @@ const ConnectionsView: React.FC = () => {
           <p>For <u>uncharacterized pathways</u> we can use the average of the values from the characterized pathways (0.2260 μm-1).</p>
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

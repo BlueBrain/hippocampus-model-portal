@@ -65,7 +65,7 @@ const AcetylcholineView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer navItems={[
+      <DataContainer theme={theme} navItems={[
         { id: 'neuronsSection', label: 'Neurons' },
         { id: 'synapsesSection', label: 'Synapses' },
       ]}>
@@ -80,7 +80,7 @@ const AcetylcholineView: React.FC = () => {
           <SynapsesGraph />
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };
