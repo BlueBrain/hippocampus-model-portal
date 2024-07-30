@@ -1,11 +1,17 @@
 @import '@/styles/config/_colors';
 @import '@/styles/config/_queries';
 
-.dataContainer {
+.data {
+  width: 100%;
   background-color: map-get($basePalette, "grey");
+}
+
+.dataContainer {
+
   //min-height: 100vh;
   padding: 4rem 0 0 0;
-  width: 100%;
+  max-width: $max-page-width;
+  margin: 0 auto;
   position: relative;
   box-sizing: border-box;
 }

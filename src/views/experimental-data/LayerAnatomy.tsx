@@ -61,14 +61,14 @@ const LayerAnatomyView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p>
+                  <p >
                     The rat hippocampus CA1 is organized into four layers: stratum lacunoso-moleculare (SLM), stratum radiatum (SR), stratum pyramidal (SP), stratum oriens (SO). This section shows the data used to estimate the layer thicknesses.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
           </div>
-          <div className="mb-2 w-full lg:w-1/2 set-accent-color--grey">
+          <div className="mb-2 w-full lg:w-1/2 set-accent-color--grey flex justify-center ">
             <div style={{ maxWidth: '26rem' }}>
               <div className={`selector__column theme-${theme}`}>
                 <div className={`selector__head theme-${theme}`}>Choose a layer</div>

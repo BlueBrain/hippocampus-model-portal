@@ -3,6 +3,11 @@
 .wrapper {
   position: relative;
   overflow: hidden;
+  padding: 0 4rem;
+
+  @media (max-width: $ant-breakpoint-md) {
+    padding: 0 2rem;
+  }
 }
 
 .solidBackground {
@@ -47,9 +52,10 @@
 
 .container {
   position: relative;
-  padding: 100px 3rem 3rem;
-  min-height: 100vh;
 
+  min-height: 100vh;
+  max-width: $max-page-width;
+  margin: 0 auto;
   display: flex;
 
   z-index: 3;

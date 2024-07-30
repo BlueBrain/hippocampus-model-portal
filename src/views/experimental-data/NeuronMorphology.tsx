@@ -134,7 +134,7 @@ const NeuronExperimentalMorphology = () => {
           <div className="w-full lg:w-1/2">
             <Title
               primaryColor={colorName}
-              title={<span>Neuronal <br /> Morphology</span>}
+              title={<span>Neuronal Morphology</span>}
               subtitle="Experimental Data"
               theme={theme}
             />
@@ -192,9 +192,11 @@ const NeuronExperimentalMorphology = () => {
           { id: 'populationSection', label: 'Population' },
         ]}
       >
+
         <Collapsible
           id="morphologySection"
-          title={`Neuron Morphology ${currentMtype} ${currentInstance}`}
+          title="Neuron Morphology"
+          properties={[currentLayer, currentMtype, currentInstance]} // Assuming 'layer' is a string
         >
           <ESData query={morphologyDataQuery(currentMtype, currentInstance)}>
             {(esDocuments) => {

@@ -27,8 +27,10 @@ const Header: React.FC = () => {
 
   return (
     <div role="navigation" className={`${classPrefix}basis ${isScrolled ? 'scrolled' : ''}`}>
-      <Brand />
-      <MainNav />
+      <div className="nav__basis__container">
+        <Brand />
+        <MainNav />
+      </div>
     </div>
   );
 };

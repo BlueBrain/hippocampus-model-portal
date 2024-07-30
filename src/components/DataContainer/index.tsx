@@ -28,24 +28,28 @@ const DataContainer: React.FC<DataContainerProps> = ({
   return (
     <>
       {visible && (
-        <><div id="data" className={styles.dataContainer}>
-          {navItems && (
-            <SectionNav theme={theme} navItems={navItems} />
-          )}
+        <>
+          <div className={styles.data}>
+            <div id="data" className={styles.dataContainer}>
+              {navItems && (
+                <SectionNav theme={theme} navItems={navItems} />
+              )}
 
-          <div className={styles.scrollTop}>
-            <ScrollTop />
+              <div className={styles.scrollTop}>
+                <ScrollTop />
+              </div>
+
+
+              <div className={styles.center}>{children}</div>
+
+            </div>
+            <div className={styles.scrollTo}>
+              <ScrollTo anchor="filters" direction="up">
+                Return to selectors
+              </ScrollTo>
+            </div>
           </div>
-
-
-          <div className={styles.center}>{children}</div>
-
-        </div>
-          <div className={styles.scrollTo}>
-            <ScrollTo anchor="filters" direction="up">
-              Return to selectors
-            </ScrollTo>
-          </div></>
+        </>
       )}
     </>
   );
