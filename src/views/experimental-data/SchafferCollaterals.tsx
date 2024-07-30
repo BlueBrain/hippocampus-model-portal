@@ -74,7 +74,7 @@ const SchafferCollateralsView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'anatomySection', label: 'Anatomy' },
           { id: 'synapsePhysiologySection', label: 'Synapse physiology' },
@@ -100,7 +100,7 @@ const SchafferCollateralsView: React.FC = () => {
           </p>
           <SCSynapsePhysiologySection />
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

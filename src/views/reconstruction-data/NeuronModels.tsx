@@ -198,7 +198,7 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[]}
       >
         <Collapsible
@@ -208,7 +208,7 @@ const Neurons: React.FC = () => {
           <h3 className="text-tmp">Text description</h3>
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

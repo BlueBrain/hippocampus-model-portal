@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
-import { Row, Col } from 'antd';
 
+// Layout and Component Imports
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
@@ -10,29 +10,37 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import LayerSelector3D from '@/components/LayerSelector3D';
-import { layerAnatomyDataQuery } from '@/queries/es';
 import ESData from '@/components/ESData';
 import LayerThickness from '@/components/LayerThickness';
 import LayerAnatomySummary from '@/components/LayerAnatomySummary';
+
+// Query Imports
+import { layerAnatomyDataQuery } from '@/queries/es';
+
+// Type Imports
 import { Layer } from '@/types';
+
+// Constant Imports
 import { defaultSelection, layers } from '@/constants';
+
+// HOC Imports
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import LayerThicknessTable from "./layer-anatomy/thickness";
+// Local Component Imports
+import LayerThicknessTable from './layer-anatomy/thickness';
 
+// Config Imports
 import { colorName } from './config';
-
 
 const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
 
   const theme = 1;
-
-
   const { layer } = router.query as { layer: Layer };
 
+  // Function to update the layer query parameter
   const setLayerQuery = (layer: Layer) => {
     const query = { layer };
     router.push({ query }, undefined, { shallow: true });
@@ -41,15 +49,9 @@ const LayerAnatomyView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={!!layer}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+        <div className="flex flex-col lg:flex-row w-full sm:items-center space-y-10 sm:mx-0  lg:space-y-0 lg:space-x-5 mt-24 md:mt-0">
+
+          <div className="mb-2 w-full lg:w-1/2">
             <StickyContainer>
               <Title
                 primaryColor={colorName}
@@ -65,29 +67,25 @@ const LayerAnatomyView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
+          </div>
+          <div className="mb-2 w-full lg:w-1/2 set-accent-color--grey">
             <div style={{ maxWidth: '26rem' }}>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__body"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+                <div className="selector__body">
                   <LayerSelector3D
-                    value={layer as Layer}
+                    value={layer}
                     onSelect={setLayerQuery}
                     theme={theme}
                   />
                 </div>
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters >
 
-      <DataContainer
+      <DataContainer theme={theme}
         visible={!!layer}
         navItems={[
           { id: 'layerSection', label: 'Layer' },
@@ -96,47 +94,43 @@ const LayerAnatomyView: React.FC = () => {
       >
         <ESData query={layerAnatomyDataQuery}>
           {data => (
-            <>{data && (
-              <>
-                <Collapsible
-                  id="layerSection"
-                  title={`Layer ${layer}`}
-                >
-                  <div>
-                    <h3>Layer thickness for CA1</h3>
-                    <p>
-                      The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
-                    </p>
-                  </div>
+            <>
+              {data && (
+                <>
+                  <Collapsible
+                    id="layerSection"
+                    title={`Layer ${layer}`}
+                  >
+                    <div>
+                      <h3 className='text-xl mt-2'>Layer thickness for CA1</h3>
+                      <p className='text-base mt-2 mb-5'>
+                        The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
+                      </p>
+                    </div>
+                    <LayerThicknessTable layer={layer} />
+                  </Collapsible>
 
-                  <LayerThicknessTable layer={layer as Layer} />
-
-                </Collapsible>
-
-                <Collapsible
-                  id="summarySection"
-                  title="Summary"
-                  className="mt-4"
-                >
-                  <LayerAnatomySummary data={data} highlightLayer={layer} />
-                </Collapsible>
-              </>
-            )}
+                  <Collapsible
+                    id="summarySection"
+                    title="Summary"
+                    className="mt-4"
+                  >
+                    <LayerAnatomySummary data={data} highlightLayer={layer} />
+                  </Collapsible>
+                </>
+              )}
             </>
           )}
         </ESData>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };
 
-const hocPreselection = withPreselection(
-  LayerAnatomyView,
-  {
-    key: 'layer',
-    defaultQuery: defaultSelection.experimentalData.layerAnatomy,
-  },
-);
+const hocPreselection = withPreselection(LayerAnatomyView, {
+  key: 'layer',
+  defaultQuery: defaultSelection.experimentalData.layerAnatomy,
+});
 
 const qsEntries = [{
   title: 'Layer',
@@ -144,10 +138,7 @@ const qsEntries = [{
   values: layers,
 }];
 
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
-  },
-);
+export default withQuickSelector(hocPreselection, {
+  entries: qsEntries,
+  color: colorName,
+});

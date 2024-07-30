@@ -264,7 +264,7 @@ const ConnectionsView: React.FC = () => {
           },
         ]}
       />
-      <DataContainer
+      <DataContainer theme={theme}
         visible={!!pretype && !!posttype}
         navItems={[
           { id: 'pathwaySection', label: 'Pathway' },
@@ -309,7 +309,7 @@ const ConnectionsView: React.FC = () => {
         >
           <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

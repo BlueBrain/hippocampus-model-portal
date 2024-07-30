@@ -392,18 +392,6 @@ tfoot.ant-table-summary {
   color: map-get($basePalette, "navy-4");
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // Collapsible
 $collapsible-padding: 20px 30px;
 
@@ -415,14 +403,18 @@ $collapsible-padding: 20px 30px;
     position: relative;
     overflow: hidden;
     text-overflow: ellipsis;
-    background-color: #343846;
-    font-size: map-get($fontSize, "large");
-    font-weight: 400;
-    padding: 20px 60px 20px 30px;
+
+    display: flex;
+
+
+
+    padding: 20px 35px;
+
+    background-color: map-get($basePalette, "navy-1");
 
     &:hover {
       cursor: pointer;
-      background-color: #545A70;
+      background-color: map-get($basePalette, "navy-2");
     }
   }
 
@@ -887,6 +879,7 @@ $collapsible-padding: 20px 30px;
   text-decoration: none;
   text-align: center;
 
+
   &.animated svg {
     animation: arrow-down 1s infinite;
     animation-timing-function: ease-out;
@@ -938,14 +931,13 @@ $collapsible-padding: 20px 30px;
 // Title
 .title__basis {
   display: inline-block;
-  margin-bottom: 60px;
+  margin-bottom: 2rem;
   max-width: 100%;
   overflow: hidden;
 
 
   h2 {
     text-transform: uppercase;
-    line-height: 1;
     margin: 10px 0;
     padding-left: 12px;
     border-left: 4px solid;
@@ -1043,7 +1035,7 @@ $collapsible-padding: 20px 30px;
   position: sticky;
   bottom: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 3;
 }
 
 
@@ -1164,8 +1156,7 @@ $collapsible-padding: 20px 30px;
 
   &.scrolled {
     height: 70px;
-
-    background-color: rgba(#313354, .9);
+    background-color: map-get($basePalette, "navy-2");
   }
 }
 
@@ -1245,8 +1236,8 @@ $collapsible-padding: 20px 30px;
   position: absolute;
   left: 0;
   bottom: 0;
-  border-radius: 4px;
-  backdrop-filter: blur(1px);
+  margin-left: 2rem;
+
 }
 
 .morpho-legend>ul {

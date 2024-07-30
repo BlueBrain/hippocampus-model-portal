@@ -84,7 +84,7 @@ const CellCompositionView: React.FC = () => {
         </Row>
       </Filters >
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'cellCompositionSection', label: 'Cell composition' },
           { id: 'MECompositionSection', label: 'ME-composition' },
@@ -112,7 +112,7 @@ const CellCompositionView: React.FC = () => {
 
           <MECompositionTable />
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

@@ -71,7 +71,7 @@ const ThetaView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'phaseSection', label: 'Phase' },
           { id: 'rateSection', label: 'Rate' },
@@ -98,7 +98,7 @@ const ThetaView: React.FC = () => {
           </p>
           <RateTable />
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

@@ -189,7 +189,7 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
@@ -203,7 +203,7 @@ const Neurons: React.FC = () => {
           <p>We provide morphometrics for the entire m-type group selected.</p>
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

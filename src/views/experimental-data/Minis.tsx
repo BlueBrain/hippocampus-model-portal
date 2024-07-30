@@ -69,7 +69,7 @@ const MinisView: React.FC = () => {
                 </Row>
             </Filters>
 
-            <DataContainer
+            <DataContainer theme={theme}
                 navItems={[
                     { id: 'minisSection', label: 'Minis' },
 
@@ -86,7 +86,7 @@ const MinisView: React.FC = () => {
                 </Collapsible>
 
 
-            </DataContainer>
+            </DataContainer >
         </>
     );
 };

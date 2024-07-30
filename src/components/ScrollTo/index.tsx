@@ -4,7 +4,6 @@ import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp';
 
 import { Direction, Color } from '../../types';
 
-
 const classPrefix = 'scroll-to__';
 
 type ScrollToProps = {
@@ -26,7 +25,14 @@ const ScrollTo: React.FC<ScrollToProps> = ({
     const target = document.querySelector(`#${anchor}`);
 
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      const offset = 50;
+      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = targetPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -34,10 +40,7 @@ const ScrollTo: React.FC<ScrollToProps> = ({
     <div onClick={scroll} className={`${classPrefix}basis ${color} ${animated ? 'animated' : ''} ${direction === 'up' && 'black'}`}>
       {direction === 'up' && <div className="yoyo-arrow"><IoIosArrowUp size={20} /></div>}
       {children}
-
-      {direction === 'down' && <div className="yoyo-arrow"> <IoIosArrowDown size={20} /></div>}
-
-
+      {direction === 'down' && <div className="yoyo-arrow"><IoIosArrowDown size={20} /></div>}
     </div>
   );
 };

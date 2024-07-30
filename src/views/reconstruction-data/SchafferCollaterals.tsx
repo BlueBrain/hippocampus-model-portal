@@ -66,7 +66,7 @@ const ConnectionPhysiologyView: React.FC = () => {
             </Filters>
 
 
-            <DataContainer
+            <DataContainer theme={theme}
                 navItems={[
                     { id: 'anatomySection', label: 'Anatomy' },
                     { id: 'physiologySection', label: 'Physiology' },
@@ -96,7 +96,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     <PhysiologyTable />
                 </Collapsible>
 
-            </DataContainer>
+            </DataContainer >
 
         </>
     );

@@ -69,7 +69,7 @@ const SchafferCollateralsView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         navItems={[
           { id: 'anatomySection', label: 'Anatomy' },
           { id: 'physiologySection', label: 'Physiology' }
@@ -83,7 +83,7 @@ const SchafferCollateralsView: React.FC = () => {
           <p>We used available <Link href={"/reconstruction-data/schaffer-collaterals"}>data</Link> to predict the physiology of the SC. The synapses between CA3 and CA1 can be analyzed in terms of PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.</p>
         </Collapsible>
 
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

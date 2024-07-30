@@ -62,7 +62,7 @@ const CellDensityView: React.FC = () => {
                     </Col>
                 </Row>
             </Filters>
-            <DataContainer
+            <DataContainer theme={theme}
 
             >
 
@@ -76,7 +76,7 @@ const CellDensityView: React.FC = () => {
                 </Collapsible>
 
 
-            </DataContainer>
+            </DataContainer >
         </>
     );
 };

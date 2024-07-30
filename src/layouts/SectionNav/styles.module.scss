@@ -1,14 +1,19 @@
 @import '@/styles/config/_queries';
+@import '@/styles/config/_colors';
 
 .container {
   position: sticky;
   float: left;
 
-  padding-bottom: 4rem;
-  color: #313254;
+  padding: 1rem 1rem 1rem 2rem;
+  border-radius: 0 3px 3px 0;
+
+  color: map-get($basePalette, "navy-2");
+  background-color: map-get($basePalette, "navy-1");
+  border: 1px solid rgba(white, .05);
+  border-left: none;
   top: 50vh;
 
-  left: calc((100vw - $full-hd) / 4);
   z-index: 1;
 
   @media (max-width: $ant-breakpoint-xl) {
@@ -24,8 +29,8 @@
 .circle {
   height: .7rem;
   width: .7rem;
-  background-color: #aeb2c3;
-  border-radius: 1.2rem;
+  background-color: white;
+  border-radius: 1.6rem;
   display: inline-block;
   vertical-align: middle;
   transition: background-color 0.3s ease-in-out;
@@ -34,7 +39,7 @@
 .label {
   font-size: .9rem;
   margin-left: 0.6rem;
-  color: grey;
+  color: map-get($basePalette, "grey-3");
   user-select: none;
   vertical-align: middle;
   transition: color 0.3s ease-in-out;
@@ -44,12 +49,59 @@
   }
 }
 
+
 .sectionItemCurrent {
   .label {
-    color: #050a30;
+    color: white;
   }
 
   .circle {
-    background-color: #313254;
+    color: white;
+
+
+  }
+
+  &.theme-1 {
+
+    .circle {
+      background-color: map-get($theme, "experimental-data");
+    }
+  }
+
+  &.theme-2 {
+
+
+    .circle {
+      background-color: map-get($theme, "reconstruction-data");
+    }
+  }
+
+  &.theme-3 {
+
+
+    .circle {
+      background-color: map-get($theme, "digital-reconstruction");
+    }
+  }
+
+  &.theme-4 {
+
+    .circle {
+      background-color: map-get($theme, "validations");
+    }
+  }
+
+  &.theme-5 {
+
+    .circle {
+      background-color: map-get($theme, "predictions");
+    }
+  }
+
+  &.theme-6 {
+
+    .circle {
+      background-color: map-get($theme, "predictions");
+    }
   }
 }

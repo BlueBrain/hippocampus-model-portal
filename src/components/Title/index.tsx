@@ -28,8 +28,8 @@ const Title: React.FC<TitleProps> = ({
         } ${theme}`}
     >
       {subtitle && !primary && <h4 className={"text-theme-" + theme}>{subtitle}</h4>}
-      {title && <h2 role="title" className={"text-white border-theme-" + theme}>{title}</h2>}
-      {subtitle && primary && <h4 className="text-white">{subtitle}</h4>}
+      {title && <h2 role="title" className={"text-white text-xl	leading-7  border-theme-" + theme}>{title}</h2>}
+      {subtitle && primary && <h4 className="text-white mb-8">{subtitle}</h4>}
       {hint && <p dangerouslySetInnerHTML={{ __html: hint }} />}
     </div>
   );

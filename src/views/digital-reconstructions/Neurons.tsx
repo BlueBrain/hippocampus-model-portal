@@ -194,7 +194,7 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer
+      <DataContainer theme={theme}
         visible={!!currentInstance}
         navItems={[
           { id: 'modelInstance', label: 'Instance' },
@@ -278,7 +278,7 @@ const Neurons: React.FC = () => {
           </div>
           <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };
