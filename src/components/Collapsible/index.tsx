@@ -1,14 +1,14 @@
 import React, { ReactChild, ReactFragment } from 'react';
 import { IoIosArrowUp } from 'react-icons/io';
 
-
 const classPrefix = 'collapsible__';
 
-type CollapsibleColor = 'red'
+type CollapsibleColor = 'red';
 
 type CollapsibleProps = {
   collapsed?: boolean;
   title: string;
+  properties?: string[];
   children: ReactChild | ReactFragment;
   color?: CollapsibleColor;
   id?: string;
@@ -18,6 +18,7 @@ type CollapsibleProps = {
 const Collapsible: React.FC<CollapsibleProps> = ({
   collapsed,
   title,
+  properties = [],
   children,
   color = '',
   className = '',
@@ -28,7 +29,7 @@ const Collapsible: React.FC<CollapsibleProps> = ({
   return (
     <div
       id={id}
-      className={`${classPrefix}${isCollapsed ? 'collapsed' : 'expanded'} ${color} ${className}`}
+      className={`collapsabe ${classPrefix}${isCollapsed ? 'collapsed' : 'expanded'} ${color} ${className}`}
     >
       <div
         className="header text-base"
@@ -36,6 +37,16 @@ const Collapsible: React.FC<CollapsibleProps> = ({
         onClick={() => setCollapsed(!isCollapsed)}
       >
         <span>{title}</span>
+        {properties.length > 0 && (
+          <div className="properties" style={{ display: 'inline' }}>
+            {properties.map((property, index) => (
+              <div key={index} className="collapsible-property" style={{ display: 'inline' }}>
+                {property}
+                {index < properties.length - 1 && ''}
+              </div>
+            ))}
+          </div>
+        )}
         <span className="arrow">
           <IoIosArrowUp />
         </span>

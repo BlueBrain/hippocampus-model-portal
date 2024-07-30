@@ -5,14 +5,12 @@
   position: sticky;
   float: left;
 
-  padding: 1rem 1rem 1rem 2rem;
-  border-radius: 0 3px 3px 0;
+  padding-left: 3rem;
 
   color: map-get($basePalette, "navy-2");
-  background-color: map-get($basePalette, "navy-1");
   border: 1px solid rgba(white, .05);
   border-left: none;
-  top: 50vh;
+  top: 8rem;
 
   z-index: 1;
 
@@ -21,38 +19,47 @@
   }
 }
 
+.line {
+  margin: .5rem 0;
+  width: 250px;
+  height: 1px;
+  background-color: lightgrey
+}
+
 .sectionItem {
   cursor: pointer;
 
+  &:hover {
+    .label {
+      color: black;
+    }
+
+  }
 }
 
 .circle {
-  height: .7rem;
-  width: .7rem;
+  height: 5px;
+  width: 5px;
   background-color: white;
-  border-radius: 1.6rem;
+  border-radius: 1rem;
   display: inline-block;
   vertical-align: middle;
-  transition: background-color 0.3s ease-in-out;
+
 }
 
 .label {
-  font-size: .9rem;
+  font-size: .870rem;
   margin-left: 0.6rem;
   color: map-get($basePalette, "grey-3");
   user-select: none;
   vertical-align: middle;
-  transition: color 0.3s ease-in-out;
 
-  @media (max-width: 1580px) {
-    display: none;
-  }
 }
 
 
 .sectionItemCurrent {
   .label {
-    color: white;
+    color: black;
   }
 
   .circle {
@@ -65,6 +72,7 @@
 
     .circle {
       background-color: map-get($theme, "experimental-data");
+      background-color: map-get($basePalette, "blue");
     }
   }
 
@@ -102,6 +110,7 @@
 
     .circle {
       background-color: map-get($theme, "predictions");
+      background-color: map-get($basePalette, "blue");
     }
   }
 }

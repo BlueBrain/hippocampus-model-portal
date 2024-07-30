@@ -47,7 +47,7 @@
 
 .container {
   position: relative;
-  padding: 100px 60px 3rem;
+  padding: 100px 3rem 3rem;
   min-height: 100vh;
 
   display: flex;
@@ -55,7 +55,7 @@
   z-index: 3;
 
   @media (max-width: $ant-breakpoint-md) {
-    padding: 80px 20px 2rem;
+    padding: 20px 2rem;
   }
 }
 
