@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { IoIosArrowDown } from "react-icons/io";
-
 import { basePath } from '../../config';
-
 import styles from './nav.module.scss';
 
 const Menu: React.FC = ({ children }) => {
@@ -105,7 +103,7 @@ type SubmenuGroupProps = {
 
 const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color, openMenuGroup, setOpenMenuGroup }) => {
   const isOpened = openMenuGroup === menuGroup;
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement>(null);  // Define the type here
 
   const handleMenuToggle = () => {
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
@@ -216,7 +214,6 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
               <SubmenuLink label="Theta" href="/experimental-data/theta/" />
             </SubmenuGroup>
-
             <SubmenuGroup
               label="Reconstruction Data"
               menuGroup='menu-group-reconstruction-data'
@@ -231,7 +228,7 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
               <SubmenuLink label="Connections" href="/reconstruction-data/connections/" />
               <SubmenuLink label="Synapses" href="/reconstruction-data/synapses/" />
-              <SubmenuLink label="Schaffer Collaterlas" href="/reconstruction-data/schaffer-collaterals/" />
+              <SubmenuLink label="Schaffer Collaterals" href="/reconstruction-data/schaffer-collaterals/" />
               <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
             </SubmenuGroup>
 
@@ -271,7 +268,7 @@ const MainNav: React.FC = () => {
               openMenuGroup={openMenuGroup}
               setOpenMenuGroup={setOpenMenuGroup}
             >
-              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
+              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneous-activity' />
               <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
               <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
               <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />

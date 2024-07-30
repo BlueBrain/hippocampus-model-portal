@@ -75,7 +75,7 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
           <Table.Summary.Row>
             <Table.Summary.Cell index={0}><strong>Total</strong></Table.Summary.Cell>
             <Table.Summary.Cell index={1} />
-            <Table.Summary.Cell index={2}><strong><NumberFormat value={totalCount}/></strong></Table.Summary.Cell>
+            <Table.Summary.Cell index={2}><strong><NumberFormat value={totalCount} /></strong></Table.Summary.Cell>
           </Table.Summary.Row>
         )}
       />

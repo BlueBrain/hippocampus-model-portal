@@ -72,7 +72,7 @@ const CellDensityView: React.FC = () => {
                     title="Cell Density"
                 >
                     <p>Cell density is the number of cells per unitary volume.</p>
-                    <CellDensityTable />
+                    { /*<CellDensityTable /> */}
                 </Collapsible>
 
 

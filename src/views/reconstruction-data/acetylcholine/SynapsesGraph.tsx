@@ -11,6 +11,10 @@ import {
     Tooltip,
 } from 'chart.js';
 
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import { downloadAsJson } from '@/utils';
+import SynapsesGraphData from './synapses-graph-data.json';
+
 // Register necessary components
 Chart.register(
     ScatterController,
@@ -23,19 +27,25 @@ Chart.register(
     Tooltip,
 );
 
-const calculateFormulaPoints = () => {
-    const points = [];
+// Define the type for the data points
+interface DataPoint {
+    x: number;
+    y: number;
+}
+
+const calculateFormulaPoints = (): DataPoint[] => {
+    const points: DataPoint[] = [];
     for (let x = 0.01; x <= 1000; x *= 1.1) { // Increase the granularity of points
         const ACh = x;
         const y = (1.0 * Math.pow(ACh, -0.576)) / (Math.pow(4.541, -0.576) + Math.pow(ACh, -0.576));
-        points.push({ x: ACh, y: y });
+        points.push({ x: ACh, y });
     }
     return points;
 };
 
-const splitFormulaPoints = (points) => {
-    const solidPoints = [];
-    const dottedPoints = [];
+const splitFormulaPoints = (points: DataPoint[]): { solidPoints: DataPoint[], dottedPoints: DataPoint[] } => {
+    const solidPoints: DataPoint[] = [];
+    const dottedPoints: DataPoint[] = [];
     const splitPoint = 500;
 
     points.forEach(point => {
@@ -135,7 +145,7 @@ const SynapsesGraph: React.FC = () => {
                                 },
                                 ticks: {
                                     callback: function (value) {
-                                        const logValue = Math.log10(value);
+                                        const logValue = Math.log10(value as number);
                                         if (logValue === -2 || logValue === -1 || logValue === 0 || logValue === 1 || logValue === 2 || logValue === 3) {
                                             return `10^${logValue.toFixed(0)}`;
                                         }
@@ -167,6 +177,9 @@ const SynapsesGraph: React.FC = () => {
     return (
         <div>
             <canvas ref={chartRef} />
+            <HttpDownloadButton onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
+                table data
+            </HttpDownloadButton>
         </div>
     );
 };
