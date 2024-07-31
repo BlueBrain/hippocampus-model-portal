@@ -985,11 +985,22 @@ $collapsible-padding: 20px 30px;
 }
 
 // layout / Brand
+.nav__basis__container {
+
+
+  @media (max-width: $breakpoint-lg) {
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
+  }
+}
+
 .brand__basis {
   a {
     text-align: center;
     display: block;
     font-size: 1.2rem;
+
 
   }
 
@@ -1173,6 +1184,7 @@ $collapsible-padding: 20px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     width: 100%;
     max-width: $max-page-width;
     margin: 0 auto;
