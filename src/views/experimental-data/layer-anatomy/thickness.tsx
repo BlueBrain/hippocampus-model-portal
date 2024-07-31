@@ -56,8 +56,8 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
                 <Image
                     src={`${nexusImgLoaderUrl}exp-morph-images/thumbnails/${link}.jpeg`}
                     alt={`slice image ${link}`}
-                    width={200}
-                    height={150}
+                    width={150}
+                    height={125}
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                         setLightboxSlides(data.map(entry => ({ src: `${nexusImgLoaderUrl}/exp-morph-images/${entry.cell_id}.jpeg` })));
