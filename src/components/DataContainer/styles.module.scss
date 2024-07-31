@@ -6,20 +6,37 @@
   background-color: map-get($basePalette, "grey");
 }
 
+.navItemsContainer {
+
+  min-width: 200px;
+
+  @media (max-width: $breakpoint-xl) {
+    display: none;
+  }
+}
+
 .dataContainer {
 
   //min-height: 100vh;
-  padding: 4rem 0 0 0;
+  padding: 4rem 2rem;
   max-width: $max-page-width;
   margin: 0 auto;
   position: relative;
   box-sizing: border-box;
+
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 4rem 0rem;
+  }
 }
 
 .center {
   background-color: map-get($basePalette, "grey");
   margin: 0 auto;
   max-width: $full-hd;
+
 }
 
 .scrollTo {

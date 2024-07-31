@@ -32,7 +32,9 @@ const DataContainer: React.FC<DataContainerProps> = ({
           <div className={styles.data}>
             <div id="data" className={styles.dataContainer}>
               {navItems && (
-                <SectionNav theme={theme} navItems={navItems} />
+                <div className={styles.navItemsContainer}>
+                  <SectionNav theme={theme} navItems={navItems} />
+                </div>
               )}
 
               <div className={styles.scrollTop}>
@@ -41,6 +43,8 @@ const DataContainer: React.FC<DataContainerProps> = ({
 
 
               <div className={styles.center}>{children}</div>
+
+              <div className={styles.navItemsContainer} />
 
             </div>
             <div className={styles.scrollTo}>
