@@ -14,7 +14,7 @@
   height: 100%;
 }
 
-@media (max-width: $ant-breakpoint-md) {
+@media (max-width: $breakpoint-md) {
   .container {
     margin: 0 2rem;
   }

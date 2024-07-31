@@ -37,7 +37,7 @@
   }
 }
 
-@media (max-width: $ant-breakpoint-sm) {
+@media (max-width: $breakpoint-sm) {
   .quick-selector-container {
     display: none;
   }

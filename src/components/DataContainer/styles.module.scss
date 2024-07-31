@@ -40,7 +40,7 @@
   right: calc((85vw - $full-hd) / 4);
   display: none;
 
-  @media (max-width: $ant-breakpoint-xl) {
+  @media (max-width: $breakpoint-xl) {
     display: none;
   }
 }

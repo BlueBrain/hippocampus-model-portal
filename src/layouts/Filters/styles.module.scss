@@ -5,8 +5,8 @@
   overflow: hidden;
   padding: 0 4rem;
 
-  @media (max-width: $ant-breakpoint-md) {
-    padding: 0 2rem;
+  @media (max-width: $breakpoint-md) {
+    padding: 0 0rem;
   }
 }
 
@@ -60,8 +60,8 @@
 
   z-index: 3;
 
-  @media (max-width: $ant-breakpoint-md) {
-    padding: 20px 2rem;
+  @media (max-width: $breakpoint-md) {
+    padding: .5rem;
   }
 }
 

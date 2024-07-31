@@ -1,10 +1,9 @@
-
 @import '../../styles/config/_queries';
 
 .section {
   padding-left: 1rem;
 
-  @media (max-width: $ant-breakpoint-md) {
+  @media (max-width: $breakpoint-md) {
     padding-left: 0;
   }
 }
@@ -16,12 +15,14 @@
 
   color: var(--color-text-medium-white);
 
-  a, a:hover {
+  a,
+  a:hover {
     color: var(--color-text-medium-white);
     text-decoration: underline;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     color: var(--color-text-high-white);
   }
 
@@ -37,10 +38,11 @@
     font-weight: bold;
   }
 
-  @media (max-width: $ant-breakpoint-md) {
+  @media (max-width: $breakpoint-md) {
     padding: 0;
 
-    ul, ol {
+    ul,
+    ol {
       padding-inline-start: 1.6rem;
     }
   }

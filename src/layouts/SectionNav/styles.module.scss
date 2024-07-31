@@ -14,7 +14,7 @@
 
   z-index: 1;
 
-  @media (max-width: $ant-breakpoint-xl) {
+  @media (max-width: $breakpoint-xl) {
     display: none;
   }
 }

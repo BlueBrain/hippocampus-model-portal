@@ -4,7 +4,8 @@
   width: 200px;
   border: 1px solid #dedede;
   border-radius: 5px;
-  @media (max-width: $ant-breakpoint-sm){
+
+  @media (max-width: $breakpoint-sm) {
     width: unset;
   }
 }
@@ -17,7 +18,9 @@
 }
 
 .highlightedRowBg {
-  td, th {
+
+  td,
+  th {
     background-color: #fafbfd;
   }
 }
