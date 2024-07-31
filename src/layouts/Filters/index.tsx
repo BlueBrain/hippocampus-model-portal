@@ -22,19 +22,17 @@ const Filters: React.FC<FiltersProps> = ({
   id = 'filters',
 }) => {
   return (
-    <div className={styles.wrapper}>
+    <><div className={styles.wrapper}>
       <div
         className={styles.solidBackground}
         style={{
           backgroundColor: '#050A30', // Solid background color
-        }}
-      />
+        }} />
       <div
         className={`${styles.background} ${styles[`background--${theme}`]}`}
         style={{
           backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.svg)`,
-        }}
-      />
+        }} />
       <div
         id={id}
         className={styles.container}
@@ -43,17 +41,17 @@ const Filters: React.FC<FiltersProps> = ({
       </div>
       {!!hasData && (
         <div className="scroll-to">
-          <ScrollTo
-            anchor="data"
-            color={primaryColor}
-            direction="down"
-            animated
-          >
-            Click to view data
-          </ScrollTo>
+
         </div>
       )}
-    </div>
+    </div><ScrollTo
+      anchor="data"
+      color={primaryColor}
+      direction="down"
+      animated
+    >
+        Click to view data
+      </ScrollTo></>
   );
 };
 

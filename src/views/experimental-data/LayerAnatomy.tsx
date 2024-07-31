@@ -49,7 +49,7 @@ const LayerAnatomyView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={!!layer}>
-        <div className="flex flex-col md:flex-row w-full md:items-center mt-48 md:mt-0">
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
 
           <div className="w-full lg:w-1/2 mb-12 md:mb-0">
             <StickyContainer>
