@@ -53,18 +53,16 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
 
   return (
     <div className={style.container} ref={container}>
-      <h3 className='text-xs font-semibold text-gray-600 mb-1'>Sections</h3>
-      {/*<hr className={style.line} />*/}
+
+      <h3 className='text-sm font-semibold font-bold mb-1'>Sections</h3>
+      <hr className={style.line} />
       {navItems.map((navItem, idx) => (
         <div
           className={`${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
           key={navItem.id}
           onClick={() => scrollTo(navItem.id)}
         >
-          <div
-            className={`${style.circle}`}
-            title={navItem.label}
-          />
+          {/* <div className={`${style.circle}`} title={navItem.label} /> */}
           <span className={style.label}>{navItem.label}</span>
         </div>
       ))}

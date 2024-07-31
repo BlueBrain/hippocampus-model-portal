@@ -1172,10 +1172,16 @@ $collapsible-padding: 20px 30px;
     justify-content: center;
   }
 
+
   &.scrolled {
     height: 3rem;
     background-color: map-get($basePalette, "navy-2");
     border-bottom: 1px solid rgba(white, .1);
+
+    @media (max-width: $breakpoint-lg) {
+      height: 5rem;
+    }
+
   }
 
   & &__container {
