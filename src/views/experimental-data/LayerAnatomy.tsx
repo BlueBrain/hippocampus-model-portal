@@ -49,9 +49,9 @@ const LayerAnatomyView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={!!layer}>
-        <div className="flex flex-col lg:flex-row w-full sm:items-center space-y-10 sm:mx-0  lg:space-y-0 lg:space-x-5 mt-24 md:mt-0">
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-48 md:mt-0">
 
-          <div className="mb-2 w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 mb-12 md:mb-0">
             <StickyContainer>
               <Title
                 primaryColor={colorName}
@@ -68,7 +68,7 @@ const LayerAnatomyView: React.FC = () => {
               </div>
             </StickyContainer>
           </div>
-          <div className="mb-2 w-full lg:w-1/2 set-accent-color--grey flex justify-center ">
+          <div className="w-full lg:w-1/2 set-accent-color--grey flex justify-center mb-12 md:mb-0">
             <div style={{ maxWidth: '26rem' }}>
               <div className={`selector__column theme-${theme}`}>
                 <div className={`selector__head theme-${theme}`}>Choose a layer</div>

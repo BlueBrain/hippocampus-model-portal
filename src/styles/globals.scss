@@ -277,7 +277,7 @@ tfoot.ant-table-summary {
 }
 
 .responsiveTable {
-  @media (max-width: $ant-breakpoint-sm) {
+  @media (max-width: $breakpoint-sm) {
     .ant-table-tbody>tr.ant-table-row-level-0:hover>td {
       background: unset;
     }
@@ -574,7 +574,7 @@ $collapsible-padding: 20px 30px;
   td {
     padding: 0.5rem 1rem;
 
-    @media (max-width: $ant-breakpoint-sm) {
+    @media (max-width: $breakpoint-sm) {
       padding: 0;
     }
   }

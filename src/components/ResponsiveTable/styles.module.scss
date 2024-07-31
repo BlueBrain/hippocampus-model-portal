@@ -6,17 +6,18 @@
 
 .responsiveTablOdd {
   background-color: map-get($basePalette, "grey-1");
-  // @media (max-width: $ant-breakpoint-sm) {
+  // @media (max-width: $breakpoint-sm) {
   //   background-color: map-get($basePalette, "grey-1");
   // }
 }
+
 .responsiveTablEven {
   // background-color: map-get($basePalette, "white");
   // background-color: map-get($basePalette, "grey-1");
 }
 
 .highlightBackground {
-  @media (min-width: $ant-breakpoint-sm) {
+  @media (min-width: $breakpoint-sm) {
     // background-color: white;
   }
 }
