@@ -1,0 +1,34 @@
+[
+    {
+        "layer": "SLM",
+        "layer_thickness": {
+            "mean": 145.92,
+            "std": 26.882
+        },
+        "measurements": 12
+    },
+    {
+        "layer": "SR",
+        "layer_thickness": {
+            "mean": 278.65,
+            "std": 39.758
+        },
+        "measurements": 20
+    },
+    {
+        "layer": "SP",
+        "layer_thickness": {
+            "mean": 58.714,
+            "std": 15.15
+        },
+        "measurements": 21
+    },
+    {
+        "layer": "SO",
+        "layer_thickness": {
+            "mean": 168.0,
+            "std": 30.107
+        },
+        "measurements": 19
+    }
+]

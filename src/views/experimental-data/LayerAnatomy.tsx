@@ -32,6 +32,9 @@ import LayerThicknessTable from './layer-anatomy/thickness';
 
 // Config Imports
 import { colorName } from './config';
+import HttpDownloadButton from '@/components/HttpDownloadButton';
+import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 const LayerAnatomyView: React.FC = () => {
   const router = useRouter();
@@ -101,16 +104,17 @@ const LayerAnatomyView: React.FC = () => {
                   <Collapsible
                     id="layerSection"
                     title="Layer"
-                    properties={[layer]} // Assuming 'layer' is a string
+                    properties={[layer]}
                   >
 
                     <div>
-                      <h3 className='text-xl mt-2'>Layer thickness for CA1</h3>
-                      <p className='text-base mt-2 mb-5'>
+                      <h3 className='text-xl'>Layer thickness for CA1</h3>
+                      <p className='text-base mt-2 mb-8'>
                         The data consist of the reconstruction of the layers (and morphologies) superimposed onto slice images. From the images, we estimated the layer thicknesses, and we summarized the results in the table below.
                       </p>
                     </div>
-                    <LayerThicknessTable layer={layer} />
+                    <LayerThicknessTable layer={layer} theme={theme} />
+
                   </Collapsible>
 
                   <Collapsible
@@ -118,7 +122,7 @@ const LayerAnatomyView: React.FC = () => {
                     title="Summary"
                     className="mt-4"
                   >
-                    <LayerAnatomySummary data={data} highlightLayer={layer} />
+                    <LayerAnatomySummary data={data} highlightLayer={layer} theme={theme} />
                   </Collapsible>
                 </>
               )}

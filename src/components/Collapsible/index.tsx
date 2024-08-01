@@ -29,7 +29,7 @@ const Collapsible: React.FC<CollapsibleProps> = ({
   return (
     <div
       id={id}
-      className={`collapsabe ${classPrefix}${isCollapsed ? 'collapsed' : 'expanded'} ${color} ${className}`}
+      className={`collapsabe  ${classPrefix}${isCollapsed ? 'collapsed' : 'expanded'} ${color}`}
     >
       <div
         className="header text-base"

@@ -26,6 +26,7 @@ import InfoBox from '@/components/InfoBox';
 import NexusPlugin from '@/components/NexusPlugin';
 import Collapsible from '@/components/Collapsible';
 import List from '@/components/List';
+import AuthorBox from '@/components/AuthorBox/AuthorBox';
 import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
 import ExpMorphologyTable from '@/components/ExpMorphologyTable';
 import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
@@ -211,14 +212,18 @@ const NeuronExperimentalMorphology = () => {
               const esDocument = esDocuments[0]._source;
               return (
                 <>
-                  <p>
+                  <AuthorBox>
+                    <Metadata nexusDocument={esDocument} />
+                  </AuthorBox>
+
+                  <p className='text-lg mt-10 '>
                     We provide visualization and morphometrics for the selected morphology.
                   </p>
-                  <Metadata nexusDocument={esDocument} />
 
-                  <h3>3D view</h3>
+
+                  <h3 className='text-xl mt-10'>3D view</h3>
                   <NexusPlugin
-                    className="mt-3"
+                    className="mt-4"
                     name="neuron-morphology"
                     resource={esDocument}
                     nexusClient={nexus}
@@ -253,7 +258,7 @@ const NeuronExperimentalMorphology = () => {
           <HttpData path={expMorphFactesheetPath(currentInstance)}>
             {(factsheetData) => (
               <div className="mt-3">
-                <h3>Factsheet</h3>
+                <h3 className='text-xl mb-2 mt-10'>Factsheet</h3>
                 {factsheetData && (
                   <>
                     <NeuriteTypeGroupedFactsheets id="morphometrics" facts={factsheetData.values} />
@@ -274,7 +279,7 @@ const NeuronExperimentalMorphology = () => {
           <HttpData path={expMorphDistributionPlotsPath(currentInstance)}>
             {(plotsData) => (
               <div className="mt-4">
-                <h3>Distributions</h3>
+                <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
                 {plotsData && (
                   <>
                     <MorphDistributionPlots type="singleMorphology" data={plotsData} />
@@ -298,13 +303,13 @@ const NeuronExperimentalMorphology = () => {
           title="Population"
           className="mt-4 mb-4"
         >
-          <p>
+          <p className='text-lg mb-10'>
             We provide morphometrics for the entire m-type group selected.
           </p>
           <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
             {(factsheetData) => (
               <div>
-                <h3>Factsheet</h3>
+                <h3 className='text-xl mt-10 mb-4'>Factsheet</h3>
                 {factsheetData && (
                   <>
                     <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
@@ -326,7 +331,7 @@ const NeuronExperimentalMorphology = () => {
             <HttpData path={expMorphPopulationDistributionPlotsPath(currentMtype)}>
               {(plotsData) => (
                 <div className="mt-4">
-                  <h3>Distributions</h3>
+                  <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
                   {plotsData && (
                     <>
                       <MorphDistributionPlots type="population" data={plotsData} />

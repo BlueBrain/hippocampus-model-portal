@@ -17,8 +17,12 @@
 
 }
 
+.title {
+  color: map-get($basePalette, "navy-2");
+}
+
 .line {
-  margin: 5px 0;
+  margin-bottom: .5rem;
   width: 100%;
   height: 1px;
   background-color: lightgrey
@@ -58,7 +62,6 @@
 .sectionItemCurrent {
   .label {
     color: map-get($basePalette, "navy-1");
-    font-weight: bold;
   }
 
   .circle {

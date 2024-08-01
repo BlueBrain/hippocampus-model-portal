@@ -21,6 +21,7 @@ import SLMData from './slm.json';
 import SRData from './sr.json';
 import SPData from './sp.json';
 import SOData from './so.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
@@ -93,9 +94,10 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
 
 type ThicknessProps = {
     layer: Layer;
+    theme?: number;
 };
 
-const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
+const Thickness: React.FC<ThicknessProps> = ({ layer, theme }) => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxSlides, setLightboxSlides] = useState([]);
     const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -127,11 +129,13 @@ const Thickness: React.FC<ThicknessProps> = ({ layer }) => {
                 data={data}
                 columns={ThicknessColumns(data, setLightboxOpen, setLightboxSlides, setLightboxIndex)}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton onClick={() => downloadAsJson(data, `exp-${layer}-table.json`)}>
-                    Download table data
-                </HttpDownloadButton>
+
+            <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(data, `${layer}-data.json`)} theme={theme}>
+                    Download <span className='collapsible-property'>{layer}</span> data
+                </DownloadButton>
             </div>
+
             {lightboxOpen && (
                 <Lightbox
                     open={lightboxOpen}

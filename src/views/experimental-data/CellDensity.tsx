@@ -51,8 +51,10 @@ const CellDensityView: React.FC = () => {
                     className="mt-4"
                     title="Cell Density"
                 >
-                    <p className="mb-4">Cell density is the number of cells per unitary volume.</p>
-                    <CellDensityTable />
+                    <p className='text-base mb-4'>
+                        Cell density is the number of cells per unitary volume.
+                    </p>
+                    <CellDensityTable theme={theme} />
                 </Collapsible>
             </DataContainer>
         </>

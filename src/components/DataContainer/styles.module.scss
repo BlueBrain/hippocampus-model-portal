@@ -35,9 +35,11 @@
 .center {
   background-color: map-get($basePalette, "grey");
   margin: 0 auto;
-  max-width: $full-hd;
+  width: 100%;
 
 }
+
+
 
 .scrollTo {
   left: 0;

@@ -9,6 +9,9 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { layerDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
+import DownloadButton from '../DownloadButton/DownloadButton';
+
+import SummaryData from './layer-anatommy-summary.json';
 
 const Term = termFactory(layerDescription);
 
@@ -17,6 +20,7 @@ const classPrefix = 'layer-anatomy-summary__';
 export type LayerAnatomySummaryProps = {
   data?: ElasticSearchViewQueryResponse<any>['hits']['hits'];
   highlightLayer?: string;
+  theme?: number;
 };
 
 type SummaryData = {
@@ -27,7 +31,7 @@ type SummaryData = {
   rawThickness: any,
 }
 
-const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], highlightLayer = '' }) => {
+const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], highlightLayer = '', theme }) => {
   const entities = data.map(document => document._source);
 
   let thicknessUnit: string = '';
@@ -94,12 +98,11 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
         <div id="layerAnatomySummary" className={`${classPrefix}basis`}>
           <ResponsiveTable<SummaryData> columns={columns} data={summary} rowKey={({ layer }) => layer} />
 
-          <div className="text-right mt-2">
-            <HttpDownloadButton
-              onClick={() => downloadAsJson(factsheetData, 'experimental-layer-anatomy-factsheet.json')}
-            >
-              factsheet
-            </HttpDownloadButton>
+          <div className="mt-4">
+            <DownloadButton onClick={() => downloadAsJson(SummaryData, 'layer-anatommy-summary.json')} theme={theme}>
+              Download Layer Anatony Summary
+            </DownloadButton>
+
           </div>
         </div>
       )}

@@ -1,0 +1,17 @@
+@import "@/styles/config/_colors";
+
+.authorBox {
+    color: map-get($basePalette, "navy-3") !important;
+    background-color: map-get($infobox, "fill");
+    border: 1px solid map-get($infobox, "border");
+    border-radius: 5px;
+
+    padding: 1rem 1rem;
+
+}
+
+.icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    color: rgba(map-get($basePalette, "blue"), 1);
+}
