@@ -9,11 +9,13 @@ import {
     PointElement,
     LineElement,
     Tooltip,
+    Title,
 } from 'chart.js';
 
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import SynapsesGraphData from './synapses-graph-data.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 // Register necessary components
 Chart.register(
@@ -25,6 +27,7 @@ Chart.register(
     PointElement,
     LineElement,
     Tooltip,
+    Title
 );
 
 // Define the type for the data points
@@ -35,7 +38,8 @@ interface DataPoint {
 
 const calculateFormulaPoints = (): DataPoint[] => {
     const points: DataPoint[] = [];
-    for (let x = 0.01; x <= 1000; x *= 1.1) { // Increase the granularity of points
+    for (let x = 0.01; x <= 1000; x *= 1.1) {
+        // Increase the granularity of points
         const ACh = x;
         const y = (1.0 * Math.pow(ACh, -0.576)) / (Math.pow(4.541, -0.576) + Math.pow(ACh, -0.576));
         points.push({ x: ACh, y });
@@ -43,7 +47,7 @@ const calculateFormulaPoints = (): DataPoint[] => {
     return points;
 };
 
-const splitFormulaPoints = (points: DataPoint[]): { solidPoints: DataPoint[], dottedPoints: DataPoint[] } => {
+const splitFormulaPoints = (points: DataPoint[]): { solidPoints: DataPoint[]; dottedPoints: DataPoint[] } => {
     const solidPoints: DataPoint[] = [];
     const dottedPoints: DataPoint[] = [];
     const splitPoint = 500;
@@ -59,7 +63,11 @@ const splitFormulaPoints = (points: DataPoint[]): { solidPoints: DataPoint[], do
     return { solidPoints, dottedPoints };
 };
 
-const SynapsesGraph: React.FC = () => {
+export type SynapsesGraphProps = {
+    theme?: number;
+};
+
+const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -104,14 +112,14 @@ const SynapsesGraph: React.FC = () => {
                                     { x: 10, y: 0.06 },
                                     { x: 0, y: 1 }
                                 ],
-                                backgroundColor: 'rgba(3, 20, 55, 1)',
-                                pointRadius: 5
+                                backgroundColor: '#EA9088', // Updated to desired color
+                                pointRadius: 3
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidPoints,
                                 type: 'line',
-                                borderColor: 'rgba(5, 10, 48, 1)',
+                                borderColor: '#EA9088', // Updated to desired color
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
@@ -122,7 +130,7 @@ const SynapsesGraph: React.FC = () => {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedPoints,
                                 type: 'line',
-                                borderColor: 'rgba(5, 10, 48, 1)',
+                                borderColor: '#EA9088', // Updated to desired color
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
@@ -133,6 +141,13 @@ const SynapsesGraph: React.FC = () => {
                         ]
                     },
                     options: {
+                        plugins: {
+                            title: {
+                                display: false,
+                                text: '',
+                                color: '#EA9088' // Title color
+                            }
+                        },
                         scales: {
                             x: {
                                 type: 'logarithmic',
@@ -141,7 +156,12 @@ const SynapsesGraph: React.FC = () => {
                                 max: 1000,
                                 title: {
                                     display: true,
-                                    text: 'ACh Concentration (µM)'
+                                    text: 'ACh Concentration (µM)',
+                                    color: '#050A30' // Axis title color
+                                },
+                                grid: {
+                                    color: '#050A30', // Grid line color
+                                    borderWidth: .1
                                 },
                                 ticks: {
                                     callback: function (value) {
@@ -152,7 +172,8 @@ const SynapsesGraph: React.FC = () => {
                                         return '';
                                     },
                                     autoSkip: false,
-                                    maxTicksLimit: 6
+                                    maxTicksLimit: 6,
+                                    color: '#050A30', // Tick color
                                 }
                             },
                             y: {
@@ -161,13 +182,22 @@ const SynapsesGraph: React.FC = () => {
                                 max: 1.2,
                                 title: {
                                     display: true,
-                                    text: 'Use scaling'
+                                    text: 'Use scaling',
+                                    color: '#050A30' // Axis title color
+                                },
+                                grid: {
+                                    color: '#050A30', // Grid line color
+                                    borderWidth: .1
                                 },
                                 ticks: {
-                                    stepSize: 0.2
+                                    stepSize: 0.2,
+                                    color: '#050A30' // Tick color
                                 }
                             }
-                        }
+                        },
+                        // Set background color for the chart
+
+                        backgroundColor: '#313354', // Canvas background color
                     }
                 });
             }
@@ -175,12 +205,14 @@ const SynapsesGraph: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <canvas ref={chartRef} />
-            <HttpDownloadButton onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
-                table data
-            </HttpDownloadButton>
-        </div>
+        <>
+            <div className='mb-4 graph'>
+                <canvas ref={chartRef} />
+            </div>
+            <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
+                Download Synapses Graph Data
+            </DownloadButton>
+        </>
     );
 };
 

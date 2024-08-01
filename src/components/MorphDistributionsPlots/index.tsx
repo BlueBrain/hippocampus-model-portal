@@ -38,7 +38,7 @@ const histogramTitle = (entry) => {
   return capitalize(titleSub) + unitSub;
 };
 
-const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps>= ({ data, type }) => {
+const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps> = ({ data, type }) => {
   const plotEntries = sortBy(Object.entries(data).map(([key, val]) => ({ ...val, key })), 'key');
   const groupedEntries = groupBy(plotEntries, 'neuriteType');
 

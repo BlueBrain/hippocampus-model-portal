@@ -51,11 +51,18 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
     };
   }, [navItems]);
 
+  // Only render if there is more than one item in navItems
+  if (navItems.length <= 1) {
+    return null;
+  }
+
   return (
     <div className={style.container} ref={container}>
-
-      <h3 className='text-sm font-semibold font-bold mb-1'>Sections</h3>
+      {/* 
+      <h3 className={`${style.title} text-base mb-1`}>Sections</h3>
       <hr className={style.line} />
+      */}
+
       {navItems.map((navItem, idx) => (
         <div
           className={`${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}

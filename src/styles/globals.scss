@@ -391,7 +391,7 @@ tfoot.ant-table-summary {
 
 .collapsabe {
   border: 1px solid rgba(black, 0.1);
-  margin: 0 .5rem;
+  margin-bottom: 1rem;
 }
 
 .collapsible-property {
@@ -404,7 +404,7 @@ tfoot.ant-table-summary {
   @apply text-xs;
 }
 
-$collapsible-padding: 20px 30px;
+$collapsible-padding: 2rem 2rem;
 
 @mixin collapsible__basis {
   border-radius: 3px;
@@ -530,7 +530,13 @@ $collapsible-padding: 20px 30px;
 
 
 
-
+// Graoh 
+.graph {
+  background-color: map-get($infobox, "fill");
+  border: 1px solid map-get($infobox, "border");
+  padding: 20px;
+  border-radius: 0px;
+}
 
 
 
@@ -926,18 +932,6 @@ $collapsible-padding: 20px 30px;
   height: 1.5rem;
   margin-top: -0.25rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Title
 .title__basis {

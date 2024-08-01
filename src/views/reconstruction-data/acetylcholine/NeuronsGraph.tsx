@@ -13,6 +13,7 @@ import {
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import NeuronGraphData from './neuron-graph-data.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 // Register necessary components
 Chart.register(
@@ -66,7 +67,12 @@ const splitLineData = (data: DataPoint[]): { solidData: DataPoint[], dottedData:
     return { solidData, dottedData };
 };
 
-const NeuronsGraph: React.FC = () => {
+export type NeuronsGraphProps = {
+    theme?: number;
+};
+
+
+const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -112,27 +118,29 @@ const NeuronsGraph: React.FC = () => {
                                     { x: 3.0, y: 0.06 },
                                     { x: 10.0, y: 0.07 }
                                 ],
-                                backgroundColor: 'rgba(3, 20, 55, 1)',
-                                pointRadius: 5
+                                backgroundColor: '#EA9088', // Updated to desired color from the first graph
+                                pointRadius: 3 // Updated to match the first graph
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidData,
-                                borderColor: 'rgba(5, 10, 48, 1)',
+                                borderColor: '#EA9088', // Updated to desired color from the first graph
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
-                                borderWidth: 2
+                                borderWidth: 2, // Updated to match the first graph
+                                tension: 0.4 // Added to make the line a curve
                             },
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedData,
-                                borderColor: 'rgba(5, 10, 48, 1)',
+                                borderColor: '#EA9088', // Updated to desired color from the first graph
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
-                                borderWidth: 2,
-                                borderDash: [6, 6]
+                                borderWidth: 2, // Updated to match the first graph
+                                borderDash: [6, 6],
+                                tension: 0.4 // Added to make the line a curve
                             }
                         ]
                     },
@@ -145,7 +153,12 @@ const NeuronsGraph: React.FC = () => {
                                 max: 1000,
                                 title: {
                                     display: true,
-                                    text: 'ACh Concentration (µM)'
+                                    text: 'ACh Concentration (µM)',
+                                    color: '#050A30' // Updated axis title color
+                                },
+                                grid: {
+                                    color: 'EA9088', // Grid line color
+                                    borderWidth: .1
                                 },
                                 ticks: {
                                     callback: function (value) {
@@ -156,7 +169,8 @@ const NeuronsGraph: React.FC = () => {
                                         return '';
                                     },
                                     autoSkip: false,
-                                    maxTicksLimit: 6
+                                    maxTicksLimit: 6,
+                                    color: '#050A30' // Updated tick color
                                 }
                             },
                             y: {
@@ -165,13 +179,28 @@ const NeuronsGraph: React.FC = () => {
                                 max: 0.4,
                                 title: {
                                     display: true,
-                                    text: 'Current (nA)'
+                                    text: 'Current (nA)',
+                                    color: '#050A30' // Updated axis title color
+                                },
+                                grid: {
+                                    color: '#3B4165', // Grid line color
+                                    borderWidth: .1
                                 },
                                 ticks: {
-                                    stepSize: 0.1
+                                    stepSize: 0.1,
+                                    color: '#050A30' // Updated tick color
                                 }
                             }
-                        }
+                        },
+                        plugins: {
+                            title: {
+                                display: false,
+                                text: '',
+                                color: '#050A30' // Title color
+                            }
+                        },
+                        // Set background color for the chart
+                        backgroundColor: 'white', // Canvas background color
                     }
                 });
             }
@@ -179,12 +208,16 @@ const NeuronsGraph: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <canvas ref={chartRef} />
-            <HttpDownloadButton onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
-                table data
-            </HttpDownloadButton>
-        </div>
+        <>
+            <div className='mb-4 graph'>
+                <canvas ref={chartRef} />
+
+            </div>
+
+            <DownloadButton theme={theme} onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
+                Download Neuron Graph Data
+            </DownloadButton>
+        </>
     );
 };
 

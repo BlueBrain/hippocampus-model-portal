@@ -1,23 +1,36 @@
 @import '../../styles/config/_colors';
 @import '../../styles/config/_queries';
 
-
 // TODO: find better solution to support striped sub-rows on mobile
+
+.responsiveTable .ant-table-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.responsiveTable .ant-table-cell-auto {
+  width: auto;
+  max-width: 100%; // Use max-width to prevent overflow
+  white-space: normal; // Allows wrapping if needed
+}
 
 .responsiveTablOdd {
   background-color: map-get($basePalette, "grey-1");
-  // @media (max-width: $breakpoint-sm) {
-  //   background-color: map-get($basePalette, "grey-1");
-  // }
+
+  @media (max-width: $breakpoint-sm) {
+    background-color: map-get($basePalette, "grey-1");
+  }
 }
 
 .responsiveTablEven {
-  // background-color: map-get($basePalette, "white");
+  background-color: map-get($basePalette, "white");
+  // Uncomment the following line if you want to use the grey background for even rows as well.
   // background-color: map-get($basePalette, "grey-1");
 }
 
 .highlightBackground {
   @media (min-width: $breakpoint-sm) {
-    // background-color: white;
+    background-color: white;
   }
 }

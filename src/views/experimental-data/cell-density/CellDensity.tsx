@@ -4,15 +4,12 @@ import { Table } from 'antd';
 import { VolumeSection } from '@/types';
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import cellDensityData from './cell-denstiy.json';  // Import the JSON data
 
-type CellDensityTableProps = {
-    volumeSection: VolumeSection;
-};
 
 type CellDensity = {
     Cell_type: string;
@@ -78,7 +75,11 @@ const columns = [
     },
 ];
 
-const CellDensityTable: React.FC<CellDensityTableProps> = () => {
+type CellDensityTableProps = {
+    theme?: number; // Ensure that theme is an optional number
+};
+
+const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection, theme }) => {
     const dataSource = useMemo(() => cellDensityData, []);
 
     return (
@@ -109,15 +110,10 @@ const CellDensityTable: React.FC<CellDensityTableProps> = () => {
                 }}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
-                    onClick={() => downloadAsJson(
-                        dataSource,
-                        `cell-density-table.json`
-                    )}
-                >
-                    table data
-                </HttpDownloadButton>
+            <div className="text-right mt-4">
+                <DownloadButton onClick={() => downloadAsJson(dataSource, `cell-density-data.json`)} theme={theme}>
+                    Download Cell Density Data
+                </DownloadButton>
             </div>
         </>
     );
