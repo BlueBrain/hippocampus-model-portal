@@ -39,6 +39,7 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 
 import { colorName } from './config';
 import morphologies from '@/exp-morphology-list.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 const factsheetEntryTypes = [
   'all',
@@ -127,6 +128,10 @@ const NeuronExperimentalMorphology = () => {
     return esDocuments
       .map((esDocument) => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name ? 1 : -1));
+  };
+
+  const filterMorphologies = (morphologies, currentInstance) => {
+    return morphologies.filter(morphology => morphology.name === currentInstance);
   };
 
   return (
@@ -221,13 +226,15 @@ const NeuronExperimentalMorphology = () => {
                   </p>
 
 
-                  <h3 className='text-xl mt-10'>3D view</h3>
-                  <NexusPlugin
-                    className="mt-4"
-                    name="neuron-morphology"
-                    resource={esDocument}
-                    nexusClient={nexus}
-                  />
+                  <h3 className='text-xl mt-10 mb-2'>3D view</h3>
+                  <div className="graph no-margin">
+                    <NexusPlugin
+                      className=""
+                      name="neuron-morphology"
+                      resource={esDocument}
+                      nexusClient={nexus}
+                    />
+                  </div>
                   <div className="text-right">
                     <a
                       className="mr-1 btn btn-primary btn-sm"
@@ -276,6 +283,8 @@ const NeuronExperimentalMorphology = () => {
             )}
           </HttpData>
 
+
+
           <HttpData path={expMorphDistributionPlotsPath(currentInstance)}>
             {(plotsData) => (
               <div className="mt-4">
@@ -296,6 +305,21 @@ const NeuronExperimentalMorphology = () => {
               </div>
             )}
           </HttpData>
+
+          <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
+            {(esDocuments) => {
+              if (!esDocuments) return null;
+              const filteredMorphologies = filterMorphologies(getAndSortMorphologies(esDocuments), currentInstance);
+              return (
+                <ExpMorphologyTable
+                  layer={currentLayer}
+                  mtype={currentMtype}
+                  morphologies={filteredMorphologies}
+                  currentMorphology={currentInstance}
+                />
+              );
+            }}
+          </ESData>
         </Collapsible>
 
         <Collapsible
@@ -303,71 +327,74 @@ const NeuronExperimentalMorphology = () => {
           title="Population"
           className="mt-4 mb-4"
         >
-          <p className='text-lg mb-10'>
+          <p className='text-base mb-4'>
             We provide morphometrics for the entire m-type group selected.
           </p>
           <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
             {(factsheetData) => (
               <div>
-                <h3 className='text-xl mt-10 mb-4'>Factsheet</h3>
+                <h3 className='text-xl mt-4 mb-4'>Factsheet</h3>
                 {factsheetData && (
                   <>
                     <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
                     <div className="text-right mt-3">
-                      <HttpDownloadButton
+                      <DownloadButton
+                        theme={theme}
                         href={expMorphPopulationFactesheetPath(currentMtype)}
                         download={`exp-morphology-population-factsheet-${currentMtype}.json`}
-                      >
-                        factsheet
-                      </HttpDownloadButton>
+                      ><span className='collapsible-property small' style={{ margin: '2px' }}>{currentLayer}</span><span className='collapsible-property small' style={{ margin: '2px' }}>{currentMtype}</span><span className='collapsible-property small' style={{ margin: '2px' }}>{currentInstance}</span> Population Factsheet
+                      </DownloadButton>
                     </div>
                   </>
                 )}
               </div>
             )}
-          </HttpData>
+          </HttpData >
 
-          {instances.length > 1 && (
-            <HttpData path={expMorphPopulationDistributionPlotsPath(currentMtype)}>
-              {(plotsData) => (
-                <div className="mt-4">
-                  <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
-                  {plotsData && (
-                    <>
-                      <MorphDistributionPlots type="population" data={plotsData} />
-                      <div className="text-right mt-2">
-                        <HttpDownloadButton
-                          href={expMorphPopulationDistributionPlotsPath(currentMtype)}
-                          download={`exp-morphology-population-distributions-${currentMtype}.json`}
-                        >
-                          distributions
-                        </HttpDownloadButton>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </HttpData>
-          )}
+          {
+            instances.length > 1 && (
+              <HttpData path={expMorphPopulationDistributionPlotsPath(currentMtype)}>
+                {(plotsData) => (
+                  <div className="mt-4">
+                    <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
+                    {plotsData && (
+                      <>
+                        <MorphDistributionPlots type="population" data={plotsData} />
+                        <div className="text-right mt-2">
+                          <HttpDownloadButton
+                            href={expMorphPopulationDistributionPlotsPath(currentMtype)}
+                            download={`exp-morphology-population-distributions-${currentMtype}.json`}
+                          >
+                            distributions
+                          </HttpDownloadButton>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </HttpData>
+            )
+          }
 
-          <h3 className="mt-4">Reconstructed morphologies</h3>
+          < h3 className="mt-4" > Reconstructed morphologies</h3 >
           <p>
             Reconstructed morphologies from the selected m-type
           </p>
           <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
             {(esDocuments) => {
               if (!esDocuments) return null;
+              const filteredMorphologies = filterMorphologies(getAndSortMorphologies(esDocuments), currentInstance);
               return (
                 <ExpMorphologyTable
                   layer={currentLayer}
                   mtype={currentMtype}
-                  morphologies={getAndSortMorphologies(esDocuments)}
+                  morphologies={filteredMorphologies}
                   currentMorphology={currentInstance}
                 />
               );
             }}
           </ESData>
-        </Collapsible>
+        </Collapsible >
       </DataContainer >
     </>
   );

@@ -66,7 +66,7 @@ const AcetylcholineView: React.FC = () => {
           title="Resting membrane potential"
         >
           <p className="mb-4">The data below shows that ACh tends to increase the resting membrane potential of CA1 neurons.</p>
-          <RestingMembranePotentialTable />
+          <RestingMembranePotentialTable theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -75,7 +75,7 @@ const AcetylcholineView: React.FC = () => {
           title="Firing rate"
         >
           <p className="mb-4">The data below shows that ACh tends to increase the firing rates of CA1 neurons.</p>
-          <FiringRateTable />
+          <FiringRateTable theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -84,7 +84,7 @@ const AcetylcholineView: React.FC = () => {
           title="Synapse"
         >
           <p className="mb-4">The data below shows that ACh tends to increase the postsynaptic response (potential or current) in CA1.</p>
-          <SynapsesTable />
+          <SynapsesTable theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -93,7 +93,7 @@ const AcetylcholineView: React.FC = () => {
           title="Network"
         >
           <p className="mb-4">Consistent with the effect on neurons and synapses, ACh tends to increase the network activity, which in turn induces oscillations.</p>
-          <NetworkTable />
+          <NetworkTable theme={theme} />
         </Collapsible>
       </DataContainer>
     </>

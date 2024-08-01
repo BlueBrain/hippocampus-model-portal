@@ -13,6 +13,7 @@ import TauDecayData from './nmda_kinetics_-_nmda_tau_decay.json';
 import TauRiseData from './nmda_kinetics_-_nmda_tau_rise.json';
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 const Term = termFactory(mtypeDescription);
@@ -157,58 +158,65 @@ const TauRiseColumns = [
   },
 ];
 
-const NMDAKineticsSection: React.FC = () => {
+type NMDAKineticsSectionProps = {
+  theme?: number;
+}
+
+const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
   return (
     <>
-      <h2>NMDA/AMPA ratio</h2>
+      <h3 className='text-lg mb-2'>NMDA/AMPA ratio</h3 >
       <ResponsiveTable<TableEntry>
         data={RatioData}
         columns={RatioColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             RatioData,
-            `exp-connection-physiology_-_nmda-ratio-table.json`
+            `NMDAAMPA-Ratio-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          NMDA/AMPA ratio Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">NMDA tau decay</h2>
+      <h3 className='text-lg mb-2 mt-12'>NMDA tau decay</h3 >
       <ResponsiveTable<TableEntry>
         data={TauDecayData}
         columns={TauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             TauDecayData,
-            `exp-connection-physiology_-_nmda-kinetics_-_tau-decay-table.json`
+            ` NMDA-Tau-Decay-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          NMDA tau decay Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">NMDA tau rise</h2>
+      <h3 className=" text-lg  mt-12">NMDA tau rise</h3 >
       <ResponsiveTable<TableEntry>
         data={TauRiseData}
         columns={TauRiseColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             TauRiseData,
-            `exp-connection-physiology_-_nmda-kinetics_-_tau-rise-table.json`
+            `NMDA-Tau-Rise.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          NMDA tau rise Data
+        </DownloadButton>
       </div>
     </>
   );

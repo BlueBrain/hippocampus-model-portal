@@ -10,6 +10,7 @@ import { pathwayDescription } from '@/terms';
 
 import synapsePhysiologyData from './sc-synaptic-physiology.json';
 import doiIndex from './ref-doi.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 const Term = termFactory(pathwayDescription);
 
@@ -94,12 +95,15 @@ const synapsePhysiologyAllColumns = [
 const synapsePhysiologyWOWeightColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Weight');
 const synapsePhysiologyWOAgeColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Age');
 
-const SCSynapsePhysiologySection: React.FC = () => {
+type SCSynapsePhysiologySectionProps = {
+  theme?: number;
+}
+
+const SCSynapsePhysiologySection: React.FC<SCSynapsePhysiologySectionProps> = ({ theme }) => {
   return (
     <>
-      <h2 className="mt-3">SC → Exc</h2>
-
-      <h3 className="mt-3">PSP Magnitude and Variability</h3>
+      <h2 className='text-xl mt-12'>SC → Exc</h2>
+      <h3 className="mt-3  mb-3 text-lg">PSP Magnitude and Variability</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].PSPMagnitudeAndVariability}
@@ -107,7 +111,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>PSP Kinetics</h3>
+      <h3 className='mt-3 text-lg'>PSP Kinetics</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].PSPKinetics}
@@ -115,7 +119,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>NMDA Kinetics</h3>
+      <h3 className='mt-3 text-lg'>NMDA Kinetics</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].NMDAKinetics}
@@ -123,7 +127,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>Short Term Plasticity</h3>
+      <h3 className='mt-3 text-lg'>Short Term Plasticity</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-exc'].ShortTermPlasticity}
@@ -131,9 +135,9 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h2>SC → Inh</h2>
+      <h2 className='text-xl mt-12 mb-3'>SC → Inh</h2>
 
-      <h3 className="mt-3">PSC Magnitude</h3>
+      <h3 className='text-xl'>PSC Magnitude</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].PSCMagnitude}
@@ -141,7 +145,8 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>PSP Kinetics</h3>
+
+      <h3 className='text-lg mt-10'>SP Kinetics</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].PSPKinetics}
@@ -149,7 +154,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>NMDA Kinetics</h3>
+      <h3 className='text-lg mt-10'>NMDA Kinetics</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].NMDAKinetics}
@@ -157,7 +162,7 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <h3>Short Term Plasticity</h3>
+      <h3 className='text-lg mt-10'>Short Term Plasticity</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
         data={synapsePhysiologyData['sc-inh'].ShortTermPlasticity}
@@ -165,15 +170,16 @@ const SCSynapsePhysiologySection: React.FC = () => {
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             synapsePhysiologyData,
-            `exp-schaffer-collaterals-synapse-physiology-table.json`
+            `SC-Synapse-Physiology-Data.json`
           )}
         >
-          all table data
-        </HttpDownloadButton>
+          Download SC Synapse Physiology Data
+        </DownloadButton>
       </div>
     </>
   );

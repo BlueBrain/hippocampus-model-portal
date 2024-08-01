@@ -9,6 +9,7 @@ import { downloadAsJson } from '@/utils';
 
 import anatomyData from './sc-anatomy.json';
 import doiIndex from './ref-doi.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type TableEntry = {
@@ -95,7 +96,11 @@ const anatomyColumns = [
   },
 ];
 
-const SCAnatomySection: React.FC = () => {
+type SCAnatomySectionProps = {
+  theme?: number;
+};
+
+const SCAnatomySection: React.FC<SCAnatomySectionProps> = ({ theme }) => {
   return (
     <>
       <ResponsiveTable<TableEntry>
@@ -104,15 +109,16 @@ const SCAnatomySection: React.FC = () => {
         columns={anatomyColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             anatomyData,
-            `exp-schaffer-collaterals-anatomy-table.json`
+            `SC-Anatomy-Data.json.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          Download SC Anatomy Data
+        </DownloadButton>
       </div>
     </>
   );

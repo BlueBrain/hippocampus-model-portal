@@ -1,17 +1,21 @@
+@import '@/styles/config/_colors.scss';
+
 .Selector {
+
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
     gap: 0;
     padding: 0;
     margin: 0;
-    border-radius: 0.5em;
+    border-radius: 3px;
     overflow: hidden;
     height: 2em;
-    box-shadow: 0 0.125em 0.5em #000;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+
 }
 
-.Selector > button {
+.Selector>button {
     position: static;
     font-size: inherit;
     font-family: inherit;
@@ -22,18 +26,20 @@
     align-items: center;
     width: 180px;
     height: 2em;
-    box-shadow: 0 0 1px 1px #fff3;
     border-radius: 0;
 }
 
 .selected {
-    background: #368;
+    background: map-get($basePalette, "navy-2");
     color: #fff;
-    font-weight: bolder;
 }
 
 .unselected {
-    background: #246;
+    background: map-get($basePalette, "navy-1");
     color: #ccc;
-    font-weight: lighter;
+
+    &:hover {
+        background: map-get($basePalette, "navy-2");
+        color: #fff;
+    }
 }

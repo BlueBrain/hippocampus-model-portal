@@ -7,6 +7,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
 import SynapsesPerConnectionData from './synapses-per-conections.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type TableEntry = {
     Pathway: string;
@@ -82,7 +83,11 @@ const SynapsesPerConnectionColumns = [
     },
 ];
 
-const SynapsesPerConnection: React.FC = () => {
+type SynapsesPerConnectionProps = {
+    theme?: number;
+};
+
+const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) => {
     const data = transformData(SynapsesPerConnectionData);
 
     return (
@@ -93,15 +98,16 @@ const SynapsesPerConnection: React.FC = () => {
                 columns={SynapsesPerConnectionColumns}
                 rowKey={(record) => `${record.Pathway}_${record.Convergence}`}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4 mb-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         data,
-                        `SynapsesPerConnection-table.json`
+                        ` Download-Number-Of-Synapses-Per-Connection-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Number of synapses per connection Data
+                </DownloadButton>
             </div>
         </>
     );

@@ -93,10 +93,10 @@ const Minis: React.FC<MinisProps> = ({ theme }) => {
                     theme={theme}
                     onClick={() => downloadAsJson(
                         MinisData,
-                        `exp-minis-table.json`
+                        `Minis-Data.json`
                     )}
                 >
-                    table data
+                    Download Minis Data
                 </DownloadButton>
             </div>
         </>

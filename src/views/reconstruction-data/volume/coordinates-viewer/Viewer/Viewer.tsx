@@ -100,9 +100,9 @@ const Viewer: React.FC<VectorsViewerProps> = ({
                     onPainterInit={setPainter}
                 />
                 <div className={Styles.colorrampContainer}>
-                    <div style={{ color: 'white' }}>0.0</div>
+                    <div style={{ color: 'black' }}>0.0</div>
                     <Gradient />
-                    <div style={{ color: 'white' }}>1.0</div>
+                    <div style={{ color: 'black' }}>1.0</div>
                 </div>
                 <Selector className={Styles.selector} />
             </div>
@@ -119,7 +119,7 @@ function getClassName(className?: string) {
 function Gradient() {
     return (
         <div
-            style={{ width: '100px', height: '100px' }}
+            style={{ width: '50px', height: '50px', borderRadius: '5px', border: 'none' }}
             className={Styles.colorramp}
             ref={(div) => {
                 div?.appendChild(getGradientCanvas());

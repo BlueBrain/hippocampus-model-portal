@@ -10,6 +10,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import networkData from './network.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     Species: string;
@@ -331,8 +332,12 @@ const columns = [
     }
 ];
 
+type NetwrokProps = {
+    theme?: number;
+};
 
-const Network = () => {
+
+const Netwrok: React.FC<NetwrokProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -342,15 +347,16 @@ const Network = () => {
                 rowKey={(record) => record.Reference}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         networkData,
-                        `exp-connection-anatomy_-_network.json`
+                        `Network-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Network Data
+                </DownloadButton>
             </div>
 
         </>
@@ -358,4 +364,4 @@ const Network = () => {
 };
 
 
-export default Network;
+export default Netwrok;

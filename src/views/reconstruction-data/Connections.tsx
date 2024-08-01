@@ -22,19 +22,12 @@ const ConnectionsView: React.FC = () => {
 
   return (
     <>
-      <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+      <Filters theme={theme}>
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
+          {/* Title and Info */}
+          <div className="w-full mb-12 md:mb-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Connections"
                 subtitle="Reconstruction Data"
                 theme={theme}
@@ -47,25 +40,12 @@ const ConnectionsView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
 
       <DataContainer theme={theme} navItems={[
-        { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
+        { id: 'nbSynapsesPerConnectionSection', label: 'Nb synapses p. connection' },
         { id: 'boutonDensitySection', label: 'Bouton density' },
       ]}>
 
@@ -73,7 +53,7 @@ const ConnectionsView: React.FC = () => {
           <p>For <u>characterized pathways</u> we can use data from literature (see <Link href={"/experimental-data/connection-anatomy/"}> connection anatomy</Link>)</p>
           <p>For <u>uncharacterized pathways</u> we can use the following plot to extrapolate the ratio between appositions and synapses per connection.</p>
 
-          <SynsPerConnectionTable />
+          <SynsPerConnectionTable theme={theme} />
 
           <p>For each pathway, the standard deviation is computed multiplying the mean and the coefficient of variation (CV) which is set to 0.5.</p>
         </Collapsible>

@@ -10,6 +10,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import networkData from './network.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     "Neuron Type": string;
@@ -292,9 +293,11 @@ const columns = [
     }
 ];
 
+type RestingMembranePotentialProps = {
+    theme?: number;
+};
 
-
-const FiringRate = () => {
+const RestingMembranePotential: React.FC<RestingMembranePotentialProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -304,15 +307,16 @@ const FiringRate = () => {
                 rowKey={({ 'Neuron Type': neuronType }) => neuronType}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         networkData,
                         `exp-connection-anatomy_-_resting-membrane-potential.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Resting Membrane Potential Data
+                </DownloadButton>
             </div>
 
         </>
@@ -320,4 +324,4 @@ const FiringRate = () => {
 };
 
 
-export default FiringRate;
+export default RestingMembranePotential;

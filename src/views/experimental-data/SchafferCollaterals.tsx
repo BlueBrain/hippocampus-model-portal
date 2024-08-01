@@ -62,7 +62,7 @@ const SchafferCollateralsView: React.FC = () => {
             Here we report the anatomical measurements on the connectivity established by
             Schaffer collaterals with excitatory (Exc) and inhibitory (Inh) neurons in CA1.
           </p>
-          <SCAnatomySection />
+          <SCAnatomySection theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -70,7 +70,7 @@ const SchafferCollateralsView: React.FC = () => {
           className="mt-3"
           title="Synapse physiology"
         >
-          <p className="mb-4">
+          <p className='text--base'>
             Data about synapse physiology are divided into two main groups: one where we report
             data on connections between Schaffer collaterals and excitatory neurons (SC→Exc) and
             the other, between Schaffer collaterals and inhibitory neurons (SC→Inh). Similar to
@@ -79,7 +79,7 @@ const SchafferCollateralsView: React.FC = () => {
             The dataset also includes the EPSP-IPSP latency, which is particularly important to
             reproduce the feedforward inhibition of the SC.
           </p>
-          <SCSynapsePhysiologySection />
+          <SCSynapsePhysiologySection theme={theme} />
         </Collapsible>
       </DataContainer>
     </>

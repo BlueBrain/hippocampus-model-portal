@@ -12,6 +12,7 @@ import Collapsible from '@/components/Collapsible';
 
 import preSynDynamicsParamsData from './presyn-dynamics-params.json';
 import postSynDynamicsParamsData from './postsyn-dynamics-params.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 const termDescription = {
@@ -210,7 +211,7 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
           id="presynapsesSection"
           title="Presynaptic dynamics parameters"
         >
-          <p>
+          <p className='text-base mb-4'>
             Presynaptic parameters include short-term plasticity modeled using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling).  The coefficient of variation (CV) of postsynaptic current (PSC), mainly depending on the presynaptic mechanism, is validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link>.
           </p>
           <ResponsiveTable<PreSynDynamicsParam>
@@ -218,15 +219,17 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
             data={preSynDynamicsParamsData}
             rowKey={({ from, to }) => `${from}_${to}`}
           />
-          <div className="text-right mt-2 mb-4">
-            <HttpDownloadButton
+          <div className="text-right mt-4">
+
+            <DownloadButton
+              theme={theme}
               onClick={() => downloadAsJson(
                 preSynDynamicsParamsData,
-                `rec-data-synapses_-_presynaptic-dynamics-parameters.json`
+                `Presynaptic-Dynamics-Parameters-Data.json.json`
               )}
             >
-              table data
-            </HttpDownloadButton>
+              Presynaptic dynamics parameters Data
+            </DownloadButton>
           </div>
 
 
@@ -237,22 +240,23 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
           id="postsynapsesSection"
           title="Postsynaptic dynamics parameters"
         >
-          <p>Postsynaptic parameters include the maximum synaptic conductance (gsyn), rise and decay time constant of the fast ionotropic receptors (AMPA, GABAA), rise and decay time constant of the slow ionotropic receptors (NMDA), and NMDA/AMPA ratio. Note that we set rise time constant to 0.2 and 2.95 ms respectively for fast and slow receptors. We do not consider the slow ionotropic receptor GABAA. The somatic postsynaptic potentials (PSPs) are validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link></p>
+          <p className='text-base mb-4'>Postsynaptic parameters include the maximum synaptic conductance (gsyn), rise and decay time constant of the fast ionotropic receptors (AMPA, GABAA), rise and decay time constant of the slow ionotropic receptors (NMDA), and NMDA/AMPA ratio. Note that we set rise time constant to 0.2 and 2.95 ms respectively for fast and slow receptors. We do not consider the slow ionotropic receptor GABAA. The somatic postsynaptic potentials (PSPs) are validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link></p>
           <ResponsiveTable<PostSynDynamicsParam>
             className="mt-3"
             columns={postColumns}
             data={postSynDynamicsParamsData}
             rowKey={({ from, to }) => `${from}_${to}`}
           />
-          <div className="text-right mt-2">
-            <HttpDownloadButton
+          <div className="text-right  mt-4">
+            <DownloadButton
+              theme={theme}
               onClick={() => downloadAsJson(
                 postSynDynamicsParamsData,
-                `rec-data-synapses_-_postsynaptic-dynamics-parameters.json`
+                `Postsynaptic-Dynamics-Parameters-Data.json`
               )}
             >
-              table data
-            </HttpDownloadButton>
+              Postsynaptic dynamics parameters Data
+            </DownloadButton>
           </div>
 
         </Collapsible>

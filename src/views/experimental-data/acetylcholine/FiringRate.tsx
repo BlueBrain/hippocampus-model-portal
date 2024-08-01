@@ -10,6 +10,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import networkData from './network.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     "Neuron Type": string;
@@ -197,26 +198,31 @@ const columns = [
 ];
 
 
+type FiringRateProps = {
+    theme?: number;
+};
 
-const FiringRate = () => {
+const FiringRate: React.FC<FiringRateProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
+
                 className="mb-2"
                 columns={columns}
                 data={data}
                 rowKey={(record) => record.Reference}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         networkData,
-                        `exp-connection-anatomy_-_network.json`
+                        `Firing-Rate-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Firing Rate Data
+                </DownloadButton>
             </div>
 
         </>
