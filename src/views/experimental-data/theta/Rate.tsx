@@ -7,6 +7,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
 import rawRateData from './rate.json'; // Ensure this path matches the location of your JSON file
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type TableEntry = {
     neuronType: string;
@@ -80,7 +81,11 @@ const PhaseColumns = [
     }
 ];
 
-const Rate: React.FC = () => {
+type RateProps = {
+    theme?: number;
+};
+
+const Rate: React.FC<RateProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<TableEntry>
@@ -89,15 +94,16 @@ const Rate: React.FC = () => {
                 columns={PhaseColumns}
                 rowKey={({ neuronType, recordingCondition, source }) => `${neuronType}_${recordingCondition}_${source}`}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         PhaseData,
                         `theta-rate-table.json`
                     )}
                 >
                     table data
-                </HttpDownloadButton>
+                </DownloadButton>
             </div>
         </>
     );

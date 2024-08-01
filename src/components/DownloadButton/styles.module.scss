@@ -1,9 +1,9 @@
 @import "@/styles/config/_colors";
 
 .button {
-    background-color: map-get($basePalette, "navy-1");
-    color: white;
-    border-radius: 3px;
+    background-color: #E5E9F4;
+    color: map-get($basePalette, "navy-2");
+
 
     cursor: pointer;
 
@@ -11,34 +11,53 @@
     flex-direction: row;
     align-items: center;
     gap: .5rem;
+    border-radius: 3px;
 
-    padding: .5rem 1rem;
+
+    padding-right: .5rem;
 
     transition: 100ms ease-in-out all;
 
     &:hover {
-        background-color: map-get($basePalette, "navy-2");
+        background-color: map-get($basePalette, "navy-1");
+        color: white;
+
+        .icon {
+            //  color: map-get($basePalette, "navy-2");
+        }
     }
 
     $theme-length: length($theme);
 
-    @for $i from 1 through $theme-length {
-        $key: nth(map-keys($theme), $i);
-        $color: map-get($theme, $key);
 
-        &.theme-#{$i} {
-            border-left: 5px solid $color;
+    .iconContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: map-get($basePalette, "navy-3");
+
+        width: 2rem;
+        height: 2rem;
+
+        transition: 100ms ease-in-out all;
+
+        @for $i from 1 through $theme-length {
+            $key: nth(map-keys($theme), $i);
+            $color: map-get($theme, $key);
+
+            &.theme-#{$i} {
+                background-color: $color;
+            }
         }
     }
 
 
     .icon {
-        background-color: map-get($basePalette, "navy-3");
         width: 1rem;
         height: 1rem;
+        color: white;
+        transition: 100ms ease-in-out all;
 
-        padding: 1rem;
-        border-radius: 99px;
-        display: contents;
+
     }
 }

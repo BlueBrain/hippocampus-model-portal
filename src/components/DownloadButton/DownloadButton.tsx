@@ -13,8 +13,8 @@ type DownloadButtonProps = {
 const DownloadButton: React.FC<DownloadButtonProps> = ({ children, download, theme, onClick }) => {
     return (
         <button className={`text-sm ${styles.button} ${theme ? styles[`theme-${theme}`] : ''} `} onClick={onClick}>
-            <div className={`${styles.icon}`}>
-                <MdOutlineFileDownload color='white' />
+            <div className={`${styles.iconContainer} ${theme ? styles[`theme-${theme}`] : ''} `}>
+                <MdOutlineFileDownload className={`${styles.icon} ${theme ? styles[`theme-${theme}`] : ''} `} />
             </div>
             <span>{children}</span>
         </button>

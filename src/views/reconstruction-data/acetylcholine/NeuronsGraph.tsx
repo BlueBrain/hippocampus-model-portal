@@ -118,23 +118,23 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     { x: 3.0, y: 0.06 },
                                     { x: 10.0, y: 0.07 }
                                 ],
-                                backgroundColor: '#EA9088', // Updated to desired color from the first graph
+                                backgroundColor: '#3B4165', // Updated to desired color from the first graph
                                 pointRadius: 3 // Updated to match the first graph
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidData,
-                                borderColor: '#EA9088', // Updated to desired color from the first graph
+                                borderColor: '#3B4165', // Updated to desired color from the first graph
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
                                 borderWidth: 2, // Updated to match the first graph
-                                tension: 0.4 // Added to make the line a curve
+                                tension: 10// Added to make the line a curve
                             },
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedData,
-                                borderColor: '#EA9088', // Updated to desired color from the first graph
+                                borderColor: '#3B4165', // Updated to desired color from the first graph
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
@@ -183,7 +183,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     color: '#050A30' // Updated axis title color
                                 },
                                 grid: {
-                                    color: '#3B4165', // Grid line color
+                                    color: '#050A30', // Grid line color
                                     borderWidth: .1
                                 },
                                 ticks: {
@@ -209,14 +209,16 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
 
     return (
         <>
-            <div className='mb-4 graph'>
+            <div className='graph'>
                 <canvas ref={chartRef} />
 
             </div>
+            <div className="mt-4">
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
+                    Download Neuron Graph Data
+                </DownloadButton>
+            </div>
 
-            <DownloadButton theme={theme} onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
-                Download Neuron Graph Data
-            </DownloadButton>
         </>
     );
 };

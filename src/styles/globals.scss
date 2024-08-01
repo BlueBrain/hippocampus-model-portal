@@ -397,6 +397,7 @@ tfoot.ant-table-summary {
 .collapsible-property {
   padding: 0 .5rem;
   margin: 0.25rem;
+  color: white !important;
   border: 1px solid rgba(white, 0.1);
   background-color: #52617D;
   border-radius: 99px;
@@ -419,13 +420,16 @@ $collapsible-padding: 2rem 2rem;
     gap: .5rem;
 
 
-    padding: 20px 35px;
+    padding: 1rem 2rem;
 
     background-color: map-get($basePalette, "navy-1");
+    color: white;
+    transition: 100ms ease-in-out all;
 
     &:hover {
       cursor: pointer;
       background-color: map-get($basePalette, "navy-2");
+      color: white;
     }
   }
 
@@ -534,8 +538,13 @@ $collapsible-padding: 2rem 2rem;
 .graph {
   background-color: map-get($infobox, "fill");
   border: 1px solid map-get($infobox, "border");
-  padding: 20px;
+  padding: 2rem 2rem;
   border-radius: 0px;
+  margin: 0 4rem;
+
+  @media (max-width: $breakpoint-sm) {
+    margin: 0 0rem;
+  }
 }
 
 

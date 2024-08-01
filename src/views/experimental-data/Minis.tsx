@@ -64,7 +64,7 @@ const MinisView: React.FC = () => {
                         amplitude of the spontaneous or miniature events in different pathways.
                     </p>
 
-                    <MinisTable />
+                    <MinisTable theme={theme} />
                 </Collapsible>
             </DataContainer>
         </>

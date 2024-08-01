@@ -7,6 +7,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
 import PhysiologyData from './physiology.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type TableEntry = {
     ruleN: number;
@@ -61,7 +62,11 @@ const PhysiolgyColumns = [
     },
 ];
 
-const Anatomy: React.FC = () => {
+type PhysiologyProps = {
+    theme?: number;
+};
+
+const Anatomy: React.FC<PhysiologyProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<TableEntry>
@@ -70,15 +75,16 @@ const Anatomy: React.FC = () => {
                 columns={PhysiolgyColumns}
                 rowKey={(record) => `${record.ruleN}_${record.from}_${record.to}`}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         PhysiologyData,
-                        `Physiology-table.json`
+                        `Anatomy-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Anatomy Data
+                </DownloadButton>
             </div>
         </>
     );

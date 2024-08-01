@@ -193,7 +193,11 @@ function formatValue(value) {
   );
 }
 
-const SynDynamicsParamsTables: React.FC = () => {
+type SynDynamicsParamsTablesProps = {
+  theme?: number;
+}
+
+const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme }) => {
   return (
     <>
       <DataContainer theme={theme}

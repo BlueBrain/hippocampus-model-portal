@@ -24,16 +24,10 @@ const ConnectionPhysiologyView: React.FC = () => {
 
     return (
         <>
-            <Filters>
-                <Row
-                    className="w-100"
-                    gutter={[0, 20]}
-                >
-                    <Col
-                        className="mb-2"
-                        xs={24}
-                        lg={12}
-                    >
+            <Filters theme={theme}>
+                <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
+                    {/* Title and Info */}
+                    <div className="w-full mb-12 md:mb-0">
                         <StickyContainer>
                             <Title
                                 title="Schaffer Collaterals"
@@ -48,21 +42,8 @@ const ConnectionPhysiologyView: React.FC = () => {
                                 </InfoBox>
                             </div>
                         </StickyContainer>
-                    </Col>
-                    <Col
-                        className={`set-accent-color--${'grey'} mb-2`}
-                        xs={24}
-                        lg={12}
-                    >
-                        <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-                            <div className={selectorStyle.selectorColumn}>
-                                <div className={selectorStyle.selectorBody}>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Filters>
 
 
@@ -79,8 +60,8 @@ const ConnectionPhysiologyView: React.FC = () => {
                     className="mt-4"
                     title="Anatomy"
                 >
-                    <p>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> (TBC) and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</p>
-                    <AnatomyTable />
+                    <p className='text-base mb-4'>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> (TBC) and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</p>
+                    <AnatomyTable theme={theme} />
                 </Collapsible>
 
                 <Collapsible
@@ -88,12 +69,11 @@ const ConnectionPhysiologyView: React.FC = () => {
                     className="mt-4"
                     title="Physiology"
                 >
-                    <p>
+                    <p className='text-base mb-4'>
                         With a specific optimization protocol, we defined a set of parameters and rules to describe the three pathways. These parameters include the ones defining the short-term plasticity model using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling), the maximum synaptic conductance (gsyn), rise and decay time
                         constant of the fast ionotropic AMPA receptors, rise and decay time constant of the slow ionotropic receptors NMDA, and NMDA/AMPA ratio.
-
                     </p>
-                    <PhysiologyTable />
+                    <PhysiologyTable theme={theme} />
                 </Collapsible>
 
             </DataContainer >
