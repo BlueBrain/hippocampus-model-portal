@@ -1,37 +1,26 @@
 import React from 'react';
-import { Row, Col } from 'antd';
-import Image from 'next/image';
 
-
+// Component Imports
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
-
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import selectorStyle from '@/styles/selector.module.scss';
-
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+// Table Component Import
 import CellDensityTable from './cell-density/CellDensity';
 
-
 const CellDensityView: React.FC = () => {
-
     const theme = 1;
 
     return (
         <>
-            <Filters>
-                <Row
-                    className="w-100"
-                    gutter={[0, 20]}
-                >
-                    <Col
-                        className="mb-2"
-                        xs={24}
-                        lg={12}
-                    >
+            {/* Filters Section */}
+            <Filters theme={theme}>
+                <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
+                    {/* Title and Info */}
+                    <div className="w-full mb-12 md:mb-0">
                         <StickyContainer>
                             <Title
                                 title="Cell Density"
@@ -46,40 +35,28 @@ const CellDensityView: React.FC = () => {
                                 </InfoBox>
                             </div>
                         </StickyContainer>
-                    </Col>
-                    <Col
-                        className={`set-accent-color--${'grey'} mb-2`}
-                        xs={24}
-                        lg={12}
-                    >
-                        <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-                            <div className={selectorStyle.selectorColumn}>
-                                <div className={selectorStyle.selectorBody}>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Filters>
-            <DataContainer theme={theme}
 
+            {/* Data Container Section */}
+            <DataContainer
+                theme={theme}
+                navItems={[
+                    { id: 'cellDensitySection', label: 'Cell Density' },
+                ]}
             >
-
                 <Collapsible
                     id="cellDensitySection"
                     className="mt-4"
                     title="Cell Density"
                 >
-                    <p>Cell density is the number of cells per unitary volume.</p>
-                    { /*<CellDensityTable /> */}
+                    <p className="mb-4">Cell density is the number of cells per unitary volume.</p>
+                    <CellDensityTable />
                 </Collapsible>
-
-
-            </DataContainer >
+            </DataContainer>
         </>
     );
 };
-
 
 export default CellDensityView;

@@ -17,6 +17,7 @@ import {
 
 import ESData from '@/components/ESData';
 import HttpData from '@/components/HttpData';
+import StickyContainer from '@/components/StickyContainer';
 import DataContainer from '@/components/DataContainer';
 import LayerSelector3D from '@/components/LayerSelector3D';
 import Filters from '@/layouts/Filters';
@@ -130,22 +131,26 @@ const NeuronExperimentalMorphology = () => {
   return (
     <>
       <Filters theme={theme} hasData={!!currentInstance}>
-        <div className="flex flex-col lg:flex-row w-full items-center space-y-5 lg:space-y-0 lg:space-x-5">
-          <div className="w-full lg:w-1/2">
-            <Title
-              primaryColor={colorName}
-              title={<span>Neuronal Morphology</span>}
-              subtitle="Experimental Data"
-              theme={theme}
-            />
-            <InfoBox>
-              <p>
-                We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
-              </p>
-            </InfoBox>
-          </div>
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
 
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 mb-12 md:mb-0">
+            <StickyContainer>
+              <Title
+                primaryColor={colorName}
+                title={<span>Neuronal Morphology</span>}
+                subtitle="Experimental Data"
+                theme={theme}
+              />
+              <div role="information">
+                <InfoBox>
+                  <p>
+                    We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
+                  </p>
+                </InfoBox>
+              </div>
+            </StickyContainer>
+          </div>
+          <div className="w-full lg:w-1/2 set-accent-color--grey flex justify-center mb-12 md:mb-0">
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
                 <div className={`selector__head theme-${theme}`}>Choose a layer</div>
@@ -180,10 +185,12 @@ const NeuronExperimentalMorphology = () => {
                   />
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </Filters>
+
 
       <DataContainer theme={theme}
         visible={!!currentInstance}

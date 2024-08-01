@@ -68,17 +68,18 @@ const LayerAnatomyView: React.FC = () => {
               </div>
             </StickyContainer>
           </div>
+
           <div className="w-full lg:w-1/2 set-accent-color--grey flex justify-center mb-12 md:mb-0">
-            <div style={{ maxWidth: '26rem' }}>
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-                <div className="selector__body">
-                  <LayerSelector3D
-                    value={layer}
-                    onSelect={setLayerQuery}
-                    theme={theme}
-                  />
-                </div>
+
+            <div className={`selector__column theme-${theme}`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <LayerSelector3D
+                  value={layer}
+                  onSelect={setLayerQuery}
+                  theme={theme}
+                />
+
               </div>
             </div>
           </div>
