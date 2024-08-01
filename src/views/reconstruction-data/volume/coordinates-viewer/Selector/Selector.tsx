@@ -2,7 +2,7 @@
 import React from "react";
 import State from "../state";
 import { useAtomicState } from "../state/atomic-state"; // Adjust the import path accordingly
-import Styles from "./Selector.module.css";
+import Styles from "./Selector.module.scss";
 
 export interface SelectorProps {
     className?: string;

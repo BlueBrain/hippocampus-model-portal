@@ -23,10 +23,10 @@ const Glossary: React.FC = () => {
 
             {(glossaryContent as any)[sectionLabel].map(([term, description]: [term: any, d: any]) => (
               <div className="row mt-2" key={term}>
-                <div className="col-xs-4 col-md-3">
+                <div className="col-xs-6 col-md-3">
                   <strong dangerouslySetInnerHTML={{ __html: term }} />
                 </div>
-                <div className="col-xs-8 col-md-9">
+                <div className="col-xs-6 col-md-9">
                   <span dangerouslySetInnerHTML={{ __html: description }} />
                 </div>
               </div>

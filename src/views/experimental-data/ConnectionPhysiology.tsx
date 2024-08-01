@@ -68,7 +68,7 @@ const ConnectionPhysiologyView: React.FC = () => {
             the reversal potential of a synapse, the voltage at which there is no net flow of ions
             through the membrane, the peak PSP and PSC, and the coefficient of variation (CV) of the peak PSC.
           </p>
-          <ConductanceModelSection />
+          <ConductanceModelSection theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -85,7 +85,7 @@ const ConnectionPhysiologyView: React.FC = () => {
             or blocked in the experiments, the measures are due to mainly the fast receptors,
             AMPA or GABAA, respectively for excitatory or inhibitory synapses.
           </p>
-          <AMPAKineticsSection />
+          <AMPAKineticsSection theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -99,7 +99,7 @@ const ConnectionPhysiologyView: React.FC = () => {
             of NMDA and AMPA (NMDA/AMPA ratio). NMDA has slower kinetics and rise and decay time
             constants are usually computed by fitting exponential rise (et/rise) and decay (e-t/decay) functions.
           </p>
-          <NMDAKineticsSection />
+          <NMDAKineticsSection theme={theme} />
         </Collapsible>
       </DataContainer>
     </>

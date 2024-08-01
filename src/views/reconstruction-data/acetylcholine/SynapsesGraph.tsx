@@ -160,7 +160,6 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     color: '#050A30' // Axis title color
                                 },
                                 grid: {
-                                    color: '#050A30', // Grid line color
                                     borderWidth: .1
                                 },
                                 ticks: {
@@ -186,8 +185,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     color: '#050A30' // Axis title color
                                 },
                                 grid: {
-                                    color: '#050A30', // Grid line color
-                                    borderWidth: .1
+
                                 },
                                 ticks: {
                                     stepSize: 0.2,

@@ -129,7 +129,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 fill: false,
                                 pointRadius: 0,
                                 borderWidth: 2, // Updated to match the first graph
-                                tension: 10// Added to make the line a curve
+                                tension: 0// Added to make the line a curve
                             },
                             {
                                 label: 'Formula Line (Dotted)',
@@ -140,7 +140,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 pointRadius: 0,
                                 borderWidth: 2, // Updated to match the first graph
                                 borderDash: [6, 6],
-                                tension: 0.4 // Added to make the line a curve
+                                tension: 0 // Added to make the line a curve
                             }
                         ]
                     },
@@ -157,7 +157,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     color: '#050A30' // Updated axis title color
                                 },
                                 grid: {
-                                    color: 'EA9088', // Grid line color
                                     borderWidth: .1
                                 },
                                 ticks: {
@@ -182,12 +181,10 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     text: 'Current (nA)',
                                     color: '#050A30' // Updated axis title color
                                 },
-                                grid: {
-                                    color: '#050A30', // Grid line color
+                                grid: { // Grid line color
                                     borderWidth: .1
                                 },
                                 ticks: {
-                                    stepSize: 0.1,
                                     color: '#050A30' // Updated tick color
                                 }
                             }

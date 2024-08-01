@@ -10,6 +10,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import networkData from './network.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     "Pre Neuron Type": string;
@@ -391,7 +392,11 @@ const columns = [
     }
 ];
 
-const Synapses = () => {
+type SynapsesProps = {
+    theme?: number;
+};
+
+const Synapse: React.FC<SynapsesProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -401,15 +406,16 @@ const Synapses = () => {
                 rowKey={({ 'Pre Neuron Type': pre, 'Post Neuron Type': post }) => `${pre}-${post}`}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         networkData,
-                        `exp-connection-anatomy_-synapses.json`
+                        `Synapses-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Download Synapses Data
+                </DownloadButton>
             </div>
 
         </>
@@ -417,4 +423,4 @@ const Synapses = () => {
 };
 
 
-export default Synapses;
+export default Synapse;

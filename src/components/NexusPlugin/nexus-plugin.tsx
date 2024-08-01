@@ -121,7 +121,7 @@ export class NexusPlugin extends React.Component<
 
     return (
       <div
-        className={`remote-component ${className}`}
+        className={` ${className}`}
         ref={this.container}
       />
       // <Loading

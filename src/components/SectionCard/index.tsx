@@ -40,8 +40,8 @@ const SectionCard: React.FC<SectionCardProps> = ({
         <div className={styles.head}>
           <div className="flex justify-between items-center">
             <div>
-              <div className="sm:text-l">
-                <h3 className='text-white'>{title}</h3>
+              <div className="sm:text-lg">
+                <h3 className='text-white text-lg'>{title}</h3>
               </div>
             </div>
             <div>

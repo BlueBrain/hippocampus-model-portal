@@ -12,6 +12,7 @@ import PSCRiseTimeData from './ampa_kinetics_-_psc_rise_time.json';
 import PSCTauDecayData from './ampa_kinetics_-_psc_tau_decay.json';
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 const Term = termFactory(mtypeDescription);
@@ -122,41 +123,47 @@ const PSCTauDecayColumns = [
   },
 ];
 
-const AMPAKineticsSection: React.FC = () => {
+type AMPAKineticsSectionProps = {
+  theme?: number;
+}
+
+const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
   return (
     <>
-      <h2>PSC rise time</h2>
+      <h3 className=" text-lg mb-2 mt-4">PSC rise time</h3>
       <ResponsiveTable<TableEntry>
         data={PSCRiseTimeData}
         columns={PSCRiseTimeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
       <div className="text-right mt-2">
-        <HttpDownloadButton
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             PSCRiseTimeData,
-            `exp-connection-physiology_-_ampa-kinetics_-_psc-rise-time-table.json`
+            `PSC-Rise-Time-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          PSC Rise Time Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">PSC tau decay</h2>
+      <h3 className=" text-lg mb-2 mt-12">PSC tau decay</h3>
       <ResponsiveTable<TableEntry>
         data={PSCTauDecayData}
         columns={PSCTauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
       <div className="text-right mt-2">
-        <HttpDownloadButton
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             PSCTauDecayData,
-            `exp-connection-physiology_-_ampa-kinetics_-_psc-tau-decay-table.json`
+            `PSC-Tau-Decay-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          PSC Tau Decay Data
+        </DownloadButton>
       </div>
     </>
   );

@@ -140,6 +140,7 @@ export default class VolumeViewer {
 
     renderer.domElement.toBlob(blob => saveAs(blob!, `${filename}.png`));
     renderer.dispose();
+
   }
 
   public destroy() {

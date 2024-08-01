@@ -15,6 +15,7 @@ import PSCAmplitudeData from './conductance_model_-_psc_amplitude.json';
 
 import doiIndex from './ref-doi.json';
 import { TableEntry } from './types';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 const Term = termFactory(mtypeDescription);
@@ -213,19 +214,20 @@ const PSCAmplitudeColumns = [
   },
 ];
 
+type ConductanceModelSectionProps = {
+  theme?: number;
+}
 
-const ConductanceModelSection: React.FC = () => {
+const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme }) => {
   return (
     <>
-
-
-      <h2>Reversal potential</h2>
+      <h3 className=" text-lg mb-2 mt-4">Reversal potential</h3>
       <ResponsiveTable<TableEntry>
         data={reversalPotentialData}
         columns={ReversalPotentialColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <small className="mt-2 block">
+      <small className="mt-2 block text-sm">
         <sup>*</sup> Reversal potential values were taken from <a
           href="https://hippocampome.org/php/synaptome.php"
           target="_blank"
@@ -236,66 +238,71 @@ const ConductanceModelSection: React.FC = () => {
         see <TextWithRefs text="Moradi and Ascoli, 2020" doiIndex={doiIndex} />). Metadata (species, age, weight,
         and region) were taken from the original experimental study on which these values were based.
       </small>
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-3">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             reversalPotentialData,
-            `exp-connection-physiology_-_conductance_model_-_reversal-potential-table.json`
+            `Reversal-Potential-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          Reversal potential Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">PSP Amplitude</h2>
+      <h2 className="text-lg mb-2 mt-12">PSP Amplitude</h2>
       <ResponsiveTable<TableEntry>
         data={PSPAmplitudeData}
         columns={PSPAmplitudeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             PSPAmplitudeData,
             `exp-connection-physiology_-_conductance_model_-_psp-amplitude-table.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          PSP Amplitude Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">PSP CV</h2>
+      <h3 className=" text-lg mb-2 mt-12">PSP CV</h3>
       <ResponsiveTable<TableEntry>
         data={PSPCVData}
         columns={PSPCVColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             PSPCVData,
-            `exp-connection-physiology_-_conductance_model_-_psp-cv-table.json`
+            `PSP-CV-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          PSP CV Data
+        </DownloadButton>
       </div>
 
-      <h2 className="mt-3">PSC amplitude</h2>
+
+      <h3 className=" text-lg mb-2 mt-12">PSC amplitude</h3>
       <ResponsiveTable<TableEntry>
         data={PSCAmplitudeData}
         columns={PSCAmplitudeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             PSCAmplitudeData,
-            `exp-connection-physiology_-_conductance_model_-_psc-amplitude-table.json`
+            `PSC-Amplitude-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          PSC Amplitude Data
+        </DownloadButton>
       </div>
     </>
   );

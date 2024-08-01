@@ -43,6 +43,8 @@ export default class Painter {
         this.camera = camera;
         this.renderer = renderer;
 
+        renderer.setClearColor(0xEFF1F8, 1);
+
         const { x, y, z, sizeX, sizeY, sizeZ } = getSizeAndLocation(meshInfo);
         const controls = new OrbitControls(camera, canvas);
         this.controls = controls;

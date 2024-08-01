@@ -31,28 +31,28 @@ const MorphologyFactsheetSingleValueEntry: React.FC<{
 }> = ({
   fact
 }) => {
-  return (
-    <div className="row mt-1">
-      <div className="col-xs-8 col-sm-4 name">{fact.name}</div>
-      <div className="col-xs-4 col-sm-8 value">
-        {isNil(fact.value)
-          ? (<span>-</span>)
-          : (<span>
+    return (
+      <div className="row mt-1">
+        <div className="col-xs-6 col-sm-4 name">{fact.name}</div>
+        <div className="col-xs-6 col-sm-8 value">
+          {isNil(fact.value)
+            ? (<span>-</span>)
+            : (<span>
               <NumberFormat value={fact.value} /> <Unit value={fact.unit} />
             </span>)
-        }
+          }
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 const MorphologyFactsheetEntry: React.FC<{
   fact: MorphologyFactsheetEntryType
 }> = ({
   fact
 }) => {
-  return (<MorphologyFactsheetSingleValueEntry fact={fact} />);
-};
+    return (<MorphologyFactsheetSingleValueEntry fact={fact} />);
+  };
 
 const neuriteTypes = ['all', 'axon', 'apical_dendrite', 'basal_dendrite'];
 

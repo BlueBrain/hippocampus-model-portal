@@ -32,10 +32,10 @@ const FactsheetSingleValueEntry: React.FC<{
 }) => {
     return (
       <div className="row mt-1">
-        <div className="col-xs-4 col-sm-4 name">
+        <div className="col-xs-6 col-sm-4 name">
           <Term term={fact.name} description={fact.description} />
         </div>
-        <div className="col-xs-8 col-sm-8 value">
+        <div className="col-xs-6 col-sm-8 value">
           {isNil(fact.value)
             ? (<span>-</span>)
             : (<span>
@@ -96,10 +96,10 @@ const FactsheetMapValueEntry: React.FC<{
 
     return (
       <div className="row mt-1">
-        <div className="col-xs-4 name">
+        <div className="col-xs-6 col-lg-4 name">
           <Term term={fact.name} description={fact.description} />
         </div>
-        <div className="col-xs-8">{valueColumn}</div>
+        <div className="col-xs-6 col-lg-8">{valueColumn}</div>
       </div>
     );
   };

@@ -74,7 +74,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
                         backgroundColor: '#031437',
                         showLine: true,
                         fill: false,
-                        tension: 0.1,
+                        tension: 0,
                     },
                 ],
             },

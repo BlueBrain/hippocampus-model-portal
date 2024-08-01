@@ -20,16 +20,10 @@ const SynapsesView: React.FC = () => {
 
   return (
     <>
-      <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+      <Filters theme={theme}>
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
+          {/* Title and Info */}
+          <div className="w-full mb-12 md:mb-0">
             <StickyContainer>
               <Title
                 primaryColor={colorName}
@@ -46,33 +40,12 @@ const SynapsesView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  {/* 
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
-                  />
-                  */}
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
 
-      <SynDynamicsParamsTables />
+
+      <SynDynamicsParamsTables theme={theme} />
 
 
     </>
