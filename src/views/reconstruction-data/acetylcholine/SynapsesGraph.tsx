@@ -112,25 +112,25 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     { x: 10, y: 0.06 },
                                     { x: 0, y: 1 }
                                 ],
-                                backgroundColor: '#EA9088', // Updated to desired color
+                                backgroundColor: '#3B4165', // Updated to desired color
                                 pointRadius: 3
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidPoints,
                                 type: 'line',
-                                borderColor: '#EA9088', // Updated to desired color
+                                borderColor: '#3B4165', // Updated to desired color
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
                                 pointRadius: 0, // Make the points invisible
-                                tension: 0.4 // Smooth the line to make it a curve
+                                tension: 10 // Smooth the line to make it a curve
                             },
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedPoints,
                                 type: 'line',
-                                borderColor: '#EA9088', // Updated to desired color
+                                borderColor: '#3B4165', // Updated to desired color
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
@@ -145,7 +145,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                             title: {
                                 display: false,
                                 text: '',
-                                color: '#EA9088' // Title color
+                                color: '#3B4165' // Title color
                             }
                         },
                         scales: {
@@ -206,12 +206,14 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
 
     return (
         <>
-            <div className='mb-4 graph'>
+            <div className='graph'>
                 <canvas ref={chartRef} />
             </div>
-            <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
-                Download Synapses Graph Data
-            </DownloadButton>
+            <div className="mt-4">
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
+                    Download Synapses Graph Data
+                </DownloadButton>
+            </div>
         </>
     );
 };

@@ -7,6 +7,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
 import rawPhaseData from './phase.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type TableEntry = {
     morphologicalType: string;
@@ -91,7 +92,11 @@ const PhaseColumns = [
     }
 ];
 
-const Phase: React.FC = () => {
+type PhaseProps = {
+    theme?: number;
+};
+
+const Phase: React.FC<PhaseProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<TableEntry>
@@ -100,15 +105,16 @@ const Phase: React.FC = () => {
                 columns={PhaseColumns}
                 rowKey={({ morphologicalType, specie, reference }) => `${morphologicalType}_${specie}_${reference}`}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         PhaseData,
                         `theta-phase-table.json`
                     )}
                 >
                     table data
-                </HttpDownloadButton>
+                </DownloadButton>
             </div>
         </>
     );

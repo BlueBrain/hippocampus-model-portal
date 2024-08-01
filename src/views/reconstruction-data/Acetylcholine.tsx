@@ -24,18 +24,11 @@ const AcetylcholineView: React.FC = () => {
   return (
     <>
       <Filters theme={theme}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
+          {/* Title and Info */}
+          <div className="w-full mb-12 md:mb-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Acetylcholine"
                 subtitle="Reconstruction Data"
                 theme={theme}
@@ -48,21 +41,8 @@ const AcetylcholineView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                <div className={selectorStyle.selectorBody}>
-
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
 
       <DataContainer theme={theme} navItems={[

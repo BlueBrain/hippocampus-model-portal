@@ -10,9 +10,9 @@ import {
     LineElement,
     Tooltip,
 } from 'chart.js';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import IfCurvePerCellData from './if-curve-per-cell-data.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 // Register necessary components
 Chart.register(
@@ -118,12 +118,16 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
     }, [instance]);
 
     return (
-        <div>
-            <canvas ref={chartRef} />
-            <HttpDownloadButton onClick={() => downloadAsJson(IfCurvePerCellData, `if-curve-per-cell-data.json`)}>
-                Download table data
-            </HttpDownloadButton>
-        </div>
+        <>
+            <div className='graph'>
+                <canvas ref={chartRef} />
+            </div>
+            <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(IfCurvePerCellData, `if-curve-per-cell-data.json`)}>
+                    Download table data
+                </DownloadButton>
+            </div>
+        </>
     );
 };
 

@@ -7,6 +7,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
 import MinisData from './minis.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type TableEntry = {
@@ -73,8 +74,11 @@ const MinisColumns = [
     },
 ];
 
+type MinisProps = {
+    theme?: number;
+};
 
-const Minis: React.FC = () => {
+const Minis: React.FC<MinisProps> = ({ theme }) => {
     return (
         <>
 
@@ -84,15 +88,16 @@ const Minis: React.FC = () => {
                 columns={MinisColumns}
                 rowKey={({ preMtype, postMtype, type }) => `${preMtype}_${postMtype}_${type}`}
             />
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         MinisData,
                         `exp-minis-table.json`
                     )}
                 >
                     table data
-                </HttpDownloadButton>
+                </DownloadButton>
             </div>
         </>
     );

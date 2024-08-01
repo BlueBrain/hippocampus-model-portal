@@ -63,11 +63,11 @@ const ThetaView: React.FC = () => {
           className="mt-3"
           title="Phase"
         >
-          <p className="mb-4">
+          <p>
             Different morphological types of CA1 neuron respond preferentially at
             specific phases of theta rhythmic activity.
           </p>
-          <PhaseTable />
+          <PhaseTable theme={theme} />
         </Collapsible>
 
         <Collapsible
@@ -75,11 +75,11 @@ const ThetaView: React.FC = () => {
           className="mt-3"
           title="Rate"
         >
-          <p className="mb-4">
+          <p>
             During periods of theta rhythmic activity, each morphological type of
             CA1 neuron tends to respond with a different average spiking rate.
           </p>
-          <RateTable />
+          <RateTable theme={theme} />
         </Collapsible>
       </DataContainer>
     </>

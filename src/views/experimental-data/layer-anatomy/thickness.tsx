@@ -132,7 +132,7 @@ const Thickness: React.FC<ThicknessProps> = ({ layer, theme }) => {
 
             <div className="mt-4">
                 <DownloadButton onClick={() => downloadAsJson(data, `${layer}-data.json`)} theme={theme}>
-                    Download <span className='collapsible-property'>{layer}</span> data
+                    Download <span className='collapsible-property'>{layer}</span>
                 </DownloadButton>
             </div>
 

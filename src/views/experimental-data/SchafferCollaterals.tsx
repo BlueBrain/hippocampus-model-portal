@@ -22,13 +22,12 @@ const SchafferCollateralsView: React.FC = () => {
   return (
     <>
       {/* Filters Section */}
-      <Filters theme={theme} hasData={true}>
+      <Filters theme={theme}>
         <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
           {/* Title and Info */}
           <div className="w-full mb-12 md:mb-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Schaffer Collaterals"
                 subtitle="Experimental Data"
                 theme={theme}
@@ -45,6 +44,7 @@ const SchafferCollateralsView: React.FC = () => {
           </div>
         </div>
       </Filters>
+
 
       {/* Data Container Section */}
       <DataContainer
