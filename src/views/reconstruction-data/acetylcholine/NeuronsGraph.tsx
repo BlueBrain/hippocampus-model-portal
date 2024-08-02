@@ -13,6 +13,7 @@ import {
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import NeuronGraphData from './neuron-graph-data.json';
+import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 // Register necessary components
 Chart.register(
@@ -180,6 +181,11 @@ const NeuronsGraph: React.FC = () => {
 
     return (
         <div>
+            <MathJaxContext>
+                <MathJax>
+                    {"\\[ I_{\\text{depol}} = \\frac{0.567 \\cdot ACh^{0.436}}{100^{0.436} + ACh^{0.436}} \\]"}
+                </MathJax>
+            </MathJaxContext>
             <canvas ref={chartRef} />
             <HttpDownloadButton onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
                 table data
