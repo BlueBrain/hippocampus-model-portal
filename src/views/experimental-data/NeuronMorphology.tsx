@@ -137,9 +137,8 @@ const NeuronExperimentalMorphology = () => {
   return (
     <>
       <Filters theme={theme} hasData={!!currentInstance}>
-        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
-
-          <div className="w-full lg:w-1/2 mb-12 md:mb-0">
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
                 primaryColor={colorName}
@@ -147,7 +146,7 @@ const NeuronExperimentalMorphology = () => {
                 subtitle="Experimental Data"
                 theme={theme}
               />
-              <div role="information">
+              <div className='w-full' role="information">
                 <InfoBox>
                   <p>
                     We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
@@ -156,46 +155,44 @@ const NeuronExperimentalMorphology = () => {
               </div>
             </StickyContainer>
           </div>
-          <div className="w-full lg:w-1/2 set-accent-color--grey flex justify-center mb-12 md:mb-0">
-            <div className="selector">
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-                <div className="selector__body">
-                  <LayerSelector3D
-                    value={currentLayer}
-                    onSelect={setLayer}
-                  />
-                </div>
-              </div>
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
-                <div className="selector__body">
-                  <List
-                    block
-                    list={mtypes}
-                    value={currentMtype}
-                    title="m-type"
-                    color={colorName}
-                    onSelect={setMtype}
-                    theme={theme}
-                  />
-                  <List
-                    block
-                    list={instances}
-                    value={currentInstance}
-                    title="Reconstructed morphology"
-                    color={colorName}
-                    onSelect={setInstance}
-                    anchor="data"
-                    theme={theme}
-                  />
-                </div>
-              </div>
 
+          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none">
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+              <div className="selector__body">
+                <List
+                  block
+                  list={mtypes}
+                  value={currentMtype}
+                  title="m-type"
+                  color={colorName}
+                  onSelect={setMtype}
+                  theme={theme}
+                />
+                <List
+                  block
+                  list={instances}
+                  value={currentInstance}
+                  title="Reconstructed morphology"
+                  color={colorName}
+                  onSelect={setInstance}
+                  anchor="data"
+                  theme={theme}
+                />
+              </div>
+            </div>
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <LayerSelector3D
+                  value={currentLayer}
+                  onSelect={setLayer}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </Filters>
+      </Filters >
 
 
       <DataContainer theme={theme}
