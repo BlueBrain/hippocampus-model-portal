@@ -110,10 +110,10 @@ const Phase: React.FC<PhaseProps> = ({ theme }) => {
                     theme={theme}
                     onClick={() => downloadAsJson(
                         PhaseData,
-                        `theta-phase-table.json`
+                        `theta-phase-data.json`
                     )}
                 >
-                    table data
+                    Download Phase Data
                 </DownloadButton>
             </div>
         </>

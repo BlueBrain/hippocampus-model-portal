@@ -192,7 +192,7 @@ const NeuronExperimentalMorphology = () => {
             </div>
           </div>
         </div>
-      </Filters >
+      </Filters>
 
 
       <DataContainer theme={theme}

@@ -99,10 +99,10 @@ const Rate: React.FC<RateProps> = ({ theme }) => {
                     theme={theme}
                     onClick={() => downloadAsJson(
                         PhaseData,
-                        `theta-rate-table.json`
+                        `theta-rate-data.json`
                     )}
                 >
-                    table data
+                    Download Rate Data
                 </DownloadButton>
             </div>
         </>
