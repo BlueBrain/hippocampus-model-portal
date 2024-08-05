@@ -62,6 +62,7 @@
 
   @media (max-width: $breakpoint-md) {
     padding: .5rem;
+    min-height: auto !important;
   }
 }
 
