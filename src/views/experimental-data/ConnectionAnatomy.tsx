@@ -26,9 +26,8 @@ const ConnectionAnatomyView: React.FC = () => {
     <>
       {/* Filters Section */}
       <Filters theme={theme} hasData={true}>
-        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
-          {/* Title and Info */}
-          <div className="w-full mb-12 md:mb-0">
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
                 primaryColor={colorName}

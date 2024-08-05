@@ -1,438 +1,257 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
-import groupBy from 'lodash/groupBy';
+import { Button } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
-import { hippocampus, deploymentUrl } from '@/config';
-import { defaultSelection, layers } from '@/constants';
-import { Layer } from '@/types';
-
-import { morphologyDataQuery, mtypeExpMorphologyListDataQuery } from '@/queries/es';
-import {
-  expMorphFactesheetPath,
-  expMorphPopulationFactesheetPath,
-  expMorphPopulationDistributionPlotsPath,
-  expMorphDistributionPlotsPath,
-} from '@/queries/http';
-
+// Component Imports
 import ESData from '@/components/ESData';
-import HttpData from '@/components/HttpData';
-import StickyContainer from '@/components/StickyContainer';
 import DataContainer from '@/components/DataContainer';
-import LayerSelector3D from '@/components/LayerSelector3D';
+import NexusPlugin from '@/components/NexusPlugin';
+import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import NexusPlugin from '@/components/NexusPlugin';
-import Collapsible from '@/components/Collapsible';
 import List from '@/components/List';
-import AuthorBox from '@/components/AuthorBox/AuthorBox';
-import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
-import ExpMorphologyTable from '@/components/ExpMorphologyTable';
-import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
+import Collapsible from '@/components/Collapsible';
+import ExpTraceTable from '@/components/ExpTraceTable';
 import Metadata from '@/components/Metadata';
-import MorphologyRelatedTraces from '@/components/MorphologyRelatedTraces';
-import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
+import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
+
+// Graph Imports
+import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
+import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
+
+// Config and Query Imports
+import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
+import { deploymentUrl, hippocampus, basePath } from '@/config';
+import { colorName } from './config';
+import { defaultSelection } from '@/constants';
+
+// HOC Imports
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import { colorName } from './config';
-import morphologies from '@/exp-morphology-list.json';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+// Data Import
+import traces from '@/traces.json';
+import StickyContainer from '@/components/StickyContainer';
 
-const factsheetEntryTypes = [
-  'all',
-  'soma',
-  'dendrite',
-  'axon',
-  'apical',
-  'basal',
-];
+// Helper Functions
+const getEphysDistribution = (resource) => Array.isArray(resource.distribution)
+  ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
+  : resource.distribution;
 
-const NeuriteTypeGroupedFactsheets = ({ facts, id }) => {
-  const factsGrouped = groupBy(facts, fact => factsheetEntryTypes.find(entryType => fact.type === entryType));
+const getEtype = () => Object.keys(traces).sort();
+const getInstance = (etype) => etype ? traces[etype].sort() : [];
 
-  return (
-    <div id={id}>
-      {factsheetEntryTypes
-        .filter(entryType => factsGrouped[entryType])
-        .map(entryType => (
-          <div key={entryType}>
-            <h4 className="capitalize">{entryType}</h4>
-            <Factsheet facts={factsGrouped[entryType]} />
-          </div>
-        ))}
-    </div>
-  );
-};
-
-const getMtypes = (layer) => {
-  return layer
-    ? Array.from(new Set(morphologies.filter(m => m.region === layer).map(m => m.mtype))).sort()
-    : [];
-};
-
-const getInstances = (mtype) => {
-  return mtype
-    ? morphologies.filter(m => m.mtype === mtype).map(m => m.name).sort()
-    : [];
-};
-
-const NeuronExperimentalMorphology = () => {
+const NeuronElectrophysiology = () => {
   const router = useRouter();
   const nexus = useNexusContext();
+  const theme = 1;
   const { query } = router;
 
-  const theme = 1;
-  const currentLayer = query.layer;
-  const currentMtype = query.mtype;
-  const currentInstance = query.instance;
-
-  const setQuery = (query) => {
-    router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
+  const setQuery = (newQuery) => {
+    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setLayer = (layer) => {
-    setQuery({
-      layer,
-      mtype: null,
-      instance: null,
-    });
-  };
+  const setEtype = (etype) => setQuery({ etype, etype_instance: null });
+  const setInstance = (instance) => setQuery({ etype: currentEtype, etype_instance: instance });
 
-  const setMtype = (mtype) => {
-    setQuery({
-      mtype,
-      layer: currentLayer,
-      instance: null,
-    });
-  };
+  const currentEtype = query.etype as string;
+  const currentInstance = query.etype_instance as string;
 
-  const setInstance = (instance) => {
-    setQuery({
-      instance,
-      layer: currentLayer,
-      mtype: currentMtype,
-    });
-  };
+  const etypes = getEtype();
+  const instances = getInstance(currentEtype);
 
-  const mtypes = getMtypes(currentLayer);
-  const instances = getInstances(currentMtype);
+  const fullElectroPhysiologyDataQueryObj = useMemo(() =>
+    electroPhysiologyDataQuery(currentEtype, currentInstance),
+    [currentEtype, currentInstance]
+  );
 
-  const getMorphologyDistribution = (morphologyResource) => {
-    return morphologyResource.distribution.find((d) => d.name.match(/\.asc$/i));
-  };
+  const etypeTracesDataQueryObj = useMemo(() =>
+    etypeTracesDataQuery(currentEtype),
+    [currentEtype]
+  );
 
-  const getAndSortMorphologies = (esDocuments) => {
-    return esDocuments
-      .map((esDocument) => esDocument._source)
-      .sort((m1, m2) => (m1.name > m2.name ? 1 : -1));
-  };
-
-  // Function to filter morphologies based on currentInstance
-  const filterMorphologiesByInstance = (morphologies, currentInstance) => {
-    return morphologies.filter(morphology => morphology.name === currentInstance);
-  };
-
-  // Function to filter morphologies based on currentMtype
-  const filterMorphologiesByMtype = (morphologies, currentMtype) => {
-    return morphologies.filter(morphology => morphology.mtype === currentMtype);
-  };
+  const getAndSortTraces = (esDocuments) =>
+    esDocuments
+      .map(esDocument => esDocument._source)
+      .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
 
   return (
     <>
-      <Filters theme={theme} hasData={!!currentInstance}>
-        <div className="flex flex-col md:flex-row w-full md:items-center mt-40 md:mt-0">
 
-          <div className="w-full lg:w-1/2 mb-12 md:mb-0">
+      <Filters theme={theme} hasData={!!currentInstance}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title={<span>Neuronal Morphology</span>}
+                title={<span>Neuron <br /> Electrophysiology</span>}
                 subtitle="Experimental Data"
                 theme={theme}
               />
-              <div role="information">
+              <div className='w-full' role="information">
                 <InfoBox>
                   <p>
-                    We classified neuronal morphologies into different morphological types (m-types) and created digital 3D reconstructions. Using objective classification methods, we identified 12 m-types in region CA1 of the rat hippocampus.
+                    We recorded electrical traces from neurons using single-cell recording experiments in brain slices.
+                    Then, we classified the traces in different electrical types (e-types) based on their firing patterns.
+                    We identified one e-type for excitatory cells and four e-types for inhibitory cells.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
           </div>
-          <div className="w-full lg:w-1/2 set-accent-color--grey flex justify-center mb-12 md:mb-0">
-            <div className="selector">
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-                <div className="selector__body">
-                  <LayerSelector3D
-                    value={currentLayer}
-                    onSelect={setLayer}
-                  />
-                </div>
-              </div>
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
-                <div className="selector__body">
-                  <List
-                    block
-                    list={mtypes}
-                    value={currentMtype}
-                    title="m-type"
-                    color={colorName}
-                    onSelect={setMtype}
-                    theme={theme}
-                  />
-                  <List
-                    block
-                    list={instances}
-                    value={currentInstance}
-                    title="Reconstructed morphology"
-                    color={colorName}
-                    onSelect={setInstance}
-                    anchor="data"
-                    theme={theme}
-                  />
-                </div>
-              </div>
 
+          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none justify-center">
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+              <div className="selector__body">
+
+                <List
+                  block
+                  list={etypes}
+                  value={currentEtype}
+                  title="e-type"
+                  color={colorName}
+                  onSelect={setEtype}
+                  theme={theme}
+                />
+                <List
+                  block
+                  list={instances}
+                  value={currentInstance}
+                  title={`Experiment instance (${instances.length})`}
+                  color={colorName}
+                  onSelect={setInstance}
+                  anchor="data"
+                  theme={theme}
+                />
+
+              </div>
             </div>
           </div>
         </div>
       </Filters>
 
-
-      <DataContainer theme={theme}
+      <DataContainer
+        theme={theme}
         visible={!!currentInstance}
         navItems={[
-          { id: 'morphologySection', label: 'Neuron Morphology' },
-          { id: 'populationSection', label: 'Population' },
+          { id: 'instanceSection', label: 'Instance' },
+          { id: 'etypeSection', label: 'Population' },
         ]}
       >
-
         <Collapsible
-          id="morphologySection"
-          title="Neuron Morphology"
-          properties={[currentLayer, currentMtype, currentInstance]} // Assuming 'layer' is a string
+          id="instanceSection"
+          title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
         >
-          <ESData query={morphologyDataQuery(currentMtype, currentInstance)}>
-            {(esDocuments) => {
-              if (!esDocuments || !esDocuments.length) return null;
-              const esDocument = esDocuments[0]._source;
-              return (
-                <>
-                  <AuthorBox>
-                    <Metadata nexusDocument={esDocument} />
-                  </AuthorBox>
+          <p className="mb-4">We provide visualization and features for the selected recording.</p>
 
-                  <p className='text-lg mt-10 '>
-                    We provide visualization and morphometrics for the selected morphology.
-                  </p>
-
-
-                  <h3 className='text-xl mt-10 mb-2'>3D view</h3>
-                  <div className="graph no-margin">
+          <ESData query={fullElectroPhysiologyDataQueryObj}>
+            {esDocuments => (
+              <>
+                {!!esDocuments && !!esDocuments.length && (
+                  <>
+                    <Metadata nexusDocument={esDocuments[0]._source} />
+                    <h3 className="mt-3">Patch clamp recording</h3>
+                    <div className="flex justify-between items-center mt-2 mb-2">
+                      <div>
+                        <Button
+                          className="mr-1"
+                          type="dashed"
+                          icon={<QuestionCircleOutlined />}
+                          href={`${basePath}/tutorials/nwb/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          size="small"
+                        >
+                          How to read NWB files
+                        </Button>
+                        <NexusFileDownloadButton
+                          filename={getEphysDistribution(esDocuments[0]._source).name}
+                          url={getEphysDistribution(esDocuments[0]._source).contentUrl}
+                          org={hippocampus.org}
+                          project={hippocampus.project}
+                          id="ephysDownloadBtn"
+                        >
+                          trace
+                        </NexusFileDownloadButton>
+                      </div>
+                    </div>
                     <NexusPlugin
-                      className=""
-                      name="neuron-morphology"
-                      resource={esDocument}
+                      name="neuron-electrophysiology"
+                      resource={esDocuments[0]._source}
                       nexusClient={nexus}
                     />
-                  </div>
-                  <div className="text-right">
-                    <a
-                      className="mr-1 btn btn-primary btn-sm"
-                      href={`${deploymentUrl}/build/data/morphology?query=${encodeURIComponent(currentInstance)}`}
-                    >
-                      Send to the Build section
-                    </a>
-
-                    <NexusFileDownloadButton
-                      id="morphologyDownloadBtn"
-                      className="mt-3"
-                      filename={getMorphologyDistribution(esDocument).name}
-                      url={getMorphologyDistribution(esDocument).contentUrl}
-                      org={hippocampus.org}
-                      project={hippocampus.project}
-                    >
-                      morphology
-                    </NexusFileDownloadButton>
-                  </div>
-                  <div className="mt-3">
-                    <MorphologyRelatedTraces morphology={esDocument} />
-                  </div>
-                </>
-              );
-            }}
-          </ESData>
-
-          <HttpData path={expMorphFactesheetPath(currentInstance)}>
-            {(factsheetData) => (
-              <div className="mt-3">
-                <h3 className='text-xl mb-2 mt-10'>Factsheet</h3>
-                {factsheetData && (
-                  <>
-                    <NeuriteTypeGroupedFactsheets id="morphometrics" facts={factsheetData.values} />
-                    <div className="text-right mt-2">
-                      <HttpDownloadButton
-                        href={expMorphFactesheetPath(currentInstance)}
-                        download={`exp-morphology-factsheet-${currentInstance}.json`}
+                    <div className="text-right">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        size="small"
+                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
                       >
-                        factsheet
-                      </HttpDownloadButton>
+                        Send to the Build section
+                      </Button>
+                    </div>
+                    <div className="mt-3">
+                      <TraceRelatedMorphologies trace={esDocuments[0]._source} />
                     </div>
                   </>
                 )}
-              </div>
+              </>
             )}
-          </HttpData>
-
-          <HttpData path={expMorphDistributionPlotsPath(currentInstance)}>
-            {(plotsData) => (
-              <div className="mt-4">
-                <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
-                {plotsData && (
-                  <>
-                    <MorphDistributionPlots type="singleMorphology" data={plotsData} />
-                    <div className="text-right mt-3">
-                      <HttpDownloadButton
-                        href={expMorphDistributionPlotsPath(currentInstance)}
-                        download={`exp-morphology-distributions-factsheet-${currentInstance}.json`}
-                      >
-                        distributions
-                      </HttpDownloadButton>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-          </HttpData>
-
-          {/* First table: Filter by currentInstance */}
-          <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
-            {(esDocuments) => {
-              if (!esDocuments) return null;
-              const filteredMorphologies = filterMorphologiesByInstance(getAndSortMorphologies(esDocuments), currentInstance);
-              return (
-                <ExpMorphologyTable
-                  layer={currentLayer}
-                  mtype={currentMtype}
-                  morphologies={filteredMorphologies}
-                  currentMorphology={currentInstance}
-                />
-              );
-            }}
           </ESData>
+          <IfCurvePerCellGraph instance={currentInstance} />
         </Collapsible>
 
         <Collapsible
-          id="populationSection"
+          id="etypeSection"
+          className="mt-4"
           title="Population"
-          className="mt-4 mb-4"
         >
-          <p className='text-base mb-4'>
-            We provide morphometrics for the entire m-type group selected.
-          </p>
-          <HttpData path={expMorphPopulationFactesheetPath(currentMtype)}>
-            {(factsheetData) => (
-              <div>
-                <h3 className='text-xl mt-4 mb-4'>Factsheet</h3>
-                {factsheetData && (
-                  <>
-                    <NeuriteTypeGroupedFactsheets facts={factsheetData.values} />
-                    <div className="text-right mt-3">
-                      <DownloadButton
-                        theme={theme}
-                        href={expMorphPopulationFactesheetPath(currentMtype)}
-                        download={`exp-morphology-population-factsheet-${currentMtype}.json`}
-                      ><span className='collapsible-property small' style={{ margin: '2px' }}>{currentLayer}</span><span className='collapsible-property small' style={{ margin: '2px' }}>{currentMtype}</span><span className='collapsible-property small' style={{ margin: '2px' }}>{currentInstance}</span> Population Factsheet
-                      </DownloadButton>
-                    </div>
-                  </>
+          <p className="mb-4">We provide features for the entire e-type group selected.</p>
+
+          <ESData query={etypeTracesDataQueryObj}>
+            {esDocuments => (
+              <>
+                {!!esDocuments && (
+                  <ExpTraceTable
+                    etype={currentEtype}
+                    traces={getAndSortTraces(esDocuments)}
+                    currentTrace={currentInstance}
+                  />
                 )}
-              </div>
+              </>
             )}
-          </HttpData >
-
-          {
-            instances.length > 1 && (
-              <HttpData path={expMorphPopulationDistributionPlotsPath(currentMtype)}>
-                {(plotsData) => (
-                  <div className="mt-4">
-                    <h3 className='text-xl mt-2 mb-2'>Distributions</h3>
-                    {plotsData && (
-                      <>
-                        <MorphDistributionPlots type="population" data={plotsData} />
-                        <div className="text-right mt-2">
-                          <HttpDownloadButton
-                            href={expMorphPopulationDistributionPlotsPath(currentMtype)}
-                            download={`exp-morphology-population-distributions-${currentMtype}.json`}
-                          >
-                            distributions
-                          </HttpDownloadButton>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </HttpData>
-            )
-          }
-
-          < h3 className="mt-4" > Reconstructed morphologies</h3 >
-          <p>
-            Reconstructed morphologies from the selected m-type
-          </p>
-          {/* Second table: Filter by currentMtype */}
-          <ESData query={mtypeExpMorphologyListDataQuery(currentMtype)}>
-            {(esDocuments) => {
-              if (!esDocuments) return null;
-              const filteredMorphologies = filterMorphologiesByMtype(getAndSortMorphologies(esDocuments), currentMtype);
-              return (
-                <ExpMorphologyTable
-                  layer={currentLayer}
-                  mtype={currentMtype}
-                  morphologies={filteredMorphologies}
-                  currentMorphology={currentInstance}
-                />
-              );
-            }}
           </ESData>
-        </Collapsible >
-      </DataContainer >
+          <IfCurvePerETypeGraph eType={currentEtype} />
+        </Collapsible>
+      </DataContainer>
     </>
   );
 };
 
 const hocPreselection = withPreselection(
-  NeuronExperimentalMorphology,
+  NeuronElectrophysiology,
   {
-    key: 'layer',
-    defaultQuery: defaultSelection.experimentalData.neuronMorphology,
+    key: 'etype',
+    defaultQuery: defaultSelection.experimentalData.neuronElectrophysiology,
   },
 );
 
 const qsEntries = [
   {
-    title: 'Layer',
-    key: 'layer',
-    values: layers,
-  },
-  {
-    title: 'M-type',
-    key: 'mtype',
-    getValuesFn: getMtypes,
-    getValuesParam: 'layer',
-    paramsToKeepOnChange: ['layer'],
+    title: 'E-type',
+    key: 'etype',
+    values: getEtype(),
   },
   {
     title: 'Instance',
-    key: 'instance',
-    getValuesFn: getInstances,
-    getValuesParam: 'mtype',
-    paramsToKeepOnChange: ['layer', 'mtype'],
+    key: 'etype_instance',
+    getValuesFn: getInstance,
+    getValuesParam: 'etype',
+    paramsToKeepOnChange: ['etype'],
   },
 ];
 
