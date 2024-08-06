@@ -269,7 +269,7 @@ const MainNav: React.FC = () => {
               openMenuGroup={openMenuGroup}
               setOpenMenuGroup={setOpenMenuGroup}
             >
-              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneous-activity' />
+              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
               <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
               <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
               <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />

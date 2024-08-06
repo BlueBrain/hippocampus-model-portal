@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 
@@ -18,16 +17,9 @@ const ThetaOscillatoryInputView: React.FC = () => {
 
     return (
         <>
-            <Filters>
-                <Row
-                    className="w-100"
-                    gutter={[0, 20]}
-                >
-                    <Col
-                        className="mb-2"
-                        xs={24}
-                        lg={12}
-                    >
+            <Filters theme={theme} hasData={true}>
+                <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+                    <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
                                 title="Theta - Oscillatory input"
@@ -37,28 +29,13 @@ const ThetaOscillatoryInputView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-
-                                    </p>
+                                        To model the transmission of theta activity from CA3 to CA1, we generated individual random spike trains for each SC axon modulated by sinusoidal rate function (range 4-10 Hz). Here, we report how this induced a highly regular theta activity in CA1 that matched the stimulus frequency with homogeneous phase response of different morphological types. </p>
                                 </InfoBox>
                             </div>
                         </StickyContainer>
-                    </Col>
-                    <Col
-                        className={`set-accent-color--${'grey'} mb-2`}
-                        xs={24}
-                        lg={12}
-                    >
-                        <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-                            <div className={selectorStyle.selectorColumn}>
-                                <div className={selectorStyle.selectorBody}>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Filters>
-
         </>
     );
 };
