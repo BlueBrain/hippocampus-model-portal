@@ -114,7 +114,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
     camera.current = new THREE.OrthographicCamera(-aspect * 200, aspect * 200, 200, -200, 0.1, 1000);
-    camera.current.zoom = 12;
+    camera.current.zoom = 16;
     camera.current.updateProjectionMatrix();
 
     renderer.current = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -130,7 +130,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
     loader.load(
       '/hippocampus-portal-dev/data/3d/volume-selector-with-skeleton.obj',
       (obj) => {
-        const offset = 18;
+        const offset = 20;
         const obj1 = obj.clone();
         const obj2 = obj.clone();
         const obj3 = obj.clone();

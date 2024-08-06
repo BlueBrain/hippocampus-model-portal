@@ -16,6 +16,7 @@ import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import SynapsesGraphData from './synapses-graph-data.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 // Register necessary components
 Chart.register(
@@ -213,6 +214,14 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                 </DownloadButton>
             </div>
         </>
+        <div>
+            <MathJaxContext>
+                <MathJax>
+                    {"\\[ U_{SE}^{ACh} = \\frac{1.0 \\cdot ACh^{-0.576}}{4.541^{-0.576} + ACh^{-0.576}} \\]"}
+                </MathJax>
+            </MathJaxContext>
+            <canvas ref={chartRef} />
+        </div>
     );
 };
 

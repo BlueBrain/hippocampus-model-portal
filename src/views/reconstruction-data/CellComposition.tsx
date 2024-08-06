@@ -57,7 +57,7 @@ const CellCompositionView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined information on available <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphological reconstructions</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-electrophysiology/">electrophysiological recordings</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/cell-density">cell density</Link>, <Link className={`link theme-${theme}`} href="/reconstruction-data/volume/">volume</Link>, and the <Link className={`link theme-${theme}`} href="https://pubmed.ncbi.nlm.nih.gov/23674373/">estimation from Bezaire and Soltesz (2013)</Link> to predict the number of neuron types.
+                    We combined information on available <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphological reconstructions</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-electrophysiology/">electrophysiological recordings</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/cell-density">cell density</Link>, <Link className={`link theme-${theme}`} href="/reconstruction-data/volume/">volume</Link>, and the estimation from  <Link className={`link theme-${theme}`} href="https://pubmed.ncbi.nlm.nih.gov/23674373/">Bezaire and Soltesz (2013)</Link> to predict the number of neuron types.
                   </p>
                 </InfoBox>
               </div>

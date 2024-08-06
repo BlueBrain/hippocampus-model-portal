@@ -1,0 +1,148 @@
+{
+    "name": "Connections",
+    "values": [
+        {
+            "name": "Synapse per connection",
+            "description": "Average number of intrinsic synapses formed by intrinsic connections",
+            "unit": null,
+            "value": 5.157524371824797
+        },
+        {
+            "name": "Bouton density",
+            "id": "bouton-density",
+            "description": "Bouton density of the pre-synaptic cells",
+            "unit": null,
+            "values": [
+                0.2391011914445195,
+                0.10277779873110403
+            ]
+        },
+        {
+            "name": "Sample convergence by connection",
+            "id": "sample-convergence-by-connection",
+            "description": "Sample convergence by connection for the pathway",
+            "unit": null,
+            "values": [
+                121.89121338912133,
+                33.88407332195348
+            ]
+        },
+        {
+            "name": "Sample convergence by synapse",
+            "id": "sample-convergence-by-synapse",
+            "description": "Sample convergence by synapse for the pathway",
+            "unit": null,
+            "values": [
+                628.6569037656903,
+                183.85629582665786
+            ]
+        },
+        {
+            "name": "Sample divergence by connection",
+            "id": "sample-divergence-by-connection",
+            "description": "Sample convergence by connection for the pathway",
+            "unit": null,
+            "values": [
+                43.03101920236337,
+                23.38441035932696
+            ]
+        },
+        {
+            "name": "Sample divergence by synapse",
+            "id": "sample-divergence-by-synapse",
+            "description": "Sample divergence by synapse for the pathway",
+            "unit": null,
+            "values": [
+                221.93353028064993,
+                153.3910248754877
+            ]
+        },
+        {
+            "name": "Laminar distribution",
+            "description": "Laminar distribution of the synapses for the pathway across different layers",
+            "unit": null,
+            "value_map": {
+                "SLM": {
+                    "SLM_PPA": 0.2582781456953642,
+                    "SO_BP": 0.0024378352023403218,
+                    "SO_BS": 0.002680965147453083,
+                    "SO_OLM": 0.2066420664206642,
+                    "SO_Tri": 0.00101010101010101,
+                    "SP_AA": 0.0,
+                    "SP_BS": 0.0001733477789815818,
+                    "SP_CCKBC": 0.00010649249227929431,
+                    "SP_Ivy": 4.253147329023477e-05,
+                    "SP_PC": 0.0,
+                    "SP_PVBC": 0.0002919139826797704,
+                    "SR_SCA": 0.0022935779816513763
+                },
+                "SO": {
+                    "SLM_PPA": 0.0,
+                    "SO_BP": 0.37445148707947346,
+                    "SO_BS": 0.3297587131367292,
+                    "SO_OLM": 0.05781057810578106,
+                    "SO_Tri": 0.6666666666666666,
+                    "SP_AA": 0.0,
+                    "SP_BS": 0.3715709642470206,
+                    "SP_CCKBC": 0.4023286358311739,
+                    "SP_Ivy": 0.32591867982306905,
+                    "SP_PC": 0.0,
+                    "SP_PVBC": 0.3785151308747689,
+                    "SR_SCA": 0.32798165137614677
+                },
+                "SP": {
+                    "SLM_PPA": 0.0,
+                    "SO_BP": 0.21794246708922477,
+                    "SO_BS": 0.14209115281501342,
+                    "SO_OLM": 0.03198031980319803,
+                    "SO_Tri": 0.1686868686868687,
+                    "SP_AA": 0.0,
+                    "SP_BS": 0.1818418201516793,
+                    "SP_CCKBC": 0.36725710837385966,
+                    "SP_Ivy": 0.34420721333787,
+                    "SP_PC": 0.0,
+                    "SP_PVBC": 0.33847426291719374,
+                    "SR_SCA": 0.14220183486238533
+                },
+                "SR": {
+                    "SLM_PPA": 0.7417218543046358,
+                    "SO_BP": 0.39882983910287667,
+                    "SO_BS": 0.5207774798927614,
+                    "SO_OLM": 0.7035670356703567,
+                    "SO_Tri": 0.1303030303030303,
+                    "SP_AA": 0.0,
+                    "SP_BS": 0.4414734561213434,
+                    "SP_CCKBC": 0.23005928082070215,
+                    "SP_Ivy": 0.3296047408415561,
+                    "SP_PC": 0.0,
+                    "SP_PVBC": 0.2827186922253576,
+                    "SR_SCA": 0.5229357798165137
+                },
+                "out": {
+                    "SLM_PPA": 0.0,
+                    "SO_BP": 0.006338371526084837,
+                    "SO_BS": 0.004691689008042895,
+                    "SO_OLM": 0.0,
+                    "SO_Tri": 0.03333333333333333,
+                    "SP_AA": 0.0,
+                    "SP_BS": 0.004940411700975081,
+                    "SP_CCKBC": 0.00024848248198502005,
+                    "SP_Ivy": 0.00022683452421458545,
+                    "SP_PC": 0.0,
+                    "SP_PVBC": 0.0,
+                    "SR_SCA": 0.0045871559633027525
+                }
+            }
+        },
+        {
+            "name": "Connection probability vs inter-somatic distance",
+            "id": "connection-probability-vs-inter-somatic-distance",
+            "description": "Probability of connections between two cells as a function of inter-somatic distance",
+            "unit": null,
+            "values": [
+                0.28369129946542004,
+                0.27097285198376264
+            ]
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-import { Layer, NeuriteType, VolumeSection, Theme } from './types';
+import { Layer, NeuriteType, VolumeSection, CellGroup, Theme } from './types';
 
 export const layers: Layer[] = [
   'SLM',
@@ -15,7 +15,6 @@ export const theme: Theme = {
   5: { default: 0x44405B, hover: 0x595D79, selected: 0x6E7B97, selectedEdges: 0x8398B5 },
 };
 
-
 export const neuriteTypes: NeuriteType[] = [
   'axon',
   'apical',
@@ -30,6 +29,24 @@ export const volumeSections: VolumeSection[] = [
   'slice',
   'cylinder',
 ];
+
+export const cellGroup: CellGroup[] = [
+  'All',
+  'Excitatory',
+  'Inhibitory',
+  'SLM_PPA',
+  'SO_BP',
+  'SO_BS',
+  'SO_OLM',
+  'SO_Tri',
+  'SP_AA',
+  'SP_BS',
+  'SP_CCKBC',
+  'SP_Ivy',
+  'SP_PC',
+  'SP_PVBC',
+  'SR_SCA'
+]
 
 export const defaultSelection = {
   experimentalData: {
@@ -65,10 +82,9 @@ export const defaultSelection = {
       instance: 'CA1_int_bAC_011127HP1_20190329115610',
     },
     synapticPathways: {
-      prelayer: 'SP',
-      postlayer: 'SO',
-      pretype: 'SP_PC',
-      posttype: 'SO_BP',
+      volume_section: 'slice',
+      prelayer: 'All',
+      postlayer: 'All',
     },
   },
 };

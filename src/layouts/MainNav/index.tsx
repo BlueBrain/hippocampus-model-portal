@@ -244,7 +244,8 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Connections" href="/digital-reconstructions/connections/" />
               <SubmenuLink label="Synapses" href="/digital-reconstructions/synapses/" />
               <SubmenuLink label="Neurons" href="/digital-reconstructions/neurons/" />
-              <SubmenuLink label="Acetylcholine" href="/digital-reconstructions/acetylcholine/" />
+              <SubmenuLink label="Acetylcholine - Effects on Cells" href="/digital-reconstructions/acetylcholine-effects-on-cells/" />
+              <SubmenuLink label="Acetylcholine - Effects on Synapses" href="/digital-reconstructions/acetylcholine-effects-on-synapses/" />
             </SubmenuGroup>
 
             <SubmenuGroup

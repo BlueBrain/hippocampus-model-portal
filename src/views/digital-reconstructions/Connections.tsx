@@ -1,44 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Spin } from 'antd';
-import chunk from 'lodash/chunk';
+import Link from 'next/link';
 
-import { Layer } from '@/types';
-import { layers, defaultSelection } from '@/constants';
+import { basePath } from '../../config';
 import { colorName } from './config';
-import { pathwayIndexPath, connectionViewerDataPath } from '@/queries/http';
+
+import { Layer, VolumeSection } from '@/types';
+import { layers, cellGroup, defaultSelection } from '@/constants';
+
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import ConnectionViewer from '@/components/ConnectionViewer';
-import HttpData from '@/components/HttpData';
-import LayerSelector from '@/components/LayerSelector';
-import LayerSelector3D from '@/components/LayerSelector3D/index';
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
+import DistibutionPlot from './connections/DistibutionPlot'; // Import the new component
 
 import selectorStyle from '../../styles/selector.module.scss';
 
-type PathwayIndex = {
-  pathways: number[];
-  mtypeIdx: string[];
-}
-
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
 const ConnectionsView: React.FC = () => {
   const router = useRouter();
+  const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
 
-  const { prelayer, postlayer, pretype, posttype } = router.query as Record<string, string>;
-
-  const [pathwayIndex, setPathwayIndex] = useState<PathwayIndex | null>(null);
-  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ prelayer, postlayer, pretype, posttype });
+  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ volume_section, prelayer, postlayer });
   const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
+  const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
 
   const theme = 3;
 
@@ -50,116 +41,85 @@ const ConnectionsView: React.FC = () => {
   useEffect(() => {
     if (!router.isReady) return;
 
-    if (!router.query.prelayer) {
+    if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
       const query = defaultSelection.digitalReconstruction.synapticPathways;
-      const { prelayer, pretype, postlayer, posttype } = query;
-      setQuickSelection({ prelayer, pretype, postlayer, posttype });
+      const { volume_section, prelayer, postlayer } = query;
+      setQuickSelection({ volume_section, prelayer, postlayer });
       router.replace({ query }, undefined, { shallow: true });
     } else {
-      setQuickSelection({ prelayer, postlayer, pretype, posttype });
+      setQuickSelection({ volume_section, prelayer, postlayer });
     }
   }, [router.query]);
 
-  const setPreLayerQuery = (layer: Layer) => {
-    setParams({
-      prelayer: layer,
-      postlayer: "",
-      pretype: "",
-      posttype: "",
+  const setVolumeSectionQuery = (volume_section: VolumeSection) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, volume_section };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
     });
   };
-  const setQsPreLayer = (prelayer) => {
-    const { region } = quickSelection;
-    setQuickSelection({ prelayer });
-  };
 
-  const setPostLayerQuery = (layer: Layer) => {
-    setParams({
-      postlayer: layer,
-      posttype: "",
+  const setPreLayerQuery = (prelayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, prelayer };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
     });
   };
-  const setQsPostLayer = (postlayer) => {
-    const { prelayer, pretype } = quickSelection;
-    setQuickSelection({ prelayer, pretype, postlayer });
-  };
 
-  const setPreTypeQuery = (pretype: string) => {
-    setParams({
-      pretype,
-      posttype: "",
+  const setPostLayerQuery = (postlayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, postlayer };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
     });
   };
-  const setQsPreType = (pretype) => {
-    const { prelayer } = quickSelection;
-    setQuickSelection({ prelayer, pretype });
-  };
-
-  const setPostTypeQuery = (posttype: string) => {
-    setParams({
-      posttype,
-    });
-  };
-  const setQsPostType = (posttype) => {
-    const { prelayer, pretype, postlayer } = quickSelection;
-    setQuickSelection({ prelayer, pretype, postlayer, posttype });
-    setParams({ prelayer, pretype, postlayer, posttype });
-  };
-
-  const getPreMtypes = (prelayer) => {
-    if (!pathwayIndex || !prelayer) return [];
-
-    return chunk(pathwayIndex.pathways, 2)
-      .map(([preMtypeIdx]) => pathwayIndex.mtypeIdx[preMtypeIdx])
-      .filter(onlyUnique)
-      .filter(mtype => mtype.match(prelayer))
-      .sort();
-  };
-
-  const preMtypes = getPreMtypes(prelayer);
-  const qsPreMtypes = getPreMtypes(quickSelection.prelayer);
-
-  const getPostMtypes = (pretype, postlayer) => {
-    if (!pathwayIndex || !pretype || !postlayer) return [];
-
-    return chunk(pathwayIndex.pathways, 2)
-      .filter(([preMtypeIdx]) => pathwayIndex.mtypeIdx[preMtypeIdx] === pretype)
-      .map(([, postMtypeIdx]) => pathwayIndex.mtypeIdx[postMtypeIdx])
-      .filter(onlyUnique)
-      .filter(mtype => mtype.match(postlayer))
-      .sort()
-  };
-
-  const postMtypes = getPostMtypes(pretype, postlayer);
-  const qsPostMtypes = getPostMtypes(quickSelection.pretype, quickSelection.postlayer);
-
-  const pathway = pretype && posttype
-    ? `${pretype}-${posttype}`
-    : null;
-
-  useEffect(() => {
-    fetch(pathwayIndexPath)
-      .then(res => res.json())
-      .then(pathwayIndex => setPathwayIndex(pathwayIndex));
-  }, []);
 
   useEffect(() => {
     setConnViewerReady(false);
-  }, [pretype, posttype]);
+  }, [prelayer, postlayer]);
+
+  useEffect(() => {
+    if (volume_section && prelayer && postlayer) {
+      const filePath = `${basePath}/data/digital-reconstruction/connections/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      fetch(filePath)
+        .then(response => response.json())
+        .then(data => {
+          if (data && Array.isArray(data.values)) {
+            const plots = data.values;
+            const availablePlots = {
+              boutonDensitySection: plots.some(plot => plot.id === 'bouton-density'),
+              nbSynapsesPerConnectionSection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              diversionConnectionsDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
+              diversionSynapsesDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
+              LaminarDistributionSynapsesSection: plots.some(plot => plot.id === 'laminar-distribution-synapses'),
+              convergenceConnectionsDistribution: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              convergenceSynapsesDistribution: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
+              connectionProbabilityDistributionSection: plots.some(plot => plot.id === 'connection-probability-vs-inter-somatic-distance'),
+            };
+            setAvailablePlots(availablePlots);
+            setFactsheetData(plots); // Store the actual plots data
+          } else {
+            console.error('Unexpected data format:', data);
+          }
+        })
+        .catch(error => console.error('Error fetching factsheet:', error));
+    }
+  }, [volume_section, prelayer, postlayer]);
+
+  const getPlotDataById = (id: string) => {
+    return factsheetData?.find((plot: any) => plot.id === id);
+  };
 
   return (
     <>
-      <Filters theme={theme} hasData={!!pretype && !!posttype}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
-            <StickyContainer>
+      <Filters theme={theme} hasData={!!prelayer && !!postlayer}>
+        <div className="w-full flex flex-wrap">
+          <div className="w-full lg:w-1/2 mb-2">
+            <StickyContainer centered={true}>
               <Title
                 primaryColor={colorName}
                 title="Connections"
@@ -168,99 +128,148 @@ const ConnectionsView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We combined <Link href={"/experimental-data/connection-anatomy/"} className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href={"/reconstruction-data/connections/"} className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={`${selectorStyle.head} ${selectorStyle.fullHeader}`}>1. Select a pre-synaptic layer and M-type</div>
-            <div className={selectorStyle.row}>
-              <div className={selectorStyle.column}>
-                <div className={selectorStyle.body}>
-                  <LayerSelector3D value={prelayer as Layer} onSelect={setPreLayerQuery} />
-                </div>
-              </div>
-              <div className={selectorStyle.column}>
-                <div className={selectorStyle.body}>
-                  <List
-                    block
-                    title="M-type pre-synaptic"
-                    list={preMtypes}
-                    value={pretype}
-                    color={colorName}
-                    onSelect={setPreTypeQuery}
-                  />
+          </div>
+          <div className="w-full lg:w-1/2 mb-2 flex flex-col">
+            <div className="w-full">
+              <div className={selectorStyle.row}>
+                <div className={`selector__column mt-3 theme-${theme}`}>
+                  <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
+                  <div className="selector__body">
+                    <VolumeSectionSelector3D
+                      value={volume_section}
+                      onSelect={setVolumeSectionQuery}
+                      theme={theme}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-            <div className={`${selectorStyle.head} ${selectorStyle.fullHeader}`}>2. Select a post-synaptic layer and M-type</div>
-            <div className={selectorStyle.row}>
-              <div className={selectorStyle.column}>
-                <div className={selectorStyle.body}>
-                  <LayerSelector3D value={postlayer as Layer} onSelect={setPostLayerQuery} />
+            <div className="flex flex-wrap -mx-2">
+              <div className="w-full lg:w-1/2 px-2">
+                <div className={selectorStyle.row}>
+                  <div className={`selector__column mt-3 theme-${theme}`}>
+                    <div className={`selector__head theme-${theme}`}>2. Select a pre-synaptic cell group</div>
+                    <div className="selector__body">
+                      <List
+                        block
+                        list={cellGroup}
+                        value={prelayer}
+                        title="m-type"
+                        color={colorName}
+                        onSelect={setPreLayerQuery}
+                        theme={theme}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className={selectorStyle.column}>
-                <div className={selectorStyle.body}>
-                  <List
-                    block
-                    title="M-type post-synaptic"
-                    list={postMtypes}
-                    value={posttype}
-                    color={colorName}
-                    onSelect={setPostTypeQuery}
-                  />
+              <div className="w-full lg:w-1/2 px-2">
+                <div className={selectorStyle.row}>
+                  <div className={`selector__column mt-3 theme-${theme}`}>
+                    <div className={`selector__head theme-${theme}`}>3. Select a post-synaptic cell group</div>
+                    <div className="selector__body">
+                      <List
+                        block
+                        list={cellGroup}
+                        value={postlayer}
+                        title="m-type"
+                        color={colorName}
+                        onSelect={setPostLayerQuery}
+                        theme={theme}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
+
+      <DataContainer
+        visible={!!volume_section && !!prelayer && !!postlayer}
+        navItems={[
+          { id: 'boutonDensitySection', label: 'Bouton density of the presynaptic cells' },
+          { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
+          { id: 'diversionConnectionsDistributionSection', label: 'Divergence (connections) distribution + mean and std' },
+          { id: 'diversionSynapsesDistributionSection', label: 'Divergence (synapses) distribution + mean and std' },
+          { id: 'LaminarDistributionSynapsesSection', label: 'Laminar distribution of synapses' },
+          { id: 'convergenceConnectionsDistribution', label: 'Convergence (connections) distribution + mean and std' },
+          { id: 'convergenceSynapsesDistribution', label: 'Convergence (synapses) distribution + mean and std' },
+          { id: 'connectionProbabilityDistributionSection', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
+        ]}
+      >
+        {availablePlots.boutonDensitySection && (
+          <Collapsible title="Bouton density of the presynaptic cells" id="boutonDensitySection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
+          </Collapsible>
+        )}
+        {availablePlots.nbSynapsesPerConnectionSection && (
+          <Collapsible title="Number of synapses per connection" id="nbSynapsesPerConnectionSection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+          </Collapsible>
+        )}
+        {availablePlots.diversionConnectionsDistributionSection && (
+          <Collapsible title="Divergence (connections) distribution + mean and std" id="diversionConnectionsDistributionSection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
+          </Collapsible>
+        )}
+        {availablePlots.diversionSynapsesDistributionSection && (
+          <Collapsible title="Divergence (synapses) distribution + mean and std" id="diversionSynapsesDistributionSection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+          </Collapsible>
+        )}
+        {availablePlots.LaminarDistributionSynapsesSection && (
+          <Collapsible title="Laminar distribution of synapses" id="LaminarDistributionSynapsesSection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('laminar-distribution-synapses')} />
+          </Collapsible>
+        )}
+        {availablePlots.convergenceConnectionsDistribution && (
+          <Collapsible title="Convergence (connections) distribution + mean and std" id="convergenceConnectionsDistribution" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+          </Collapsible>
+        )}
+        {availablePlots.convergenceSynapsesDistribution && (
+          <Collapsible title="Convergence (synapses) distribution + mean and std" id="convergenceSynapsesDistribution" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
+          </Collapsible>
+        )}
+        {availablePlots.connectionProbabilityDistributionSection && (
+          <Collapsible title="Connection probability distribution vs inter-somatic distance + mean and std" id="connectionProbabilityDistributionSection" className="mt-4">
+            <DistibutionPlot plotData={getPlotDataById('connection-probability-vs-inter-somatic-distance')} />
+          </Collapsible>
+        )}
+      </DataContainer>
 
       <QuickSelector
         color={colorName}
         entries={[
           {
+            title: 'Volume section',
+            currentValue: quickSelection.volume_section,
+            values: layers,
+            onChange: setVolumeSectionQuery,
+            width: '120px',
+          },
+          {
             title: 'Pre-syn layer',
             currentValue: quickSelection.prelayer,
             values: layers,
-            onChange: setQsPreLayer,
+            onChange: setPreLayerQuery,
             width: '80px',
-          },
-          {
-            title: 'Pre-syn M-type',
-            currentValue: quickSelection.pretype,
-            values: qsPreMtypes,
-            onChange: setQsPreType,
-            width: '120px',
           },
           {
             title: 'Post-syn layer',
             currentValue: quickSelection.postlayer,
             values: layers,
-            onChange: setQsPostLayer,
+            onChange: setPostLayerQuery,
             width: '80px',
-          },
-          {
-            title: 'Post-syn M-type',
-            currentValue: quickSelection.posttype,
-            values: qsPostMtypes,
-            onChange: setQsPostType,
-            width: '120px',
           },
         ]}
       />

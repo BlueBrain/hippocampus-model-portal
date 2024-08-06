@@ -50,12 +50,17 @@ export default class Painter {
         this.controls = controls;
         controls.target.set(x, y, z);
         controls.addEventListener("change", this.paint);
+
         const [mesh, setUniSelector] = createMeshFromData(vert, elem);
         mesh.position.set(x, y, z);
+        mesh.rotation.x = Math.PI; // Rotate the mesh by 180 degrees around the X-axis
+        mesh.rotation.y = -Math.PI / 2; // Rotate the mesh by 180 degrees around the X-axis
         scene.add(mesh);
+
         camera.position.set(x, y, z - Math.max(sizeX, sizeY, sizeZ) * 1.5);
         camera.lookAt(new ThreeVector3(x, y, z));
         window.requestAnimationFrame(this.paint);
+
         State.axe.addListener((axe) => {
             setUniSelector(Axes[axe] ?? Axes.L);
             window.requestAnimationFrame(this.paint);
