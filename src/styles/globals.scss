@@ -66,7 +66,7 @@ a {
 
 
 section {
-  padding: 40px 0;
+  padding: 2rem 0;
 }
 
 .link {
@@ -1182,7 +1182,8 @@ $collapsible-padding: 2rem 2rem;
 .full-page__basis {
   padding: 160px 60px;
   min-height: 100vh;
-  background-color: #17151A;
+  background-color: map-get($basePalette , "grey");
+
 
   @media (max-width: $small) {
     padding: 90px 30px 60px;
@@ -1237,6 +1238,10 @@ $collapsible-padding: 2rem 2rem;
 .glossary__container {
   max-width: 1080px;
   margin: 0 auto;
+  padding: 4rem;
+  border-radius: 3px;
+  border: 1px solid rgba(black, 0.1);
+  background-color: map-get($basePalette, "white");
 }
 
 // NeuronMorphology plugin, romove after Nexus integration

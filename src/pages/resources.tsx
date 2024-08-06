@@ -1,10 +1,10 @@
 import React from 'react';
 
-import resourcesView from '../views/Resources';
+import ResourcesView from '../views/Resources';
 
 
 export default function Home() {
   return (
-    <resourcesView />
+    <ResourcesView />
   )
 };

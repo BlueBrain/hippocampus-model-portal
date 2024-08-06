@@ -275,6 +275,7 @@ const MainNav: React.FC = () => {
             </SubmenuGroup>
 
             <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external highlight />
+            <SubmenuLink label="Resources" href={`${basePath}/resources/`} external highlight />
           </MenuItem>
 
           <button className={`${styles["main-navigation__button"]}`}>

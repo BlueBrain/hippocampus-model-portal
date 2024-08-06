@@ -12,22 +12,23 @@ const Glossary: React.FC = () => {
 
   return (
     <FullPage>
-      <Title title="Glossary" primaryColor="grey-1" />
+
 
       <div className="glossary__container">
+        <Title title="Glossary" />
         {sectionLabels.map(sectionLabel => (
           <section key={sectionLabel}>
             {sectionLabel !== 'Glossary' && (
-              <Title subtitle={sectionLabel} primaryColor="grey-1" />
+              <Title subtitle={sectionLabel} theme={null} isDark={true} />
             )}
 
             {(glossaryContent as any)[sectionLabel].map(([term, description]: [term: any, d: any]) => (
-              <div className="row mt-2" key={term}>
-                <div className="col-xs-6 col-md-3">
-                  <strong dangerouslySetInnerHTML={{ __html: term }} />
+              <div className="row" key={term}>
+                <div className="col-xs-12 col-md-3">
+                  <strong className='text-black' dangerouslySetInnerHTML={{ __html: term }} />
                 </div>
-                <div className="col-xs-6 col-md-9">
-                  <span dangerouslySetInnerHTML={{ __html: description }} />
+                <div className="col-xs-12 xs:pb-5 col-md-9">
+                  <span className='text-black' dangerouslySetInnerHTML={{ __html: description }} />
                 </div>
               </div>
             ))}
