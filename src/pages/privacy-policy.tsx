@@ -2,16 +2,12 @@ import React from 'react';
 
 import FullPage from '../layouts/FullPage';
 
-import styles from '../styles/privacy-policy.module.scss';
-
-
-
 
 export default function PrivacyPolicyPage() {
   return (
     <FullPage>
-      <div className={styles.container}>
-        <h2>PRIVACY POLICY</h2>
+      <div className='iq__container'>
+        <h1>PRIVACY POLICY</h1>
 
         <p>
           Protecting your privacy and, in particular, your personal data is very important to us.

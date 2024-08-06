@@ -14,7 +14,7 @@ const Glossary: React.FC = () => {
     <FullPage>
 
 
-      <div className="glossary__container">
+      <div className="iq__container">
         <Title title="Glossary" />
         {sectionLabels.map(sectionLabel => (
           <section key={sectionLabel}>

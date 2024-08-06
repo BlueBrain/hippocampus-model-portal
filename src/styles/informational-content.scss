@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.iq {
+    &__container {
+        max-width: 1080px;
+        margin: 0 auto;
+        border-radius: 3px;
+        border: 1px solid rgba(black, 0.1);
+        background-color: map-get($basePalette, "white");
+
+        @apply p-10 md:p-20;
+
+        h1 {
+            @apply text-3xl text-black font-semibold mb-4;
+
+
+        }
+
+        h2 {
+            @apply text-2xl text-black font-semibold pt-10 pb-1 mb-2;
+            display: block;
+            border-bottom: 1px solid darkgrey;
+
+        }
+
+        h3 {
+            @apply text-xl text-black font-semibold pt-10 pb-1 mb-2;
+            display: block;
+            border-bottom: 1px solid darkgrey;
+
+        }
+
+        p {
+            @apply text-base text-black pb-2 leading-8;
+        }
+
+        li {
+            @apply list-disc text-base text-black ml-5 pl-3 pb-2 leading-8;
+        }
+
+        a {
+            text-decoration: underline;
+        }
+    }
+}
