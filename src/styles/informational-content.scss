@@ -10,25 +10,25 @@
         border: 1px solid rgba(black, 0.1);
         background-color: map-get($basePalette, "white");
 
-        @apply p-10 md:p-20;
+        @apply px-10 py-12 md:px-20 md:py-12;
 
         h1 {
             @apply text-3xl text-black mb-4;
-
+            color: map-get($basePalette, "navy-3");
 
         }
 
         h2 {
-            @apply text-2xl text-black pt-10 pb-1 mb-2;
+            @apply text-2xl text-black pt-8 pb-1 mb-2;
             display: block;
-            border-bottom: 1px solid darkgrey;
+            border-bottom: 1px solid map-get($basePalette, "navy-3");
 
         }
 
         h3 {
             @apply text-xl text-black pt-3 pb-1 mb-2;
             display: block;
-            border-bottom: 1px solid darkgrey;
+            border-bottom: 1px solid map-get($basePalette, "navy-3");
 
         }
 
@@ -38,23 +38,27 @@
 
         p,
         strong {
-            @apply text-base text-black pb-2 leading-8;
+            @apply text-base text-black pb-2 leading-7;
         }
 
         ul {
             list-style-type: none;
-            padding: 0;
+            /* Remove default bullets */
+
         }
 
-
-
         li {
-            @apply text-base text-black pb-2 leading-8;
+            @apply text-base text-black pb-2 leading-7;
+            list-style-position: inside;
+            padding-left: 2.5rem;
+            position: relative;
         }
 
         li::before {
             content: "—";
-            @apply mr-3;
+            position: absolute;
+            left: 0;
+
         }
 
         a {
