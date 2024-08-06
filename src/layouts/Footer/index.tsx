@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li className="mb-1">
-                <Link href={`${basePath}/`} className="text-white hover:underline">
+                <Link href={`/`} className="text-white hover:underline">
                   Explore Models
                 </Link>
               </li>
@@ -72,7 +72,12 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li className="mb-1">
-                <Link href={`${basePath}/glossary`} className="text-white hover:underline">
+                <Link href={`/resources`} className="text-white hover:underline">
+                  Resources
+                </Link>
+              </li>
+              <li className="mb-1">
+                <Link href={`/glossary`} className="text-white hover:underline">
                   Glossary
                 </Link>
               </li>

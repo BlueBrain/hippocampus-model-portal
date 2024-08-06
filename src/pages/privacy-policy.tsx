@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
           not connected with the anonymous log files. You may delete your registration at any time.
         </p>
 
-        <h4>Right to Information</h4>
+        <h2>Right to Information</h2>
 
         <p>
           If you would like information on data relating to your person that has been collected and processed,

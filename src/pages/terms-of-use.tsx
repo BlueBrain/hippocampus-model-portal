@@ -154,10 +154,6 @@ export default function Terms() {
           Image title and BBP copyright as per copyright notice on the image and reference to the Hub.
         </p>
 
-        <p>
-          © [[year of first publication]] BBP/EPFL. [Title of Image] [Hippocampus Hub]. Available from: [Resource URL]
-        </p>
-
         <h3>TERMINATION</h3>
 
         <p>

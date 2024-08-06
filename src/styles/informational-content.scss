@@ -13,31 +13,48 @@
         @apply p-10 md:p-20;
 
         h1 {
-            @apply text-3xl text-black font-semibold mb-4;
+            @apply text-3xl text-black mb-4;
 
 
         }
 
         h2 {
-            @apply text-2xl text-black font-semibold pt-10 pb-1 mb-2;
+            @apply text-2xl text-black pt-10 pb-1 mb-2;
             display: block;
             border-bottom: 1px solid darkgrey;
 
         }
 
         h3 {
-            @apply text-xl text-black font-semibold pt-10 pb-1 mb-2;
+            @apply text-xl text-black pt-3 pb-1 mb-2;
             display: block;
             border-bottom: 1px solid darkgrey;
 
         }
 
-        p {
+        h4 {
+            @apply text-lg text-black pt-2;
+        }
+
+        p,
+        strong {
             @apply text-base text-black pb-2 leading-8;
         }
 
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+
+
         li {
-            @apply list-disc text-base text-black ml-5 pl-3 pb-2 leading-8;
+            @apply text-base text-black pb-2 leading-8;
+        }
+
+        li::before {
+            content: "—";
+            @apply mr-3;
         }
 
         a {
