@@ -204,8 +204,13 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
     }, []);
 
     return (
-        <>
-            <div className='graph'>
+        <div>
+            <MathJaxContext>
+                <MathJax>
+                    {"\\[ U_{SE}^{ACh} = \\frac{1.0 \\cdot ACh^{-0.576}}{4.541^{-0.576} + ACh^{-0.576}} \\]"}
+                </MathJax>
+            </MathJaxContext>
+            <div className="graph mb-4">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
@@ -213,15 +218,8 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                     Download Synapses Graph Data
                 </DownloadButton>
             </div>
-        </>
-        <div>
-            <MathJaxContext>
-                <MathJax>
-                    {"\\[ U_{SE}^{ACh} = \\frac{1.0 \\cdot ACh^{-0.576}}{4.541^{-0.576} + ACh^{-0.576}} \\]"}
-                </MathJax>
-            </MathJaxContext>
-            <canvas ref={chartRef} />
         </div>
+
     );
 };
 

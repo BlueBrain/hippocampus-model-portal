@@ -212,20 +212,16 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     {"\\[ I_{\\text{depol}} = \\frac{0.567 \\cdot ACh^{0.436}}{100^{0.436} + ACh^{0.436}} \\]"}
                 </MathJax>
             </MathJaxContext>
-            <canvas ref={chartRef} />
-        </div>
-        <>
-            <div className='graph'>
+            <div className="graph">
                 <canvas ref={chartRef} />
-
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
                     Download Neuron Graph Data
                 </DownloadButton>
             </div>
+        </div>
 
-        </>
     );
 };
 
