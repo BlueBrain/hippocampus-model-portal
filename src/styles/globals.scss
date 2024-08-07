@@ -392,6 +392,14 @@ tfoot.ant-table-summary {
 .collapsabe {
   border: 1px solid rgba(black, 0.1);
   margin-bottom: 1rem;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: black;
+    }
+  }
 }
 
 .collapsible-property {

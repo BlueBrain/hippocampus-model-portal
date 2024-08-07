@@ -111,8 +111,8 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection, them
             />
 
             <div className="text-right mt-4">
-                <DownloadButton onClick={() => downloadAsJson(dataSource, `cell-density-data.json`)} theme={theme}>
-                    Download Cell Density Data
+                <DownloadButton onClick={() => downloadAsJson(dataSource, `Cell-Density-Data.json`)} theme={theme}>
+                    Cell Density Data
                 </DownloadButton>
             </div>
         </>

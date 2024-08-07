@@ -212,8 +212,7 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
           title="Presynaptic dynamics parameters"
         >
           <p className='text-base mb-4'>
-            Presynaptic parameters include short-term plasticity modeled using Tsodyks-Markram formalism (U, D, F), number of vesicles in the release-ready pool (NRRP), the dependency of release probability from the extracellular calcium concentration (Hill scaling).  The coefficient of variation (CV) of postsynaptic current (PSC), mainly depending on the presynaptic mechanism, is validated against <Link href="/validations/connection-physiology"> pathway-specific data.</Link>.
-          </p>
+            Postsynaptic parameters include the maximum synaptic conductance (gsyn), rise and decay time constant of the fast ionotropic receptors (AMPA, GABAA), rise and decay time constant of the slow ionotropic receptors (NMDA), and NMDA/AMPA ratio. Note that we set rise time constant to 0.2 and 2.95 ms respectively for fast and slow receptors. We do not consider the slow ionotropic receptor GABAA. The somatic postsynaptic potentials (PSPs) are <Link href={"/validations/connection-physiology/"}>validated against pathway-specific data</Link>. </p>
           <ResponsiveTable<PreSynDynamicsParam>
             columns={preColumns}
             data={preSynDynamicsParamsData}

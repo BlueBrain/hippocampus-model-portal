@@ -283,7 +283,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
     }, [hoveredIndex, value, themeProp, sceneReady, trapezoids, edges, texts]);
 
     return (
-        <div className={styles.container} style={{ width: '100%', minHeight: '400px' }}>
+        <div className='flex align-middle justify-center' style={{ width: '100%', minHeight: '400px' }}>
             <div ref={mountRef} style={{ width: 'calc(100% - 2px)', minHeight: '400px' }}></div>
         </div>
     );

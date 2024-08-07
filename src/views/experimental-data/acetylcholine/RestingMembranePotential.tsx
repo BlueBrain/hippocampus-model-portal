@@ -315,7 +315,7 @@ const RestingMembranePotential: React.FC<RestingMembranePotentialProps> = ({ the
                         `exp-connection-anatomy_-_resting-membrane-potential.json`
                     )}
                 >
-                    Download Resting Membrane Potential Data
+                    Resting Membrane Potential Data
                 </DownloadButton>
             </div>
 

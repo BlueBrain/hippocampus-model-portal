@@ -156,6 +156,8 @@ body.no-scroll {
   justify-content: center;
 
 
+  @apply text-base leading-7;
+
 
   &.show {
     visibility: visible;
@@ -201,6 +203,8 @@ body.no-scroll {
     align-items: center;
     padding: .5rem 2rem;
     background-color: grey;
+
+    @apply text-lg;
 
     h3 {
       margin: 0;

@@ -178,7 +178,7 @@ const SCSynapsePhysiologySection: React.FC<SCSynapsePhysiologySectionProps> = ({
             `SC-Synapse-Physiology-Data.json`
           )}
         >
-          Download SC Synapse Physiology Data
+          SC Synapse Physiology Data
         </DownloadButton>
       </div>
     </>

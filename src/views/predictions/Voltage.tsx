@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Row, Col } from 'antd';
 import Image from 'next/image';
 
 
@@ -9,7 +8,6 @@ import StickyContainer from '@/components/StickyContainer';
 
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import selectorStyle from '@/styles/selector.module.scss';
 
 
 const VoltageView: React.FC = () => {
@@ -18,16 +16,9 @@ const VoltageView: React.FC = () => {
 
     return (
         <>
-            <Filters>
-                <Row
-                    className="w-100"
-                    gutter={[0, 20]}
-                >
-                    <Col
-                        className="mb-2"
-                        xs={24}
-                        lg={12}
-                    >
+            <Filters theme={theme} hasData={true}>
+                <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+                    <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
                                 title="Volate - Calcium Scan"
@@ -37,28 +28,14 @@ const VoltageView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-
+                                        Changing the extracellular ionic concentrations is known to alter excitability of neurons. To model this effect, we varied over a realistic range changes in extracellular calcium and the tonic depolarization resulting from varying extracellular potassium concentration. Here, we report that for restricted parameter ranges only variable and irregular theta activity was generated in CA1.
                                     </p>
                                 </InfoBox>
                             </div>
                         </StickyContainer>
-                    </Col>
-                    <Col
-                        className={`set-accent-color--${'grey'} mb-2`}
-                        xs={24}
-                        lg={12}
-                    >
-                        <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-                            <div className={selectorStyle.selectorColumn}>
-                                <div className={selectorStyle.selectorBody}>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Filters>
-
         </>
     );
 };

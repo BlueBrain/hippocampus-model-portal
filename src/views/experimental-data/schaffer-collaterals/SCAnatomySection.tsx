@@ -117,7 +117,7 @@ const SCAnatomySection: React.FC<SCAnatomySectionProps> = ({ theme }) => {
             `SC-Anatomy-Data.json.json`
           )}
         >
-          Download SC Anatomy Data
+          SC Anatomy Data
         </DownloadButton>
       </div>
     </>

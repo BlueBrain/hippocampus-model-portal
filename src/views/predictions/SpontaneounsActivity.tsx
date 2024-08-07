@@ -1,15 +1,10 @@
 import React from 'react';
-import { Row, Col } from 'antd';
-import Image from 'next/image';
-
 
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import selectorStyle from '@/styles/selector.module.scss';
-
 
 const SpontaneousActivityView: React.FC = () => {
 
@@ -17,16 +12,9 @@ const SpontaneousActivityView: React.FC = () => {
 
     return (
         <>
-            <Filters>
-                <Row
-                    className="w-100"
-                    gutter={[0, 20]}
-                >
-                    <Col
-                        className="mb-2"
-                        xs={24}
-                        lg={12}
-                    >
+            <Filters theme={theme} hasData={true}>
+                <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+                    <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
                                 title="Spontaneous Activity"
@@ -36,28 +24,14 @@ const SpontaneousActivityView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-
+                                        We simulated the network using different levels of spontaneous synaptic release (0.00025 - 0.002 Hz) and different extracellular calcium concentration (1 - 2 mM). These simulations can give a prediction on how the CA1 could behave without any external inputs at in vivo or in vitro extracellular calcium concentrations (respectively 1 and 2 mM). In these conditions, the activity is very sparse and irregular.
                                     </p>
                                 </InfoBox>
                             </div>
                         </StickyContainer>
-                    </Col>
-                    <Col
-                        className={`set-accent-color--${'grey'} mb-2`}
-                        xs={24}
-                        lg={12}
-                    >
-                        <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-                            <div className={selectorStyle.selectorColumn}>
-                                <div className={selectorStyle.selectorBody}>
-
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Filters>
-
         </>
     );
 };

@@ -70,15 +70,21 @@ export type SynapsesGraphProps = {
 
 const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null); // To store the chart instance
 
     useEffect(() => {
+        // Ensure the chart is destroyed if it already exists
+        if (chartInstanceRef.current) {
+            chartInstanceRef.current.destroy();
+        }
+
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const formulaPoints = calculateFormulaPoints();
                 const { solidPoints, dottedPoints } = splitFormulaPoints(formulaPoints);
 
-                new Chart(ctx, {
+                chartInstanceRef.current = new Chart(ctx, {
                     type: 'scatter',
                     data: {
                         datasets: [
@@ -201,7 +207,14 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                 });
             }
         }
-    }, []);
+
+        // Cleanup function to destroy the chart instance on component unmount
+        return () => {
+            if (chartInstanceRef.current) {
+                chartInstanceRef.current.destroy();
+            }
+        };
+    }, []); // Dependency array: [] ensures this runs only on mount and unmount
 
     return (
         <div>
@@ -215,11 +228,10 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
-                    Download Synapses Graph Data
+                    Synapses Graph Data
                 </DownloadButton>
             </div>
         </div>
-
     );
 };
 

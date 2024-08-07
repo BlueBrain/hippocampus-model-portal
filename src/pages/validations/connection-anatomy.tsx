@@ -1,13 +1,13 @@
 import Head from 'next/head';
 
-import ConnectionAnatomyView from '../../views/validations/ConnectionAnatomy';
+import ConnectionAnatomyView from '../../views/validations/ConnnectionAnatomy';
 
 
 export default function ConnectionAnatomyPage() {
   return (
     <>
       <Head>
-        <title>Connection anatomy / Validations / Hippocampus Hub Explore</title>
+        <title>Pathway anatomy / Validations / Hippocampus Hub Explore</title>
         {/* TODO: add description */}
         <meta
           name="description"

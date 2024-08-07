@@ -27,7 +27,7 @@ const SynapsesView: React.FC = () => {
             <StickyContainer>
               <Title
                 primaryColor={colorName}
-                title="Synapses"
+                title="Connection Physiology"
                 subtitle="Reconstruction Data"
                 theme={theme}
               />

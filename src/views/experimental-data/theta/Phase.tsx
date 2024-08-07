@@ -113,7 +113,7 @@ const Phase: React.FC<PhaseProps> = ({ theme }) => {
                         `theta-phase-data.json`
                     )}
                 >
-                    Download Phase Data
+                    Phase Data
                 </DownloadButton>
             </div>
         </>

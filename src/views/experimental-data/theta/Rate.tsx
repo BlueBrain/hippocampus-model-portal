@@ -102,7 +102,7 @@ const Rate: React.FC<RateProps> = ({ theme }) => {
                         `theta-rate-data.json`
                     )}
                 >
-                    Download Rate Data
+                    Rate Data
                 </DownloadButton>
             </div>
         </>

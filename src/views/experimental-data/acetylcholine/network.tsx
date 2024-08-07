@@ -355,7 +355,7 @@ const Netwrok: React.FC<NetwrokProps> = ({ theme }) => {
                         `Network-Data.json`
                     )}
                 >
-                    Download Network Data
+                    Network Data
                 </DownloadButton>
             </div>
 

@@ -1,16 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 
-
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import selectorStyle from '@/styles/selector.module.scss';
 
 
-const AcetylcholineView: React.FC = () => {
+const ConnectionAnatomyView: React.FC = () => {
 
     const theme = 4;
 
@@ -21,14 +19,14 @@ const AcetylcholineView: React.FC = () => {
                     <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
-                                title="Acetylcholine"
+                                title="Connection Anatomy"
                                 subtitle="Validations"
                                 theme={theme}
                             />
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We validated the impact of <Link className={`link theme-${theme}`} href={'/digital-reconstruction/acetylcholine/'}> acetylcholine</Link> at network level using <Link className={`link theme-${theme}`} href={'/experimental-data/acetylcholine/'}> available data from literature</Link>. As in the experiments, we observe different network dynamics depending on the concentration of acetylcholine.
+                                        We validated the <Link className={`link theme-${theme}`} href={'#'}>connectome</Link>with a series of <Link className={`link theme-${theme}`} href={'#'}>experimental data</Link> not used to constrain it. These data include bouton density, number of synapses per connection, connection probability, convergence, and divergence.
                                     </p>
                                 </InfoBox>
                             </div>
@@ -36,9 +34,11 @@ const AcetylcholineView: React.FC = () => {
                     </div>
                 </div>
             </Filters>
+
+
         </>
     );
 };
 
 
-export default AcetylcholineView;
+export default ConnectionAnatomyView;

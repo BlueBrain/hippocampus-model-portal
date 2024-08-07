@@ -83,7 +83,7 @@ const Anatomy: React.FC<PhysiologyProps> = ({ theme }) => {
                         `Anatomy-Data.json`
                     )}
                 >
-                    Download Anatomy Data
+                    Anatomy Data
                 </DownloadButton>
             </div>
         </>

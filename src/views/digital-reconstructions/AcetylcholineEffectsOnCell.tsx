@@ -1,78 +1,41 @@
 import React from 'react';
-import { Row, Col, theme } from 'antd';
-import Image from 'next/image';
+import Link from 'next/link';
 
-import { colorName } from './config';
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
+
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 
-import selectorStyle from '@/styles/selector.module.scss';
+const AcetylcholineEffectsOnCellView: React.FC = () => {
 
-
-const AcetylcholineView: React.FC = () => {
   const theme = 3;
 
   return (
     <>
-      <Filters theme={theme}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+      <Filters theme={theme} hasData={true}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Acetylcholine - Effects on Cells"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We applied the  <Link className={`link theme-${theme}`} href={'/reconstruction-data//^acetylcholine/'}>dose-effect curves</Link> to predict the effect of acetylcholine on neuron membrane resting potential or firing rate.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=Illustration&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Filters>
+          </div>
+        </div >
+      </Filters >
     </>
   );
 };
 
 
-export default AcetylcholineView;
+export default AcetylcholineEffectsOnCellView;

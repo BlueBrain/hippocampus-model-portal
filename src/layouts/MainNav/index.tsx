@@ -214,6 +214,7 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Acetylcholine" href="/experimental-data/acetylcholine/" />
               <SubmenuLink label="Theta" href="/experimental-data/theta/" />
             </SubmenuGroup>
+
             <SubmenuGroup
               label="Reconstruction Data"
               menuGroup='menu-group-reconstruction-data'
@@ -227,7 +228,7 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
               <SubmenuLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
               <SubmenuLink label="Connections" href="/reconstruction-data/connections/" />
-              <SubmenuLink label="Synapses" href="/reconstruction-data/synapses/" />
+              <SubmenuLink label="Connection Physiology" href="/reconstruction-data/connection-physiology/" />
               <SubmenuLink label="Schaffer Collaterals" href="/reconstruction-data/schaffer-collaterals/" />
               <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />
             </SubmenuGroup>
@@ -256,9 +257,10 @@ const MainNav: React.FC = () => {
               setOpenMenuGroup={setOpenMenuGroup}
             >
               <SubmenuLink label="Neurons" href='/validations/neurons/' />
-              <SubmenuLink label="Connection anatomy" href='/validations/connection-anatomy/' />
-              <SubmenuLink label="Connection physiology" href='/validations/connection-physiology/' />
-              <SubmenuLink label="Schaffer collaterals" href='/validations/schaffer-collaterals/' />
+              <SubmenuLink label="Connection Anatomy" href='/validations/connection-anatomy/' />
+              <SubmenuLink label="Connection Physiology" href='/validations/connection-physiology/' />
+              <SubmenuLink label="Schaffer collaterals 1" href='/validations/schaffer-collaterals-1/' />
+              <SubmenuLink label="Schaffer collaterals 2" href='/validations/schaffer-collaterals-2/' />
               <SubmenuLink label="Acetylcholine" href='/validations/acetylcholine/' />
             </SubmenuGroup>
 
@@ -269,7 +271,7 @@ const MainNav: React.FC = () => {
               openMenuGroup={openMenuGroup}
               setOpenMenuGroup={setOpenMenuGroup}
             >
-              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneous-activity' />
+              <SubmenuLink label="Spontaneous Activity" href='/predictions/spontaneouns-activity' />
               <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
               <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
               <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />
