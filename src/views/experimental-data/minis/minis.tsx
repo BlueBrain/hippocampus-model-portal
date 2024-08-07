@@ -96,7 +96,7 @@ const Minis: React.FC<MinisProps> = ({ theme }) => {
                         `Minis-Data.json`
                     )}
                 >
-                    Download Minis Data
+                    Minis Data
                 </DownloadButton>
             </div>
         </>

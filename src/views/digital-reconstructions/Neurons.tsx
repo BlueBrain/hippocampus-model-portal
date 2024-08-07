@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { Button, Spin } from 'antd';
 
 import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
-import LayerSelector from '@/components/LayerSelector';
 import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
@@ -22,7 +22,7 @@ import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 import { colorName } from './config';
 
-import styles from '../../styles/digital-reconstructions/neurons.module.scss';
+import StickyContainer from '@/components/StickyContainer';
 
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
@@ -121,73 +121,70 @@ const Neurons: React.FC = () => {
 
   return (
     <>
-      <Filters theme={theme}>
-        <div className="row bottom-xs w-100">
-          <div className="col-xs-12 col-lg-6">
-            <Title
-              primaryColor={colorName}
-              title={<span>Neurons</span>}
-              subtitle="Digital Reconstructions"
-              theme={theme}
-            />
-            <InfoBox
-              color={colorName}
-            >
-              <p>
-                We reconstructed the 3D morphology of single neurons and classified them into
-                morphological types (m-types). In addition, we recorded electrical traces from the same cell types
-                and classified the traces into electrical types (e-types). Finally, we mapped the e-types
-                expressed in each m-type to account for the observed diversity
-                of morpho-electrical subtypes (me-types).
-              </p>
-            </InfoBox>
-          </div>
-          <div className="col-xs-12 col-lg-6">
-            <div className="selector">
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__body"}>
-                  <LayerSelector3D
-                    value={currentLayer}
-                    onSelect={setLayer}
-                    theme={theme}
-                  />
-                </div>
+
+      <Filters theme={theme} hasData={!!currentInstance}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
+            <StickyContainer>
+              <Title
+                title="Neurons"
+                subtitle="Digital Reconstructions"
+                theme={theme}
+              />
+              <div className='w-full' role="information">
+                <InfoBox>
+                  <p>
+                    We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
+                  </p>
+                </InfoBox>
               </div>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
-                <div className={"selector__body"}>
-                  <List
-                    className="mb-2"
-                    block
-                    list={mtypes}
-                    value={currentMtype}
-                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setMtype}
-                    theme={theme}
-                  />
-                  <List
-                    className="mb-2"
-                    block
-                    list={etypes}
-                    value={currentEtype}
-                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setEtype}
-                    theme={theme}
-                  />
-                  <List
-                    block
-                    list={instances}
-                    value={currentInstance}
-                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
-                    color={colorName}
-                    onSelect={setInstance}
-                    anchor="data"
-                    theme={theme}
-                  />
-                </div>
+            </StickyContainer>
+          </div>
+
+          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none">
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+              <div className="selector__body">
+                <List
+                  className="mb-2"
+                  block
+                  list={mtypes}
+                  value={currentMtype}
+                  title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                  color={colorName}
+                  onSelect={setMtype}
+                  theme={theme}
+                />
+                <List
+                  className="mb-2"
+                  block
+                  list={etypes}
+                  value={currentEtype}
+                  title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
+                  color={colorName}
+                  onSelect={setEtype}
+                  theme={theme}
+                />
+                <List
+                  block
+                  list={instances}
+                  value={currentInstance}
+                  title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                  color={colorName}
+                  onSelect={setInstance}
+                  anchor="data"
+                  theme={theme}
+                />
+              </div>
+            </div>
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <LayerSelector3D
+                  value={currentLayer}
+                  onSelect={setLayer}
+                  theme={theme}
+                />
               </div>
             </div>
           </div>

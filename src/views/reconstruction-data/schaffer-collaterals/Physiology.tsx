@@ -80,7 +80,7 @@ const Physiology: React.FC<PhysiologyProps> = ({ theme }) => {
                         `Physiology-table.json`
                     )}
                 >
-                    Download Physiology Data
+                    Physiology Data
                 </DownloadButton>
             </div>
         </>

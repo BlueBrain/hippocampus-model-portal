@@ -117,12 +117,12 @@ const Home: React.FC = () => (
                 href: '/reconstruction-data/neuron-model-library/',
               },
               {
-                label: 'Connections',
-                href: '/reconstruction-data/connections/',
+                label: 'Connection anatomy',
+                href: '/reconstruction-data/connection/',
               },
               {
-                label: 'Synapses',
-                href: '/reconstruction-data/synapses/',
+                label: 'Connection Physiology',
+                href: '/reconstruction-data/connection-physiology/',
               },
               {
                 label: 'Schaffer Collaterals',
@@ -156,11 +156,11 @@ const Home: React.FC = () => (
                 href: '/digital-reconstructions/schaffer-collaterals/',
               },
               {
-                label: 'Connections',
-                href: '/digital-reconstructions/connections/',
+                label: 'Connection Anatomy',
+                href: '/digital-reconstructions/connection-anatomy/',
               },
               {
-                label: 'Synapses',
+                label: 'Connecton Physiology',
                 href: '/digital-reconstructions/synapses/',
               },
               {
@@ -195,16 +195,20 @@ const Home: React.FC = () => (
                 href: '/validations/neurons/'
               },
               {
-                label: 'Connection anatomy',
+                label: 'Connection Anatomy',
                 href: '/validations/connection-anatomy/'
               },
               {
-                label: 'Connection physiology',
+                label: 'Connection Physiology',
                 href: '/validations/connection-physiology/'
               },
               {
-                label: 'Schaffer collaterals',
-                href: '/validations/schaffer-collaterals/'
+                label: 'Schaffer collaterals 1',
+                href: '/validations/schaffer-collaterals-1/'
+              },
+              {
+                label: 'Schaffer collaterals 2',
+                href: '/validations/schaffer-collaterals-2/'
               },
               {
                 label: 'Acetylcholine',

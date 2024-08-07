@@ -221,7 +221,7 @@ const FiringRate: React.FC<FiringRateProps> = ({ theme }) => {
                         `Firing-Rate-Data.json`
                     )}
                 >
-                    Download Firing Rate Data
+                    Firing Rate Data
                 </DownloadButton>
             </div>
 

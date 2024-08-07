@@ -414,7 +414,7 @@ const Synapse: React.FC<SynapsesProps> = ({ theme }) => {
                         `Synapses-Data.json`
                     )}
                 >
-                    Download Synapses Data
+                    Synapses Data
                 </DownloadButton>
             </div>
 
