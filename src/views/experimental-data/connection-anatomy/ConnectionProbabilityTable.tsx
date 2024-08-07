@@ -1,13 +1,12 @@
 import React from 'react';
-import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
-
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
+
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 import connectionProbabilityData from './connection-probability.json';
 
@@ -398,26 +397,30 @@ const columns = [
     }
 ];
 
+type ConnectionProbabilityTableProps = {
+    theme?: number;
+}
 
-const ConnectionProbabilityTable = () => {
+const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({ theme }) => {
+
     return (
         <>
             <ResponsiveTable<DataEntry>
                 className="mb-2"
                 columns={columns}
                 data={data}
-            //rowKey={({ from, to }) => `${from}_${to}`}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={1}
                     onClick={() => downloadAsJson(
                         connectionProbabilityData,
-                        `exp-connection-anatomy_-_connection-probability-table.json`
+                        `Connection-Probability-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Connection Probability Data
+                </DownloadButton>
             </div>
 
         </>

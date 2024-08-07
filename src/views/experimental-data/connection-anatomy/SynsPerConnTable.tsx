@@ -3,13 +3,13 @@ import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
 
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import synsPerConnData from './syns-per-conn.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type DataEntry = {
@@ -337,7 +337,11 @@ const columns = [
   }
 ];
 
-const SynsPerConnTable = () => {
+type SynsPerConnTableProps = {
+  theme?: number;
+}
+
+const SynsPerConnTable: React.FC<SynsPerConnTableProps> = ({ theme }) => {
   return (
     <>
       <ResponsiveTable<DataEntry>
@@ -349,26 +353,27 @@ const SynsPerConnTable = () => {
       <small><sup>[1]</sup> Additional calculations (see below).</small>
 
       <div className="text-right mt-2">
-        <HttpDownloadButton
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             synsPerConnData,
             `exp-connection-anatomy_-_syns-per-conn-table.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          Number of synapses per connection Data
+        </DownloadButton>
       </div>
 
-      <h3 className="mt-3">Calculations</h3>
+      <h3 className="text-xl mt-12 mb-2">Calculations</h3>
 
-      <h4><a
+      <h4 className='text-base mb-2'><a
         href="https://doi.org/10.1126/science.8085161"
         target="_blank"
         rel="noopener noreferrer"
       >
         Sik et al., 1995
       </a></h4>
-      <p>
+      <p className='mb-4'>
         Overall, 99 boutons in contact with 64 parvalbumin-immunoreactive neurons were counted (Fig. 2).
         Thirty-five contacts were on somata and the remaining ones on thick proximal dendrites.
         The majority of the targets were contacted by a single bouton, whereas 13 neurons received
@@ -401,11 +406,11 @@ const SynsPerConnTable = () => {
           </Table.Summary.Row>
         )}
       />
-      <p>
+      <p className='mt-4'>
         Mean = 99/64 = 1.54688, SD = 1.0831.
       </p>
 
-      <h4><a
+      <h4 className='text-base mt-4 mb-1'><a
         href="https://doi.org/10.1016/0306-4522(96)00251-5"
         target="_blank"
         rel="noopener noreferrer"
@@ -417,7 +422,7 @@ const SynsPerConnTable = () => {
         Mean = 1.1666, std = 0.4082, n = 6, sem = 0.1666.
       </p>
 
-      <h4><a
+      <h4 className='text-base mt-3 mb-1'><a
         href="https://doi.org/10.1111/j.1469-7793.1998.755bv.x"
         target="_blank"
         rel="noopener noreferrer"
@@ -429,7 +434,7 @@ const SynsPerConnTable = () => {
         Mean = 5.3333, std = 1.1547, n = 3, sem = 0.6666.
       </p>
 
-      <h4><a
+      <h4 className='text-base mt-3 mb-1'><a
         href="https://doi.org/10.1152/jn.00831.2010"
         target="_blank"
         rel="noopener noreferrer"
@@ -438,15 +443,15 @@ const SynsPerConnTable = () => {
       </a></h4>
       <p>
         On average 2–5 close apposition of presynaptic boutons on postsynaptic dendrites were observed
-        at the light micro-scope level. <br/>
+        at the light micro-scope level. <br />
         Note that the range 2-5 refers to the first synaptic type described in the paper,
         that is the one from LM-SCA to SCA cells (n=7) and SP basket cells (n=2).
       </p>
       <p>
         Range, data: 2 - 5.
-        Mean = 3.5, max error = 1.5. <br/>
-        <small>We used the max error as an estimation of the std.</small>
+        Mean = 3.5, max error = 1.5.
       </p>
+      <p className='text-xs mt-8'>* We used the max error as an estimation of the std.</p>
     </>
   );
 };

@@ -3,13 +3,12 @@ import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
 
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
-import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import connectionProbabilityData from './connection-probability.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     mtype: string;
@@ -186,8 +185,11 @@ const columns = [
         ),
     }
 ];
+type ConnectionProbabilityTableProps = {
+    theme?: number;
+}
 
-const ConnectionProbabilityTable = () => {
+const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -197,15 +199,16 @@ const ConnectionProbabilityTable = () => {
             //rowKey={({ from, to }) => `${from}_${to}`}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={theme}
                     onClick={() => downloadAsJson(
                         connectionProbabilityData,
-                        `exp-connection-anatomy_-_sd-per-trenaptic-type-table.json`
+                        `Percentage-of-synapse-divergence-per-layer-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Percentage Of Synapse Divergence Per Layer Data
+                </DownloadButton>
             </div>
 
         </>

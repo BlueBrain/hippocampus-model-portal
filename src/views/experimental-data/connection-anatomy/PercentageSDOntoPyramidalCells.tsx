@@ -3,13 +3,12 @@ import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
 
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
-import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import connectionProbabilityData from './connection-probability.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 type DataEntry = {
     "m-type": string;
@@ -123,25 +122,29 @@ const columns = [
 ];
 
 
-const PercentageSDOntoPyramidalCells = () => {
+type PercentageSDOntoPyramidalCellsProps = {
+    theme?: number;
+}
+
+const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsProps> = ({ theme }) => {
     return (
         <>
             <ResponsiveTable<DataEntry>
                 className="mb-2"
                 columns={columns}
                 data={data}
-            //rowKey={({ from, to }) => `${from}_${to}`}
             />
 
-            <div className="text-right mt-2">
-                <HttpDownloadButton
+            <div className="text-right mt-4">
+                <DownloadButton
+                    theme={1}
                     onClick={() => downloadAsJson(
                         connectionProbabilityData,
-                        `exp-connection-anatomy_-_percentage-SD-onto-pyramidal-cells.json`
+                        `Percentage-of-Synapse-Divergence-Onto-Pyramidal-Cells-And-Interneurons-Data.json`
                     )}
                 >
-                    table data
-                </HttpDownloadButton>
+                    Percentage of Synapse Divergence Onto Pyramidal Cells And Interneurons Data
+                </DownloadButton>
             </div>
 
         </>

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { downloadAsJson } from '@/utils';
 
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import boutonDensityData from './bouton-density.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type BoutonDensity = {
@@ -213,7 +213,11 @@ const columns = [
   }
 ];
 
-const BoutonDenisityTable = () => {
+type BoutonDenisityTableProps = {
+  theme?: number;
+}
+
+const BoutonDenisityTable: React.FC<BoutonDenisityTableProps> = ({ theme }) => {
   return (
     <>
       <ResponsiveTable<BoutonDensity>
@@ -240,34 +244,35 @@ const BoutonDenisityTable = () => {
       </small>
 
       <div className="text-right mt-2">
-        <HttpDownloadButton
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             boutonDensityData,
-            `exp-connection-anatomy_-_bouton-density-table.json`
+            `Bouton-Density-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          Bouton Density Data
+        </DownloadButton>
       </div>
 
-      <h3 className="mt-3">Calculations</h3>
+      <h3 className="text-2xl mt-12 mb-2">Calculations</h3>
 
-      <h4><a
+      <h4 className='text-lg mb-2'><a
         href="https://doi.org/10.1002/(sici)1096-9861(19990614)408:4%3C449::aid-cne1%3E3.0.co;2-r"
         target="_blank"
         rel="noopener noreferrer"
       >
         Esclapez et al., 1999
       </a></h4>
-      <p>Mean number of varicosities per 100 μm of axon for each segment order:</p>
-      <ul>
+      <p className='mb-2'>Mean number of varicosities per 100 μm of axon for each segment order:</p>
+      <ul className='mb-2'>
         <li>4.02 ± 1.5 and 4.31 ± 1.33, respectively, for first-order segments.</li>
         <li>10.04 ± 2.98 and 9.15 ± 2.56 for second-order segments.</li>
         <li>14.78 ± 3.42 and 13.51 ± 5.36 for third-order segments.</li>
         <li>12.34 ± 2.6 and 10.04 ± 3.57 for fourth-order segments.</li>
       </ul>
 
-      <h4><a
+      <h4 className='text-lg mb-2'><a
         href="https://dx.doi.org/10.1002%2Fhipo.22141"
         target="_blank"
         rel="noopener noreferrer"

@@ -68,7 +68,7 @@ const ConnectionAnatomyView: React.FC = () => {
             microscopy, that represent putative synaptic contacts. Bouton density is normally
             expressed as the number of boutons per 100 μm.
           </p>
-          <BoutonDensityTable />
+          <BoutonDensityTable theme={theme} />
         </Collapsible>
 
         <Collapsible id="synNumPerConnectionSection" className="mt-4" title="Number of synapses per connection">
@@ -76,7 +76,7 @@ const ConnectionAnatomyView: React.FC = () => {
             Each connection between pairs of morphological types could include one or multiple
             synapses, which in part affects the strength of the connection.
           </p>
-          <SynsPerConnTable />
+          <SynsPerConnTable theme={theme} />
         </Collapsible>
 
         <Collapsible id="connectionProbabilitySection" className="mt-4" title="Connection probability">
@@ -87,7 +87,7 @@ const ConnectionAnatomyView: React.FC = () => {
             Second, the method usually does not report precise distance of the pairs and this does
             not allow an accurate replica in the model.
           </p>
-          <ConnectionProbabilityTable />
+          <ConnectionProbabilityTable theme={theme} />
         </Collapsible>
 
         <Collapsible id="synapseDivergencePerTypeSection" className="mt-4" title="Synapse divergence per presynaptic type">
@@ -96,7 +96,7 @@ const ConnectionAnatomyView: React.FC = () => {
             Here, we calculate the percentage of synapses made by a morphological type onto
             pyramidal cells or interneurons.
           </p>
-          <SDPerPrenapticTypeTable />
+          <SDPerPrenapticTypeTable theme={theme} />
         </Collapsible>
 
         <Collapsible id="synapseDivergenceOntoPyramidalCellsSection" className="mt-4" title="Percentage of synapse divergence onto pyramidal cells and interneurons">
@@ -105,7 +105,7 @@ const ConnectionAnatomyView: React.FC = () => {
             Here, we calculate the percentage of synapses made by a morphological type onto
             pyramidal cells or interneurons.
           </p>
-          <PercentageSDOntoPyramidalCells />
+          <PercentageSDOntoPyramidalCells theme={theme} />
         </Collapsible>
 
         <Collapsible id="synapseDivergencePerLayerSection" className="mt-4" title="Percentage of synapse divergence per layer">
@@ -113,7 +113,7 @@ const ConnectionAnatomyView: React.FC = () => {
             We present here the distribution of synapse divergence per morphological type across
             the different layers.
           </p>
-          <SynDivLayTable />
+          <SynDivLayTable theme={theme} />
         </Collapsible>
       </DataContainer>
     </>
