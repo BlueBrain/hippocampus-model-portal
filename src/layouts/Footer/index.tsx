@@ -27,17 +27,17 @@ const Footer: React.FC = () => {
           <div className="w-full sm:w-1/3 pr-12 mb-4 xs:mb-12">
             <ul className="list-none p-0">
               <li className="mb-2">
-                <Link href={`${basePath}/terms-of-use/`} className="text-white hover:underline">
+                <Link href={`/terms-of-use/`} className="text-white hover:underline">
                   Terms of Use
                 </Link>
               </li>
               <li className="mb-2">
-                <Link href={`${basePath}/privacy-policy/`} className="text-white hover:underline">
+                <Link href={`/privacy-policy/`} className="text-white hover:underline">
                   Privacy Policy
                 </Link>
               </li>
               <li className="mb-2">
-                <Link href={`${basePath}/cookies-policy/`} className="text-white hover:underline">
+                <Link href={`/cookies-policy/`} className="text-white hover:underline">
                   Cookies Policy
                 </Link>
               </li>
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li className="mb-1">
-                <Link href={`${basePath}/`} className="text-white hover:underline">
+                <Link href={`/`} className="text-white hover:underline">
                   Explore Models
                 </Link>
               </li>
@@ -72,7 +72,12 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li className="mb-1">
-                <Link href={`${basePath}/glossary`} className="text-white hover:underline">
+                <Link href={`/resources`} className="text-white hover:underline">
+                  Resources
+                </Link>
+              </li>
+              <li className="mb-1">
+                <Link href={`/glossary`} className="text-white hover:underline">
                   Glossary
                 </Link>
               </li>

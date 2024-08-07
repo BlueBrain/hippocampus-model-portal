@@ -17,7 +17,25 @@ const Header: React.FC = () => {
       }
     };
 
+    const updateScrolledStateForPath = () => {
+      const currentPath = window.location.pathname;
+      const specialPages = [
+        '/hippocampus-portal-dev/terms-of-use/',
+        '/hippocampus-portal-dev/privacy-policy/',
+        '/hippocampus-portal-dev/cookies-policy/',
+        '/hippocampus-portal-dev/glossary/',
+        '/hippocampus-portal-dev/resources/'
+      ];
+
+      if (specialPages.includes(currentPath)) {
+        setIsScrolled(true);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
+
+    // Check the paath on component mount
+    updateScrolledStateForPath();
 
     // Clean up the event listener on component unmount
     return () => {

@@ -2,16 +2,11 @@ import React from 'react';
 
 import FullPage from '../layouts/FullPage';
 
-import styles from '../styles/terms-of-use.module.scss';
-
-
-
-
 export default function Terms() {
   return (
     <FullPage>
-      <div className={styles.container}>
-        <h2>TERMS OF USE</h2>
+      <div className="iq__container">
+        <h1>Terms of Use</h1>
 
         <p>
           Welcome to the EPFL/ Blue Brain Project (“<strong>BBP</strong>”)
@@ -35,7 +30,7 @@ export default function Terms() {
           including any intellectual property or content of third-party websites included on the Hub.
         </p>
 
-        <h3>LICENCE</h3>
+        <h2 >Licences</h2>
 
         <p>
           Unless otherwise stated, we own or have a license to all of the Content on the Hub.
@@ -63,7 +58,7 @@ export default function Terms() {
           Violation of licence terms may result to a claim for damages and/or be a criminal offence.
         </p>
 
-        <h3>YOUR USE OF THE HUB</h3>
+        <h2 className='text-xl pt-8 pb-4'>Your Use of The Hub</h2>
 
         <p>
           BBP maintains this Hub for your information, education and to ensure that the outputs of its research
@@ -95,7 +90,7 @@ export default function Terms() {
           but do not replicate, any page of our Hub and subject to the following conditions:
         </p>
 
-        <ol type="a" className={styles.list}>
+        <ol type="a">
           <li>
             you do not in any way imply that we are endorsing any services or products
             unless this has been specifically agreed with us
@@ -122,23 +117,13 @@ export default function Terms() {
         <h3>DISCLAIMER</h3>
 
         <p>
-          CONTENT ON THIS HUB IS PROVIDED BY BBP AS-IS AND AS-AVAILABLE, AND BBP MAKES NO REPRESENTATIONS
-          OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, ABOUT THE COMPLETENESS, ACCURACY, RELIABILITY,
-          SUITABILITY OR AVAILABILITY, NON-INFRINGEMENT, FITNESS FOR A PARTICULAR PURPOSE, ERROR-FREE,
-          ABSENCE OF LATENT OF OTHER DEFECTS OF THE CONTENT; OR THAT THE CONTENT IS FREE OF VIRUSES
-          OR OTHER HARMFUL COMPONENTS. ANY RELIANCE YOU PLACE ON CONTENT IS THEREFORE STRICTLY AT YOUR OWN RISK.
+          Content on this hub is provided by BBP as-is and as-available, and BBP makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability, non-infringement, fitness for a particular purpose, error-free, absence of latent or other defects of the content; or that the content is free of viruses or other harmful components. Any reliance you place on content is therefore strictly at your own risk.
         </p>
 
         <h3>LIMITATION OF LIABILITY</h3>
 
         <p>
-          YOU ASSUME ALL RESPONSIBILITY FOR ANY USE OF THE CONTENT OFFERED ON THE HUBL. IN NO EVENT SHALL BBP,
-          ITS DIRECTORS, OFFICERS, EMPLOYEES, AGENTS, LICENSEES, LICENSORS, CONTRIBUTORS, FOUNDERS OR ADVISORS,
-          OR ANY OTHER PERSON WHO HAS BEEN INVOLVED IN THE CREATION OR PRODUCTION OF THE HUB OR CONTENT
-          BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, LOST PROFITS,
-          LOST SALES, OR LOSS OF GOODWILL, LOSS OF BUSINESS, LOSS OF DATA ARISING OUT OF THE USE OF,
-          THE INABILITY TO USE, OR ERRORS, OMISSIONS, INTERRUPTIONS OR OTHER INACCURACIES IN,
-          THE HUB OR THE CONTENT, EVEN IF THE PARTY HAD BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+          You assume all responsibility for any use of the content offered on the Hub. In no event shall BBP, its directors, officers, employees, agents, licensees, licensors, contributors, founders or advisors, or any other person who has been involved in the creation or production of the Hub or content be liable for any direct, indirect, special, incidental, or consequential damages, lost profits, lost sales, or loss of goodwill, loss of business, loss of data arising out of the use of, the inability to use, or errors, omissions, interruptions or other inaccuracies in, the Hub or the content, even if the party had been advised of the possibility of such damages.
         </p>
 
         <h3>CITATION</h3>
@@ -167,10 +152,6 @@ export default function Terms() {
 
         <p>
           Image title and BBP copyright as per copyright notice on the image and reference to the Hub.
-        </p>
-
-        <p>
-          © [[year of first publication]] BBP/EPFL. [Title of Image] [Hippocampus Hub]. Available from: [Resource URL]
         </p>
 
         <h3>TERMINATION</h3>
