@@ -3,11 +3,11 @@ import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { layerDescription, mtypeDescription, etypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import MECompositionData from './me-composition.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type MEComposition = {
@@ -58,8 +58,11 @@ const columns = [
   },
 ];
 
+type MECompositionTableProps = {
+  theme?: number;
+};
 
-const MECompositionTable: React.FC = () => {
+const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
   return (
     <>
       <Table<MEComposition>
@@ -73,15 +76,16 @@ const MECompositionTable: React.FC = () => {
         rowKey={({ mtype }) => mtype}
       />
 
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             MECompositionData,
-            `rec-data-cell-composition_-_me-composition.json`
+            `ME-Composition-Table-Data.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          ME Composition Table Data
+        </DownloadButton>
       </div>
     </>
   );

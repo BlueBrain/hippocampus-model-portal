@@ -822,6 +822,10 @@ $collapsible-padding: 2rem 2rem;
     background-color: #313354;
     max-width: 380px;
 
+    &--lg {
+      max-width: 800px;
+    }
+
     @media screen and (max-width: $breakpoint-xl) {
       max-width: 320px;
     }

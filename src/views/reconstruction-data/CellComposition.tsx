@@ -38,51 +38,38 @@ const CellCompositionView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Cell composition"
                 subtitle="Reconstruction Data"
                 theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p>
+                  <p >
                     We combined information on available <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphological reconstructions</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-electrophysiology/">electrophysiological recordings</Link>, <Link className={`link theme-${theme}`} href="/experimental-data/cell-density">cell density</Link>, <Link className={`link theme-${theme}`} href="/reconstruction-data/volume/">volume</Link>, and the estimation from  <Link className={`link theme-${theme}`} href="https://pubmed.ncbi.nlm.nih.gov/23674373/">Bezaire and Soltesz (2013)</Link> to predict the number of neuron types.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.row}>
-              <div className={"selector__column mt-3 theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select a volume section</div>
-                <div className={"selector__body"}>
-                  <VolumeSectionSelector3D
-                    value={volumeSection}
-                    onSelect={setVolumeSectionQuery}
-                    theme={theme}
-                  />
-                </div>
+          </div>
+
+          <div className="flex flex-col-reverse  md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-1/2 md:w-full flex-grow md:flex-none justify-center">
+            <div className={`selector__column selector__column--lg theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <VolumeSectionSelector3D
+                  value={volumeSection}
+                  onSelect={setVolumeSectionQuery}
+                  theme={theme}
+                />
               </div>
             </div>
-          </Col>
-        </Row>
-      </Filters >
+          </div>
+        </div>
+      </Filters>
 
       <DataContainer theme={theme}
         navItems={[
@@ -98,7 +85,7 @@ const CellCompositionView: React.FC = () => {
             Here we provide the density and number of cells for each morphological type (m-type).
           </p>
 
-          <CellCompositionTable volumeSection={volumeSection} />
+          <CellCompositionTable theme={theme} volumeSection={volumeSection} />
         </Collapsible>
 
         <Collapsible
@@ -110,7 +97,7 @@ const CellCompositionView: React.FC = () => {
             Each morphological type (m-type) can show one or more electrical types (e-types) giving rise to different morpho-electrical types (me-types).
           </p>
 
-          <MECompositionTable />
+          <MECompositionTable theme={theme} />
         </Collapsible>
       </DataContainer >
     </>

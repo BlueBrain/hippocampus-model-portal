@@ -4,15 +4,16 @@ import { Table } from 'antd';
 import { VolumeSection } from '@/types';
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
 import cellCompositionData from './cell-composition.json';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 
 type CellCompositionTableProps = {
   volumeSection: VolumeSection;
+  theme?: number;
 };
 
 type CellComposition = {
@@ -54,7 +55,7 @@ const columns = [
   },
 ];
 
-const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSection }) => {
+const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSection, theme }) => {
   const totalCount = useMemo(() => {
     return volumeSection
       ? cellCompositionData[volumeSection].reduce((sum, curr) => sum + curr.count, 0)
@@ -80,15 +81,16 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
         )}
       />
 
-      <div className="text-right mt-2">
-        <HttpDownloadButton
+      <div className="text-right mt-4">
+        <DownloadButton
+          theme={theme}
           onClick={() => downloadAsJson(
             cellCompositionData[volumeSection],
-            `rec-data-cell-composition_-_mtype-composition-${volumeSection}.json`
+            `Cell-Composition-Data-${volumeSection}.json`
           )}
         >
-          table data
-        </HttpDownloadButton>
+          Cell Composition Data
+        </DownloadButton>
       </div>
     </>
   );
