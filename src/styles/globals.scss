@@ -561,6 +561,10 @@ $collapsible-padding: 2rem 2rem;
   border-radius: 0px;
   margin: 0 4rem;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   @media (max-width: $breakpoint-sm) {
     margin: 0 0rem;
   }

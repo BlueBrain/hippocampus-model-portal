@@ -8,7 +8,8 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import LayerSelector3D from '@/components/LayerSelector3D';
+
+import SynapseDensityProfileGraph from './schaffer-collaterals-1/SynapsesDensityProfileGraph';
 
 const NeuronView: React.FC = () => {
 
@@ -48,10 +49,12 @@ const NeuronView: React.FC = () => {
 
                 <Collapsible id="pspSection" title={`PSP`}>
                     <p>Post-synaptic potential (PSP) measured at the soma is generally smaller than the PSP measured at the level of the synapse. The amount of decrement depends on the distance from the soma. </p>
+
                 </Collapsible>
 
-                <Collapsible id="bapSection" title={`CV`}>
+                <Collapsible id="bapSection" title={`bAP`}>
                     <p>Action potentials generated at the soma or axon initial segment (AIS) travels backwards into the dendrites. The height of the AP is generally smaller at the level of the dendrites than at the level of the soma. The amount of decrement depends on the distance from the soma.</p>
+                    <BAPGraph />
                 </Collapsible>
 
             </DataContainer>

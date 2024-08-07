@@ -28,14 +28,14 @@ const AcetylcholineView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We validated the impact of <Link className={`link theme-${theme}`} href={'/digital-reconstruction/acetylcholine/'}> acetylcholine</Link> at network level using <Link className={`link theme-${theme}`} href={'/experimental-data/acetylcholine/'}> available data from literature</Link>. As in the experiments, we observe different network dynamics depending on the concentration of acetylcholine.
+                                        We validated the impact of acetylcholine at network level using <Link className={`link theme-${theme}`} href={'/experimental-data/acetylcholine/'}>available data from literature</Link>. As in the experiments, we observe different network dynamics depending on the concentration of acetylcholine.
                                     </p>
                                 </InfoBox>
                             </div>
                         </StickyContainer>
                     </div>
-                </div>
-            </Filters>
+                </div >
+            </Filters >
         </>
     );
 };

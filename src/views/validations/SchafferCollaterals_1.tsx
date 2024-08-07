@@ -9,6 +9,12 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import SynapseDensityProfileGraph from './schaffer-collaterals-1/SynapsesDensityProfileGraph';
+import DivergenceGraph from './schaffer-collaterals-1/DivergenceGraph';
+import NumberOfSynapsesPerConnectionGraph from './schaffer-collaterals-1/NumberOfSynapsesPerConnectionGraph';
+import SynapsesConvergenceForPyramidalCellsGraph from './schaffer-collaterals-1/SynapseConvergenceForPyramidalCells';
+import SynapsesConvergenceForPyramidalCellsGraph_2 from './schaffer-collaterals-1/SynapseConvergenceForPyramidalCells_2';
+
 
 const SchafferCollateralsView: React.FC = () => {
 
@@ -45,6 +51,11 @@ const SchafferCollateralsView: React.FC = () => {
                 <Collapsible id="anatomySection" title={`Anatomy`}>
                     <p>We compared the model with experimental data in terms of synapse profile, number of synapses per connection, convergence and divergence.
                     </p>
+                    <SynapseDensityProfileGraph />
+                    <DivergenceGraph />
+                    <NumberOfSynapsesPerConnectionGraph />
+                    <SynapsesConvergenceForPyramidalCellsGraph />
+                    <SynapsesConvergenceForPyramidalCellsGraph_2 />
                 </Collapsible>
 
                 <Collapsible id="physiologySection" title={`Physiology`}>
