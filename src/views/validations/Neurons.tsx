@@ -54,7 +54,7 @@ const NeuronView: React.FC = () => {
 
                 <Collapsible id="bapSection" title={`bAP`}>
                     <p>Action potentials generated at the soma or axon initial segment (AIS) travels backwards into the dendrites. The height of the AP is generally smaller at the level of the dendrites than at the level of the soma. The amount of decrement depends on the distance from the soma.</p>
-                    <BAPGraph />
+
                 </Collapsible>
 
             </DataContainer>
