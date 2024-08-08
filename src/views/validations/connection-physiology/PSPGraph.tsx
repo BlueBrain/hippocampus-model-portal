@@ -32,10 +32,9 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
         const colors = ['red', 'green', 'blue', 'magenta'];
 
         const datasets = connectionClasses.map((connectionClass, index) => {
-            const filteredIndices = Object.entries(valueMap.connection_class)
-                .filter(([_, value]) => value === connectionClass)
-                .map(([key, _]) => key);
-
+            const filteredIndices = Object.keys(valueMap.connection_class).filter(
+                key => valueMap.connection_class[key] === connectionClass
+            );
             return {
                 label: connectionClass.toUpperCase(),
                 data: filteredIndices.map(i => ({
@@ -52,9 +51,6 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
             };
         });
 
-        // Calculate the maximum x-value for the fit lines
-        const maxXValue = Math.max(...Object.values(valueMap.mod_mean));
-
         // Add diagonal line
         const maxValue = Math.max(
             ...Object.values(valueMap.mod_mean),
@@ -64,7 +60,7 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
             label: 'Diagonal',
             data: [
                 { x: 0, y: 0 },
-                { x: maxXValue, y: maxXValue },
+                { x: maxValue, y: maxValue },
             ],
             borderColor: 'black',
             borderDash: [5, 5],
@@ -81,7 +77,7 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
             label: 'Fit (II)',
             data: [
                 { x: 0, y: 0 },
-                { x: maxXValue, y: maxXValue * slopeII },
+                { x: maxValue, y: maxValue * slopeII },
             ],
             borderColor: 'magenta',
             borderWidth: 2,
@@ -93,7 +89,7 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
             label: 'Fit (Rest)',
             data: [
                 { x: 0, y: 0 },
-                { x: maxXValue, y: maxXValue * slopeRest },
+                { x: maxValue, y: maxValue * slopeRest },
             ],
             borderColor: 'red',
             borderWidth: 2,
@@ -171,14 +167,8 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
                                         if (xErr) {
                                             ctx.save();
                                             ctx.beginPath();
-                                            ctx.moveTo(
-                                                xScale.getPixelForValue(Math.max(dataset.data[index].x - xErr, 0)),
-                                                y
-                                            );
-                                            ctx.lineTo(
-                                                xScale.getPixelForValue(dataset.data[index].x + xErr),
-                                                y
-                                            );
+                                            ctx.moveTo(xScale.getPixelForValue(dataset.data[index].x - xErr), y);
+                                            ctx.lineTo(xScale.getPixelForValue(dataset.data[index].x + xErr), y);
                                             ctx.strokeStyle = dataset.borderColor;
                                             ctx.stroke();
                                             ctx.restore();
@@ -187,14 +177,8 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
                                         if (yErr) {
                                             ctx.save();
                                             ctx.beginPath();
-                                            ctx.moveTo(
-                                                x,
-                                                yScale.getPixelForValue(Math.max(dataset.data[index].y - yErr, 0))
-                                            );
-                                            ctx.lineTo(
-                                                x,
-                                                yScale.getPixelForValue(dataset.data[index].y + yErr)
-                                            );
+                                            ctx.moveTo(x, yScale.getPixelForValue(dataset.data[index].y - yErr));
+                                            ctx.lineTo(x, yScale.getPixelForValue(dataset.data[index].y + yErr));
                                             ctx.strokeStyle = dataset.borderColor;
                                             ctx.stroke();
                                             ctx.restore();
@@ -214,21 +198,24 @@ const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
     }, [chartRef]);
 
     return (
-        <>
-            <div className="w-full max-w-3xl pt-4 mx-auto">
-                <div className="graph aspect-square">
-                    <canvas ref={chartRef} />
-                </div>
+        <div className="w-full max-w-3xl mx-auto">
+            <div className="graph aspect-square">
+                <canvas ref={chartRef} />
             </div>
-            <div className="mt-4 mb-4 text-center">
+            <div className="mt-4 text-center text-sm">
+                <p>Fitting lines:</p>
+                <p className="text-purple-600">I-I: y = 0.1096x</p>
+                <p className="text-red-600">Rest: y = 1.1690x</p>
+            </div>
+            <div className="mt-4 text-center">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(synapsesPerConnectionData, `Synapses-Per-Connection-Data.json`)}
                 >
-                    Synapses Per Connection Data
+                    Download Synapses Per Connection Data
                 </DownloadButton>
             </div>
-        </>
+        </div>
     );
 };
 

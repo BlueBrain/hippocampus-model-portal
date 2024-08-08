@@ -1,30 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 import {
     Chart,
-    LineController,
     ScatterController,
-    CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
     Tooltip,
-    Title,
+    Legend,
 } from 'chart.js';
-
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
 import ConnectionProbabilityData from './connection-probability.json';
 
 Chart.register(
-    LineController,
     ScatterController,
-    CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
     Tooltip,
-    Title
+    Legend
 );
 
 export type ConnectionProbabilityProps = {
@@ -32,15 +26,148 @@ export type ConnectionProbabilityProps = {
 };
 
 const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ theme }) => {
-    const chartRef = useRef(null);
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
+        if (chartRef.current) {
+            const ctx = chartRef.current.getContext('2d');
+            if (ctx) {
+                // Prepare data
+                const data = Object.keys(ConnectionProbabilityData.value_map.exp_mean).map(key => ({
+                    x: ConnectionProbabilityData.value_map.exp_mean[key],
+                    y: ConnectionProbabilityData.value_map.model_mean[key],
+                    connectionClass: ConnectionProbabilityData.value_map.connection_class[key]
+                }));
 
+                // Define custom plugin for diagonal line
+                const customPlugin = {
+                    id: 'customPlugin',
+                    afterDraw: (chart) => {
+                        const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
+
+                        // Draw diagonal line
+                        ctx.save();
+                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+                        ctx.setLineDash([5, 5]);
+                        ctx.beginPath();
+                        ctx.moveTo(left, bottom);
+                        ctx.lineTo(right, top);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                };
+
+                new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'EE',
+                                data: data.filter(d => d.connectionClass === 'EE'),
+                                backgroundColor: 'red',
+                                pointStyle: 'circle',
+                                radius: 6,
+                            },
+                            {
+                                label: 'EI',
+                                data: data.filter(d => d.connectionClass === 'EI'),
+                                backgroundColor: 'green',
+                                pointStyle: 'circle',
+                                radius: 6,
+                            },
+                            {
+                                label: 'IE',
+                                data: data.filter(d => d.connectionClass === 'IE'),
+                                backgroundColor: 'blue',
+                                pointStyle: 'circle',
+                                radius: 6,
+                            },
+                            {
+                                label: 'II',
+                                data: data.filter(d => d.connectionClass === 'II'),
+                                backgroundColor: 'purple',
+                                pointStyle: 'circle',
+                                radius: 6,
+                            }
+                        ]
+                    },
+                    options: {
+                        aspectRatio: 1,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Connection probability Experiment',
+
+
+                                },
+                                min: 0,
+                                max: 0.5,
+                                ticks: {
+                                    color: 'black',
+                                    font: {
+                                        size: 12,
+                                    },
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                },
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Connection probability Model',
+
+                                },
+                                min: 0,
+                                max: 0.5,
+                                ticks: {
+                                    font: {
+                                        size: 12,
+                                    },
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                },
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: 6,
+                                    boxHeight: 6,
+                                    padding: 15,
+                                    font: {
+                                        size: 12,
+                                    },
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        return `${context.dataset.label}: (${context.parsed.x.toFixed(3)}, ${context.parsed.y.toFixed(3)})`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [customPlugin]
+                });
+            }
+        }
     }, [chartRef]);
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph graph--rect">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">

@@ -13,8 +13,8 @@ import BoutonDensityValidation from './connection-anatomy/BoutonDensityValidatio
 import ConnectionProbability from './connection-anatomy/ConnectionProbability';
 import ConvergenceValidation from './connection-anatomy/ConvergenceValidation';
 import DivergenceValidation from './connection-anatomy/DivergenceValidation';
-import ExperimentalLaminarDistributionOfSynapses from './connection-anatomy/ExperimentalLaminarDistributionOfSynapses';
-import ModelLaminarDistributionOfDynapses from './connection-anatomy/ModelLaminarDistributionOfDynapses';
+
+import LaminarDistributionOfDynapses from './connection-anatomy/LaminarDistributionOfSynapses';
 import NbOfSynapsesPConnection from './connection-anatomy/NbOfSynapsesPConnection';
 import SynapticDivergencePercentages from './connection-anatomy/SynapticDivergencePercentages';
 
@@ -72,14 +72,6 @@ const ConnectionAnatomyView: React.FC = () => {
                     <DivergenceValidation theme={theme} />
                 </Collapsible>
 
-                <Collapsible id="ExperimentalLaminarDistributionOfSynapsesSection" title={`Experimental Laminar distribution of synapses`}>
-                    <ExperimentalLaminarDistributionOfSynapses theme={theme} />
-                </Collapsible>
-
-                <Collapsible id="ModelLaminarDistributionOfDynapsesSection" title={`Model Laminar distribution of synapses`}>
-                    <ModelLaminarDistributionOfDynapses theme={theme} />
-                </Collapsible>
-
                 <Collapsible id="NbOfSynapsesPConnectionSection" title={`Number of Synapse per connection validation`}>
                     <NbOfSynapsesPConnection theme={theme} />
                 </Collapsible>
@@ -87,6 +79,12 @@ const ConnectionAnatomyView: React.FC = () => {
                 <Collapsible id="SynapticDivergencePercentagesSection" title={`Synaptic divergence percetages`}>
                     <SynapticDivergencePercentages theme={theme} />
                 </Collapsible>
+
+
+                <Collapsible id="ModelLaminarDistributionOfDynapsesSection" title={`Model Laminar distribution of synapses`}>
+                    <LaminarDistributionOfDynapses theme={theme} />
+                </Collapsible>
+
 
 
             </DataContainer >

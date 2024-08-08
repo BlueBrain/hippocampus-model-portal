@@ -107,8 +107,10 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
 
     return (
         <div>
-            <div className="graph">
-                <canvas ref={chartRef} />
+            <div className="graph flex justify-center items-center">
+                <div className="w-1/2">
+                    <canvas ref={chartRef} />
+                </div>
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapseDensityProfileData, `synapse-density-profile.json`)}>

@@ -51,11 +51,11 @@ const SchafferCollateralsView: React.FC = () => {
                 <Collapsible id="anatomySection" title={`Anatomy`}>
                     <p>We compared the model with experimental data in terms of synapse profile, number of synapses per connection, convergence and divergence.
                     </p>
-                    <SynapseDensityProfileGraph />
-                    <DivergenceGraph />
-                    <NumberOfSynapsesPerConnectionGraph />
-                    <SynapsesConvergenceForPyramidalCellsGraph />
-                    <SynapsesConvergenceForPyramidalCellsGraph_2 />
+                    <div className="mt-4"> <SynapseDensityProfileGraph /></div>
+                    <div className="mt-4"> <DivergenceGraph /></div>
+                    <div className="mt-4"> <NumberOfSynapsesPerConnectionGraph /></div>
+                    <div className="mt-4"> <SynapsesConvergenceForPyramidalCellsGraph /></div>
+                    <div className="mt-4"> <SynapsesConvergenceForPyramidalCellsGraph_2 /></div>
                 </Collapsible>
 
                 <Collapsible id="physiologySection" title={`Physiology`}>

@@ -9,6 +9,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
+import PSPGraph from './connection-physiology/PSPGraph';
+
 
 const ConnectionPhysiologyView: React.FC = () => {
 
@@ -45,6 +47,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                 <Collapsible id="anatomySection" title={`PSP`}>
                     <p>Post-synaptic potential (PSP) measured at the soma.
                     </p>
+                    <PSPGraph theme={theme} />
                 </Collapsible>
 
                 <Collapsible id="physiologySection" title={`CV`}>
