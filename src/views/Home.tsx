@@ -161,7 +161,7 @@ const Home: React.FC = () => (
               },
               {
                 label: 'Connecton Physiology',
-                href: '/digital-reconstructions/synapses/',
+                href: '/digital-reconstructions/connection-physiology/',
               },
               {
                 label: 'Neurons',

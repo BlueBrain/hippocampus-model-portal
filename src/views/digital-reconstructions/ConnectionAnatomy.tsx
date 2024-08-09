@@ -122,7 +122,7 @@ const ConnectionsView: React.FC = () => {
             <StickyContainer centered={true}>
               <Title
                 primaryColor={colorName}
-                title="Connections"
+                title="Connection Anatomy"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />
@@ -273,52 +273,6 @@ const ConnectionsView: React.FC = () => {
           },
         ]}
       />
-      <DataContainer theme={theme}
-        visible={!!pretype && !!posttype}
-        navItems={[
-          { id: 'pathwaySection', label: 'Pathway' },
-          { id: 'synaptomesSection', label: 'Synaptomes' },
-          { id: 'simulationsSection', label: 'Simulations' },
-        ]}
-      >
-        <Collapsible
-          id="pathwaySection"
-          title={`Pathway ${pathway}`}
-        >
-          <h3 className="text-tmp">Pathway factsheet</h3>
-          <h3 className="text-tmp">Synaptic anatomy&physiology distribution plots</h3>
-          <h3 className="text-tmp">Exemplar connection</h3>
-
-          <HttpData path={connectionViewerDataPath(pretype, posttype)}>
-            {(data) => (
-              <div className="mt-3">
-                <h3>Exemplar connection 3D viewer</h3>
-                <Spin spinning={!connViewerReady}>
-                  <ConnectionViewer data={data} onReady={() => setConnViewerReady(true)} />
-                </Spin>
-              </div>
-            )}
-          </HttpData>
-        </Collapsible>
-
-        <Collapsible
-          id="synaptomesSection"
-          title="Synaptomes"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Text</h3>
-          <h3 className="text-tmp">Pre-synaptic Synaptome plots + render</h3>
-          <h3 className="text-tmp">Post-synaptic Synaptome plots + render</h3>
-        </Collapsible>
-
-        <Collapsible
-          id="simulationsSection"
-          title="Simulations"
-          className="mt-4"
-        >
-          <h3 className="text-tmp">Text + images/videos? + links to the pair recording app</h3>
-        </Collapsible>
-      </DataContainer >
     </>
   );
 };
