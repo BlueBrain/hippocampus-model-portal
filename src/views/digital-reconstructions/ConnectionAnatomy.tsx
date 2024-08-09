@@ -20,6 +20,8 @@ import QuickSelector from '@/components/QuickSelector';
 import DistibutionPlot from './connections/DistibutionPlot'; // Import the new component
 
 import selectorStyle from '../../styles/selector.module.scss';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const ConnectionsView: React.FC = () => {
   const router = useRouter();
@@ -116,79 +118,80 @@ const ConnectionsView: React.FC = () => {
 
   return (
     <>
+
       <Filters theme={theme} hasData={!!prelayer && !!postlayer}>
-        <div className="w-full flex flex-wrap">
-          <div className="w-full lg:w-1/2 mb-2">
-            <StickyContainer centered={true}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
+            <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Connection Anatomy"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p>
+                  <p >
                     We combined <Link href={"/experimental-data/connection-anatomy/"} className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href={"/reconstruction-data/connections/"} className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
           </div>
-          <div className="w-full lg:w-1/2 mb-2 flex flex-col">
-            <div className="w-full">
-              <div className={selectorStyle.row}>
-                <div className={`selector__column mt-3 theme-${theme}`}>
-                  <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
-                  <div className="selector__body">
-                    <VolumeSectionSelector3D
-                      value={volume_section}
-                      onSelect={setVolumeSectionQuery}
-                      theme={theme}
-                    />
-                  </div>
-                </div>
+
+          <div className="flex flex-col gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-1/2 md:w-full flex-grow md:flex-none justify-center" style={{ maxWidth: '800px' }}>
+            <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
+              <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
+              <div className="selector__body">
+                <VolumeSectionSelector3D
+                  value={volume_section}
+                  onSelect={setVolumeSectionQuery}
+                  theme={theme}
+                />
               </div>
+
             </div>
-            <div className="flex flex-wrap -mx-2">
-              <div className="w-full lg:w-1/2 px-2">
-                <div className={selectorStyle.row}>
-                  <div className={`selector__column mt-3 theme-${theme}`}>
-                    <div className={`selector__head theme-${theme}`}>2. Select a pre-synaptic cell group</div>
-                    <div className="selector__body">
-                      <List
-                        block
-                        list={cellGroup}
-                        value={prelayer}
-                        title="m-type"
-                        color={colorName}
-                        onSelect={setPreLayerQuery}
-                        theme={theme}
-                      />
-                    </div>
-                  </div>
+            <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
+
+              <><div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
+                <div className={`selector__head theme-${theme}`}>2. Select a pre-synaptic cell group</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={cellGroup}
+                    value={prelayer}
+                    title="m-type"
+                    color={colorName}
+                    onSelect={setPreLayerQuery}
+                    theme={theme} />
                 </div>
-              </div>
-              <div className="w-full lg:w-1/2 px-2">
-                <div className={selectorStyle.row}>
-                  <div className={`selector__column mt-3 theme-${theme}`}>
-                    <div className={`selector__head theme-${theme}`}>3. Select a post-synaptic cell group</div>
-                    <div className="selector__body">
-                      <List
-                        block
-                        list={cellGroup}
-                        value={postlayer}
-                        title="m-type"
-                        color={colorName}
-                        onSelect={setPostLayerQuery}
-                        theme={theme}
-                      />
-                    </div>
+              </div><div className={`selector__column theme-${theme} flex-1`}>
+                  <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
+                  <div className="selector__body">
+                    <List
+                      block
+                      list={cellGroup}
+                      value={postlayer}
+                      title="m-type"
+                      color={colorName}
+                      onSelect={setPostLayerQuery}
+                      theme={theme} />
                   </div>
-                </div>
+                </div></>
+
+            </div>
+          </div>
+
+          {/*
+           <div className="flex flex-col-reverse  md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none justify-center">
+            <div className={`selector__column theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+
               </div>
             </div>
           </div>
+          */}
+
         </div>
       </Filters>
 
@@ -207,45 +210,126 @@ const ConnectionsView: React.FC = () => {
       >
         {availablePlots.boutonDensitySection && (
           <Collapsible title="Bouton density of the presynaptic cells" id="boutonDensitySection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('bouton-density'), `Bouton-Density-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Bouton Density
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.nbSynapsesPerConnectionSection && (
           <Collapsible title="Number of synapses per connection" id="nbSynapsesPerConnectionSection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                sample convergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.diversionConnectionsDistributionSection && (
           <Collapsible title="Divergence (connections) distribution + mean and std" id="diversionConnectionsDistributionSection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-connection'), `sample-divergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                sample divergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.diversionSynapsesDistributionSection && (
           <Collapsible title="Divergence (synapses) distribution + mean and std" id="diversionSynapsesDistributionSection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-synapse'), `sample-divergence-by-synapse-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                sample divergence by synapse
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.LaminarDistributionSynapsesSection && (
           <Collapsible title="Laminar distribution of synapses" id="LaminarDistributionSynapsesSection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('laminar-distribution-synapses')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('laminar-distribution-synapses')} />
+            </div>
+
           </Collapsible>
         )}
         {availablePlots.convergenceConnectionsDistribution && (
           <Collapsible title="Convergence (connections) distribution + mean and std" id="convergenceConnectionsDistribution" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                sample convergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.convergenceSynapsesDistribution && (
           <Collapsible title="Convergence (synapses) distribution + mean and std" id="convergenceSynapsesDistribution" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-synapse'), `sample-convergence-by-synapse-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                sample convergence by synapse
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
         {availablePlots.connectionProbabilityDistributionSection && (
           <Collapsible title="Connection probability distribution vs inter-somatic distance + mean and std" id="connectionProbabilityDistributionSection" className="mt-4">
-            <DistibutionPlot plotData={getPlotDataById('connection-probability-vs-inter-somatic-distance')} />
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('connection-probability-vs-inter-somatic-distance')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('connection-probability-vs-inter-somatic-distance'), `connection-probability-vs-inter-somatic-distance-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                conn. probability v inter somatic distance
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
           </Collapsible>
         )}
-      </DataContainer>
+      </DataContainer >
 
       <QuickSelector
         color={colorName}
