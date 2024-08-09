@@ -5,14 +5,14 @@ import { RegionViewerProps } from './RegionViewer';
 import styles from './volume-viewer.module.scss';
 
 
-const VolumeViewerLazy = dynamic(() => import('./RegionViewer'), { ssr: false });
+const RegionViewerLazy = dynamic(() => import('./RegionViewer'), { ssr: false });
 
-const VolumeViewer: React.FC<RegionViewerProps> = (props) => {
+const RegionViewer: React.FC<RegionViewerProps> = (props) => {
   return (
     <div className={styles.fixedAspectRation}>
-      <VolumeViewerLazy {...props} />
+      <RegionViewerLazy {...props} />
     </div>
   );
 };
 
-export default VolumeViewer;
+export default RegionViewer;
