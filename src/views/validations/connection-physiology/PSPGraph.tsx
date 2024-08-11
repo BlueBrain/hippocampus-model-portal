@@ -21,7 +21,7 @@ Chart.register(
 );
 
 // Import the data from a separate file
-import synapsesPerConnectionData from './synapses-per-conections.json';
+import synapsesPerConnectionData from './psp-data.json';
 
 const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);

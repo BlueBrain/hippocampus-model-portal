@@ -4,21 +4,21 @@ import { Bar } from 'react-chartjs-2';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-import DivergenceData from './divergence.json';
+import SynapsesConvergenceForPyramidalCellsData from './synapse-convergence-for-pyramidal-cells_2.json';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-interface DivergenceGraphProps {
+interface SynapsesConvergenceForPyramidalCellsGraphProps {
     theme?: number;
 }
 
-const DivergenceGraph: React.FC<DivergenceGraphProps> = ({ theme }) => {
+const SynapsesConvergenceForPyramidalCellsGraph: React.FC<SynapsesConvergenceForPyramidalCellsGraphProps> = ({ theme }) => {
     const data = {
-        labels: DivergenceData.bins.map((bin: number) => bin.toFixed(2)),
+        labels: SynapsesConvergenceForPyramidalCellsData.bins,
         datasets: [
             {
-                label: DivergenceData.description,
-                data: DivergenceData.counts,
+                label: SynapsesConvergenceForPyramidalCellsData.description,
+                data: SynapsesConvergenceForPyramidalCellsData.counts,
                 backgroundColor: '#050A30',
                 borderColor: '#050A30',
                 borderWidth: 1,
@@ -33,26 +33,26 @@ const DivergenceGraph: React.FC<DivergenceGraphProps> = ({ theme }) => {
                 display: false,
             },
             title: {
-                display: true,
-                text: DivergenceData.description,
+                display: false,
+                text: SynapsesConvergenceForPyramidalCellsData.name,
             },
         },
         scales: {
             x: {
                 title: {
                     display: true,
-                    text: 'Synapse indegree on each CA1 PC',
+                    text: 'Synapse indegree',
                 },
                 ticks: {
                     callback: function (value: any, index: number) {
-                        return index % 10 === 0 ? this.getLabelForValue(value) : '';
+                        return index % 5 === 0 ? SynapsesConvergenceForPyramidalCellsData.bins[index].toFixed(0) : '';
                     }
                 }
             },
             y: {
                 title: {
                     display: true,
-                    text: DivergenceData.units || 'Count',
+                    text: 'Count',
                 },
                 beginAtZero: true,
             },
@@ -61,16 +61,16 @@ const DivergenceGraph: React.FC<DivergenceGraphProps> = ({ theme }) => {
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph no-margin">
                 <Bar data={data} options={options} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(DivergenceData, `Divergence-Data.json`)}>
-                    Divergence Data
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesConvergenceForPyramidalCellsData, `Synapse-Convergence-For-Pyramidal-Cells-Data.json`)}>
+                    Synapse Convergence For Pyramidal Cells Data
                 </DownloadButton>
             </div>
         </div>
     );
 };
 
-export default DivergenceGraph;
+export default SynapsesConvergenceForPyramidalCellsGraph;

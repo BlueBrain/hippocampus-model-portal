@@ -124,7 +124,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
-                                    display: true,
+                                    display: false,
                                     text: 'Synapses per connection Experiment'
                                 },
                                 min: 0,

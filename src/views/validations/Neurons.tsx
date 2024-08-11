@@ -9,7 +9,7 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
-import SynapseDensityProfileGraph from './schaffer-collaterals-1/SynapsesDensityProfileGraph';
+import SynapseDensityProfileGraph from './schaffer-collaterals-1/anatomy/SynapsesDensityProfileGraph';
 
 const NeuronView: React.FC = () => {
 

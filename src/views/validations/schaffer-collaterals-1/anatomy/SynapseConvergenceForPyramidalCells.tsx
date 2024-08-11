@@ -33,7 +33,7 @@ const SynapsesConvergenceForPyramidalCellsGraph: React.FC<SynapsesConvergenceFor
                 display: false,
             },
             title: {
-                display: true,
+                display: false,
                 text: SynapsesConvergenceForPyramidalCellsData.name,
             },
         },
@@ -61,7 +61,7 @@ const SynapsesConvergenceForPyramidalCellsGraph: React.FC<SynapsesConvergenceFor
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph no-margin">
                 <Bar data={data} options={options} />
             </div>
             <div className="mt-4">

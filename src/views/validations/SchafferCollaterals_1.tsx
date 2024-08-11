@@ -9,11 +9,11 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
-import SynapseDensityProfileGraph from './schaffer-collaterals-1/SynapsesDensityProfileGraph';
-import DivergenceGraph from './schaffer-collaterals-1/DivergenceGraph';
-import NumberOfSynapsesPerConnectionGraph from './schaffer-collaterals-1/NumberOfSynapsesPerConnectionGraph';
-import SynapsesConvergenceForPyramidalCellsGraph from './schaffer-collaterals-1/SynapseConvergenceForPyramidalCells';
-import SynapsesConvergenceForPyramidalCellsGraph_2 from './schaffer-collaterals-1/SynapseConvergenceForPyramidalCells_2';
+import SynapseDensityProfileGraph from './schaffer-collaterals-1/anatomy/SynapsesDensityProfileGraph';
+import DivergenceGraph from './schaffer-collaterals-1/anatomy/DivergenceGraph';
+import NumberOfSynapsesPerConnectionGraph from './schaffer-collaterals-1/anatomy/NumberOfSynapsesPerConnectionGraph';
+import SynapsesConvergenceForPyramidalCellsGraph from './schaffer-collaterals-1/anatomy/SynapseConvergenceForPyramidalCells';
+import SynapsesConvergenceForPyramidalCellsGraph_2 from './schaffer-collaterals-1/anatomy/SynapseConvergenceForPyramidalCells_2';
 
 
 const SchafferCollateralsView: React.FC = () => {
@@ -51,15 +51,26 @@ const SchafferCollateralsView: React.FC = () => {
                 <Collapsible id="anatomySection" title={`Anatomy`}>
                     <p>We compared the model with experimental data in terms of synapse profile, number of synapses per connection, convergence and divergence.
                     </p>
-                    <div className="mt-4"> <SynapseDensityProfileGraph /></div>
-                    <div className="mt-4"> <DivergenceGraph /></div>
-                    <div className="mt-4"> <NumberOfSynapsesPerConnectionGraph /></div>
-                    <div className="mt-4"> <SynapsesConvergenceForPyramidalCellsGraph /></div>
-                    <div className="mt-4"> <SynapsesConvergenceForPyramidalCellsGraph_2 /></div>
+                    <h2 className="text-lg mt-8">Density of synapses along the radial axis</h2>
+                    <div className="mt-2"> <SynapseDensityProfileGraph /></div>
+
+                    <h2 className="text-lg mt-16">Synapse outdegree from each CA3 PC</h2>
+                    <div className="mt-2"> <DivergenceGraph /></div>
+
+                    <h2 className="text-lg mt-16">Number of synapse per connection</h2>
+                    <div className="mt-2"> <NumberOfSynapsesPerConnectionGraph /></div>
+
+                    <h2 className="text-lg mt-16">Synapse indegree on each CA1 PC"</h2>
+                    <div className="mt-2"> <SynapsesConvergenceForPyramidalCellsGraph /></div>
+
+                    <h2 className="text-lg mt-16">Synapse convergence for Pyramidal cells</h2>
+                    <div className="mt-2"> <SynapsesConvergenceForPyramidalCellsGraph_2 /></div>
                 </Collapsible>
 
                 <Collapsible id="physiologySection" title={`Physiology`}>
                     <p>We compared the model with experimental data in terms of postsynaptic potential (PSP) amplitude and time-course (rise time, tau decay, and half-width), and EPSP-IPSP latency.                    </p>
+
+
                 </Collapsible>
 
             </DataContainer >

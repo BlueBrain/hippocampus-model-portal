@@ -47,7 +47,7 @@ const NumberOfSynapsesPerConectionsGraph: React.FC<NumberOfSynapsesPerConections
         scales: {
             x: {
                 title: {
-                    display: true,
+                    display: false,
                     text: 'Number of synapses',
                 },
                 ticks: {
@@ -70,7 +70,7 @@ const NumberOfSynapsesPerConectionsGraph: React.FC<NumberOfSynapsesPerConections
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph no-margin">
                 <Bar data={data} options={options} />
             </div>
             <div className="mt-4">
