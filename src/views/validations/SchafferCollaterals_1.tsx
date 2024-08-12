@@ -140,7 +140,7 @@ const SchafferCollateralsView: React.FC = () => {
                         yAxisTitle="Count"
                     />
 
-                    <div className="w-full flex flex-row gap-6">
+                    <div className="w-full flex flex-col lg:flex-row gap-6">
                         <div className="flex-1">
                             <h2 className="text-base mt-16 mb-2">{RiseTImeData.name}</h2>
                             <SCDistibutionGraph
