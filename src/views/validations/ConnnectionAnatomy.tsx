@@ -53,9 +53,9 @@ const ConnectionAnatomyView: React.FC = () => {
                     { id: 'ConnectionProbabilitySection', label: 'Connection probabilites validation' },
                     { id: 'ConvergenceValidationSection', label: 'Convergence validation' },
                     { id: 'DivergenceValidationSection', label: 'Divergence validation' },
-                    { id: 'ExperimentalLaminarDistributionOfSynapsesSection', label: 'Experimental Laminar distribution of synapses' },
+                    { id: 'NbOfSynapsesPConnectionSection', label: 'Number of Synapse per connection validation' },
+                    { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percetages' },
                     { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model Laminar distribution of synapses' },
-
                 ]}>
 
                 <Collapsible id="BoutonDensityValidationSection" title={`Bouton density validation`}>
