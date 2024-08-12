@@ -75,7 +75,6 @@ const ConnectionAnatomyView: React.FC = () => {
                             <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
                         </div>
                     </div>
-
                 </Collapsible>
 
                 <Collapsible id="DivergenceValidationSection" title={`Divergence validation`}>
