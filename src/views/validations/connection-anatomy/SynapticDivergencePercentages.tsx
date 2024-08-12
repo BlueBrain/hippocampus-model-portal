@@ -36,10 +36,12 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
             if (ctx) {
                 const mtypes = Object.values(SynapticDivergencePercentagesData.value_map.mtype);
 
+                const spPcIndex = mtypes.indexOf('SP_PC'); // Find the index of SP_PC
+
                 const hachurePlugin = {
                     id: 'hachurePlugin',
                     afterDatasetsDraw(chart, args, options) {
-                        const { ctx, data, chartArea: { top, bottom }, scales: { x, y } } = chart;
+                        const { ctx, data } = chart;
 
                         ctx.save();
                         ctx.lineWidth = 1;
@@ -52,16 +54,24 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                                     if (dataset.data[index] > 0) {
                                         const { x, y, width, height } = bar.getProps(['x', 'y', 'width', 'height']);
 
-                                        // Draw hachure lines
                                         ctx.save();
                                         ctx.beginPath();
-                                        ctx.rect(x - width / 2, y, width, bottom - y);
+                                        ctx.rect(x - width / 2, y, width, height);
                                         ctx.clip();
 
-                                        for (let i = y - width; i < bottom + width; i += 4) {
-                                            ctx.moveTo(x - width / 2, i);
-                                            ctx.lineTo(x + width / 2, i - width);
+                                        const lineSpacing = 4;
+                                        const angle = Math.PI / 4;
+
+                                        for (let i = -width; i < height + width; i += lineSpacing) {
+                                            const startX = x - width / 2;
+                                            const startY = y + i;
+                                            const endX = x + width / 2;
+                                            const endY = startY - width;
+
+                                            ctx.moveTo(startX, startY);
+                                            ctx.lineTo(endX, endY);
                                         }
+
                                         ctx.stroke();
                                         ctx.restore();
                                     }
@@ -81,26 +91,26 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                             {
                                 label: 'Model I-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_PC[index]),
-                                backgroundColor: 'rgba(0, 0, 255, 0.7)',  // Blue
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? 'rgba(220, 20, 60, 0.7)' : 'rgba(65, 105, 225, 0.7)'), // Red for SP_PC, Blue for others
                                 stack: 'Model',
                             },
                             {
                                 label: 'Model I-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_INT[index]),
-                                backgroundColor: 'rgba(128, 0, 128, 0.7)',  // Violet
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? 'rgba(34, 139, 34, 0.7)' : 'rgba(128, 0, 128, 0.7)'), // Green for SP_PC, Purple for others
                                 stack: 'Model',
                             },
                             {
                                 label: 'Exp E-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_PC[index] || 0),
-                                backgroundColor: 'rgba(255, 0, 0, 0.7)',  // Red
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? 'rgba(220, 20, 60, 0.7)' : 'rgba(65, 105, 225, 0.7)'), // Red only for SP_PC, transparent for others
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },
                             {
                                 label: 'Exp E-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_INT[index] || 0),
-                                backgroundColor: 'rgba(0, 128, 0, 0.7)',  // Green
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? 'rgba(34, 139, 34, 0.7)' : 'rgba(128, 0, 128, 0.7)'), // Green only for SP_PC, transparent for others
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },
@@ -114,9 +124,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                                 title: {
                                     display: true,
                                     text: 'mtype',
-                                    font: {
-                                        size: 14,
-                                    }
+                                    font: { size: 14 }
                                 },
                             },
                             y: {
@@ -124,9 +132,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                                 title: {
                                     display: true,
                                     text: 'Divergence (%)',
-                                    font: {
-                                        size: 14,
-                                    }
+                                    font: { size: 14 }
                                 },
                                 min: 0,
                                 max: 100,
@@ -134,14 +140,13 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                         },
                         plugins: {
                             legend: {
+                                display: false,
                                 position: 'right',
                                 labels: {
                                     usePointStyle: true,
                                     pointStyle: 'rect',
                                     padding: 15,
-                                    font: {
-                                        size: 12,
-                                    },
+                                    font: { size: 12 },
                                 }
                             },
                             tooltip: {

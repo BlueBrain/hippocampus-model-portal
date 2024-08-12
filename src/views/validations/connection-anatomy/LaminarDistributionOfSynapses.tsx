@@ -29,7 +29,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
         const hachurePlugin = {
             id: 'hachurePlugin',
             afterDatasetsDraw(chart, args, options) {
-                const { ctx, data, chartArea: { top, bottom }, scales: { x, y } } = chart;
+                const { ctx, data } = chart;
 
                 ctx.save();
                 ctx.lineWidth = 1;
@@ -42,18 +42,27 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                             if (dataset.data[index] > 0) {
                                 const { x, y, width, height } = bar.getProps(['x', 'y', 'width', 'height']);
 
-                                // Draw hachure lines
+                                // Clip to individual bar
                                 ctx.save();
                                 ctx.beginPath();
-                                ctx.rect(x - width / 2, y, width, bottom - y);
+                                ctx.rect(x - width / 2, y, width, height); // Adjust clipping to the bar itself
                                 ctx.clip();
 
-                                for (let i = y - width; i < bottom + width; i += 4) {
-                                    ctx.moveTo(x - width / 2, i);
-                                    ctx.lineTo(x + width / 2, i - width);
+                                const lineSpacing = 4; // Adjust line spacing for consistency
+                                const angle = Math.PI / 4; // 45-degree angle for hachures
+
+                                for (let i = -width; i < height + width; i += lineSpacing) {
+                                    const startX = x - width / 2;
+                                    const startY = y + i;
+                                    const endX = x + width / 2;
+                                    const endY = startY - width;
+
+                                    ctx.moveTo(startX, startY);
+                                    ctx.lineTo(endX, endY);
                                 }
+
                                 ctx.stroke();
-                                ctx.restore();
+                                ctx.restore(); // Restore context to original state after drawing each bar
                             }
                         });
                     }

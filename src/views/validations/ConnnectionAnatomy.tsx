@@ -11,8 +11,11 @@ import Collapsible from '@/components/Collapsible';
 
 import BoutonDensityValidation from './connection-anatomy/BoutonDensityValidation';
 import ConnectionProbability from './connection-anatomy/ConnectionProbability';
-import ConvergenceValidation from './connection-anatomy/ConvergenceValidation';
 import DivergenceValidation from './connection-anatomy/DivergenceValidation';
+
+import ConvergenceValidation from './connection-anatomy/ConvergenceValidation';
+import ConvergenceValidationApicalBasal from './connection-anatomy/convergence-validation-apical-basal.json';
+import ConvergenceValidationSomaAxon from './connection-anatomy/convergence-validation-soma-axon.json';
 
 import LaminarDistributionOfDynapses from './connection-anatomy/LaminarDistributionOfSynapses';
 import NbOfSynapsesPConnection from './connection-anatomy/NbOfSynapsesPConnection';
@@ -52,8 +55,7 @@ const ConnectionAnatomyView: React.FC = () => {
                     { id: 'DivergenceValidationSection', label: 'Divergence validation' },
                     { id: 'ExperimentalLaminarDistributionOfSynapsesSection', label: 'Experimental Laminar distribution of synapses' },
                     { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model Laminar distribution of synapses' },
-                    { id: 'NbOfSynapsesPConnectionSection', label: 'Number of Synapse per connection validation' },
-                    { id: 'SynapticDivergencePercentagesSection', label: '' },
+
                 ]}>
 
                 <Collapsible id="BoutonDensityValidationSection" title={`Bouton density validation`}>
@@ -65,7 +67,15 @@ const ConnectionAnatomyView: React.FC = () => {
                 </Collapsible>
 
                 <Collapsible id="ConvergenceValidationSection" title={`Convergence validation`}>
-                    <ConvergenceValidation theme={theme} />
+                    <div className="w-full flex flex-col lg:flex-row lg:gap-8 gap-10">
+                        <div className="flex-1">
+                            <ConvergenceValidation data={ConvergenceValidationSomaAxon} theme={theme} />
+                        </div>
+                        <div className="flex-1">
+                            <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
+                        </div>
+                    </div>
+
                 </Collapsible>
 
                 <Collapsible id="DivergenceValidationSection" title={`Divergence validation`}>
