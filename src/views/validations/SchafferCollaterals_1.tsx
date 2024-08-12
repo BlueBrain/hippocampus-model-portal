@@ -51,7 +51,7 @@ const SchafferCollateralsView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We validated the <Link className={`link theme-${theme}`} href={'/digital-reconstructions/schaffer-collaterals/'}> Schaffer collaterals</Link> using <Link className={`link theme-${theme}`} href={'/experimental-data/schaffer-collaterals/'}>available data on its anatomy and physiology</Link>.
+                                        We validated the <Link className={`link theme-${theme}`} href={'/digital-reconstructions/schaffer-collaterals/'}> Schaffer collaterals</Link> using <Link className={`link theme-${theme}`} href={'/experimental-data/schaffer-collaterals/'}>available data on its anatomy</Link>. We compared the model with experimental data in terms of synapse profile, number of synapses per connection, convergence and divergence.
                                     </p>
                                 </InfoBox>
                             </div>
@@ -61,113 +61,105 @@ const SchafferCollateralsView: React.FC = () => {
             </Filters>
             <DataContainer theme={theme}
                 navItems={[
-                    { id: 'anatomySection', label: 'Anatomy' },
-                    { id: 'physiologySection', label: 'Physiology' },
+                    { id: 'AnatomyDensityOfSynapsesSection', label: 'Anatomy Density of synapses along the radial axis' },
+                    { id: 'SynapsesConvergenceForPyramidalCellsSection', label: SynapsesConvergenceForPyramidalCellsData.name },
+                    { id: 'NumberOfSynapsesPerConectionsSection', label: NumberOfSynapsesPerConectionsData.name },
+                    { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: SynapsesConvergenceForPyramidalCellsTwoData.name },
+                    { id: 'DivergenceSection', label: 'Anatomy ' + DivergenceData.name },
+                    { id: 'PSPAmplitudeSection', label: PSPAmplitudeData.name },
+                    { id: 'PSCRatioFromSCToCB1RPlusSection', label: PSCRatioFromSCToCB1RPlusData.name },
+                    { id: 'PSCRatioFromSCToCB1RMinusSection', label: PSCRatioFromSCToCB1RMinusData.name },
+                    { id: 'TemporalDynamicsOfSCToPCSynapticTransmissionSection', label: 'Temporal Dynamics of SC to PC Synaptic Transmission' },
+                    { id: 'ESPS_IPSPLatencySection', label: ESPS_IPSPLatencyData.name },
                 ]}>
 
-                <Collapsible id="anatomySection" title={`Anatomy`}>
-                    <p>We compared the model with experimental data in terms of synapse profile, number of synapses per connection, convergence and divergence.
-                    </p>
-                    <h2 className="text-lg mt-8">Density of synapses along the radial axis</h2>
-                    <div className="mt-2"> <SynapseDensityProfileGraph /></div>
+                <Collapsible id="AnatomyDensityOfSynapsesSection" properties={["Anatomy"]} title={"Density of synapses along the radial axis"} >
+                    <SynapseDensityProfileGraph />
+                </Collapsible>
 
-                    <h2 className="text-lg mt-16 mb-2">{SynapsesConvergenceForPyramidalCellsData.name}</h2>
+                <Collapsible id="SynapsesConvergenceForPyramidalCellsSection" properties={["Anatomy"]} title={SynapsesConvergenceForPyramidalCellsData.name}>
                     <SCDistibutionGraph
                         data={SynapsesConvergenceForPyramidalCellsData}
                         xAxisTitle="Synapse Indegree from each CA1 PC"
                         yAxisTitle="Count"
                     />
+                </Collapsible>
 
-                    <h2 className="text-lg mt-8 mb-2">{NumberOfSynapsesPerConectionsData.name}</h2>
+                <Collapsible id="NumberOfSynapsesPerConectionsSection" properties={["Anatomy"]} title={NumberOfSynapsesPerConectionsData.name}>
                     <SCDistibutionGraph
                         data={NumberOfSynapsesPerConectionsData}
                         xAxisTitle="Synapse Indegree from each CA1 INT"
                         yAxisTitle="Count"
                         isLogarithmic={true}
                     />
+                </Collapsible>
 
-                    <h2 className="text-lg mt-8 mb-2">{SynapsesConvergenceForPyramidalCellsTwoData.name}</h2>
+                <Collapsible id="SynapsesConvergenceForPyramidalCellsTwoSection" properties={["Anatomy"]} title={SynapsesConvergenceForPyramidalCellsTwoData.name}>
                     <SCDistibutionGraph
                         data={SynapsesConvergenceForPyramidalCellsTwoData}
                         xAxisTitle="Synapses/Connection"
                         yAxisTitle="Count"
                     />
+                </Collapsible>
 
-                    <h2 className="text-lg mt-8 mb-2">{DivergenceData.name}</h2>
+                <Collapsible id="DivergenceSection" properties={["Anatomy"]} title={DivergenceData.name}>
                     <SCDistibutionGraph
                         data={DivergenceData}
                         xAxisTitle="Synapse Outdegree from each CA3 PC"
                         yAxisTitle=""
                     />
-
-
-
-                    {/*
-                    SynapsesConvergenceForPyramidalCellsTwoData
-
-                    <h2 className="text-lg mt-8 mb-2">{SynapsesConvergenceForPyramidalCellsData_2.name}</h2>
-                    <SCDistibutionGraph
-                        data={SynapsesConvergenceForPyramidalCellsData_2}
-                        xAxisTitle="PSP Amplitude (mV)"
-                        yAxisTitle="Count"
-                    />
-                    */}
-
                 </Collapsible>
 
-                <Collapsible id="physiologySection" title={`Physiology`}>
-                    <p>We compared the model with experimental data in terms of postsynaptic potential (PSP) amplitude and time-course (rise time, tau decay, and half-width), and EPSP-IPSP latency.                    </p>
-
-                    <h2 className="text-lg mt-8 mb-2">{PSPAmplitudeData.name}</h2>
+                <Collapsible id="PSPAmplitudeSection" properties={["Physiology"]} title={PSPAmplitudeData.name}>
                     <SCDistibutionGraph
                         data={PSPAmplitudeData}
                         xAxisTitle="PSP Amplitude (mV)"
                         yAxisTitle="Count"
                     />
+                </Collapsible>
 
-
-                    <h2 className="text-lg mt-16 mb-2">{PSCRatioFromSCToCB1RPlusData.name}</h2>
+                <Collapsible id="PSCRatioFromSCToCB1RPlusSection" properties={["Physiology"]} title={PSCRatioFromSCToCB1RPlusData.name}>
                     <SCDistibutionGraph
                         data={PSCRatioFromSCToCB1RPlusData}
                         xAxisTitle="PSC Ratio"
                         yAxisTitle="Count"
                     />
+                </Collapsible>
 
-                    <h2 className="text-lg mt-16 mb-2">{PSCRatioFromSCToCB1RMinusData.name}</h2>
+                <Collapsible id="PSCRatioFromSCToCB1RMinusSection" properties={["Physiology"]} title={PSCRatioFromSCToCB1RMinusData.name}>
                     <SCDistibutionGraph
                         data={PSCRatioFromSCToCB1RMinusData}
                         xAxisTitle="PSC Ratio"
                         yAxisTitle="Count"
                     />
+                </Collapsible>
 
-                    <div className="w-full flex flex-col lg:flex-row gap-6">
-                        <div className="flex-1">
-                            <h2 className="text-base mt-16 mb-2">{RiseTImeData.name}</h2>
-                            <SCDistibutionGraph
-                                data={RiseTImeData}
-                                xAxisTitle="Rise Time (ms)"
-                                yAxisTitle="Count"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <h2 className="text-base mt-16 mb-2">{TauDecayData.name}</h2>
-                            <SCDistibutionGraph
-                                data={TauDecayData}
-                                xAxisTitle="Tau Decay (ms)"
-                                yAxisTitle="Count"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <h2 className="text-base mt-16 mb-2">{HalfWidthData.name}</h2>
-                            <SCDistibutionGraph
-                                data={HalfWidthData}
-                                xAxisTitle="Half-width (ms)"
-                                yAxisTitle="Count"
-                            />
-                        </div>
-                    </div>
+                <Collapsible id="TemporalDynamicsOfSCToPCSynapticTransmissionSection" properties={["Physiology"]} title={"Temporal Dynamics of SC to PC Synaptic Transmission"}>
 
-                    <h2 className="text-lg mt-16 mb-2">{ESPS_IPSPLatencyData.name}</h2>
+                    <h2 className="text-base  mb-2">{RiseTImeData.name}</h2>
+                    <SCDistibutionGraph
+                        data={RiseTImeData}
+                        xAxisTitle="Rise Time (ms)"
+                        yAxisTitle="Count"
+                    />
+
+                    <h2 className="text-base mt-16 mb-2">{TauDecayData.name}</h2>
+                    <SCDistibutionGraph
+                        data={TauDecayData}
+                        xAxisTitle="Tau Decay (ms)"
+                        yAxisTitle="Count"
+                    />
+
+                    <h2 className="text-base mt-16 mb-2">{HalfWidthData.name}</h2>
+                    <SCDistibutionGraph
+                        data={HalfWidthData}
+                        xAxisTitle="Half-width (ms)"
+                        yAxisTitle="Count"
+                    />
+
+                </Collapsible>
+
+                <Collapsible id="ESPS_IPSPLatencySection" properties={["Physiology"]} title={ESPS_IPSPLatencyData.name}>
                     <SCDistibutionGraph
                         data={ESPS_IPSPLatencyData}
                         xAxisTitle="EPSP IPSP Latency (ms)"

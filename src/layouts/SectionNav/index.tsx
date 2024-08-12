@@ -65,7 +65,7 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
 
       {navItems.map((navItem, idx) => (
         <div
-          className={`${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
+          className={` ${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
           key={navItem.id}
           onClick={() => scrollTo(navItem.id)}
         >

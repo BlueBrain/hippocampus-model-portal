@@ -107,7 +107,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
 
     return (
         <div>
-            <div className="graph no-margin flex justify-center items-center">
+            <div className="graph  flex justify-center items-center">
                 <div className="w-1/2">
                     <canvas ref={chartRef} />
                 </div>

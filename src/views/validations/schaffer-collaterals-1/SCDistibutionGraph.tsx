@@ -112,7 +112,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
 
     return (
         <div>
-            <div className="graph no-margin no-padding">
+            <div className="graph">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
