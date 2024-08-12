@@ -1,4 +1,4 @@
-import { Layer, NeuriteType, VolumeSection, CellGroup, Theme } from './types';
+import { Layer, NeuriteType, VolumeSection, CellGroup, Theme, GraphTheme } from './types';
 
 export const layers: Layer[] = [
   'SLM',
@@ -14,6 +14,15 @@ export const theme: Theme = {
   4: { default: 0x44405B, hover: 0x625D77, selected: 0x807B92, selectedEdges: 0x9E98AE },
   5: { default: 0x44405B, hover: 0x595D79, selected: 0x6E7B97, selectedEdges: 0x8398B5 },
 };
+
+export const graphTheme: GraphTheme = {
+  red: 'rgba(220, 20, 60, 1)',
+  blue: 'rgba(65, 105, 225, 1)',
+  green: 'rgba(34, 139, 34, 1)',
+  purple: 'rgba(128, 0, 128, 1)',
+  yellow: 'rgba(255, 165, 0, 1)',
+};
+
 
 export const neuriteTypes: NeuriteType[] = [
   'axon',

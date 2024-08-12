@@ -10,6 +10,14 @@ export type NeuriteType = 'all' | 'axon' | 'apical' | 'basal' | 'dendrite' | 'so
 
 export type CellGroup = 'All' | 'Excitatory' | 'Inhibitory' | 'SLM_PPA' | 'SO_BP' | 'SO_BS' | 'SO_OLM' | 'SO_Tri' | 'SP_AA' | 'SP_BS' | 'SP_CCKBC' | 'SP_Ivy' | 'SP_PC' | 'SP_PC' | 'SP_PVBC' | 'SR_SCA';
 
+export type GraphTheme = {
+  red: string;
+  blue: string;
+  green: string;
+  purple: string;
+  yellow: string;
+};
+
 export type Color =
   | 'yellow'
   | 'blue'

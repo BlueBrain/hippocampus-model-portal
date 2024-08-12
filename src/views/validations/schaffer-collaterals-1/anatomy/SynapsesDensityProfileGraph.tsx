@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     LineController,
@@ -11,6 +11,7 @@ import {
     Title,
 } from 'chart.js';
 
+import { graphTheme } from '@/constants';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
@@ -33,10 +34,35 @@ export type SynapsesDensityProfileGraphProps = {
 
 const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = ({ theme }) => {
     const chartRef = useRef(null);
+    const chartInstanceRef = useRef(null);
+    const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
-        if (chartRef.current) {
+        const updateWindowSize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        };
+
+        // Set initial size
+        updateWindowSize();
+
+        // Add event listener
+        window.addEventListener('resize', updateWindowSize);
+
+        // Clean up
+        return () => window.removeEventListener('resize', updateWindowSize);
+    }, []);
+
+    useEffect(() => {
+        if (chartRef.current && windowSize.width > 0) {
             const ctx = chartRef.current.getContext('2d');
+
+            // Destroy the previous chart instance if it exists
+            if (chartInstanceRef.current) {
+                chartInstanceRef.current.destroy();
+            }
 
             const radialAxis = Object.values(SynapseDensityProfileData.value_map.radial_axis).map(Number);
             const modelData = Object.entries(SynapseDensityProfileData.value_map.model_data).map(([key, value]) => ({
@@ -48,7 +74,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 x: Number(value)
             }));
 
-            new Chart(ctx, {
+            chartInstanceRef.current = new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [
@@ -63,7 +89,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                         {
                             label: 'Experimental Data',
                             data: expData,
-                            borderColor: 'red',
+                            borderColor: graphTheme.red,
                             backgroundColor: 'red',
                             showLine: true,
                             pointRadius: 0,
@@ -72,6 +98,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             type: 'linear',
@@ -103,12 +130,12 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 },
             });
         }
-    }, [chartRef]);
+    }, [chartRef, windowSize]);
 
     return (
         <div>
-            <div className="graph  flex justify-center items-center">
-                <div className="w-1/2">
+            <div className="graph flex justify-center items-center">
+                <div className="w-1/2 h-[500px]">
                     <canvas ref={chartRef} />
                 </div>
             </div>

@@ -96,7 +96,9 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
         renderChart();
 
         const handleResize = () => {
-            renderChart(); // Re-render the chart on window resize
+            if (chartInstance.current) {
+                chartInstance.current.resize();
+            }
         };
 
         window.addEventListener('resize', handleResize);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     ScatterController,
@@ -9,8 +9,10 @@ import {
     Legend,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
+import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import pspAmplitudeData from './psp-amplitude.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     ScatterController,
@@ -43,12 +45,37 @@ type PSPAmplitudeProps = {
 
 const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null);
     const data: PSPAmplitudeData = pspAmplitudeData;
+    const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
-        if (chartRef.current && data && data.value_map) {
+        const updateWindowSize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        };
+
+        // Set initial size
+        updateWindowSize();
+
+        // Add event listener
+        window.addEventListener('resize', updateWindowSize);
+
+        // Clean up
+        return () => window.removeEventListener('resize', updateWindowSize);
+    }, []);
+
+    useEffect(() => {
+        if (chartRef.current && data && data.value_map && windowSize.width > 0) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
+                // Destroy previous chart instance if it exists
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.destroy();
+                }
+
                 // Prepare data
                 const chartData = Object.keys(data.value_map.exp_mean).map(key => ({
                     x: data.value_map.exp_mean[key],
@@ -67,7 +94,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                         ctx.save();
 
                         // Draw diagonal line
-                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.9)';
                         ctx.setLineDash([5, 5]);
                         ctx.beginPath();
                         ctx.moveTo(left, bottom);
@@ -91,6 +118,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
 
                             // Y error bars
                             ctx.strokeStyle = 'black';
+                            ctx.lineWidth = 2;
                             const yErrorPixels = Math.abs(y.getPixelForValue(datapoint.y + datapoint.yError) - y.getPixelForValue(datapoint.y));
                             ctx.beginPath();
                             ctx.moveTo(xPixel, yPixel - yErrorPixels);
@@ -102,7 +130,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                     }
                 };
 
-                new Chart(ctx, {
+                chartInstanceRef.current = new Chart(ctx, {
                     type: 'scatter',
                     data: {
                         datasets: [{
@@ -110,15 +138,15 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                             backgroundColor: (context) => {
                                 const connectionClass = chartData[context.dataIndex].connectionClass;
                                 switch (connectionClass) {
-                                    case 'E-E': return 'red';
-                                    case 'E-I': return 'green';
-                                    case 'I-E': return 'blue';
-                                    case 'I-I': return 'purple';
+                                    case 'E-E': return graphTheme.red;
+                                    case 'E-I': return graphTheme.green;
+                                    case 'I-E': return graphTheme.blue;
+                                    case 'I-I': return graphTheme.purple;
                                     default: return 'black';
                                 }
                             },
                             pointStyle: 'circle',
-                            radius: 5,
+                            radius: 4,
                             borderWidth: 1,
                         }]
                     },
@@ -154,16 +182,23 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                                 labels: {
                                     usePointStyle: true,
                                     pointStyle: 'circle',
+                                    borderRadius: 0,
+                                    boxWidth: 6,
+                                    boxHeight: 6,
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        weight: 'normal',
+                                    },
                                     generateLabels: (chart) => {
                                         return ['E-E', 'E-I', 'I-E', 'I-I'].map(label => ({
                                             text: label,
-                                            fillStyle: label === 'E-E' ? 'red' :
-                                                label === 'E-I' ? 'green' :
-                                                    label === 'I-E' ? 'blue' : 'purple',
-                                            strokeStyle: 'black',
-
+                                            fillStyle: label === 'E-E' ? graphTheme.red :
+                                                label === 'E-I' ? graphTheme.green :
+                                                    label === 'I-E' ? graphTheme.blue : graphTheme.purple,
                                             hidden: false,
-                                            index: null
+                                            index: null,
+                                            strokeStyle: 'transparent',
                                         }));
                                     }
                                 }
@@ -183,7 +218,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                 });
             }
         }
-    }, [chartRef]);
+    }, [chartRef, windowSize, data]);
 
     if (!data || !data.value_map) {
         return <div>No data available</div>;
@@ -191,7 +226,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
 
     return (
         <div>
-            <div className="graph graph--rect">
+            <div className="graph graph--rect flex justify-center">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
