@@ -9,8 +9,8 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
-import PSPGraph from './connection-physiology/PSPGraph';
-
+import PSPAmplitude from './connection-physiology/PSPAmplitude';
+import PSPCVValidation from './connection-physiology/PSPCVValidation';
 
 const ConnectionPhysiologyView: React.FC = () => {
 
@@ -45,13 +45,14 @@ const ConnectionPhysiologyView: React.FC = () => {
                 ]}>
 
                 <Collapsible id="anatomySection" title={`PSP`}>
-                    <p>Post-synaptic potential (PSP) measured at the soma.
+                    <p className='mb-4'>Post-synaptic potential (PSP) measured at the soma.
                     </p>
-                    <PSPGraph theme={theme} />
+                    <PSPAmplitude />
                 </Collapsible>
 
                 <Collapsible id="physiologySection" title={`CV`}>
-                    <p>PSP peaks can vary among several recordings due to the stochastic nature of the synaptic release. The coefficient of variation (CV) of the first PSP peak has been correlated with the number of vesicles in the release-ready pool (NRRP) (<Link className='link' href={"https://pubmed.ncbi.nlm.nih.gov/31680928/"}>Barros-Zulaica et al., 2019</Link>). </p>
+                    <p className='mb-4'>PSP peaks can vary among several recordings due to the stochastic nature of the synaptic release. The coefficient of variation (CV) of the first PSP peak has been correlated with the number of vesicles in the release-ready pool (NRRP) (<Link className='link' href={"https://pubmed.ncbi.nlm.nih.gov/31680928/"}>Barros-Zulaica et al., 2019</Link>). </p>
+                    <PSPCVValidation />
                 </Collapsible>
             </DataContainer >
 
