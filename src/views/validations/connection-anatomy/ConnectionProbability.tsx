@@ -8,9 +8,11 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import { GraphTheme } from '@/types';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import ConnectionProbabilityData from './connection-probability.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     ScatterController,
@@ -64,28 +66,28 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                             {
                                 label: 'EE',
                                 data: data.filter(d => d.connectionClass === 'EE'),
-                                backgroundColor: 'red',
+                                backgroundColor: graphTheme.red,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'EI',
                                 data: data.filter(d => d.connectionClass === 'EI'),
-                                backgroundColor: 'green',
+                                backgroundColor: graphTheme.green,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'IE',
                                 data: data.filter(d => d.connectionClass === 'IE'),
-                                backgroundColor: 'blue',
+                                backgroundColor: graphTheme.blue,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'II',
                                 data: data.filter(d => d.connectionClass === 'II'),
-                                backgroundColor: 'purple',
+                                backgroundColor: graphTheme.purple,
                                 pointStyle: 'circle',
                                 radius: 6,
                             }

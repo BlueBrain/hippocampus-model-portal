@@ -94,7 +94,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                         ctx.save();
 
                         // Draw diagonal line
-                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.9)';
+                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.)';
                         ctx.setLineDash([5, 5]);
                         ctx.beginPath();
                         ctx.moveTo(left, bottom);

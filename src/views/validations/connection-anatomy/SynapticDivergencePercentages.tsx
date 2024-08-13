@@ -12,6 +12,7 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import SynapticDivergencePercentagesData from './synaptic-divergence-percentages.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     BarController,
@@ -91,26 +92,26 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                             {
                                 label: 'Model I-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_PC[index]),
-                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? 'rgba(220, 20, 60, 0.7)' : 'rgba(65, 105, 225, 0.7)'), // Red for SP_PC, Blue for others
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.red : graphTheme.blue), // Red for SP_PC, Blue for others
                                 stack: 'Model',
                             },
                             {
                                 label: 'Model I-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_INT[index]),
-                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? 'rgba(34, 139, 34, 0.7)' : 'rgba(128, 0, 128, 0.7)'), // Green for SP_PC, Purple for others
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.green : graphTheme.purple), // Green for SP_PC, Purple for others
                                 stack: 'Model',
                             },
                             {
                                 label: 'Exp E-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_PC[index] || 0),
-                                backgroundColor: mtypes.map((_, index) => index === 6 ? 'rgba(220, 20, 60, 0.7)' : 'rgba(65, 105, 225, 0.7)'), // Red only for SP_PC, transparent for others
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.red : graphTheme.blue), // Red only for SP_PC, transparent for others
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },
                             {
                                 label: 'Exp E-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_INT[index] || 0),
-                                backgroundColor: mtypes.map((_, index) => index === 6 ? 'rgba(34, 139, 34, 0.7)' : 'rgba(128, 0, 128, 0.7)'), // Green only for SP_PC, transparent for others
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.green : graphTheme.purple), // Green only for SP_PC, transparent for others
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },

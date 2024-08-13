@@ -13,6 +13,8 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import BoutonDensityValidationData from './bouton-density-validation.json';
+import { GraphTheme } from '@/types';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     ScatterController,
@@ -103,8 +105,8 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                                     x: index,
                                     y: BoutonDensityValidationData.value_map.exp_mean[index],
                                 })),
-                                backgroundColor: 'red',
-                                borderColor: 'red',
+                                backgroundColor: graphTheme.red,
+                                borderColor: graphTheme.red,
                                 pointStyle: 'circle',
                                 pointRadius: 5,
                                 showLine: false,

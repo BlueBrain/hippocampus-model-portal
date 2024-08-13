@@ -14,6 +14,7 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import DivergenceValidationData from './divergence-validation.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     LineController,
@@ -89,7 +90,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                             const yMinPixel = y.getPixelForValue(point.yMin);
                             const yMaxPixel = y.getPixelForValue(point.yMax);
 
-                            ctx.strokeStyle = 'red';
+                            ctx.strokeStyle = graphTheme.red;
                             ctx.beginPath();
                             ctx.moveTo(xPixel, yMinPixel);
                             ctx.lineTo(xPixel, yMaxPixel);
@@ -128,10 +129,10 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                                 type: 'scatter',
                                 label: 'Experiment',
                                 data: experimentData,
-                                backgroundColor: 'red',
+                                backgroundColor: graphTheme.red,
                                 pointStyle: 'circle',
                                 radius: 5,
-                                borderColor: 'red',
+                                borderColor: graphTheme.red,
                                 borderWidth: 1,
                             }
                         ]

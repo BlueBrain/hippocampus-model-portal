@@ -9,8 +9,10 @@ import {
     Legend
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
+import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import bAPValidationData from './bap-validation.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     ScatterController,
@@ -67,8 +69,8 @@ const BAPValidationGraph = ({ theme }) => {
                         {
                             label: 'Experiment',
                             data: expDataset,
-                            backgroundColor: 'red',
-                            borderColor: 'red',
+                            backgroundColor: graphTheme.red,
+                            borderColor: graphTheme.red,
                             pointStyle: 'circle',
                             pointRadius: 3,
                             pointHoverRadius: 7,

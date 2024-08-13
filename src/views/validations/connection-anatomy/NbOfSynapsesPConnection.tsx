@@ -13,6 +13,7 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import NbOfSynapsesPConnectionData from './nb-of-synapses-p-connection.json';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     LineController,
@@ -67,7 +68,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             const yPixel = y.getPixelForValue(datapoint.y);
 
                             // X error bars
-                            ctx.strokeStyle = 'red';
+                            ctx.strokeStyle = graphTheme.red;
                             ctx.lineWidth = 2;
                             const xErrorPixels = Math.abs(x.getPixelForValue(datapoint.x + datapoint.xError) - x.getPixelForValue(datapoint.x));
                             ctx.beginPath();

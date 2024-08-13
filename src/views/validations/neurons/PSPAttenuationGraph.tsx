@@ -12,6 +12,8 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import pspAttenuationData from './psp-attenuation.json';
+import { GraphTheme } from '@/types';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     ScatterController,
@@ -83,8 +85,8 @@ const PSPAttenuationGraph = ({ theme }) => {
                         {
                             label: 'Experiment',
                             data: expDataset,
-                            backgroundColor: 'red',
-                            borderColor: 'red',
+                            backgroundColor: graphTheme.red,
+                            borderColor: graphTheme.red,
                             pointStyle: 'circle',
                             pointRadius: 3,
                             pointHoverRadius: 5,
@@ -92,8 +94,8 @@ const PSPAttenuationGraph = ({ theme }) => {
                         {
                             label: 'Experiment Fit',
                             data: expFitDataset,
-                            backgroundColor: 'red',
-                            borderColor: 'red',
+                            backgroundColor: graphTheme.red,
+                            borderColor: graphTheme.red,
                             pointRadius: 0,
                             showLine: true,
                             borderWidth: 3,

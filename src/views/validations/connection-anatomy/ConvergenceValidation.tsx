@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale } from 'chart.js';
 import { downloadAsJson } from '@/utils';
+import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { graphTheme } from '@/constants';
 
 Chart.register(ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale);
 
@@ -65,8 +67,8 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                                 yMin: Math.max(0, d[4] - d[5]),
                                 yMax: d[4] + d[5]
                             })),
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
+                            backgroundColor: graphTheme.blue,
+                            borderColor: graphTheme.blue,
                         },
                         {
                             label: 'Excitatory',
@@ -76,8 +78,8 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                                 yMin: Math.max(0, d[4] - d[5]),
                                 yMax: d[4] + d[5]
                             })),
-                            backgroundColor: 'green',
-                            borderColor: 'green',
+                            backgroundColor: graphTheme.green,
+                            borderColor: graphTheme.green,
                         },
                         {
                             label: 'Experimental',
@@ -87,8 +89,8 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                                 yMin: Math.max(0, d[2] - d[3]),
                                 yMax: d[2] + d[3]
                             })),
-                            backgroundColor: 'red',
-                            borderColor: 'red',
+                            backgroundColor: graphTheme.red,
+                            borderColor: graphTheme.red,
                         }
                     ]
                 },
