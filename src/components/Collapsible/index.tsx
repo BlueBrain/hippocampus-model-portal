@@ -36,7 +36,6 @@ const Collapsible: React.FC<CollapsibleProps> = ({
         title={title}
         onClick={() => setCollapsed(!isCollapsed)}
       >
-        <span>{title}</span>
         {properties.length > 0 && (
           <div className="properties" style={{ display: 'inline' }}>
             {properties.map((property, index) => (
@@ -47,6 +46,8 @@ const Collapsible: React.FC<CollapsibleProps> = ({
             ))}
           </div>
         )}
+        <span>{title}</span>
+
         <span className="arrow">
           <IoIosArrowUp />
         </span>

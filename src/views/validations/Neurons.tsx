@@ -8,7 +8,9 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import LayerSelector3D from '@/components/LayerSelector3D';
+
+import BAPValidationGraph from './neurons/BAPValidationGraph';
+import PSPAttenuationGraph from './neurons/PSPAttenuationGraph';
 
 const NeuronView: React.FC = () => {
 
@@ -42,17 +44,21 @@ const NeuronView: React.FC = () => {
             </Filters>
             <DataContainer theme={theme}
                 navItems={[
-                    { id: 'pspSection', label: 'PSP' },
                     { id: 'bapSection', label: 'bAP' },
+                    { id: 'pspSection', label: 'PSP' },
                 ]}>
 
-                <Collapsible id="pspSection" title={`PSP`}>
-                    <p>Post-synaptic potential (PSP) measured at the soma is generally smaller than the PSP measured at the level of the synapse. The amount of decrement depends on the distance from the soma. </p>
+                <Collapsible id="bapSection" title={`bAP`}>
+                    <p className='mb-4'>Action potentials generated at the soma or axon initial segment (AIS) travels backwards into the dendrites. The height of the AP is generally smaller at the level of the dendrites than at the level of the soma. The amount of decrement depends on the distance from the soma.</p>
+                    <BAPValidationGraph theme={theme} />
                 </Collapsible>
 
-                <Collapsible id="bapSection" title={`CV`}>
-                    <p>Action potentials generated at the soma or axon initial segment (AIS) travels backwards into the dendrites. The height of the AP is generally smaller at the level of the dendrites than at the level of the soma. The amount of decrement depends on the distance from the soma.</p>
+
+                <Collapsible id="pspSection" title={`PSP`}>
+                    <p className='mb-4'>Post-synaptic potential (PSP) measured at the soma is generally smaller than the PSP measured at the level of the synapse. The amount of decrement depends on the distance from the soma. </p>
+                    <PSPAttenuationGraph theme={theme} />
                 </Collapsible>
+
 
             </DataContainer>
 

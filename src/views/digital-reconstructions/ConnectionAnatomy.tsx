@@ -122,7 +122,7 @@ const ConnectionsView: React.FC = () => {
             <StickyContainer centered={true}>
               <Title
                 primaryColor={colorName}
-                title="Connections"
+                title="Connection Anatomy"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />

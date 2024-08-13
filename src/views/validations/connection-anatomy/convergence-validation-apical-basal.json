@@ -1,0 +1,51 @@
+{
+    "name": "Convergence Validation Basal-Apical",
+    "columns": [
+        "Region",
+        "Synapse",
+        "exp_mean",
+        "exp_std",
+        "model_mean",
+        "model_std"
+    ],
+    "index": [
+        0,
+        1,
+        2,
+        3
+    ],
+    "data": [
+        [
+            "basal",
+            "exc",
+            197.0,
+            0.0,
+            269.3353799338,
+            139.8157244969
+        ],
+        [
+            "basal",
+            "inh",
+            639.2,
+            146.6,
+            823.6727468003,
+            385.8096660304
+        ],
+        [
+            "apical",
+            "exc",
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        [
+            "apical",
+            "inh",
+            1074.4,
+            238.9,
+            537.8037769623,
+            264.2095122256
+        ]
+    ]
+}

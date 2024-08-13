@@ -227,7 +227,7 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Morphology library" href="/reconstruction-data/morphology-library/" />
               <SubmenuLink label="Neuron models" href="/reconstruction-data/neuron-models/" />
               <SubmenuLink label="Neuron model library" href="/reconstruction-data/neuron-model-library/" />
-              <SubmenuLink label="Connections" href="/reconstruction-data/connections/" />
+              <SubmenuLink label="Connection Anatomy" href="/reconstruction-data/connection-anatomy/" />
               <SubmenuLink label="Connection Physiology" href="/reconstruction-data/connection-physiology/" />
               <SubmenuLink label="Schaffer Collaterals" href="/reconstruction-data/schaffer-collaterals/" />
               <SubmenuLink label="Acetylcholine" href="/reconstruction-data/acetylcholine/" />

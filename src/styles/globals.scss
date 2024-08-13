@@ -562,6 +562,10 @@ $collapsible-padding: 2rem 2rem;
   border-radius: 0px;
   margin: 0 4rem;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   @media (max-width: $breakpoint-sm) {
     margin: 0 0rem;
   }
@@ -572,6 +576,15 @@ $collapsible-padding: 2rem 2rem;
 
   &.no-margin {
     margin: 0;
+  }
+
+  &--rect {
+    padding: 2rem 12rem;
+
+    @media (max-width: $breakpoint-lg) {
+      padding: 2rem 2rem;
+      margin: 0;
+    }
   }
 }
 

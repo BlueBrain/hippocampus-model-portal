@@ -6,7 +6,20 @@ import StickyContainer from '@/components/StickyContainer';
 
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
+import DataContainer from '@/components/DataContainer';
+import Collapsible from '@/components/Collapsible';
 
+import BoutonDensityValidation from './connection-anatomy/BoutonDensityValidation';
+import ConnectionProbability from './connection-anatomy/ConnectionProbability';
+import DivergenceValidation from './connection-anatomy/DivergenceValidation';
+
+import ConvergenceValidation from './connection-anatomy/ConvergenceValidation';
+import ConvergenceValidationApicalBasal from './connection-anatomy/convergence-validation-apical-basal.json';
+import ConvergenceValidationSomaAxon from './connection-anatomy/convergence-validation-soma-axon.json';
+
+import LaminarDistributionOfDynapses from './connection-anatomy/LaminarDistributionOfSynapses';
+import NbOfSynapsesPConnection from './connection-anatomy/NbOfSynapsesPConnection';
+import SynapticDivergencePercentages from './connection-anatomy/SynapticDivergencePercentages';
 
 const ConnectionAnatomyView: React.FC = () => {
 
@@ -34,8 +47,56 @@ const ConnectionAnatomyView: React.FC = () => {
                     </div>
                 </div>
             </Filters>
+            <DataContainer theme={theme}
+                navItems={[
+                    { id: 'BoutonDensityValidationSection', label: 'Bouton density validation' },
+                    { id: 'ConnectionProbabilitySection', label: 'Connection probabilites validation' },
+                    { id: 'ConvergenceValidationSection', label: 'Convergence validation' },
+                    { id: 'DivergenceValidationSection', label: 'Divergence validation' },
+                    { id: 'NbOfSynapsesPConnectionSection', label: 'Nb. of Synapse p.connection validation' },
+                    { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percetages' },
+                    { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model Laminar distribution of synapses' },
+                ]}>
+
+                <Collapsible id="BoutonDensityValidationSection" title={`Bouton density validation`}>
+                    <BoutonDensityValidation theme={theme} />
+                </Collapsible>
+
+                <Collapsible id="ConnectionProbabilitySection" title={`Connection probabilites validation`}>
+                    <ConnectionProbability theme={theme} />
+                </Collapsible>
+
+                <Collapsible id="ConvergenceValidationSection" title={`Convergence validation`}>
+
+                    <div className="flex flex-col gap-8">
+                        <ConvergenceValidation data={ConvergenceValidationSomaAxon} theme={theme} />
+
+                        <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
+
+                    </div>
+
+                </Collapsible>
+
+                <Collapsible id="DivergenceValidationSection" title={`Divergence validation`}>
+                    <DivergenceValidation theme={theme} />
+                </Collapsible>
+
+                <Collapsible id="NbOfSynapsesPConnectionSection" title={`Number of Synapse per connection validation`}>
+                    <NbOfSynapsesPConnection theme={theme} />
+                </Collapsible>
+
+                <Collapsible id="SynapticDivergencePercentagesSection" title={`Synaptic divergence percetages`}>
+                    <SynapticDivergencePercentages theme={theme} />
+                </Collapsible>
 
 
+                <Collapsible id="ModelLaminarDistributionOfDynapsesSection" title={`Model Laminar distribution of synapses`}>
+                    <LaminarDistributionOfDynapses theme={theme} />
+                </Collapsible>
+
+
+
+            </DataContainer >
         </>
     );
 };

@@ -1,9 +1,6 @@
 import React from 'react';
-import { Row, Col } from 'antd';
-import Image from 'next/image';
 import Link from 'next/link';
 
-import { colorName } from './config';
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
@@ -12,9 +9,6 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
 import SynsPerConnectionTable from './connections/synapsesPerConnection';
-
-import selectorStyle from '@/styles/selector.module.scss';
-
 
 const ConnectionsView: React.FC = () => {
 
@@ -28,7 +22,7 @@ const ConnectionsView: React.FC = () => {
           <div className="w-full mb-12 md:mb-0">
             <StickyContainer>
               <Title
-                title="Connections"
+                title="Connection Anatomy"
                 subtitle="Reconstruction Data"
                 theme={theme}
               />

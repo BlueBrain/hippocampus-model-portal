@@ -1,16 +1,13 @@
 import React from 'react';
-import Link from 'next/link';
-
 
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
-import selectorStyle from '@/styles/selector.module.scss';
 
 
-const AcetylcholineView: React.FC = () => {
+const SchafferCollateralsView: React.FC = () => {
 
     const theme = 4;
 
@@ -21,24 +18,24 @@ const AcetylcholineView: React.FC = () => {
                     <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
-                                title="Acetylcholine"
+                                title="Schaffer Collaterals 2"
                                 subtitle="Validations"
                                 theme={theme}
                             />
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We validated the impact of acetylcholine at network level using <Link className={`link theme-${theme}`} href={'/experimental-data/acetylcholine/'}>available data from literature</Link>. As in the experiments, we observe different network dynamics depending on the concentration of acetylcholine.
+                                        After we validated the Schaffer collaterals at neuron and synapse level, we validated them at network level. In particular, we reproduced one of the experiments reported in Sasaki et al. (2006), where Schaffer collaterals are stimulated at different intensities with and without Gabazine (an antagonist of GABAA receptors). As in the experiment, the feedforward inhibition linearises the I-O response, while the I-O response saturates quickly when the inhibition is blocked. We repeated the simulations over three different slices.
                                     </p>
                                 </InfoBox>
                             </div>
                         </StickyContainer>
                     </div>
-                </div >
-            </Filters >
+                </div>c
+            </Filters>
         </>
     );
 };
 
 
-export default AcetylcholineView;
+export default SchafferCollateralsView;

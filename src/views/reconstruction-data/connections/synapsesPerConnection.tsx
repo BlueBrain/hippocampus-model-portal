@@ -1,112 +1,231 @@
-import React from 'react';
-import { FixedType } from 'rc-table/lib/interface';
-
-import ResponsiveTable from '@/components/ResponsiveTable';
-import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
+import React, { useEffect, useRef } from 'react';
+import {
+    Chart,
+    ScatterController,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip,
+} from 'chart.js';
 import { downloadAsJson } from '@/utils';
-
-import SynapsesPerConnectionData from './synapses-per-conections.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-type TableEntry = {
-    Pathway: string;
-    Convergence: string;
-    BioMean: number;
-    BioStd: number | null;
-    BioN: number;
-    ModMean: number;
-    ModStd: number;
-    ModN: number;
-    ConnectionClass: string;
-};
+Chart.register(
+    ScatterController,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip
+);
 
-const transformData = (data: any): TableEntry[] => {
-    const entries = data.values[0].value_map;
-    return Object.keys(entries.pre).map(key => ({
-        Pathway: `${entries.pre[key]}_${entries.post[key]}`,
-        Convergence: entries.connection_class[key],
-        BioMean: entries.bio_mean[key],
-        BioStd: entries.bio_std[key],
-        BioN: entries.bio_n[key],
-        ModMean: entries.mod_mean[key],
-        ModStd: entries.mod_std[key],
-        ModN: entries.mod_n[key],
-        ConnectionClass: entries.connection_class[key]
-    }));
-};
+// Import the data from a separate file
+import synapsesPerConnectionData from './synapses-per-conections.json';
 
-const SynapsesPerConnectionColumns = [
-    {
-        title: 'Pathway',
-        dataIndex: 'Pathway' as keyof TableEntry,
-        fixed: 'left' as FixedType,
-    },
-    {
-        title: 'Convergence',
-        dataIndex: 'Convergence' as keyof TableEntry,
-        fixed: 'left' as FixedType,
-    },
-    {
-        title: 'Bio Mean',
-        dataIndex: 'BioMean' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Bio Std',
-        dataIndex: 'BioStd' as keyof TableEntry,
-        render: (value: number | null) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Bio N',
-        dataIndex: 'BioN' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Mod Mean',
-        dataIndex: 'ModMean' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Mod Std',
-        dataIndex: 'ModStd' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Mod N',
-        dataIndex: 'ModN' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />
-    },
-    {
-        title: 'Connection Class',
-        dataIndex: 'ConnectionClass' as keyof TableEntry,
-    },
-];
+const SynapsesPerConnection: React.FC<{ theme?: number }> = ({ theme }) => {
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
 
-type SynapsesPerConnectionProps = {
-    theme?: number;
-};
+    const createDatasets = () => {
+        const valueMap = synapsesPerConnectionData.values[0].value_map;
+        const connectionClasses = ['ee', 'ei', 'ie', 'ii'];
+        const colors = ['red', 'green', 'blue', 'magenta'];
 
-const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) => {
-    const data = transformData(SynapsesPerConnectionData);
+        const datasets = connectionClasses.map((connectionClass, index) => {
+            const filteredIndices = Object.entries(valueMap.connection_class)
+                .filter(([_, value]) => value === connectionClass)
+                .map(([key, _]) => key);
+
+            return {
+                label: connectionClass.toUpperCase(),
+                data: filteredIndices.map(i => ({
+                    x: valueMap.mod_mean[i],
+                    y: valueMap.bio_mean[i],
+                    xErr: valueMap.mod_std[i],
+                    yErr: valueMap.bio_std[i],
+                })),
+                backgroundColor: colors[index],
+                borderColor: colors[index],
+                pointStyle: 'circle',
+                pointRadius: 6,
+                pointHoverRadius: 8,
+            };
+        });
+
+        // Calculate the maximum x-value for the fit lines
+        const maxXValue = Math.max(...Object.values(valueMap.mod_mean));
+
+        // Add diagonal line
+        const maxValue = Math.max(
+            ...Object.values(valueMap.mod_mean),
+            ...Object.values(valueMap.bio_mean)
+        );
+        datasets.push({
+            label: 'Diagonal',
+            data: [
+                { x: 0, y: 0 },
+                { x: maxXValue, y: maxXValue },
+            ],
+            borderColor: 'black',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            pointRadius: 0,
+            showLine: true,
+        });
+
+        // Add fit lines
+        const slopeII = synapsesPerConnectionData.values[1].value;
+        const slopeRest = synapsesPerConnectionData.values[2].value;
+
+        datasets.push({
+            label: 'Fit (II)',
+            data: [
+                { x: 0, y: 0 },
+                { x: maxXValue, y: maxXValue * slopeII },
+            ],
+            borderColor: 'magenta',
+            borderWidth: 2,
+            pointRadius: 0,
+            showLine: true,
+        });
+
+        datasets.push({
+            label: 'Fit (Rest)',
+            data: [
+                { x: 0, y: 0 },
+                { x: maxXValue, y: maxXValue * slopeRest },
+            ],
+            borderColor: 'red',
+            borderWidth: 2,
+            pointRadius: 0,
+            showLine: true,
+        });
+
+        return datasets;
+    };
+
+    useEffect(() => {
+        if (chartRef.current) {
+            const ctx = chartRef.current.getContext('2d');
+            if (ctx) {
+                const chart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: createDatasets(),
+                    },
+                    options: {
+                        responsive: true,
+                        aspectRatio: 1,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const dataset = context.dataset;
+                                        const index = context.dataIndex;
+                                        const x = dataset.data[index].x;
+                                        const y = dataset.data[index].y;
+                                        const xErr = dataset.data[index].xErr;
+                                        const yErr = dataset.data[index].yErr;
+                                        return `${dataset.label}: (${x.toFixed(2)} ± ${xErr?.toFixed(2) || 'N/A'}, ${y.toFixed(2)} ± ${yErr?.toFixed(2) || 'N/A'})`;
+                                    },
+                                },
+                            },
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Structural circuit (#)',
+                                },
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Bio data (#)',
+                                },
+                            },
+                        },
+                    },
+                    plugins: [{
+                        id: 'errorBars',
+                        afterDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            chart.data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+                                if (!meta.hidden) {
+                                    meta.data.forEach((element, index) => {
+                                        const xScale = chart.scales.x;
+                                        const yScale = chart.scales.y;
+                                        const xErr = dataset.data[index].xErr;
+                                        const yErr = dataset.data[index].yErr;
+                                        const x = xScale.getPixelForValue(dataset.data[index].x);
+                                        const y = yScale.getPixelForValue(dataset.data[index].y);
+
+                                        if (xErr) {
+                                            ctx.save();
+                                            ctx.beginPath();
+                                            ctx.moveTo(
+                                                xScale.getPixelForValue(Math.max(dataset.data[index].x - xErr, 0)),
+                                                y
+                                            );
+                                            ctx.lineTo(
+                                                xScale.getPixelForValue(dataset.data[index].x + xErr),
+                                                y
+                                            );
+                                            ctx.strokeStyle = dataset.borderColor;
+                                            ctx.stroke();
+                                            ctx.restore();
+                                        }
+
+                                        if (yErr) {
+                                            ctx.save();
+                                            ctx.beginPath();
+                                            ctx.moveTo(
+                                                x,
+                                                yScale.getPixelForValue(Math.max(dataset.data[index].y - yErr, 0))
+                                            );
+                                            ctx.lineTo(
+                                                x,
+                                                yScale.getPixelForValue(dataset.data[index].y + yErr)
+                                            );
+                                            ctx.strokeStyle = dataset.borderColor;
+                                            ctx.stroke();
+                                            ctx.restore();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }]
+                });
+
+                return () => {
+                    chart.destroy();
+                };
+            }
+        }
+    }, [chartRef]);
 
     return (
         <>
-            <ResponsiveTable<TableEntry>
-                className="mt-3"
-                data={data}
-                columns={SynapsesPerConnectionColumns}
-                rowKey={(record) => `${record.Pathway}_${record.Convergence}`}
-            />
-            <div className="text-right mt-4 mb-4">
+            <div className="w-full max-w-3xl pt-4 mx-auto">
+                <div className="graph aspect-square">
+                    <canvas ref={chartRef} />
+                </div>
+            </div>
+            <div className="mt-4 mb-4 text-center">
                 <DownloadButton
                     theme={theme}
-                    onClick={() => downloadAsJson(
-                        data,
-                        ` Download-Number-Of-Synapses-Per-Connection-Data.json`
-                    )}
+                    onClick={() => downloadAsJson(synapsesPerConnectionData, `Synapses-Per-Connection-Data.json`)}
                 >
-                    Download Number of synapses per connection Data
+                    Synapses Per Connection Data
                 </DownloadButton>
             </div>
         </>
