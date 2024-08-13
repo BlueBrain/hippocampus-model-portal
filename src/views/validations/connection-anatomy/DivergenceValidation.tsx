@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     LineController,
@@ -34,8 +34,9 @@ export type DivergenceValidationProps = {
 
 const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
@@ -61,9 +62,8 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                         ctx.lineWidth = 2;
 
                         // Draw error bars for model data
-                        modelData.forEach((point, index) => {
+                        modelData.forEach((point) => {
                             const xPixel = x.getPixelForValue(point.x);
-                            const yPixel = y.getPixelForValue(point.y);
                             const yMinPixel = y.getPixelForValue(point.yMin);
                             const yMaxPixel = y.getPixelForValue(point.yMax);
 
@@ -84,9 +84,8 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                         });
 
                         // Draw error bars for experiment data
-                        experimentData.forEach((point, index) => {
+                        experimentData.forEach((point) => {
                             const xPixel = x.getPixelForValue(point.x);
-                            const yPixel = y.getPixelForValue(point.y);
                             const yMinPixel = y.getPixelForValue(point.yMin);
                             const yMaxPixel = y.getPixelForValue(point.yMax);
 
@@ -110,7 +109,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                     }
                 };
 
-                new Chart(ctx, {
+                const newChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: Object.values(DivergenceValidationData.value_map.mtype),
@@ -139,6 +138,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 type: 'category',
@@ -146,7 +146,6 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                                 title: {
                                     display: true,
                                     text: 'mtype',
-
                                 },
                             },
                             y: {
@@ -155,7 +154,6 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                                 title: {
                                     display: true,
                                     text: 'Divergence (synapses)',
-
                                 },
                                 min: 0,
                                 max: 25000,
@@ -171,7 +169,6 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                                     boxWidth: 6,
                                     boxHeight: 6,
                                     padding: 20,
-
                                 }
                             },
                             tooltip: {
@@ -187,13 +184,34 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                     },
                     plugins: [customPlugin]
                 });
+
+                setChart(newChart);
             }
         }
-    }, [chartRef]);
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
+        };
+    }, []);
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph" style={{ height: "500px" }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">

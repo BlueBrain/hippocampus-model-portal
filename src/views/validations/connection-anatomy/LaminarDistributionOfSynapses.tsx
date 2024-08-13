@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     BarController,
@@ -23,8 +23,69 @@ Chart.register(
 
 const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
     const chartRef = useRef(null);
+    const [chart, setChart] = useState(null);
 
-    useEffect(() => {
+    const data = {
+        labels: ['SLM_PPA', 'SR_SCA', 'SP_AA', 'SP_BS', 'SP_CCKBC', 'SP_Ivy', 'SP_PC', 'SP_PVBC', 'SO_BP', 'SO_BS', 'SO_OLM', 'SO_Tri'],
+        datasets: [
+            {
+                label: 'SO (Model)',
+                data: [0, 26.65, 5.52, 32.64, 34.76, 34.40, 77.47, 33.10, 31.11, 33.11, 0.39, 57.41],
+                backgroundColor: graphTheme.blue,
+                stack: 'Model',
+            },
+            {
+                label: 'SP (Model)',
+                data: [0, 14.45, 89.96, 20.86, 43.95, 36.26, 11.48, 43.00, 24.54, 17.90, 0.55, 27.02],
+                backgroundColor: graphTheme.yellow,
+                stack: 'Model',
+            },
+            {
+                label: 'SR (Model)',
+                data: [35.48, 56.15, 4.52, 45.85, 21.03, 29.12, 3.34, 23.58, 40.36, 47.46, 31.28, 14.39],
+                backgroundColor: graphTheme.green,
+                stack: 'Model',
+            },
+            {
+                label: 'SLM (Model)',
+                data: [64.18, 1.88, 0, 0.20, 0.03, 0.02, 0.02, 0.05, 3.56, 0.90, 65.60, 0.13],
+                backgroundColor: graphTheme.red,
+                stack: 'Model',
+            },
+            {
+                label: 'out (Model)',
+                data: [0.34, 0.86, 0, 0.46, 0.24, 0.20, 7.68, 0.27, 0.43, 0.64, 2.18, 1.06],
+                backgroundColor: graphTheme.purple,
+                stack: 'Model',
+            },
+            {
+                label: 'SO (Exp)',
+                data: [0, 0, null, 47.6, 29.4, null, null, null, null, 48.1, null, 58.12],
+                backgroundColor: graphTheme.blue,
+                stack: 'Exp',
+            },
+            {
+                label: 'SP (Exp)',
+                data: [0, 0.2, null, 9.85, 62.85, null, null, null, null, 12.4, null, 18.11],
+                backgroundColor: graphTheme.yellow,
+                stack: 'Exp',
+            },
+            {
+                label: 'SR (Exp)',
+                data: [37.7, 97.4, null, 42.55, 7.75, null, null, null, null, 39.5, null, 23.77],
+                backgroundColor: graphTheme.green,
+                stack: 'Exp',
+            },
+            {
+                label: 'SLM (Exp)',
+                data: [62.3, 2.4, null, 0, 0, null, null, null, null, 0, null, 0],
+                backgroundColor: graphTheme.red,
+                stack: 'Exp',
+            },
+        ],
+    };
+
+    const createChart = () => {
         const ctx = chartRef.current.getContext('2d');
 
         const hachurePlugin = {
@@ -46,11 +107,11 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                                 // Clip to individual bar
                                 ctx.save();
                                 ctx.beginPath();
-                                ctx.rect(x - width / 2, y, width, height); // Adjust clipping to the bar itself
+                                ctx.rect(x - width / 2, y, width, height);
                                 ctx.clip();
 
-                                const lineSpacing = 4; // Adjust line spacing for consistency
-                                const angle = Math.PI / 4; // 45-degree angle for hachures
+                                const lineSpacing = 4;
+                                const angle = Math.PI / 4;
 
                                 for (let i = -width; i < height + width; i += lineSpacing) {
                                     const startX = x - width / 2;
@@ -63,7 +124,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                                 }
 
                                 ctx.stroke();
-                                ctx.restore(); // Restore context to original state after drawing each bar
+                                ctx.restore();
                             }
                         });
                     }
@@ -71,66 +132,6 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
 
                 ctx.restore();
             }
-        };
-
-        const data = {
-            labels: ['SLM_PPA', 'SR_SCA', 'SP_AA', 'SP_BS', 'SP_CCKBC', 'SP_Ivy', 'SP_PC', 'SP_PVBC', 'SO_BP', 'SO_BS', 'SO_OLM', 'SO_Tri'],
-            datasets: [
-                {
-                    label: 'SO (Model)',
-                    data: [0, 26.65, 5.52, 32.64, 34.76, 34.40, 77.47, 33.10, 31.11, 33.11, 0.39, 57.41],
-                    backgroundColor: graphTheme.blue,
-                    stack: 'Model',
-                },
-                {
-                    label: 'SP (Model)',
-                    data: [0, 14.45, 89.96, 20.86, 43.95, 36.26, 11.48, 43.00, 24.54, 17.90, 0.55, 27.02],
-                    backgroundColor: graphTheme.yellow,
-                    stack: 'Model',
-                },
-                {
-                    label: 'SR (Model)',
-                    data: [35.48, 56.15, 4.52, 45.85, 21.03, 29.12, 3.34, 23.58, 40.36, 47.46, 31.28, 14.39],
-                    backgroundColor: graphTheme.green,
-                    stack: 'Model',
-                },
-                {
-                    label: 'SLM (Model)',
-                    data: [64.18, 1.88, 0, 0.20, 0.03, 0.02, 0.02, 0.05, 3.56, 0.90, 65.60, 0.13],
-                    backgroundColor: graphTheme.red,
-                    stack: 'Model',
-                },
-                {
-                    label: 'out (Model)',
-                    data: [0.34, 0.86, 0, 0.46, 0.24, 0.20, 7.68, 0.27, 0.43, 0.64, 2.18, 1.06],
-                    backgroundColor: graphTheme.purple,
-                    stack: 'Model',
-                },
-                {
-                    label: 'SO (Exp)',
-                    data: [0, 0, null, 47.6, 29.4, null, null, null, null, 48.1, null, 58.12],
-                    backgroundColor: graphTheme.blue,
-                    stack: 'Exp',
-                },
-                {
-                    label: 'SP (Exp)',
-                    data: [0, 0.2, null, 9.85, 62.85, null, null, null, null, 12.4, null, 18.11],
-                    backgroundColor: graphTheme.yellow,
-                    stack: 'Exp',
-                },
-                {
-                    label: 'SR (Exp)',
-                    data: [37.7, 97.4, null, 42.55, 7.75, null, null, null, null, 39.5, null, 23.77],
-                    backgroundColor: graphTheme.green,
-                    stack: 'Exp',
-                },
-                {
-                    label: 'SLM (Exp)',
-                    data: [62.3, 2.4, null, 0, 0, null, null, null, null, 0, null, 0],
-                    backgroundColor: graphTheme.red,
-                    stack: 'Exp',
-                },
-            ],
         };
 
         const config = {
@@ -151,7 +152,6 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                         position: 'right',
                         labels: {
                             filter: function (item, chart) {
-                                // Only show one label for each unique color
                                 return !item.text.includes('(');
                             },
                             generateLabels: function (chart) {
@@ -175,6 +175,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                     },
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         stacked: true,
@@ -193,16 +194,32 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
             plugins: [hachurePlugin],
         };
 
-        const chart = new Chart(ctx, config);
+        const newChart = new Chart(ctx, config);
+        setChart(newChart);
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
 
         return () => {
-            chart.destroy();
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
         };
     }, []);
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph" style={{ height: "500px" }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">

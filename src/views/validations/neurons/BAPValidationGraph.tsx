@@ -23,10 +23,9 @@ Chart.register(
     Legend
 );
 
-const BAPValidationGraph = ({ theme }) => {
+const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-    const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
     const createChart = () => {
         if (chartRef.current) {
@@ -106,7 +105,6 @@ const BAPValidationGraph = ({ theme }) => {
                     plugins: {
                         legend: {
                             position: 'top',
-
                             align: 'end',
                             labels: {
                                 usePointStyle: true,
@@ -164,15 +162,13 @@ const BAPValidationGraph = ({ theme }) => {
     };
 
     useEffect(() => {
-        const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        };
+        createChart();
 
-        // Set initial size
-        handleResize();
+        const handleResize = () => {
+            if (chartInstance) {
+                chartInstance.resize();
+            }
+        };
 
         window.addEventListener('resize', handleResize);
 
@@ -183,15 +179,6 @@ const BAPValidationGraph = ({ theme }) => {
             }
         };
     }, []);
-
-    useEffect(() => {
-        if (windowSize.width > 0 && windowSize.height > 0) {
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-            createChart();
-        }
-    }, [windowSize]);
 
     return (
         <>

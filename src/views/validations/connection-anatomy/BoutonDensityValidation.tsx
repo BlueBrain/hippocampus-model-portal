@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     ScatterController,
@@ -33,8 +33,9 @@ export type BoutonDensityValidationProps = {
 
 const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
@@ -80,7 +81,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 };
 
                 // Create the chart with the plugin included
-                const chart = new Chart(ctx, {
+                const newChart = new Chart(ctx, {
                     type: 'scatter',
                     data: {
                         labels: Object.values(BoutonDensityValidationData.value_map.mtype),
@@ -115,6 +116,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 type: 'category',
@@ -157,18 +159,39 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                     },
                     plugins: [errorBarPlugin], // Add the custom plugin here
                 });
+
+                setChart(newChart);
             }
         }
-    }, [chartRef]);
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
+        };
+    }, []);
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph" style={{ height: "500px" }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(BoutonDensityValidationData, `Bouton-Density-Validation-Data.json`)}>
-                    Bouton Density Validation Data
+                    {BoutonDensityValidationData.name} Data
                 </DownloadButton>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     BarController,
@@ -30,14 +30,14 @@ export type SynapticDivergencePercentagesProps = {
 
 const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentagesProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const mtypes = Object.values(SynapticDivergencePercentagesData.value_map.mtype);
-
-                const spPcIndex = mtypes.indexOf('SP_PC'); // Find the index of SP_PC
+                const spPcIndex = mtypes.indexOf('SP_PC');
 
                 const hachurePlugin = {
                     id: 'hachurePlugin',
@@ -84,7 +84,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                     }
                 };
 
-                new Chart(ctx, {
+                const newChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: mtypes,
@@ -92,26 +92,26 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                             {
                                 label: 'Model I-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_PC[index]),
-                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.red : graphTheme.blue), // Red for SP_PC, Blue for others
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.red : graphTheme.blue),
                                 stack: 'Model',
                             },
                             {
                                 label: 'Model I-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.model_INT[index]),
-                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.green : graphTheme.purple), // Green for SP_PC, Purple for others
+                                backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.green : graphTheme.purple),
                                 stack: 'Model',
                             },
                             {
                                 label: 'Exp E-E',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_PC[index] || 0),
-                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.red : graphTheme.blue), // Red only for SP_PC, transparent for others
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.red : graphTheme.blue),
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },
                             {
                                 label: 'Exp E-I',
                                 data: mtypes.map((_, index) => SynapticDivergencePercentagesData.value_map.exp_INT[index] || 0),
-                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.green : graphTheme.purple), // Green only for SP_PC, transparent for others
+                                backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.green : graphTheme.purple),
                                 stack: 'Exp',
                                 borderWidth: 1,
                             },
@@ -119,6 +119,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 stacked: true,
@@ -163,13 +164,34 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                     },
                     plugins: [hachurePlugin],
                 });
+
+                setChart(newChart);
             }
         }
-    }, [chartRef]);
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
+        };
+    }, []);
 
     return (
         <div>
-            <div className="graph">
+            <div className="graph" style={{ height: "500px" }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">

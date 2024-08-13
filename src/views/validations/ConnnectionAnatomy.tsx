@@ -53,7 +53,7 @@ const ConnectionAnatomyView: React.FC = () => {
                     { id: 'ConnectionProbabilitySection', label: 'Connection probabilites validation' },
                     { id: 'ConvergenceValidationSection', label: 'Convergence validation' },
                     { id: 'DivergenceValidationSection', label: 'Divergence validation' },
-                    { id: 'NbOfSynapsesPConnectionSection', label: 'Number of Synapse per connection validation' },
+                    { id: 'NbOfSynapsesPConnectionSection', label: 'Nb. of Synapse p.connection validation' },
                     { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percetages' },
                     { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model Laminar distribution of synapses' },
                 ]}>
@@ -67,14 +67,14 @@ const ConnectionAnatomyView: React.FC = () => {
                 </Collapsible>
 
                 <Collapsible id="ConvergenceValidationSection" title={`Convergence validation`}>
-                    <div className="w-full flex flex-col lg:flex-row lg:gap-8 gap-10">
-                        <div className="flex-1">
-                            <ConvergenceValidation data={ConvergenceValidationSomaAxon} theme={theme} />
-                        </div>
-                        <div className="flex-1">
-                            <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
-                        </div>
+
+                    <div className="flex flex-col gap-8">
+                        <ConvergenceValidation data={ConvergenceValidationSomaAxon} theme={theme} />
+
+                        <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
+
                     </div>
+
                 </Collapsible>
 
                 <Collapsible id="DivergenceValidationSection" title={`Divergence validation`}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Chart, ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
@@ -50,12 +50,13 @@ const errorBarPlugin = {
 
 const ConvergenceValidationGraph = ({ theme, data }) => {
     const chartRef = useRef(null);
+    const [chart, setChart] = useState(null);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
 
-            const chartInstance = new Chart(ctx, {
+            const newChart = new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [
@@ -95,6 +96,8 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                     ]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             type: 'category',
@@ -157,10 +160,27 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                 plugins: [errorBarPlugin],
             });
 
-            return () => {
-                chartInstance.destroy();
-            };
+            setChart(newChart);
         }
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
+        };
     }, [data]);
 
     return (

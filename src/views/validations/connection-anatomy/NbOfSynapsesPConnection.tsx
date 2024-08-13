@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     LineController,
@@ -32,8 +32,9 @@ export type NbOfSynapsesPConnectionProps = {
 
 const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
@@ -106,7 +107,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                     }
                 };
 
-                new Chart(ctx, {
+                const newChart = new Chart(ctx, {
                     type: 'scatter',
                     data: {
                         datasets: [{
@@ -119,7 +120,8 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                         }]
                     },
                     options: {
-                        aspectRatio: 1,
+                        responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 type: 'linear',
@@ -165,13 +167,34 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                     },
                     plugins: [customPlugin]
                 });
+
+                setChart(newChart);
             }
         }
-    }, [chartRef]);
+    };
+
+    useEffect(() => {
+        createChart();
+
+        const handleResize = () => {
+            if (chart) {
+                chart.resize();
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (chart) {
+                chart.destroy();
+            }
+        };
+    }, []);
 
     return (
         <div>
-            <div className="graph graph--rect">
+            <div className="graph graph--rect" style={{ height: "500px" }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
