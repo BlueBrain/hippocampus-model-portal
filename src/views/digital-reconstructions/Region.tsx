@@ -111,7 +111,7 @@ const RegionView: React.FC = () => {
           </h3>
 
           <div className="graph">
-            <RegionViewer meshPath={`${staticDataBaseUrl}/rec-data/volume/volume.obj`} volumeSection={validVolumeSection} onReady={() => setVolumeViewerReady(true)} />
+            <RegionViewer meshPath={`${staticDataBaseUrl}/3d/region.obj`} volumeSection={validVolumeSection} onReady={() => setVolumeViewerReady(true)} />
           </div>
           {validVolumeSection && (
             <HttpData path={regionFactsheetPath(validVolumeSection ?? '')}>
