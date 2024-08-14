@@ -139,6 +139,16 @@ export type NexusTrace = {
   };
 };
 
+export type QuickSelectorEntry = {
+  title: string;
+  key: string;
+  values?: string[];
+  getValuesFn?: (param: string) => string[];
+  getValuesParam?: string;
+  paramsToKeepOnChange?: string[];
+  setFn?: (value: string) => void;
+};
+
 
 export type ThemeKeys = 1 | 2 | 3 | 4 | 5;
 

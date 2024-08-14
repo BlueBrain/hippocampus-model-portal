@@ -201,6 +201,7 @@ const NeuronExperimentalMorphology = () => {
           { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
 
         <Collapsible
