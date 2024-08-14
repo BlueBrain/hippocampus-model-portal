@@ -10,25 +10,20 @@ import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
 import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import { Layer } from '@/types';
+import { Layer, QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 import EtypeFactsheet from '@/components/EtypeFactsheet';
 import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-// import NeuronMorphology from '@/components/NeuronMorphology';
 import { basePath } from '@/config';
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
 import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
 
-
 const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
-
-
 
 const getMtypes = (layer: Layer): string[] => {
   return layer
@@ -61,9 +56,7 @@ const getInstances = (mtype: string, etype: string): string[] => {
 
 const Neurons: React.FC = () => {
   const router = useRouter();
-
   const theme = 3;
-
   const { query } = router;
 
   const currentLayer: Layer = query.layer as Layer;
@@ -72,7 +65,7 @@ const Neurons: React.FC = () => {
   const currentInstance: string = query.instance as string;
 
   const setParams = (params: Record<string, string>): void => {
-    const query = {
+    const newQuery = {
       ...{
         layer: currentLayer,
         mtype: currentMtype,
@@ -81,7 +74,7 @@ const Neurons: React.FC = () => {
       },
       ...params,
     };
-    router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
+    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
   const setLayer = (layer: Layer) => {
@@ -108,10 +101,9 @@ const Neurons: React.FC = () => {
   const setInstance = (instance: string) => {
     setParams({ instance })
   };
+
   const mtypes = getMtypes(currentLayer);
-
   const etypes = getEtypes(currentMtype);
-
   const instances = getInstances(currentMtype, currentEtype);
 
   const getMorphologyDistribution = (morphologyResource: any) => {
@@ -119,49 +111,70 @@ const Neurons: React.FC = () => {
   };
 
   const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
-  /*
-    const morphologyName = currentInstance
-      ? currentInstance.match(modelMorphologyRe)[1]
-      : null;
-  */
+
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Layer',
+      key: 'layer',
+      values: layers,
+      setFn: setLayer,
+    },
+    {
+      title: 'M-type',
+      key: 'mtype',
+      getValuesFn: getMtypes,
+      getValuesParam: 'layer',
+      setFn: setMtype,
+    },
+    {
+      title: 'E-Type',
+      key: 'etype',
+      getValuesFn: getEtypes,
+      getValuesParam: 'mtype',
+      setFn: setEtype,
+    },
+    {
+      title: 'Instance',
+      key: 'instance',
+      getValuesFn: getInstances,
+      getValuesParam: ['mtype', 'etype'],
+      setFn: setInstance,
+    },
+  ];
+
   return (
     <>
       <Filters theme={theme}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
-
             <Title
               primaryColor={colorName}
               title="Neuron models"
               subtitle="Reconstruction Data"
               theme={theme}
             />
-            <InfoBox
-              color={colorName}
-            >
+            <InfoBox color={colorName}>
               <p>
-                Starting from a subset of <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphological reconstructions</Link>, we develop an initial set of single cell models by optimizing model parameters against a set of features extracted from <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-electrophysiology/"}>electrophysiological recordings</Link>.
+                Starting from a subset of <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphological reconstructions</Link>, we develop an initial set of single cell models by optimizing model parameters against a set of features extracted from <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-electrophysiology/">electrophysiological recordings</Link>.
               </p>
             </InfoBox>
-
-
           </div>
 
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__selector-container"}>
-                  < LayerSelector3D
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+                <div className="selector__selector-container">
+                  <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                     theme={theme}
                   />
                 </div>
               </div>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
-                <div className={"selector__body"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
                   <List
                     block
                     list={mtypes}
@@ -171,7 +184,6 @@ const Neurons: React.FC = () => {
                     onSelect={setMtype}
                     theme={theme}
                   />
-
                   <List
                     block
                     list={etypes}
@@ -198,8 +210,10 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer theme={theme}
+      <DataContainer
+        theme={theme}
         navItems={[]}
+        quickSelectorEntries={qsEntries}
       >
         <Collapsible
           id="tbd"
@@ -207,54 +221,15 @@ const Neurons: React.FC = () => {
         >
           <h3 className="text-tmp">Text description</h3>
         </Collapsible>
-
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
 
-const hocPreselection = withPreselection(
+export default withPreselection(
   Neurons,
   {
     key: 'layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
-  },
-);
-
-const qsEntries = [
-  {
-    title: 'Layer',
-    key: 'layer',
-    values: layers,
-  },
-  {
-    title: 'M-type',
-    key: 'mtype',
-    getValuesFn: getMtypes,
-    getValuesParam: 'layer',
-    paramsToKeepOnChange: ['layer'],
-  },
-  {
-    title: 'E-Type',
-    key: 'etype',
-    getValuesFn: getEtypes,
-    getValuesParam: 'mtype',
-    paramsToKeepOnChange: ['layer', 'mtype'],
-  },
-
-  {
-    title: 'Instance',
-    key: 'instance',
-    getValuesFn: getInstances,
-    getValuesParam: ['mtype', 'etype'],
-    paramsToKeepOnChange: ['layer', 'mtype', 'etype'],
-  },
-];
-
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
   },
 );

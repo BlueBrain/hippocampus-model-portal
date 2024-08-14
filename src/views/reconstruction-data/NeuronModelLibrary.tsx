@@ -1,27 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Spin, Row, Col } from 'antd'; // Import Row and Col from antd
+import { Button, Spin, Row, Col } from 'antd';
 
-import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
-import LayerSelector from '@/components/LayerSelector';
 import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
-import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import { Layer } from '@/types';
+import { Layer, QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
-import EtypeFactsheet from '@/components/EtypeFactsheet';
-import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-// import NeuronMorphology from '@/components/NeuronMorphology';
+
 import { basePath } from '@/config';
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
 import { colorName } from './config';
 
 import styles from '../../styles/digital-reconstructions/neurons.module.scss';
@@ -115,6 +109,36 @@ const Neurons: React.FC = () => {
     ? currentInstance.match(modelMorphologyRe)?.[1] || null
     : null;
 
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Layer',
+      key: 'layer',
+      values: layers,
+      setFn: setLayer,
+    },
+    {
+      title: 'M-type',
+      key: 'mtype',
+      getValuesFn: getMtypes,
+      getValuesParam: 'layer',
+      setFn: setMtype,
+    },
+    {
+      title: 'E-Type',
+      key: 'etype',
+      getValuesFn: getEtypes,
+      getValuesParam: 'mtype',
+      setFn: setEtype,
+    },
+    {
+      title: 'Instance',
+      key: 'instance',
+      getValuesFn: getInstances,
+      getValuesParam: ['mtype', 'etype'],
+      setFn: setInstance,
+    },
+  ];
+
   return (
     <>
       <Filters theme={theme} hasData={true}>
@@ -129,14 +153,14 @@ const Neurons: React.FC = () => {
             <div role="information">
               <InfoBox>
                 <p>
-                  Initial set of single <Link className={"link theme-" + theme} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphology library</Link> to produce a library of neuron models.
+                  Initial set of single <Link className={`link theme-${theme}`} href="/reconstruction-data/neuron-models">cell models</Link> are combined with the <Link className={`link theme-${theme}`} href="/experimental-data/neuronal-morphology/">morphology library</Link> to produce a library of neuron models.
                 </p>
               </InfoBox>
             </div>
             <div className="selector">
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__selector-container"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+                <div className="selector__selector-container">
                   <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
@@ -144,9 +168,9 @@ const Neurons: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
-                <div className={"selector__body"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
                   <List
                     block
                     list={mtypes}
@@ -181,56 +205,23 @@ const Neurons: React.FC = () => {
           </Col>
         </Row>
       </Filters>
-      <DataContainer theme={theme} navItems={[]}>
+      <DataContainer
+        theme={theme}
+        navItems={[]}
+        quickSelectorEntries={qsEntries}
+      >
         <Collapsible id="tbd" title="TBD">
           <h3 className="text-tmp">Text description</h3>
         </Collapsible>
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
 
-const hocPreselection = withPreselection(
+export default withPreselection(
   Neurons,
   {
     key: 'layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
-  },
-);
-
-const qsEntries = [
-  {
-    title: 'Layer',
-    key: 'layer',
-    values: layers,
-  },
-  {
-    title: 'M-type',
-    key: 'mtype',
-    getValuesFn: getMtypes,
-    getValuesParam: 'layer',
-    paramsToKeepOnChange: ['layer'],
-  },
-  {
-    title: 'E-Type',
-    key: 'etype',
-    getValuesFn: getEtypes,
-    getValuesParam: 'mtype',
-    paramsToKeepOnChange: ['layer', 'mtype'],
-  },
-  {
-    title: 'Instance',
-    key: 'instance',
-    getValuesFn: getInstances,
-    getValuesParam: ['mtype', 'etype'],
-    paramsToKeepOnChange: ['layer', 'mtype', 'etype'],
-  },
-];
-
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
   },
 );
