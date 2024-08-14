@@ -29,6 +29,8 @@
 .sectionItem {
   cursor: pointer;
 
+
+
   &:hover {
     .label {
       color: black;
@@ -48,7 +50,7 @@
 }
 
 .label {
-  font-size: .870rem;
+  @apply text-sm;
 
   color: map-get($basePalette, "grey-3");
   user-select: none;

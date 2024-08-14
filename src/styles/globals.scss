@@ -457,6 +457,11 @@ $collapsible-padding: 2rem 2rem;
     color: black;
     padding: $collapsible-padding;
     overflow: hidden;
+
+    @media screen and (max-width: $breakpoint-sm) {
+      padding: 1.5rem;
+
+    }
   }
 
   &.red {
@@ -558,9 +563,9 @@ $collapsible-padding: 2rem 2rem;
 .graph {
   background-color: map-get($infobox, "fill");
   border: 1px solid map-get($infobox, "border");
-  padding: 2rem 2rem;
+  padding: 2rem 1rem;
   border-radius: 0px;
-  margin: 0 4rem;
+  margin: 0 1rem;
 
   display: flex;
   justify-content: center;
@@ -568,6 +573,7 @@ $collapsible-padding: 2rem 2rem;
 
   @media (max-width: $breakpoint-sm) {
     margin: 0 0rem;
+    padding: 1rem;
   }
 
   &.no-padding {
