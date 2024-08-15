@@ -1,0 +1,268 @@
+{
+    "name": "Schaffer Collaterals",
+    "values": [
+        {
+            "name": "Synapse per connection",
+            "id": "synapses-per-connection",
+            "description": "Average number of extrinsic synapses formed by extrinsic connections",
+            "unit": null,
+            "values": [
+                1.0415733060949373,
+                0.20574792076906206
+            ]
+        },
+        {
+            "name": "Sample convergence by connection",
+            "id": "sample-convergence-by-connection",
+            "description": "Sample convergence by connection for the pathway",
+            "unit": null,
+            "values": [
+                19171.12385,
+                5846.911483758855
+            ]
+        },
+        {
+            "name": "Sample convergence by synapse",
+            "id": "sample-convergence-by-synapse",
+            "description": "Sample convergence by synapse for the pathway",
+            "unit": null,
+            "values": [
+                19968.13085,
+                6328.131287989234
+            ]
+        },
+        {
+            "name": "Sample divergence by connection",
+            "id": "sample-divergence-by connection",
+            "description": "Sample divergence by connection for the pathway",
+            "unit": null,
+            "values": [
+                1434.7603147755933,
+                36.327614396807355
+            ]
+        },
+        {
+            "name": "Sample divergence by synapse",
+            "id": "sample-divergence-by synapse",
+            "description": "Sample divergence by synapse for the pathway",
+            "unit": null,
+            "values": [
+                1494.4080445146274,
+                38.6342402381955
+            ]
+        },
+        {
+            "name": "Laminar distribution",
+            "id": "laminar-distribution",
+            "description": "Laminar distribution of the synapses for the pathway across different layers",
+            "unit": null,
+            "value_map": {
+                "SLM": {
+                    "SLM_PPA": 0.2339674154969285,
+                    "SO_BP": 0.0016458728269335332,
+                    "SO_BS": 0.0,
+                    "SO_OLM": 0.0,
+                    "SO_Tri": 0.00035048299437306755,
+                    "SP_AA": 0.0055181568383185255,
+                    "SP_BS": 0.0002499856858911964,
+                    "SP_CCKBC": 0.010692214616541813,
+                    "SP_Ivy": 0.0006402474861298285,
+                    "SP_PC": 0.003058773151875863,
+                    "SP_PVBC": 0.003187079653822291,
+                    "SR_SCA": 0.001755727844800612
+                },
+                "SO": {
+                    "SLM_PPA": 0.0006825533430275693,
+                    "SO_BP": 0.6001557701068347,
+                    "SO_BS": 0.9529970090752471,
+                    "SO_OLM": 0.9359258803409944,
+                    "SO_Tri": 0.44199986556816656,
+                    "SP_AA": 0.20913049937060696,
+                    "SP_BS": 0.2414370956264263,
+                    "SP_CCKBC": 0.1376714384293516,
+                    "SP_Ivy": 0.2423531997402574,
+                    "SP_PC": 0.24640638422020397,
+                    "SP_PVBC": 0.2220815826194079,
+                    "SR_SCA": 0.11234726712945257
+                },
+                "SP": {
+                    "SLM_PPA": 0.002730213372110277,
+                    "SO_BP": 0.09363840761803995,
+                    "SO_BS": 0.01805442586413388,
+                    "SO_OLM": 0.04253847848055347,
+                    "SO_Tri": 0.08840093334101515,
+                    "SP_AA": 0.027392714330267593,
+                    "SP_BS": 0.16022651054745332,
+                    "SP_CCKBC": 0.04348720340554376,
+                    "SP_Ivy": 0.06513721132537431,
+                    "SP_PC": 0.07125859090698948,
+                    "SP_PVBC": 0.07640289427405106,
+                    "SR_SCA": 0.0416893617185659
+                },
+                "SR": {
+                    "SLM_PPA": 0.7626198177879336,
+                    "SO_BP": 0.3042660435862393,
+                    "SO_BS": 0.028436201077245274,
+                    "SO_OLM": 0.021006076231440934,
+                    "SO_Tri": 0.46887422941752604,
+                    "SP_AA": 0.7578926061736986,
+                    "SP_BS": 0.5979928552148344,
+                    "SP_CCKBC": 0.8080593026434253,
+                    "SP_Ivy": 0.6917887169729153,
+                    "SP_PC": 0.6790969045784533,
+                    "SP_PVBC": 0.6982494337728585,
+                    "SR_SCA": 0.8441419725187065
+                },
+                "out": {
+                    "SLM_PPA": 0.0,
+                    "SO_BP": 0.0002939058619524166,
+                    "SO_BS": 0.0005123639833737887,
+                    "SO_OLM": 0.000529564947011116,
+                    "SO_Tri": 0.00037448867891916803,
+                    "SP_AA": 6.602328710834509e-05,
+                    "SP_BS": 9.355292539486492e-05,
+                    "SP_CCKBC": 8.984090513756172e-05,
+                    "SP_Ivy": 8.062447532314474e-05,
+                    "SP_PC": 0.00017934714247735994,
+                    "SP_PVBC": 7.900967986025109e-05,
+                    "SR_SCA": 6.567078847439032e-05
+                }
+            }
+        },
+        {
+            "name": "Connection probability",
+            "description": "Probability of connections between two cells",
+            "unit": null,
+            "value": 0.07173801573877966
+        },
+        {
+            "name": "PSP Amplitude",
+            "id": "psp-amplitude",
+            "description": "PSP Amplitude from the simulation",
+            "unit": "mV",
+            "values": [
+                0.6444200628313608,
+                0.7534181542483126
+            ]
+        },
+        {
+            "name": "PSP CV",
+            "id": "psp-cv",
+            "description": "PSP CV from the simulation",
+            "unit": "mV",
+            "values": [
+                0.32590101163923607,
+                0.2469655983277936
+            ]
+        },
+        {
+            "name": "Synapse latency",
+            "id": "synapse-latency",
+            "description": "Synapse latency",
+            "unit": "ms",
+            "values": [
+                0.08401995897293091,
+                0.2898619771003723
+            ]
+        },
+        {
+            "name": "Synapse latency (from simulation)",
+            "id": "synapse-latency-for-simulation",
+            "description": "Synapse latency as measured from the simulation",
+            "unit": "ms",
+            "values": [
+                2.1393354815984154,
+                0.8808703257798138
+            ]
+        },
+        {
+            "name": "Rise time constant (from simulation)",
+            "id": "rise-time-constant-for-simulation",
+            "description": "Rise time constant as measured from the simulation",
+            "unit": "ms",
+            "values": [
+                3.4875032587121484,
+                1.5988039183311593
+            ]
+        },
+        {
+            "name": "Decay time constant",
+            "id": "decay-time-constant",
+            "description": "Decay time constant",
+            "unit": "ms",
+            "values": [
+                0.6721596717834473,
+                3.2794137001037598
+            ]
+        },
+        {
+            "name": "Decay time constant (from simulation)",
+            "id": "decay-time-constant-for-simulation",
+            "description": "Decay time constant as measured from simulation",
+            "unit": "ms",
+            "values": [
+                10.202240298978085,
+                2.9080990007064504
+            ]
+        },
+        {
+            "name": "NMDA/AMPA ratio",
+            "id": "nmda-ampa-ratio",
+            "description": "Ratio of NMDA conductance to AMPA conductance",
+            "unit": null,
+            "values": [
+                0.08401995897293091,
+                0.2898619771003723
+            ]
+        },
+        {
+            "name": "U Parameter",
+            "id": "u-parameter",
+            "description": "U Parameter in Tsodyks-Markram Model",
+            "unit": null,
+            "values": [
+                0.010502494871616364,
+                0.03623274713754654
+            ]
+        },
+        {
+            "name": "D Parameter",
+            "id": "d-parameter",
+            "description": "D Parameter in Tsodyks-Markram Model",
+            "unit": "ms",
+            "values": [
+                21.527748107910156,
+                79.19165802001953
+            ]
+        },
+        {
+            "name": "F Parameter",
+            "description": "F Parameter in Tsodyks-Markram Model",
+            "unit": "ms",
+            "values": [
+                11.733036041259766,
+                53.11234664916992
+            ]
+        },
+        {
+            "name": "NRRP Parameter",
+            "id": "nrrp-parameter",
+            "description": "Number of Readily-Releasable Vesicle Pool Size for a Synapse ",
+            "unit": null,
+            "values": [
+                11.696312829901153,
+                3.475100065015148
+            ]
+        },
+        {
+            "name": "G SYNX",
+            "id": "g-synx",
+            "description": "Conductance of a Synapse.G Parameter in Tsodyks-Markram Model",
+            "unit": "\u00b5S",
+            "values": [
+                0.7755650281906128,
+                3.320866823196411
+            ]
+        }
+    ]
+}
