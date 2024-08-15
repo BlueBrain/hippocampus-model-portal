@@ -40,13 +40,11 @@ const DistrbutionPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                     text: 'Bins',
                 },
                 ticks: {
-                    maxRotation: 0,  // Prevent rotation
-                    minRotation: 0,  // Prevent rotation
+                    maxRotation: 0,
+                    minRotation: 0,
                     callback: function (value: number, index: number) {
-                        // Show a label only for every 10th tick
                         if (index % 10 === 0) {
                             const label = this.getLabelForValue(value);
-                            // Remove comma if it's a whole number
                             return Number(label) % 1 === 0 ? Number(label).toString() : label;
                         } else {
                             return '';

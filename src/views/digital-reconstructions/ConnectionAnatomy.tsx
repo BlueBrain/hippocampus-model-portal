@@ -17,7 +17,7 @@ import Collapsible from '@/components/Collapsible';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
-import DistibutionPlot from './connections/DistibutionPlot'; // Import the new component
+import DistibutionPlot from '@/components/DistributionPlot'; // Import the new component
 
 import selectorStyle from '../../styles/selector.module.scss';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
