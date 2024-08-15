@@ -151,8 +151,7 @@ const ConnectionsView: React.FC = () => {
 
             </div>
             <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
-
-              <><div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
+              <div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
                 <div className={`selector__head theme-${theme}`}>2. Select a pre-synaptic cell group</div>
                 <div className="selector__body">
                   <List
@@ -165,33 +164,20 @@ const ConnectionsView: React.FC = () => {
                     theme={theme} />
                 </div>
               </div><div className={`selector__column theme-${theme} flex-1`}>
-                  <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
-                  <div className="selector__body">
-                    <List
-                      block
-                      list={cellGroup}
-                      value={postlayer}
-                      title="m-type"
-                      color={colorName}
-                      onSelect={setPostLayerQuery}
-                      theme={theme} />
-                  </div>
-                </div></>
-
-            </div>
-          </div>
-
-          {/*
-           <div className="flex flex-col-reverse  md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none justify-center">
-            <div className={`selector__column theme-${theme} w-full`}>
-              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-              <div className="selector__body">
-
+                <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={cellGroup}
+                    value={postlayer}
+                    title="m-type"
+                    color={colorName}
+                    onSelect={setPostLayerQuery}
+                    theme={theme} />
+                </div>
               </div>
             </div>
           </div>
-          */}
-
         </div>
       </Filters>
 

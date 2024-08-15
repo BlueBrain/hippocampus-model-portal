@@ -18,6 +18,8 @@ import { cellGroup, defaultSelection } from '@/constants';
 import { Layer, VolumeSection } from '@/types';
 
 import { basePath } from '../../config';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -74,20 +76,73 @@ const SchafferCollateralsView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const filePath = `${basePath}/data/digital-reconstruction/connections/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      fetch(filePath)
-        .then(response => response.json())
-        .then(data => {
-          if (data && Array.isArray(data.values)) {
-            const plots = data.values;
+      const distributionPlotFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const sCFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
+
+      // Fetch data from both distributionPlotFile and sCFile
+      Promise.all([
+        fetch(distributionPlotFile).then(response => response.json()),
+        fetch(sCFile).then(response => response.json())
+      ])
+        .then(([distributionData, scData]) => {
+          if (distributionData && Array.isArray(distributionData.values) && scData) {
+            const plots = distributionData.values;
             const availablePlots = {
-              boutonDensitySection: plots.some(plot => plot.id === 'bouton-density'),
-              // More plots can be added here
+
+              // -- Anatomy
+
+              //number of synapses per connection distribution + mean and std
+              SynapsesPerConnection: plots.some(plot => plot.id === 'synapses-per-connection'),
+
+              //Divergence (connections) distribution + mean and std
+              SampleDivergenceByConnection: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
+
+              //Divergence (synapses) distribution + mean and std
+              SampleDivergenceBySynapse: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
+
+              // Laminar distribution of synapses
+              LaminarDistribution: scData.laminar_distribution !== undefined,
+
+              //Convergence (connections) distribution + mean and std
+              SampleConvergenceByConnection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+
+              //Convergence (synapses) distribution + mean and std
+              SampleConvergenceBySynapse: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
+
+              // -- Physiology
+
+              //PSP distribution + mean and std
+              PSPAmplitude: plots.some(plot => plot.id === 'psp-amplitude'),
+
+              //CV distribution + mean and std
+              PSPCV: plots.some(plot => plot.id === 'psp-cv'),
+
+              //Synapse latency distribution + mean and std
+              SynapseLatency: plots.some(plot => plot.id === 'synapse-latency'),
+              SynapseLatencyFromSimulation: plots.some(plot => plot.id === 'synapse-latency-from-simulation'),
+
+              //Rise time constant distribution + mean and std
+              RiseTimeFromSimulation: plots.some(plot => plot.id === 'rise-time-constant-for-simulation'),
+
+              //Decay time constant distribution + mean and std
+              DecayTimeConstant: plots.some(plot => plot.id === 'decay-time-constant'),
+              DecayTimeConstantFromSimulation: plots.some(plot => plot.id === 'decay-time-constant-from-simulation'),
+
+              //NMDA/AMPA ratio distribution + mean and std
+              NMDAAMPARatio: plots.some(plot => plot.id === 'nmda-ampa-ratio'),
+
+              //Distribution + mean and std of U, D, F, NRRP
+              UParameter: plots.some(plot => plot.id === 'u-parameter'),
+              DParameter: plots.some(plot => plot.id === 'd-parameter'),
+              NRRPParameter: plots.some(plot => plot.id === 'nrrp-parameter'),
+              GSYNX: plots.some(plot => plot.id === 'g-synx'),
+
+
             };
             setAvailablePlots(availablePlots);
-            setFactsheetData(plots);
+            setFactsheetData([...plots, scData.laminar_distribution]);
           } else {
-            console.error('Unexpected data format:', data);
+            console.error('Unexpected data format:', distributionData, scData);
           }
         })
         .catch(error => console.error('Error fetching factsheet:', error));
@@ -115,6 +170,10 @@ const SchafferCollateralsView: React.FC = () => {
                   <p>
                     Reconstruction of the Schaffer collaterals, the major input to the CA1. This massive innervation accounts for 9,122 M synapses, and most of the synapses considered in the model (92%).
                   </p>
+                  <ul>
+                    <li>Using <Link className={`link theme-${theme}`} href={"/reconstruction-data/schaffer-collaterals"}>data</Link> on Schaffer collaterals, we predicted their anatomy, analyzing CA3-CA1 connections by synapse count, divergence, convergence, and connection probability.</li>
+                    <li>We also predicted the physiology of these connections using <Link className={`link theme-${theme}`} href={"/reconstruction-data/schaffer-collaterals"}>data</Link>, focusing on PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.</li>
+                  </ul>
                 </InfoBox>
               </div>
             </StickyContainer>
@@ -161,18 +220,121 @@ const SchafferCollateralsView: React.FC = () => {
 
       <DataContainer theme={theme}
         navItems={[
-          { id: 'anatomySection', label: 'Anatomy' },
-          { id: 'physiologySection', label: 'Physiology' }
+          { id: 'NbSynapsesPerConnectionSection', label: 'Number of synapses per connection distribution + mean and std' },
+          { id: 'DivergenceConnectionSection', label: 'Divergence (connections) distribution + mean and std' },
+          { id: 'DivergenceSynapsesSection', label: 'Divergence (synapses) distribution + mean and std' },
+          { id: 'LaminarDistributionSynapsesSection', label: 'Laminar distribution of synapses' },
+          { id: 'SampleConvergenceByConnectionSection', label: 'Convergence (connections) distribution + mean and std' },
+          { id: 'SampleConvergenceBySynapsesSection', label: 'Convergence (synapses) distribution + mean and std' },
+          { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability + std' },
+          { id: '', label: '' },
+          { id: '', label: '' },
+          { id: '', label: '' },
+          { id: '', label: '' },
+          { id: '', label: '' },
+          { id: '', label: '' },
         ]}
       >
-        <Collapsible id="anatomySection" title="Anatomy" >
-          <p className='mb-4'>We used available <Link href={"/reconstruction-data/schaffer-collaterals"}>data</Link> to predict the anatomy of the SC. The connections between CA3 and CA1 can be analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.</p>
 
+        {availablePlots.SynapsesPerConnection && (
+          <Collapsible title="Number of synapses per connection distribution + mean and std" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>
+            <div className="graph">
+              <DistrbutionPlot plotData={getPlotDataById('synapses-per-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('synapses-per-connection'), `Synapses-per-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Number of synapses per connection distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.SampleDivergenceByConnection && (
+          <Collapsible title="Divergence (connections) distribution + mean and std" id="DivergenceConnectionSection" properties={["Anatomy"]}>
+            <div className="graph">
+              <DistrbutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-connection'), `sample-divergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Divergence (connections) distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.SampleDivergenceBySynapse && (
+          <Collapsible title="Divergence (synapses) distribution + mean and std" id="DivergenceSynapsesSection" properties={["Anatomy"]}>
+            <div className="graph">
+              <DistrbutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-synapses'), `sample-divergence-by-synapses-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Divergence (synapses) distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+
+        <Collapsible title='Laminar distribution of synapses' id='LaminarDistributionSynapsesSection' properties={["Anatomy"]}>
+          <p>Laminar</p>
         </Collapsible>
 
-        <Collapsible id="physiologySection" title="Physiology">
-          <p className='mb-4'>We used available <Link href={"/reconstruction-data/schaffer-collaterals"}>data</Link> to predict the physiology of the SC. The synapses between CA3 and CA1 can be analyzed in terms of PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.</p>
+        {availablePlots.SampleConvergenceByConnection && (
+          <Collapsible title="Convergence (connections) distribution + mean and std" id="SampleConvergenceByConnectionSection" properties={["Anatomy"]}>
+            <div className="graph">
+              <DistrbutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Convergence (connections) distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.SampleConvergenceBySynapse && (
+          <Collapsible title="Convergence (synapses) distribution + mean and std" id="SampleConvergenceBySynapsesSection" properties={["Anatomy"]}>
+            <div className="graph">
+              <DistrbutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-synapse'), `sample-convergence-by-synapse-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Convergence (synapses) distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        <Collapsible title='Mean connection probability + std' id='MeanConnectionProbabilitySection' properties={["Anatomy"]}>
+          <p>Mean connection</p>
         </Collapsible>
+
 
       </DataContainer >
     </>

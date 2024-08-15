@@ -537,7 +537,7 @@
         },
         {
             "name": "Sample divergence by connection",
-            "id": "sample-divergence-by connection",
+            "id": "sample-divergence-by-connection",
             "description": "Sample divergence by connection for the pathway",
             "unit": null,
             "counts": [
@@ -749,7 +749,7 @@
         },
         {
             "name": "Sample divergence by synapse",
-            "id": "sample-divergence-by synapse",
+            "id": "sample-divergence-by-synapse",
             "description": "Sample divergence by synapse for the pathway",
             "unit": null,
             "counts": [
