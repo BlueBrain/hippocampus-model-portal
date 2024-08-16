@@ -3,8 +3,9 @@ import throttle from 'lodash/throttle';
 import style from './styles.module.scss';
 
 type NavItem = {
-  id: string;
+  id?: string;
   label: string;
+  isTitle?: boolean;
 };
 
 type SectionNavProps = {
@@ -28,7 +29,8 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
       const inTheViewThreshold = 64;
 
       const currentNavItem = navItems
-        .map(navItem => ({ ...navItem, element: document.getElementById(navItem.id) }))
+        .filter(item => !item.isTitle && item.id)
+        .map(navItem => ({ ...navItem, element: document.getElementById(navItem.id!) }))
         .filter(navItem => navItem.element)
         .map(navItem => ({ ...navItem, top: navItem.element!.getBoundingClientRect().top }))
         .sort((navItemA, navItemB) => navItemA.top - navItemB.top)
@@ -51,27 +53,27 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
     };
   }, [navItems]);
 
-  // Only render if there is more than one item in navItems
-  if (navItems.length <= 1) {
+  // Only render if there is more than one non-title item in navItems
+  if (navItems.filter(item => !item.isTitle).length <= 1) {
     return null;
   }
 
   return (
     <div className={style.container} ref={container}>
-      {/* 
-      <h3 className={`${style.title} text-base mb-1`}>Sections</h3>
-      <hr className={style.line} />
-      */}
-
       {navItems.map((navItem, idx) => (
-        <div
-          className={` ${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
-          key={navItem.id}
-          onClick={() => scrollTo(navItem.id)}
-        >
-          {/* <div className={`${style.circle}`} title={navItem.label} /> */}
-          <span className={style.label}>{navItem.label}</span>
-        </div>
+        navItem.isTitle ? (
+          <div key={idx} className={`${style.sectionTitle} `}>
+            {navItem.label}
+          </div>
+        ) : (
+          <div
+            className={`${style.sectionItem} ${currentItemIdx === idx ? `${style.sectionItemCurrent} ${theme ? style[`theme-${theme}`] : ''}` : ''}`}
+            key={navItem.id || idx}
+            onClick={() => navItem.id && scrollTo(navItem.id)}
+          >
+            <span className={style.label}>{navItem.label}</span>
+          </div>
+        )
       ))}
     </div>
   );

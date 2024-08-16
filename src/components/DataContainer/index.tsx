@@ -7,9 +7,10 @@ import { QuickSelectorEntry } from '@/types';
 import QuickSelector from '@/components/QuickSelectorNew';
 
 type NavItem = {
-  id: string;
+  id?: string;
   label: string;
-};
+  isTitle?: boolean;
+}
 
 type DataContainerProps = {
   visible?: boolean;
