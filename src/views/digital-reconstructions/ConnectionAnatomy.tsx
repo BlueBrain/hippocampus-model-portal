@@ -86,7 +86,7 @@ const ConnectionsView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const filePath = `${basePath}/data/digital-reconstruction/connections/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const filePath = `${basePath}/data/digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
       fetch(filePath)
         .then(response => response.json())
         .then(data => {

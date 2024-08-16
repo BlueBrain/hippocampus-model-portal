@@ -17,6 +17,7 @@ import { basePath } from '@/config';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import { cellGroup, defaultSelection } from '@/constants';
+import { Layer, VolumeSection } from '@/types';
 
 
 const SynapsesView: React.FC = () => {
@@ -28,6 +29,7 @@ const SynapsesView: React.FC = () => {
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
+  const [laminarPlots, setLaminarPlots] = useState<Record<string, boolean>>({});
 
   const theme = 3;
 
@@ -82,26 +84,33 @@ const SynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const filePath = `${basePath}/data/digital-reconstruction/connections/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      fetch(filePath)
+      const distributionPlotFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const ConnectionsFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+
+      // Fetch data from Connections.json for laminar distribution
+      fetch(ConnectionsFile)
         .then(response => response.json())
-        .then(data => {
-          if (data && Array.isArray(data.values)) {
-            const plots = data.values;
+        .then(scData => {
+          const laminarData = scData.values.find(plot => plot.id === 'laminar-distribution');
+          laminarData && setLaminarPlots(laminarData);
+        })
+        .catch(error => console.error('Error fetching schaffer-collaterals data:', error));
+
+      // Fetch data from distributionPlotFile only
+      fetch(distributionPlotFile)
+        .then(response => response.json())
+        .then(distributionData => {
+          if (distributionData && Array.isArray(distributionData.values)) {
+            const plots = distributionData.values;
+
             const availablePlots = {
-              boutonDensitySection: plots.some(plot => plot.id === 'bouton-density'),
-              nbSynapsesPerConnectionSection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
-              diversionConnectionsDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
-              diversionSynapsesDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
-              LaminarDistributionSynapsesSection: plots.some(plot => plot.id === 'laminar-distribution-synapses'),
-              convergenceConnectionsDistribution: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
-              convergenceSynapsesDistribution: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
-              connectionProbabilityDistributionSection: plots.some(plot => plot.id === 'connection-probability-vs-inter-somatic-distance'),
+              SynapsesPerConnection: plots.some(plot => plot.id === 'synapses-per-connection'),
             };
+
             setAvailablePlots(availablePlots);
-            setFactsheetData(plots); // Store the actual plots data
+            setFactsheetData([...plots]);
           } else {
-            console.error('Unexpected data format:', data);
+            console.error('Unexpected data format:', distributionData);
           }
         })
         .catch(error => console.error('Error fetching factsheet:', error));
@@ -114,7 +123,6 @@ const SynapsesView: React.FC = () => {
 
   return (
     <>
-
       <Filters theme={theme} hasData={!!prelayer && !!postlayer}>
         <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
           <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
