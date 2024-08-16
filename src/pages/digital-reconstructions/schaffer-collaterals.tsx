@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import SchafferCollateralsView from '@/views/digital-reconstructions/SchafferCollaterals';
+import SchafferCollateralsView from '@/views/3_digital-reconstructions/SchafferCollaterals';
 
 
 export default function SchafferCollateralsPage() {

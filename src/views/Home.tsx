@@ -168,6 +168,10 @@ const Home: React.FC = () => (
                 href: '/digital-reconstructions/neurons/',
               },
               {
+                label: 'Synapses',
+                href: '/digital-reconstructions/synapses/',
+              },
+              {
                 label: 'Acetylcholine - Effects on Cells',
                 href: '/digital-reconstructions/acetylcholine-effects-on-cells/',
               },

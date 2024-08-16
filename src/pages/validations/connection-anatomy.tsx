@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import ConnectionAnatomyView from '../../views/validations/ConnnectionAnatomy';
+import ConnectionAnatomyView from '../../views/4_validations/ConnnectionAnatomy';
 
 
 export default function ConnectionAnatomyPage() {

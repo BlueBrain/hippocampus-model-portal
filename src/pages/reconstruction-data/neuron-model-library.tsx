@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import NeuronModelLibraryView from '@/views/reconstruction-data/NeuronModelLibrary';
+import NeuronModelLibraryView from '@/views/2_reconstruction-data/NeuronModelLibrary';
 
 
 export default function NeuronModelLibraryPage() {

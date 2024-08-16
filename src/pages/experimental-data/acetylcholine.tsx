@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import AcetylcholineView from '@/views/experimental-data/Acetylcholine';
+import AcetylcholineView from '@/views/1_experimental-data/Acetylcholine';
 
 
 export default function AcetylcholinePage() {

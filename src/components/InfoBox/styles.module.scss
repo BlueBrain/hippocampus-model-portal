@@ -17,4 +17,13 @@
     max-width: initial;
 
   }
+
+  ul {
+    list-style: "– ";
+    padding-left: 1rem;
+
+    li {
+      padding-top: 1rem;
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import CellCompositionView from '@/views/reconstruction-data/CellComposition';
+import CellCompositionView from '@/views/2_reconstruction-data/CellComposition';
 
 
 export default function CellCompositionPage() {

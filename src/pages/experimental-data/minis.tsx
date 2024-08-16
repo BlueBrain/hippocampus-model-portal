@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import MinisView from '@/views/experimental-data/Minis';
+import MinisView from '@/views/1_experimental-data/Minis';
 
 
 export default function MinisPage() {

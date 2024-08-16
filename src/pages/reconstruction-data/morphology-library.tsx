@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import MorphologyLibraryView from '@/views/reconstruction-data/MorphologyLibrary';
+import MorphologyLibraryView from '@/views/2_reconstruction-data/MorphologyLibrary';
 
 
 export default function MorphologyLibraryPage() {

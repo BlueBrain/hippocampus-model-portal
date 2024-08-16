@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import NeuronsView from '../../views/digital-reconstructions/Neurons';
+import NeuronsView from '../../views/3_digital-reconstructions/Neurons';
 
 
 export default function DigRecNeuronsPage() {
