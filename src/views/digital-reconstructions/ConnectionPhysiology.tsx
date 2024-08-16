@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import Image from 'next/image';
 
@@ -11,68 +11,170 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
 import selectorStyle from '@/styles/selector.module.scss';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { basePath } from '@/config';
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+import List from '@/components/List';
+import { cellGroup, defaultSelection } from '@/constants';
 
 
 const SynapsesView: React.FC = () => {
+  const router = useRouter();
+  const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
+
+  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ volume_section, prelayer, postlayer });
+  const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
+  const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
 
   const theme = 3;
 
+  const setParams = (params: Record<string, string>): void => {
+    const query = { ...router.query, ...params };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
+      const query = defaultSelection.digitalReconstruction.synapticPathways;
+      const { volume_section, prelayer, postlayer } = query;
+      setQuickSelection({ volume_section, prelayer, postlayer });
+      router.replace({ query }, undefined, { shallow: true });
+    } else {
+      setQuickSelection({ volume_section, prelayer, postlayer });
+    }
+  }, [router.query]);
+
+  const setVolumeSectionQuery = (volume_section: VolumeSection) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, volume_section };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
+    });
+  };
+
+  const setPreLayerQuery = (prelayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, prelayer };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
+    });
+  };
+
+  const setPostLayerQuery = (postlayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, postlayer };
+      setParams(updatedSelection);
+      setSelectedPlot(null);
+      return updatedSelection;
+    });
+  };
+
+  useEffect(() => {
+    setConnViewerReady(false);
+  }, [prelayer, postlayer]);
+
+  useEffect(() => {
+    if (volume_section && prelayer && postlayer) {
+      const filePath = `${basePath}/data/digital-reconstruction/connections/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      fetch(filePath)
+        .then(response => response.json())
+        .then(data => {
+          if (data && Array.isArray(data.values)) {
+            const plots = data.values;
+            const availablePlots = {
+              boutonDensitySection: plots.some(plot => plot.id === 'bouton-density'),
+              nbSynapsesPerConnectionSection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              diversionConnectionsDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
+              diversionSynapsesDistributionSection: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
+              LaminarDistributionSynapsesSection: plots.some(plot => plot.id === 'laminar-distribution-synapses'),
+              convergenceConnectionsDistribution: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              convergenceSynapsesDistribution: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
+              connectionProbabilityDistributionSection: plots.some(plot => plot.id === 'connection-probability-vs-inter-somatic-distance'),
+            };
+            setAvailablePlots(availablePlots);
+            setFactsheetData(plots); // Store the actual plots data
+          } else {
+            console.error('Unexpected data format:', data);
+          }
+        })
+        .catch(error => console.error('Error fetching factsheet:', error));
+    }
+  }, [volume_section, prelayer, postlayer]);
+
+  const getPlotDataById = (id: string) => {
+    return factsheetData?.find((plot: any) => plot.id === id);
+  };
+
   return (
     <>
-      <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+
+      <Filters theme={theme} hasData={!!prelayer && !!postlayer}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Connection Physiology"
                 subtitle="Digital Reconstructions"
                 theme={theme}
               />
               <div role="information">
                 <InfoBox>
-                  <p className="text-tmp">
-                    Vivamus vel semper nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                    per inceptos himenaeos. Vivamus ipsum enim, fermentum quis ipsum nec, euismod convallis leo. <br />
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Sed vel scelerisque felis, quis condimentum felis. Pellentesque dictum neque vel mauris dignissim,
-                    vitae ornare arcu sagittis. <br />
-                    Etiam vestibulum, nisi in scelerisque porta, enim est gravida mi,
-                    nec pulvinar enim ligula non lorem. Aliquam ut orci est.
-                    Praesent tempus sollicitudin ante varius feugiat.
+                  <p>
+                    We assigned <Link href={"/experimental-data/connection-physiology/"} className={`link theme-${theme}`}>synapse properties</Link> to the <Link href={"/digital-reconstructions/connection-anatomy/"} className={`link theme-${theme}`}>established connections</Link>. For each circuit, each pathway is analyzed in terms of PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.selector} style={{ maxWidth: '26rem' }}>
-              <div className={selectorStyle.selectorColumn}>
-                {/* <div className={selectorStyle.selectorHead}></div> */}
-                <div className={selectorStyle.selectorBody}>
-                  <Image
-                    src="https://fakeimg.pl/640x480/282828/faad14/?retina=1&text=LayerSelector&font=bebas"
-                    width="640"
-                    height="480"
-                    unoptimized
-                    alt=""
-                  />
+          </div>
+
+          <div className="flex flex-col gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-1/2 md:w-full flex-grow md:flex-none justify-center" style={{ maxWidth: '800px' }}>
+            <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
+              <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
+              <div className="selector__body">
+                <VolumeSectionSelector3D
+                  value={volume_section}
+                  onSelect={setVolumeSectionQuery}
+                  theme={theme}
+                />
+              </div>
+
+            </div>
+            <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
+              <div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
+                <div className={`selector__head theme-${theme}`}>2. Select a pre-synaptic cell group</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={cellGroup}
+                    value={prelayer}
+                    title="m-type"
+                    color={colorName}
+                    onSelect={setPreLayerQuery}
+                    theme={theme} />
+                </div>
+              </div><div className={`selector__column theme-${theme} flex-1`}>
+                <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={cellGroup}
+                    value={postlayer}
+                    title="m-type"
+                    color={colorName}
+                    onSelect={setPostLayerQuery}
+                    theme={theme} />
                 </div>
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
 
       <DataContainer theme={theme}
