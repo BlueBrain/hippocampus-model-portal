@@ -17,6 +17,7 @@ import Collapsible from '@/components/Collapsible';
 import ExpTraceTable from '@/components/ExpTraceTable';
 import Metadata from '@/components/Metadata';
 import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
+import StickyContainer from '@/components/StickyContainer';
 
 // Graph Imports
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
@@ -30,32 +31,33 @@ import { defaultSelection } from '@/constants';
 
 // HOC Imports
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
+
+// Type Imports
+import { QuickSelectorEntry } from '@/types';
 
 // Data Import
 import traces from '@/traces.json';
-import StickyContainer from '@/components/StickyContainer';
 
 // Helper Functions
-const getEphysDistribution = (resource) => Array.isArray(resource.distribution)
-  ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
+const getEphysDistribution = (resource: any) => Array.isArray(resource.distribution)
+  ? resource.distribution.find((d: any) => d.name.match(/\.nwb$/i))
   : resource.distribution;
 
 const getEtype = () => Object.keys(traces).sort();
-const getInstance = (etype) => etype ? traces[etype].sort() : [];
+const getInstance = (etype: string) => etype ? traces[etype].sort() : [];
 
-const NeuronElectrophysiology = () => {
+const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
   const { query } = router;
 
-  const setQuery = (newQuery) => {
-    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
+  const setQuery = (newQuery: Partial<typeof query>) => {
+    router.push({ query: { ...query, ...newQuery }, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setEtype = (etype) => setQuery({ etype, etype_instance: null });
-  const setInstance = (instance) => setQuery({ etype: currentEtype, etype_instance: instance });
+  const setEtype = (etype: string) => setQuery({ etype, etype_instance: undefined });
+  const setInstance = (instance: string) => setQuery({ etype_instance: instance });
 
   const currentEtype = query.etype as string;
   const currentInstance = query.etype_instance as string;
@@ -73,14 +75,29 @@ const NeuronElectrophysiology = () => {
     [currentEtype]
   );
 
-  const getAndSortTraces = (esDocuments) =>
+  const getAndSortTraces = (esDocuments: any[]) =>
     esDocuments
       .map(esDocument => esDocument._source)
       .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
 
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'E-type',
+      key: 'etype',
+      values: etypes,
+      setFn: setEtype,
+    },
+    {
+      title: 'Instance',
+      key: 'etype_instance',
+      getValuesFn: getInstance,
+      getValuesParam: 'etype',
+      setFn: setInstance,
+    },
+  ];
+
   return (
     <>
-
       <Filters theme={theme} hasData={!!currentInstance}>
         <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
           <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
@@ -107,7 +124,6 @@ const NeuronElectrophysiology = () => {
             <div className={`selector__column theme-${theme} w-full`}>
               <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
               <div className="selector__body">
-
                 <List
                   block
                   list={etypes}
@@ -127,7 +143,6 @@ const NeuronElectrophysiology = () => {
                   anchor="data"
                   theme={theme}
                 />
-
               </div>
             </div>
           </div>
@@ -141,6 +156,7 @@ const NeuronElectrophysiology = () => {
           { id: 'instanceSection', label: 'Instance' },
           { id: 'etypeSection', label: 'Population' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
         <Collapsible
           id="instanceSection"
@@ -149,7 +165,7 @@ const NeuronElectrophysiology = () => {
           <p className="mb-4">We provide visualization and features for the selected recording.</p>
 
           <ESData query={fullElectroPhysiologyDataQueryObj}>
-            {esDocuments => (
+            {(esDocuments: any[]) => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
@@ -213,7 +229,7 @@ const NeuronElectrophysiology = () => {
           <p className="mb-4">We provide features for the entire e-type group selected.</p>
 
           <ESData query={etypeTracesDataQueryObj}>
-            {esDocuments => (
+            {(esDocuments: any[]) => (
               <>
                 {!!esDocuments && (
                   <ExpTraceTable
@@ -240,25 +256,5 @@ const hocPreselection = withPreselection(
   },
 );
 
-const qsEntries = [
-  {
-    title: 'E-type',
-    key: 'etype',
-    values: getEtype(),
-  },
-  {
-    title: 'Instance',
-    key: 'etype_instance',
-    getValuesFn: getInstance,
-    getValuesParam: 'etype',
-    paramsToKeepOnChange: ['etype'],
-  },
-];
-
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
-  },
-);
+// Export the component wrapped with HOCs
+export default hocPreselection;

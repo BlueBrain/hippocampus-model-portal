@@ -61,11 +61,13 @@ const SchafferCollateralsView: React.FC = () => {
             </Filters>
             <DataContainer theme={theme}
                 navItems={[
+                    { label: 'Anatomy', isTitle: true },
                     { id: 'AnatomyDensityOfSynapsesSection', label: 'Density of synapses along the radial axis' },
                     { id: 'SynapsesConvergenceForPyramidalCellsSection', label: SynapsesConvergenceForPyramidalCellsData.name },
                     { id: 'NumberOfSynapsesPerConectionsSection', label: NumberOfSynapsesPerConectionsData.name },
                     { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: SynapsesConvergenceForPyramidalCellsTwoData.name },
                     { id: 'DivergenceSection', label: 'Anatomy ' + DivergenceData.name },
+                    { label: 'Physiology', isTitle: true },
                     { id: 'PSPAmplitudeSection', label: PSPAmplitudeData.name },
                     { id: 'PSCRatioFromSCToCB1RPlusSection', label: PSCRatioFromSCToCB1RPlusData.name },
                     { id: 'PSCRatioFromSCToCB1RMinusSection', label: PSCRatioFromSCToCB1RMinusData.name },

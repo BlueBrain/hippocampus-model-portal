@@ -3,8 +3,8 @@ import { Row, Col, Spin, Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import VolumeViewer from './volume/volume-viewer'; // Ensure this path is correct
-import CoordinatesViewer from './volume/coordinates-viewer/CoordinatesViewer'; // Ensure this path is correct
+import VolumeViewer from './volume/volume-viewer';
+import CoordinatesViewer from './volume/coordinates-viewer/CoordinatesViewer';
 
 import { staticDataBaseUrl } from '@/config';
 import { volumeAnalysisPath, volumeRasterDataPath } from '@/queries/http';
@@ -21,10 +21,9 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
 
 import selectorStyle from '@/styles/selector.module.scss';
-import { VolumeSection } from '@/types';
+import { VolumeSection, QuickSelectorEntry } from '@/types';
 import { colorName } from './config';
 
 const VolumeView: React.FC = () => {
@@ -43,9 +42,17 @@ const VolumeView: React.FC = () => {
     return facts.filter(fact => factNameR.test(fact.name));
   }
 
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Volume section',
+      key: 'volume_section',
+      values: volumeSections,
+      setFn: setVolumeSectionQuery,
+    },
+  ];
+
   return (
     <>
-
       <Filters theme={theme} hasData={true}>
         <Row className="w-100" gutter={[0, 20]}>
           <Col className="mb-2" xs={24} lg={12}>
@@ -54,26 +61,18 @@ const VolumeView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}>atlas</Link> with a process of coordinate extraction and <Link href="/experimental-data/layer-anatomy/  " className={`link theme-${theme}`}>layer thickness estimation</Link> to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
+                    We combined a publicly available <Link href="http://cng.gmu.edu/hippocampus3d/" className={`link theme-${theme}`}>atlas</Link> with a process of coordinate extraction and <Link href="/experimental-data/layer-anatomy/" className={`link theme-${theme}`}>layer thickness estimation</Link> to reconstruct the volume of CA1. From the entire CA1, we can obtain subvolumes of particular interest, such as cylinders and slices, at any desired location.
                   </p>
                 </InfoBox>
               </div>
             </StickyContainer>
           </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
+          <Col className={`set-accent-color--${'grey'} mb-2`} xs={24} lg={12}>
             <div className={selectorStyle.row}>
               <div className={"selector__column mt-3 theme-" + theme}>
                 <div className={"selector__head theme-" + theme}>Select a volume section</div>
                 <div className={"selector__body"}>
-                  <VolumeSectionSelector3D
-                    value={volumeSection}
-                    onSelect={setVolumeSectionQuery}
-                    theme={theme}
-                  />
+                  <VolumeSectionSelector3D value={volumeSection} onSelect={setVolumeSectionQuery} theme={theme} />
                 </div>
               </div>
             </div>
@@ -81,11 +80,15 @@ const VolumeView: React.FC = () => {
         </Row>
       </Filters>
 
-      <DataContainer theme={theme} navItems={[
-        { id: 'volumeSection', label: 'Volume' },
-        { id: 'vectorsSection', label: 'Vectors' },
-        { id: 'coordinatesSection', label: 'Coordinates' }
-      ]}>
+      <DataContainer
+        theme={theme}
+        navItems={[
+          { id: 'volumeSection', label: 'Volume' },
+          { id: 'vectorsSection', label: 'Vectors' },
+          { id: 'coordinatesSection', label: 'Coordinates' }
+        ]}
+        quickSelectorEntries={qsEntries}
+      >
         <Collapsible id="volume" title="Volume">
           <h2>
             {volumeSection === 'region' ? (
@@ -106,7 +109,6 @@ const VolumeView: React.FC = () => {
               <Button className="mr-2" href="https://bbp.epfl.ch/atlas#camPosition=36984.948,3938.164,5712.791&camLookat=6612.504,3938.164,5712.791&camUp=0,-1,0&srs=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fallen_ccfv3_spatial_reference_system&atlas=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fe2e500ec-fe7e-4888-88b9-b72425315dda&resources=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F20f22cc6-7ded-45bc-a2d5-9f14f3b2f6a0,bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F64ab81de-dbcc-4461-b077-f1e009a10a22" target="_blank" rel="noopener noreferrer" icon={<EyeOutlined />} size="small" type="primary">
                 CA1 in Blue Brain Atlas
               </Button>
-
               <HttpDownloadButton href={volumeRasterDataPath(volumeSection)} download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}>
                 NRRD file(s)
               </HttpDownloadButton>
@@ -140,7 +142,6 @@ const VolumeView: React.FC = () => {
 
         <Collapsible id="vectorsSection" title="Vectors" className="mt-4">
           <p>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</p>
-
         </Collapsible>
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
@@ -151,31 +152,15 @@ const VolumeView: React.FC = () => {
             </Spin>
           </div>
         </Collapsible>
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
 
-
-const VolumeViewWithPreselection = withPreselection(
+export default withPreselection(
   VolumeView,
   {
     key: 'volume_section',
     defaultQuery: defaultSelection.reconstructionData.volume,
-  },
-);
-
-const qsEntries = [{
-  title: 'Volume section',
-  key: 'volume_section',
-  values: volumeSections,
-}];
-
-
-export default withQuickSelector(
-  VolumeViewWithPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
   },
 );

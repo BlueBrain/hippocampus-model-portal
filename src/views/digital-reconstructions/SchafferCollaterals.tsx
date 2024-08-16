@@ -224,9 +224,10 @@ const SchafferCollateralsView: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer theme={theme}
+      <DataContainer
+        theme={theme}
         navItems={[
-          { label: 'Anatomy' isTitle: true },
+          { label: 'Anatomy', isTitle: true },
           { id: 'NbSynapsesPerConnectionSection', label: 'Nb of synapses p.connection dist.' },
           { id: 'DivergenceConnectionSection', label: 'Divergence connections dist.' },
           { id: 'DivergenceSynapsesSection', label: 'Divergence synapses dist.' },
@@ -234,6 +235,7 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'SampleConvergenceByConnectionSection', label: 'Convergence connections dist.' },
           { id: 'SampleConvergenceBySynapsesSection', label: 'Convergence synapses dist.' },
           { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability' },
+          { label: 'Physiology', isTitle: true },
           { id: 'PSPAmplitudeSection', label: 'PSP Amplitude dist.' },
           { id: 'PSPCVSection', label: 'PSP CV dist.' },
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
@@ -243,8 +245,7 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
-        ]}
-      >
+        ]}>
 
         {availablePlots.SynapsesPerConnection && (
           <Collapsible title="Number of synapses per connection distribution + mean and std" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>

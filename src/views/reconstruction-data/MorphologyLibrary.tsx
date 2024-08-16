@@ -1,32 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Spin } from 'antd';
 
-import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
-import LayerSelector from '@/components/LayerSelector';
 import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
-import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import { Layer } from '@/types';
+import { Layer, QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
-import EtypeFactsheet from '@/components/EtypeFactsheet';
-import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-// import NeuronMorphology from '@/components/NeuronMorphology';
-import { basePath } from '@/config';
+
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
 import { colorName } from './config';
-
-import styles from '../../styles/digital-reconstructions/neurons.module.scss';
-
-const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
 const getMtypes = (layer: Layer): string[] => {
   return layer
@@ -109,14 +97,35 @@ const Neurons: React.FC = () => {
   const etypes = getEtypes(currentMtype);
   const instances = getInstances(currentMtype, currentEtype);
 
-  const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
-
-  /*
-  Not Used
-  const morphologyName = currentInstance
-    ? currentInstance.match(modelMorphologyRe)[1]
-    : null;
-    */
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Layer',
+      key: 'layer',
+      values: layers,
+      setFn: setLayer,
+    },
+    {
+      title: 'M-type',
+      key: 'mtype',
+      getValuesFn: getMtypes,
+      getValuesParam: 'layer',
+      setFn: setMtype,
+    },
+    {
+      title: 'E-Type',
+      key: 'etype',
+      getValuesFn: getEtypes,
+      getValuesParam: 'mtype',
+      setFn: setEtype,
+    },
+    {
+      title: 'Instance',
+      key: 'instance',
+      getValuesFn: getInstances,
+      getValuesParam: ['mtype', 'etype'],
+      setFn: setInstance,
+    },
+  ];
 
   return (
     <>
@@ -129,9 +138,7 @@ const Neurons: React.FC = () => {
               subtitle="Reconstruction Data"
               theme={theme}
             />
-            <InfoBox
-              color={colorName}
-            >
+            <InfoBox color={colorName}>
               <p>
                 We scale and clone <Link className={"link theme-" + theme} href={"/experimental-data/neuronal-morphology/"}>morphologies</Link> to produce a morphology library.
               </p>
@@ -143,7 +150,7 @@ const Neurons: React.FC = () => {
               <div className={"selector__column theme-" + theme}>
                 <div className={"selector__head theme-" + theme}>Choose a layer</div>
                 <div className={"selector__selector-container"}>
-                  < LayerSelector3D
+                  <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
                     theme={theme}
@@ -162,7 +169,6 @@ const Neurons: React.FC = () => {
                     onSelect={setMtype}
                     theme={theme}
                   />
-
                   <List
                     block
                     list={etypes}
@@ -189,12 +195,14 @@ const Neurons: React.FC = () => {
         </div>
       </Filters>
 
-      <DataContainer theme={theme}
+      <DataContainer
+        theme={theme}
         navItems={[
           { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
-        ]}>
-
+        ]}
+        quickSelectorEntries={qsEntries}
+      >
         <Collapsible id="morphologySection" title={`Neuron Morphology ${currentMtype} ${currentEtype} ${currentInstance}`}>
           <p>We provide visualization and morphometrics for the selected morphology.</p>
         </Collapsible>
@@ -202,53 +210,15 @@ const Neurons: React.FC = () => {
         <Collapsible id="populationSection" title={`Population`}>
           <p>We provide morphometrics for the entire m-type group selected.</p>
         </Collapsible>
-
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
 
-const hocPreselection = withPreselection(
+export default withPreselection(
   Neurons,
   {
     key: 'layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
-  },
-);
-
-const qsEntries = [
-  {
-    title: 'Layer',
-    key: 'layer',
-    values: layers,
-  },
-  {
-    title: 'M-type',
-    key: 'mtype',
-    getValuesFn: getMtypes,
-    getValuesParam: 'layer',
-    paramsToKeepOnChange: ['layer'],
-  },
-  {
-    title: 'E-Type',
-    key: 'etype',
-    getValuesFn: getEtypes,
-    getValuesParam: 'mtype',
-    paramsToKeepOnChange: ['layer', 'mtype'],
-  },
-  {
-    title: 'Instance',
-    key: 'instance',
-    getValuesFn: getInstances,
-    getValuesParam: ['mtype', 'etype'],
-    paramsToKeepOnChange: ['layer', 'mtype', 'etype'],
-  },
-];
-
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
   },
 );
