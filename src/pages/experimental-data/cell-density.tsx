@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import CellDensityView from '@/views/experimental-data/CellDensity';
+import CellDensityView from '@/views/1_experimental-data/CellDensity';
 
 
 export default function ThetaPage() {

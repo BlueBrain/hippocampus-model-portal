@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import RegionView from '@/views/digital-reconstructions/Region';
+import RegionView from '@/views/3_digital-reconstructions/Region';
 
 
 export default function DigRecRegionPage() {

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import VoltageView from '@/views/predictions/Voltage';
+import VoltageView from '@/views/5_predictions/Voltage';
 
 
 export default function VoltagePage() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import ConnectionAnatomyView from '@/views/digital-reconstructions/ConnectionAnatomy';
+import ConnectionAnatomyView from '@/views/3_digital-reconstructions/ConnectionAnatomy';
 
 
 export default function DigRecConnectionsPage() {

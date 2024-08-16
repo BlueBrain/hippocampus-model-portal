@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import ConnnectionPhysiologyView from '@/views/validations/ConnnectionPhysiology';
+import ConnnectionPhysiologyView from '@/views/4_validations/ConnnectionPhysiology';
 
 
 export default function ConnectionPhysiologyPage() {

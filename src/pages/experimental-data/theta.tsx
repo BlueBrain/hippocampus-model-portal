@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import ThetaView from '@/views/experimental-data/Theta';
+import ThetaView from '@/views/1_experimental-data/Theta';
 
 
 export default function ThetaPage() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import NeuronsView from '@/views/validations/Neurons';
+import NeuronsView from '@/views/4_validations/Neurons';
 
 
 export default function NeuronsPage() {

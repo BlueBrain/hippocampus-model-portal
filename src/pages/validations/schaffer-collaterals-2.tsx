@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import SchafferCollateralsView from '@/views/validations/SchafferCollaterals_2';
+import SchafferCollateralsView from '@/views/4_validations/SchafferCollaterals_2';
 
 
 export default function SchafferCollateralsTwoPage() {

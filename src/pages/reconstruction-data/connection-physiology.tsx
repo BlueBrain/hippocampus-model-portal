@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import ConnectionPhysiologyView from '@/views/reconstruction-data/ConnectionPhysiology';
+import ConnectionPhysiologyView from '@/views/2_reconstruction-data/ConnectionPhysiology';
 
 
 export default function ConnectionPhysiologyPage() {

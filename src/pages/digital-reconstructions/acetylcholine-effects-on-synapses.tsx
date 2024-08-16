@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import AcetylcholineView from '@/views/digital-reconstructions/AcetylcholineEffectsOnSynapses';
+import AcetylcholineView from '@/views/3_digital-reconstructions/AcetylcholineEffectsOnSynapses';
 
 
 export default function AcetylcholinePage() {
