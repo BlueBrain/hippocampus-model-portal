@@ -10,6 +10,7 @@ import Collapsible from '@/components/Collapsible';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import DistrbutionPlot from '@/components/DistributionPlot';
+import LaminarGraph from '@/components/LaminarGraph';
 
 import Filters from '@/layouts/Filters';
 
@@ -29,6 +30,8 @@ const SchafferCollateralsView: React.FC = () => {
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
+  const [laminarPlots, setLaminarPlots] = useState<Record<string, boolean>>({});
+
 
   const theme = 3;
 
@@ -79,16 +82,23 @@ const SchafferCollateralsView: React.FC = () => {
       const distributionPlotFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
       const sCFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
 
-      // Fetch data from both distributionPlotFile and sCFile
-      Promise.all([
-        fetch(distributionPlotFile).then(response => response.json()),
-        fetch(sCFile).then(response => response.json())
-      ])
-        .then(([distributionData, scData]) => {
-          if (distributionData && Array.isArray(distributionData.values) && scData) {
-            const plots = distributionData.values;
-            const availablePlots = {
+      // Fetch data from schaffer-collaterals.json for laminar distribution
+      fetch(sCFile)
+        .then(response => response.json())
+        .then(scData => {
+          const laminarData = scData.values.find(plot => plot.id === 'laminar-distribution');
+          laminarData && setLaminarPlots(laminarData);
+        })
+        .catch(error => console.error('Error fetching schaffer-collaterals data:', error));
 
+      // Fetch data from distributionPlotFile only
+      fetch(distributionPlotFile)
+        .then(response => response.json())
+        .then(distributionData => {
+          if (distributionData && Array.isArray(distributionData.values)) {
+            const plots = distributionData.values;
+
+            const availablePlots = {
               // -- Anatomy
 
               //number of synapses per connection distribution + mean and std
@@ -99,9 +109,6 @@ const SchafferCollateralsView: React.FC = () => {
 
               //Divergence (synapses) distribution + mean and std
               SampleDivergenceBySynapse: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
-
-              // Laminar distribution of synapses
-              LaminarDistribution: scData.laminar_distribution !== undefined,
 
               //Convergence (connections) distribution + mean and std
               SampleConvergenceByConnection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
@@ -136,14 +143,12 @@ const SchafferCollateralsView: React.FC = () => {
               DParameter: plots.some(plot => plot.id === 'd-parameter'),
               GSYNX: plots.some(plot => plot.id === 'g-synx'),
               NRRPParameter: plots.some(plot => plot.id === 'nrrp-parameter'),
-
-
-
             };
+
             setAvailablePlots(availablePlots);
-            setFactsheetData([...plots, scData.laminar_distribution]);
+            setFactsheetData([...plots]);
           } else {
-            console.error('Unexpected data format:', distributionData, scData);
+            console.error('Unexpected data format:', distributionData);
           }
         })
         .catch(error => console.error('Error fetching factsheet:', error));
@@ -221,6 +226,7 @@ const SchafferCollateralsView: React.FC = () => {
 
       <DataContainer theme={theme}
         navItems={[
+          { label: 'Anatomy' isTitle: true },
           { id: 'NbSynapsesPerConnectionSection', label: 'Nb of synapses p.connection dist.' },
           { id: 'DivergenceConnectionSection', label: 'Divergence connections dist.' },
           { id: 'DivergenceSynapsesSection', label: 'Divergence synapses dist.' },
@@ -233,8 +239,10 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
           { id: 'RiseTimeSection', label: 'Rise time constant dist.' },
           { id: 'DecayTimeConstantSection', label: 'Decay time constant dist.' },
+          { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' },
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
+          { id: 'TracesSection', label: 'Traces' },
         ]}
       >
 
@@ -307,6 +315,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         <Collapsible title='Laminar distribution of synapses' id='LaminarDistributionSynapsesSection' properties={["Anatomy"]}>
           <p>Laminar</p>
+          <LaminarGraph data={laminarPlots} title={undefined} yAxisLabel={undefined} />
         </Collapsible>
 
         {availablePlots.SampleConvergenceByConnection && (
@@ -602,6 +611,10 @@ const SchafferCollateralsView: React.FC = () => {
           )
         }
 
+        <Collapsible title='Short-term plasticity: average traces + mean traces' id='ShortTermPlasticitySection' properties={["Physiology"]}>
+          <p>Short-term plasticity: average traces + mean traces</p>
+        </Collapsible>
+
         <Collapsible
           title="Distribution + mean and std of U, D, F, NRRP"
           id="UParameterSection"
@@ -733,6 +746,11 @@ const SchafferCollateralsView: React.FC = () => {
             )}
           </div>
         </Collapsible>
+
+        <Collapsible title='Traces' id='TracesSection' properties={["Physiology"]}>
+          <p>Traces</p>
+        </Collapsible>
+
       </DataContainer >
     </>
   )
