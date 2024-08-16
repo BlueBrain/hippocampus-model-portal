@@ -29,7 +29,7 @@
         },
         {
             "name": "Sample convergence by synapse",
-            "id": "ssample-convergence-by-synapse",
+            "id": "sample-convergence-by-synapse",
             "description": "Sample convergence by synapse for the pathway",
             "unit": null,
             "values": [

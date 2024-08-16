@@ -9,6 +9,7 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
+import DistibutionPlot from '@/components/DistributionPlot';
 
 import selectorStyle from '@/styles/selector.module.scss';
 import Link from 'next/link';
@@ -18,6 +19,9 @@ import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import { cellGroup, defaultSelection } from '@/constants';
 import { Layer, VolumeSection } from '@/types';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
+import LaminarGraph from '@/components/LaminarGraph';
 
 
 const SynapsesView: React.FC = () => {
@@ -84,8 +88,8 @@ const SynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const ConnectionsFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const distributionPlotFile = `${basePath}/data/digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const ConnectionsFile = `${basePath}/data/digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
 
       // Fetch data from Connections.json for laminar distribution
       fetch(ConnectionsFile)
@@ -104,7 +108,11 @@ const SynapsesView: React.FC = () => {
             const plots = distributionData.values;
 
             const availablePlots = {
-              SynapsesPerConnection: plots.some(plot => plot.id === 'synapses-per-connection'),
+              boutonDenstiy: plots.some(plot => plot.id === 'bouton-density'),
+              sampleConvergenceByConnection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              sampleConvergenceBySynapses: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
+              sampleDivergenceConnections: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
+              sampleDivergenceBySynapses: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
             };
 
             setAvailablePlots(availablePlots);
@@ -187,15 +195,97 @@ const SynapsesView: React.FC = () => {
 
       <DataContainer theme={theme}
         navItems={[
-          { id: 'tbd', label: 'TBD' },
+          { id: 'BoutonDenstiySection', label: 'Bouton density' },
+          { id: 'SampleConvergenceByConnectionSection', label: 'Sample convergence by connection' },
+          { id: 'SampleConvergenceBySynapsesSection', label: 'Sample convergence by synapses' },
+          { id: 'LaminarDistributionSection', label: 'Laminar distribution' },
+          { id: 'SampleDivergenceConnectionsSection', label: 'Sample divergence by connection' },
+          { id: 'SampleDivergenceBySynapsesSection', label: 'Sample divergence by synapses' },
         ]}
       >
-        <Collapsible
-          id="tbd"
-          title="TBD"
-        >
-          <h3 className="text-tmp">TBD</h3>
-        </Collapsible>
+
+        {availablePlots.boutonDenstiy && (
+          <Collapsible title="Bouton Desnity" id="BoutonDenstiySection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('bouton-density'), `bouton-density-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Bouton density
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.sampleConvergenceByConnection && (
+          <Collapsible title="Sample convergence by connection" id="SampleConvergenceByConnectionSection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Sample convergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.sampleConvergenceBySynapses && (
+          <Collapsible title="Sample convergence by synapses" id="SampleConvergenceBySynapsesSection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-synapses'), `sample-convergence-by-synapses-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Sample convergence by synapses
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {laminarPlots && (
+          <Collapsible title='Laminar distribution of synapses' id='LaminarDistributionSection'>
+            <LaminarGraph data={laminarPlots} title={undefined} yAxisLabel={undefined} />
+          </Collapsible>
+        )}
+
+        {availablePlots.sampleDivergenceConnections && (
+          <Collapsible title="Sample divergence by connection" id="SampleDivergenceByConnectionSection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-connection'), `sample-divergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Sample divergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.sampleDivergenceBySynapses && (
+          <Collapsible title="Sample divergence by synapses" id="SampleDivergenceBySynapsesSection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-synapses'), `sample-divergence-by-synapses-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Sample divergence by synapses
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+
       </DataContainer >
     </>
   );
