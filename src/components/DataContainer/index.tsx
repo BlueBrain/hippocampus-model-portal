@@ -30,13 +30,38 @@ const DataContainer: React.FC<DataContainerProps> = ({
   return (
     <>
       {visible && (
-        <div className={styles.data}>
+        <div className={styles.data_page}>
           <div id="data" className={styles.dataContainer}>
-            {navItems && (
-              <div className={styles.navItemsContainer}>
-                <SectionNav theme={theme} navItems={navItems} />
+            <div className={styles.sidebar}>
+              <div className={styles.sidebar__sticky}>
+                {quickSelectorEntries && (
+                  <QuickSelector theme={theme} entries={quickSelectorEntries} />
+                )}
+                {navItems && (
+                  <div className={styles.navItemsContainer}>
+                    <SectionNav theme={theme} navItems={navItems} />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            <div className={styles.content}>
+              <div>{children}</div>
+            </div>
+          </div>
+        </div>
+
+      )}
+
+    </>
+  );
+};
+
+export default DataContainer;
+
+
+{/*<div className={styles.data}>
+          <div id="data" className={styles.dataContainer}>
+           
 
             {quickSelectorEntries && (
               <QuickSelector entries={quickSelectorEntries} />
@@ -56,9 +81,4 @@ const DataContainer: React.FC<DataContainerProps> = ({
             </ScrollTo>
           </div>
         </div>
-      )}
-    </>
-  );
-};
-
-export default DataContainer;
+         */}

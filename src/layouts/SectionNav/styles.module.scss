@@ -27,7 +27,7 @@
 }
 
 .sectionTitle {
-  @apply text-sm mb-2 mt-4;
+  @apply text-sm mb-1 mt-4 pb-1;
   color: map-get($basePalette, "navy-2");
 
 }

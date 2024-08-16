@@ -15,11 +15,12 @@ import List from '@/components/List';
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
-import { cellGroup, defaultSelection } from '@/constants';
-import { Layer, VolumeSection } from '@/types';
+import { cellGroup, defaultSelection, volumeSections } from '@/constants';
+import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { basePath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
+import LaminarGraph from '@/components/LaminarGraph';
 
 
 const SynapsesView: React.FC = () => {
@@ -79,6 +80,27 @@ const SynapsesView: React.FC = () => {
       return updatedSelection;
     });
   };
+
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Volume section',
+      key: 'volume_section',
+      values: volumeSections,
+      setFn: setVolumeSectionQuery,
+    },
+    {
+      title: 'Pre-synaptic cell group',
+      key: 'prelayer',
+      values: cellGroup,
+      setFn: setPreLayerQuery,
+    },
+    {
+      title: 'Post-synaptic cell group',
+      key: 'postlayer',
+      values: cellGroup,
+      setFn: setPostLayerQuery,
+    },
+  ];
 
   useEffect(() => {
     setConnViewerReady(false);
@@ -198,6 +220,7 @@ const SynapsesView: React.FC = () => {
           { id: 'SampleDivergenceConnectionsSection', label: 'Sample divergence by connection' },
           { id: 'SampleDivergenceBySynapsesSection', label: 'Sample divergence by synapses' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
 
         {availablePlots.boutonDenstiy && (

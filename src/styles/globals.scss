@@ -392,7 +392,11 @@ tfoot.ant-table-summary {
 
 .collapsabe {
   border: 1px solid rgba(black, 0.1);
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   a {
     text-decoration: underline;

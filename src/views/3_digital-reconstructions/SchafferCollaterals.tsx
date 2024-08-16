@@ -14,9 +14,9 @@ import LaminarGraph from '@/components/LaminarGraph';
 
 import Filters from '@/layouts/Filters';
 
-import { cellGroup, defaultSelection } from '@/constants';
+import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 
-import { Layer, VolumeSection } from '@/types';
+import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 
 import { basePath } from '../../config';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
@@ -76,6 +76,27 @@ const SchafferCollateralsView: React.FC = () => {
       return updatedSelection;
     });
   };
+
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Volume section',
+      key: 'volume_section',
+      values: volumeSections,
+      setFn: setVolumeSectionQuery,
+    },
+    {
+      title: 'Pre-synaptic cell group',
+      key: 'prelayer',
+      values: ["All"],
+      setFn: setPreLayerQuery,
+    },
+    {
+      title: 'Post-synaptic cell group',
+      key: 'postlayer',
+      values: cellGroup,
+      setFn: setPostLayerQuery,
+    },
+  ];
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
@@ -245,7 +266,9 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
-        ]}>
+        ]}
+        quickSelectorEntries={qsEntries}
+      >
 
         {availablePlots.SynapsesPerConnection && (
           <Collapsible title="Number of synapses per connection distribution + mean and std" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>
