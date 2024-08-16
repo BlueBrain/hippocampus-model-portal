@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { basePath } from '../../config';
-import { colorName } from './config';
-
-import { Layer, VolumeSection } from '@/types';
-import { layers, cellGroup, defaultSelection } from '@/constants';
 
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
@@ -14,14 +9,19 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+import DistibutionPlot from '@/components/DistributionPlot';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
-import DistibutionPlot from '@/components/DistributionPlot'; // Import the new component
 
-import selectorStyle from '../../styles/selector.module.scss';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+
+import { cellGroup, defaultSelection, layers } from '@/constants';
+import { Layer, VolumeSection } from '@/types';
+import { basePath } from '@/config';
+
 import { downloadAsJson } from '@/utils';
+
 
 const ConnectionsView: React.FC = () => {
   const router = useRouter();
@@ -159,7 +159,6 @@ const ConnectionsView: React.FC = () => {
                     list={cellGroup}
                     value={prelayer}
                     title="m-type"
-                    color={colorName}
                     onSelect={setPreLayerQuery}
                     theme={theme} />
                 </div>
@@ -171,7 +170,6 @@ const ConnectionsView: React.FC = () => {
                     list={cellGroup}
                     value={postlayer}
                     title="m-type"
-                    color={colorName}
                     onSelect={setPostLayerQuery}
                     theme={theme} />
                 </div>
@@ -318,7 +316,6 @@ const ConnectionsView: React.FC = () => {
       </DataContainer >
 
       <QuickSelector
-        color={colorName}
         entries={[
           {
             title: 'Volume section',
