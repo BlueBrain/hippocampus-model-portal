@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col } from 'antd';
-import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { colorName } from './config';
+
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
@@ -10,18 +10,16 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
-
-import selectorStyle from '@/styles/selector.module.scss';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { basePath } from '@/config';
-import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import List from '@/components/List';
+
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+
 import { cellGroup, defaultSelection } from '@/constants';
 import { Layer, VolumeSection } from '@/types';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { basePath } from '@/config';
+
 import { downloadAsJson } from '@/utils';
-import LaminarGraph from '@/components/LaminarGraph';
 
 
 const SynapsesView: React.FC = () => {
@@ -171,7 +169,6 @@ const SynapsesView: React.FC = () => {
                     list={cellGroup}
                     value={prelayer}
                     title="m-type"
-                    color={colorName}
                     onSelect={setPreLayerQuery}
                     theme={theme} />
                 </div>
@@ -183,7 +180,6 @@ const SynapsesView: React.FC = () => {
                     list={cellGroup}
                     value={postlayer}
                     title="m-type"
-                    color={colorName}
                     onSelect={setPostLayerQuery}
                     theme={theme} />
                 </div>
@@ -285,6 +281,137 @@ const SynapsesView: React.FC = () => {
           </Collapsible>
         )}
 
+        <Collapsible
+          title="Distribution + mean and std of U, D, F, NRRP"
+          id="UParameterSection"
+          properties={["Physiology"]}
+        >
+          <div className="flex flex-col gap-12">
+            {availablePlots.UParameter && (
+              <div className='flex flex-col gap-2'>
+                <div className="text-lg mb-2">U Parameter</div>
+                <div className="graph">
+                  <DistibutionPlot
+                    plotData={getPlotDataById('u-parameter')}
+                    xAxis='u_syn'
+                    yAxis='Frequency'
+                  />
+                </div>
+                <div className="mt-2">
+                  <DownloadButton
+                    theme={theme}
+                    onClick={() =>
+                      downloadAsJson(
+                        getPlotDataById('u-parameter'),
+                        `u-parameter-${volume_section}-${prelayer}-${postlayer}.json`
+                      )
+                    }
+                  >
+                    <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                      {volume_section}
+                    </span>
+                    U Parameter
+                    <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                    <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                  </DownloadButton>
+                </div>
+              </div>
+            )}
+
+            {availablePlots.DParameter && (
+              <div className='flex flex-col gap-2'>
+                <div className="text-lg mb-2">D Parameter</div>
+                <div className="graph">
+                  <DistibutionPlot
+                    plotData={getPlotDataById('d-parameter')}
+                    xAxis='d_syn'
+                    yAxis='Frequency'
+                  />
+                </div>
+                <div className="mt-2">
+                  <DownloadButton
+                    theme={theme}
+                    onClick={() =>
+                      downloadAsJson(
+                        getPlotDataById('d-parameter'),
+                        `d-parameter-${volume_section}-${prelayer}-${postlayer}.json`
+                      )
+                    }
+                  >
+                    <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                      {volume_section}
+                    </span>
+                    D Parameter
+                    <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                    <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                  </DownloadButton>
+                </div>
+              </div>
+            )}
+
+            {availablePlots.GSYNX && (
+              <div className='flex flex-col gap-2'>
+                <div className="text-lg mb-2">G-SYNX</div>
+                <div className="graph">
+                  <DistibutionPlot
+                    plotData={getPlotDataById('g-synx')}
+                    xAxis='g_syn'
+                    yAxis='Frequency'
+                  />
+                </div>
+                <div className="mt-2">
+                  <DownloadButton
+                    theme={theme}
+                    onClick={() =>
+                      downloadAsJson(
+                        getPlotDataById('g-synx'),
+                        `g-synx-${volume_section}-${prelayer}-${postlayer}.json`
+                      )
+                    }
+                  >
+                    <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                      {volume_section}
+                    </span>
+                    G-SYNX Parameter
+                    <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                    <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                  </DownloadButton>
+                </div>
+              </div>
+            )}
+
+            {availablePlots.NRRPParameter && (
+              <div className='flex flex-col gap-2'>
+                <div className="text-lg mb-2">NRRP Parameter</div>
+                <div className="graph">
+                  <DistibutionPlot
+                    plotData={getPlotDataById('nrrp-parameter')}
+                    xAxis='NRRP'
+                    yAxis='Frequency'
+                  />
+                </div>
+                <div className="mt-2">
+                  <DownloadButton
+                    theme={theme}
+                    onClick={() =>
+                      downloadAsJson(
+                        getPlotDataById('nrrp-parameter'),
+                        `nrrp-parameter-${volume_section}-${prelayer}-${postlayer}.json`
+                      )
+                    }
+                  >
+                    <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                      {volume_section}
+                    </span>
+                    NRRP Parameter
+                    <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                    <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                  </DownloadButton>
+                </div>
+              </div>
+            )}
+          </div>
+        </Collapsible>
 
       </DataContainer >
     </>
