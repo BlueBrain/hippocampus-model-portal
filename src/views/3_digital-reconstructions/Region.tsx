@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Spin } from 'antd';
 import { useRouter } from 'next/router';
 
+import { staticDataBaseUrl } from '@/config';
 import { colorName } from './config';
 import Filters from '@/layouts/Filters';
 import { regionFactsheetPath } from '@/queries/http';
@@ -21,12 +22,14 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 
 import selectorStyle from '@/styles/selector.module.scss';
 
+import RegionViewer from './region/region-viewer/RegionViewer';
+
 const RegionView: React.FC = () => {
   const router = useRouter();
-
   const theme = 3;
-
   const { volume_section: volumeSection } = router.query as { volume_section: VolumeSection | undefined };
+
+  const [isViewerReady, setIsViewerReady] = useState(false);
 
   const setVolumeSectionQuery = (volumeSection: VolumeSection) => {
     const query = { volume_section: volumeSection };
@@ -37,6 +40,11 @@ const RegionView: React.FC = () => {
 
   if (!validVolumeSection) {
     return null; // Or handle this case appropriately
+  }
+
+  function setVolumeViewerReady(isReady: boolean): void {
+    setIsViewerReady(isReady);
+    console.log(`Volume viewer ready: ${isReady}`);
   }
 
   return (
@@ -101,6 +109,10 @@ const RegionView: React.FC = () => {
               <span> Cylindrical subvolume of radius 300 um from the dorsal CA1. The image shows soma positions.</span>
             ) : null}
           </h3>
+
+          <div className="graph">
+            <RegionViewer meshPath={`${staticDataBaseUrl}/3d/region.obj`} volumeSection={validVolumeSection} onReady={() => setVolumeViewerReady(true)} />
+          </div>
           {validVolumeSection && (
             <HttpData path={regionFactsheetPath(validVolumeSection ?? '')}>
               {(data, loading) => (
@@ -140,7 +152,7 @@ const RegionView: React.FC = () => {
             </HttpData>
           )}
         </Collapsible>
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
