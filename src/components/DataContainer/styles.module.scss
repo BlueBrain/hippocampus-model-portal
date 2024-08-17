@@ -1,7 +1,6 @@
 @import '@/styles/config/_colors';
 @import '@/styles/config/_queries';
 
-
 .data_page {
   @apply w-full flex flex-row gap-4;
   background-color: map-get($basePalette, "grey");
@@ -9,7 +8,7 @@
 
 .dataContainer {
   @apply w-full;
-  padding: 4rem 1rem;
+  padding: 4rem 3rem;
   max-width: $max-page-width;
   margin: 0 auto;
   box-sizing: border-box;
@@ -21,14 +20,11 @@
     padding: 4rem 1rem;
   }
 
-  /* Ensure all content respects container width */
   * {
     box-sizing: border-box;
     max-width: 100%;
     word-wrap: break-word;
-    /* Break long words */
     overflow-wrap: break-word;
-    /* Ensure content wraps correctly */
   }
 }
 
@@ -37,7 +33,6 @@
 
   @screen lg {
     @apply block flex-none w-1/5;
-
   }
 
   &__sticky {
@@ -53,7 +48,14 @@
 .content {
   @apply w-full;
 
+  /* On screens smaller than 'lg', ensure the content takes up full width */
   @screen md {
+    @apply w-full;
+    margin-left: 0;
+  }
+
+  /* On larger screens, allow content to grow and adjust margin if sidebar is present */
+  @screen lg {
     @apply flex-grow;
     margin-left: 2rem;
   }
@@ -61,12 +63,7 @@
   /* Ensure content within flexbox container adapts correctly */
   display: flex;
   flex-direction: column;
-
 }
-
-
-
-
 
 
 /*
