@@ -32,7 +32,7 @@ const DataContainer: React.FC<DataContainerProps> = ({
       {visible && (
         <div className={styles.data_page}>
           <div id="data" className={styles.dataContainer}>
-            {quickSelectorEntries && navItems && (
+            {quickSelectorEntries || navItems && (
               <div className={styles.sidebar}>
                 <div className={styles.sidebar__sticky}>
                   {quickSelectorEntries && (
