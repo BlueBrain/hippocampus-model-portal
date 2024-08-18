@@ -20,6 +20,7 @@ import { Layer, VolumeSection } from '@/types';
 import { basePath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
+import LaminarGraph from '@/components/LaminarGraph';
 
 
 const SynapsesView: React.FC = () => {

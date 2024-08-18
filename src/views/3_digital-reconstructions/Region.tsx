@@ -23,6 +23,7 @@ import withQuickSelector from '@/hoc/with-quick-selector';
 import selectorStyle from '@/styles/selector.module.scss';
 
 import RegionViewer from './region/region-viewer/RegionViewer';
+import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
 const RegionView: React.FC = () => {
   const router = useRouter();
@@ -42,26 +43,26 @@ const RegionView: React.FC = () => {
     return null; // Or handle this case appropriately
   }
 
-  function setVolumeViewerReady(isReady: boolean): void {
-    setIsViewerReady(isReady);
-    console.log(`Volume viewer ready: ${isReady}`);
-  }
+  const getVolumeDescription = (section: VolumeSection) => {
+    switch (section) {
+      case 'region':
+        return "Region CA1."
+      case 'cylinder':
+        return "Cylindrical subvolume of radius 300 um from the dorsal CA1."
+      case 'slice':
+        return "Coronal slice of 400 um from the dorsal CA1."
+      default:
+        return '';
+    }
+  };
 
   return (
     <>
       <Filters theme={theme} hasData={true}>
-        <Row
-          className="w-100"
-          gutter={[0, 20]}
-        >
-          <Col
-            className="mb-2"
-            xs={24}
-            lg={12}
-          >
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
               <Title
-                primaryColor={colorName}
                 title="Region"
                 subtitle="Digital Reconstructions"
                 theme={theme}
@@ -74,47 +75,50 @@ const RegionView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col
-            className={`set-accent-color--${'grey'} mb-2`}
-            xs={24}
-            lg={12}
-          >
-            <div className={selectorStyle.row} style={{ maxWidth: '26rem' }}>
-              <div className={`${selectorStyle.column} mt-3`}>
-                <div className={selectorStyle.head}>Select a volume section</div>
-                <div className={selectorStyle.body}>
-                  <VolumeSectionSelector
-                    value={validVolumeSection}
-                    onSelect={setVolumeSectionQuery}
-                  />
-                </div>
+          </div>
+
+          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-1/2 md:w-full flex-grow md:flex-none justify-center">
+            <div className={`selector__column selector__column--lg theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <VolumeSectionSelector3D
+                  value={volumeSection}
+                  onSelect={setVolumeSectionQuery}
+                  theme={theme}
+                />
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
 
-      <DataContainer theme={theme} visible={!!volumeSection}>
-        <Collapsible
-          id="regionSection"
-          title="Factsheet"
-        >
-          <h3>
-            {validVolumeSection === 'region' ? (
-              <span>Region CA1. The image shows soma positions.</span>
-            ) : validVolumeSection === 'cylinder' ? (
-              <span>Coronal slice of 400 um from the dorsal CA1. The image shows soma positions.</span>
-            ) : validVolumeSection === 'slice' ? (
-              <span> Cylindrical subvolume of radius 300 um from the dorsal CA1. The image shows soma positions.</span>
-            ) : null}
-          </h3>
 
-          <div className="graph">
-            <RegionViewer meshPath={`${staticDataBaseUrl}/3d/region.obj`} volumeSection={validVolumeSection} onReady={() => setVolumeViewerReady(true)} />
+      <DataContainer theme={theme}
+        visible={!!volumeSection}
+        navItems={[
+          { id: 'ViewerSection', label: "Viewer" },
+          { id: 'factsheetSection', label: "Factsheet" },
+        ]}
+      >
+
+        <Collapsible id='viewerSection' title={'Viewer'}>
+          <h3>{getVolumeDescription(validVolumeSection)}</h3>
+          <div className="text-base mb-2">The image shows soma positions.</div>
+
+          <div className="graph no-padding">
+            <RegionViewer
+              meshPath={`${staticDataBaseUrl}/3d/region.obj`}
+              volumeSection={validVolumeSection}
+              onReady={() => setIsViewerReady(true)}
+            />
           </div>
+        </Collapsible>
+
+        <Collapsible id="factsheetSection" title="Factsheet">
+
+
           {validVolumeSection && (
-            <HttpData path={regionFactsheetPath(validVolumeSection ?? '')}>
+            <HttpData path={regionFactsheetPath(validVolumeSection)}>
               {(data, loading) => (
                 <Spin spinning={loading}>
                   {data && (
