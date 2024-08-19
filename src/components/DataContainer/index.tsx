@@ -27,59 +27,35 @@ const DataContainer: React.FC<DataContainerProps> = ({
   theme,
   quickSelectorEntries,
 }) => {
+  const navItemsLength = navItems?.length ?? 0; // Safely get the length or default to 0
+
   return (
     <>
       {visible && (
         <div className={styles.data_page}>
           <div id="data" className={styles.dataContainer}>
-            {quickSelectorEntries || navItems && (
-              <div className={styles.sidebar}>
+            <div className={navItemsLength < 2 && !quickSelectorEntries ? styles.navItemsContainer : styles.sidebar}>
+              {navItemsLength < 2 && !quickSelectorEntries ? (
+                <SectionNav theme={theme} navItems={navItems} />
+              ) : (
                 <div className={styles.sidebar__sticky}>
-                  {quickSelectorEntries && (
-                    <QuickSelector theme={theme} entries={quickSelectorEntries} />
-                  )}
+                  {quickSelectorEntries && <QuickSelector theme={theme} entries={quickSelectorEntries} />}
                   {navItems && (
                     <div className={styles.navItemsContainer}>
                       <SectionNav theme={theme} navItems={navItems} />
                     </div>
                   )}
                 </div>
-              </div>)}
+              )}
+            </div>
             <div className={styles.content}>
               <div>{children}</div>
             </div>
           </div>
         </div>
-
       )}
-
     </>
   );
 };
 
 export default DataContainer;
-
-
-{/*<div className={styles.data}>
-          <div id="data" className={styles.dataContainer}>
-           
-
-            {quickSelectorEntries && (
-              <QuickSelector entries={quickSelectorEntries} />
-            )}
-
-            <div className={styles.scrollTop}>
-              <ScrollTop />
-            </div>
-
-            <div className={styles.center}>{children}</div>
-
-            <div className={styles.navItemsContainer} />
-          </div>
-          <div className={styles.scrollTo}>
-            <ScrollTo anchor="filters" direction="up">
-              Return to selectors
-            </ScrollTo>
-          </div>
-        </div>
-         */}
