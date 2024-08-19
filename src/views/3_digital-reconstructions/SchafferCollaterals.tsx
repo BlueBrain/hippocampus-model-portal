@@ -100,8 +100,8 @@ const SchafferCollateralsView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const sCFile = `${basePath}/data/digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
+      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const sCFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
 
       // Fetch data from schaffer-collaterals.json for laminar distribution
       fetch(sCFile)

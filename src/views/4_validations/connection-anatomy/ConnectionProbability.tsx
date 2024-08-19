@@ -11,7 +11,7 @@ import {
 import { GraphTheme } from '@/types';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import ConnectionProbabilityData from './connection-probability.json';
+import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
 
 Chart.register(
@@ -28,18 +28,26 @@ export type ConnectionProbabilityProps = {
 };
 
 const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ theme }) => {
+
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/connection-anatomy/connection-probability.json')
+            .then((response) => response.json())
+            .then((data) => setData(data));
+    }, []);
 
     const createChart = () => {
-        if (chartRef.current) {
+        if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                // Prepare data
-                const data = Object.keys(ConnectionProbabilityData.value_map.exp_mean).map(key => ({
-                    x: ConnectionProbabilityData.value_map.exp_mean[key],
-                    y: ConnectionProbabilityData.value_map.model_mean[key],
-                    connectionClass: ConnectionProbabilityData.value_map.connection_class[key]
+                // Prepare chartData
+                const chartData = Object.keys(data.value_map.exp_mean).map(key => ({
+                    x: data.value_map.exp_mean[key],
+                    y: data.value_map.model_mean[key],
+                    connectionClass: data.value_map.connection_class[key]
                 }));
 
                 // Define custom plugin for diagonal line
@@ -66,28 +74,28 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                         datasets: [
                             {
                                 label: 'EE',
-                                data: data.filter(d => d.connectionClass === 'EE'),
+                                data: chartData.filter(d => d.connectionClass === 'EE'),
                                 backgroundColor: graphTheme.red,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'EI',
-                                data: data.filter(d => d.connectionClass === 'EI'),
+                                data: chartData.filter(d => d.connectionClass === 'EI'),
                                 backgroundColor: graphTheme.green,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'IE',
-                                data: data.filter(d => d.connectionClass === 'IE'),
+                                data: chartData.filter(d => d.connectionClass === 'IE'),
                                 backgroundColor: graphTheme.blue,
                                 pointStyle: 'circle',
                                 radius: 6,
                             },
                             {
                                 label: 'II',
-                                data: data.filter(d => d.connectionClass === 'II'),
+                                data: chartData.filter(d => d.connectionClass === 'II'),
                                 backgroundColor: graphTheme.purple,
                                 pointStyle: 'circle',
                                 radius: 6,
@@ -185,7 +193,7 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                 chart.destroy();
             }
         };
-    }, []);
+    }, [data]);
 
     return (
         <div>
@@ -193,7 +201,7 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(ConnectionProbabilityData, `Connection-Probability-Data.json`)}>
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Connection-Probability-Data.json`)}>
                     Connection Probability Data
                 </DownloadButton>
             </div>
