@@ -242,9 +242,10 @@ const MainNav: React.FC = () => {
             >
               <SubmenuLink label="Region" href="/digital-reconstructions/region/" />
               <SubmenuLink label="Schaffer Collaterals" href="/digital-reconstructions/schaffer-collaterals/" />
-              <SubmenuLink label="Connections" href="/digital-reconstructions/connections/" />
-              <SubmenuLink label="Synapses" href="/digital-reconstructions/synapses/" />
+              <SubmenuLink label="Connection Anatomy" href="/digital-reconstructions/connection-anatomy/" />
+              <SubmenuLink label="Connection Physiology" href="/digital-reconstructions/connection-physiology/" />
               <SubmenuLink label="Neurons" href="/digital-reconstructions/neurons/" />
+              <SubmenuLink label="Synapses" href="/digital-reconstructions/synapses/" />
               <SubmenuLink label="Acetylcholine - Effects on Cells" href="/digital-reconstructions/acetylcholine-effects-on-cells/" />
               <SubmenuLink label="Acetylcholine - Effects on Synapses" href="/digital-reconstructions/acetylcholine-effects-on-synapses/" />
             </SubmenuGroup>

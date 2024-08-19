@@ -7,7 +7,6 @@ type InfoBoxProps = {
 };
 
 const InfoBox: React.FC<InfoBoxProps> = ({
-  color = 'grey-1',
   children,
 }) => {
   const [isVisible, setIsVisible] = useState(false);

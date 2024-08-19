@@ -1,9 +1,10 @@
+import React from 'react';
 import Head from 'next/head';
 
-import SynapsesView from '../../views/digital-reconstructions/Synapses';
+import SynapsesView from '../../views/3_digital-reconstructions/Synapses';
 
 
-export default function SynapsesPage() {
+export default function DigRecNeuronsPage() {
   return (
     <>
       <Head>
@@ -18,4 +19,4 @@ export default function SynapsesPage() {
       <SynapsesView />
     </>
   );
-}
+};

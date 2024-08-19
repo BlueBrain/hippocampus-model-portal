@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import VolumeView from '@/views/reconstruction-data/Volume';
+import VolumeView from '@/views/2_reconstruction-data/Volume';
 
 
 export default function VolumePage() {

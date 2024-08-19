@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import SpontaneounsActivityView from '@/views/predictions/SpontaneounsActivity';
+import SpontaneounsActivityView from '@/views/5_predictions/SpontaneounsActivity';
 
 
 export default function SpontaneounsActivityPage() {

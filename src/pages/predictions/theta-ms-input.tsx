@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import ThetaMSInputView from '@/views/predictions/ThetaMSInput';
+import ThetaMSInputView from '@/views/5_predictions/ThetaMSInput';
 
 
 export default function ThetaMSInputPage() {

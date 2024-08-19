@@ -1,0 +1,203 @@
+{
+    "name": "distribution-plots",
+    "values": [
+        {
+            "name": "PSP Amplitude",
+            "id": "psp-amplitude",
+            "description": "PSP Amplitude from the simulation",
+            "unit": null,
+            "values": [
+                [
+                    0.10279489475975667,
+                    0.08498661656835625,
+                    0.8182516198710915,
+                    0.13058389864509135
+                ]
+            ]
+        },
+        {
+            "name": "PSP CV",
+            "id": "psp-cv",
+            "description": "PSP CV from the simulation",
+            "unit": null,
+            "values": [
+                [
+                    0.06967377513704841,
+                    0.11910033237647262,
+                    0.09893795210883166,
+                    0.0365736972855067
+                ]
+            ]
+        },
+        {
+            "name": "Synapse latency",
+            "id": "synapse-latency",
+            "description": "Synapse latency",
+            "unit": null,
+            "values": [
+                [
+                    2.5740694999694824,
+                    3.9652037620544434,
+                    3.9819445610046387,
+                    2.843989372253418,
+                    4.512064456939697,
+                    4.529081344604492
+                ]
+            ]
+        },
+        {
+            "name": "Synapse latency (from simulation)",
+            "id": "synapse-latency-from-simulation",
+            "description": "Synapse latency as measured from the simulation",
+            "unit": null,
+            "values": [
+                [
+                    4.256879584930303,
+                    5.0904313231466665,
+                    2.6759196771722547,
+                    3.0875670030049185
+                ]
+            ]
+        },
+        {
+            "name": "Rise time constant",
+            "id": "rise-time-constant",
+            "description": "Bouton Density of the pre-synaptic cells",
+            "unit": null,
+            "values": [
+                [
+                    1.9548714778599914,
+                    2.272722161497713,
+                    1.0981696335845093,
+                    2.0773446010802816
+                ]
+            ]
+        },
+        {
+            "name": "Decay time constant",
+            "id": "decay-time-constant",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    3.384389877319336,
+                    3.51444411277771,
+                    3.51444411277771,
+                    4.689039707183838,
+                    3.983477830886841,
+                    3.983477830886841
+                ]
+            ]
+        },
+        {
+            "name": "Decay time constant (from simulation)",
+            "id": "decay-time-constant-from-sumluation",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    4.3834105627653726,
+                    3.922594888195038,
+                    3.597077515535126,
+                    5.451490199849294
+                ]
+            ]
+        },
+        {
+            "name": "NMDA/AMPA ratio",
+            "id": "nmda-ampa-ratio",
+            "description": "Sample Convergence by synapse for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            ]
+        },
+        {
+            "name": "U Parameter",
+            "id": "u-parameter",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    0.24507875740528107,
+                    0.27934572100639343,
+                    0.27934572100639343,
+                    0.24935054779052734,
+                    0.2917506992816925,
+                    0.2917506992816925
+                ]
+            ]
+        },
+        {
+            "name": "D Parameter",
+            "id": "d-parameter",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    1218.396728515625,
+                    584.47314453125,
+                    584.47314453125,
+                    514.473388671875,
+                    929.465576171875,
+                    929.465576171875
+                ]
+            ]
+        },
+        {
+            "name": "F Parameter",
+            "id": "f-parameter",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    1.4277678728103638,
+                    1.2921171188354492,
+                    1.2921171188354492,
+                    1.7583436965942383,
+                    1.3581469058990479,
+                    1.3581469058990479
+                ]
+            ]
+        },
+        {
+            "name": "NRRP Parameter",
+            "id": "nrrp-parameter",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
+                ]
+            ]
+        },
+        {
+            "name": "G SYNX",
+            "id": "g-synx",
+            "description": "Sample Convergence by Connection for the pathway",
+            "unit": null,
+            "values": [
+                [
+                    3.4905946254730225,
+                    3.9488611221313477,
+                    3.9488611221313477,
+                    3.4806220531463623,
+                    3.9401402473449707,
+                    3.9401402473449707
+                ]
+            ]
+        }
+    ]
+}
