@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 
 import { downloadAsJson } from '@/utils';
@@ -6,9 +6,8 @@ import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription, etypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
-import MECompositionData from './me-composition.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
+import { dataPath } from '@/config';
 
 type MEComposition = {
   mtype: string;
@@ -33,7 +32,7 @@ function getMtypeDescription(fullMtype: string) {
     : null;
 }
 
-const formatValue = value => value ? <NumberFormat value={value} suffix="%" /> : '-';
+const formatValue = (value: number | null) => value !== null ? <NumberFormat value={value} suffix="%" /> : '-';
 
 const columns = [
   {
@@ -63,6 +62,18 @@ type MECompositionTableProps = {
 };
 
 const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
+  const [data, setData] = useState<MEComposition[] | null>(null);
+
+  useEffect(() => {
+    fetch(dataPath + '/2_reconstruction-data/cell-composition/me-composition.json')
+      .then((response) => response.json())
+      .then((fetchedData) => setData(fetchedData));
+  }, [data]);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Table<MEComposition>
@@ -72,7 +83,7 @@ const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
         tableLayout="fixed"
         pagination={false}
         columns={columns}
-        dataSource={MECompositionData}
+        dataSource={data}
         rowKey={({ mtype }) => mtype}
       />
 
@@ -80,7 +91,7 @@ const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(
-            MECompositionData,
+            data,
             `ME-Composition-Table-Data.json`
           )}
         >
@@ -90,6 +101,5 @@ const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
     </>
   );
 };
-
 
 export default MECompositionTable;

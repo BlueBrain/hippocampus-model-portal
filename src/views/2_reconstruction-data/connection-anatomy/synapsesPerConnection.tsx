@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import synapsesPerConnectionData from './synapses-per-conections.json';
+import { dataPath } from '@/config';
 
 Chart.register(...registerables);
 
@@ -10,9 +10,32 @@ interface SynapsesPerConnectionProps {
     theme?: number;
 }
 
+interface SynapsesPerConnectionData {
+    values: [
+        {
+            value_map: {
+                connection_class: Record<string, string>;
+                mod_mean: Record<string, number>;
+                bio_mean: Record<string, number>;
+                mod_std: Record<string, number>;
+                bio_std: Record<string, number>;
+            };
+        },
+        { value: number },
+        { value: number }
+    ];
+}
+
 const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const [chartSize, setChartSize] = useState(0);
+    const [data, setData] = useState<SynapsesPerConnectionData | null>(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/2_reconstruction-data/connection-anatomy/synapses-per-conections.json')
+            .then((response) => response.json())
+            .then((fetchedData) => setData(fetchedData));
+    }, []);
 
     useEffect(() => {
         const updateSize = () => {
@@ -28,13 +51,13 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
     }, []);
 
     useEffect(() => {
-        if (!chartRef.current || chartSize === 0) return;
+        if (!chartRef.current || chartSize === 0 || !data) return;
 
         const ctx = chartRef.current.getContext('2d');
         if (!ctx) return;
 
         const createDatasets = (): ChartDataset<'scatter'>[] => {
-            const valueMap = synapsesPerConnectionData.values[0].value_map;
+            const valueMap = data.values[0].value_map;
             const connectionClasses = ['ee', 'ei', 'ie', 'ii'];
             const colors = ['red', 'green', 'blue', 'magenta'];
 
@@ -67,8 +90,8 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
             });
 
             // Add fit lines
-            const slopeII = synapsesPerConnectionData.values[1].value;
-            const slopeRest = synapsesPerConnectionData.values[2].value;
+            const slopeII = data.values[1].value;
+            const slopeRest = data.values[2].value;
 
             datasets.push({
                 label: 'Fit (II)',
@@ -160,17 +183,21 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
         return () => {
             chart.destroy();
         };
-    }, [chartSize]);
+    }, [chartSize, data]);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <div className="w-full max-w-3xl mx-auto">
-            <div style={{ width: `${chartSize}px`, height: `${chartSize}px`, margin: '0 auto' }}>
+        <div className="w-full max-w-3xl">
+            <div className='graph' style={{ width: `${chartSize}px`, height: `${chartSize}px` }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4 text-center">
                 <DownloadButton
                     theme={theme}
-                    onClick={() => downloadAsJson(synapsesPerConnectionData, 'Synapses-Per-Connection-Data.json')}
+                    onClick={() => downloadAsJson(data, 'Synapses-Per-Connection-Data.json')}
                 >
                     Synapses Per Connection Data
                 </DownloadButton>

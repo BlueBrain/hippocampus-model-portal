@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import { downloadAsJson } from '@/utils';
 
-import PhysiologyData from './physiology.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
 
 type TableEntry = {
     ruleN: number;
@@ -24,7 +24,7 @@ type TableEntry = {
     NMDAAMPARatio: number;
 };
 
-const PhysiolgyColumns = [
+const PhysiologyColumns = [
     {
         title: 'Rule N',
         dataIndex: 'ruleN' as keyof TableEntry,
@@ -64,19 +64,31 @@ type PhysiologyProps = {
 }
 
 const Physiology: React.FC<PhysiologyProps> = ({ theme }) => {
+    const [data, setData] = useState<TableEntry[] | null>(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/2_reconstruction-data/schaffer-collaterals/physiology.json')
+            .then((response) => response.json())
+            .then((fetchedData) => setData(fetchedData));
+    }, []);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                data={PhysiologyData}
-                columns={PhysiolgyColumns}
+                data={data}
+                columns={PhysiologyColumns}
                 rowKey={(record) => `${record.ruleN}_${record.from}_${record.to}`}
             />
             <div className="text-right mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
-                        PhysiologyData,
+                        data,
                         `Physiology-table.json`
                     )}
                 >

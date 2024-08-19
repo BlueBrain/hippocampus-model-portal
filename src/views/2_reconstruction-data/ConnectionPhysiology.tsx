@@ -9,10 +9,7 @@ import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 
-import SynDynamicsParamsTables from './synapses/SynDynamicsParamsTables';
-
-import selectorStyle from '@/styles/selector.module.scss';
-
+import SynDynamicsParamsTables from './connection-physiology/SynDynamicsParamsTables';
 
 const SynapsesView: React.FC = () => {
 

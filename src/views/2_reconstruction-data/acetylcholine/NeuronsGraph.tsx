@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     ScatterController,
@@ -12,11 +12,12 @@ import {
 } from 'chart.js';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-import NeuronGraphData from './neuron-graph-data.json';
+
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
-// Register necessary components
+import { dataPath } from '@/config';
+
 Chart.register(
     ScatterController,
     CategoryScale,
@@ -28,13 +29,16 @@ Chart.register(
     Tooltip,
 );
 
-// Define the type for the data points
 interface DataPoint {
     x: number;
     y: number;
 }
 
-// Function to calculate y-values based on the formula
+interface NeuronGraphData {
+    dataPoints: DataPoint[];
+    equation: string;
+}
+
 const calculateY = (x: number): number => {
     const ACH = x;
     const numerator = 0.567 * Math.pow(ACH, 0.436);
@@ -42,7 +46,6 @@ const calculateY = (x: number): number => {
     return numerator / denominator;
 };
 
-// Generate data points for the formula line
 const generateLineData = (): DataPoint[] => {
     const lineData: DataPoint[] = [];
     for (let i = 0.01; i <= 1000; i *= 1.1) {
@@ -51,7 +54,6 @@ const generateLineData = (): DataPoint[] => {
     return lineData;
 };
 
-// Split the line data into solid and dotted segments
 const splitLineData = (data: DataPoint[]): { solidData: DataPoint[], dottedData: DataPoint[] } => {
     const solidData: DataPoint[] = [];
     const dottedData: DataPoint[] = [];
@@ -72,12 +74,24 @@ export type NeuronsGraphProps = {
     theme?: number;
 };
 
-
 const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [data, setData] = useState<NeuronGraphData | null>(null);
 
     useEffect(() => {
-        if (chartRef.current) {
+        fetch(dataPath + '/2_reconstruction-data/acetylcholine/neuron-graph-data.json')
+            .then((response) => response.json())
+            .then((fetchedData) => {
+                const neuronGraphData: NeuronGraphData = {
+                    dataPoints: fetchedData.filter((item: any) => 'x' in item && 'y' in item),
+                    equation: fetchedData.find((item: any) => 'equation' in item)?.equation || ''
+                };
+                setData(neuronGraphData);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const lineData = generateLineData();
@@ -89,59 +103,30 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                         datasets: [
                             {
                                 label: 'Neurons Data',
-                                data: [
-                                    { x: 10.0, y: 0.12 },
-                                    { x: 5.0, y: 0.17 },
-                                    { x: 5.0, y: 0.07 },
-                                    { x: 5.0, y: 0.13 },
-                                    { x: 10.0, y: 0.37 },
-                                    { x: 3.0, y: 0.16 },
-                                    { x: 10.0, y: 0.17 },
-                                    { x: 1.0, y: 0.09 },
-                                    { x: 50.0, y: 0.23 },
-                                    { x: 100.0, y: 0.3 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 0.0, y: 0.0 },
-                                    { x: 10.0, y: 0.02 },
-                                    { x: 10.0, y: 0.12 },
-                                    { x: 3.0, y: 0.06 },
-                                    { x: 10.0, y: 0.07 }
-                                ],
-                                backgroundColor: '#3B4165', // Updated to desired color from the first graph
-                                pointRadius: 3 // Updated to match the first graph
+                                data: data.dataPoints,
+                                backgroundColor: '#3B4165',
+                                pointRadius: 3
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidData,
-                                borderColor: '#3B4165', // Updated to desired color from the first graph
+                                borderColor: '#3B4165',
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
-                                borderWidth: 2, // Updated to match the first graph
-                                tension: 0// Added to make the line a curve
+                                borderWidth: 2,
+                                tension: 0
                             },
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedData,
-                                borderColor: '#3B4165', // Updated to desired color from the first graph
+                                borderColor: '#3B4165',
                                 type: 'line',
                                 fill: false,
                                 pointRadius: 0,
-                                borderWidth: 2, // Updated to match the first graph
+                                borderWidth: 2,
                                 borderDash: [6, 6],
-                                tension: 0 // Added to make the line a curve
+                                tension: 0
                             }
                         ]
                     },
@@ -155,7 +140,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 title: {
                                     display: true,
                                     text: 'ACh Concentration (µM)',
-                                    color: '#050A30' // Updated axis title color
+                                    color: '#050A30'
                                 },
                                 grid: {
                                     borderWidth: .1
@@ -170,7 +155,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     },
                                     autoSkip: false,
                                     maxTicksLimit: 6,
-                                    color: '#050A30' // Updated tick color
+                                    color: '#050A30'
                                 }
                             },
                             y: {
@@ -180,13 +165,13 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 title: {
                                     display: true,
                                     text: 'Current (nA)',
-                                    color: '#050A30' // Updated axis title color
+                                    color: '#050A30'
                                 },
-                                grid: { // Grid line color
+                                grid: {
                                     borderWidth: .1
                                 },
                                 ticks: {
-                                    color: '#050A30' // Updated tick color
+                                    color: '#050A30'
                                 }
                             }
                         },
@@ -194,34 +179,32 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                             title: {
                                 display: false,
                                 text: '',
-                                color: '#050A30' // Title color
+                                color: '#050A30'
                             }
                         },
-                        // Set background color for the chart
-                        backgroundColor: 'white', // Canvas background color
+                        backgroundColor: 'white',
                     }
                 });
             }
         }
-    }, []);
+    }, [data]);
 
     return (
         <div>
             <MathJaxContext>
                 <MathJax>
-                    {"\\[ I_{\\text{depol}} = \\frac{0.567 \\cdot ACh^{0.436}}{100^{0.436} + ACh^{0.436}} \\]"}
+                    {data ? `\\[${data.equation}\\]` : ''}
                 </MathJax>
             </MathJaxContext>
             <div className="graph">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(NeuronGraphData, `neuron-graph-data.json`)}>
+                <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `neuron-graph-data.json`)}>
                     Neuron Graph Data
                 </DownloadButton>
             </div>
         </div>
-
     );
 };
 
