@@ -46,9 +46,9 @@ const ConnectionsView: React.FC = () => {
         <Collapsible id="nbSynapsesPerConnectionSection" title="Number of synapses per connection">
           <p>For <u>characterized pathways</u> we can use data from literature (see <Link href={"/experimental-data/connection-anatomy/"}> connection anatomy</Link>)</p>
           <p>For <u>uncharacterized pathways</u> we can use the following plot to extrapolate the ratio between appositions and synapses per connection.</p>
-
-          <SynsPerConnectionTable theme={theme} />
-
+          <div className="my-8">
+            <SynsPerConnectionTable theme={theme} />
+          </div>
           <p>For each pathway, the standard deviation is computed multiplying the mean and the coefficient of variation (CV) which is set to 0.5.</p>
         </Collapsible>
 

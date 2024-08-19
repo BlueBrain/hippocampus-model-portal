@@ -392,7 +392,11 @@ tfoot.ant-table-summary {
 
 .collapsabe {
   border: 1px solid rgba(black, 0.1);
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   a {
     text-decoration: underline;
@@ -565,7 +569,8 @@ $collapsible-padding: 2rem 2rem;
   border: 1px solid map-get($infobox, "border");
   padding: 2rem 1rem;
   border-radius: 0px;
-  margin: 0 1rem;
+  margin: 1rem 2rem;
+
 
   display: flex;
   justify-content: center;
@@ -585,6 +590,7 @@ $collapsible-padding: 2rem 2rem;
   }
 
   &--rect {
+    aspect-ratio: 1/1;
     padding: 2rem 12rem;
 
     @media (max-width: $breakpoint-lg) {

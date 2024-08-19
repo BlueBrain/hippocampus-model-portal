@@ -2,12 +2,14 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import { QuickSelectorEntry } from '@/types';
+import style from './styles.module.scss';
 
 type QuickSelectorProps = {
-  entries: QuickSelectorEntry[];
+  entries: QuickSelectorEntry[]
+  theme?: number;
 };
 
-const QuickSelector: React.FC<QuickSelectorProps> = ({ entries }) => {
+const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
   const router = useRouter();
 
   const handleChange = (entry: QuickSelectorEntry, value: string) => {
@@ -41,9 +43,10 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries }) => {
   return (
     <div>
       {entries.map((entry) => (
-        <div key={entry.key}>
-          <label>{entry.title}</label>
+        <div className="flex flex-col mb-2">
+          <label className={style.label}>{entry.title}</label>
           <select
+            className={`${style.select} ${theme ? style[`theme-${theme}`] : ''}`}
             value={router.query[entry.key] as string}
             onChange={(e) => handleChange(entry, e.target.value)}
           >
@@ -55,8 +58,9 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries }) => {
             ))}
           </select>
         </div>
-      ))}
-    </div>
+      ))
+      }
+    </div >
   );
 };
 

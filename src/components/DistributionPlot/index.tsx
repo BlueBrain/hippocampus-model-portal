@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
@@ -15,9 +15,23 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
     xAxis = 'Value',
     yAxis = 'Frequency',
 }) => {
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { labels, datasets } = useMemo(() => {
         const createHistogram = (data: number[]) => {
-            const binCount = data.length;
+            const binCount = Math.min(20, data.length); // Limit to 20 bins max
             const min = Math.min(...data);
             const max = Math.max(...data);
             const binWidth = (max - min) / binCount;
@@ -96,6 +110,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: false,
@@ -111,7 +126,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     maxRotation: 0,
                     minRotation: 0,
                     callback: function (value: number, index: number, ticks: any[]) {
-                        if (index % Math.ceil(ticks.length / 10) === 0) {
+                        if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
                             return this.getLabelForValue(value);
                         }
                         return '';
@@ -127,7 +142,11 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
         },
     };
 
-    return <Bar data={{ labels, datasets }} options={options} />;
+    return (
+        <div style={{ width: '100%', height: '400px' }}>
+            <Bar data={{ labels, datasets }} options={options} />
+        </div>
+    );
 };
 
 export default DistributionPlot;

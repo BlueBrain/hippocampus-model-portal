@@ -94,18 +94,26 @@ const NeuronExperimentalMorphology = () => {
   };
 
   const setLayer = (layer) => {
+    const newMtypes = getMtypes(layer);
+    const newMtype = newMtypes.length > 0 ? newMtypes[0] : null;
+    const newInstances = getInstances(newMtype);
+    const newInstance = newInstances.length > 0 ? newInstances[0] : null;
+
     setQuery({
       layer,
-      mtype: null,
-      instance: null,
+      mtype: newMtype,
+      instance: newInstance,
     });
   };
 
   const setMtype = (mtype) => {
+    const newInstances = getInstances(mtype);
+    const newInstance = newInstances.length > 0 ? newInstances[0] : null;
+
     setQuery({
       mtype,
       layer: currentLayer,
-      instance: null,
+      instance: newInstance,
     });
   };
 
@@ -225,7 +233,7 @@ const NeuronExperimentalMorphology = () => {
 
 
                   <h3 className='text-xl mt-10 mb-2'>3D view</h3>
-                  <div className="graph no-margin">
+                  <div className="graph">
                     <NexusPlugin
                       className=""
                       name="neuron-morphology"

@@ -1,0 +1,77 @@
+@import '@/styles/config/_queries';
+@import '@/styles/config/_colors';
+
+.label {
+  @apply text-sm mb-2;
+  color: map-get($basePalette, "navy-2");
+}
+
+.select {
+  max-width: 200px;
+  background-color: rgba(map-get($basePalette, "navy-1"), 0.05);
+  color: rgba(map-get($basePalette, "navy-1"), 1);
+
+  @apply text-sm;
+  font-weight: 200;
+  text-transform: capitalize;
+  padding: .2rem .4rem;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+
+  &:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+  }
+
+  &.theme-1 {
+    &:focus {
+      outline: 2px solid map-get($theme, "experimental-data");
+      outline-offset: 2px;
+    }
+  }
+
+  &.theme-2 {
+    &:focus {
+      outline: 2px solid map-get($theme, "reconstruction-data");
+      outline-offset: 2px;
+    }
+  }
+
+  &.theme-3 {
+    &:focus {
+      outline: 2px solid map-get($theme, "digital-reconstruction");
+      outline-offset: 2px;
+    }
+  }
+
+  &.theme-4 {
+    &:focus {
+      outline: 2px solid map-get($theme, "validations");
+      outline-offset: 2px;
+    }
+  }
+
+  &.theme-5 {
+    &:focus {
+      outline: 2px solid, map-get($theme, "predictions");
+      outline-offset: 2px;
+    }
+  }
+}
+
+.select::-ms-expand {
+  display: none;
+}
+
+
+
+/* Custom arrow */
+.select::after {
+  content: "▼";
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+}

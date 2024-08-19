@@ -16,8 +16,8 @@ import QuickSelector from '@/components/QuickSelector';
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
-import { cellGroup, defaultSelection, layers } from '@/constants';
-import { Layer, VolumeSection } from '@/types';
+import { cellGroup, defaultSelection, layers, volumeSections } from '@/constants';
+import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { basePath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
@@ -79,6 +79,29 @@ const ConnectionsView: React.FC = () => {
       return updatedSelection;
     });
   };
+
+
+
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Volume section',
+      key: 'volume_section',
+      values: volumeSections,
+      setFn: setVolumeSectionQuery,
+    },
+    {
+      title: 'Pre-synaptic cell group',
+      key: 'prelayer',
+      values: cellGroup,
+      setFn: setPreLayerQuery,
+    },
+    {
+      title: 'Post-synaptic cell group',
+      key: 'postlayer',
+      values: cellGroup,
+      setFn: setPostLayerQuery,
+    },
+  ];
 
   useEffect(() => {
     setConnViewerReady(false);
@@ -191,6 +214,7 @@ const ConnectionsView: React.FC = () => {
           { id: 'convergenceSynapsesDistribution', label: 'Convergence (synapses) distribution + mean and std' },
           { id: 'connectionProbabilityDistributionSection', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
         {availablePlots.boutonDensitySection && (
           <Collapsible title="Bouton density of the presynaptic cells" id="boutonDensitySection" className="mt-4">
@@ -314,32 +338,6 @@ const ConnectionsView: React.FC = () => {
           </Collapsible>
         )}
       </DataContainer >
-
-      <QuickSelector
-        entries={[
-          {
-            title: 'Volume section',
-            currentValue: quickSelection.volume_section,
-            values: layers,
-            onChange: setVolumeSectionQuery,
-            width: '120px',
-          },
-          {
-            title: 'Pre-syn layer',
-            currentValue: quickSelection.prelayer,
-            values: layers,
-            onChange: setPreLayerQuery,
-            width: '80px',
-          },
-          {
-            title: 'Post-syn layer',
-            currentValue: quickSelection.postlayer,
-            values: layers,
-            onChange: setPostLayerQuery,
-            width: '80px',
-          },
-        ]}
-      />
     </>
   );
 };
