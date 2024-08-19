@@ -11,8 +11,8 @@ import {
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import pspAmplitudeData from './psp-amplitude.json';
 import { graphTheme } from '@/constants';
+import { dataPath } from '@/config';
 
 Chart.register(
     ScatterController,
@@ -46,8 +46,15 @@ type PSPAmplitudeProps = {
 const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
-    const data: PSPAmplitudeData = pspAmplitudeData;
+    const [data, setData] = useState<PSPAmplitudeData | null>(null);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/connection-physiology/psp-amplitude.json')
+            .then(response => response.json())
+            .then(jsonData => setData(jsonData))
+            .catch(error => console.error('Error fetching PSP Amplitude data:', error));
+    }, []);
 
     useEffect(() => {
         const updateWindowSize = () => {
@@ -57,13 +64,8 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
             });
         };
 
-        // Set initial size
         updateWindowSize();
-
-        // Add event listener
         window.addEventListener('resize', updateWindowSize);
-
-        // Clean up
         return () => window.removeEventListener('resize', updateWindowSize);
     }, []);
 
@@ -71,12 +73,10 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
         if (chartRef.current && data && data.value_map && windowSize.width > 0) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                // Destroy previous chart instance if it exists
                 if (chartInstanceRef.current) {
                     chartInstanceRef.current.destroy();
                 }
 
-                // Prepare data
                 const chartData = Object.keys(data.value_map.exp_mean).map(key => ({
                     x: data.value_map.exp_mean[key],
                     y: data.value_map.model_mean[key],
@@ -85,7 +85,6 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                     connectionClass: data.value_map.connection_class[key],
                 }));
 
-                // Custom plugin for error bars and diagonal line
                 const customPlugin = {
                     id: 'customPlugin',
                     beforeDatasetsDraw(chart, args, options) {
@@ -93,21 +92,18 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
 
                         ctx.save();
 
-                        // Draw diagonal line
-                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.)';
+                        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
                         ctx.setLineDash([5, 5]);
                         ctx.beginPath();
                         ctx.moveTo(left, bottom);
                         ctx.lineTo(right, top);
                         ctx.stroke();
 
-                        // Draw error bars
                         ctx.setLineDash([]);
                         chartData.forEach((datapoint) => {
                             const xPixel = x.getPixelForValue(datapoint.x);
                             const yPixel = y.getPixelForValue(datapoint.y);
 
-                            // X error bars
                             ctx.strokeStyle = 'red';
                             ctx.lineWidth = 2;
                             const xErrorPixels = Math.abs(x.getPixelForValue(datapoint.x + datapoint.xError) - x.getPixelForValue(datapoint.x));
@@ -116,7 +112,6 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                             ctx.lineTo(xPixel + xErrorPixels, yPixel);
                             ctx.stroke();
 
-                            // Y error bars
                             ctx.strokeStyle = 'black';
                             ctx.lineWidth = 2;
                             const yErrorPixels = Math.abs(y.getPixelForValue(datapoint.y + datapoint.yError) - y.getPixelForValue(datapoint.y));
@@ -221,7 +216,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
     }, [chartRef, windowSize, data]);
 
     if (!data || !data.value_map) {
-        return <div>No data available</div>;
+        return <div>Loading...</div>;
     }
 
     return (

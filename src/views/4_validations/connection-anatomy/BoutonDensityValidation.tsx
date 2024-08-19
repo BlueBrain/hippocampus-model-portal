@@ -43,7 +43,6 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
             .then((data) => setData(data));
     }, []);
 
-
     const createChart = () => {
         if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');

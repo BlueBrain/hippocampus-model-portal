@@ -11,8 +11,7 @@ import {
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import pspAttenuationData from './psp-attenuation.json';
-import { GraphTheme } from '@/types';
+import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
 
 Chart.register(
@@ -29,9 +28,17 @@ const PSPAttenuationGraph = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+    const [pspAttenuationData, setPSPAttenuationData] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/neurons/psp-attenuation.json')
+            .then(response => response.json())
+            .then(data => setPSPAttenuationData(data))
+            .catch(error => console.error('Error fetching PSP attenuation data:', error));
+    }, []);
 
     const createChart = () => {
-        if (chartRef.current) {
+        if (chartRef.current && pspAttenuationData) {
             const ctx = chartRef.current.getContext('2d');
             if (!ctx) return;
 
@@ -177,13 +184,17 @@ const PSPAttenuationGraph = ({ theme }) => {
     }, []);
 
     useEffect(() => {
-        if (windowSize.width > 0 && windowSize.height > 0) {
+        if (windowSize.width > 0 && windowSize.height > 0 && pspAttenuationData) {
             if (chartInstance) {
                 chartInstance.destroy();
             }
             createChart();
         }
-    }, [windowSize]);
+    }, [windowSize, pspAttenuationData]);
+
+    if (!pspAttenuationData) {
+        return <div>Loading PSP attenuation data...</div>;
+    }
 
     return (
         <div>

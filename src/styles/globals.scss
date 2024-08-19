@@ -591,9 +591,14 @@ $collapsible-padding: 2rem 2rem;
 
   &--rect {
     aspect-ratio: 1/1;
-    padding: 2rem 12rem;
+    width: 60%;
 
     @media (max-width: $breakpoint-lg) {
+      width: 80%;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      width: 100%;
       padding: 2rem 2rem;
       margin: 0;
     }

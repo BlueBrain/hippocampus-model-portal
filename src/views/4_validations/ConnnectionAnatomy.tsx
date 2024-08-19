@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import Filters from '@/layouts/Filters';
@@ -14,16 +14,29 @@ import ConnectionProbability from './connection-anatomy/ConnectionProbability';
 import DivergenceValidation from './connection-anatomy/DivergenceValidation';
 
 import ConvergenceValidation from './connection-anatomy/ConvergenceValidation';
-import ConvergenceValidationApicalBasal from './connection-anatomy/convergence-validation-apical-basal.json';
-import ConvergenceValidationSomaAxon from './connection-anatomy/convergence-validation-soma-axon.json';
 
 import LaminarDistributionOfDynapses from './connection-anatomy/LaminarDistributionOfSynapses';
 import NbOfSynapsesPConnection from './connection-anatomy/NbOfSynapsesPConnection';
 import SynapticDivergencePercentages from './connection-anatomy/SynapticDivergencePercentages';
 
+import { dataPath } from '@/config';
+
 const ConnectionAnatomyView: React.FC = () => {
 
     const theme = 4;
+
+    const [convergenceValidatonApicalBasal, setConvergenceValidatonApicalBasal] = useState(null);
+    const [convergenceValidatonSomaAxon, setConvergenceValidatonSomaAxon] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/convergence-validation-apical-basal.json')
+            .then((response) => response.json())
+            .then((data) => setConvergenceValidatonSomaAxon(data));
+
+        fetch(dataPath + '/4_validations/connection-anatomy/convergence-validation-soma-axon.json')
+            .then((response) => response.json())
+            .then((data) => setConvergenceValidatonSomaAxon(data));
+    }, []);
 
     return (
         <>
@@ -69,9 +82,16 @@ const ConnectionAnatomyView: React.FC = () => {
                 <Collapsible id="ConvergenceValidationSection" title={`Convergence validation`}>
 
                     <div className="flex flex-col gap-8">
-                        <ConvergenceValidation data={ConvergenceValidationSomaAxon} theme={theme} />
+                        {convergenceValidatonSomaAxon && (
+                            <ConvergenceValidation data={convergenceValidatonSomaAxon} theme={theme} />
+                        )}
 
-                        <ConvergenceValidation data={ConvergenceValidationApicalBasal} theme={theme} />
+                        {convergenceValidatonApicalBasal && (
+                            <ConvergenceValidation data={convergenceValidatonApicalBasal} theme={theme} />
+                        )}
+
+
+
 
                     </div>
 

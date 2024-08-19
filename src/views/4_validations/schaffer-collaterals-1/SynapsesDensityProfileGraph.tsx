@@ -15,7 +15,7 @@ import { graphTheme } from '@/constants';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-import SynapseDensityProfileData from './synapse-density-profile.json';
+import { dataPath } from '@/config';
 
 Chart.register(
     LineController,
@@ -36,6 +36,13 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/schaffer-collaterals-1/anatomy/synapse-density-profile.json')
+            .then((response) => response.json())
+            .then((data) => setData(data));
+    }, []);
 
     useEffect(() => {
         const updateWindowSize = () => {
@@ -45,31 +52,25 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
             });
         };
 
-        // Set initial size
         updateWindowSize();
-
-        // Add event listener
         window.addEventListener('resize', updateWindowSize);
-
-        // Clean up
         return () => window.removeEventListener('resize', updateWindowSize);
     }, []);
 
     useEffect(() => {
-        if (chartRef.current && windowSize.width > 0) {
+        if (chartRef.current && windowSize.width > 0 && data) {
             const ctx = chartRef.current.getContext('2d');
 
-            // Destroy the previous chart instance if it exists
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();
             }
 
-            const radialAxis = Object.values(SynapseDensityProfileData.value_map.radial_axis).map(Number);
-            const modelData = Object.entries(SynapseDensityProfileData.value_map.model_data).map(([key, value]) => ({
+            const radialAxis = Object.values(data.value_map.radial_axis).map(Number);
+            const modelData = Object.entries(data.value_map.model_data).map(([key, value]) => ({
                 y: radialAxis[Number(key)],
                 x: Number(value)
             }));
-            const expData = Object.entries(SynapseDensityProfileData.value_map.exp_data).map(([key, value]) => ({
+            const expData = Object.entries(data.value_map.exp_data).map(([key, value]) => ({
                 y: radialAxis[Number(key)],
                 x: Number(value)
             }));
@@ -130,7 +131,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 },
             });
         }
-    }, [chartRef, windowSize]);
+    }, [chartRef, windowSize, data]);
 
     return (
         <div>
@@ -140,7 +141,7 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 </div>
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapseDensityProfileData, `synapse-density-profile.json`)}>
+                <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `synapse-density-profile.json`)}>
                     Synapse Density Profile Data
                 </DownloadButton>
             </div>

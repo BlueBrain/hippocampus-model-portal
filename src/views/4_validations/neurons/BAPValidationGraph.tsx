@@ -11,8 +11,8 @@ import {
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import bAPValidationData from './bap-validation.json';
 import { graphTheme } from '@/constants';
+import { dataPath } from '@/config';
 
 Chart.register(
     ScatterController,
@@ -26,9 +26,17 @@ Chart.register(
 const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
+    const [bAPValidationData, setBAPValidationData] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/neurons/bap-validation.json')
+            .then(response => response.json())
+            .then(data => setBAPValidationData(data))
+            .catch(error => console.error('Error fetching bAP validation data:', error));
+    }, []);
 
     const createChart = () => {
-        if (chartRef.current) {
+        if (chartRef.current && bAPValidationData) {
             const ctx = chartRef.current.getContext('2d');
             if (!ctx) return;
 
@@ -162,8 +170,12 @@ const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
     };
 
     useEffect(() => {
-        createChart();
+        if (bAPValidationData) {
+            createChart();
+        }
+    }, [bAPValidationData]);
 
+    useEffect(() => {
         const handleResize = () => {
             if (chartInstance) {
                 chartInstance.resize();
@@ -178,7 +190,11 @@ const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
                 chartInstance.destroy();
             }
         };
-    }, []);
+    }, [chartInstance]);
+
+    if (!bAPValidationData) {
+        return <div>Loading bAP validation data...</div>;
+    }
 
     return (
         <>
