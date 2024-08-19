@@ -1,14 +1,10 @@
-import React from 'react';
-import { Table } from 'antd';
-
+import React, { useState, useEffect } from 'react';
 import { downloadAsJson } from '@/utils';
-
 import ResponsiveTable from '@/components/ResponsiveTable';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-
-import connectionProbabilityData from './connection-probability.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
 
 type DataEntry = {
     "m-type": string;
@@ -30,55 +26,10 @@ const Term = termFactory(termDescription);
 
 function getMtypeDescription(fullMtype: string) {
     const [layer, mtype] = fullMtype.split('_');
-
     return layerDescription[layer] && mtypeDescription[mtype]
         ? `${mtypeDescription[mtype]} from ${layerDescription[layer]} layer`
         : null;
 }
-
-
-const data: DataEntry[] = [
-    {
-        "m-type": "PC",
-        Specie: "Sprague-Dawley rat",
-        Age: "-",
-        Weight: "250-350 g",
-        PC: 42.151,
-        INT: 57.849,
-        n: 130,
-        Reference: "Takacs et al., 2012"
-    },
-    {
-        "m-type": "OLM",
-        Specie: "Wistar rat",
-        Age: "2 m",
-        Weight: "-",
-        PC: 89.157,
-        INT: 10.843,
-        n: 34,
-        Reference: "Katona et al., 1999"
-    },
-    {
-        "m-type": "Tri",
-        Specie: "Wistar rat",
-        Age: "-",
-        Weight: "300-400 g",
-        PC: 40,
-        INT: 60,
-        n: 52,
-        Reference: "Ferraguti et al., 2005"
-    },
-    {
-        "m-type": "AA",
-        Specie: "-",
-        Age: "-",
-        Weight: "-",
-        PC: 100,
-        INT: 0,
-        n: 0,
-        Reference: "AA.VV."
-    }
-];
 
 const columns = [
     {
@@ -121,12 +72,23 @@ const columns = [
     }
 ];
 
-
 type PercentageSDOntoPyramidalCellsProps = {
     theme?: number;
 }
 
 const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsProps> = ({ theme }) => {
+    const [data, setData] = useState<DataEntry[] | null>(null);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/connection-anatomy/percentage-sd-onto-pyramidal-cells.json`)
+            .then((response) => response.json())
+            .then((fetchedData) => setData(fetchedData));
+    }, []);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -137,19 +99,14 @@ const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsPro
 
             <div className="text-right mt-4">
                 <DownloadButton
-                    theme={1}
-                    onClick={() => downloadAsJson(
-                        connectionProbabilityData,
-                        `Percentage-of-Synapse-Divergence-Onto-Pyramidal-Cells-And-Interneurons-Data.json`
-                    )}
+                    theme={theme}
+                    onClick={() => downloadAsJson(data, `Percentage-of-Synapse-Divergence-Onto-Pyramidal-Cells-And-Interneurons-Data.json`)}
                 >
                     Percentage of Synapse Divergence Onto Pyramidal Cells And Interneurons Data
                 </DownloadButton>
             </div>
-
         </>
     );
 };
-
 
 export default PercentageSDOntoPyramidalCells;

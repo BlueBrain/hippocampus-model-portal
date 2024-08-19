@@ -1,134 +1,132 @@
-import React, { useEffect, useRef } from 'react';
-import {
-    Chart,
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    LineController,
-    LogarithmicScale,
-    PointElement,
-    LineElement,
-    Tooltip,
-} from 'chart.js';
-import { downloadAsJson } from '@/utils';
-import IfCurvePerCellData from './if-curve-per-cell-data.json';
+import React, { useEffect, useState } from 'react';
+import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
+import { Scatter } from 'react-chartjs-2';
+import { dataPath } from '@/config';
+import { graphTheme } from '@/constants';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
-// Register necessary components
-Chart.register(
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    LineController,
-    LogarithmicScale,
-    PointElement,
-    LineElement,
-    Tooltip,
-);
+ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-interface NeuronsGraphProps {
+
+
+type DataPoint = {
+    amplitude: number;
+    mean_frequency: number;
+};
+
+type IfCurveData = {
+
+    [key: string]: {
+        [key: string]: {
+            amplitude: number;
+            mean_frequency: number;
+            spikecount: number;
+        };
+    };
+};
+
+interface IfCurvePerCellGraph {
     instance: string;
+    theme?: number;
 }
 
-interface DataPoint {
-    x: number;
-    y: number;
-}
-
-const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ instance }) => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const chartInstance = useRef<Chart | null>(null);
+const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme }) => {
+    const [data, setData] = useState<DataPoint[]>([]);
 
     useEffect(() => {
-        const canvas = chartRef.current;
-        if (!canvas) return;
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${dataPath}/1_experimental-data/neuronal-electophysiology/if-curve-per-cell-data.json`);
+                const jsonData: IfCurveData = await response.json();
 
-        // Filter the JSON data based on the instance
-        const filteredData = Object.entries(IfCurvePerCellData)
-            .filter(([key]) => key.startsWith(instance))
-            .flatMap(([_, steps]) =>
-                Object.values(steps).map((step: any) => ({
-                    x: step.amplitude,
-                    y: step.mean_frequency,
-                }))
-            );
+                const instanceKey = instance.endsWith('.nwb') ? instance : `${instance}.nwb`;
 
-        // Calculate the maximum x value
-        const maxXValue = filteredData.reduce((max, point) => Math.max(max, point.x), 0);
+                if (jsonData[instanceKey]) {
+                    const instanceData = Object.values(jsonData[instanceKey])
+                        .map(item => ({
+                            amplitude: item.amplitude,
+                            mean_frequency: item.mean_frequency
+                        }))
+                        .sort((a, b) => a.amplitude - b.amplitude); // Sort by amplitude
+                    setData(instanceData);
+                } else {
+                    console.error(`No data found for instance: ${instanceKey}`);
+                    setData([]);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setData([]);
+            }
+        };
 
-        // Destroy previous chart instance if it exists
-        if (chartInstance.current) {
-            chartInstance.current.destroy();
-        }
-
-        // Create new chart
-        chartInstance.current = new Chart(canvas, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'IF Curve per Cell',
-                        data: filteredData,
-                        borderColor: '#031437',
-                        borderWidth: 2,
-                        backgroundColor: '#031437',
-                        showLine: true,
-                        fill: false,
-                        tension: 0,
-                    },
-                ],
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: {
-                            display: true,
-                            text: 'Amplitude (Na)',
-                        },
-                        max: maxXValue, // Set the max value for the x axis
-                    },
-                    y: {
-                        type: 'linear',
-                        title: {
-                            display: true,
-                            text: 'Mean Frequency (Hz)',
-                        },
-                    },
-                },
-                plugins: {
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            title: function () {
-                                return '';
-                            },
-                            label: function (context) {
-                                const raw = context.raw as DataPoint; // Type assertion
-                                return [
-                                    `Amplitude: ${raw.x.toFixed(3)}`, // Round to 3 decimal places
-                                    `Mean Frequency: ${raw.y.toFixed(3)}` // Round to 3 decimal places
-                                ];
-                            }
-                        },
-                    },
-                },
-            },
-        });
+        fetchData();
     }, [instance]);
+
+    const chartData = {
+        datasets: [
+            {
+                label: 'IF Curve',
+                data: data.map(point => ({ x: point.amplitude, y: point.mean_frequency })),
+                backgroundColor: graphTheme.blue,
+                showLine: true,
+                borderColor: graphTheme.blue,
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 7,
+            },
+        ],
+    };
+
+    const options = {
+        scales: {
+            x: {
+                type: 'linear' as const,
+                position: 'bottom' as const,
+                title: {
+                    display: true,
+                    text: 'Amplitude (nA)',
+                },
+            },
+            y: {
+                type: 'linear' as const,
+                position: 'left' as const,
+                title: {
+                    display: true,
+                    text: 'Mean Frequency (Hz)',
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: any) => {
+                        return `Amplitude: ${context.parsed.x.toFixed(2)} nA, Frequency: ${context.parsed.y.toFixed(2)} Hz`;
+                    }
+                }
+            }
+        },
+    };
+
+    if (data.length === 0) {
+        return <div>No data available for this instance.</div>;
+    }
 
     return (
         <>
-            <div className='graph'>
-                <canvas ref={chartRef} />
+            <div className='graph' >
+                <Scatter data={chartData} options={options} />
             </div>
             <div className="mt-4">
-                <DownloadButton onClick={() => downloadAsJson(IfCurvePerCellData, `if-curve-per-cell-data.json`)}>
-                    Download table data
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}>
+                    If curve per cell data
                 </DownloadButton>
             </div>
         </>
     );
 };
 
-export default NeuronsGraph;
+export default IfCurvePerCellGraph;

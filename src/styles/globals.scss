@@ -45,7 +45,22 @@
   --accent-color: var(--color-blue-2);
 }
 
+.ant-table-content {
+  overflow: initial !important;
+}
 
+.ant-table .ant-table-container::before,
+.ant-table .ant-table-container::after {
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: calc(calc(2 + 1) + 1);
+  width: 30px;
+  transition: box-shadow 0.3s;
+  content: none !important;
+  pointer-events: none;
+}
 
 
 html,
@@ -591,9 +606,14 @@ $collapsible-padding: 2rem 2rem;
 
   &--rect {
     aspect-ratio: 1/1;
-    padding: 2rem 12rem;
+    width: 60%;
 
     @media (max-width: $breakpoint-lg) {
+      width: 80%;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      width: 100%;
       padding: 2rem 2rem;
       margin: 0;
     }

@@ -8,7 +8,7 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
-import SynsPerConnectionTable from './connections/synapsesPerConnection';
+import SynsPerConnectionTable from './connection-anatomy/synapsesPerConnection';
 
 const ConnectionsView: React.FC = () => {
 

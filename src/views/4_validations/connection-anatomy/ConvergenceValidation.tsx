@@ -190,7 +190,7 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, data.name)}>
-                    {data.name} Data
+                    Convergence Validation Data
                 </DownloadButton>
             </div>
         </div>

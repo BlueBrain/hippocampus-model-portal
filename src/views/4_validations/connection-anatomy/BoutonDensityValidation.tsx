@@ -12,8 +12,7 @@ import {
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import BoutonDensityValidationData from './bouton-density-validation.json';
-import { GraphTheme } from '@/types';
+import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
 
 Chart.register(
@@ -32,11 +31,19 @@ export type BoutonDensityValidationProps = {
 };
 
 const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ theme }) => {
+
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch(dataPath + '/4_validations/connection-anatomy/bouton-density-validation.json')
+            .then((response) => response.json())
+            .then((data) => setData(data));
+    }, []);
 
     const createChart = () => {
-        if (chartRef.current) {
+        if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 // Define the error bar plugin
@@ -84,15 +91,15 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 const newChart = new Chart(ctx, {
                     type: 'scatter',
                     data: {
-                        labels: Object.values(BoutonDensityValidationData.value_map.mtype),
+                        labels: Object.values(data.value_map.mtype),
                         datasets: [
                             {
                                 label: 'Model',
-                                data: Object.values(BoutonDensityValidationData.value_map.mtype).map((_, index) => ({
+                                data: Object.values(data.value_map.mtype).map((_, index) => ({
                                     x: index,
-                                    y: BoutonDensityValidationData.value_map.model_mean[index],
-                                    yMin: BoutonDensityValidationData.value_map.model_mean[index] - BoutonDensityValidationData.value_map.model_std[index],
-                                    yMax: BoutonDensityValidationData.value_map.model_mean[index] + BoutonDensityValidationData.value_map.model_std[index],
+                                    y: data.value_map.model_mean[index],
+                                    yMin: data.value_map.model_mean[index] - data.value_map.model_std[index],
+                                    yMax: data.value_map.model_mean[index] + data.value_map.model_std[index],
                                 })),
                                 backgroundColor: 'black',
                                 borderColor: 'black',
@@ -102,9 +109,9 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                             },
                             {
                                 label: 'Experiment',
-                                data: Object.values(BoutonDensityValidationData.value_map.mtype).map((_, index) => ({
+                                data: Object.values(data.value_map.mtype).map((_, index) => ({
                                     x: index,
-                                    y: BoutonDensityValidationData.value_map.exp_mean[index],
+                                    y: data.value_map.exp_mean[index],
                                 })),
                                 backgroundColor: graphTheme.red,
                                 borderColor: graphTheme.red,
@@ -182,7 +189,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 chart.destroy();
             }
         };
-    }, []);
+    }, [data]);
 
     return (
         <div>
@@ -190,8 +197,8 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(BoutonDensityValidationData, `Bouton-Density-Validation-Data.json`)}>
-                    {BoutonDensityValidationData.name} Data
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Bouton-Density-Validation-Data.json`)}>
+                    Bouton density data
                 </DownloadButton>
             </div>
         </div>

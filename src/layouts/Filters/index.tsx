@@ -31,7 +31,7 @@ const Filters: React.FC<FiltersProps> = ({
       <div
         className={`${styles.background} ${styles[`background--${theme}`]}`}
         style={{
-          backgroundImage: `url(${basePath}/data/backgrounds/theme-bg-${theme}.svg)`,
+          backgroundImage: `url(${basePath}/resources/ui/backgrounds/theme-bg-${theme}.svg)`,
         }} />
       <div
         id={id}

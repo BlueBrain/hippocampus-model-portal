@@ -1,10 +1,13 @@
+// React and Next.js imports
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
+
+// Third-party library imports
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
-// Component Imports
+// Custom components
 import ESData from '@/components/ESData';
 import DataContainer from '@/components/DataContainer';
 import NexusPlugin from '@/components/NexusPlugin';
@@ -14,73 +17,78 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
-import ExpTraceTable from '@/components/ExpTraceTable';
-import Metadata from '@/components/Metadata';
 import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
 import StickyContainer from '@/components/StickyContainer';
+import AuthorBox from '@/components/AuthorBox/AuthorBox';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-// Graph Imports
+// Graph components
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 
-// Config and Query Imports
+// Configuration and query imports
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
 import { deploymentUrl, hippocampus, basePath } from '@/config';
 import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 
-// HOC Imports
+// Higher-order component
 import withPreselection from '@/hoc/with-preselection';
 
-// Type Imports
+// Type imports
 import { QuickSelectorEntry } from '@/types';
 
-// Data Import
+// Data import
 import traces from '@/traces.json';
 
 // Helper Functions
-const getEphysDistribution = (resource: any) => Array.isArray(resource.distribution)
-  ? resource.distribution.find((d: any) => d.name.match(/\.nwb$/i))
-  : resource.distribution;
+const getEphysDistribution = (resource) =>
+  Array.isArray(resource.distribution)
+    ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
+    : resource.distribution;
 
 const getEtype = () => Object.keys(traces).sort();
-const getInstance = (etype: string) => etype ? traces[etype].sort() : [];
+const getInstance = (etype) => (etype ? traces[etype].sort() : []);
 
-const NeuronElectrophysiology: React.FC = () => {
+const NeuronElectrophysiology = () => {
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
   const { query } = router;
 
-  const setQuery = (newQuery: Partial<typeof query>) => {
-    router.push({ query: { ...query, ...newQuery }, pathname: router.pathname }, undefined, { shallow: true });
+  // Query handling functions
+  const setQuery = (newQuery) => {
+    router.push(
+      { query: { ...query, ...newQuery }, pathname: router.pathname },
+      undefined,
+      { shallow: true }
+    );
   };
 
-  const setEtype = (etype: string) => setQuery({ etype, etype_instance: undefined });
-  const setInstance = (instance: string) => setQuery({ etype_instance: instance });
+  const setEtype = (etype) => setQuery({ etype, etype_instance: undefined });
+  const setInstance = (instance) => setQuery({ etype_instance: instance });
 
-  const currentEtype = query.etype as string;
-  const currentInstance = query.etype_instance as string;
+  // Current selections
+  const currentEtype = query.etype;
+  const currentInstance = query.etype_instance;
 
+  // Data for selectors
   const etypes = getEtype();
   const instances = getInstance(currentEtype);
 
-  const fullElectroPhysiologyDataQueryObj = useMemo(() =>
-    electroPhysiologyDataQuery(currentEtype, currentInstance),
+  // Memoized query objects
+  const fullElectroPhysiologyDataQueryObj = useMemo(
+    () => electroPhysiologyDataQuery(currentEtype, currentInstance),
     [currentEtype, currentInstance]
   );
 
-  const etypeTracesDataQueryObj = useMemo(() =>
-    etypeTracesDataQuery(currentEtype),
+  const etypeTracesDataQueryObj = useMemo(
+    () => etypeTracesDataQuery(currentEtype),
     [currentEtype]
   );
 
-  const getAndSortTraces = (esDocuments: any[]) =>
-    esDocuments
-      .map(esDocument => esDocument._source)
-      .sort((m1, m2) => (m1.name > m2.name) ? 1 : -1);
-
-  const qsEntries: QuickSelectorEntry[] = [
+  // Quick selector entries
+  const qsEntries = [
     {
       title: 'E-type',
       key: 'etype',
@@ -160,65 +168,71 @@ const NeuronElectrophysiology: React.FC = () => {
       >
         <Collapsible
           id="instanceSection"
-          title={`Electrophysiological Recordings for ${currentEtype}_${currentInstance}`}
+          properties={[currentEtype, currentInstance]}
+          title={`Electrophysiological Recordings`
+          }
         >
-          <p className="mb-4">We provide visualization and features for the selected recording.</p>
+          <AuthorBox>
+            Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
+          </AuthorBox>
+          <p className="mt-4">We provide visualization and features for the selected recording.</p>
 
           <ESData query={fullElectroPhysiologyDataQueryObj}>
-            {(esDocuments: any[]) => (
-              <>
-                {!!esDocuments && !!esDocuments.length && (
-                  <>
-                    <Metadata nexusDocument={esDocuments[0]._source} />
-                    <h3 className="mt-3">Patch clamp recording</h3>
-                    <div className="flex justify-between items-center mt-2 mb-2">
-                      <div>
-                        <Button
-                          className="mr-1"
-                          type="dashed"
-                          icon={<QuestionCircleOutlined />}
-                          href={`${basePath}/tutorials/nwb/`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="small"
-                        >
-                          How to read NWB files
-                        </Button>
-                        <NexusFileDownloadButton
-                          filename={getEphysDistribution(esDocuments[0]._source).name}
-                          url={getEphysDistribution(esDocuments[0]._source).contentUrl}
-                          org={hippocampus.org}
-                          project={hippocampus.project}
-                          id="ephysDownloadBtn"
-                        >
-                          trace
-                        </NexusFileDownloadButton>
-                      </div>
-                    </div>
-                    <NexusPlugin
-                      name="neuron-electrophysiology"
-                      resource={esDocuments[0]._source}
-                      nexusClient={nexus}
-                    />
-                    <div className="text-right">
+            {(esDocuments) => {
+              if (!esDocuments || esDocuments.length === 0) return null;
+              const document = esDocuments[0]._source;
+
+              return (
+                <>
+                  <h3 className="mt-3">Patch clamp recording</h3>
+                  <div className="flex justify-between items-center mt-2 mb-2">
+                    <div>
                       <Button
                         className="mr-1"
-                        type="primary"
+                        type="dashed"
+                        icon={<QuestionCircleOutlined />}
+                        href={`${basePath}/tutorials/nwb/`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         size="small"
-                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
                       >
-                        Send to the Build section
+                        How to read NWB files
                       </Button>
+                      <NexusFileDownloadButton
+                        filename={getEphysDistribution(document).name}
+                        url={getEphysDistribution(document).contentUrl}
+                        org={hippocampus.org}
+                        project={hippocampus.project}
+                        id="ephysDownloadBtn"
+                      >
+                        trace
+                      </NexusFileDownloadButton>
                     </div>
-                    <div className="mt-3">
-                      <TraceRelatedMorphologies trace={esDocuments[0]._source} />
-                    </div>
-                  </>
-                )}
-              </>
-            )}
+                  </div>
+                  <NexusPlugin
+                    name="neuron-electrophysiology"
+                    resource={document}
+                    nexusClient={nexus}
+                  />
+                  <div className="text-right">
+                    <Button
+                      className="mr-1"
+                      type="primary"
+                      size="small"
+                      href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
+                    >
+                      Send to the Build section
+                    </Button>
+                  </div>
+                  <div className="mt-3">
+                    <TraceRelatedMorphologies trace={document} />
+                  </div>
+                </>
+              );
+            }}
           </ESData>
-          <IfCurvePerCellGraph instance={currentInstance} />
+
+          <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
         </Collapsible>
 
         <Collapsible
@@ -227,21 +241,7 @@ const NeuronElectrophysiology: React.FC = () => {
           title="Population"
         >
           <p className="mb-4">We provide features for the entire e-type group selected.</p>
-
-          <ESData query={etypeTracesDataQueryObj}>
-            {(esDocuments: any[]) => (
-              <>
-                {!!esDocuments && (
-                  <ExpTraceTable
-                    etype={currentEtype}
-                    traces={getAndSortTraces(esDocuments)}
-                    currentTrace={currentInstance}
-                  />
-                )}
-              </>
-            )}
-          </ESData>
-          <IfCurvePerETypeGraph eType={currentEtype} />
+          <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
         </Collapsible>
       </DataContainer>
     </>
@@ -256,5 +256,4 @@ const hocPreselection = withPreselection(
   },
 );
 
-// Export the component wrapped with HOCs
 export default hocPreselection;

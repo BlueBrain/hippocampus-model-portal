@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FixedType } from 'rc-table/lib/interface';
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-
-import MinisData from './minis.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
+import { dataPath } from '@/config';
 
 type TableEntry = {
     preMtype: string;
@@ -79,12 +77,21 @@ type MinisProps = {
 };
 
 const Minis: React.FC<MinisProps> = ({ theme }) => {
+
+    const [minisData, setMinisData] = useState<TableEntry[]>([]);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/minis/minis.json`)
+            .then(response => response.json())
+            .then(data => setMinisData(data));
+    }, []);
+
     return (
         <>
 
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                data={MinisData}
+                data={minisData}
                 columns={MinisColumns}
                 rowKey={({ preMtype, postMtype, type }) => `${preMtype}_${postMtype}_${type}`}
             />
@@ -92,7 +99,7 @@ const Minis: React.FC<MinisProps> = ({ theme }) => {
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
-                        MinisData,
+                        minisData,
                         `Minis-Data.json`
                     )}
                 >

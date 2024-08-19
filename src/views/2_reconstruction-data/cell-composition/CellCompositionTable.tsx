@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Table } from 'antd';
 
 import { VolumeSection } from '@/types';
@@ -7,9 +7,9 @@ import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
-import cellCompositionData from './cell-composition.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
+import { dataPath } from '@/config';
 
 type CellCompositionTableProps = {
   volumeSection: VolumeSection;
@@ -56,11 +56,22 @@ const columns = [
 ];
 
 const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSection, theme }) => {
+  const [data, setData] = useState<Record<VolumeSection, CellComposition[]> | null>(null);
+
+  useEffect(() => {
+    fetch(dataPath + '/2_reconstruction-data/cell-composition/cell-composition.json')
+      .then((response) => response.json())
+      .then((fetchedData) => setData(fetchedData));
+  }, []);
+
   const totalCount = useMemo(() => {
-    return volumeSection
-      ? cellCompositionData[volumeSection].reduce((sum, curr) => sum + curr.count, 0)
-      : 0;
-  }, [volumeSection]);
+    if (!data || !volumeSection) return 0;
+    return data[volumeSection].reduce((sum, curr) => sum + curr.count, 0);
+  }, [data, volumeSection]);
+
+  if (!data || !volumeSection) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -70,7 +81,7 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
         pagination={false}
         bordered
         columns={columns}
-        dataSource={cellCompositionData[volumeSection]}
+        dataSource={data[volumeSection]}
         rowKey={({ mtype }) => mtype}
         summary={() => (
           <Table.Summary.Row>
@@ -85,7 +96,7 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(
-            cellCompositionData[volumeSection],
+            data[volumeSection],
             `Cell-Composition-Data-${volumeSection}.json`
           )}
         >
@@ -95,6 +106,5 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
     </>
   );
 };
-
 
 export default CellCompositionTable;

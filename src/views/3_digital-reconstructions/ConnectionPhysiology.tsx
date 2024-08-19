@@ -108,8 +108,8 @@ const SynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/data/digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const ConnectionsFile = `${basePath}/data/digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const ConnectionsFile = `${basePath}/resources/data/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
 
       // Fetch data from Connections.json for laminar distribution
       fetch(ConnectionsFile)

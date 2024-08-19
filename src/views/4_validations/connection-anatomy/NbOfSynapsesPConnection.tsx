@@ -12,8 +12,8 @@ import {
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-import NbOfSynapsesPConnectionData from './nb-of-synapses-p-connection.json';
 import { graphTheme } from '@/constants';
+import { dataPath } from '@/config';
 
 Chart.register(
     LineController,
@@ -33,17 +33,24 @@ export type NbOfSynapsesPConnectionProps = {
 const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
+    const [chartData, setChartData] = useState<any>(null);
+
+    useEffect(() => {
+        fetch(`${dataPath}/4_validations/connection-anatomy/nb-of-synapses-p-connection.json`)
+            .then((response) => response.json())
+            .then((data) => setChartData(data));
+    }, []);
 
     const createChart = () => {
-        if (chartRef.current) {
+        if (chartRef.current && chartData) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 // Prepare data
-                const data = Object.keys(NbOfSynapsesPConnectionData.value_map.exp_mean).map(key => ({
-                    x: NbOfSynapsesPConnectionData.value_map.exp_mean[key],
-                    y: NbOfSynapsesPConnectionData.value_map.model_mean[key],
-                    xError: NbOfSynapsesPConnectionData.value_map.exp_std[key] || 0,
-                    yError: NbOfSynapsesPConnectionData.value_map.model_std[key],
+                const dataPoints = Object.keys(chartData.value_map.exp_mean).map(key => ({
+                    x: chartData.value_map.exp_mean[key],
+                    y: chartData.value_map.model_mean[key],
+                    xError: chartData.value_map.exp_std[key] || 0,
+                    yError: chartData.value_map.model_std[key],
                 }));
 
                 // Custom plugin for error bars, diagonal line, and points
@@ -64,7 +71,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
 
                         // Draw error bars
                         ctx.setLineDash([]);
-                        data.forEach((datapoint) => {
+                        dataPoints.forEach((datapoint) => {
                             const xPixel = x.getPixelForValue(datapoint.x);
                             const yPixel = y.getPixelForValue(datapoint.y);
 
@@ -111,7 +118,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                     type: 'scatter',
                     data: {
                         datasets: [{
-                            data: data,
+                            data: dataPoints,
                             backgroundColor: 'black',
                             pointStyle: 'circle',
                             radius: 5,
@@ -157,8 +164,8 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                                 callbacks: {
                                     label: (context) => {
                                         const dataIndex = context.dataIndex;
-                                        const pre = NbOfSynapsesPConnectionData.value_map.pre[dataIndex];
-                                        const post = NbOfSynapsesPConnectionData.value_map.post[dataIndex];
+                                        const pre = chartData.value_map.pre[dataIndex];
+                                        const post = chartData.value_map.post[dataIndex];
                                         return `${pre} -> ${post}: (${context.parsed.x.toFixed(2)}, ${context.parsed.y.toFixed(2)})`;
                                     }
                                 }
@@ -174,8 +181,12 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
     };
 
     useEffect(() => {
-        createChart();
+        if (chartData) {
+            createChart();
+        }
+    }, [chartData]);
 
+    useEffect(() => {
         const handleResize = () => {
             if (chart) {
                 chart.resize();
@@ -190,7 +201,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                 chart.destroy();
             }
         };
-    }, []);
+    }, [chart]);
 
     return (
         <div>
@@ -198,7 +209,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(NbOfSynapsesPConnectionData, `Nb-Of-Synapses-Per-Connection-Data.json`)}>
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(chartData, `Nb-Of-Synapses-Per-Connection-Data.json`)}>
                     Number Of Synapses Per Connection Data
                 </DownloadButton>
             </div>

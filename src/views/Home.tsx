@@ -7,7 +7,7 @@ const Home: React.FC = () => (
     <section
       id="home-section"
       className="bg-cover bg-center"
-      style={{ backgroundImage: `url(${basePath}/data/bg.png)` }}
+      style={{ backgroundImage: `url(${basePath}/resources/ui/backgrounds/bg.png)` }}
     >
       <div className="p-8 mt-24 mw-full max-w-screen-xl mx-auto xl:px-0 xs:px-8">
         <h2 className="text-white text-2xl mb-2 text-center">EXPLORE</h2>

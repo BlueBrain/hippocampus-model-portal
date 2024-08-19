@@ -107,7 +107,7 @@ const SynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/data/digital-reconstruction/synapses/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/synapses/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
 
       fetch(distributionPlotFile)
         .then(response => response.json())

@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FixedType } from 'rc-table/lib/interface';
-
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-
-import rawPhaseData from './phase.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
 
 type TableEntry = {
     morphologicalType: string;
     meanAngle: number;
-    angularDeviation: number;
+    angularDeviation: number | null;
     meanFiringRate: number | null;
     minFiringRate: number | null;
     maxFiringRate: number | null;
@@ -35,59 +32,57 @@ const preprocessData = (data: any[]): TableEntry[] => {
     }));
 };
 
-const PhaseData: TableEntry[] = preprocessData(rawPhaseData);
-
 const PhaseColumns = [
     {
         title: 'Morphological Type',
-        dataIndex: 'morphologicalType' as keyof TableEntry,
+        dataIndex: 'morphologicalType',
         key: 'morphologicalType',
         fixed: 'left' as FixedType,
     },
     {
         title: 'Mean Angle (deg)',
-        dataIndex: 'meanAngle' as keyof TableEntry,
+        dataIndex: 'meanAngle',
         key: 'meanAngle',
-        render: (meanAngle: number) => <NumberFormat value={meanAngle} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'Angular Deviation (deg)',
-        dataIndex: 'angularDeviation' as keyof TableEntry,
+        dataIndex: 'angularDeviation',
         key: 'angularDeviation',
-        render: (angularDeviation: number) => <NumberFormat value={angularDeviation} />,
+        render: (value: number | null) => <NumberFormat value={value} />,
     },
     {
         title: 'Mean Firing Rate (Hz)',
-        dataIndex: 'meanFiringRate' as keyof TableEntry,
+        dataIndex: 'meanFiringRate',
         key: 'meanFiringRate',
-        render: (meanFiringRate: number | null) => <NumberFormat value={meanFiringRate} />,
+        render: (value: number | null) => <NumberFormat value={value} />,
     },
     {
         title: 'Min Firing Rate (Hz)',
-        dataIndex: 'minFiringRate' as keyof TableEntry,
+        dataIndex: 'minFiringRate',
         key: 'minFiringRate',
-        render: (minFiringRate: number | null) => <NumberFormat value={minFiringRate} />,
+        render: (value: number | null) => <NumberFormat value={value} />,
     },
     {
         title: 'Max Firing Rate (Hz)',
-        dataIndex: 'maxFiringRate' as keyof TableEntry,
+        dataIndex: 'maxFiringRate',
         key: 'maxFiringRate',
-        render: (maxFiringRate: number | null) => <NumberFormat value={maxFiringRate} />,
+        render: (value: number | null) => <NumberFormat value={value} />,
     },
     {
         title: 'n',
-        dataIndex: 'n' as keyof TableEntry,
+        dataIndex: 'n',
         key: 'n',
-        render: (n: number) => <NumberFormat value={n} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'Specie',
-        dataIndex: 'specie' as keyof TableEntry,
+        dataIndex: 'specie',
         key: 'specie',
     },
     {
         title: 'Reference',
-        dataIndex: 'reference' as keyof TableEntry,
+        dataIndex: 'reference',
         key: 'reference',
     }
 ];
@@ -97,11 +92,19 @@ type PhaseProps = {
 };
 
 const Phase: React.FC<PhaseProps> = ({ theme }) => {
+    const [phaseData, setPhaseData] = useState<TableEntry[]>([]);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/theta/phase.json`)
+            .then(response => response.json())
+            .then(data => setPhaseData(preprocessData(data)));
+    }, []);
+
     return (
         <>
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                data={PhaseData}
+                data={phaseData}
                 columns={PhaseColumns}
                 rowKey={({ morphologicalType, specie, reference }) => `${morphologicalType}_${specie}_${reference}`}
             />
@@ -109,7 +112,7 @@ const Phase: React.FC<PhaseProps> = ({ theme }) => {
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
-                        PhaseData,
+                        phaseData,
                         `theta-phase-data.json`
                     )}
                 >

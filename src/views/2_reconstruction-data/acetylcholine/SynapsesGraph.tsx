@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
     ScatterController,
@@ -14,11 +14,11 @@ import {
 
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-import SynapsesGraphData from './synapses-graph-data.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
-// Register necessary components
+import { dataPath } from '@/config';
+
 Chart.register(
     ScatterController,
     LineController,
@@ -31,16 +31,19 @@ Chart.register(
     Title
 );
 
-// Define the type for the data points
 interface DataPoint {
     x: number;
     y: number;
 }
 
+interface SynapsesGraphData {
+    dataPoints: DataPoint[];
+    equation: string;
+}
+
 const calculateFormulaPoints = (): DataPoint[] => {
     const points: DataPoint[] = [];
     for (let x = 0.01; x <= 1000; x *= 1.1) {
-        // Increase the granularity of points
         const ACh = x;
         const y = (1.0 * Math.pow(ACh, -0.576)) / (Math.pow(4.541, -0.576) + Math.pow(ACh, -0.576));
         points.push({ x: ACh, y });
@@ -70,15 +73,27 @@ export type SynapsesGraphProps = {
 
 const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const chartInstanceRef = useRef<Chart | null>(null); // To store the chart instance
+    const chartInstanceRef = useRef<Chart | null>(null);
+    const [data, setData] = useState<SynapsesGraphData | null>(null);
 
     useEffect(() => {
-        // Ensure the chart is destroyed if it already exists
+        fetch(dataPath + '/2_reconstruction-data/acetylcholine/synapses-graph-data.json')
+            .then((response) => response.json())
+            .then((fetchedData) => {
+                const synapsesGraphData: SynapsesGraphData = {
+                    dataPoints: fetchedData.filter((item: any) => 'x' in item && 'y' in item),
+                    equation: fetchedData.find((item: any) => 'equation' in item)?.equation || ''
+                };
+                setData(synapsesGraphData);
+            });
+    }, []);
+
+    useEffect(() => {
         if (chartInstanceRef.current) {
             chartInstanceRef.current.destroy();
         }
 
-        if (chartRef.current) {
+        if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const formulaPoints = calculateFormulaPoints();
@@ -89,61 +104,33 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                     data: {
                         datasets: [
                             {
-                                label: 'Neurons Data',
-                                data: [
-                                    { x: 10, y: 0.38 },
-                                    { x: 0.01, y: 1 },
-                                    { x: 0.1, y: 0.96 },
-                                    { x: 1, y: 0.81 },
-                                    { x: 10, y: 0.74 },
-                                    { x: 100, y: 0.47 },
-                                    { x: 500, y: 0 },
-                                    { x: 0.01, y: 1 },
-                                    { x: 0.1, y: 0.98 },
-                                    { x: 1, y: 0.67 },
-                                    { x: 10, y: 0.43 },
-                                    { x: 100, y: 0.13 },
-                                    { x: 500, y: 0 },
-                                    { x: 1, y: 1 },
-                                    { x: 1, y: 0.89 },
-                                    { x: 10, y: 0.77 },
-                                    { x: 10, y: 0.66 },
-                                    { x: 5, y: 0.3 },
-                                    { x: 5, y: 0.27 },
-                                    { x: 5, y: 0.06 },
-                                    { x: 5, y: 0.32 },
-                                    { x: 0.1, y: 0.96 },
-                                    { x: 0.3, y: 0.83 },
-                                    { x: 1, y: 0.6 },
-                                    { x: 3, y: 0.3 },
-                                    { x: 10, y: 0.06 },
-                                    { x: 0, y: 1 }
-                                ],
-                                backgroundColor: '#3B4165', // Updated to desired color
+                                label: 'Synapses Data',
+                                data: data.dataPoints,
+                                backgroundColor: '#3B4165',
                                 pointRadius: 3
                             },
                             {
                                 label: 'Formula Line (Solid)',
                                 data: solidPoints,
                                 type: 'line',
-                                borderColor: '#3B4165', // Updated to desired color
+                                borderColor: '#3B4165',
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
-                                pointRadius: 0, // Make the points invisible
-                                tension: 10 // Smooth the line to make it a curve
+                                pointRadius: 0,
+                                tension: 0.4
                             },
                             {
                                 label: 'Formula Line (Dotted)',
                                 data: dottedPoints,
                                 type: 'line',
-                                borderColor: '#3B4165', // Updated to desired color
+                                borderColor: '#3B4165',
                                 borderWidth: 2,
                                 fill: false,
                                 showLine: true,
-                                pointRadius: 0, // Make the points invisible
-                                borderDash: [6, 6], // Make the line dotted
-                                tension: 0.4 // Smooth the line to make it a curve
+                                pointRadius: 0,
+                                borderDash: [6, 6],
+                                tension: 0.4
                             }
                         ]
                     },
@@ -152,7 +139,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                             title: {
                                 display: false,
                                 text: '',
-                                color: '#3B4165' // Title color
+                                color: '#3B4165'
                             }
                         },
                         scales: {
@@ -164,7 +151,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 title: {
                                     display: true,
                                     text: 'ACh Concentration (µM)',
-                                    color: '#050A30' // Axis title color
+                                    color: '#050A30'
                                 },
                                 grid: {
                                     borderWidth: .1
@@ -179,7 +166,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     },
                                     autoSkip: false,
                                     maxTicksLimit: 6,
-                                    color: '#050A30', // Tick color
+                                    color: '#050A30',
                                 }
                             },
                             y: {
@@ -189,45 +176,42 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 title: {
                                     display: true,
                                     text: 'Use scaling',
-                                    color: '#050A30' // Axis title color
+                                    color: '#050A30'
                                 },
                                 grid: {
-
+                                    borderWidth: .1
                                 },
                                 ticks: {
                                     stepSize: 0.2,
-                                    color: '#050A30' // Tick color
+                                    color: '#050A30'
                                 }
                             }
                         },
-                        // Set background color for the chart
-
-                        backgroundColor: '#313354', // Canvas background color
+                        backgroundColor: '#313354',
                     }
                 });
             }
         }
 
-        // Cleanup function to destroy the chart instance on component unmount
         return () => {
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();
             }
         };
-    }, []); // Dependency array: [] ensures this runs only on mount and unmount
+    }, [data]);
 
     return (
         <div>
             <MathJaxContext>
                 <MathJax>
-                    {"\\[ U_{SE}^{ACh} = \\frac{1.0 \\cdot ACh^{-0.576}}{4.541^{-0.576} + ACh^{-0.576}} \\]"}
+                    {data ? `\\[${data.equation}\\]` : ''}
                 </MathJax>
             </MathJaxContext>
             <div className="graph mb-4">
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(SynapsesGraphData, `synapses-graph-data.json`)}>
+                <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `synapses-graph-data.json`)}>
                     Synapses Graph Data
                 </DownloadButton>
             </div>

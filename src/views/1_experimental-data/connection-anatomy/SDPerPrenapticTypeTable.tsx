@@ -1,16 +1,11 @@
-import React from 'react';
-import { Table } from 'antd';
-
+import React, { useState, useEffect } from 'react';
 import { downloadAsJson } from '@/utils';
-
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-
-import connectionProbabilityData from './connection-probability.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
 
 type DataEntry = {
     mtype: string;
@@ -34,111 +29,11 @@ const Term = termFactory(termDescription);
 
 function getMtypeDescription(fullMtype: string) {
     const [layer, mtype] = fullMtype.split('_');
-
     return layerDescription[layer] && mtypeDescription[mtype]
         ? `${mtypeDescription[mtype]} from ${layerDescription[layer]} layer`
         : null;
 }
 
-
-const data: DataEntry[] = [
-    {
-        mtype: "SP_PVBC",
-        Region: "CA1",
-        Specie: "Sprague-Dawley rat",
-        Age: "-",
-        Weight: "250-350 g",
-        mean: 10436,
-        n_cells: 4,
-        std: 1393.26,
-        SEM: 696.63,
-        Reference: "Sik et al., 1995"
-    },
-    {
-        mtype: "SP_BC",
-        Region: "CA1",
-        Specie: "Wistar rat",
-        Age: "7-8 w",
-        Weight: "-",
-        mean: 10828,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Halasy et al., 1996"
-    },
-    {
-        mtype: "SR_SCA",
-        Region: "CA1",
-        Specie: "Wistar rat",
-        Age: "-",
-        Weight: "> 120 g",
-        mean: 5998,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Vida et al., 1998"
-    },
-    {
-        mtype: "SR_CCKBC",
-        Region: "CA1",
-        Specie: "Wistar rat",
-        Age: "-",
-        Weight: "> 120 g",
-        mean: 7964,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Vida et al., 1998"
-    },
-    {
-        mtype: "SP_BS",
-        Region: "CA1",
-        Specie: "Sprague-Dawley / Wistar rat",
-        Age: "7-8 w",
-        Weight: "250-350 g",
-        mean: 12676,
-        n_cells: 2,
-        std: 5549.37,
-        SEM: 3924,
-        Reference: "Sik et al., 1995; Halasy et al., 1996"
-    },
-    {
-        mtype: "SO_OLM",
-        Region: "CA1",
-        Specie: "Sprague-Dawley rat",
-        Age: "-",
-        Weight: "250-350 g",
-        mean: 16847,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Sik et al., 1995"
-    },
-    {
-        mtype: "SLM_PPA",
-        Region: "CA1",
-        Specie: "Wistar rat",
-        Age: "-",
-        Weight: "> 120 g",
-        mean: 8015,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Vida et al., 1998"
-    },
-    {
-        mtype: "SO_Tri",
-        Region: "CA1",
-        Specie: "Sprague-Dawley rat",
-        Age: "-",
-        Weight: "250-350 g",
-        mean: 15767,
-        n_cells: 1,
-        std: 0,
-        SEM: 0,
-        Reference: "Sik et al., 1995"
-    }
-];
 const columns = [
     {
         title: 'MType',
@@ -188,11 +83,23 @@ const columns = [
     }
 ];
 
-type ConnectionProbabilityTableProps = {
+type SDPerPresynapticTypeTableProps = {
     theme?: number;
 }
 
-const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({ theme }) => {
+const SDPerPresynapticTypeTable: React.FC<SDPerPresynapticTypeTableProps> = ({ theme }) => {
+    const [data, setData] = useState<DataEntry[] | null>(null);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/connection-anatomy/sd-per-presynaptic-type.json`)
+            .then((response) => response.json())
+            .then((fetchedData) => setData(fetchedData));
+    }, []);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             <ResponsiveTable<DataEntry>
@@ -200,22 +107,16 @@ const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({
                 columns={columns}
                 data={data}
             />
-
             <div className="text-right mt-4">
                 <DownloadButton
                     theme={theme}
-                    onClick={() => downloadAsJson(
-                        connectionProbabilityData,
-                        `Synapse-Divergence-Per-Presynaptic-Type-Data.json`
-                    )}
+                    onClick={() => downloadAsJson(data, `Synapse-Divergence-Per-Presynaptic-Type-Data.json`)}
                 >
                     Synapse Divergence Per Presynaptic Type Data
                 </DownloadButton>
             </div>
-
         </>
     );
 };
 
-
-export default ConnectionProbabilityTable;
+export default SDPerPresynapticTypeTable;
