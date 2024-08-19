@@ -1,15 +1,11 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { downloadAsJson } from '@/utils';
-
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-
-import boutonDensityData from './bouton-density.json';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
+import { dataPath } from '@/config';
 
 type BoutonDensity = {
   mtype: string;
@@ -33,143 +29,10 @@ const Term = termFactory(termDescription);
 
 function getMtypeDescription(fullMtype: string) {
   const [layer, mtype] = fullMtype.split('_');
-
   return layerDescription[layer] && mtypeDescription[mtype]
     ? `${mtypeDescription[mtype]} from ${layerDescription[layer]} layer`
     : null;
 }
-
-const data: BoutonDensity[] = [{
-  mtype: 'SO_BS',
-  region: 'CA1',
-  specie: 'Sprague-Dawley rat',
-  weight: '250-350 g',
-  mean: 0.21,
-  std: 5.6,
-  unit: '/µm',
-  n: 1,
-  sem: 5.6,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1126/science.8085161"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sik et al., 1995
-      </a> <sup>[1]</sup> <sup>[2]</sup></>
-  ),
-}, {
-  mtype: 'SO_BP',
-  region: 'CA1',
-  specie: 'Sprague-Dawley rat',
-  weight: '250-350 g',
-  mean: 0.248,
-  std: 4.13,
-  unit: '/µm',
-  n: 1,
-  sem: 4.13,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1126/science.8085161"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sik et al., 1995
-      </a> <sup>[3]</sup>
-    </>
-  ),
-}, {
-  mtype: 'SP_PC',
-  region: 'CA1',
-  specie: 'Wistar rats',
-  weight: '180-200 g',
-  mean: 0.1241,
-  std: 6.02,
-  unit: '/µm',
-  n: 4,
-  sem: 3.01,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1002/(sici)1096-9861(19990614)408:4%3C449::aid-cne1%3E3.0.co;2-r"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Esclapez et al., 1999
-      </a>; <a
-        href="https://dx.doi.org/10.1002%2Fhipo.22141"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Bezaire and Soltesz, 2013
-      </a> <sup>[4]</sup>
-    </>
-  ),
-}, {
-  mtype: 'SO_Tri',
-  region: 'CA1',
-  specie: 'Sprague-Dawley rat',
-  weight: '250-350 g',
-  mean: 0.282,
-  std: 4.9,
-  unit: '/µm',
-  n: 1,
-  sem: 4.9,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1126/science.8085161"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sik et al., 1995
-      </a> <sup>[1]</sup>
-    </>
-  ),
-}, {
-  mtype: 'SP_PVBC',
-  region: 'CA1',
-  specie: 'Sprague-Dawley rat',
-  weight: '250-350 g',
-  mean: 0.226,
-  std: 3.9,
-  unit: '/µm',
-  n: 4,
-  sem: 1.95,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1126/science.8085161"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sik et al., 1995
-      </a> <sup>[1]</sup>
-    </>
-  ),
-}, {
-  mtype: 'SO_OLM',
-  region: 'CA1',
-  specie: 'Sprague-Dawley rat',
-  weight: '250-350 g',
-  mean: 0.266,
-  std: 4.0,
-  unit: '/µm',
-  n: 2,
-  sem: 2.83,
-  reference: (
-    <>
-      <a
-        href="https://doi.org/10.1126/science.8085161"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sik et al., 1995
-      </a> <sup>[1]</sup></>
-  ),
-}];
 
 const columns = [
   {
@@ -203,21 +66,33 @@ const columns = [
       },
       {
         title: 'N. cells',
-        dataIndex: 'n' as keyof BoutonDensity,
+        dataIndex: 'nCells' as keyof BoutonDensity,
       },
     ],
   },
   {
     title: 'Reference',
-    dataIndex: 'reference' as keyof BoutonDensity,
+    dataIndex: 'ref' as keyof BoutonDensity,
   }
 ];
 
-type BoutonDenisityTableProps = {
+type BoutonDensityTableProps = {
   theme?: number;
 }
 
-const BoutonDenisityTable: React.FC<BoutonDenisityTableProps> = ({ theme }) => {
+const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
+  const [data, setData] = useState<BoutonDensity[] | null>(null);
+
+  useEffect(() => {
+    fetch(`${dataPath}/1_experimental-data/connection-anatomy/bouton-density.json`)
+      .then((response) => response.json())
+      .then((fetchedData) => setData(fetchedData));
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <ResponsiveTable<BoutonDensity>
@@ -246,14 +121,12 @@ const BoutonDenisityTable: React.FC<BoutonDenisityTableProps> = ({ theme }) => {
       <div className="text-right mt-2">
         <DownloadButton
           theme={theme}
-          onClick={() => downloadAsJson(
-            boutonDensityData,
-            `Bouton-Density-Data.json`
-          )}
+          onClick={() => downloadAsJson(data, `Bouton-Density-Data.json`)}
         >
           Bouton Density Data
         </DownloadButton>
       </div>
+
 
       <h3 className="text-2xl mt-12 mb-2">Calculations</h3>
 
@@ -289,4 +162,4 @@ const BoutonDenisityTable: React.FC<BoutonDenisityTableProps> = ({ theme }) => {
 };
 
 
-export default BoutonDenisityTable;
+export default BoutonDensityTable;

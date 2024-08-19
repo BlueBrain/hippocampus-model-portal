@@ -5,19 +5,19 @@ import { VolumeSection } from '@/types';
 // Experimental Data
 
 export const expMorphFactesheetPath = (morphName: string) => {
-  return `${staticDataBaseUrl}/exp-data/morph/${morphName}/factsheet.json`;
+  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/morphology/${morphName}/factsheet.json`;
 };
 
 export const expMorphPopulationFactesheetPath = (mtype: string) => {
-  return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/factsheet.json`;
+  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/mtype/${mtype}/factsheet.json`;
 };
 
 export const expMorphPopulationDistributionPlotsPath = (mtype: string) => {
-  return `${staticDataBaseUrl}/exp-data/mtype/${mtype}/distribution-plots.json`;
+  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/mtype/${mtype}/distribution-plots.json`;
 };
 
 export const expMorphDistributionPlotsPath = (morph: string) => {
-  return `${staticDataBaseUrl}/exp-data/morph/${morph}/distribution-plots.json`;
+  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/morphology/${morph}/distribution-plots.json`;
 };
 
 export const subregionCircuitFactsheetPath = (subregion: string): string => {

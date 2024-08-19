@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
 
 import { VolumeSection } from '@/types';
@@ -8,8 +8,7 @@ import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
-import cellDensityData from './cell-denstiy.json';  // Import the JSON data
-
+import { dataPath } from '@/config';
 
 type CellDensity = {
     Cell_type: string;
@@ -35,7 +34,7 @@ const columns = [
         key: 'Region',
     },
     {
-        title: 'Specie',
+        title: 'Species',
         dataIndex: 'Specie',
         key: 'Specie',
     },
@@ -48,25 +47,25 @@ const columns = [
         title: 'Mean (10^3/mm^3)',
         dataIndex: 'mean',
         key: 'mean',
-        render: mean => <NumberFormat value={mean} />,
+        render: (mean: number) => <NumberFormat value={mean} />,
     },
     {
         title: 'Number of Animals',
         dataIndex: 'n_animals',
         key: 'n_animals',
-        render: n_animals => <NumberFormat value={n_animals} />,
+        render: (n_animals: number) => <NumberFormat value={n_animals} />,
     },
     {
         title: 'Standard Deviation',
         dataIndex: 'std',
         key: 'std',
-        render: std => <NumberFormat value={std} />,
+        render: (std: number) => <NumberFormat value={std} />,
     },
     {
         title: 'SEM',
         dataIndex: 'SEM',
         key: 'SEM',
-        render: SEM => <NumberFormat value={SEM} />,
+        render: (SEM: number) => <NumberFormat value={SEM} />,
     },
     {
         title: 'Reference',
@@ -76,11 +75,21 @@ const columns = [
 ];
 
 type CellDensityTableProps = {
-    theme?: number; // Ensure that theme is an optional number
+    theme?: number;
 };
 
-const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection, theme }) => {
-    const dataSource = useMemo(() => cellDensityData, []);
+const CellDensityTable: React.FC<CellDensityTableProps> = ({ theme }) => {
+    const [data, setData] = useState<CellDensity[] | null>(null);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/cell-density/cell-density.json`)
+            .then((response) => response.json())
+            .then((fetchedData: CellDensity[]) => setData(fetchedData));
+    }, []);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>
@@ -90,10 +99,10 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection, them
                 pagination={false}
                 bordered
                 columns={columns}
-                dataSource={dataSource}
+                dataSource={data}
                 rowKey={({ Cell_type, Region }) => `${Cell_type}-${Region}`}
                 summary={() => {
-                    const totalAnimals = dataSource.reduce((sum, record) => sum + record.mean, 0);
+                    const totalAnimals = data.reduce((sum, record) => sum + record.n_animals, 0);
                     return (
                         <Table.Summary.Row>
                             <Table.Summary.Cell index={0}><strong>Total</strong></Table.Summary.Cell>
@@ -111,7 +120,7 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ volumeSection, them
             />
 
             <div className="text-right mt-4">
-                <DownloadButton onClick={() => downloadAsJson(dataSource, `Cell-Density-Data.json`)} theme={theme}>
+                <DownloadButton onClick={() => downloadAsJson(data, `Cell-Density-Data.json`)} theme={theme}>
                     Cell Density Data
                 </DownloadButton>
             </div>

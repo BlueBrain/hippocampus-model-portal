@@ -13,7 +13,6 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { dataPath } from '@/config';
-import { GraphTheme } from '@/types';
 import { graphTheme } from '@/constants';
 
 Chart.register(

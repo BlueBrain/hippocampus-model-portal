@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FixedType } from 'rc-table/lib/interface';
-
 import ResponsiveTable from '@/components/ResponsiveTable';
-import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-
-import rawRateData from './rate.json'; // Ensure this path matches the location of your JSON file
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
+import NumberFormat from '@/components/NumberFormat';
 
 type TableEntry = {
     neuronType: string;
@@ -36,47 +33,45 @@ const preprocessData = (data: any[]): TableEntry[] => {
     }));
 };
 
-const PhaseData: TableEntry[] = preprocessData(rawRateData);
-
-const PhaseColumns = [
+const RateColumns = [
     {
         title: 'Neuron Type',
-        dataIndex: 'neuronType' as keyof TableEntry,
+        dataIndex: 'neuronType',
         key: 'neuronType',
         fixed: 'left' as FixedType,
     },
     {
         title: 'Mean Rate (Hz)',
-        dataIndex: 'meanRateHz' as keyof TableEntry,
+        dataIndex: 'meanRateHz',
         key: 'meanRateHz',
-        render: (meanRateHz: number) => <NumberFormat value={meanRateHz} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'SE Rate (Hz)',
-        dataIndex: 'seRateHz' as keyof TableEntry,
+        dataIndex: 'seRateHz',
         key: 'seRateHz',
-        render: (seRateHz: number) => <NumberFormat value={seRateHz} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'n',
-        dataIndex: 'n' as keyof TableEntry,
+        dataIndex: 'n',
         key: 'n',
-        render: (n: number) => <NumberFormat value={n} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'SD Rate (Hz)',
-        dataIndex: 'sdRateHz' as keyof TableEntry,
+        dataIndex: 'sdRateHz',
         key: 'sdRateHz',
-        render: (sdRateHz: number) => <NumberFormat value={sdRateHz} />,
+        render: (value: number) => <NumberFormat value={value} />,
     },
     {
         title: 'Recording Condition',
-        dataIndex: 'recordingCondition' as keyof TableEntry,
+        dataIndex: 'recordingCondition',
         key: 'recordingCondition',
     },
     {
         title: 'Source',
-        dataIndex: 'source' as keyof TableEntry,
+        dataIndex: 'source',
         key: 'source',
     }
 ];
@@ -86,19 +81,27 @@ type RateProps = {
 };
 
 const Rate: React.FC<RateProps> = ({ theme }) => {
+    const [rateData, setRateData] = useState<TableEntry[]>([]);
+
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/theta/rate.json`)
+            .then(response => response.json())
+            .then(data => setRateData(preprocessData(data)));
+    }, []);
+
     return (
         <>
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                data={PhaseData}
-                columns={PhaseColumns}
+                data={rateData}
+                columns={RateColumns}
                 rowKey={({ neuronType, recordingCondition, source }) => `${neuronType}_${recordingCondition}_${source}`}
             />
             <div className="text-right mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
-                        PhaseData,
+                        rateData,
                         `theta-rate-data.json`
                     )}
                 >

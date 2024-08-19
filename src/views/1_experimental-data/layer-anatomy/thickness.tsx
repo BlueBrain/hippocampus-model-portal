@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { FixedType } from 'rc-table/lib/interface';
-import { hippocampus, basePath, nexusImgLoaderUrl } from "../../../config";
+import { basePath, imagesPath, dataPath } from "../../../config";
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-// Dynamically import Lightbox
+import { Layer } from '../../../types'
+
 const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
     ssr: false,
     loading: () => <p>Loading...</p>,
@@ -17,13 +18,6 @@ const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
-import SLMData from './slm.json';
-import SRData from './sr.json';
-import SPData from './sp.json';
-import SOData from './so.json';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
-type Layer = 'SLM' | 'SR' | 'SP' | 'SO';
 
 type TableEntry = {
     cell_id: string;
@@ -52,16 +46,16 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         title: 'Slice Image',
         dataIndex: 'cell_id' as keyof TableEntry,
         render: (link: string, record: TableEntry, index: number) => {
-            const imageUrl = `${nexusImgLoaderUrl}exp-morph-images/${link}.jpeg`;
+            const imageUrl = `${imagesPath}1_experimental-data/layer-anatomy/${link}.jpeg`;
             return (
                 <Image
-                    src={`${nexusImgLoaderUrl}exp-morph-images/thumbnails/${link}.jpeg`}
+                    src={`${imagesPath}1_experimental-data/layer-anatomy/thumbnails/${link}.jpeg`}
                     alt={`slice image ${link}`}
                     width={150}
                     height={125}
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        setLightboxSlides(data.map(entry => ({ src: `${nexusImgLoaderUrl}/exp-morph-images/${entry.cell_id}.jpeg` })));
+                        setLightboxSlides(data.map(entry => ({ src: `${imagesPath}/1_experimental-data/layer-anatomy/${entry.cell_id}.jpeg` })));
                         setLightboxIndex(index);
                         setLightboxOpen(true);
                     }}
@@ -101,25 +95,16 @@ const Thickness: React.FC<ThicknessProps> = ({ layer, theme }) => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxSlides, setLightboxSlides] = useState([]);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [data, setData] = useState<TableEntry[]>([]);
 
-    let data: TableEntry[];
+    useEffect(() => {
+        fetch(`${dataPath}/1_experimental-data/layer-anatomy/${layer.toLowerCase()}.json`)
+            .then(response => response.json())
+            .then(fetchedData => setData(fetchedData));
+    }, [layer]);
 
-    switch (layer) {
-        case 'SLM':
-            data = SLMData;
-            break;
-        case 'SR':
-            data = SRData;
-            break;
-        case 'SP':
-            data = SPData;
-            break;
-        case 'SO':
-            data = SOData;
-            break;
-        default:
-            data = [];
-            break;
+    if (!data.length) {
+        return <div>Loading...</div>;
     }
 
     return (
