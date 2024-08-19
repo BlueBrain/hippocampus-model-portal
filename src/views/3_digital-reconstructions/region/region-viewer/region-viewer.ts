@@ -228,10 +228,10 @@ export default class VolumeViewer {
   private initMaterials() {
     this.material = {
       region: new MeshLambertMaterial({
-        color: parseCssColor("black"),
+        color: parseCssColor("#3b4165"),
         wireframe: true,
         transparent: true,
-        opacity: 0.1,
+        opacity: .05,
       }),
       neurons: new MeshLambertMaterial({ color: parseCssColor("#3b4165") }),
       cylinder: new MeshLambertMaterial({ color: parseCssColor("#3b4165") }),
