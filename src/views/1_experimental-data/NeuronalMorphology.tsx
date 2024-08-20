@@ -277,9 +277,7 @@ const NeuronalMorphologyView: React.FC = () => {
                             {(tableData) => (
                                 <>
                                     {tableData && (
-                                        <>
-                                            <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={true} />
-                                        </>
+                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={true} />
                                     )}
                                 </>
                             )}
