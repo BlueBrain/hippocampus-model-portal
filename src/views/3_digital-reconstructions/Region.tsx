@@ -16,11 +16,10 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import { VolumeSection } from '@/types';
 import { defaultSelection, volumeSections } from '@/constants';
-import VolumeSectionSelector from '@/components/VolumeSectionSelector';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import selectorStyle from '@/styles/selector.module.scss';
+import { basePath } from '@/config';
 
 import RegionViewer from './region/region-viewer/RegionViewer';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
@@ -36,6 +35,7 @@ const RegionView: React.FC = () => {
     const query = { volume_section: volumeSection };
     router.push({ query }, undefined, { shallow: true });
   };
+
 
   const validVolumeSection: VolumeSection = volumeSection ?? defaultSelection.digitalReconstruction.region.volume_section as VolumeSection;
 
@@ -107,10 +107,9 @@ const RegionView: React.FC = () => {
 
           <div className="graph no-padding">
             <RegionViewer
-              meshPath={`${staticDataBaseUrl}/3d/region.obj`}
+              meshPath={`${basePath}/resources/3d/3_digital-reconstruction/region/region.obj`}
               volumeSection={validVolumeSection}
-              onReady={() => setIsViewerReady(true)}
-            />
+              onReady={() => setIsViewerReady(true)} />
           </div>
         </Collapsible>
 
