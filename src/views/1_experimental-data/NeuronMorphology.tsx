@@ -43,7 +43,6 @@ import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 const factsheetEntryTypes = [
   'all',
-  'soma',
   'dendrite',
   'axon',
   'apical',

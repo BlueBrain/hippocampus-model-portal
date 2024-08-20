@@ -534,9 +534,6 @@ $collapsible-padding: 2rem 2rem;
 
 
 
-
-
-
 // Factsheet
 
 .capitalize {
@@ -619,6 +616,15 @@ $collapsible-padding: 2rem 2rem;
     }
   }
 }
+
+
+.neuron-viewer-container {
+  background-color: map-get($infobox, "fill");
+  border: 1px solid map-get($infobox, "border");
+  padding: 1.5rem 2rem 2rem 2rem;
+}
+
+
 
 
 
