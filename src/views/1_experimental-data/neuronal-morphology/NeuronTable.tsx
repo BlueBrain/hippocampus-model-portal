@@ -1,111 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { FixedType } from 'rc-table/lib/interface';
-import { basePath, imagesPath, dataPath } from "../../../config";
-
+import { basePath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
-import NumberFormat from '@/components/NumberFormat';
-import { downloadAsJson } from '@/utils';
+import Link from 'next/link';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
-const Lightbox = dynamic(() => import("yet-another-react-lightbox"), {
-    ssr: false,
-    loading: () => <p>Loading...</p>,
-});
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/captions.css";
-
 type TableEntry = {
-    cell_id: string;
+    name: string;
     contribution: {
-        name: string;
+        names: string[];
         institution: string;
     };
 };
 
-const NeuronTableColumns = (instanceList, setLightboxOpen, setLightboxSlides, setLightboxIndex) => [
-    {
-        title: 'Cell ID',
-        dataIndex: 'cell_id' as keyof TableEntry,
-        fixed: 'left' as FixedType,
-        render: () => <>{instanceList}</>,
-    },
-    {
-        title: 'Slice Image',
-        dataIndex: 'cell_id' as keyof TableEntry,
-        render: (link: string, record: TableEntry, index: number) => {
-            const imageUrl = `${imagesPath}1_experimental-data/layer-anatomy/${instanceList}.jpeg`;
-            return (
-                <Image
-                    src={`${imagesPath}1_experimental-data/layer-anatomy/thumbnails/${instanceList}.jpeg`}
-                    alt={`slice image ${instanceList}`}
-                    width={150}
-                    height={125}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                        setLightboxSlides([{ src: imageUrl }]);
-                        setLightboxIndex(0);
-                        setLightboxOpen(true);
-                    }}
-                />
-            );
-        },
-    },
-    {
-        title: 'Contribution',
-        dataIndex: 'contribution' as keyof TableEntry,
-        fixed: 'left' as FixedType,
-        render: (contribution: { name: string; institution: string }) => (
-            <div>
-                <span>{/*contribution.name */}</span><br />
-                <span>{/*contribution.institution*/}</span>
-            </div>
-        ),
-    },
-    {
-        title: 'Download',
-        dataIndex: 'download' as keyof TableEntry,
-        render: (value: number) => <NumberFormat value={value} />,
-    },
-];
-
 type NeuronTableProps = {
-    instanceList: string;
-    theme?: number;
+    data: TableEntry | TableEntry[] | null;
+    layer?: string | string[];
+    mtype?: string | string[];
+    nameLink?: boolean,
+    theme?: number
 };
 
-const Thickness: React.FC<NeuronTableProps> = ({ instanceList, theme }) => {
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [lightboxSlides, setLightboxSlides] = useState([]);
-    const [lightboxIndex, setLightboxIndex] = useState(0);
+const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink, theme }) => {
+    const validatedData = useMemo(() => {
+        if (!data) {
+            console.error('No data provided to NeuronTable');
+            return [];
+        }
+
+        const dataArray = Array.isArray(data) ? data : [data];
+
+        return dataArray.filter((entry): entry is TableEntry =>
+            entry &&
+            typeof entry === 'object' &&
+            'name' in entry &&
+            'contribution' in entry &&
+            typeof entry.contribution === 'object' &&
+            'names' in entry.contribution &&
+            Array.isArray(entry.contribution.names) &&
+            'institution' in entry.contribution
+        );
+    }, [data]);
+
+    if (validatedData.length === 0) {
+        return <div>No valid data available</div>;
+    }
+
+    const morphHref = (morphologyName: string) => {
+        const params = new URLSearchParams();
+        if (layer) params.set('layer', Array.isArray(layer) ? layer[0] : layer);
+        if (mtype) params.set('mtype', Array.isArray(mtype) ? mtype[0] : mtype);
+        params.set('instance', morphologyName);
+        return `/experimental-data/neuronal-morphology-new/?${params.toString()}#data`;
+    };
+
+    const downloadHref = (fileUrl) => {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = 'downloadedFile.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const NeuronTableColumns = [
+        {
+            title: 'Preview',
+            dataIndex: 'name',
+            className: 'preview-column',
+            render: (name: string) => (
+                <div className="image-container">
+                    <Image
+                        src={`${basePath}/resources/images/1_experimental-data/neuronal-morphology/${name}.png`}
+                        alt={`neuron image ${name}`}
+                        width={300}
+                        height={187}
+                        style={{ width: '300px', height: 'auto' }}
+                    />
+                </div>
+            ),
+        },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            render: (name: string) => (
+
+                (nameLink) ? (
+                    <Link href={morphHref(name)} >
+                        {name}
+                    </Link >
+                ) : (
+                    <strong>{name}</strong>
+                )
+
+            ),
+        },
+        {
+            title: 'Contribution',
+            dataIndex: 'contribution',
+            render: (contribution: TableEntry['contribution']) => (
+                <div>
+                    {contribution.names.map((name, index) => (
+                        <React.Fragment key={index}>
+                            <span>{name}</span>
+                            {index < contribution.names.length - 1 && <br />}
+                        </React.Fragment>
+                    ))}
+                    <br />
+                    <span>{contribution.institution}</span>
+                </div>
+            ),
+        },
+        {
+            title: 'Download',
+            dataIndex: 'name',
+            render: () => (
+                <div>
+                    <DownloadButton theme={theme} onClick={() => { downloadHref(`${basePath}/resources/images/1_experimental-data/neuronal-morphology/${name}.png`) }}>
+                        ASC
+                    </DownloadButton>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <>
-            <h2>Instance: {instanceList}</h2>
+            <style jsx global>{`
+                .preview-column {
+                    width: 200px !important;
+                    padding: .5rem !important;
+                }
+                .image-container {
+                    width: 250px;
+                    height: auto;
+                    overflow: hidden;
+                }
+                .image-container img {
+                    display: block;
+                    width: 100%;
+                    height: auto;
+                }
+            `}</style>
             <ResponsiveTable<TableEntry>
                 className="mt-3"
-                columns={NeuronTableColumns(instanceList, setLightboxOpen, setLightboxSlides, setLightboxIndex)}
+                data={validatedData}
+                columns={NeuronTableColumns}
+                tableLayout="fixed"
             />
-
-            <div className="mt-4">
-                {/* 
-                <DownloadButton onClick={() => downloadAsJson(data, `${instanceList}-data.json`)} theme={theme}>
-                    Download <span className='collapsible-property small'>{instanceList}</span>
-                </DownloadButton>
-                */}
-            </div>
-
-            {lightboxOpen && (
-                <Lightbox
-                    open={lightboxOpen}
-                    close={() => setLightboxOpen(false)}
-                    slides={lightboxSlides}
-                    index={lightboxIndex}
-                />
-            )}
         </>
     );
 };
 
-export default Thickness;
+export default NeuronTable;

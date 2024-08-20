@@ -229,6 +229,20 @@ const NeuronalMorphologyView: React.FC = () => {
                         </HttpData>
                     </div>
 
+                    <div className="mt-16 mb-4">
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${currentInstance}/table.json`}>
+                            {(tableData) => (
+                                <>
+                                    {tableData && (
+                                        <NeuronTable theme={theme} data={tableData} layer={currentLayer} mtype={currentMtype} nameLink={false} />
+                                    )}
+                                </>
+                            )}
+                        </HttpData>
+                    </div>
+
+
+
                 </Collapsible>
 
                 <Collapsible
@@ -251,6 +265,21 @@ const NeuronalMorphologyView: React.FC = () => {
                                                     Factsheet
                                                 </DownloadButton>
                                             </div>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </HttpData>
+                    </div>
+
+                    <div className="mt-16 mb-4">
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${currentMtype}/table.json`}>
+                            {(tableData) => (
+                                <>
+                                    {tableData && (
+                                        <>
+                                            <NeuronTable theme={theme} data={tableData} layer={currentLayer} mtype={currentMtype} nameLink={true} />
+
                                         </>
                                     )}
                                 </>
