@@ -17,13 +17,14 @@ import InstanceViewer from './neuronal-morphology/InstanceViewer';
 import NeuronFactsheet from './neuronal-morphology/NeuronFactsheet';
 
 import { basePath } from '@/config';
-import { layers } from '@/constants';
+import { defaultSelection, layers } from '@/constants';
 import morphologies from '@/exp-morphology-list.json';
 import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import { expMorphDistributionPlotsPath } from '@/queries/http';
 import NeuronTable from './neuronal-morphology/NeuronTable';
+import withPreselection from '@/hoc/with-preselection';
 
 
 
@@ -291,7 +292,14 @@ const NeuronalMorphologyView: React.FC = () => {
             </DataContainer >
         </>
     )
-
 }
 
-export default NeuronalMorphologyView;
+const hocPreselection = withPreselection(
+    NeuronalMorphologyView,
+    {
+        key: 'layer',
+        defaultQuery: defaultSelection.experimentalData.neuronMorphology,
+    },
+);
+
+export default hocPreselection;

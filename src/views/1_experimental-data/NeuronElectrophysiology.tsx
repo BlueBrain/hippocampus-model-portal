@@ -35,9 +35,6 @@ import { defaultSelection } from '@/constants';
 // Higher-order component
 import withPreselection from '@/hoc/with-preselection';
 
-// Type imports
-import { QuickSelectorEntry } from '@/types';
-
 // Data import
 import traces from '@/traces.json';
 
