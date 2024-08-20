@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { basePath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
@@ -22,6 +22,11 @@ type NeuronTableProps = {
 };
 
 const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink, theme }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const entriesPerPage = 10;
+
+    const tableRef = useRef<HTMLDivElement>(null);
+
     const validatedData = useMemo(() => {
         if (!data) {
             console.error('No data provided to NeuronTable');
@@ -41,6 +46,15 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             'institution' in entry.contribution
         );
     }, [data]);
+
+    const totalEntries = validatedData.length;
+    const totalPages = Math.ceil(totalEntries / entriesPerPage);
+
+    const currentData = useMemo(() => {
+        const start = (currentPage - 1) * entriesPerPage;
+        const end = start + entriesPerPage;
+        return validatedData.slice(start, end);
+    }, [validatedData, currentPage]);
 
     if (validatedData.length === 0) {
         return <div>No valid data available</div>;
@@ -84,15 +98,13 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             title: 'Name',
             dataIndex: 'name',
             render: (name: string) => (
-
-                (nameLink) ? (
+                nameLink ? (
                     <Link href={morphHref(name)} >
                         {name}
                     </Link >
                 ) : (
                     <strong>{name}</strong>
                 )
-
             ),
         },
         {
@@ -114,7 +126,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
         {
             title: 'Download',
             dataIndex: 'name',
-            render: () => (
+            render: (name: string) => (
                 <div>
                     <DownloadButton theme={theme} onClick={() => { downloadHref(`${basePath}/resources/images/1_experimental-data/neuronal-morphology/${name}.png`) }}>
                         ASC
@@ -123,6 +135,13 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             ),
         },
     ];
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        if (tableRef.current) {
+            tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
 
     return (
         <>
@@ -142,12 +161,27 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
                     height: auto;
                 }
             `}</style>
-            <ResponsiveTable<TableEntry>
-                className="mt-3"
-                data={validatedData}
-                columns={NeuronTableColumns}
-                tableLayout="fixed"
-            />
+            <div className='pt-4' ref={tableRef}>
+                <ResponsiveTable<TableEntry>
+                    className="mt-3"
+                    data={currentData}
+                    columns={NeuronTableColumns}
+                    tableLayout="fixed"
+                />
+            </div>
+            {totalEntries > entriesPerPage && (
+                <div className="pagination">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={currentPage === index + 1 ? 'active' : ''}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
         </>
     );
 };

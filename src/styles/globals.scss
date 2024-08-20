@@ -34,7 +34,27 @@
 @import './explore-models';
 @import './informational-content.scss';
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
 
+.pagination button {
+  @apply text-sm;
+  margin: 0 0.25rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: map-get($basePalette , "navy-2");
+  color: #fff;
+  border-color: map-get($basePalette , "navy-2");
+  ;
+}
 
 // colors
 :root {

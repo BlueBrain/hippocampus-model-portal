@@ -1,7 +1,5 @@
-// React and Next.js imports
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
@@ -12,106 +10,121 @@ import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import AuthorBox from '@/components/AuthorBox/AuthorBox';
 import HttpData from '@/components/HttpData';
-
 import InstanceViewer from './neuronal-morphology/InstanceViewer';
 import NeuronFactsheet from './neuronal-morphology/NeuronFactsheet';
-
 import { basePath } from '@/config';
 import { defaultSelection, layers } from '@/constants';
 import morphologies from '@/exp-morphology-list.json';
 import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { downloadAsJson } from '@/utils';
-import { expMorphDistributionPlotsPath } from '@/queries/http';
 import NeuronTable from './neuronal-morphology/NeuronTable';
 import withPreselection from '@/hoc/with-preselection';
-
-
 
 const NeuronalMorphologyView: React.FC = () => {
     const router = useRouter();
     const { query } = router;
 
-    const theme = 1;
-    const currentLayer = query.layer;
-    const currentMtype = query.mtype;
-    const currentInstance = query.instance;
+    const [quickSelection, setQuickSelection] = useState<Record<string, string>>({
+        layer: '',
+        mtype: '',
+        instance: '',
+    });
 
-    const getMtypes = (layer) => {
+    const theme = 1;
+
+    useEffect(() => {
+        if (!router.isReady) return;
+
+        if (!query.layer && !query.mtype && !query.instance) {
+            const defaultQuery = defaultSelection.experimentalData.neuronMorphology;
+            setQuickSelection(defaultQuery);
+            router.replace({ query: defaultQuery }, undefined, { shallow: true });
+        } else {
+            setQuickSelection({
+                layer: query.layer as string,
+                mtype: query.mtype as string,
+                instance: query.instance as string,
+            });
+        }
+    }, [router.isReady, query]);
+
+    const setParams = (params: Record<string, string>): void => {
+        const newQuery = { ...router.query, ...params };
+        router.push({ query: newQuery }, undefined, { shallow: true });
+    };
+
+    const getMtypes = (layer: string) => {
         return layer
             ? Array.from(new Set(morphologies.filter(m => m.region === layer).map(m => m.mtype))).sort()
             : [];
     };
 
-    const getInstances = (mtype) => {
+    const getInstances = (mtype: string) => {
         return mtype
             ? morphologies.filter(m => m.mtype === mtype).map(m => m.name).sort()
             : [];
     };
 
-    const setQuery = (query) => {
-        router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
-    };
+    const setLayerQuery = (layer: string) => {
+        setQuickSelection(prev => {
+            const newMtypes = getMtypes(layer);
+            const newMtype = newMtypes.length > 0 ? newMtypes[0] : '';
+            const newInstances = getInstances(newMtype);
+            const newInstance = newInstances.length > 0 ? newInstances[0] : '';
 
-    const setLayer = (layer) => {
-        const newMtypes = getMtypes(layer);
-        const newMtype = newMtypes.length > 0 ? newMtypes[0] : null;
-        const newInstances = getInstances(newMtype);
-        const newInstance = newInstances.length > 0 ? newInstances[0] : null;
-
-        setQuery({
-            layer,
-            mtype: newMtype,
-            instance: newInstance,
+            const updatedSelection = { layer, mtype: newMtype, instance: newInstance };
+            setParams(updatedSelection);
+            return updatedSelection;
         });
     };
 
-    const setMtype = (mtype) => {
-        const newInstances = getInstances(mtype);
-        const newInstance = newInstances.length > 0 ? newInstances[0] : null;
+    const setMtypeQuery = (mtype: string) => {
+        setQuickSelection(prev => {
+            const newInstances = getInstances(mtype);
+            const newInstance = newInstances.length > 0 ? newInstances[0] : '';
 
-        setQuery({
-            mtype,
-            layer: currentLayer,
-            instance: newInstance,
+            const updatedSelection = { ...prev, mtype, instance: newInstance };
+            setParams(updatedSelection);
+            return updatedSelection;
         });
     };
 
-    const setInstance = (instance) => {
-        setQuery({
-            instance,
-            layer: currentLayer,
-            mtype: currentMtype,
+    const setInstanceQuery = (instance: string) => {
+        setQuickSelection(prev => {
+            const updatedSelection = { ...prev, instance };
+            setParams(updatedSelection);
+            return updatedSelection;
         });
     };
 
-    const mtypes = getMtypes(currentLayer);
-    const instances = getInstances(currentMtype);
+    const mtypes = getMtypes(quickSelection.layer);
+    const instances = getInstances(quickSelection.mtype);
 
     const qsEntries = [
         {
             title: 'Layer',
             key: 'layer',
             values: layers,
-            setFn: setLayer,
+            setFn: setLayerQuery,
         },
         {
-            title: 'E-type',
-            key: 'etype',
+            title: 'M-type',
+            key: 'mtype',
             values: mtypes,
-            setFn: setMtype,
+            setFn: setMtypeQuery,
         },
         {
             title: 'Instance',
-            key: 'etype_instance',
+            key: 'instance',
             values: instances,
-            setFn: setInstance,
+            setFn: setInstanceQuery,
         },
     ];
 
     return (
         <>
-            <Filters theme={theme} hasData={!!currentInstance}>
+            <Filters theme={theme} hasData={!!quickSelection.instance}>
                 <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
                     <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
@@ -129,7 +142,6 @@ const NeuronalMorphologyView: React.FC = () => {
                             </div>
                         </StickyContainer>
                     </div>
-
                     <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none">
                         <div className={`selector__column theme-${theme} w-full`}>
                             <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
@@ -137,17 +149,17 @@ const NeuronalMorphologyView: React.FC = () => {
                                 <List
                                     block
                                     list={mtypes}
-                                    value={currentMtype}
+                                    value={quickSelection.mtype}
                                     title="m-type"
-                                    onSelect={setMtype}
+                                    onSelect={setMtypeQuery}
                                     theme={theme}
                                 />
                                 <List
                                     block
                                     list={instances}
-                                    value={currentInstance}
+                                    value={quickSelection.instance}
                                     title="Reconstructed morphology"
-                                    onSelect={setInstance}
+                                    onSelect={setInstanceQuery}
                                     anchor="data"
                                     theme={theme}
                                 />
@@ -157,8 +169,8 @@ const NeuronalMorphologyView: React.FC = () => {
                             <div className={`selector__head theme-${theme}`}>Choose a layer</div>
                             <div className="selector__body">
                                 <LayerSelector3D
-                                    value={currentLayer}
-                                    onSelect={setLayer}
+                                    value={quickSelection.layer}
+                                    onSelect={setLayerQuery}
                                 />
                             </div>
                         </div>
@@ -167,33 +179,28 @@ const NeuronalMorphologyView: React.FC = () => {
             </Filters>
             <DataContainer
                 theme={theme}
-                visible={!!currentInstance}
+                visible={!!quickSelection.instance}
                 navItems={[
                     { id: 'morphologySection', label: 'Neuron Morphology' },
                     { id: 'populationSection', label: 'Population' },
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-
                 <Collapsible
                     id="morphologySection"
                     title="Neuron Morphology"
-                    properties={[currentLayer, currentMtype, currentInstance]} // Assuming 'layer' is a string
+                    properties={[quickSelection.layer, quickSelection.mtype, quickSelection.instance]}
                 >
-
                     <AuthorBox>
                         <h3 className="text-lg">Contribution</h3>
                         <p>Alex Thomson: supervision, Audrey Mercer: supervision, University College London.</p>
                     </AuthorBox>
-
                     <p className='text-lg mt-10 mb-2 '>
                         We provide visualization and morphometrics for the selected morphology.
                     </p>
-
-                    <InstanceViewer theme={theme} currentMtype={currentMtype} currentInstance={currentInstance} />
-
+                    <InstanceViewer theme={theme} currentMtype={quickSelection.mtype} currentInstance={quickSelection.instance} />
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${currentInstance}/factsheet.json`}>
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}>
                             {(factsheetData) => (
                                 <>
                                     {factsheetData && (
@@ -210,9 +217,8 @@ const NeuronalMorphologyView: React.FC = () => {
                             )}
                         </HttpData>
                     </div>
-
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${currentInstance}/distribution-plots.json`}>
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/distribution-plots.json`}>
                             {(plotsData) => (
                                 <>
                                     {plotsData && (
@@ -229,23 +235,18 @@ const NeuronalMorphologyView: React.FC = () => {
                             )}
                         </HttpData>
                     </div>
-
-                    <div className="mt-16 mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${currentInstance}/table.json`}>
+                    <div className="mt-8 ">
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/table.json`}>
                             {(tableData) => (
                                 <>
                                     {tableData && (
-                                        <NeuronTable theme={theme} data={tableData} layer={currentLayer} mtype={currentMtype} nameLink={false} />
+                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={false} />
                                     )}
                                 </>
                             )}
                         </HttpData>
                     </div>
-
-
-
                 </Collapsible>
-
                 <Collapsible
                     id="populationSection"
                     title="Population"
@@ -253,9 +254,8 @@ const NeuronalMorphologyView: React.FC = () => {
                     <p className='text-lg mb-2'>
                         We provide morphometrics for the entire m-type group selected.
                     </p>
-
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${currentMtype}/factsheet.json`}>
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/factsheet.json`}>
                             {(factsheetData) => (
                                 <>
                                     {factsheetData && (
@@ -272,27 +272,24 @@ const NeuronalMorphologyView: React.FC = () => {
                             )}
                         </HttpData>
                     </div>
-
-                    <div className="mt-16 mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${currentMtype}/table.json`}>
+                    <div className="mt-16 ">
+                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}>
                             {(tableData) => (
                                 <>
                                     {tableData && (
                                         <>
-                                            <NeuronTable theme={theme} data={tableData} layer={currentLayer} mtype={currentMtype} nameLink={true} />
-
+                                            <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={true} />
                                         </>
                                     )}
                                 </>
                             )}
                         </HttpData>
                     </div>
-
                 </Collapsible>
-            </DataContainer >
+            </DataContainer>
         </>
-    )
-}
+    );
+};
 
 const hocPreselection = withPreselection(
     NeuronalMorphologyView,
