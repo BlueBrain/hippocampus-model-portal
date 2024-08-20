@@ -7,6 +7,8 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { VolumeSection } from '@/types';
 import { volumeSections, theme } from '@/constants'; // Import theme
 
+import { basePath } from '@/config';
+
 import styles from './styles.module.scss';
 
 type VolumeSectionSelectProps = {
@@ -128,7 +130,8 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const loader = new OBJLoader();
     loader.load(
-      '/hippocampus-portal-dev/data/3d/volume-selector-with-skeleton.obj',
+
+      basePath + '/resources/3d/volume-selector/volume-selector.obj',
       (obj) => {
         const offset = 20;
         const obj1 = obj.clone();
