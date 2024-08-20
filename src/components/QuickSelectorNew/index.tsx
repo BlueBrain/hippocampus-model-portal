@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 
 import { QuickSelectorEntry } from '@/types';
 import style from './styles.module.scss';
+import withPreselection from '@/hoc/with-preselection';
+import NeuronElectrophysiologyPage from '@/pages/experimental-data/neuronal-electrophysiology';
 
 type QuickSelectorProps = {
   entries: QuickSelectorEntry[]

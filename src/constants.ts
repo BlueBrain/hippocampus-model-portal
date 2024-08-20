@@ -25,12 +25,13 @@ export const graphTheme: GraphTheme = {
 
 
 export const neuriteTypes: NeuriteType[] = [
+  'all',
   'axon',
   'apical',
   'basal',
   'dendrite',
   'soma',
-  'all',
+
 ];
 
 export const volumeSections: VolumeSection[] = [

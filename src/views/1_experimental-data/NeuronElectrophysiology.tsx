@@ -1,13 +1,8 @@
-// React and Next.js imports
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-
-// Third-party library imports
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-
-// Custom components
 import ESData from '@/components/ESData';
 import DataContainer from '@/components/DataContainer';
 import NexusPlugin from '@/components/NexusPlugin';
@@ -21,27 +16,15 @@ import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
 import StickyContainer from '@/components/StickyContainer';
 import AuthorBox from '@/components/AuthorBox/AuthorBox';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
-
-// Graph components
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
-
-// Configuration and query imports
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
 import { deploymentUrl, hippocampus, basePath } from '@/config';
 import { colorName } from './config';
 import { defaultSelection } from '@/constants';
-
-// Higher-order component
 import withPreselection from '@/hoc/with-preselection';
-
-// Type imports
-import { QuickSelectorEntry } from '@/types';
-
-// Data import
 import traces from '@/traces.json';
 
-// Helper Functions
 const getEphysDistribution = (resource) =>
   Array.isArray(resource.distribution)
     ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
@@ -56,7 +39,6 @@ const NeuronElectrophysiology = () => {
   const theme = 1;
   const { query } = router;
 
-  // Query handling functions
   const setQuery = (newQuery) => {
     router.push(
       { query: { ...query, ...newQuery }, pathname: router.pathname },
@@ -68,15 +50,12 @@ const NeuronElectrophysiology = () => {
   const setEtype = (etype) => setQuery({ etype, etype_instance: undefined });
   const setInstance = (instance) => setQuery({ etype_instance: instance });
 
-  // Current selections
   const currentEtype = query.etype;
   const currentInstance = query.etype_instance;
 
-  // Data for selectors
   const etypes = getEtype();
   const instances = getInstance(currentEtype);
 
-  // Memoized query objects
   const fullElectroPhysiologyDataQueryObj = useMemo(
     () => electroPhysiologyDataQuery(currentEtype, currentInstance),
     [currentEtype, currentInstance]
@@ -87,7 +66,6 @@ const NeuronElectrophysiology = () => {
     [currentEtype]
   );
 
-  // Quick selector entries
   const qsEntries = [
     {
       title: 'E-type',
@@ -127,7 +105,6 @@ const NeuronElectrophysiology = () => {
               </div>
             </StickyContainer>
           </div>
-
           <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none justify-center">
             <div className={`selector__column theme-${theme} w-full`}>
               <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
@@ -156,7 +133,6 @@ const NeuronElectrophysiology = () => {
           </div>
         </div>
       </Filters>
-
       <DataContainer
         theme={theme}
         visible={!!currentInstance}
@@ -169,19 +145,16 @@ const NeuronElectrophysiology = () => {
         <Collapsible
           id="instanceSection"
           properties={[currentEtype, currentInstance]}
-          title={`Electrophysiological Recordings`
-          }
+          title={`Electrophysiological Recordings`}
         >
           <AuthorBox>
             Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
           </AuthorBox>
           <p className="mt-4">We provide visualization and features for the selected recording.</p>
-
           <ESData query={fullElectroPhysiologyDataQueryObj}>
             {(esDocuments) => {
               if (!esDocuments || esDocuments.length === 0) return null;
               const document = esDocuments[0]._source;
-
               return (
                 <>
                   <h3 className="mt-3">Patch clamp recording</h3>
@@ -231,10 +204,8 @@ const NeuronElectrophysiology = () => {
               );
             }}
           </ESData>
-
           <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
         </Collapsible>
-
         <Collapsible
           id="etypeSection"
           className="mt-4"

@@ -11,7 +11,7 @@ interface ColumnType<Type extends object & { isHighlight?: boolean }> extends Om
 interface GroupColumnType<Type extends object & { isHighlight?: boolean }> extends AntColumnGroupType<Type> { }
 
 interface ResponsiveTableProps<Type extends object & { isHighlight?: boolean }> extends Omit<TableProps<Type>, 'columns'> {
-  data: Type[];
+  data?: Type[];
   columns: (ColumnType<Type> | GroupColumnType<Type>)[]; // Updated type
 }
 
