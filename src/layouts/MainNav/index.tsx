@@ -21,34 +21,30 @@ type MenuItemProps = {
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = false, menuGroup }) => {
   const [openMenuGroup, setOpenMenuGroup] = useState<string>('');
+  const menuRef = useRef<HTMLLIElement>(null);
 
-  const handleMenuToggle = (menuGroup: string) => {
+  const handleMenuToggle = (event: React.MouseEvent) => {
+    event.stopPropagation();
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
   };
 
-  const handleMouseEnter = (menuGroup: string) => {
-    if (window.innerWidth > 1200) {
-      setOpenMenuGroup(menuGroup);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenMenuGroup('');
+      }
+    };
 
-  const handleMouseLeave = (menuGroup: string) => {
-    if (window.innerWidth > 1200) {
-      setOpenMenuGroup('');
-    }
-  };
-
-  const handleClick = (menuGroup: string) => {
-    if (window.innerWidth <= 1200) {
-      setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
-    }
-  };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <li
-      onMouseEnter={() => handleMouseEnter(menuGroup)}
-      onMouseLeave={() => handleMouseLeave(menuGroup)}
-      onClick={() => handleClick(menuGroup)}
+      ref={menuRef}
+      onClick={handleMenuToggle}
       className={styles['main-navigation__item']}
     >
       <Link href={href}>{label}</Link>
@@ -63,6 +59,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, href, children, external = f
     </li>
   );
 };
+
 
 type SubmenuLinkProps = {
   href: string;
@@ -103,9 +100,10 @@ type SubmenuGroupProps = {
 
 const SubmenuGroup: React.FC<SubmenuGroupProps> = ({ label, href, children, external = false, menuGroup = "", color, openMenuGroup, setOpenMenuGroup }) => {
   const isOpened = openMenuGroup === menuGroup;
-  const contentRef = useRef<HTMLDivElement>(null);  // Define the type here
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const handleMenuToggle = () => {
+  const handleMenuToggle = (event: React.MouseEvent) => {
+    event.stopPropagation();
     setOpenMenuGroup(prevGroup => (prevGroup === menuGroup ? '' : menuGroup));
   };
 
