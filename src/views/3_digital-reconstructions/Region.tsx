@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Row, Col, Spin } from 'antd';
 import { useRouter } from 'next/router';
 
-import { staticDataBaseUrl } from '@/config';
-import { colorName } from './config';
 import Filters from '@/layouts/Filters';
 import { regionFactsheetPath } from '@/queries/http';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
@@ -19,10 +17,12 @@ import { defaultSelection, volumeSections } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
 
-import { basePath } from '@/config';
+import { basePath, dataPath } from '@/config';
 
 import RegionViewer from './region/region-viewer/RegionViewer';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const RegionView: React.FC = () => {
   const router = useRouter();
@@ -35,6 +35,12 @@ const RegionView: React.FC = () => {
     const query = { volume_section: volumeSection };
     router.push({ query }, undefined, { shallow: true });
   };
+
+  const qsEntries = [{
+    title: 'Volume section',
+    key: 'volume_section',
+    values: volumeSections,
+  }];
 
 
   const validVolumeSection: VolumeSection = volumeSection ?? defaultSelection.digitalReconstruction.region.volume_section as VolumeSection;
@@ -99,6 +105,7 @@ const RegionView: React.FC = () => {
           { id: 'ViewerSection', label: "Viewer" },
           { id: 'factsheetSection', label: "Factsheet" },
         ]}
+        quickSelectorEntries={qsEntries}
       >
 
         <Collapsible id='viewerSection' title={'Viewer'}>
@@ -117,7 +124,9 @@ const RegionView: React.FC = () => {
 
 
           {validVolumeSection && (
-            <HttpData path={regionFactsheetPath(validVolumeSection)}>
+
+            <HttpData path={`${dataPath}3_digital-reconstruction/region/${volumeSection}/factsheet.json`}>
+
               {(data, loading) => (
                 <Spin spinning={loading}>
                   {data && (
@@ -141,12 +150,10 @@ const RegionView: React.FC = () => {
                       <Factsheet facts={data.schafferCollaterals} />
 
                       <div className="text-right mt-2">
-                        <HttpDownloadButton
-                          href={regionFactsheetPath(validVolumeSection)}
-                          download={`dig-rec-region-factsheet_-_${validVolumeSection}.json`}
-                        >
-                          factsheet
-                        </HttpDownloadButton>
+                        <DownloadButton
+                          theme={theme} onClick={() => downloadAsJson(data, `region-factsheet.json`)} >
+                          Region Factsheet
+                        </DownloadButton>
                       </div>
                     </>
                   )}
@@ -160,7 +167,9 @@ const RegionView: React.FC = () => {
   );
 };
 
-const RegionViewWithPreselection = withPreselection(
+
+
+export default withPreselection(
   RegionView,
   {
     key: 'volume_section',
@@ -168,16 +177,4 @@ const RegionViewWithPreselection = withPreselection(
   },
 );
 
-const qsEntries = [{
-  title: 'Volume section',
-  key: 'volume_section',
-  values: volumeSections,
-}];
 
-export default withQuickSelector(
-  RegionViewWithPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
-  },
-);

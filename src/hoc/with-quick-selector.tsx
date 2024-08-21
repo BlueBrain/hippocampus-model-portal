@@ -14,7 +14,7 @@ type Entry = {
 
 type QuickSelectionProps = {
   entries: Array<Entry>;
-  color: Color;
+  color?: Color;
 };
 
 const withQuickSelector = (WrappedComponent, qsProps: QuickSelectionProps) => {

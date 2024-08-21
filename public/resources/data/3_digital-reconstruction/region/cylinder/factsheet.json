@@ -1,0 +1,238 @@
+{
+    "neuronalAnatomy": [
+        {
+            "name": "Initial reconstructions",
+            "description": "Number of input morphological reconstructions used",
+            "units": null,
+            "value": 43
+        },
+        {
+            "name": "Morphological mtypes",
+            "description": "Number of different morphological models",
+            "units": null,
+            "value": 12
+        },
+        {
+            "name": "Morphological type class",
+            "description": "Number of excitatory or inhibitory mtypes",
+            "units": null,
+            "value_map": {
+                "EXC": 1,
+                "INH": 11
+            }
+        },
+        {
+            "name": "Unique Morphologies",
+            "description": "Number of unique morphologies",
+            "units": null,
+            "value": 1584
+        }
+    ],
+    "neuronalPhysiology": [
+        {
+            "name": "Electrical Types",
+            "description": "Number of electrical types used in the model",
+            "units": null,
+            "value": 4
+        },
+        {
+            "name": "Name of e-types",
+            "description": "Name of unique e-types present in the region",
+            "units": null,
+            "value": "cACpyr,cAC,cNAC,bAC"
+        },
+        {
+            "name": "Count of morpho-electrical (me) types",
+            "description": "Number of me types present in the region",
+            "units": null,
+            "value": 16
+        },
+        {
+            "name": "Single cell models used in the region",
+            "description": "Count of single cell models used in the region",
+            "units": null,
+            "value": 25355
+        },
+        {
+            "name": "Electrophysiological traces",
+            "description": "Count of electrophysiological traces used in the model",
+            "units": null,
+            "value": 1456
+        },
+        {
+            "name": "Ion Channel Model",
+            "description": "Count of ion channel models used",
+            "units": null,
+            "value": 12
+        },
+        {
+            "name": "Initial Electrical Models",
+            "description": "Count of single cell models used in the region",
+            "units": null,
+            "value": 39
+        }
+    ],
+    "synapticAnatomy": [
+        {
+            "name": "Intrinsic Connections",
+            "description": "Number of connections formed within the region by intrinsic cells",
+            "units": null,
+            "value": 1236142
+        },
+        {
+            "name": "Intrinsic Synapses",
+            "description": "Number of synapses formed within the region by intrinsic cells",
+            "units": null,
+            "value": 7115120
+        },
+        {
+            "name": "Synapse per connection",
+            "description": "Average number of intrinsic synapses formed by intrinsic connections",
+            "units": null,
+            "value": 5.755908301797043
+        },
+        {
+            "name": "Synapse density",
+            "description": "Density of the synapse in the region",
+            "units": "synapses/µm³",
+            "value": 0.029529789099022524
+        },
+        {
+            "name": "Viable Synaptic Pathway",
+            "description": "Number of viable synaptic pathways",
+            "units": null,
+            "value": 128
+        }
+    ],
+    "synapticPhysiology": [
+        {
+            "name": "Synaptic types",
+            "description": "Number of synaptic types present in the region",
+            "units": null,
+            "value": 5
+        },
+        {
+            "name": "Synaptic classes",
+            "description": "Number of synaptic classes present in the region",
+            "units": null,
+            "value": 22
+        },
+        {
+            "name": "Receptor type",
+            "description": "List of receptor types present in the region",
+            "units": null,
+            "value": "AMPAR,NMDAR,GABAAR"
+        }
+    ],
+    "networkAnatomy": [
+        {
+            "name": "Layers",
+            "description": "Number of layers in the region",
+            "units": null,
+            "value": 4
+        },
+        {
+            "name": "Neurons",
+            "description": "Number of neurons in the region",
+            "units": null,
+            "value": 6213
+        },
+        {
+            "name": "Pyramidal Cells",
+            "description": "Number of Pyramidal Cells",
+            "units": null,
+            "value": 5536
+        },
+        {
+            "name": "Interneurons",
+            "description": "Number of interneurons",
+            "units": null,
+            "value": 677
+        },
+        {
+            "name": "Cell density",
+            "description": "Density of cells in the region",
+            "units": "neurons/mm³",
+            "value": 25785.732309817253
+        },
+        {
+            "name": "Total Volume",
+            "description": "Total Volume of the region",
+            "units": "mm³",
+            "value": 0.2409472
+        },
+        {
+            "name": "Layer Volumes",
+            "description": "Volume of different layers of the region",
+            "units": "mm³",
+            "value_map": {
+                "SR": 0.101490688,
+                "SLM": 0.056221696,
+                "SO": 0.062152704,
+                "SP": 0.021082112
+            }
+        },
+        {
+            "name": "Excitatory-Inhibitory Ratio",
+            "description": "Ratio of excitatory to inhibitory cells",
+            "units": null,
+            "value_map": {
+                "EXC": 0.8910349267664575,
+                "INH": 0.10896507323354257
+            }
+        }
+    ],
+    "schafferCollaterals": [
+        {
+            "name": "Extrinsic Synapses",
+            "description": "Number of synapses formed by intrinsic cells with Schaffer Collateral",
+            "units": null,
+            "value": 124506110
+        },
+        {
+            "name": "Extrinsic to Intrinsic Synapse Ratio",
+            "description": "Percentage of extrinsic to intrinsic synapses",
+            "units": null,
+            "value_map": {
+                "EXT": 0.9459424592825945,
+                "INT": 0.054057540717405546
+            }
+        },
+        {
+            "name": "Mean Synapse on PC",
+            "description": "Mean number of extrinsic synapses formed on pyramidal cells",
+            "units": null,
+            "value": 20936.19815751445
+        },
+        {
+            "name": "Mean Synapse on INT",
+            "description": "Mean number of extrinsic synapses formed on interneurons",
+            "units": null,
+            "value": 12708.001477104874
+        },
+        {
+            "name": "Viable Pathways",
+            "description": "Number of viable pathways in terms of mtype pairs between Schaffer Collateral and CA1",
+            "units": null,
+            "value": 12
+        },
+        {
+            "name": "External Synapse Classes",
+            "description": "Number of synapse classes for connections between Schaffer Collateral and CA1",
+            "units": null,
+            "value": 1
+        },
+        {
+            "name": "External Synapse Groups",
+            "description": "Number of synapse groups for connections between Schaffer Collateral and CA1",
+            "units": null,
+            "value": 3
+        },
+        {
+            "name": "Receptor Types",
+            "description": "Number of receptor types for connections between Schaffer Collateral and CA1",
+            "units": null,
+            "value": "AMPAR,NMDAR"
+        }
+    ]
+}
