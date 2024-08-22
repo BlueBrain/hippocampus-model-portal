@@ -5,6 +5,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { dataPath } from '@/config';
+import { ColumnsType } from 'antd/lib/table';
 
 type DataEntry = {
     "Neuron Type": string;
@@ -37,7 +38,8 @@ function getMtypeDescription(fullMtype: string) {
         : null;
 }
 
-const columns = [
+// Correctly type the columns array
+const columns: ColumnsType<DataEntry> = [
     { title: 'Neuron Type', dataIndex: 'Neuron Type' },
     { title: 'Dose (µM)', dataIndex: 'Dose (µM)' },
     { title: 'Drug', dataIndex: 'Drug' },
@@ -49,15 +51,15 @@ const columns = [
     {
         title: 'Vm_control (mV)',
         children: [
-            { title: 'Mean', dataIndex: ['Vm_control (mV)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['Vm_control (mV)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            { title: 'Mean', dataIndex: ['Vm_control (mV)', 'mean'] as const, render: (mean: number) => <>{mean}</> },
+            { title: 'std', dataIndex: ['Vm_control (mV)', 'std'] as const, render: (std: number | null) => <>{std !== null ? std : '-'}</> },
         ],
     },
     {
         title: 'Vm_ACh (mV)',
         children: [
-            { title: 'Mean', dataIndex: ['Vm_ACh (mV)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['Vm_ACh (mV)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            { title: 'Mean', dataIndex: ['Vm_ACh (mV)', 'mean'] as const, render: (mean: number) => <>{mean}</> },
+            { title: 'std', dataIndex: ['Vm_ACh (mV)', 'std'] as const, render: (std: number | null) => <>{std !== null ? std : '-'}</> },
         ],
     },
     { title: '∆FR (Hz)', dataIndex: '∆FR (Hz)' },

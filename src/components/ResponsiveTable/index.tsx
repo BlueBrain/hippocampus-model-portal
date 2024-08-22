@@ -34,7 +34,7 @@ function calculateTextWidth(text: string, font: string = '16px Arial'): number {
 
 function ResponsiveTable<Type extends object & { isHighlight?: boolean }>({
   columns,
-  data,
+  data = [], // Provide a default value of an empty array
   ...restProps
 }: ResponsiveTableProps<Type>) {
   const [columnWidths, setColumnWidths] = useState<number[]>([]);
@@ -43,9 +43,13 @@ function ResponsiveTable<Type extends object & { isHighlight?: boolean }>({
   useEffect(() => {
     const newColumnWidths = columns.map((column) => {
       const maxTextWidth = data.reduce((max, record) => {
-        const text = String(record[(column as ColumnType<Type>).dataIndex]);
-        const textWidth = calculateTextWidth(text, font);
-        return Math.max(max, textWidth);
+        const dataIndex = (column as ColumnType<Type>).dataIndex;
+        if (dataIndex && record[dataIndex] !== undefined) {
+          const text = String(record[dataIndex]);
+          const textWidth = calculateTextWidth(text, font);
+          return Math.max(max, textWidth);
+        }
+        return max;
       }, 0);
       return Math.min(maxTextWidth + 20, 200); // Add some padding and a max limit
     });
@@ -59,10 +63,11 @@ function ResponsiveTable<Type extends object & { isHighlight?: boolean }>({
     render: (_value, record, index) => {
       const nestedTableData = columns
         .map((column) => {
-          if ((column as ColumnType<Type>).dataIndex) {
+          const dataIndex = (column as ColumnType<Type>).dataIndex;
+          if (dataIndex) {
             return {
               key: column.title,
-              value: record[(column as ColumnType<Type>).dataIndex],
+              value: record[dataIndex],
             };
           }
 

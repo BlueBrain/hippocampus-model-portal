@@ -1,11 +1,9 @@
-// instrumentation.ts
-
 import * as Sentry from '@sentry/nextjs';
 
 export function register() {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
-    tracesampleRate: 1.0,
+    tracesSampleRate: 1.0,  // Corrected the property name here
     // Add other configuration options here
   });
 

@@ -23,11 +23,11 @@ type DataContainerProps = {
 const DataContainer: React.FC<DataContainerProps> = ({
   visible = true,
   children,
-  navItems,
+  navItems = [],
   theme,
   quickSelectorEntries,
 }) => {
-  const navItemsLength = navItems?.length ?? 0; // Safely get the length or default to 0
+  const navItemsLength = navItems.length; // No need for optional chaining now
 
   return (
     <>
