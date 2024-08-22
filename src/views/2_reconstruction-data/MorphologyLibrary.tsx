@@ -206,7 +206,7 @@ const MorphologyLibrary: React.FC = () => {
             </div>
             <div className={`selector__column theme-${theme} w-full`}>
               <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-              <div className="selector__body flex align-middle w-full">
+              <div className="selector__body grid place-items-center h-full">
                 <LayerSelector3D
                   value={quickSelection.layer}
                   onSelect={setLayerQuery}
