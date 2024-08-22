@@ -15,6 +15,9 @@ import { defaultSelection, layers } from '@/constants';
 import models from '@/models.json';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
+import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const MorphologyLibrary: React.FC = () => {
   const router = useRouter();
@@ -229,13 +232,35 @@ const MorphologyLibrary: React.FC = () => {
           title="Neuron Morphology"
           properties={[quickSelection.layer, quickSelection.mtype, quickSelection.etype, quickSelection.instance]}
         >
-          <p></p>
+          <p className='text-lg mb-2'>
+            We provide visualization and morphometrics for the selected morphology.
+          </p>
         </Collapsible>
         <Collapsible
           id="populationSection"
           title="Population"
         >
-          <p></p>
+          <p className='text-lg mb-2'>
+            We provide morphometrics for the entire m-type group selected.
+          </p>
+          <div className="mb-4">
+            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/mtype/${quickSelection.mtype}/factsheet.json`}>
+              {(factsheetData) => (
+                <>
+                  {factsheetData && (
+                    <>
+                      <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
+                      <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${instances}-factsheet.json`)} theme={theme}>
+                          Factsheet
+                        </DownloadButton>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </HttpData>
+          </div>
         </Collapsible>
       </DataContainer>
     </>
