@@ -24,6 +24,7 @@ import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
+import Metadata from '@/components/Metadata';
 
 const getEphysDistribution = (resource) =>
   Array.isArray(resource.distribution)
@@ -201,10 +202,7 @@ const NeuronElectrophysiology = () => {
                       </Button>
                     </div>
                     <div className="mt-3">
-
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
-
-
                     </div>
                   </>
                 )}

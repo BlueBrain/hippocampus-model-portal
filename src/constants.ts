@@ -1,4 +1,5 @@
-import { Layer, NeuriteType, VolumeSection, CellGroup, Theme, GraphTheme } from './types';
+import { Layer, NeuriteType, VolumeSection, AchConcentration, CellGroup, Theme, GraphTheme } from './types';
+import AcetylcholineView from './views/4_validations/Acetylcholine';
 
 export const layers: Layer[] = [
   'SLM',
@@ -38,6 +39,13 @@ export const volumeSections: VolumeSection[] = [
   'region',
   'slice',
   'cylinder',
+];
+
+
+export const achConcentrations: AchConcentration[] = [
+  '0µm',
+  '10µm',
+  '100µm'
 ];
 
 export const cellGroup: CellGroup[] = [
@@ -93,6 +101,11 @@ export const defaultSelection = {
     },
     synapticPathways: {
       volume_section: 'slice',
+      prelayer: 'All',
+      postlayer: 'All',
+    },
+    acetylcholine: {
+      volume_section: '0µm',
       prelayer: 'All',
       postlayer: 'All',
     },
