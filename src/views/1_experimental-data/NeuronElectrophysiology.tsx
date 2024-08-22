@@ -151,58 +151,65 @@ const NeuronElectrophysiology = () => {
             Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
           </AuthorBox>
           <p className="mt-4">We provide visualization and features for the selected recording.</p>
-          <ESData query={fullElectroPhysiologyDataQueryObj}>
-            {(esDocuments) => {
-              if (!esDocuments || esDocuments.length === 0) return null;
-              const document = esDocuments[0]._source;
-              return (
-                <>
-                  <h3 className="mt-3">Patch clamp recording</h3>
-                  <div className="flex justify-between items-center mt-2 mb-2">
-                    <div>
+          <ESData query={fullElectroPhysiologyDataQueryObj} >
+            {esDocuments => (
+              <>
+                {!!esDocuments && !!esDocuments.length && (
+                  <>
+                    {
+                      //JSON.stringify(esDocuments[0]._source)
+                    }
+                    <Metadata nexusDocument={esDocuments[0]._source} />
+                    <h3 className="mt-3">Patch clamp recording</h3>
+                    <div className="row start-xs end-sm mt-2 mb-2">
+                      <div className="col-xs">
+                        <Button
+                          className="mr-1"
+                          type="dashed"
+                          icon={<QuestionCircleOutlined />}
+                          href={`${basePath}/tutorials/nwb/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          size="small"
+                        >
+                          How to read NWB files
+                        </Button>
+                        <NexusFileDownloadButton
+                          filename={getEphysDistribution(esDocuments[0]._source).name}
+                          url={getEphysDistribution(esDocuments[0]._source).contentUrl}
+                          org={hippocampus.org}
+                          project={hippocampus.project}
+                          id="ephysDownloadBtn"
+                        >
+                          trace
+                        </NexusFileDownloadButton>
+                      </div>
+                    </div>
+                    <NexusPlugin
+                      name="neuron-electrophysiology"
+                      resource={esDocuments[0]._source}
+                      nexusClient={nexus}
+                    />
+                    <div className="text-right">
                       <Button
                         className="mr-1"
-                        type="dashed"
-                        icon={<QuestionCircleOutlined />}
-                        href={`${basePath}/tutorials/nwb/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        type="primary"
                         size="small"
+                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
                       >
-                        How to read NWB files
+                        Send to the Build section
                       </Button>
-                      <NexusFileDownloadButton
-                        filename={getEphysDistribution(document).name}
-                        url={getEphysDistribution(document).contentUrl}
-                        org={hippocampus.org}
-                        project={hippocampus.project}
-                        id="ephysDownloadBtn"
-                      >
-                        trace
-                      </NexusFileDownloadButton>
                     </div>
-                  </div>
-                  <NexusPlugin
-                    name="neuron-electrophysiology"
-                    resource={document}
-                    nexusClient={nexus}
-                  />
-                  <div className="text-right">
-                    <Button
-                      className="mr-1"
-                      type="primary"
-                      size="small"
-                      href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
-                    >
-                      Send to the Build section
-                    </Button>
-                  </div>
-                  <div className="mt-3">
-                    <TraceRelatedMorphologies trace={document} />
-                  </div>
-                </>
-              );
-            }}
+                    <div className="mt-3">
+
+                      <TraceRelatedMorphologies trace={esDocuments[0]._source} />
+
+
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </ESData>
           <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
         </Collapsible>

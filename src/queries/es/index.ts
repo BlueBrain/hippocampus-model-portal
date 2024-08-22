@@ -226,7 +226,7 @@ export const morphologyDataQuery = (
   mtype: string,
   instance: string
 ): ESQuery | null => {
-  if(!mtype || !instance) {
+  if (!mtype || !instance) {
     return null;
   }
 
@@ -279,7 +279,7 @@ export const morphologyDataQuery = (
 export const dataByIdQuery = (
   id: string | string[]
 ): ESQuery | null => {
-  if(!id) {
+  if (!id) {
     return null;
   }
 
@@ -320,7 +320,7 @@ export const dataByIdQuery = (
 export const entriesByIdsQuery = (
   ids: string[]
 ): ESQuery | null => {
-  if(!ids) {
+  if (!ids) {
     return null;
   }
 
