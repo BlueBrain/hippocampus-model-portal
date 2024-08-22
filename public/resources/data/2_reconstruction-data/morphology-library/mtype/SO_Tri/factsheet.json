@@ -1,0 +1,317 @@
+{
+    "name": "Anatomy",
+    "values": [
+        {
+            "name": "average diameter, all",
+            "values": [
+                0.4483306105860514,
+                0.06566737206195175
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average diameter, axon",
+            "values": [
+                0.37561723732883795,
+                0.0751949661473672
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average diameter, dendrite",
+            "values": [
+                0.9970473044597066,
+                0.07818584388173001
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average section length, all",
+            "values": [
+                51.023399988986775,
+                3.8563795477856635
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average section length, axon",
+            "values": [
+                50.47689533134785,
+                4.447536321398585
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average section length, dendrite",
+            "values": [
+                57.833846914222725,
+                5.32548039023964
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average segment length, all",
+            "values": [
+                0.494598833680547,
+                0.059093712866728744
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average segment length, axon",
+            "values": [
+                0.479954607217463,
+                0.06016758475728655
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "average segment length, dendrite",
+            "values": [
+                0.6582259667148159,
+                0.03454412843354194
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "maximum branch order, all",
+            "values": [
+                20.5,
+                6.619276003825102
+            ],
+            "unit": ""
+        },
+        {
+            "name": "maximum branch order, axon",
+            "values": [
+                20.5,
+                6.619276003825102
+            ],
+            "unit": ""
+        },
+        {
+            "name": "maximum branch order, dendrite",
+            "values": [
+                8.0,
+                0.0
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of sections, all",
+            "values": [
+                783.0,
+                313.6518475658663
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of sections, axon",
+            "values": [
+                708.5,
+                302.9591709443028
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of sections, dendrite",
+            "values": [
+                74.5,
+                10.692676621563633
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of segments, all",
+            "values": [
+                82699.0,
+                36404.99967088363
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of segments, axon",
+            "values": [
+                76089.5,
+                34994.075531914445
+            ],
+            "unit": ""
+        },
+        {
+            "name": "number of segments, dendrite",
+            "values": [
+                6609.5,
+                1410.9241389691815
+            ],
+            "unit": ""
+        },
+        {
+            "name": "soma diameter",
+            "values": [
+                17.57610004062597,
+                0.9149212130214901
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "soma surface area",
+            "values": [
+                973.0344270284689,
+                101.03831182969694
+            ],
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "soma volume",
+            "values": [
+                2845.3781121744296,
+                388.32300958626945
+            ],
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "total area, all",
+            "values": [
+                58891.32384898432,
+                27451.985011795852
+            ],
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total area, axon",
+            "values": [
+                44662.88045780972,
+                23215.136643801205
+            ],
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total area, dendrite",
+            "values": [
+                14228.443391174598,
+                4265.686034187695
+            ],
+            "unit": "\u00b5m\u00b2"
+        },
+        {
+            "name": "total depth, all",
+            "values": [
+                404.06075395856584,
+                108.56408838688388
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total depth, axon",
+            "values": [
+                400.0165764944894,
+                107.02604514060663
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total depth, dendrite",
+            "values": [
+                228.73767743791853,
+                55.20915948065486
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total height, all",
+            "values": [
+                718.690168108259,
+                106.89630307083895
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total height, axon",
+            "values": [
+                665.7028034755161,
+                121.7392018073802
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total height, dendrite",
+            "values": [
+                658.8037109375,
+                76.39599503013903
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total length, all",
+            "values": [
+                38924.88068113582,
+                13427.804963134568
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total length, axon",
+            "values": [
+                34571.21174232236,
+                12467.612192561059
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total length, dendrite",
+            "values": [
+                4353.668938813465,
+                972.6802839953367
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total volume, all",
+            "values": [
+                10268.080068686682,
+                4751.34088288822
+            ],
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "total volume, axon",
+            "values": [
+                5856.76570551528,
+                3243.9449648383934
+            ],
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "total volume, dendrite",
+            "values": [
+                4411.314363171402,
+                1514.6164559518752
+            ],
+            "unit": "\u00b5m\u00b3"
+        },
+        {
+            "name": "total width, all",
+            "values": [
+                1070.2803955078125,
+                118.62092146094078
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total width, axon",
+            "values": [
+                1066.7299281529017,
+                121.64323388261066
+            ],
+            "unit": "\u00b5m"
+        },
+        {
+            "name": "total width, dendrite",
+            "values": [
+                611.3912909371512,
+                140.9261098792497
+            ],
+            "unit": "\u00b5m"
+        }
+    ]
+}
