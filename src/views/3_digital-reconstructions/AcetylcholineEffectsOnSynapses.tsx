@@ -14,7 +14,7 @@ import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
 import { cellGroup, defaultSelection, achConcentrations } from '@/constants';
 import { Layer, QuickSelectorEntry, AchConcentration } from '@/types';
-import { basePath } from '@/config';
+import { dataPath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
 
@@ -102,7 +102,7 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (ach_concentration && prelayer && postlayer) {
-      const filePath = `${basePath}/resources/data/3_digital-reconstruction/acetylcholine-effects-on-synapses/${ach_concentration}/${prelayer}-${postlayer}/Ach_effect_on_synapse.json`;
+      const filePath = `${dataPath}/3_digital-reconstruction/acetylcholine-effect-on-synapses/${ach_concentration}/${prelayer}-${postlayer}/Ach_effect_on_synapse.json`;
       fetch(filePath)
         .then(response => response.json())
         .then(data => {
