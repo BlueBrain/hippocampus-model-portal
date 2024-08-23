@@ -43,9 +43,9 @@ export const volumeSections: VolumeSection[] = [
 
 
 export const achConcentrations: AchConcentration[] = [
-  '0µm',
-  '10µm',
-  '100µm'
+  '0um',
+  '10um',
+  '100um'
 ];
 
 export const cellGroup: CellGroup[] = [
@@ -105,9 +105,9 @@ export const defaultSelection = {
       postlayer: 'All',
     },
     acetylcholine: {
-      volume_section: '0µm',
-      prelayer: 'All',
-      postlayer: 'All',
+      ach_concentration: '0um',
+      prelayer: 'Excitatory',
+      postlayer: 'Excitatory',
     },
   },
 };

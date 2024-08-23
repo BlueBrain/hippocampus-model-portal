@@ -16,7 +16,7 @@ import QuickSelector from '@/components/QuickSelector';
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
-import { cellGroup, defaultSelection, layers, volumeSections } from '@/constants';
+import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { basePath } from '@/config';
 

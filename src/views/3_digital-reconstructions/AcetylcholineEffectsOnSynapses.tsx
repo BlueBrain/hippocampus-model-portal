@@ -2,27 +2,36 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
+import CustomPlot from './acetylcholine/CustomPlot';
 import List from '@/components/List';
+import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
+import { cellGroup, defaultSelection, achConcentrations } from '@/constants';
+import { Layer, QuickSelectorEntry, AchConcentration } from '@/types';
+import { basePath } from '@/config';
 
-import { cellGroup, achConcentrations, defaultSelection, volumeSections } from '@/constants';
-import { Layer, AchConcentration, QuickSelectorEntry } from '@/types';
-
+import { downloadAsJson } from '@/utils';
 
 const AcetylcholineEffectOnSynapsesView: React.FC = () => {
   const router = useRouter();
-  const { achConcentration, prelayer, postlayer } = router.query as Record<string, string>;
+  const { ach_concentration, prelayer, postlayer } = router.query as Record<string, string>;
 
-  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ achConcentration, prelayer, postlayer });
+  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ ach_concentration, prelayer, postlayer });
+  const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
+  const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
 
   const theme = 3;
+
+  // Filter out 'All' from cellGroup
+  const filteredCellGroup = cellGroup.filter(cell => cell !== 'All');
 
   const setParams = (params: Record<string, string>): void => {
     const query = { ...router.query, ...params };
@@ -34,17 +43,17 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
 
     if (!router.query.prelayer && !router.query.achConcentration && !router.query.postlayer) {
       const query = defaultSelection.digitalReconstruction.acetylcholine;
-      const { achConcentration, prelayer, postlayer } = query;
-      setQuickSelection({ achConcentration, prelayer, postlayer });
+      const { ach_concentration, prelayer, postlayer } = query;
+      setQuickSelection({ ach_concentration, prelayer, postlayer });
       router.replace({ query }, undefined, { shallow: true });
     } else {
-      setQuickSelection({ achConcentration, prelayer, postlayer });
+      setQuickSelection({ ach_concentration, prelayer, postlayer });
     }
   }, [router.query]);
 
-  const setAchConcentrationQuery = (achConcentration: AchConcentration) => {
+  const setAchConcentrationQuery = (ach_concentration: AchConcentration) => {
     setQuickSelection(prev => {
-      const updatedSelection = { ...prev, achConcentration };
+      const updatedSelection = { ...prev, ach_concentration };
       setParams(updatedSelection);
       return updatedSelection;
     });
@@ -68,25 +77,56 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
 
   const qsEntries: QuickSelectorEntry[] = [
     {
-      title: 'Concentration',
-      key: 'achConcentration',
+      title: 'Acetylcholine concentration',
+      key: 'ach_concentration',
       values: achConcentrations,
       setFn: setAchConcentrationQuery,
     },
     {
       title: 'Pre-synaptic cell group',
       key: 'prelayer',
-      values: cellGroup,
+      values: filteredCellGroup,
       setFn: setPreLayerQuery,
     },
     {
       title: 'Post-synaptic cell group',
       key: 'postlayer',
-      values: cellGroup,
+      values: filteredCellGroup,
       setFn: setPostLayerQuery,
     },
   ];
 
+  useEffect(() => {
+    setConnViewerReady(false);
+  }, [ach_concentration, prelayer, postlayer]);
+
+  useEffect(() => {
+    if (ach_concentration && prelayer && postlayer) {
+      const filePath = `${basePath}/resources/data/3_digital-reconstruction/acetylcholine-effects-on-synapses/${ach_concentration}/${prelayer}-${postlayer}/Ach_effect_on_synapse.json`;
+      fetch(filePath)
+        .then(response => response.json())
+        .then(data => {
+          if (data && Array.isArray(data.values)) {
+            const plots = data.values;
+            const availablePlots = {
+              PSPDistribution: plots.some(plot => plot.id === 'psp-amp-distribution'),
+              CVDistribution: plots.some(plot => plot.id === 'cv-distribution'),
+              USYNDistribution: plots.some(plot => plot.id === 'u_syn-distribution'),
+            };
+            setAvailablePlots(availablePlots);
+            console.log(availablePlots);
+            setFactsheetData(plots);
+          } else {
+            console.error('Unexpected data format:', data);
+          }
+        })
+        .catch(error => console.error('Error fetching factsheet:', error));
+    }
+  }, [ach_concentration, prelayer, postlayer]);
+
+  const getPlotDataById = (id: string) => {
+    return factsheetData?.find((plot: any) => plot.id === id);
+  };
 
   return (
     <>
@@ -102,7 +142,7 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We applied the <Link className={`link theme-${theme}`} href={'/reconstruction-data/acetylcholine/'}> dose - effect curves</Link> to predict the effect of acetylcholine on synapse short-term plasticity.
+                    We applied the <Link className={`link theme-${theme}`} href={'/reconstruction-data/acetylcholine-effects-on-synapses/'}> dose - effect curves</Link> to predict the effect of acetylcholine on synapse short-term plasticity.
                   </p>
                 </InfoBox>
               </div>
@@ -116,12 +156,11 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
                 <List
                   block
                   list={achConcentrations}
-                  value={postlayer}
+                  value={ach_concentration}
                   title="concentrations"
                   onSelect={setAchConcentrationQuery}
                   theme={theme} />
               </div>
-
             </div>
             <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
               <div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
@@ -129,18 +168,19 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
                 <div className="selector__body">
                   <List
                     block
-                    list={cellGroup}
+                    list={filteredCellGroup}
                     value={prelayer}
                     title="m-type"
                     onSelect={setPreLayerQuery}
                     theme={theme} />
                 </div>
-              </div><div className={`selector__column theme-${theme} flex-1`}>
-                <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
+              </div>
+              <div className={`selector__column theme-${theme} flex-1`}>
+                <div className={`selector__head theme-${theme}`}>3. Select a post-synaptic cell group</div>
                 <div className="selector__body">
                   <List
                     block
-                    list={cellGroup}
+                    list={filteredCellGroup}
                     value={postlayer}
                     title="m-type"
                     onSelect={setPostLayerQuery}
@@ -154,23 +194,74 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
 
       <DataContainer theme={theme}
         navItems={[
-          { id: 'BoutonDenstiySection', label: 'Bouton density' },
-
+          { id: 'PSPDistributionSection', label: 'PSP amp distribution' },
+          { id: 'CVDistributionSection', label: 'CV distribution' },
+          { id: 'USYNDistribution', label: 'u_syn distribution' },
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <Collapsible title="whatever" id="BoutonDenstiySection" className="mt-4">
+        {availablePlots.PSPDistribution && (
+          <Collapsible title="PSP amp distribution" id="PSPDistributionSection" className="mt-4">
+            <div className="graph">
+              <CustomPlot plotData={getPlotDataById('psp-amp-distribution')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('psp-amp-distribution'), `psp-amp-distribution-${ach_concentration}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{ach_concentration}</span>
+                PSP amp distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.CVDistribution && (
+          <Collapsible title="CV distribution" id="CVDistributionSection" className="mt-4">
+            <div className="graph">
+              <CustomPlot plotData={getPlotDataById('cv-distribution')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('cv-distribution'), `cv-distribution-${ach_concentration}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{ach_concentration}</span>
+                cv distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.USYNDistribution && (
+          <Collapsible title="u_syn distribution" id="USYNistributionSection" className="mt-4">
+            <div className="graph">
+              <CustomPlot plotData={getPlotDataById('u_syn-distribution')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton
+                theme={theme}
+                onClick={() => downloadAsJson(getPlotDataById('u_syn-distribution'), `u_syn-distribution-${ach_concentration}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{ach_concentration}</span>
+                u_syn distribution
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        <Collapsible title="Trace" id="traceSection" className="mt-4">
           <p></p>
         </Collapsible>
 
-        <Collapsible title="whatever" id="BoutonDenstiySection" className="mt-4">
-          <p></p>
-        </Collapsible>
 
-      </DataContainer >
+      </DataContainer>
     </>
   );
 };
-
 
 export default AcetylcholineEffectOnSynapsesView;
