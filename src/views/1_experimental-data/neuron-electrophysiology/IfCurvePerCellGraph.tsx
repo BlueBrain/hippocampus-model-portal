@@ -3,7 +3,7 @@ import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Lege
 import { Scatter } from 'react-chartjs-2';
 import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);

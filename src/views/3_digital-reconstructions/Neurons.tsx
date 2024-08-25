@@ -15,7 +15,7 @@ import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 import EtypeFactsheet from '@/components/EtypeFactsheet';
 import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-import { basePath } from '@/config';
+import { dataPath } from '@/config';
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
@@ -225,7 +225,7 @@ const Neurons: React.FC = () => {
               <Button
                 type="primary"
                 download
-                href={`${basePath}/data/model-morphologies-asc/${morphologyName}.asc`}
+                href={`${dataPath}/model-morphologies-asc/${morphologyName}.asc`}
               >
                 Download morphology
               </Button>

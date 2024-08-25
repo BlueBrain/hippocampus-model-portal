@@ -16,7 +16,7 @@ import { basePath } from '@/config';
 import { defaultSelection, layers } from '@/constants';
 import morphologies from '@/exp-morphology-list.json';
 import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import NeuronTable from './neuronal-morphology/NeuronTable';
 import withPreselection from '@/hoc/with-preselection';

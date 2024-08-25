@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 Chart.register(...registerables);

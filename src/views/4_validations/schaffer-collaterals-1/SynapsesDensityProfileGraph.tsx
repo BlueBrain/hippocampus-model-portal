@@ -13,7 +13,7 @@ import {
 
 import { graphTheme } from '@/constants';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 import { dataPath } from '@/config';
 

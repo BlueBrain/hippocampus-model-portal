@@ -10,14 +10,14 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
 import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
-import { basePath } from '@/config';
+import { dataPath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
 import LaminarGraph from '@/components/LaminarGraph';
@@ -108,8 +108,8 @@ const SynapsesView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const ConnectionsFile = `${basePath}/resources/data/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const distributionPlotFile = `${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const ConnectionsFile = `${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
 
       // Fetch data from Connections.json for laminar distribution
       fetch(ConnectionsFile)

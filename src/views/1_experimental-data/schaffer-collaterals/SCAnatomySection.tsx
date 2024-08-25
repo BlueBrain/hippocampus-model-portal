@@ -6,7 +6,7 @@ import NumberFormat from '@/components/NumberFormat';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type TableEntry = {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FixedType } from 'rc-table/lib/interface';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 import NumberFormat from '@/components/NumberFormat';
 

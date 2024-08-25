@@ -18,8 +18,8 @@ import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 
-import { basePath } from '../../config';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '../../config';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 const SchafferCollateralsView: React.FC = () => {
@@ -100,8 +100,8 @@ const SchafferCollateralsView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const sCFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
+      const distributionPlotFile = `${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const sCFile = `${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
 
       // Fetch data from schaffer-collaterals.json for laminar distribution
       fetch(sCFile)

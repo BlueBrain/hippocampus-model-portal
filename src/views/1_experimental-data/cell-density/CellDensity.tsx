@@ -4,7 +4,7 @@ import { Table } from 'antd';
 import { VolumeSection } from '@/types';
 import { downloadAsJson } from '@/utils';
 import NumberFormat from '@/components/NumberFormat';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 

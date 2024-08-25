@@ -7,7 +7,7 @@ import { basePath, imagesPath, dataPath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 import { Layer } from '../../../types'
 

@@ -14,7 +14,7 @@ import {
 
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 import { dataPath } from '@/config';

@@ -15,7 +15,7 @@ import Collapsible from '@/components/Collapsible';
 import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
 import StickyContainer from '@/components/StickyContainer';
 import AuthorBox from '@/components/AuthorBox/AuthorBox';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';

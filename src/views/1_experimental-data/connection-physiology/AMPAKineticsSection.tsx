@@ -5,7 +5,7 @@ import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 import { mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type TableEntry = {

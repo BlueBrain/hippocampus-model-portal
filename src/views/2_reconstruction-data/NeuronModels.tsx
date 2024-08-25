@@ -10,13 +10,13 @@ import LayerSelector3D from '@/components/LayerSelector3D';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import HttpData from '@/components/HttpData';
-import { basePath } from '@/config';
+import { basePath, dataPath } from '@/config';
 import { defaultSelection, layers } from '@/constants';
 import models from '@/models.json';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
 import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 const MorphologyLibrary: React.FC = () => {
@@ -245,7 +245,7 @@ const MorphologyLibrary: React.FC = () => {
             We provide morphometrics for the entire m-type group selected.
           </p>
           <div className="mb-4">
-            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/mtype/${quickSelection.mtype}/factsheet.json`}>
+            <HttpData path={`${dataPath}/2_reconstruction-data/morphology-library/mtype/${quickSelection.mtype}/factsheet.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (

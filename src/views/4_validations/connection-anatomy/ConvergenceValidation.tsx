@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart, ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 
 Chart.register(ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale);

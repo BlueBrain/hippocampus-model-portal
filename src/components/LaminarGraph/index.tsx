@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { graphTheme } from '@/constants';
-import DownloadButton from '../DownloadButton/DownloadButton';
+import DownloadButton from '../DownloadButton';
 
 Chart.register(...registerables);
 

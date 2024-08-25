@@ -10,7 +10,7 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
 import QuickSelector from '@/components/QuickSelector';
 
@@ -18,7 +18,7 @@ import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
 import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
-import { basePath } from '@/config';
+import { dataPath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
 
@@ -109,7 +109,7 @@ const ConnectionsView: React.FC = () => {
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
-      const filePath = `${basePath}/resources/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const filePath = `${dataPath}/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
       fetch(filePath)
         .then(response => response.json())
         .then(data => {

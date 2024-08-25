@@ -11,7 +11,7 @@ import {
     Title,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 import { dataPath } from '@/config';
 

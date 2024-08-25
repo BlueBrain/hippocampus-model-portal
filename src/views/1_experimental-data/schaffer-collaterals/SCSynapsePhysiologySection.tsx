@@ -10,7 +10,7 @@ import { pathwayDescription } from '@/terms';
 
 import synapsePhysiologyData from './sc-synaptic-physiology.json';
 import doiIndex from './ref-doi.json';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 const Term = termFactory(pathwayDescription);
 

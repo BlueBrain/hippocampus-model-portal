@@ -16,7 +16,7 @@ import models from '@/models.json';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
 import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 const MorphologyLibrary: React.FC = () => {

@@ -8,7 +8,7 @@ import { termFactory } from '@/components/Term';
 import { stypeDescription, mtypeDescription, layerDescription, pathwayDescription, formattedTerm } from '@/terms';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 const termDescription = {
