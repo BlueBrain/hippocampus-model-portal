@@ -11,6 +11,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import { graphTheme } from '@/constants';
 
 ChartJS.register(
     CategoryScale,
@@ -63,16 +64,16 @@ const TraceGraph = ({ individualTrace, meanTrace, title }) => {
                 {
                     label: 'Individual Trace',
                     data: extendedIndividualTrace,
-                    borderColor: 'rgba(75,192,192,1)',
-                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    borderColor: graphTheme.blue,
+                    backgroundColor: graphTheme.blue,
                     borderWidth: 2,
                     pointRadius: 0,
                 },
                 {
                     label: 'Mean Trace',
                     data: extendedMeanTrace,
-                    borderColor: 'rgba(255,99,132,1)',
-                    backgroundColor: 'rgba(255,99,132,0.2)',
+                    borderColor: graphTheme.red,
+                    backgroundColor: graphTheme.red,
                     borderWidth: 2,
                     pointRadius: 0,
                 },
