@@ -18,7 +18,8 @@ export const theme: Theme = {
 
 export const graphTheme: GraphTheme = {
   red: 'rgba(220, 20, 60, .9)',
-  blue: 'rgba(65, 105, 225, .9)',
+  //blue: 'rgba(65, 105, 225, .9)',
+  blue: "#3b4165",
   green: 'rgba(34, 139, 34, .9)',
   purple: 'rgba(128, 0, 128, .9)',
   yellow: 'rgba(255, 165, 0, .9)',
