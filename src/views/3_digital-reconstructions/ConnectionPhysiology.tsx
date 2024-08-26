@@ -174,11 +174,13 @@ const SynapsesView: React.FC = () => {
             <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
               <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
               <div className="selector__body">
+
                 <VolumeSectionSelector3D
                   value={volume_section}
                   onSelect={setVolumeSectionQuery}
                   theme={theme}
                 />
+
               </div>
 
             </div>

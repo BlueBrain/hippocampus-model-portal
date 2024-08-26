@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
+    ChartConfiguration,
     BarController,
     CategoryScale,
     LinearScale,
     BarElement,
     Tooltip,
     Legend,
+    ChartData,
+    ChartDataset,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
@@ -21,11 +24,15 @@ Chart.register(
     Legend
 );
 
-const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
-    const chartRef = useRef(null);
-    const [chart, setChart] = useState(null);
+interface LaminarDistributionOfSynapsesGraphProps {
+    theme: number;
+}
 
-    const data = {
+const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapsesGraphProps> = ({ theme }) => {
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
+
+    const data: ChartData<'bar'> = {
         labels: ['SLM_PPA', 'SR_SCA', 'SP_AA', 'SP_BS', 'SP_CCKBC', 'SP_Ivy', 'SP_PC', 'SP_PVBC', 'SO_BP', 'SO_BS', 'SO_OLM', 'SO_Tri'],
         datasets: [
             {
@@ -86,25 +93,26 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
     };
 
     const createChart = () => {
-        const ctx = chartRef.current.getContext('2d');
+        const ctx = chartRef.current?.getContext('2d');
+        if (!ctx) return;
 
         const hachurePlugin = {
             id: 'hachurePlugin',
-            afterDatasetsDraw(chart, args, options) {
+            afterDatasetsDraw(chart: Chart) {
                 const { ctx, data } = chart;
 
                 ctx.save();
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = 'white';
 
-                data.datasets.forEach((dataset, datasetIndex) => {
+                data.datasets.forEach((dataset: ChartDataset<'bar'>, datasetIndex) => {
                     if (dataset.stack === 'Exp') {
                         const meta = chart.getDatasetMeta(datasetIndex);
                         meta.data.forEach((bar, index) => {
-                            if (dataset.data[index] > 0) {
+                            const dataPoint = dataset.data[index];
+                            if (dataPoint != null && typeof dataPoint === 'number' && dataPoint > 0) {
                                 const { x, y, width, height } = bar.getProps(['x', 'y', 'width', 'height']);
 
-                                // Clip to individual bar
                                 ctx.save();
                                 ctx.beginPath();
                                 ctx.rect(x - width / 2, y, width, height);
@@ -134,7 +142,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
             }
         };
 
-        const config = {
+        const config: ChartConfiguration<'bar'> = {
             type: 'bar',
             data: data,
             options: {
@@ -151,13 +159,13 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                         display: false,
                         position: 'right',
                         labels: {
-                            filter: function (item, chart) {
+                            filter: function (item) {
                                 return !item.text.includes('(');
                             },
                             generateLabels: function (chart) {
                                 const original = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-                                const uniqueLabels = [];
-                                const modelExp = [];
+                                const uniqueLabels: any[] = [];
+                                const modelExp: any[] = [];
 
                                 original.forEach(label => {
                                     if (label.text.includes('(Model)')) {
@@ -224,7 +232,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Laminar-Distribution-Of-Synapses-Data.json`)}>
-                    Laminar Distribution Of Synapses Data
+                    Laminar Distribution Of Synapse Data
                 </DownloadButton>
             </div>
         </div>

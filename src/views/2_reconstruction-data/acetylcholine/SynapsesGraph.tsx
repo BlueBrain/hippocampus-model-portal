@@ -135,13 +135,6 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                         ]
                     },
                     options: {
-                        plugins: {
-                            title: {
-                                display: false,
-                                text: '',
-                                color: '#3B4165'
-                            }
-                        },
                         scales: {
                             x: {
                                 type: 'logarithmic',
@@ -154,7 +147,9 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     color: '#050A30'
                                 },
                                 grid: {
-                                    borderWidth: .1
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    // drawBorder: true,
+                                    drawOnChartArea: true,
                                 },
                                 ticks: {
                                     callback: function (value) {
@@ -179,16 +174,18 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                     color: '#050A30'
                                 },
                                 grid: {
-                                    borderWidth: .1
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    // drawBorder: true,
+                                    drawOnChartArea: true,
                                 },
                                 ticks: {
                                     stepSize: 0.2,
                                     color: '#050A30'
                                 }
                             }
-                        },
-                        backgroundColor: '#313354',
+                        }
                     }
+
                 });
             }
         }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-
 import Filters from '@/layouts/Filters';
 import StickyContainer from '@/components/StickyContainer';
 import Title from '@/components/Title';
@@ -12,8 +11,6 @@ import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
 import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
-import QuickSelector from '@/components/QuickSelector';
-
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
 import { cellGroup, defaultSelection, volumeSections } from '@/constants';
@@ -22,90 +19,100 @@ import { dataPath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
 
-
 const ConnectionsView: React.FC = () => {
   const router = useRouter();
   const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
 
-  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ volume_section, prelayer, postlayer });
-  const [connViewerReady, setConnViewerReady] = useState<boolean>(false);
+  const [quickSelection, setQuickSelection] = useState<Record<string, VolumeSection | Layer>>({
+    volume_section: '' as VolumeSection,
+    prelayer: '' as Layer,
+    postlayer: '' as Layer
+  });
   const [factsheetData, setFactsheetData] = useState<any>(null);
-  const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
 
   const theme = 3;
 
-  const setParams = (params: Record<string, string>): void => {
-    const query = { ...router.query, ...params };
-    router.push({ query }, undefined, { shallow: true });
-  };
-
   useEffect(() => {
     if (!router.isReady) return;
 
-    if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
-      const query = defaultSelection.digitalReconstruction.synapticPathways;
-      const { volume_section, prelayer, postlayer } = query;
-      setQuickSelection({ volume_section, prelayer, postlayer });
-      router.replace({ query }, undefined, { shallow: true });
+    if (!volume_section && !prelayer && !postlayer) {
+      const defaultParams = defaultSelection.digitalReconstruction.synapticPathways;
+      setQuickSelection({
+        volume_section: defaultParams.volume_section as VolumeSection,
+        prelayer: defaultParams.prelayer as Layer,
+        postlayer: defaultParams.postlayer as Layer
+      });
+      router.replace({ query: defaultParams }, undefined, { shallow: true });
     } else {
-      setQuickSelection({ volume_section, prelayer, postlayer });
+      setQuickSelection({
+        volume_section: volume_section as VolumeSection,
+        prelayer: prelayer as Layer,
+        postlayer: postlayer as Layer
+      });
     }
-  }, [router.query]);
-
-  const setVolumeSectionQuery = (volume_section: VolumeSection) => {
-    setQuickSelection(prev => {
-      const updatedSelection = { ...prev, volume_section };
-      setParams(updatedSelection);
-      setSelectedPlot(null);
-      return updatedSelection;
-    });
-  };
-
-  const setPreLayerQuery = (prelayer: Layer) => {
-    setQuickSelection(prev => {
-      const updatedSelection = { ...prev, prelayer };
-      setParams(updatedSelection);
-      setSelectedPlot(null);
-      return updatedSelection;
-    });
-  };
-
-  const setPostLayerQuery = (postlayer: Layer) => {
-    setQuickSelection(prev => {
-      const updatedSelection = { ...prev, postlayer };
-      setParams(updatedSelection);
-      setSelectedPlot(null);
-      return updatedSelection;
-    });
-  };
-
-
-
-  const qsEntries: QuickSelectorEntry[] = [
-    {
-      title: 'Volume section',
-      key: 'volume_section',
-      values: volumeSections,
-      setFn: setVolumeSectionQuery,
-    },
-    {
-      title: 'Pre-synaptic cell group',
-      key: 'prelayer',
-      values: cellGroup,
-      setFn: setPreLayerQuery,
-    },
-    {
-      title: 'Post-synaptic cell group',
-      key: 'postlayer',
-      values: cellGroup,
-      setFn: setPostLayerQuery,
-    },
-  ];
+  }, [router.isReady, volume_section, prelayer, postlayer]);
 
   useEffect(() => {
-    setConnViewerReady(false);
-  }, [prelayer, postlayer]);
+    if (quickSelection.volume_section && quickSelection.prelayer && quickSelection.postlayer) {
+      fetchFactsheetData();
+    }
+  }, [quickSelection]);
+
+  const fetchFactsheetData = async () => {
+    try {
+      const { volume_section, prelayer, postlayer } = quickSelection;
+      const filePath = `${basePath}/resources/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const response = await fetch(filePath);
+      const data = await response.json();
+
+      if (data && Array.isArray(data.values)) {
+        setFactsheetData(data.values);
+        updateAvailablePlots(data.values);
+      } else {
+        console.error('Unexpected data format:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching factsheet:', error);
+    }
+  };
+
+  const updateAvailablePlots = (plots: any[]) => {
+    const plotIds = [
+      'bouton-density',
+      'sample-convergence-by-connection',
+      'sample-divergence-by-connection',
+      'sample-divergence-by-synapse',
+      'laminar-distribution-synapses',
+      'connection-probability-vs-inter-somatic-distance',
+    ];
+
+    const availablePlots = plotIds.reduce((acc, id) => {
+      acc[id] = plots.some(plot => plot.id === id);
+      return acc;
+    }, {} as Record<string, boolean>);
+
+    setAvailablePlots(availablePlots);
+  };
+
+  const setParams = (params: Partial<Record<string, VolumeSection | Layer>>) => {
+    const newSelection = { ...quickSelection, ...params };
+    //setQuickSelection(newSelection);
+    const query = { ...router.query, ...newSelection };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
+  const updateQuickSelection = (key: string, value: VolumeSection | Layer) => {
+    setParams({ [key]: value });
+  };
+
+  const qsEntries: QuickSelectorEntry[] = [
+    { title: 'Volume section', key: 'volume_section', values: volumeSections, setFn: (value) => updateQuickSelection('volume_section', value as VolumeSection) },
+    { title: 'Pre-synaptic cell group', key: 'prelayer', values: cellGroup, setFn: (value) => updateQuickSelection('prelayer', value as Layer) },
+    { title: 'Post-synaptic cell group', key: 'postlayer', values: cellGroup, setFn: (value) => updateQuickSelection('postlayer', value as Layer) },
+  ];
+
+  const getPlotDataById = (id: string) => factsheetData?.find((plot: any) => plot.id === id);
 
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
@@ -135,14 +142,28 @@ const ConnectionsView: React.FC = () => {
     }
   }, [volume_section, prelayer, postlayer]);
 
-  const getPlotDataById = (id: string) => {
-    return factsheetData?.find((plot: any) => plot.id === id);
+    const plotData = getPlotDataById(id);
+    return (
+      <Collapsible title={title} id={id} className="mt-4">
+        <div className="graph">
+          <DistibutionPlot plotData={plotData} />
+        </div>
+        <div className="mt-4">
+          <DownloadButton
+            theme={theme}
+            onClick={() => downloadAsJson(plotData, `${id}-${quickSelection.volume_section}-${quickSelection.prelayer}-${quickSelection.postlayer}.json`)}>
+            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.volume_section}</span>
+            {title}
+            <span className='!mr-0 collapsible-property small '>{quickSelection.prelayer}</span> - <span className='!ml-0 collapsible-property small '>{quickSelection.postlayer}</span>
+          </DownloadButton>
+        </div>
+      </Collapsible>
+    );
   };
 
   return (
     <>
-
-      <Filters theme={theme} hasData={!!prelayer && !!postlayer}>
+      <Filters theme={theme} hasData={!!quickSelection.prelayer && !!quickSelection.postlayer}>
         <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
           <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
@@ -153,8 +174,8 @@ const ConnectionsView: React.FC = () => {
               />
               <div role="information">
                 <InfoBox>
-                  <p >
-                    We combined <Link href={"/experimental-data/connection-anatomy/"} className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href={"/reconstruction-data/connections/"} className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.
+                  <p>
+                    We combined <Link href="/experimental-data/connection-anatomy/" className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href="/reconstruction-data/connections/" className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.
                   </p>
                 </InfoBox>
               </div>
@@ -165,13 +186,14 @@ const ConnectionsView: React.FC = () => {
             <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
               <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
               <div className="selector__body">
+
                 <VolumeSectionSelector3D
-                  value={volume_section}
-                  onSelect={setVolumeSectionQuery}
+                  value={quickSelection.volume_section}
+                  onSelect={(value) => updateQuickSelection('volume_section', value)}
                   theme={theme}
                 />
-              </div>
 
+              </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
               <div className={`selector__column theme-${theme} flex-1`} style={{ maxWidth: "auto" }}>
@@ -180,21 +202,24 @@ const ConnectionsView: React.FC = () => {
                   <List
                     block
                     list={cellGroup}
-                    value={prelayer}
+                    value={quickSelection.prelayer}
                     title="m-type"
-                    onSelect={setPreLayerQuery}
-                    theme={theme} />
+                    onSelect={(value) => updateQuickSelection('prelayer', value as Layer)}
+                    theme={theme}
+                  />
                 </div>
-              </div><div className={`selector__column theme-${theme} flex-1`}>
-                <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
+              </div>
+              <div className={`selector__column theme-${theme} flex-1`}>
+                <div className={`selector__head theme-${theme}`}>3. Select a post-synaptic cell group</div>
                 <div className="selector__body">
                   <List
                     block
                     list={cellGroup}
-                    value={postlayer}
+                    value={quickSelection.postlayer}
                     title="m-type"
-                    onSelect={setPostLayerQuery}
-                    theme={theme} />
+                    onSelect={(value) => updateQuickSelection('postlayer', value as Layer)}
+                    theme={theme}
+                  />
                 </div>
               </div>
             </div>
@@ -203,141 +228,24 @@ const ConnectionsView: React.FC = () => {
       </Filters>
 
       <DataContainer
-        visible={!!volume_section && !!prelayer && !!postlayer}
+        visible={!!quickSelection.volume_section && !!quickSelection.prelayer && !!quickSelection.postlayer}
         navItems={[
-          { id: 'boutonDensitySection', label: 'Bouton density of the presynaptic cells' },
-          { id: 'nbSynapsesPerConnectionSection', label: 'Number of synapses per connection' },
-          { id: 'diversionConnectionsDistributionSection', label: 'Divergence (connections) distribution + mean and std' },
-          { id: 'diversionSynapsesDistributionSection', label: 'Divergence (synapses) distribution + mean and std' },
-          { id: 'LaminarDistributionSynapsesSection', label: 'Laminar distribution of synapses' },
-          { id: 'convergenceConnectionsDistribution', label: 'Convergence (connections) distribution + mean and std' },
-          { id: 'convergenceSynapsesDistribution', label: 'Convergence (synapses) distribution + mean and std' },
-          { id: 'connectionProbabilityDistributionSection', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
+          { id: 'bouton-density', label: 'Bouton density of the presynaptic cells' },
+          { id: 'sample-convergence-by-connection', label: 'Number of synapses per connection' },
+          { id: 'sample-divergence-by-connection', label: 'Divergence (connections) distribution + mean and std' },
+          { id: 'sample-divergence-by-synapse', label: 'Divergence (synapses) distribution + mean and std' },
+          { id: 'laminar-distribution-synapses', label: 'Laminar distribution of synapses' },
+          { id: 'connection-probability-vs-inter-somatic-distance', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
         ]}
         quickSelectorEntries={qsEntries}
       >
-        {availablePlots.boutonDensitySection && (
-          <Collapsible title="Bouton density of the presynaptic cells" id="boutonDensitySection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('bouton-density'), `Bouton-Density-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                Bouton Density
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.nbSynapsesPerConnectionSection && (
-          <Collapsible title="Number of synapses per connection" id="nbSynapsesPerConnectionSection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                sample convergence by connection
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.diversionConnectionsDistributionSection && (
-          <Collapsible title="Divergence (connections) distribution + mean and std" id="diversionConnectionsDistributionSection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-connection'), `sample-divergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                sample divergence by connection
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.diversionSynapsesDistributionSection && (
-          <Collapsible title="Divergence (synapses) distribution + mean and std" id="diversionSynapsesDistributionSection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-synapse'), `sample-divergence-by-synapse-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                sample divergence by synapse
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.LaminarDistributionSynapsesSection && (
-          <Collapsible title="Laminar distribution of synapses" id="LaminarDistributionSynapsesSection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('laminar-distribution-synapses')} />
-            </div>
-
-          </Collapsible>
-        )}
-        {availablePlots.convergenceConnectionsDistribution && (
-          <Collapsible title="Convergence (connections) distribution + mean and std" id="convergenceConnectionsDistribution" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                sample convergence by connection
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.convergenceSynapsesDistribution && (
-          <Collapsible title="Convergence (synapses) distribution + mean and std" id="convergenceSynapsesDistribution" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-synapse'), `sample-convergence-by-synapse-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                sample convergence by synapse
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-        {availablePlots.connectionProbabilityDistributionSection && (
-          <Collapsible title="Connection probability distribution vs inter-somatic distance + mean and std" id="connectionProbabilityDistributionSection" className="mt-4">
-            <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('connection-probability-vs-inter-somatic-distance')} />
-            </div>
-            <div className="mt-4">
-              <DownloadButton
-                theme={theme}
-                onClick={() => downloadAsJson(getPlotDataById('connection-probability-vs-inter-somatic-distance'), `connection-probability-vs-inter-somatic-distance-${volume_section}-${prelayer}-${postlayer}.json`)}>
-                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                conn. probability v inter somatic distance
-                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-              </DownloadButton>
-            </div>
-          </Collapsible>
-        )}
-      </DataContainer >
+        {renderPlot('bouton-density', 'Bouton density of the presynaptic cells')}
+        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection')}
+        {renderPlot('sample-divergence-by-connection', 'Divergence (connections) distribution + mean and std')}
+        {renderPlot('sample-divergence-by-synapse', 'Divergence (synapses) distribution + mean and std')}
+        {renderPlot('laminar-distribution-synapses', 'Laminar distribution of synapses')}
+        {renderPlot('connection-probability-vs-inter-somatic-distance', 'Connection probability distribution vs inter-somatic distance + mean and std')}
+      </DataContainer>
     </>
   );
 };

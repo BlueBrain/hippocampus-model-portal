@@ -9,6 +9,8 @@ import {
     Tooltip,
     Title,
     Legend,
+    ChartData,
+    ChartOptions,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
@@ -30,16 +32,24 @@ export type BoutonDensityValidationProps = {
     theme?: number;
 };
 
-const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ theme }) => {
+interface BoutonDensityData {
+    value_map: {
+        mtype: string[];
+        model_mean: number[];
+        model_std: number[];
+        exp_mean: number[];
+    };
+}
 
+const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<BoutonDensityData | null>(null);
 
     useEffect(() => {
         fetch(dataPath + '/4_validations/connection-anatomy/bouton-density-validation.json')
             .then((response) => response.json())
-            .then((data) => setData(data));
+            .then((fetchedData: BoutonDensityData) => setData(fetchedData));
     }, []);
 
     const createChart = () => {
@@ -49,7 +59,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 // Define the error bar plugin
                 const errorBarPlugin = {
                     id: 'errorBar',
-                    afterDatasetsDraw(chart: any, args: any, options: any) {
+                    afterDatasetsDraw(chart: Chart, args: any, options: any) {
                         const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
 
                         ctx.save();
@@ -87,84 +97,86 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                     }
                 };
 
-                // Create the chart with the plugin included
+                const chartData: ChartData<'scatter'> = {
+                    labels: data.value_map.mtype,
+                    datasets: [
+                        {
+                            label: 'Model',
+                            data: data.value_map.mtype.map((_, index) => ({
+                                x: index,
+                                y: data.value_map.model_mean[index],
+                                yMin: data.value_map.model_mean[index] - data.value_map.model_std[index],
+                                yMax: data.value_map.model_mean[index] + data.value_map.model_std[index],
+                            })),
+                            backgroundColor: 'black',
+                            borderColor: 'black',
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            showLine: false,
+                        },
+                        {
+                            label: 'Experiment',
+                            data: data.value_map.mtype.map((_, index) => ({
+                                x: index,
+                                y: data.value_map.exp_mean[index],
+                            })),
+                            backgroundColor: graphTheme.red,
+                            borderColor: graphTheme.red,
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            showLine: false,
+                        },
+                    ],
+                };
+
+                const chartOptions: ChartOptions<'scatter'> = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'category',
+                            title: {
+                                display: true,
+                                text: 'mtype',
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'bouton density (um⁻¹)',
+                            },
+                            min: 0,
+                            max: 0.5,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                boxWidth: 6,
+                                boxHeight: 6,
+                                padding: 20,
+                                font: {
+                                    size: 11,
+                                    weight: 'normal',
+                                },
+                            },
+                            onClick: null as any, // Disable legend item click
+                        },
+                        title: {
+                            display: false, // Remove the title
+                        },
+                    },
+                };
+
                 const newChart = new Chart(ctx, {
                     type: 'scatter',
-                    data: {
-                        labels: Object.values(data.value_map.mtype),
-                        datasets: [
-                            {
-                                label: 'Model',
-                                data: Object.values(data.value_map.mtype).map((_, index) => ({
-                                    x: index,
-                                    y: data.value_map.model_mean[index],
-                                    yMin: data.value_map.model_mean[index] - data.value_map.model_std[index],
-                                    yMax: data.value_map.model_mean[index] + data.value_map.model_std[index],
-                                })),
-                                backgroundColor: 'black',
-                                borderColor: 'black',
-                                pointStyle: 'circle',
-                                pointRadius: 5,
-                                showLine: false,
-                            },
-                            {
-                                label: 'Experiment',
-                                data: Object.values(data.value_map.mtype).map((_, index) => ({
-                                    x: index,
-                                    y: data.value_map.exp_mean[index],
-                                })),
-                                backgroundColor: graphTheme.red,
-                                borderColor: graphTheme.red,
-                                pointStyle: 'circle',
-                                pointRadius: 5,
-                                showLine: false,
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                type: 'category',
-                                title: {
-                                    display: true,
-                                    text: 'mtype',
-                                },
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'bouton density (um⁻¹)',
-                                },
-                                min: 0,
-                                max: 0.5,
-                            },
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: {
-                                    usePointStyle: true,
-                                    pointStyle: 'circle',
-                                    boxWidth: 6,
-                                    boxHeight: 6,
-                                    padding: 20,
-                                    font: {
-                                        size: 11,
-                                        weight: 'normal',
-                                    },
-                                },
-                                onClick: null, // Disable legend item click
-                            },
-                            title: {
-                                display: false, // Remove the title
-                            },
-                            errorBar: {}, // Enable the error bar plugin
-                        },
-                    },
-                    plugins: [errorBarPlugin], // Add the custom plugin here
+                    data: chartData,
+                    options: chartOptions,
+                    plugins: [errorBarPlugin],
                 });
 
                 setChart(newChart);
@@ -173,7 +185,9 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
     };
 
     useEffect(() => {
-        createChart();
+        if (data) {
+            createChart();
+        }
 
         const handleResize = () => {
             if (chart) {
@@ -190,6 +204,10 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
             }
         };
     }, [data]);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>

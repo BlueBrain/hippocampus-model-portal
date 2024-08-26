@@ -49,6 +49,7 @@ const MorphologyLibrary: React.FC = () => {
     }
   }, [router.isReady, query]);
 
+  // Function to set URL parameters
   const setParams = (params: Record<string, string>): void => {
     const newQuery = { ...router.query, ...params };
     router.push({ query: newQuery }, undefined, { shallow: true });
@@ -267,6 +268,7 @@ const MorphologyLibrary: React.FC = () => {
   );
 };
 
+// Export component with preselection HOC
 export default withPreselection(
   MorphologyLibrary,
   {

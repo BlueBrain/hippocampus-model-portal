@@ -121,7 +121,7 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme })
                 <Scatter data={chartData} options={options} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}>
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-data.json`)}>
                     If curve per cell data
                 </DownloadButton>
             </div>

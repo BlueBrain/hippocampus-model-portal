@@ -5,6 +5,7 @@ import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
+import { ColumnsType } from 'antd/lib/table';
 
 type DataEntry = {
     "Neuron Type": string;
@@ -37,7 +38,8 @@ function getMtypeDescription(fullMtype: string) {
         : null;
 }
 
-const columns = [
+// Explicitly typing the columns array
+const columns: ColumnsType<DataEntry> = [
     { title: 'Neuron Type', dataIndex: 'Neuron Type' },
     { title: 'Dose (µM)', dataIndex: 'Dose (µM)' },
     { title: 'Drug', dataIndex: 'Drug' },
@@ -49,15 +51,15 @@ const columns = [
     {
         title: 'FR control (Hz)',
         children: [
-            { title: 'Mean', dataIndex: ['FR control (Hz)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['FR control (Hz)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            { title: 'Mean', dataIndex: ['FR control (Hz)', 'mean'] as const, render: (mean: number) => <>{mean}</> },
+            { title: 'std', dataIndex: ['FR control (Hz)', 'std'] as const, render: (std: number | null) => <>{std !== null ? std : '-'}</> },
         ],
     },
     {
         title: 'FR ACh (Hz)',
         children: [
-            { title: 'Mean', dataIndex: ['FR ACh (Hz)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['FR ACh (Hz)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            { title: 'Mean', dataIndex: ['FR ACh (Hz)', 'mean'] as const, render: (mean: number) => <>{mean}</> },
+            { title: 'std', dataIndex: ['FR ACh (Hz)', 'std'] as const, render: (std: number | null) => <>{std !== null ? std : '-'}</> },
         ],
     },
     { title: '∆FR (Hz)', dataIndex: '∆FR (Hz)' },
@@ -91,7 +93,7 @@ const FiringRate: React.FC<FiringRateProps> = ({ theme }) => {
         <>
             <ResponsiveTable<DataEntry>
                 className="mb-2"
-                columns={columns}
+                columns={columns as any}  // Temporarily cast to any if type issue persists
                 data={data}
                 rowKey={(record) => record.Reference}
             />

@@ -26,21 +26,33 @@ import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
 import Metadata from '@/components/Metadata';
 
-const getEphysDistribution = (resource) =>
-  Array.isArray(resource.distribution)
-    ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
-    : resource.distribution;
+type Distribution = {
+  name: string;
+  contentUrl: string;
+};
 
-const getEtype = () => Object.keys(traces).sort();
-const getInstance = (etype) => (etype ? traces[etype].sort() : []);
+type Resource = {
+  distribution: Distribution | Distribution[];
+};
 
-const NeuronElectrophysiology = () => {
+const getEphysDistribution = (resource: Resource): Distribution => {
+  if (Array.isArray(resource.distribution)) {
+    return resource.distribution.find((d) => d.name.match(/\.nwb$/i)) || resource.distribution[0];
+  }
+  return resource.distribution;
+};
+
+const getEtype = (): string[] => Object.keys(traces).sort();
+const getInstance = (etype: string | undefined): string[] =>
+  etype && traces[etype] ? traces[etype].sort() : [];
+
+const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
   const { query } = router;
 
-  const setQuery = (newQuery) => {
+  const setQuery = (newQuery: Record<string, string | undefined>) => {
     router.push(
       { query: { ...query, ...newQuery }, pathname: router.pathname },
       undefined,
@@ -48,22 +60,22 @@ const NeuronElectrophysiology = () => {
     );
   };
 
-  const setEtype = (etype) => setQuery({ etype, etype_instance: undefined });
-  const setInstance = (instance) => setQuery({ etype_instance: instance });
+  const setEtype = (etype: string) => setQuery({ etype, etype_instance: undefined });
+  const setInstance = (instance: string) => setQuery({ etype_instance: instance });
 
-  const currentEtype = query.etype;
-  const currentInstance = query.etype_instance;
+  const currentEtype = typeof query.etype === 'string' ? query.etype : undefined;
+  const currentInstance = typeof query.etype_instance === 'string' ? query.etype_instance : undefined;
 
   const etypes = getEtype();
   const instances = getInstance(currentEtype);
 
   const fullElectroPhysiologyDataQueryObj = useMemo(
-    () => electroPhysiologyDataQuery(currentEtype, currentInstance),
+    () => currentEtype && currentInstance ? electroPhysiologyDataQuery(currentEtype, currentInstance) : null,
     [currentEtype, currentInstance]
   );
 
   const etypeTracesDataQueryObj = useMemo(
-    () => etypeTracesDataQuery(currentEtype),
+    () => currentEtype ? etypeTracesDataQuery(currentEtype) : null,
     [currentEtype]
   );
 
@@ -217,7 +229,9 @@ const NeuronElectrophysiology = () => {
           title="Population"
         >
           <p className="mb-4">We provide features for the entire e-type group selected.</p>
-          <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
+          {currentEtype && (
+            <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
+          )}
         </Collapsible>
       </DataContainer>
     </>

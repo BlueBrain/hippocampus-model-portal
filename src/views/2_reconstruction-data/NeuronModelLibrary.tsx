@@ -149,7 +149,6 @@ const MorphologyLibrary: React.FC = () => {
       setFn: setInstanceQuery,
     },
   ];
-
   return (
     <>
       <Filters theme={theme} >

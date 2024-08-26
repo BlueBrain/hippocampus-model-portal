@@ -121,7 +121,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             data: dataPoints,
                             backgroundColor: 'black',
                             pointStyle: 'circle',
-                            radius: 5,
+                            //radius: 5,
                             borderColor: 'black',
                             borderWidth: 1,
                         }]

@@ -1,60 +1,79 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
+    ChartConfiguration,
     LineController,
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    PointElement,
     LineElement,
-    Tooltip,
+    PointElement,
+    LinearScale,
     Title,
+    Legend,
+    Tooltip,
+    ScatterDataPoint
 } from 'chart.js';
-
-import { graphTheme } from '@/constants';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 
 import { dataPath } from '@/config';
+import { graphTheme } from '@/constants';
 
 Chart.register(
     LineController,
-    ScatterController,
-    CategoryScale,
-    LinearScale,
-    PointElement,
     LineElement,
-    Tooltip,
-    Title
+    PointElement,
+    LinearScale,
+    Title,
+    Legend,
+    Tooltip
 );
 
-export type SynapsesDensityProfileGraphProps = {
-    theme?: number;
-};
+interface SynapsesDensityData {
+    name: string;
+    description: string;
+    units: string;
+    value_map: {
+        distance: { [key: string]: number };
+        model_mean: { [key: string]: number };
+        model_std: { [key: string]: number };
+        exp_mean: { [key: string]: number };
+        exp_std: { [key: string]: number };
+    };
+}
+
+interface SynapsesDensityProfileGraphProps {
+    theme: number;
+}
+
+interface ExtendedScatterDataPoint extends ScatterDataPoint {
+    yMin: number;
+    yMax: number;
+}
 
 const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = ({ theme }) => {
-    const chartRef = useRef(null);
-    const chartInstanceRef = useRef(null);
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null);
+    const [data, setData] = useState<SynapsesDensityData | null>(null);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-    const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch(dataPath + '/4_validations/schaffer-collaterals-1/anatomy/synapse-density-profile.json')
-            .then((response) => response.json())
-            .then((data) => setData(data));
+        fetch(dataPath + '/4_validations/schaffer-collaterals-1/synapses-density-profile.json')
+            .then(response => response.json())
+            .then(jsonData => setData(jsonData))
+            .catch(error => console.error('Error fetching synapses density profile data:', error));
     }, []);
 
     useEffect(() => {
-        const updateWindowSize = () => {
+        const handleResize = () => {
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
         };
 
-        updateWindowSize();
-        window.addEventListener('resize', updateWindowSize);
-        return () => window.removeEventListener('resize', updateWindowSize);
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     useEffect(() => {
@@ -65,84 +84,123 @@ const SynapsesDensityProfileGraph: React.FC<SynapsesDensityProfileGraphProps> = 
                 chartInstanceRef.current.destroy();
             }
 
-            const radialAxis = Object.values(data.value_map.radial_axis).map(Number);
-            const modelData = Object.entries(data.value_map.model_data).map(([key, value]) => ({
-                y: radialAxis[Number(key)],
-                x: Number(value)
-            }));
-            const expData = Object.entries(data.value_map.exp_data).map(([key, value]) => ({
-                y: radialAxis[Number(key)],
-                x: Number(value)
-            }));
+            if (ctx) {
+                const modelDataset = Object.keys(data.value_map.distance).map(key => ({
+                    x: data.value_map.distance[key],
+                    y: data.value_map.model_mean[key],
+                    yMin: data.value_map.model_mean[key] - data.value_map.model_std[key],
+                    yMax: data.value_map.model_mean[key] + data.value_map.model_std[key],
+                }));
 
-            chartInstanceRef.current = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [
-                        {
-                            label: 'Model Data',
-                            data: modelData,
-                            borderColor: 'black',
-                            backgroundColor: 'black',
-                            showLine: true,
-                            pointRadius: 0,
-                        },
-                        {
-                            label: 'Experimental Data',
-                            data: expData,
-                            borderColor: graphTheme.red,
-                            backgroundColor: 'red',
-                            showLine: true,
-                            pointRadius: 0,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Synapses/μm³',
+                const expDataset = Object.keys(data.value_map.distance).map(key => ({
+                    x: data.value_map.distance[key],
+                    y: data.value_map.exp_mean[key],
+                    yMin: data.value_map.exp_mean[key] - data.value_map.exp_std[key],
+                    yMax: data.value_map.exp_mean[key] + data.value_map.exp_std[key],
+                }));
+
+                const config: ChartConfiguration<'line', ExtendedScatterDataPoint[]> = {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'Model',
+                                data: modelDataset,
+                                borderColor: 'black',
+                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                                fill: false,
+                                pointStyle: 'circle',
                             },
-                            min: 0,
-                            max: 0.025,
-                        },
-                        y: {
-                            type: 'linear',
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'Radial axis',
+                            {
+                                label: 'Experiment',
+                                data: expDataset,
+                                borderColor: graphTheme.red,
+                                backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                                fill: false,
+                                pointStyle: 'circle',
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Distance (µm)',
+                                }
                             },
-                            min: 0,
-                            max: 1,
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: data.units,
+                                }
+                            }
                         },
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            legend: {
+                                position: 'top',
+                            },
+                        }
                     },
-                    plugins: {
-                        title: {
-                            display: false,
-                            text: 'PDF',
-                        },
-                    },
-                },
-            });
+                    plugins: [{
+                        id: 'errorBars',
+                        afterDatasetsDraw(chart) {
+                            const { ctx, data, scales } = chart;
+                            if (!scales.x || !scales.y) return;
+
+                            data.datasets.forEach((dataset, i) => {
+                                const meta = chart.getDatasetMeta(i);
+
+                                meta.data.forEach((datapoint, index) => {
+                                    const { x: xPos } = datapoint.getProps(['x']);
+                                    const yPos = datapoint.getProps(['y']).y;
+
+                                    const extendedData = dataset.data[index] as ExtendedScatterDataPoint;
+                                    if (extendedData.yMin === undefined || extendedData.yMax === undefined) return;
+
+                                    const yTop = scales.y.getPixelForValue(extendedData.yMax);
+                                    const yBottom = scales.y.getPixelForValue(extendedData.yMin);
+
+                                    ctx.save();
+                                    ctx.strokeStyle = dataset.borderColor as string;
+                                    ctx.lineWidth = 2;
+                                    ctx.beginPath();
+                                    ctx.moveTo(xPos, yBottom);
+                                    ctx.lineTo(xPos, yTop);
+                                    ctx.stroke();
+                                    ctx.restore();
+                                });
+                            });
+                        }
+                    }]
+                };
+
+                chartInstanceRef.current = new Chart(ctx, config);
+            }
         }
-    }, [chartRef, windowSize, data]);
+    }, [data, windowSize]);
+
+    if (!data) {
+        return <div>Loading synapses density profile data...</div>;
+    }
 
     return (
         <div>
-            <div className="graph flex justify-center items-center">
-                <div className="w-1/2 h-[500px]">
-                    <canvas ref={chartRef} />
-                </div>
+            <div className="graph" style={{ height: '400px' }}>
+                <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `synapse-density-profile.json`)}>
-                    Synapse Density Profile Data
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, 'Synapses-Density-Profile-Data.json')}>
+                    Synapses Density Profile Data
                 </DownloadButton>
             </div>
         </div>

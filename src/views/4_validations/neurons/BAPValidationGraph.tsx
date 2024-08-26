@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
+    ChartConfiguration,
     ScatterController,
     LinearScale,
     PointElement,
     LineElement,
     Tooltip,
-    Legend
+    Legend,
+    ScatterDataPoint,
+    ChartEvent,
+    ActiveElement,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
@@ -23,10 +27,30 @@ Chart.register(
     Legend
 );
 
-const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
+interface BAPValidationData {
+    values: Array<{
+        value_map: {
+            distance: { [key: string]: number };
+            model_mean: { [key: string]: number };
+            model_std: { [key: string]: number };
+            exp_mean: { [key: string]: number };
+        };
+    }>;
+}
+
+interface BAPValidationGraphProps {
+    theme: number;
+}
+
+interface ExtendedScatterDataPoint extends ScatterDataPoint {
+    yMin: number;
+    yMax: number;
+}
+
+const BAPValidationGraph: React.FC<BAPValidationGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-    const [bAPValidationData, setBAPValidationData] = useState(null);
+    const [bAPValidationData, setBAPValidationData] = useState<BAPValidationData | null>(null);
 
     useEffect(() => {
         fetch(dataPath + '/4_validations/neurons/bap-validation.json')
@@ -55,11 +79,11 @@ const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
             const expDataset = Object.keys(expData.distance).map(key => ({
                 x: expData.distance[key],
                 y: expData.exp_mean[key],
-                yMin: expData.exp_mean[key] - expData.model_mean[key],
-                yMax: expData.exp_mean[key] + expData.model_mean[key],
+                yMin: expData.exp_mean[key] - modelData.model_mean[key],
+                yMax: expData.exp_mean[key] + modelData.model_mean[key],
             }));
 
-            const newChart = new Chart(ctx, {
+            const config: ChartConfiguration<'scatter', ExtendedScatterDataPoint[]> = {
                 type: 'scatter',
                 data: {
                     datasets: [
@@ -136,35 +160,35 @@ const BAPValidationGraph = ({ theme }: { theme: GraphTheme }) => {
                 plugins: [{
                     id: 'errorBars',
                     afterDatasetsDraw(chart, args, options) {
-                        const { ctx, data, scales: { x, y } } = chart;
+                        const { ctx, chartArea, scales } = chart;
 
-                        data.datasets.forEach((dataset, i) => {
+                        chart.data.datasets.forEach((dataset, i) => {
                             const meta = chart.getDatasetMeta(i);
 
                             if (!meta.hidden) {
                                 meta.data.forEach((element, index) => {
-                                    const { x: xPos } = element.tooltipPosition();
+                                    const { x, y } = element.getProps(['x', 'y']);
 
-                                    const dataPoint = dataset.data[index] as { yMin: number, yMax: number };
-                                    const yTop = y.getPixelForValue(dataPoint.yMax);
-                                    const yBottom = y.getPixelForValue(dataPoint.yMin);
+                                    const dataPoint = dataset.data[index] as ExtendedScatterDataPoint;
+                                    const yTop = scales.y.getPixelForValue(dataPoint.yMax);
+                                    const yBottom = scales.y.getPixelForValue(dataPoint.yMin);
 
                                     ctx.save();
                                     ctx.strokeStyle = dataset.borderColor as string;
                                     ctx.lineWidth = 2;
                                     ctx.beginPath();
-                                    ctx.moveTo(xPos, yBottom);
-                                    ctx.lineTo(xPos, yTop);
+                                    ctx.moveTo(x, yBottom);
+                                    ctx.lineTo(x, yTop);
                                     ctx.stroke();
-
                                     ctx.restore();
                                 });
                             }
                         });
                     }
                 }]
-            });
+            };
 
+            const newChart = new Chart(ctx, config);
             setChartInstance(newChart);
         }
     };

@@ -1,45 +1,69 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Chart, ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale } from 'chart.js';
+import {
+    Chart,
+    ScatterController,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    ChartData,
+    ChartOptions,
+    ScatterDataPoint,
+} from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
 import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 
-Chart.register(ScatterController, LinearScale, PointElement, LineElement, Tooltip, Legend, CategoryScale);
+Chart.register(
+    ScatterController,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Legend,
+    CategoryScale
+);
+
+interface ConvergenceValidationData {
+    name: string;
+    data: [string, string, number, number, number, number][];
+}
+
+interface ConvergenceValidationProps {
+    theme?: number;
+    data: ConvergenceValidationData;
+}
 
 const errorBarPlugin = {
     id: 'errorBar',
-    afterDatasetsDraw(chart, args, options) {
-        const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
+    afterDatasetsDraw(chart: Chart, args: any, options: any) {
+        const { ctx, data, chartArea: { left, right }, scales: { x, y } } = chart;
 
         ctx.save();
-        data.datasets.forEach((dataset, i) => {
-            dataset.data.forEach((datapoint, index) => {
+        data.datasets.forEach((dataset: any) => {
+            dataset.data.forEach((datapoint: any) => {
                 if (datapoint.yMin !== undefined && datapoint.yMax !== undefined) {
-                    const xScale = x.getPixelForValue(datapoint.x);
-                    const yScale = y.getPixelForValue(datapoint.y);
-                    const yScaleMin = y.getPixelForValue(datapoint.yMin);
-                    const yScaleMax = y.getPixelForValue(datapoint.yMax);
-
-                    // Adjust x position for potential offset
-                    const xPos = Math.max(left, Math.min(xScale, right));
+                    const xPos = x.getPixelForValue(datapoint.x);
+                    const yMin = y.getPixelForValue(datapoint.yMin);
+                    const yMax = y.getPixelForValue(datapoint.yMax);
 
                     ctx.strokeStyle = dataset.borderColor;
                     ctx.lineWidth = 2;
 
-                    // Draw vertical line
                     ctx.beginPath();
-                    ctx.moveTo(xPos, yScaleMin);
-                    ctx.lineTo(xPos, yScaleMax);
+                    ctx.moveTo(xPos, yMin);
+                    ctx.lineTo(xPos, yMax);
                     ctx.stroke();
 
-                    // Draw horizontal lines
                     const horizontalLength = 5;
                     ctx.beginPath();
-                    ctx.moveTo(xPos - horizontalLength, yScaleMin);
-                    ctx.lineTo(xPos + horizontalLength, yScaleMin);
-                    ctx.moveTo(xPos - horizontalLength, yScaleMax);
-                    ctx.lineTo(xPos + horizontalLength, yScaleMax);
+                    ctx.moveTo(xPos - horizontalLength, yMin);
+                    ctx.lineTo(xPos + horizontalLength, yMin);
+                    ctx.moveTo(xPos - horizontalLength, yMax);
+                    ctx.lineTo(xPos + horizontalLength, yMax);
                     ctx.stroke();
                 }
             });
@@ -48,22 +72,23 @@ const errorBarPlugin = {
     }
 };
 
-const ConvergenceValidationGraph = ({ theme, data }) => {
-    const chartRef = useRef(null);
-    const [chart, setChart] = useState(null);
+const ConvergenceValidationGraph: React.FC<ConvergenceValidationProps> = ({ theme, data }) => {
+    const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const [chart, setChart] = useState<Chart | null>(null);
 
     const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
+            if (ctx) {
+                const uniqueRegions = Array.from(new Set(data.data.map(d => d[0])));
 
-            const newChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
+                const chartData: ChartData<'scatter'> = {
+                    labels: uniqueRegions,
                     datasets: [
                         {
                             label: 'Inhibitory',
                             data: data.data.filter(d => d[1] === 'inh').map(d => ({
-                                x: d[0],
+                                x: uniqueRegions.indexOf(d[0]),
                                 y: d[4],
                                 yMin: Math.max(0, d[4] - d[5]),
                                 yMax: d[4] + d[5]
@@ -74,7 +99,7 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                         {
                             label: 'Excitatory',
                             data: data.data.filter(d => d[1] === 'exc').map(d => ({
-                                x: d[0],
+                                x: uniqueRegions.indexOf(d[0]),
                                 y: d[4],
                                 yMin: Math.max(0, d[4] - d[5]),
                                 yMax: d[4] + d[5]
@@ -85,7 +110,7 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                         {
                             label: 'Experimental',
                             data: data.data.map(d => ({
-                                x: d[0],
+                                x: uniqueRegions.indexOf(d[0]),
                                 y: d[2],
                                 yMin: Math.max(0, d[2] - d[3]),
                                 yMax: d[2] + d[3]
@@ -94,49 +119,50 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                             borderColor: graphTheme.red,
                         }
                     ]
-                },
-                options: {
+                };
+
+                const maxValue = Math.max(
+                    ...chartData.datasets.flatMap(dataset =>
+                        dataset.data.map((d: ScatterDataPoint) => {
+                            const point = d as ScatterDataPoint & { yMax?: number };
+                            return Math.max(point.y as number, point.yMax || 0);
+                        })
+                    )
+                );
+
+                const chartOptions: ChartOptions<'scatter'> = {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            type: 'category',
-                            position: 'bottom',
+                            type: 'category' as const,
+                            position: 'bottom' as const,
                             title: {
                                 display: true,
                                 text: 'Region'
                             },
-                            offset: true,
                             ticks: {
                                 padding: 10
                             },
                             grid: {
-                                display: false,
-                                offset: true
+                                display: false
                             }
                         },
                         y: {
-                            type: 'linear',
-                            position: 'left',
+                            type: 'linear' as const,
+                            position: 'left' as const,
                             title: {
                                 display: true,
                                 text: 'Number of synapses'
                             },
                             min: 0,
-                            suggestedMax: (context) => {
-                                const maxValue = context.chart.data.datasets.reduce((max, dataset) => {
-                                    const datasetMax = Math.max(...dataset.data.map(d => d.yMax || d.y));
-                                    return datasetMax > max ? datasetMax : max;
-                                }, 0);
-                                return maxValue * 1.1;
-                            }
+                            max: maxValue * 1.1
                         }
                     },
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'end',
+                            position: 'top' as const,
+                            align: 'end' as const,
                             labels: {
                                 usePointStyle: true,
                                 pointStyle: 'circle',
@@ -145,43 +171,39 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                             }
                         },
                         tooltip: {
-                            enabled: true,
-                        },
-                    },
-                    layout: {
-                        padding: {
-                            left: 10,
-                            right: 10,
-                            top: 10,
-                            bottom: 10
+                            callbacks: {
+                                title: (context) => uniqueRegions[context[0].parsed.x as number]
+                            }
                         }
                     }
-                },
-                plugins: [errorBarPlugin],
-            });
+                };
 
-            setChart(newChart);
+                const newChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: chartData,
+                    options: chartOptions,
+                    plugins: [errorBarPlugin]
+                });
+
+                setChart(newChart);
+            }
         }
     };
 
     useEffect(() => {
         createChart();
-
-        const handleResize = () => {
-            if (chart) {
-                chart.resize();
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-
         return () => {
-            window.removeEventListener('resize', handleResize);
             if (chart) {
                 chart.destroy();
             }
         };
     }, [data]);
+
+    useEffect(() => {
+        const handleResize = () => chart?.resize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [chart]);
 
     return (
         <div className="w-full">
