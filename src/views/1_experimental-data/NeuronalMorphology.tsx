@@ -14,6 +14,7 @@ import InstanceViewer from './neuronal-morphology/InstanceViewer';
 import NeuronFactsheet from './neuronal-morphology/NeuronFactsheet';
 import { basePath } from '@/config';
 import { defaultSelection, layers } from '@/constants';
+import { Layer } from '@/types';
 import morphologies from '@/exp-morphology-list.json';
 import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
@@ -21,12 +22,18 @@ import { downloadAsJson } from '@/utils';
 import NeuronTable from './neuronal-morphology/NeuronTable';
 import withPreselection from '@/hoc/with-preselection';
 
+type QuickSelection = {
+    layer: Layer | null;
+    mtype: string;
+    instance: string;
+};
+
 const NeuronalMorphologyView: React.FC = () => {
     const router = useRouter();
     const { query } = router;
 
-    const [quickSelection, setQuickSelection] = useState<Record<string, string>>({
-        layer: '',
+    const [quickSelection, setQuickSelection] = useState<QuickSelection>({
+        layer: null,
         mtype: '',
         instance: '',
     });
@@ -38,23 +45,23 @@ const NeuronalMorphologyView: React.FC = () => {
 
         if (!query.layer && !query.mtype && !query.instance) {
             const defaultQuery = defaultSelection.experimentalData.neuronMorphology;
-            setQuickSelection(defaultQuery);
+            setQuickSelection(defaultQuery as QuickSelection);
             router.replace({ query: defaultQuery }, undefined, { shallow: true });
         } else {
             setQuickSelection({
-                layer: query.layer as string,
-                mtype: query.mtype as string,
-                instance: query.instance as string,
+                layer: (query.layer as Layer) || null,
+                mtype: (query.mtype as string) || '',
+                instance: (query.instance as string) || '',
             });
         }
     }, [router.isReady, query]);
 
-    const setParams = (params: Record<string, string>): void => {
+    const setParams = (params: Partial<QuickSelection>): void => {
         const newQuery = { ...router.query, ...params };
         router.push({ query: newQuery }, undefined, { shallow: true });
     };
 
-    const getMtypes = (layer: string) => {
+    const getMtypes = (layer: Layer | null) => {
         return layer
             ? Array.from(new Set(morphologies.filter(m => m.region === layer).map(m => m.mtype))).sort()
             : [];
@@ -68,12 +75,13 @@ const NeuronalMorphologyView: React.FC = () => {
 
     const setLayerQuery = (layer: string) => {
         setQuickSelection(prev => {
-            const newMtypes = getMtypes(layer);
+            const newLayer = layer as Layer | null;
+            const newMtypes = getMtypes(newLayer);
             const newMtype = newMtypes.length > 0 ? newMtypes[0] : '';
             const newInstances = getInstances(newMtype);
             const newInstance = newInstances.length > 0 ? newInstances[0] : '';
 
-            const updatedSelection = { layer, mtype: newMtype, instance: newInstance };
+            const updatedSelection = { layer: newLayer, mtype: newMtype, instance: newInstance };
             setParams(updatedSelection);
             return updatedSelection;
         });
@@ -169,7 +177,7 @@ const NeuronalMorphologyView: React.FC = () => {
                             <div className={`selector__head theme-${theme}`}>Choose a layer</div>
                             <div className="selector__body">
                                 <LayerSelector3D
-                                    value={quickSelection.layer}
+                                    value={quickSelection.layer || undefined}
                                     onSelect={setLayerQuery}
                                 />
                             </div>
@@ -207,7 +215,7 @@ const NeuronalMorphologyView: React.FC = () => {
                                         <>
                                             <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
                                             <div className="mt-4">
-                                                <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${instances}-factsheet.json`)} theme={theme}>
+                                                <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${quickSelection.instance}-factsheet.json`)} theme={theme}>
                                                     Factsheet
                                                 </DownloadButton>
                                             </div>
@@ -225,7 +233,7 @@ const NeuronalMorphologyView: React.FC = () => {
                                         <>
                                             <MorphDistributionPlots type="singleMorphology" data={plotsData} />
                                             <div className="mt-4">
-                                                <DownloadButton onClick={() => downloadAsJson(plotsData, `${instances}-plot-data.json`)} theme={theme}>
+                                                <DownloadButton onClick={() => downloadAsJson(plotsData, `${quickSelection.instance}-plot-data.json`)} theme={theme}>
                                                     Plot Data
                                                 </DownloadButton>
                                             </div>
@@ -240,7 +248,7 @@ const NeuronalMorphologyView: React.FC = () => {
                             {(tableData) => (
                                 <>
                                     {tableData && (
-                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={false} />
+                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer || undefined} mtype={quickSelection.mtype} nameLink={false} />
                                     )}
                                 </>
                             )}
@@ -262,7 +270,7 @@ const NeuronalMorphologyView: React.FC = () => {
                                         <>
                                             <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
                                             <div className="mt-4">
-                                                <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${instances}-factsheet.json`)} theme={theme}>
+                                                <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${quickSelection.mtype}-factsheet.json`)} theme={theme}>
                                                     Factsheet
                                                 </DownloadButton>
                                             </div>
@@ -277,7 +285,7 @@ const NeuronalMorphologyView: React.FC = () => {
                             {(tableData) => (
                                 <>
                                     {tableData && (
-                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer} mtype={quickSelection.mtype} nameLink={true} />
+                                        <NeuronTable theme={theme} data={tableData} layer={quickSelection.layer || undefined} mtype={quickSelection.mtype} nameLink={true} />
                                     )}
                                 </>
                             )}

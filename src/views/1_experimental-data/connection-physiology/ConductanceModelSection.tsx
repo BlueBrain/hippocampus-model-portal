@@ -262,7 +262,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         data={reversalPotentialData}
         columns={ReversalPotentialColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <small className="mt-2 block text-sm">
         <sup>*</sup> Reversal potential values were taken from <a
@@ -289,7 +289,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         data={PSPAmplitudeData}
         columns={PSPAmplitudeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton
@@ -305,7 +305,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         data={PSPCVData}
         columns={PSPCVColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton
@@ -321,7 +321,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         data={PSCAmplitudeData}
         columns={PSCAmplitudeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton

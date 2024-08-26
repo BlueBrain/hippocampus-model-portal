@@ -204,7 +204,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={RatioData}
         columns={RatioColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton
@@ -220,7 +220,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={TauDecayData}
         columns={TauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton
@@ -236,7 +236,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={TauRiseData}
         columns={TauRiseColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      //additionalData={doiIndex}
       />
       <div className="text-right mt-4">
         <DownloadButton

@@ -1,24 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ChartOptions,
+    ChartData
+} from 'chart.js';
 import { dataPath } from '@/config';
-
 import { graphTheme } from '@/constants';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
+interface DataPoint {
+    mean: number;
+    variance: number;
+}
+
+interface ETypeData {
+    [amplitude: string]: DataPoint;
+}
+
+interface Data {
+    [eType: string]: ETypeData;
+}
+
+interface ChartDataPoint {
+    x: number;
+    y: number;
+    variance: number;
+}
+
+interface IfCurvePerETypeGraphProps {
+    eType: string;
+    theme: number;
+}
 
 const errorBarPlugin = {
     id: 'errorBar',
-    afterDatasetsDraw(chart, args, options) {
+    afterDatasetsDraw(chart: ChartJS, args: any, options: any) {
         const { ctx, data, scales: { x, y } } = chart;
 
         ctx.save();
         ctx.strokeStyle = graphTheme.blue;
         ctx.lineWidth = 2;
 
-        data.datasets[0].data.forEach((datapoint, index) => {
+        data.datasets[0].data.forEach((datapoint: ChartDataPoint) => {
             const xPos = x.getPixelForValue(datapoint.x);
             const yPos = y.getPixelForValue(datapoint.y);
 
@@ -45,27 +87,28 @@ const errorBarPlugin = {
     }
 };
 
-const IfCurvePerETypeGraph = ({ eType, theme }) => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, theme }) => {
+    const [data, setData] = useState<Data | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(dataPath + '/1_experimental-data/neuronal-electophysiology/if-curve-per-e-type-data.json')
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${dataPath}/1_experimental-data/neuronal-electophysiology/if-curve-per-e-type-data.json`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(jsonData => {
+                const jsonData: Data = await response.json();
                 setData(jsonData);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            } finally {
                 setLoading(false);
-            })
-            .catch(err => {
-                setError(err.message);
-                setLoading(false);
-            });
+            }
+        };
+
+        fetchData();
     }, []);
 
     if (loading) return <div>Loading...</div>;
@@ -73,30 +116,43 @@ const IfCurvePerETypeGraph = ({ eType, theme }) => {
     if (!data || !data[eType]) return <div>No data available for this e-type.</div>;
 
     const eTypeData = data[eType];
-    const sortedData = Object.entries(eTypeData)
-        .map(([amplitude, values]) => ({ x: parseFloat(amplitude), y: values.mean, variance: values.variance }))
+    const sortedData: ChartDataPoint[] = Object.entries(eTypeData)
+        .map(([amplitude, values]) => ({
+            x: parseFloat(amplitude),
+            y: values.mean,
+            variance: values.variance
+        }))
         .sort((a, b) => a.x - b.x);
 
-    const chartData = {
+    const chartData: ChartData<'line', ChartDataPoint[]> = {
         datasets: [
             {
                 data: sortedData,
                 borderColor: graphTheme.blue,
-                backgroundColor: graphTheme.blue
+                backgroundColor: graphTheme.blue,
+                pointRadius: 5,
+                pointHoverRadius: 7,
             },
         ],
     };
 
-    const options = {
+    const options: ChartOptions<'line'> = {
+        responsive: true,
         scales: {
-            x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Amplitude (nA)' } },
-            y: { title: { display: true, text: 'Mean Frequency (Hz)' } },
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: { display: true, text: 'Amplitude (nA)' }
+            },
+            y: {
+                title: { display: true, text: 'Mean Frequency (Hz)' }
+            },
         },
         plugins: {
             tooltip: {
                 callbacks: {
                     label: (context) => {
-                        const point = context.raw;
+                        const point = context.raw as ChartDataPoint;
                         return [
                             `Mean: ${point.y.toFixed(2)} Hz`,
                             `Std Dev: ${Math.sqrt(point.variance).toFixed(2)}`,
@@ -104,20 +160,26 @@ const IfCurvePerETypeGraph = ({ eType, theme }) => {
                     },
                 },
             },
+            legend: {
+                display: false,
+            },
         },
     };
 
     return (
-        <>
+        <div className="if-curve-graph">
             <div className='graph'>
                 <Line data={chartData} options={options} plugins={[errorBarPlugin]} />
             </div>
             <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}>
-                    If curve per e-type data
+                <DownloadButton
+                    theme={theme}
+                    onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}
+                >
+                    Download IF curve per e-type data
                 </DownloadButton>
             </div>
-        </>
+        </div>
     );
 };
 

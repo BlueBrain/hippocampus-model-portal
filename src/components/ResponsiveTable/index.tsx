@@ -12,7 +12,7 @@ interface GroupColumnType<Type extends object & { isHighlight?: boolean }> exten
 
 interface ResponsiveTableProps<Type extends object & { isHighlight?: boolean }> extends Omit<TableProps<Type>, 'columns'> {
   data?: Type[];
-  columns: (ColumnType<Type> | GroupColumnType<Type>)[]; // Updated type
+  columns: (ColumnType<Type> | GroupColumnType<Type>)[] | any;
 }
 
 const renderHighlightValue = (record) => (nestedValue, _value) =>
