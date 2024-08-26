@@ -13,7 +13,7 @@ import {
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 import { dataPath } from '@/config';
@@ -133,7 +133,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     options: {
                         scales: {
                             x: {
-                                type: 'logarithmic',
+                                type: 'logarithmic' as const,
                                 position: 'bottom',
                                 min: 0.01,
                                 max: 1000,
@@ -143,7 +143,9 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     color: '#050A30'
                                 },
                                 grid: {
-                                    borderWidth: .1
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    // drawBorder: true,
+                                    drawOnChartArea: true,
                                 },
                                 ticks: {
                                     callback: function (value) {
@@ -168,7 +170,9 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                     color: '#050A30'
                                 },
                                 grid: {
-                                    borderWidth: .1
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    //drawBorder: true,
+                                    drawOnChartArea: true,
                                 },
                                 ticks: {
                                     color: '#050A30'
@@ -188,7 +192,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
             }
         }
     }, [data]);
-
     return (
         <div>
             <MathJaxContext>

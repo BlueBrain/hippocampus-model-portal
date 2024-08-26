@@ -6,7 +6,7 @@ import NumberFormat from '@/components/NumberFormat';
 import { layerDescription, mtypeDescription, etypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
 
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type MEComposition = {

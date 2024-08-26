@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { graphTheme } from '@/constants';
-import DownloadButton from '../DownloadButton/DownloadButton';
+import DownloadButton from '../DownloadButton';
 
 Chart.register(...registerables);
 
 const LaminarGraph = ({ data, height = 500, title, yAxisLabel }) => {
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
+    const chartRef = useRef<HTMLCanvasElement>(null);
+    const chartInstance = useRef<Chart | null>(null);
 
     const getColor = useCallback((index) => {
         const colors = [graphTheme.blue, graphTheme.yellow, graphTheme.green, graphTheme.red, graphTheme.purple];
@@ -65,6 +65,8 @@ const LaminarGraph = ({ data, height = 500, title, yAxisLabel }) => {
         if (!chartRef.current || !data || !data.value_map) return;
 
         const ctx = chartRef.current.getContext('2d');
+        if (!ctx) return; // Ensure that ctx is not null
+
         const cellTypes = Object.keys(data.value_map[Object.keys(data.value_map)[0]]);
 
         if (chartInstance.current) {

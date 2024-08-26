@@ -7,10 +7,12 @@ import {
     LineElement,
     Tooltip,
     Legend,
+    ChartData,
+    ChartOptions,
 } from 'chart.js';
 import { GraphTheme } from '@/types';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
 
@@ -27,24 +29,31 @@ export type ConnectionProbabilityProps = {
     theme?: number;
 };
 
-const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ theme }) => {
+interface ConnectionProbabilityData {
+    value_map: {
+        exp_mean: { [key: string]: number };
+        model_mean: { [key: string]: number };
+        connection_class: { [key: string]: string };
+    };
+}
 
+const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<ConnectionProbabilityData | null>(null);
 
     useEffect(() => {
         fetch(dataPath + '/4_validations/connection-anatomy/connection-probability.json')
             .then((response) => response.json())
-            .then((data) => setData(data));
+            .then((fetchedData: ConnectionProbabilityData) => setData(fetchedData));
     }, []);
 
     const createChart = () => {
         if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                // Prepare chartData
-                const chartData = Object.keys(data.value_map.exp_mean).map(key => ({
+                // Prepare rawChartData
+                const rawChartData = Object.keys(data.value_map.exp_mean).map(key => ({
                     x: data.value_map.exp_mean[key],
                     y: data.value_map.model_mean[key],
                     connectionClass: data.value_map.connection_class[key]
@@ -53,7 +62,7 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                 // Define custom plugin for diagonal line
                 const customPlugin = {
                     id: 'customPlugin',
-                    afterDraw: (chart) => {
+                    afterDraw: (chart: Chart) => {
                         const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
 
                         // Draw diagonal line
@@ -68,106 +77,110 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
                     }
                 };
 
-                const newChart = new Chart(ctx, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [
-                            {
-                                label: 'EE',
-                                data: chartData.filter(d => d.connectionClass === 'EE'),
-                                backgroundColor: graphTheme.red,
-                                pointStyle: 'circle',
-                                radius: 6,
+                const chartData: ChartData<'scatter'> = {
+                    datasets: [
+                        {
+                            label: 'EE',
+                            data: rawChartData.filter(d => d.connectionClass === 'EE'),
+                            backgroundColor: graphTheme.red,
+                            pointStyle: 'circle',
+                            //radius: 6,
+                        },
+                        {
+                            label: 'EI',
+                            data: rawChartData.filter(d => d.connectionClass === 'EI'),
+                            backgroundColor: graphTheme.green,
+                            pointStyle: 'circle',
+                            //radius: 6,
+                        },
+                        {
+                            label: 'IE',
+                            data: rawChartData.filter(d => d.connectionClass === 'IE'),
+                            backgroundColor: graphTheme.blue,
+                            pointStyle: 'circle',
+                            // radius: 6,
+                        },
+                        {
+                            label: 'II',
+                            data: rawChartData.filter(d => d.connectionClass === 'II'),
+                            backgroundColor: graphTheme.purple,
+                            pointStyle: 'circle',
+                            // radius: 6,
+                        }
+                    ]
+                };
+
+                const chartOptions: ChartOptions<'scatter'> = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Connection probability Experiment',
                             },
-                            {
-                                label: 'EI',
-                                data: chartData.filter(d => d.connectionClass === 'EI'),
-                                backgroundColor: graphTheme.green,
-                                pointStyle: 'circle',
-                                radius: 6,
+                            min: 0,
+                            max: 0.5,
+                            ticks: {
+                                color: 'black',
+                                font: {
+                                    size: 12,
+                                },
                             },
-                            {
-                                label: 'IE',
-                                data: chartData.filter(d => d.connectionClass === 'IE'),
-                                backgroundColor: graphTheme.blue,
-                                pointStyle: 'circle',
-                                radius: 6,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
                             },
-                            {
-                                label: 'II',
-                                data: chartData.filter(d => d.connectionClass === 'II'),
-                                backgroundColor: graphTheme.purple,
-                                pointStyle: 'circle',
-                                radius: 6,
-                            }
-                        ]
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Connection probability Model',
+                            },
+                            min: 0,
+                            max: 0.5,
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                },
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                            },
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: 'Connection probability Experiment',
-                                },
-                                min: 0,
-                                max: 0.5,
-                                ticks: {
-                                    color: 'black',
-                                    font: {
-                                        size: 12,
-                                    },
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
-                                },
-                            },
-                            y: {
-                                type: 'linear',
-                                position: 'left',
-                                title: {
-                                    display: true,
-                                    text: 'Connection probability Model',
-                                },
-                                min: 0,
-                                max: 0.5,
-                                ticks: {
-                                    font: {
-                                        size: 12,
-                                    },
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                boxWidth: 6,
+                                boxHeight: 6,
+                                padding: 15,
+                                font: {
+                                    size: 12,
                                 },
                             }
                         },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: {
-                                    usePointStyle: true,
-                                    pointStyle: 'circle',
-                                    boxWidth: 6,
-                                    boxHeight: 6,
-                                    padding: 15,
-                                    font: {
-                                        size: 12,
-                                    },
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        return `${context.dataset.label}: (${context.parsed.x.toFixed(3)}, ${context.parsed.y.toFixed(3)})`;
-                                    }
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    return `${context.dataset.label}: (${context.parsed.x.toFixed(3)}, ${context.parsed.y.toFixed(3)})`;
                                 }
                             }
                         }
-                    },
+                    }
+                };
+
+                const newChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: chartData,
+                    options: chartOptions,
                     plugins: [customPlugin]
                 });
 
@@ -177,7 +190,9 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
     };
 
     useEffect(() => {
-        createChart();
+        if (data) {
+            createChart();
+        }
 
         const handleResize = () => {
             if (chart) {
@@ -194,6 +209,10 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
             }
         };
     }, [data]);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>

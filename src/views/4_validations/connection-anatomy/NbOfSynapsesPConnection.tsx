@@ -11,7 +11,7 @@ import {
     Title,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 import { dataPath } from '@/config';
 
@@ -121,7 +121,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             data: dataPoints,
                             backgroundColor: 'black',
                             pointStyle: 'circle',
-                            radius: 5,
+                            //radius: 5,
                             borderColor: 'black',
                             borderWidth: 1,
                         }]

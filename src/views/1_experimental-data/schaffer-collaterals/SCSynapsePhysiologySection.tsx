@@ -1,19 +1,17 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 import { termFactory } from '@/components/Term';
 import { pathwayDescription } from '@/terms';
 
-import synapsePhysiologyData from './sc-synaptic-physiology.json';
-import doiIndex from './ref-doi.json';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
+
+
+import DownloadButton from '@/components/DownloadButton';
 
 const Term = termFactory(pathwayDescription);
-
 
 type TableEntry = {
   expFeature: string;
@@ -27,79 +25,116 @@ type TableEntry = {
   nAnimals: number | string;
   nCells: number | string;
   ref: string;
+  unit: string;
 }
 
-const synapsePhysiologyAllColumns = [
-  {
-    title: 'Exp. feature',
-    dataIndex: 'expFeature' as keyof TableEntry,
-    render: feature => (<Term term={feature} />),
-    width: 180,
-  },
-  {
-    title: 'Mean',
-    dataIndex: 'mean' as keyof TableEntry,
-    render: (mean) => <NumberFormat value={mean} />,
-    width: 50,
-  },
-  {
-    title: 'SD',
-    dataIndex: 'sd' as keyof TableEntry,
-    render: (sd) => <NumberFormat value={sd} />,
-    width: 50,
-  },
-  {
-    title: 'SEM',
-    dataIndex: 'sem' as keyof TableEntry,
-    render: (sem) => <NumberFormat value={sem} />,
-    width: 50,
-  },
-  {
-    title: 'Unit',
-    dataIndex: 'unit' as keyof TableEntry,
-    width: 50,
-  },
-  {
-    title: 'Species',
-    dataIndex: 'species' as keyof TableEntry,
-    width: 136,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age' as keyof TableEntry,
-    width: 142,
-  },
-  {
-    title: 'Weight',
-    dataIndex: 'weight' as keyof TableEntry,
-    width: 142,
-  },
-  {
-    title: 'Region',
-    dataIndex: 'region' as keyof TableEntry,
-    width: 50,
-  },
-  {
-    title: 'N cells',
-    className: 'text-nowrap',
-    dataIndex: 'nCells' as keyof TableEntry,
-    width: 50,
-  },
-  {
-    title: 'Reference',
-    dataIndex: 'ref' as keyof TableEntry,
-    render: (text) => <TextWithRefs text={text} doiIndex={doiIndex} />
-  },
-];
-
-const synapsePhysiologyWOWeightColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Weight');
-const synapsePhysiologyWOAgeColumns = synapsePhysiologyAllColumns.filter(column => column.title !== 'Age');
+type SynapsePhysiologyData = {
+  'sc-exc': {
+    PSPMagnitudeAndVariability: TableEntry[];
+    PSPKinetics: TableEntry[];
+    NMDAKinetics: TableEntry[];
+    ShortTermPlasticity: TableEntry[];
+  };
+  'sc-inh': {
+    PSCMagnitude: TableEntry[];
+    PSPKinetics: TableEntry[];
+    NMDAKinetics: TableEntry[];
+    ShortTermPlasticity: TableEntry[];
+  };
+}
 
 type SCSynapsePhysiologySectionProps = {
   theme?: number;
 }
 
 const SCSynapsePhysiologySection: React.FC<SCSynapsePhysiologySectionProps> = ({ theme }) => {
+  const [synapsePhysiologyData, setSynapsePhysiologyData] = useState<SynapsePhysiologyData | null>(null);
+  const [doiIndex, setDoiIndex] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const synapsePhysiologyResponse = await fetch(`${dataPath}/1_experimental-data/schaffer-collaterals/sc-synaptic-physiology.json`);
+      const synapsePhysiologyJson = await synapsePhysiologyResponse.json();
+      setSynapsePhysiologyData(synapsePhysiologyJson);
+
+      const doiResponse = await fetch(`${dataPath}/1_experimental-data/schaffer-collaterals/ref-doi.json`);
+      const doiJson = await doiResponse.json();
+      setDoiIndex(doiJson);
+    };
+
+    fetchData();
+  }, []);
+
+  const synapsePhysiologyColumns = [
+    {
+      title: 'Exp. feature',
+      dataIndex: 'expFeature' as keyof TableEntry,
+      render: (feature: string) => (<Term term={feature} />),
+      width: 180,
+    },
+    {
+      title: 'Mean',
+      dataIndex: 'mean' as keyof TableEntry,
+      render: (mean: number) => <NumberFormat value={mean} />,
+      width: 50,
+    },
+    {
+      title: 'SD',
+      dataIndex: 'sd' as keyof TableEntry,
+      render: (sd: number | string) => <NumberFormat value={sd} />,
+      width: 50,
+    },
+    {
+      title: 'SEM',
+      dataIndex: 'sem' as keyof TableEntry,
+      render: (sem: number | string) => <NumberFormat value={sem} />,
+      width: 50,
+    },
+    {
+      title: 'Unit',
+      dataIndex: 'unit' as keyof TableEntry,
+      width: 50,
+    },
+    {
+      title: 'Species',
+      dataIndex: 'species' as keyof TableEntry,
+      width: 136,
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age' as keyof TableEntry,
+      width: 142,
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight' as keyof TableEntry,
+      width: 142,
+    },
+    {
+      title: 'Region',
+      dataIndex: 'region' as keyof TableEntry,
+      width: 50,
+    },
+    {
+      title: 'N cells',
+      className: 'text-nowrap',
+      dataIndex: 'nCells' as keyof TableEntry,
+      width: 50,
+    },
+    {
+      title: 'Reference',
+      dataIndex: 'ref' as keyof TableEntry,
+      render: (text: string) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    },
+  ];
+
+  const synapsePhysiologyWOWeightColumns = synapsePhysiologyColumns.filter(column => column.title !== 'Weight');
+  const synapsePhysiologyWOAgeColumns = synapsePhysiologyColumns.filter(column => column.title !== 'Age');
+
+  if (!synapsePhysiologyData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <h2 className='text-xl mt-12'>SC → Exc</h2>
@@ -145,7 +180,6 @@ const SCSynapsePhysiologySection: React.FC<SCSynapsePhysiologySectionProps> = ({
         rowKey={({ expFeature, mean }) => `${expFeature}_${mean}`}
       />
 
-
       <h3 className='text-lg mt-10'>SP Kinetics</h3>
       <ResponsiveTable<TableEntry>
         className="mt-2 mb-3"
@@ -184,6 +218,5 @@ const SCSynapsePhysiologySection: React.FC<SCSynapsePhysiologySectionProps> = ({
     </>
   );
 };
-
 
 export default SCSynapsePhysiologySection;

@@ -7,10 +7,12 @@ import {
     Tooltip,
     Title,
     Legend,
+    ChartType,
+    LegendItem,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import { GraphTheme } from '@/types';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 import { dataPath } from '@/config';
 
@@ -87,7 +89,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
 
                 const customPlugin = {
                     id: 'customPlugin',
-                    beforeDatasetsDraw(chart, args, options) {
+                    beforeDatasetsDraw(chart: Chart, args: any, options: any) {
                         const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
 
                         ctx.save();
@@ -126,7 +128,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                 };
 
                 chartInstanceRef.current = new Chart(ctx, {
-                    type: 'scatter',
+                    type: 'scatter' as ChartType,
                     data: {
                         datasets: [{
                             data: chartData,
@@ -141,7 +143,6 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                                 }
                             },
                             pointStyle: 'circle',
-                            radius: 4,
                             borderWidth: 1,
                         }]
                     },
@@ -185,15 +186,18 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                                         size: 11,
                                         weight: 'normal',
                                     },
-                                    generateLabels: (chart) => {
-                                        return ['E-E', 'E-I', 'I-E', 'I-I'].map(label => ({
+                                    generateLabels: (chart): LegendItem[] => {
+                                        return ['E-E', 'E-I', 'I-E', 'I-I'].map((label, index) => ({
                                             text: label,
                                             fillStyle: label === 'E-E' ? graphTheme.red :
                                                 label === 'E-I' ? graphTheme.green :
                                                     label === 'I-E' ? graphTheme.blue : graphTheme.purple,
                                             hidden: false,
-                                            index: null,
+                                            index: index,
                                             strokeStyle: 'transparent',
+                                            lineWidth: 0,
+                                            fontColor: 'black',
+                                            datasetIndex: 0,
                                         }));
                                     }
                                 }

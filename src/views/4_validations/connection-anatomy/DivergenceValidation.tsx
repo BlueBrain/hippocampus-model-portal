@@ -12,7 +12,7 @@ import {
     Legend,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 import { graphTheme } from '@/constants';
 import { dataPath } from '@/config';
@@ -138,7 +138,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                         data: modelData,
                         backgroundColor: 'black',
                         pointStyle: 'circle',
-                        radius: 5,
+                        //radius: 5,
                         borderColor: 'black',
                         borderWidth: 1,
                     },
@@ -148,7 +148,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
                         data: experimentData,
                         backgroundColor: graphTheme.red,
                         pointStyle: 'circle',
-                        radius: 5,
+                        //radius: 5,
                         borderColor: graphTheme.red,
                         borderWidth: 1,
                     }

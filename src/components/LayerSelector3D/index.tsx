@@ -4,7 +4,6 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { Layer } from '../../types';
 import { layers, theme } from '../../constants'; // Import theme
-import styles from './styles.module.scss';
 
 type LayerSelectProps3D = {
     value?: Layer;

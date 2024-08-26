@@ -3,7 +3,7 @@ import { downloadAsJson } from '@/utils';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import { layerDescription, mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type DataEntry = {
@@ -23,6 +23,19 @@ type DataEntry = {
     "Reference": string;
 };
 
+// Define custom types to match ResponsiveTable's expectations
+type ColumnType<T> = {
+    title: string;
+    dataIndex: keyof T | (string | number)[];
+    key?: string;
+    render?: (value: any, record: T, index: number) => React.ReactNode;
+};
+
+type GroupColumnType<T> = {
+    title: string;
+    children: ColumnType<T>[];
+};
+
 const termDescription = {
     ...mtypeDescription,
     ...layerDescription,
@@ -37,7 +50,8 @@ function getMtypeDescription(fullMtype: string) {
         : null;
 }
 
-const columns = [
+// Define columns using the custom types
+const columns: (ColumnType<DataEntry> | GroupColumnType<DataEntry>)[] = [
     { title: 'Neuron Type', dataIndex: 'Neuron Type' },
     { title: 'Dose (µM)', dataIndex: 'Dose (µM)' },
     { title: 'Drug', dataIndex: 'Drug' },
@@ -49,22 +63,40 @@ const columns = [
     {
         title: 'Vm_control (mV)',
         children: [
-            { title: 'Mean', dataIndex: ['Vm_control (mV)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['Vm_control (mV)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            {
+                title: 'Mean',
+                dataIndex: ['Vm_control (mV)', 'mean'],
+                render: (mean: number) => <>{mean}</>
+            },
+            {
+                title: 'std',
+                dataIndex: ['Vm_control (mV)', 'std'],
+                render: (std: number | null) => <>{std !== null ? std : '-'}</>
+            },
         ],
     },
     {
         title: 'Vm_ACh (mV)',
         children: [
-            { title: 'Mean', dataIndex: ['Vm_ACh (mV)', 'mean'], render: (mean: number) => <>{mean}</> },
-            { title: 'std', dataIndex: ['Vm_ACh (mV)', 'std'], render: (std: number | null) => <>{std !== null ? std : '-'}</> },
+            {
+                title: 'Mean',
+                dataIndex: ['Vm_ACh (mV)', 'mean'],
+                render: (mean: number) => <>{mean}</>
+            },
+            {
+                title: 'std',
+                dataIndex: ['Vm_ACh (mV)', 'std'],
+                render: (std: number | null) => <>{std !== null ? std : '-'}</>
+            },
         ],
     },
     { title: '∆FR (Hz)', dataIndex: '∆FR (Hz)' },
     { title: 'Current (nA)', dataIndex: 'Current (nA)' },
     { title: 'n. cells', dataIndex: 'n. cells' },
     {
-        title: 'Reference', dataIndex: 'Reference', render: (reference: string) => (
+        title: 'Reference',
+        dataIndex: 'Reference',
+        render: (reference: string) => (
             <a href="#" target="_blank" rel="noopener noreferrer">{reference}</a>
         )
     },

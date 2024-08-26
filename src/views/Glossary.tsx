@@ -4,9 +4,9 @@ import Title from '../components/Title';
 import FullPage from '../layouts/FullPage';
 import { accentColors } from '../config';
 import { Color } from '../types';
-import glossaryContent from './glossary-content.json';
+
 import { basePath } from '../config';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 const Glossary: React.FC = () => {
   // Split the glossary content string into an array of entries

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ResponsiveTable from '@/components/ResponsiveTable';
 import { downloadAsJson } from '@/utils';
 
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type TableEntry = {

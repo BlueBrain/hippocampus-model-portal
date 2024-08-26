@@ -9,7 +9,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { layerDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-import DownloadButton from '../DownloadButton/DownloadButton';
+import DownloadButton from '../DownloadButton';
 
 import SummaryData from './layer-anatommy-summary.json';
 

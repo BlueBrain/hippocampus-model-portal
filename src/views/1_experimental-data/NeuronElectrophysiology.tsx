@@ -15,7 +15,6 @@ import Collapsible from '@/components/Collapsible';
 import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
 import StickyContainer from '@/components/StickyContainer';
 import AuthorBox from '@/components/AuthorBox/AuthorBox';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
@@ -24,22 +23,35 @@ import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
+import Metadata from '@/components/Metadata';
 
-const getEphysDistribution = (resource) =>
-  Array.isArray(resource.distribution)
-    ? resource.distribution.find((d) => d.name.match(/\.nwb$/i))
-    : resource.distribution;
+type Distribution = {
+  name: string;
+  contentUrl: string;
+};
 
-const getEtype = () => Object.keys(traces).sort();
-const getInstance = (etype) => (etype ? traces[etype].sort() : []);
+type Resource = {
+  distribution: Distribution | Distribution[];
+};
 
-const NeuronElectrophysiology = () => {
+const getEphysDistribution = (resource: Resource): Distribution => {
+  if (Array.isArray(resource.distribution)) {
+    return resource.distribution.find((d) => d.name.match(/\.nwb$/i)) || resource.distribution[0];
+  }
+  return resource.distribution;
+};
+
+const getEtype = (): string[] => Object.keys(traces).sort();
+const getInstance = (etype: string | undefined): string[] =>
+  etype && traces[etype] ? traces[etype].sort() : [];
+
+const NeuronElectrophysiology: React.FC = () => {
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
   const { query } = router;
 
-  const setQuery = (newQuery) => {
+  const setQuery = (newQuery: Record<string, string | undefined>) => {
     router.push(
       { query: { ...query, ...newQuery }, pathname: router.pathname },
       undefined,
@@ -47,22 +59,22 @@ const NeuronElectrophysiology = () => {
     );
   };
 
-  const setEtype = (etype) => setQuery({ etype, etype_instance: undefined });
-  const setInstance = (instance) => setQuery({ etype_instance: instance });
+  const setEtype = (etype: string) => setQuery({ etype, etype_instance: undefined });
+  const setInstance = (instance: string) => setQuery({ etype_instance: instance });
 
-  const currentEtype = query.etype;
-  const currentInstance = query.etype_instance;
+  const currentEtype = typeof query.etype === 'string' ? query.etype : undefined;
+  const currentInstance = typeof query.etype_instance === 'string' ? query.etype_instance : undefined;
 
   const etypes = getEtype();
   const instances = getInstance(currentEtype);
 
   const fullElectroPhysiologyDataQueryObj = useMemo(
-    () => electroPhysiologyDataQuery(currentEtype, currentInstance),
+    () => currentEtype && currentInstance ? electroPhysiologyDataQuery(currentEtype, currentInstance) : null,
     [currentEtype, currentInstance]
   );
 
   const etypeTracesDataQueryObj = useMemo(
-    () => etypeTracesDataQuery(currentEtype),
+    () => currentEtype ? etypeTracesDataQuery(currentEtype) : null,
     [currentEtype]
   );
 
@@ -156,9 +168,6 @@ const NeuronElectrophysiology = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    {
-                      //JSON.stringify(esDocuments[0]._source)
-                    }
                     <Metadata nexusDocument={esDocuments[0]._source} />
                     <h3 className="mt-3">Patch clamp recording</h3>
                     <div className="row start-xs end-sm mt-2 mb-2">
@@ -195,16 +204,13 @@ const NeuronElectrophysiology = () => {
                         className="mr-1"
                         type="primary"
                         size="small"
-                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
+                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}
                       >
                         Send to the Build section
                       </Button>
                     </div>
                     <div className="mt-3">
-
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
-
-
                     </div>
                   </>
                 )}
@@ -219,7 +225,9 @@ const NeuronElectrophysiology = () => {
           title="Population"
         >
           <p className="mb-4">We provide features for the entire e-type group selected.</p>
-          <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
+          {currentEtype && (
+            <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
+          )}
         </Collapsible>
       </DataContainer>
     </>

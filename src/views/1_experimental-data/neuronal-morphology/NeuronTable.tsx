@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { basePath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
 import Link from 'next/link';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 
 type TableEntry = {
     name: string;

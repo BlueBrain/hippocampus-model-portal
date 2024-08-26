@@ -8,7 +8,7 @@ import { termFactory } from '@/components/Term';
 import { stypeDescription, mtypeDescription, layerDescription, pathwayDescription, formattedTerm } from '@/terms';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 const termDescription = {
@@ -17,9 +17,6 @@ const termDescription = {
   ...layerDescription,
   ...pathwayDescription,
 };
-
-const termFormatter = (term: string) => formattedTerm[term] ?? term;
-const Term = termFactory(termDescription, termFormatter);
 
 type PreSynDynamicsParam = {
   ruleN: number;
@@ -58,9 +55,9 @@ function formatPathway(pathway: string) {
   if (!pre || !post) return '-';
   return (
     <>
-      <Term term={pre} description={getMtypeDescription(pre)} />
+      {pre}
       -
-      <Term term={post} description={getMtypeDescription(post)} />
+      {post}
     </>
   );
 }
@@ -80,24 +77,24 @@ const preColumns = [
     title: 'From',
     dataIndex: 'from' as keyof PreSynDynamicsParam,
     render: (from: string) => from.split(',').map(mtype => mtype.trim()).map(mtype => (
-      <span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>
+      <span key={mtype}>{ }mtype</span>
     ))
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof PreSynDynamicsParam,
     render: (to: string) => to.split(',').map(mtype => mtype.trim()).map(mtype => (
-      <span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>
+      <span key={mtype}>{mtype}</span>
     ))
   },
   {
     title: 'Rule type',
     dataIndex: 'ruleType' as keyof PreSynDynamicsParam,
-    render: (ruleType: string) => (<Term term={ruleType} />)
+    render: (ruleType: string) => ({ ruleType })
   },
-  { title: (<><Term term="U" /> (mean ± std)</>), dataIndex: 'u' as keyof PreSynDynamicsParam, render: formatValue },
-  { title: (<><Term term="D" /> (mean ± std), ms</>), dataIndex: 'd' as keyof PreSynDynamicsParam, render: formatValue },
-  { title: (<><Term term="F" /> (mean ± std), ms</>), dataIndex: 'f' as keyof PreSynDynamicsParam, render: formatValue },
+  { title: (<>U (mean ± std)</>), dataIndex: 'u' as keyof PreSynDynamicsParam, render: formatValue },
+  { title: (<>D (mean ± std), ms</>), dataIndex: 'd' as keyof PreSynDynamicsParam, render: formatValue },
+  { title: (<>F (mean ± std), ms</>), dataIndex: 'f' as keyof PreSynDynamicsParam, render: formatValue },
   { title: 'NRRP', dataIndex: 'nrrp' as keyof PreSynDynamicsParam },
   { title: 'Hill scaling', dataIndex: 'hillScaling' as keyof PreSynDynamicsParam },
   {
@@ -113,22 +110,22 @@ const postColumns = [
     title: 'From',
     dataIndex: 'from' as keyof PostSynDynamicsParam,
     render: (from: string) => from.split(',').map(mtype => mtype.trim()).map(mtype => (
-      <span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>
+      <span key={mtype}>{mtype}<br /></span>
     ))
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof PostSynDynamicsParam,
     render: (to: string) => to.split(',').map(mtype => mtype.trim()).map(mtype => (
-      <span key={mtype}><Term term={mtype} description={getMtypeDescription(mtype)} /> <br /></span>
+      <span key={mtype}>{mtype}</span>
     ))
   },
   {
     title: 'Rule type',
     dataIndex: 'ruleType' as keyof PostSynDynamicsParam,
-    render: (ruleType: string) => (<Term term={ruleType} />)
+    render: (ruleType: string) => ({ ruleType })
   },
-  { title: (<><Term term="gsyn" /> (mean ± std), nS</>), dataIndex: 'gsyn' as keyof PostSynDynamicsParam, render: formatValue },
+  { title: (<>gsyn (mean ± std), nS</>), dataIndex: 'gsyn' as keyof PostSynDynamicsParam, render: formatValue },
   { title: 'tdecay fast (mean ± std), ms', dataIndex: 'tdecayFast' as keyof PostSynDynamicsParam, render: formatValue },
   { title: 'NMDA/AMPA ratio', dataIndex: 'NMDAAMPARatio' as keyof PostSynDynamicsParam },
   { title: 'τdecay NMDA, ms', dataIndex: 'tdecayNMDA' as keyof PostSynDynamicsParam },

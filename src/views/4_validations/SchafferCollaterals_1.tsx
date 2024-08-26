@@ -14,9 +14,28 @@ import SynapseDensityProfileGraph from './schaffer-collaterals-1/SynapsesDensity
 
 import { dataPath } from '@/config';
 
+interface JsonDataItem {
+    name: string;
+    // Add other properties as needed
+}
+
+interface JsonData {
+    SynapsesConvergenceForPyramidalCells: JsonDataItem | null;
+    SynapsesConvergenceForPyramidalCellsTwo: JsonDataItem | null;
+    NumberOfSynapsesPerConections: JsonDataItem | null;
+    Divergence: JsonDataItem | null;
+    ESPS_IPSPLatency: JsonDataItem | null;
+    HalfWidth: JsonDataItem | null;
+    PSCRatioFromSCToCB1RPlus: JsonDataItem | null;
+    PSCRatioFromSCToCB1RMinus: JsonDataItem | null;
+    PSPAmplitude: JsonDataItem | null;
+    RiseTime: JsonDataItem | null;
+    TauDecay: JsonDataItem | null;
+}
+
 const SchafferCollateralsView: React.FC = () => {
     const theme = 4;
-    const [jsonData, setJsonData] = useState({
+    const [jsonData, setJsonData] = useState<JsonData>({
         SynapsesConvergenceForPyramidalCells: null,
         SynapsesConvergenceForPyramidalCellsTwo: null,
         NumberOfSynapsesPerConections: null,
@@ -100,111 +119,127 @@ const SchafferCollateralsView: React.FC = () => {
                 navItems={[
                     { label: 'Anatomy', isTitle: true },
                     { id: 'AnatomyDensityOfSynapsesSection', label: 'Density of synapses along the radial axis' },
-                    { id: 'SynapsesConvergenceForPyramidalCellsSection', label: jsonData.SynapsesConvergenceForPyramidalCells.name },
-                    { id: 'NumberOfSynapsesPerConectionsSection', label: jsonData.NumberOfSynapsesPerConections.name },
-                    { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: jsonData.SynapsesConvergenceForPyramidalCellsTwo.name },
-                    { id: 'DivergenceSection', label: 'Anatomy ' + jsonData.Divergence.name },
+                    { id: 'SynapsesConvergenceForPyramidalCellsSection', label: jsonData.SynapsesConvergenceForPyramidalCells?.name || 'Synapses Convergence For Pyramidal Cells' },
+                    { id: 'NumberOfSynapsesPerConectionsSection', label: jsonData.NumberOfSynapsesPerConections?.name || 'Number of Synapses Per Connections' },
+                    { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: jsonData.SynapsesConvergenceForPyramidalCellsTwo?.name || 'Synapses Convergence For Pyramidal Cells Two' },
+                    { id: 'DivergenceSection', label: 'Anatomy ' + (jsonData.Divergence?.name || 'Divergence') },
                     { label: 'Physiology', isTitle: true },
-                    { id: 'PSPAmplitudeSection', label: jsonData.PSPAmplitude.name },
-                    { id: 'PSCRatioFromSCToCB1RPlusSection', label: jsonData.PSCRatioFromSCToCB1RPlus.name },
-                    { id: 'PSCRatioFromSCToCB1RMinusSection', label: jsonData.PSCRatioFromSCToCB1RMinus.name },
+                    { id: 'PSPAmplitudeSection', label: jsonData.PSPAmplitude?.name || 'PSP Amplitude' },
+                    { id: 'PSCRatioFromSCToCB1RPlusSection', label: jsonData.PSCRatioFromSCToCB1RPlus?.name || 'PSC Ratio From SC To CB1R+' },
+                    { id: 'PSCRatioFromSCToCB1RMinusSection', label: jsonData.PSCRatioFromSCToCB1RMinus?.name || 'PSC Ratio From SC To CB1R-' },
                     { id: 'TemporalDynamicsOfSCToPCSynapticTransmissionSection', label: 'Temporal Dynamics of SC to PC Synaptic Transmission' },
-                    { id: 'ESPS_IPSPLatencySection', label: jsonData.ESPS_IPSPLatency.name },
+                    { id: 'ESPS_IPSPLatencySection', label: jsonData.ESPS_IPSPLatency?.name || 'ESPS IPSP Latency' },
                 ]}>
 
                 <Collapsible id="AnatomyDensityOfSynapsesSection" properties={["Anatomy"]} title={"Density of synapses along the radial axis"} >
-                    <SynapseDensityProfileGraph />
+                    <SynapseDensityProfileGraph theme={theme} />
                 </Collapsible>
 
-                <Collapsible id="SynapsesConvergenceForPyramidalCellsSection" properties={["Anatomy"]} title={jsonData.SynapsesConvergenceForPyramidalCells.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.SynapsesConvergenceForPyramidalCells}
-                        xAxisTitle="Synapse Indegree from each CA1 PC"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.SynapsesConvergenceForPyramidalCells && (
+                    <Collapsible id="SynapsesConvergenceForPyramidalCellsSection" properties={["Anatomy"]} title={jsonData.SynapsesConvergenceForPyramidalCells.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.SynapsesConvergenceForPyramidalCells}
+                            xAxisTitle="Synapse Indegree from each CA1 PC"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="NumberOfSynapsesPerConectionsSection" properties={["Anatomy"]} title={jsonData.NumberOfSynapsesPerConections.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.NumberOfSynapsesPerConections}
-                        xAxisTitle="Synapse Indegree from each CA1 INT"
-                        yAxisTitle="Count"
-                        isLogarithmic={true}
-                    />
-                </Collapsible>
+                {jsonData.NumberOfSynapsesPerConections && (
+                    <Collapsible id="NumberOfSynapsesPerConectionsSection" properties={["Anatomy"]} title={jsonData.NumberOfSynapsesPerConections.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.NumberOfSynapsesPerConections}
+                            xAxisTitle="Synapse Indegree from each CA1 INT"
+                            yAxisTitle="Count"
+                            isLogarithmic={true}
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="SynapsesConvergenceForPyramidalCellsTwoSection" properties={["Anatomy"]} title={jsonData.SynapsesConvergenceForPyramidalCellsTwo.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.SynapsesConvergenceForPyramidalCellsTwo}
-                        xAxisTitle="Synapses/Connection"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.SynapsesConvergenceForPyramidalCellsTwo && (
+                    <Collapsible id="SynapsesConvergenceForPyramidalCellsTwoSection" properties={["Anatomy"]} title={jsonData.SynapsesConvergenceForPyramidalCellsTwo.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.SynapsesConvergenceForPyramidalCellsTwo}
+                            xAxisTitle="Synapses/Connection"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="DivergenceSection" properties={["Anatomy"]} title={jsonData.Divergence.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.Divergence}
-                        xAxisTitle="Synapse Outdegree from each CA3 PC"
-                        yAxisTitle=""
-                    />
-                </Collapsible>
+                {jsonData.Divergence && (
+                    <Collapsible id="DivergenceSection" properties={["Anatomy"]} title={jsonData.Divergence.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.Divergence}
+                            xAxisTitle="Synapse Outdegree from each CA3 PC"
+                            yAxisTitle=""
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="PSPAmplitudeSection" properties={["Physiology"]} title={jsonData.PSPAmplitude.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.PSPAmplitude}
-                        xAxisTitle="PSP Amplitude (mV)"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.PSPAmplitude && (
+                    <Collapsible id="PSPAmplitudeSection" properties={["Physiology"]} title={jsonData.PSPAmplitude.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.PSPAmplitude}
+                            xAxisTitle="PSP Amplitude (mV)"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="PSCRatioFromSCToCB1RPlusSection" properties={["Physiology"]} title={jsonData.PSCRatioFromSCToCB1RPlus.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.PSCRatioFromSCToCB1RPlus}
-                        xAxisTitle="PSC Ratio"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.PSCRatioFromSCToCB1RPlus && (
+                    <Collapsible id="PSCRatioFromSCToCB1RPlusSection" properties={["Physiology"]} title={jsonData.PSCRatioFromSCToCB1RPlus.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.PSCRatioFromSCToCB1RPlus}
+                            xAxisTitle="PSC Ratio"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="PSCRatioFromSCToCB1RMinusSection" properties={["Physiology"]} title={jsonData.PSCRatioFromSCToCB1RMinus.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.PSCRatioFromSCToCB1RMinus}
-                        xAxisTitle="PSC Ratio"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.PSCRatioFromSCToCB1RMinus && (
+                    <Collapsible id="PSCRatioFromSCToCB1RMinusSection" properties={["Physiology"]} title={jsonData.PSCRatioFromSCToCB1RMinus.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.PSCRatioFromSCToCB1RMinus}
+                            xAxisTitle="PSC Ratio"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                <Collapsible id="TemporalDynamicsOfSCToPCSynapticTransmissionSection" properties={["Physiology"]} title={"Temporal Dynamics of SC to PC Synaptic Transmission"}>
+                {jsonData.RiseTime && jsonData.TauDecay && jsonData.HalfWidth && (
+                    <Collapsible id="TemporalDynamicsOfSCToPCSynapticTransmissionSection" properties={["Physiology"]} title={"Temporal Dynamics of SC to PC Synaptic Transmission"}>
+                        <h2 className="text-base  mb-2">{jsonData.RiseTime.name}</h2>
+                        <SCDistibutionGraph
+                            data={jsonData.RiseTime}
+                            xAxisTitle="Rise Time (ms)"
+                            yAxisTitle="Count"
+                        />
 
-                    <h2 className="text-base  mb-2">{jsonData.RiseTime.name}</h2>
-                    <SCDistibutionGraph
-                        data={jsonData.RiseTime}
-                        xAxisTitle="Rise Time (ms)"
-                        yAxisTitle="Count"
-                    />
+                        <h2 className="text-base mt-16 mb-2">{jsonData.TauDecay.name}</h2>
+                        <SCDistibutionGraph
+                            data={jsonData.TauDecay}
+                            xAxisTitle="Tau Decay (ms)"
+                            yAxisTitle="Count"
+                        />
 
-                    <h2 className="text-base mt-16 mb-2">{jsonData.TauDecay.name}</h2>
-                    <SCDistibutionGraph
-                        data={jsonData.TauDecay}
-                        xAxisTitle="Tau Decay (ms)"
-                        yAxisTitle="Count"
-                    />
+                        <h2 className="text-base mt-16 mb-2">{jsonData.HalfWidth.name}</h2>
+                        <SCDistibutionGraph
+                            data={jsonData.HalfWidth}
+                            xAxisTitle="Half-width (ms)"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
-                    <h2 className="text-base mt-16 mb-2">{jsonData.HalfWidth.name}</h2>
-                    <SCDistibutionGraph
-                        data={jsonData.HalfWidth}
-                        xAxisTitle="Half-width (ms)"
-                        yAxisTitle="Count"
-                    />
-
-                </Collapsible>
-
-                <Collapsible id="ESPS_IPSPLatencySection" properties={["Physiology"]} title={jsonData.ESPS_IPSPLatency.name}>
-                    <SCDistibutionGraph
-                        data={jsonData.ESPS_IPSPLatency}
-                        xAxisTitle="EPSP IPSP Latency (ms)"
-                        yAxisTitle="Count"
-                    />
-                </Collapsible>
+                {jsonData.ESPS_IPSPLatency && (
+                    <Collapsible id="ESPS_IPSPLatencySection" properties={["Physiology"]} title={jsonData.ESPS_IPSPLatency.name}>
+                        <SCDistibutionGraph
+                            data={jsonData.ESPS_IPSPLatency}
+                            xAxisTitle="EPSP IPSP Latency (ms)"
+                            yAxisTitle="Count"
+                        />
+                    </Collapsible>
+                )}
 
             </DataContainer>
         </>

@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy';
 
 import { neuriteTypes } from '../../../constants'
 import Factsheet from '@/components/Factsheet';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 

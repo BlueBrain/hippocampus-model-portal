@@ -21,7 +21,7 @@ import { basePath, dataPath } from '@/config';
 
 import RegionViewer from './region/region-viewer/RegionViewer';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 const RegionView: React.FC = () => {

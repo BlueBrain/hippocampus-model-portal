@@ -5,7 +5,7 @@ import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 import { mtypeDescription } from '@/terms';
 import { termFactory } from '@/components/Term';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 type TableEntry = {
@@ -164,7 +164,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         data={PSCRiseTimeData}
         columns={PSCRiseTimeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      // additionalData={doiIndex}
       />
       <div className="text-right mt-2">
         <DownloadButton
@@ -180,7 +180,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         data={PSCTauDecayData}
         columns={PSCTauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-        additionalData={doiIndex}
+      // additionalData={doiIndex}
       />
       <div className="text-right mt-2">
         <DownloadButton

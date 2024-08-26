@@ -7,10 +7,12 @@ import {
     Tooltip,
     Title,
     Legend,
+    ChartType,
+    LegendItem,
 } from 'chart.js';
 import { graphTheme } from '@/constants';
 import { downloadAsJson } from '@/utils';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
 
 Chart.register(
@@ -86,7 +88,7 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
 
                 const customPlugin = {
                     id: 'customPlugin',
-                    beforeDatasetsDraw(chart, args, options) {
+                    beforeDatasetsDraw(chart: Chart, args: any, options: any) {
                         const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
 
                         ctx.save();
@@ -124,7 +126,7 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                 };
 
                 chartInstanceRef.current = new Chart(ctx, {
-                    type: 'scatter',
+                    type: 'scatter' as ChartType,
                     data: {
                         datasets: [{
                             data: chartData,
@@ -139,7 +141,6 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                                 }
                             },
                             pointStyle: 'circle',
-                            radius: 4,
                         }]
                     },
                     options: {
@@ -181,15 +182,18 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                                         size: 11,
                                         weight: 'normal',
                                     },
-                                    generateLabels: (chart) => {
-                                        return ['E-E', 'E-I', 'I-E', 'I-I'].map(label => ({
+                                    generateLabels: (chart): LegendItem[] => {
+                                        return ['E-E', 'E-I', 'I-E', 'I-I'].map((label, index) => ({
                                             text: label,
                                             fillStyle: label === 'E-E' ? graphTheme.red :
                                                 label === 'E-I' ? graphTheme.green :
                                                     label === 'I-E' ? graphTheme.blue : graphTheme.purple,
                                             strokeStyle: 'transparent',
                                             hidden: false,
-                                            index: null
+                                            index: index,
+                                            datasetIndex: 0,
+                                            lineWidth: 0,
+                                            fontColor: 'black',
                                         }));
                                     }
                                 }

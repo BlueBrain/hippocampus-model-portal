@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -11,6 +11,7 @@ import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import DistrbutionPlot from '@/components/DistributionPlot';
 import LaminarGraph from '@/components/LaminarGraph';
+import TraceGraph from '@/components/TraceGraph/TraceGraph';
 
 import Filters from '@/layouts/Filters';
 
@@ -18,27 +19,21 @@ import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 
-import { basePath } from '../../config';
-import DownloadButton from '@/components/DownloadButton/DownloadButton';
+import { dataPath } from '@/config';
+import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
   const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
 
+  const [traceData, setTraceData] = useState<any>(null);
   const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ volume_section, prelayer, postlayer });
   const [factsheetData, setFactsheetData] = useState<any>(null);
-  const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
+  const [laminarPlots, setLaminarPlots] = useState<any>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
-  const [laminarPlots, setLaminarPlots] = useState<Record<string, boolean>>({});
-
 
   const theme = 3;
-
-  const setParams = (params: Record<string, string>): void => {
-    const query = { ...router.query, ...params };
-    router.push({ query }, undefined, { shallow: true });
-  };
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -52,6 +47,71 @@ const SchafferCollateralsView: React.FC = () => {
       setQuickSelection({ volume_section, prelayer, postlayer });
     }
   }, [router.query]);
+
+  useEffect(() => {
+    if (volume_section && prelayer && postlayer) {
+      fetchFactsheetData();
+      fetchTraceData();
+      fetchLaminarData();
+    }
+  }, [volume_section, prelayer, postlayer]);
+
+  const fetchFactsheetData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`);
+      const data = await response.json();
+      if (data && Array.isArray(data.values)) {
+        setFactsheetData(data.values);
+        setAvailablePlots({
+          SynapsesPerConnection: data.values.some(plot => plot.id === 'synapses-per-connection'),
+          SampleDivergenceByConnection: data.values.some(plot => plot.id === 'sample-divergence-by-connection'),
+          SampleDivergenceBySynapse: data.values.some(plot => plot.id === 'sample-divergence-by-synapse'),
+          SampleConvergenceByConnection: data.values.some(plot => plot.id === 'sample-convergence-by-connection'),
+          SampleConvergenceBySynapse: data.values.some(plot => plot.id === 'sample-convergence-by-synapse'),
+          PSPAmplitude: data.values.some(plot => plot.id === 'psp-amplitude'),
+          PSPCV: data.values.some(plot => plot.id === 'psp-cv'),
+          SynapseLatency: data.values.some(plot => plot.id === 'synapse-latency'),
+          SynapseLatencyFromSimulation: data.values.some(plot => plot.id === 'synapse-latency-for-simulation'),
+          RiseTimeFromSimulation: data.values.some(plot => plot.id === 'rise-time-constant-for-simulation'),
+          DecayTimeConstant: data.values.some(plot => plot.id === 'decay-time-constant'),
+          DecayTimeConstantFromSimulation: data.values.some(plot => plot.id === 'decay-time-constant-for-simulation'),
+          NMDAAMPARatio: data.values.some(plot => plot.id === 'nmda-ampa-ratio'),
+          UParameter: data.values.some(plot => plot.id === 'u-parameter'),
+          DParameter: data.values.some(plot => plot.id === 'd-parameter'),
+          GSYNX: data.values.some(plot => plot.id === 'g-synx'),
+          NRRPParameter: data.values.some(plot => plot.id === 'nrrp-parameter'),
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching factsheet:', error);
+    }
+  };
+
+  const fetchTraceData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/trace.json`);
+      const data = await response.json();
+      setTraceData(data);
+    } catch (error) {
+      console.error('Error fetching trace data:', error);
+    }
+  };
+
+  const fetchLaminarData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`);
+      const data = await response.json();
+      const laminarData = data.values.find(plot => plot.id === 'laminar-distribution');
+      setLaminarPlots(laminarData);
+    } catch (error) {
+      console.error('Error fetching laminar data:', error);
+    }
+  };
+
+  const setParams = (params: Record<string, string>): void => {
+    const query = { ...router.query, ...params };
+    router.push({ query }, undefined, { shallow: true });
+  };
 
   const setVolumeSectionQuery = (volume_section: VolumeSection) => {
     setQuickSelection(prev => {
@@ -97,85 +157,6 @@ const SchafferCollateralsView: React.FC = () => {
       setFn: setPostLayerQuery,
     },
   ];
-
-  useEffect(() => {
-    if (volume_section && prelayer && postlayer) {
-      const distributionPlotFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
-      const sCFile = `${basePath}/resources/data/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`;
-
-      // Fetch data from schaffer-collaterals.json for laminar distribution
-      fetch(sCFile)
-        .then(response => response.json())
-        .then(scData => {
-          const laminarData = scData.values.find(plot => plot.id === 'laminar-distribution');
-          laminarData && setLaminarPlots(laminarData);
-        })
-        .catch(error => console.error('Error fetching schaffer-collaterals data:', error));
-
-      // Fetch data from distributionPlotFile only
-      fetch(distributionPlotFile)
-        .then(response => response.json())
-        .then(distributionData => {
-          if (distributionData && Array.isArray(distributionData.values)) {
-            const plots = distributionData.values;
-
-            const availablePlots = {
-              // -- Anatomy
-
-              //number of synapses per connection distribution + mean and std
-              SynapsesPerConnection: plots.some(plot => plot.id === 'synapses-per-connection'),
-
-              //Divergence (connections) distribution + mean and std
-              SampleDivergenceByConnection: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
-
-              //Divergence (synapses) distribution + mean and std
-              SampleDivergenceBySynapse: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
-
-              //Convergence (connections) distribution + mean and std
-              SampleConvergenceByConnection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
-
-              //Convergence (synapses) distribution + mean and std
-              SampleConvergenceBySynapse: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
-
-              // -- Physiology
-
-              //PSP distribution + mean and std
-              PSPAmplitude: plots.some(plot => plot.id === 'psp-amplitude'),
-
-              //CV distribution + mean and std
-              PSPCV: plots.some(plot => plot.id === 'psp-cv'),
-
-              //Synapse latency distribution + mean and std
-              SynapseLatency: plots.some(plot => plot.id === 'synapse-latency'),
-              SynapseLatencyFromSimulation: plots.some(plot => plot.id === 'synapse-latency-for-simulation'),
-
-              //Rise time constant distribution + mean and std
-              RiseTimeFromSimulation: plots.some(plot => plot.id === 'rise-time-constant-for-simulation'),
-
-              //Decay time constant distribution + mean and std
-              DecayTimeConstant: plots.some(plot => plot.id === 'decay-time-constant'),
-              DecayTimeConstantFromSimulation: plots.some(plot => plot.id === 'decay-time-constant-for-simulation'),
-
-              //NMDA/AMPA ratio distribution + mean and std
-              NMDAAMPARatio: plots.some(plot => plot.id === 'nmda-ampa-ratio'),
-
-              //Distribution + mean and std of U, D, F, NRRP
-              UParameter: plots.some(plot => plot.id === 'u-parameter'),
-              DParameter: plots.some(plot => plot.id === 'd-parameter'),
-              GSYNX: plots.some(plot => plot.id === 'g-synx'),
-              NRRPParameter: plots.some(plot => plot.id === 'nrrp-parameter'),
-            };
-
-            setAvailablePlots(availablePlots);
-            setFactsheetData([...plots]);
-          } else {
-            console.error('Unexpected data format:', distributionData);
-          }
-        })
-        .catch(error => console.error('Error fetching factsheet:', error));
-    }
-  }, [volume_section, prelayer, postlayer]);
-
 
   const getPlotDataById = (id: string) => {
     return factsheetData?.find((plot: any) => plot.id === id);
@@ -228,7 +209,8 @@ const SchafferCollateralsView: React.FC = () => {
                     onSelect={setPreLayerQuery}
                     theme={theme} />
                 </div>
-              </div><div className={`selector__column theme-${theme} flex-1`}>
+              </div>
+              <div className={`selector__column theme-${theme} flex-1`}>
                 <div className={`selector__head theme-${theme}`}>2. Select a post-synaptic cell group</div>
                 <div className="selector__body">
                   <List
@@ -244,7 +226,6 @@ const SchafferCollateralsView: React.FC = () => {
           </div>
         </div>
       </Filters>
-
       <DataContainer
         theme={theme}
         navItems={[
@@ -772,7 +753,13 @@ const SchafferCollateralsView: React.FC = () => {
         </Collapsible>
 
         <Collapsible title='Traces' id='TracesSection' properties={["Physiology"]}>
-          <p>Traces</p>
+          {traceData && traceData.individual_trace && traceData.mean_trace && (
+            <TraceGraph
+              individualTrace={traceData.individual_trace}
+              meanTrace={traceData.mean_trace}
+              title="Individual and Mean Traces"
+            />
+          )}
         </Collapsible>
 
       </DataContainer >

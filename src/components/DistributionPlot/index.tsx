@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { graphTheme } from '@/constants';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -55,7 +56,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                 datasets: [{
                     label: 'Frequency',
                     data: counts,
-                    backgroundColor: '#050A30',
+                    backgroundColor: graphTheme.blue,
                     borderColor: '#050A30',
                     borderWidth: 1,
                 }]
@@ -68,7 +69,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     datasets: [{
                         label: 'Frequency',
                         data: plotData.counts,
-                        backgroundColor: '#050A30',
+                        backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
                     }]
@@ -82,7 +83,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     datasets: [{
                         label: 'Frequency',
                         data: counts,
-                        backgroundColor: '#050A30',
+                        backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
                     }]
@@ -95,7 +96,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     datasets: [{
                         label: 'Value',
                         data: entries.map(([_, value]) => value),
-                        backgroundColor: '#050A30',
+                        backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
                     }]
