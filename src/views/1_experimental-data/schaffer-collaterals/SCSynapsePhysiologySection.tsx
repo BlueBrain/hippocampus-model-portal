@@ -6,8 +6,9 @@ import { downloadAsJson } from '@/utils';
 import { termFactory } from '@/components/Term';
 import { pathwayDescription } from '@/terms';
 
-import synapsePhysiologyData from './sc-synaptic-physiology.json';
-import doiIndex from './ref-doi.json';
+import { dataPath } from '@/config';
+
+
 import DownloadButton from '@/components/DownloadButton';
 
 const Term = termFactory(pathwayDescription);

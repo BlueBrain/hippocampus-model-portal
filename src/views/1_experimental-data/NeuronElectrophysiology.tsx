@@ -15,7 +15,6 @@ import Collapsible from '@/components/Collapsible';
 import TraceRelatedMorphologies from '@/components/TraceRelatedMorphologies';
 import StickyContainer from '@/components/StickyContainer';
 import AuthorBox from '@/components/AuthorBox/AuthorBox';
-import DownloadButton from '@/components/DownloadButton';
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
@@ -169,9 +168,6 @@ const NeuronElectrophysiology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    {
-                      //JSON.stringify(esDocuments[0]._source)
-                    }
                     <Metadata nexusDocument={esDocuments[0]._source} />
                     <h3 className="mt-3">Patch clamp recording</h3>
                     <div className="row start-xs end-sm mt-2 mb-2">
@@ -208,7 +204,7 @@ const NeuronElectrophysiology: React.FC = () => {
                         className="mr-1"
                         type="primary"
                         size="small"
-                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`}
+                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}
                       >
                         Send to the Build section
                       </Button>

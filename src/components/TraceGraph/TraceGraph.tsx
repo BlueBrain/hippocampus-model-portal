@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Spin } from 'antd';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,7 +9,11 @@ import {
     Title,
     Tooltip,
     Legend,
+    ChartData,
+    ChartOptions
 } from 'chart.js';
+
+// Assuming graphTheme is imported from a constants file
 import { graphTheme } from '@/constants';
 
 ChartJS.register(
@@ -23,7 +26,16 @@ ChartJS.register(
     Legend
 );
 
-const interpolateArray = (data, desiredLength) => {
+// Define types
+type TraceData = number[];
+
+interface TraceGraphProps {
+    individualTrace: TraceData;
+    meanTrace: TraceData;
+    title: string;
+}
+
+const interpolateArray = (data: TraceData, desiredLength: number): TraceData => {
     const step = (data.length - 1) / (desiredLength - 1);
     return Array.from({ length: desiredLength }, (_, i) => {
         const index = i * step;
@@ -36,29 +48,20 @@ const interpolateArray = (data, desiredLength) => {
     });
 };
 
-const TraceGraph = ({ individualTrace, meanTrace, title }) => {
+const TraceGraph: React.FC<TraceGraphProps> = ({ individualTrace, meanTrace, title }) => {
     const [loading, setLoading] = useState(true);
-    const [chartData, setChartData] = useState(null);
+    const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
 
     useEffect(() => {
         setLoading(true);
 
-        // Determine the length of the longer trace
         const maxLength = Math.max(individualTrace.length, meanTrace.length);
-        const timeStepIndividual = 100 / (individualTrace.length - 1);
-        const timeStepMean = 100 / (meanTrace.length - 1);
+        const extendedTimeValues = Array.from({ length: maxLength }, (_, i) => (i * 100) / (maxLength - 1));
 
-        const timeValuesIndividual = Array.from({ length: individualTrace.length }, (_, i) => i * timeStepIndividual);
-        const timeValuesMean = Array.from({ length: meanTrace.length }, (_, i) => i * timeStepMean);
-
-        // Interpolate both traces to the same length (max length of either trace)
         const extendedIndividualTrace = interpolateArray(individualTrace, maxLength);
         const extendedMeanTrace = interpolateArray(meanTrace, maxLength);
 
-        const extendedTimeValues = Array.from({ length: maxLength }, (_, i) => (i * 100) / (maxLength - 1));
-
-        // Prepare the chart data
-        const newChartData = {
+        const newChartData: ChartData<'line'> = {
             labels: extendedTimeValues,
             datasets: [
                 {
@@ -84,7 +87,7 @@ const TraceGraph = ({ individualTrace, meanTrace, title }) => {
         setLoading(false);
     }, [individualTrace, meanTrace]);
 
-    const options = {
+    const options: ChartOptions<'line'> = {
         responsive: true,
         plugins: {
             legend: {
@@ -97,7 +100,7 @@ const TraceGraph = ({ individualTrace, meanTrace, title }) => {
         },
         scales: {
             x: {
-                display: false, // Hide the x-axis labels
+                display: false,
             },
             y: {
                 title: {
@@ -108,11 +111,11 @@ const TraceGraph = ({ individualTrace, meanTrace, title }) => {
         },
     };
 
-    return (
-        <Spin spinning={loading}>
-            {chartData && <Line data={chartData} options={options} />}
-        </Spin>
-    );
+    if (loading || !chartData) {
+        return <div>Loading...</div>;
+    }
+
+    return <Line data={chartData} options={options} />;
 };
 
 export default TraceGraph;
