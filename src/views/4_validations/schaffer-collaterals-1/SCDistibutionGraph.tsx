@@ -9,6 +9,8 @@ import {
     Title,
 } from 'chart.js';
 
+import { graphTheme } from '@/constants';
+
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 
@@ -54,7 +56,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                             {
                                 label: data.name,
                                 data: data.counts,
-                                backgroundColor: 'black',
+                                backgroundColor: graphTheme.blue,
                             },
                         ],
                     },
