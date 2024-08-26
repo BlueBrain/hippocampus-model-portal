@@ -161,12 +161,12 @@ const ConnectionsView: React.FC = () => {
             <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
               <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
               <div className="selector__body">
-                {/* 
-                   <VolumeSectionSelector3D
+
+                <VolumeSectionSelector3D
                   value={quickSelection.volume_section}
                   onSelect={(value) => updateQuickSelection('volume_section', value)}
                   theme={theme}
-                />*/}
+                />
 
               </div>
             </div>

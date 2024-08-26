@@ -4,7 +4,7 @@ import Title from '../components/Title';
 import FullPage from '../layouts/FullPage';
 import { accentColors } from '../config';
 import { Color } from '../types';
-import glossaryContent from './glossary-content.json';
+
 import { basePath } from '../config';
 import DownloadButton from '@/components/DownloadButton/DownloadButton';
 
