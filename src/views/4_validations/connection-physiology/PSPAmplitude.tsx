@@ -147,6 +147,9 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                         }]
                     },
                     options: {
+                        animation: {
+                            duration: 0
+                        },
                         aspectRatio: 1,
                         scales: {
                             x: {

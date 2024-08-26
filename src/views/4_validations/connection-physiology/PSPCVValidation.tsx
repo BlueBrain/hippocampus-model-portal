@@ -144,6 +144,9 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                         }]
                     },
                     options: {
+                        animation: {
+                            duration: 0
+                        },
                         aspectRatio: 1,
                         scales: {
                             x: {
