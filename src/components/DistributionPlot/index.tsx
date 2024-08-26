@@ -56,7 +56,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                 datasets: [{
                     label: 'Frequency',
                     data: counts,
-                    backgroundColor: '#050A30',
+                    backgroundColor: graphTheme.blue,
                     borderColor: '#050A30',
                     borderWidth: 1,
                 }]
