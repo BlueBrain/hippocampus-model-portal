@@ -18,10 +18,6 @@ const NeuronView: React.FC = () => {
 
     return (
         <>
-
-
-
-
             <Filters theme={theme} hasData={true}>
                 <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
                     <div className="w-full md:flex-none mb-8 md:mb-8 lg:pr-0">

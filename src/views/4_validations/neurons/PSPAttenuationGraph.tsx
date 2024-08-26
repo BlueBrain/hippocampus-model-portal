@@ -101,7 +101,7 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
                             backgroundColor: 'black',
                             borderColor: 'black',
                             pointStyle: 'circle',
-                            pointRadius: 3,
+                            pointRadius: 2,
                             pointHoverRadius: 5,
                         },
                         {
@@ -111,7 +111,7 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
                             borderColor: 'black',
                             pointRadius: 0,
                             showLine: true,
-                            borderWidth: 3,
+                            borderWidth: 2,
                         },
                         {
                             label: 'Experiment',
@@ -119,7 +119,7 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
                             backgroundColor: graphTheme.red,
                             borderColor: graphTheme.red,
                             pointStyle: 'circle',
-                            pointRadius: 3,
+                            pointRadius: 2,
                             pointHoverRadius: 5,
                         },
                         {
@@ -129,11 +129,14 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
                             borderColor: graphTheme.red,
                             pointRadius: 0,
                             showLine: true,
-                            borderWidth: 3,
+                            borderWidth: 2,
                         }
                     ]
                 },
                 options: {
+                    animation: {
+                        duration: 0
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
