@@ -26,6 +26,51 @@ interface SynapsesPerConnectionData {
     ];
 }
 
+interface CustomDataPoint {
+    x: number;
+    y: number;
+    xErr?: number;
+    yErr?: number;
+}
+
+// Custom plugin for error bars
+const errorBarsPlugin = {
+    id: 'errorBars',
+    afterDatasetsDraw(chart) {
+        const ctx = chart.ctx;
+        chart.data.datasets.forEach((dataset, i) => {
+            const meta = chart.getDatasetMeta(i);
+            if (!meta.hidden) {
+                meta.data.forEach((element, index) => {
+                    const { x, y, xErr, yErr } = dataset.data[index] as CustomDataPoint;
+                    const xScale = chart.scales.x;
+                    const yScale = chart.scales.y;
+
+                    ctx.save();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = dataset.borderColor as string;
+
+                    if (xErr) {
+                        ctx.beginPath();
+                        ctx.moveTo(xScale.getPixelForValue(x - xErr), yScale.getPixelForValue(y));
+                        ctx.lineTo(xScale.getPixelForValue(x + xErr), yScale.getPixelForValue(y));
+                        ctx.stroke();
+                    }
+
+                    if (yErr) {
+                        ctx.beginPath();
+                        ctx.moveTo(xScale.getPixelForValue(x), yScale.getPixelForValue(y - yErr));
+                        ctx.lineTo(xScale.getPixelForValue(x), yScale.getPixelForValue(y + yErr));
+                        ctx.stroke();
+                    }
+
+                    ctx.restore();
+                });
+            }
+        });
+    }
+};
+
 const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const [chartSize, setChartSize] = useState(0);
@@ -61,7 +106,7 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
             const connectionClasses = ['ee', 'ei', 'ie', 'ii'];
             const colors = ['red', 'green', 'blue', 'magenta'];
 
-            const datasets = connectionClasses.map((connectionClass, index) => ({
+            const datasets: ChartDataset<'scatter'>[] = connectionClasses.map((connectionClass, index) => ({
                 label: connectionClass.toUpperCase(),
                 data: Object.keys(valueMap.connection_class)
                     .filter(key => valueMap.connection_class[key] === connectionClass)
@@ -70,7 +115,7 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
                         y: valueMap.bio_mean[key],
                         xErr: valueMap.mod_std[key],
                         yErr: valueMap.bio_std[key],
-                    })),
+                    } as CustomDataPoint)),
                 backgroundColor: colors[index],
                 borderColor: colors[index],
             }));
@@ -82,7 +127,10 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
             // Add diagonal line
             datasets.push({
                 label: 'Diagonal',
-                data: [{ x: 0, y: 0 }, { x: maxValue, y: maxValue }],
+                data: [
+                    { x: 0, y: 0, xErr: 0, yErr: 0 },
+                    { x: maxValue, y: maxValue, xErr: 0, yErr: 0 }
+                ] as CustomDataPoint[],
                 borderColor: 'black',
                 borderDash: [5, 5],
                 pointRadius: 0,
@@ -95,7 +143,10 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
 
             datasets.push({
                 label: 'Fit (II)',
-                data: [{ x: 0, y: 0 }, { x: maxValue, y: maxValue * slopeII }],
+                data: [
+                    { x: 0, y: 0, xErr: 0, yErr: 0 },
+                    { x: maxValue, y: maxValue * slopeII, xErr: 0, yErr: 0 }
+                ] as CustomDataPoint[],
                 borderColor: 'magenta',
                 pointRadius: 0,
                 showLine: true,
@@ -103,7 +154,10 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
 
             datasets.push({
                 label: 'Fit (Rest)',
-                data: [{ x: 0, y: 0 }, { x: maxValue, y: maxValue * slopeRest }],
+                data: [
+                    { x: 0, y: 0, xErr: 0, yErr: 0 },
+                    { x: maxValue, y: maxValue * slopeRest, xErr: 0, yErr: 0 }
+                ] as CustomDataPoint[],
                 borderColor: 'red',
                 pointRadius: 0,
                 showLine: true,
@@ -112,9 +166,11 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
             return datasets;
         };
 
-        const chart = new Chart(ctx, {
+        const chartConfig: ChartConfiguration<'scatter'> = {
             type: 'scatter',
-            data: { datasets: createDatasets() },
+            data: {
+                datasets: createDatasets(),
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -123,7 +179,7 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
                     tooltip: {
                         callbacks: {
                             label: (context) => {
-                                const point = context.raw as { x: number, y: number, xErr?: number, yErr?: number };
+                                const point = context.raw as CustomDataPoint;
                                 return `${context.dataset.label}: (${point.x.toFixed(2)} ± ${point.xErr?.toFixed(2) || 'N/A'}, ${point.y.toFixed(2)} ± ${point.yErr?.toFixed(2) || 'N/A'})`;
                             },
                         },
@@ -142,43 +198,10 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
                     },
                 },
             },
-            plugins: [{
-                id: 'errorBars',
-                afterDatasetsDraw(chart) {
-                    const ctx = chart.ctx;
-                    chart.data.datasets.forEach((dataset, i) => {
-                        const meta = chart.getDatasetMeta(i);
-                        if (!meta.hidden) {
-                            meta.data.forEach((element, index) => {
-                                const { x, y, xErr, yErr } = dataset.data[index] as { x: number, y: number, xErr?: number, yErr?: number };
-                                const xScale = chart.scales.x;
-                                const yScale = chart.scales.y;
+            plugins: [errorBarsPlugin],
+        };
 
-                                ctx.save();
-                                ctx.lineWidth = 2;
-                                ctx.strokeStyle = dataset.borderColor as string;
-
-                                if (xErr) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(xScale.getPixelForValue(x - xErr), yScale.getPixelForValue(y));
-                                    ctx.lineTo(xScale.getPixelForValue(x + xErr), yScale.getPixelForValue(y));
-                                    ctx.stroke();
-                                }
-
-                                if (yErr) {
-                                    ctx.beginPath();
-                                    ctx.moveTo(xScale.getPixelForValue(x), yScale.getPixelForValue(y - yErr));
-                                    ctx.lineTo(xScale.getPixelForValue(x), yScale.getPixelForValue(y + yErr));
-                                    ctx.stroke();
-                                }
-
-                                ctx.restore();
-                            });
-                        }
-                    });
-                }
-            }]
-        } as ChartConfiguration<'scatter'>);
+        const chart = new Chart(ctx, chartConfig);
 
         return () => {
             chart.destroy();

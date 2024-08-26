@@ -16,6 +16,7 @@ import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
 
+// Function to get unique M-types for a given layer
 const getMtypes = (layer: Layer): string[] => {
   return layer
     ? models
@@ -26,6 +27,7 @@ const getMtypes = (layer: Layer): string[] => {
     : [];
 }
 
+// Function to get unique E-types for a given M-type
 const getEtypes = (mtype: string): string[] => {
   return mtype
     ? models
@@ -36,6 +38,7 @@ const getEtypes = (mtype: string): string[] => {
     : [];
 }
 
+// Function to get unique instances for given M-type and E-type
 const getInstances = (mtype: string, etype: string): string[] => {
   return etype
     ? models
@@ -45,6 +48,7 @@ const getInstances = (mtype: string, etype: string): string[] => {
     : [];
 }
 
+// React Functional Component
 const Neurons: React.FC = () => {
   const router = useRouter();
   const theme = 3;
@@ -55,6 +59,7 @@ const Neurons: React.FC = () => {
   const currentEtype: string = query.etype as string;
   const currentInstance: string = query.instance as string;
 
+  // Function to set URL parameters
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
       ...{
@@ -68,35 +73,38 @@ const Neurons: React.FC = () => {
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
+  // Functions to set specific parameters
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
       mtype: '',
       etype: '',
       instance: '',
-    })
+    });
   };
   const setMtype = (mtype: string) => {
     setParams({
       mtype,
       etype: '',
       instance: '',
-    })
+    });
   };
   const setEtype = (etype: string) => {
     setParams({
       etype,
       instance: '',
-    })
+    });
   };
   const setInstance = (instance: string) => {
-    setParams({ instance })
+    setParams({ instance });
   };
 
+  // Generate options based on current parameters
   const mtypes = getMtypes(currentLayer);
   const etypes = getEtypes(currentMtype);
   const instances = getInstances(currentMtype, currentEtype);
 
+  // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'Layer',
@@ -108,21 +116,19 @@ const Neurons: React.FC = () => {
       title: 'M-type',
       key: 'mtype',
       getValuesFn: getMtypes,
-      getValuesParam: 'layer',
       setFn: setMtype,
     },
     {
       title: 'E-Type',
       key: 'etype',
       getValuesFn: getEtypes,
-      getValuesParam: 'mtype',
       setFn: setEtype,
     },
     {
       title: 'Instance',
       key: 'instance',
-      getValuesFn: getInstances,
-      getValuesParam: ['mtype', 'etype'],
+      // Wrap the getInstances function to match expected signature
+      getValuesFn: (etype: string) => getInstances(currentMtype, etype),
       setFn: setInstance,
     },
   ];
@@ -215,6 +221,7 @@ const Neurons: React.FC = () => {
   );
 };
 
+// Export component with preselection HOC
 export default withPreselection(
   Neurons,
   {

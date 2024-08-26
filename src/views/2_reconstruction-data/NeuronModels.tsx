@@ -1,30 +1,22 @@
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Spin } from 'antd';
 
-import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
-import LayerSelector from '@/components/LayerSelector';
 import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
-import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
 import { Layer, QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
-import EtypeFactsheet from '@/components/EtypeFactsheet';
-import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-import { basePath } from '@/config';
+
 import models from '@/models.json';
 import { defaultSelection, layers } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
 
-import styles from '../../styles/digital-reconstructions/neurons.module.scss';
-
-const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
-
+// Function to get unique M-types for a given layer
 const getMtypes = (layer: Layer): string[] => {
   return layer
     ? models
@@ -35,6 +27,7 @@ const getMtypes = (layer: Layer): string[] => {
     : [];
 }
 
+// Function to get unique E-types for a given M-type
 const getEtypes = (mtype: string): string[] => {
   return mtype
     ? models
@@ -45,6 +38,7 @@ const getEtypes = (mtype: string): string[] => {
     : [];
 }
 
+// Function to get unique instances for given M-type and E-type
 const getInstances = (mtype: string, etype: string): string[] => {
   return etype
     ? models
@@ -54,16 +48,18 @@ const getInstances = (mtype: string, etype: string): string[] => {
     : [];
 }
 
+// React Functional Component
 const Neurons: React.FC = () => {
   const router = useRouter();
   const theme = 3;
-  const { query } = router;
 
+  const { query } = router;
   const currentLayer: Layer = query.layer as Layer;
   const currentMtype: string = query.mtype as string;
   const currentEtype: string = query.etype as string;
   const currentInstance: string = query.instance as string;
 
+  // Function to set URL parameters
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
       ...{
@@ -77,41 +73,38 @@ const Neurons: React.FC = () => {
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
+  // Functions to set specific parameters
   const setLayer = (layer: Layer) => {
     setParams({
       layer,
       mtype: '',
       etype: '',
       instance: '',
-    })
+    });
   };
   const setMtype = (mtype: string) => {
     setParams({
       mtype,
       etype: '',
       instance: '',
-    })
+    });
   };
   const setEtype = (etype: string) => {
     setParams({
       etype,
       instance: '',
-    })
+    });
   };
   const setInstance = (instance: string) => {
-    setParams({ instance })
+    setParams({ instance });
   };
 
+  // Generate options based on current parameters
   const mtypes = getMtypes(currentLayer);
   const etypes = getEtypes(currentMtype);
   const instances = getInstances(currentMtype, currentEtype);
 
-  const getMorphologyDistribution = (morphologyResource: any) => {
-    return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
-  };
-
-  const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
-
+  // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'Layer',
@@ -123,32 +116,28 @@ const Neurons: React.FC = () => {
       title: 'M-type',
       key: 'mtype',
       getValuesFn: getMtypes,
-      getValuesParam: 'layer',
       setFn: setMtype,
     },
     {
       title: 'E-Type',
       key: 'etype',
       getValuesFn: getEtypes,
-      getValuesParam: 'mtype',
       setFn: setEtype,
     },
     {
       title: 'Instance',
       key: 'instance',
-      getValuesFn: getInstances,
-      getValuesParam: ['mtype', 'etype'],
+      // Wrap the getInstances function to match expected signature
+      getValuesFn: (etype: string) => getInstances(currentMtype, etype),
       setFn: setInstance,
     },
   ];
-
   return (
     <>
       <Filters theme={theme}>
         <div className="row bottom-xs w-100">
           <div className="col-xs-12 col-lg-6">
             <Title
-              primaryColor={colorName}
               title="Neuron models"
               subtitle="Reconstruction Data"
               theme={theme}
@@ -162,9 +151,9 @@ const Neurons: React.FC = () => {
 
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-                <div className="selector__selector-container">
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Choose a layer</div>
+                <div className={"selector__selector-container"}>
                   <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
@@ -172,9 +161,9 @@ const Neurons: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
-                <div className="selector__body">
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
+                <div className={"selector__body"}>
                   <List
                     block
                     list={mtypes}

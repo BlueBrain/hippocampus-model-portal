@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     Chart,
+    ChartConfiguration,
     ScatterController,
     LineController,
     LinearScale,
@@ -24,11 +25,30 @@ Chart.register(
     Legend
 );
 
-const PSPAttenuationGraph = ({ theme }) => {
+interface ValueMap {
+    Distance: { [key: string]: number };
+    'dend_psp/soma_psp': { [key: string]: number };
+    fit_model_data?: { [key: string]: number };
+    fit_exp_data?: { [key: string]: number };
+}
+
+interface PSPAttenuationData {
+    values: {
+        [key: number]: {
+            value_map: ValueMap;
+        };
+    };
+}
+
+interface PSPAttenuationGraphProps {
+    theme: number;
+}
+
+const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chartInstance, setChartInstance] = useState<Chart | null>(null);
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-    const [pspAttenuationData, setPSPAttenuationData] = useState(null);
+    const [pspAttenuationData, setPSPAttenuationData] = useState<PSPAttenuationData | null>(null);
 
     useEffect(() => {
         fetch(dataPath + '/4_validations/neurons/psp-attenuation.json')
@@ -57,17 +77,21 @@ const PSPAttenuationGraph = ({ theme }) => {
                 y: modelData['dend_psp/soma_psp'][key],
             }));
 
-            const modelFitDataset = Object.keys(modelFitData.Distance).map(key => ({
-                x: modelFitData.Distance[key],
-                y: modelFitData.fit_model_data[key],
-            }));
+            const modelFitDataset = modelFitData.fit_model_data
+                ? Object.keys(modelFitData.Distance).map(key => ({
+                    x: modelFitData.Distance[key],
+                    y: modelFitData.fit_model_data![key],
+                }))
+                : [];
 
-            const expFitDataset = Object.keys(expFitData.Distance).map(key => ({
-                x: expFitData.Distance[key],
-                y: expFitData.fit_exp_data[key],
-            }));
+            const expFitDataset = expFitData.fit_exp_data
+                ? Object.keys(expFitData.Distance).map(key => ({
+                    x: expFitData.Distance[key],
+                    y: expFitData.fit_exp_data![key],
+                }))
+                : [];
 
-            const newChart = new Chart(ctx, {
+            const config: ChartConfiguration = {
                 type: 'scatter',
                 data: {
                     datasets: [
@@ -158,8 +182,9 @@ const PSPAttenuationGraph = ({ theme }) => {
                         }
                     }
                 }
-            });
+            };
 
+            const newChart = new Chart(ctx, config);
             setChartInstance(newChart);
         }
     };

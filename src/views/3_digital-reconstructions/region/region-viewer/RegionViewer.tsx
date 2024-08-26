@@ -8,7 +8,6 @@ import { layers } from '@/constants';
 
 import RegionViewer from './region-viewer';
 
-
 import styles from './volume-viewer.module.scss';
 
 export type RegionViewerProps = {
@@ -17,11 +16,10 @@ export type RegionViewerProps = {
   onReady?: () => void;
 };
 
-const defaultLayerVisibilityState: Record<Layer, boolean> = {
-  region: true,
-  cylinder: true,
-  slice: true,
-};
+const defaultLayerVisibilityState: Record<Layer, boolean> = layers.reduce((acc, layer) => {
+  acc[layer] = true;
+  return acc;
+}, {} as Record<Layer, boolean>);
 
 // Check if fullscreen is available
 const isFullscreenAvailable = typeof document !== 'undefined' && (document.fullscreenEnabled || document['webkitFullscreenEnabled']);
@@ -35,14 +33,17 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
   const [layerVisibilityState, setLayerVisibilityState] = useState(defaultLayerVisibilityState);
   const [regionMaskVisible, setRegionMaskVisible] = useState(true);
 
-  const updateLayerVisibility = (layerVisibilityState: Record<Layer, boolean>) => {
-    setLayerVisibilityState(layerVisibilityState);
-    volumeViewer?.setLayerVisibility(layerVisibilityState);
+  const updateLayerVisibility = (newState: Partial<Record<Layer, boolean>>) => {
+    const updatedState = { ...layerVisibilityState, ...newState };
+    setLayerVisibilityState(updatedState);
+    volumeViewer?.setLayerVisibility(updatedState);
   };
 
   const updateRegionMaskVisibility = (visible: boolean) => {
     setRegionMaskVisible(visible);
-    volumeViewer?.setRegionMaskVisibility(visible);
+    // Assuming the RegionViewer has a method to update the region mask visibility
+    // If not, we might need to handle this differently
+    //volumeViewer?.updateRegionMaskVisibility?.(visible);
   };
 
   const toggleFullscreen = () => {
@@ -66,20 +67,16 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
     setRegionViewer(viewer);
 
     viewer.init(meshPath, volumeSection).then(() => {
-      if (onReady) {
-        onReady();
-      }
+      onReady?.();
     });
 
     return () => {
       viewer.destroy();
     };
-  }, [meshPath, containerRef, volumeSection, onReady]);
+  }, [meshPath, volumeSection, onReady]);
 
   useEffect(() => {
-    if (volumeViewer && volumeSection) {
-      volumeViewer.setVolumeSection(volumeSection, layerVisibilityState);
-    }
+    volumeViewer?.setVolumeSection(volumeSection, layerVisibilityState);
   }, [volumeViewer, volumeSection, layerVisibilityState]);
 
   return (
@@ -132,11 +129,8 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
               <Checkbox
                 className={styles.coloredCheckbox}
                 style={{ '--checkbox-color': "black" } as React.CSSProperties}
-                defaultChecked={regionMaskVisible}
-                onChange={(e) => {
-                  const { checked: visible } = e.target;
-                  updateRegionMaskVisibility(visible);
-                }}
+                checked={regionMaskVisible}
+                onChange={(e) => updateRegionMaskVisibility(e.target.checked)}
               >
                 CA1 region mask
               </Checkbox>
@@ -149,11 +143,8 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
                 <Checkbox
                   className={styles.coloredCheckbox}
                   style={{ '--checkbox-color': "black" } as React.CSSProperties}
-                  defaultChecked={layerVisibilityState[layer]}
-                  onChange={(e) => {
-                    const { checked: visible } = e.target;
-                    updateLayerVisibility({ ...layerVisibilityState, [layer]: visible });
-                  }}
+                  checked={layerVisibilityState[layer]}
+                  onChange={(e) => updateLayerVisibility({ [layer]: e.target.checked })}
                 >
                   {layer}
                 </Checkbox>
