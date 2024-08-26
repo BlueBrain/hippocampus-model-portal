@@ -9,8 +9,6 @@ import {
     Tooltip,
     Title,
     Legend,
-    ChartData,
-    ChartOptions,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
@@ -32,24 +30,26 @@ export type BoutonDensityValidationProps = {
     theme?: number;
 };
 
-interface BoutonDensityData {
+// Define the interface for the data structure
+interface BoutonDensityValidationData {
     value_map: {
-        mtype: string[];
-        model_mean: number[];
-        model_std: number[];
-        exp_mean: number[];
+        mtype: { [key: number]: string };
+        model_mean: { [key: number]: number };
+        model_std: { [key: number]: number };
+        exp_mean: { [key: number]: number };
     };
 }
 
 const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
-    const [data, setData] = useState<BoutonDensityData | null>(null);
+    const [data, setData] = useState<BoutonDensityValidationData | null>(null);
 
     useEffect(() => {
         fetch(dataPath + '/4_validations/connection-anatomy/bouton-density-validation.json')
             .then((response) => response.json())
-            .then((fetchedData: BoutonDensityData) => setData(fetchedData));
+            .then((data) => setData(data as BoutonDensityValidationData))
+            .catch((error) => console.error('Error fetching bouton density validation data:', error));
     }, []);
 
     const createChart = () => {
@@ -59,16 +59,15 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                 // Define the error bar plugin
                 const errorBarPlugin = {
                     id: 'errorBar',
-                    afterDatasetsDraw(chart: Chart, args: any, options: any) {
-                        const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
+                    afterDatasetsDraw(chart: any, args: any, options: any) {
+                        const { ctx, data, scales: { x, y } } = chart;
 
                         ctx.save();
-                        data.datasets.forEach((dataset: any, datasetIndex: number) => {
+                        data.datasets.forEach((dataset: any) => {
                             if (dataset.label === 'Model') {
-                                dataset.data.forEach((datapoint: any, index: number) => {
+                                dataset.data.forEach((datapoint: any) => {
                                     if (datapoint.yMin !== undefined && datapoint.yMax !== undefined) {
                                         const xPos = x.getPixelForValue(datapoint.x);
-                                        const yPos = y.getPixelForValue(datapoint.y);
                                         const yPosMin = y.getPixelForValue(datapoint.yMin);
                                         const yPosMax = y.getPixelForValue(datapoint.yMax);
 
@@ -97,86 +96,84 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
                     }
                 };
 
-                const chartData: ChartData<'scatter'> = {
-                    labels: data.value_map.mtype,
-                    datasets: [
-                        {
-                            label: 'Model',
-                            data: data.value_map.mtype.map((_, index) => ({
-                                x: index,
-                                y: data.value_map.model_mean[index],
-                                yMin: data.value_map.model_mean[index] - data.value_map.model_std[index],
-                                yMax: data.value_map.model_mean[index] + data.value_map.model_std[index],
-                            })),
-                            backgroundColor: 'black',
-                            borderColor: 'black',
-                            pointStyle: 'circle',
-                            pointRadius: 5,
-                            showLine: false,
-                        },
-                        {
-                            label: 'Experiment',
-                            data: data.value_map.mtype.map((_, index) => ({
-                                x: index,
-                                y: data.value_map.exp_mean[index],
-                            })),
-                            backgroundColor: graphTheme.red,
-                            borderColor: graphTheme.red,
-                            pointStyle: 'circle',
-                            pointRadius: 5,
-                            showLine: false,
-                        },
-                    ],
-                };
-
-                const chartOptions: ChartOptions<'scatter'> = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'category',
-                            title: {
-                                display: true,
-                                text: 'mtype',
-                            },
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'bouton density (um⁻¹)',
-                            },
-                            min: 0,
-                            max: 0.5,
-                        },
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            align: 'end',
-                            labels: {
-                                usePointStyle: true,
-                                pointStyle: 'circle',
-                                boxWidth: 6,
-                                boxHeight: 6,
-                                padding: 20,
-                                font: {
-                                    size: 11,
-                                    weight: 'normal',
-                                },
-                            },
-                            onClick: null as any, // Disable legend item click
-                        },
-                        title: {
-                            display: false, // Remove the title
-                        },
-                    },
-                };
-
+                // Create the chart with the plugin included
+                // In the chart configuration, remove the errorBar property from plugins
                 const newChart = new Chart(ctx, {
                     type: 'scatter',
-                    data: chartData,
-                    options: chartOptions,
-                    plugins: [errorBarPlugin],
+                    data: {
+                        labels: Object.values(data.value_map.mtype),
+                        datasets: [
+                            {
+                                label: 'Model',
+                                data: Object.values(data.value_map.mtype).map((_, index) => ({
+                                    x: index,
+                                    y: data.value_map.model_mean[index],
+                                    yMin: data.value_map.model_mean[index] - data.value_map.model_std[index],
+                                    yMax: data.value_map.model_mean[index] + data.value_map.model_std[index],
+                                })),
+                                backgroundColor: 'black',
+                                borderColor: 'black',
+                                pointStyle: 'circle',
+                                pointRadius: 3,
+                                showLine: false,
+                            },
+                            {
+                                label: 'Experiment',
+                                data: Object.values(data.value_map.mtype).map((_, index) => ({
+                                    x: index,
+                                    y: data.value_map.exp_mean[index],
+                                })),
+                                backgroundColor: graphTheme.red,
+                                borderColor: graphTheme.red,
+                                pointStyle: 'circle',
+                                pointRadius: 3,
+                                showLine: false,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'category',
+                                title: {
+                                    display: true,
+                                    text: 'mtype',
+                                },
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'bouton density (um⁻¹)',
+                                },
+                                min: 0,
+                                max: 0.5,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: 6,
+                                    boxHeight: 6,
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        weight: 'normal',
+                                    },
+                                },
+                                onClick: () => { }, // Disable legend item click
+                            },
+                            title: {
+                                display: false, // Remove the title
+                            },
+                        },
+                    },
+                    plugins: [errorBarPlugin], // Add the custom plugin here
                 });
 
                 setChart(newChart);
@@ -185,9 +182,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
     };
 
     useEffect(() => {
-        if (data) {
-            createChart();
-        }
+        createChart();
 
         const handleResize = () => {
             if (chart) {
@@ -204,10 +199,6 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
             }
         };
     }, [data]);
-
-    if (!data) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div>
