@@ -157,21 +157,28 @@ const BAPValidationGraph = ({ theme }: { theme: number }) => {
 
                             if (!meta.hidden) {
                                 meta.data.forEach((element, index) => {
-                                    const { x: xPos } = element.tooltipPosition();
+                                    // Get the tooltip position with the required boolean argument
+                                    const tooltipPosition = element.tooltipPosition(true); // Use `true` for final position
 
-                                    const dataPoint = dataset.data[index] as { yMin: number, yMax: number };
-                                    const yTop = y.getPixelForValue(dataPoint.yMax);
-                                    const yBottom = y.getPixelForValue(dataPoint.yMin);
+                                    // Safeguard and type the data point appropriately
+                                    const dataPoint = dataset.data[index];
 
-                                    ctx.save();
-                                    ctx.strokeStyle = dataset.borderColor as string;
-                                    ctx.lineWidth = 2;
-                                    ctx.beginPath();
-                                    ctx.moveTo(xPos, yBottom);
-                                    ctx.lineTo(xPos, yTop);
-                                    ctx.stroke();
+                                    // Check if the dataPoint has the necessary properties before proceeding
+                                    if (dataPoint && typeof dataPoint === 'object' && 'yMin' in dataPoint && 'yMax' in dataPoint) {
+                                        const { yMin, yMax } = dataPoint as { yMin: number; yMax: number };
 
-                                    ctx.restore();
+                                        const yTop = y.getPixelForValue(yMax);
+                                        const yBottom = y.getPixelForValue(yMin);
+
+                                        ctx.save();
+                                        ctx.strokeStyle = dataset.borderColor as string;
+                                        ctx.lineWidth = 2;
+                                        ctx.beginPath();
+                                        ctx.moveTo(tooltipPosition.x, yBottom);
+                                        ctx.lineTo(tooltipPosition.x, yTop);
+                                        ctx.stroke();
+                                        ctx.restore();
+                                    }
                                 });
                             }
                         });
