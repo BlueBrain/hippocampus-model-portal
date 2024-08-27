@@ -191,6 +191,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                 });
             }
         }
+
     }, [data]);
     return (
         <div>

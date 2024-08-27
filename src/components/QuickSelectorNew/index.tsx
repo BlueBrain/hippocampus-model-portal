@@ -45,7 +45,7 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
   return (
     <div>
       {entries.map((entry) => (
-        <div className="flex flex-col mb-2">
+        <div key={entry.key} className="flex flex-col mb-2">
           <label className={style.label}>{entry.title}</label>
           <select
             className={`${style.select} ${theme ? style[`theme-${theme}`] : ''}`}
@@ -60,9 +60,8 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
             ))}
           </select>
         </div>
-      ))
-      }
-    </div >
+      ))}
+    </div>
   );
 };
 

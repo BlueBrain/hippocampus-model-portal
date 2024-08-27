@@ -172,6 +172,9 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
                 datasets: createDatasets(),
             },
             options: {
+                animation: {
+                    duration: 0
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {

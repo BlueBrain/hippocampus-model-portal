@@ -65,7 +65,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
         if (layer) params.set('layer', Array.isArray(layer) ? layer[0] : layer);
         if (mtype) params.set('mtype', Array.isArray(mtype) ? mtype[0] : mtype);
         params.set('instance', morphologyName);
-        return `/experimental-data/neuronal-morphology-new/?${params.toString()}#data`;
+        return `/experimental-data/neuronal-morphology/?${params.toString()}#data`;
     };
 
     const downloadHref = (fileUrl) => {
