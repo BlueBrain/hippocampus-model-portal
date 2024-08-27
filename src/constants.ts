@@ -1,4 +1,4 @@
-import { Layer, NeuriteType, VolumeSection, AchConcentration, CellGroup, Theme, GraphTheme } from './types';
+import { Layer, NeuriteType, VolumeSection, AchConcentration, CellGroup, Theme, GraphTheme, ThemeColors } from './types';
 import AcetylcholineView from './views/4_validations/Acetylcholine';
 
 export const layers: Layer[] = [
@@ -24,6 +24,15 @@ export const graphTheme: GraphTheme = {
   purple: "#7F5482",
   yellow: "#f9f871",
 };
+
+export const themeColors: ThemeColors = {
+  experimental_data: "#EFAE97",
+  reconstruction_data: "#EA9088",
+  digital_reconstruction: "#CC8A99",
+  validations: "#9E98AE",
+  predictions: "#8398B5",
+};
+
 
 
 export const neuriteTypes: NeuriteType[] = [
