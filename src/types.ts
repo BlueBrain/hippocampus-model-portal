@@ -158,6 +158,7 @@ export type QuickSelectorEntry = {
   getValuesParam?: string;
   paramsToKeepOnChange?: string[];
   setFn?: (value: string) => void;
+  sliderRange?: number[];
 };
 
 

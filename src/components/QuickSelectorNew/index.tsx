@@ -47,18 +47,33 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
       {entries.map((entry) => (
         <div key={entry.key} className="flex flex-col mb-2">
           <label className={style.label}>{entry.title}</label>
-          <select
-            className={`${style.select} ${theme ? style[`theme-${theme}`] : ''}`}
-            value={router.query[entry.key] as string}
-            onChange={(e) => handleChange(entry, e.target.value)}
-          >
-            <option value="">Select {entry.title}</option>
-            {getValues(entry).map((value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
+          {entry.sliderRange ?
+            <input
+              id="xAxisSlider"
+              type="range"
+              min={0}
+              max={10}
+              step={1}
+              value={5}
+              onChange={(e) => { console.log("change") }}
+              className={`${style.slider}`}
+            />
+            :
+
+            <select
+              className={`${style.select} ${theme ? style[`theme-${theme}`] : ''}`}
+              value={router.query[entry.key] as string}
+              onChange={(e) => handleChange(entry, e.target.value)}
+            >
+              <option value="">Select {entry.title}</option>
+              {getValues(entry).map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          }
+
         </div>
       ))}
     </div>

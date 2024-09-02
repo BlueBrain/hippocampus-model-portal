@@ -6,41 +6,75 @@ import {
     PointElement,
     ChartOptions,
 } from 'chart.js';
-import { themeColors, GraphTheme, ThemeColors } from "@/constants";
+import { themeColors } from "@/constants";
+import { dataPath } from "@/config";
 import styles from './ScatterPlotSelector.module.scss';
 
 Chart.register(ScatterController, LinearScale, PointElement);
 
 type ScatterPlotSelectorProps = {
+    path: string;
     xAxisLabel?: string;
     yAxisLabel?: string;
+    xRange: number[];
+    yRange: number[];
     theme: number;
 };
 
 const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
-    xAxisLabel = "X Axis",
-    yAxisLabel = "Y Axis",
+    path,
+    xAxisLabel = "Minis Rate",
+    yAxisLabel = "ca_0",
+    xRange,
+    yRange,
     theme
 }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [xAxis, setXAxis] = useState<number>(25);
-    const [yAxis, setYAxis] = useState<number>(25);
+    const [data, setData] = useState<{ x: number, y: number }[]>([]);
+    const [xAxis, setXAxis] = useState<number>(xRange[0]);
+    const [yAxis, setYAxis] = useState<number>(yRange[0]);
 
     const getThemeColor = (theme: number): string => {
-        const colorKeys = Object.keys(themeColors) as (keyof ThemeColors)[];
+        const colorKeys = Object.keys(themeColors) as (keyof typeof themeColors)[];
         return themeColors[colorKeys[theme - 1]] || themeColors.experimental_data;
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [path, xAxis, yAxis]);
 
     useEffect(() => {
         if (chart) {
             chart.destroy();
         }
-        if (chartRef.current) {
+        if (chartRef.current && data.length > 0) {
             createChart();
         }
-    }, [xAxis, yAxis, xAxisLabel, yAxisLabel, theme]);
+    }, [data, xAxisLabel, yAxisLabel, theme]);
+
+    const fetchData = async () => {
+        try {
+            const fullUrl = `${dataPath}${path}${yAxis}-${xAxis}/spike-time.json`;
+            const response = await fetch(fullUrl);
+            const jsonData = await response.json();
+            const spikeTimes = jsonData.find((item: any) => item.name === "Spike Times for SP_PC-cACpyr");
+            if (spikeTimes && spikeTimes.value_map) {
+                const { t, gid } = spikeTimes.value_map;
+                const processedData = Object.keys(t).map(key => ({
+                    x: parseFloat(t[key]),
+                    y: parseInt(gid[key])
+                }));
+                setData(processedData);
+            } else {
+                setError('No valid data found in the JSON file');
+            }
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            setError('Failed to fetch data. Please try again.');
+        }
+    };
 
     const createChart = () => {
         if (chartRef.current) {
@@ -48,8 +82,13 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             if (ctx) {
                 try {
                     const themeColor = getThemeColor(theme);
+                    const yMin = Math.min(...data.map(d => d.y));
+                    const yMax = Math.max(...data.map(d => d.y));
                     const chartOptions: ChartOptions<'scatter'> = {
                         responsive: true,
+                        animation: {
+                            duration: 0
+                        },
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
@@ -61,17 +100,25 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
-                                    display: false,
+                                    display: true,
                                     text: xAxisLabel,
                                     color: themeColor,
                                 },
-                                min: 0,
-                                max: 50,
+                                min: Math.min(...data.map(d => d.x)),
+                                max: Math.max(...data.map(d => d.x)),
                                 ticks: {
                                     color: themeColor,
                                     font: {
-                                        size: 12,
+                                        size: 10,
                                     },
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    callback: function (value, index, ticks) {
+                                        if (index === 0 || index === ticks.length - 1) {
+                                            return this.getLabelForValue(value as number);
+                                        }
+                                        return '';
+                                    }
                                 },
                                 grid: {
                                     display: true,
@@ -92,13 +139,20 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                                     text: yAxisLabel,
                                     color: themeColor,
                                 },
-                                min: 0,
-                                max: 50,
+                                min: yMin,
+                                max: yMax,
                                 ticks: {
                                     color: themeColor,
                                     font: {
-                                        size: 12,
+                                        size: 10,
                                     },
+                                    callback: function (value, index, ticks) {
+                                        if (index === 0 || index === ticks.length - 1) {
+                                            return this.getLabelForValue(value as number);
+                                        }
+                                        return '';
+                                    },
+
                                 },
                                 grid: {
                                     display: true,
@@ -114,22 +168,22 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                         },
                     };
 
-                    const exampleData = {
+                    const chartData = {
                         datasets: [
                             {
-                                label: 'Dataset 1',
-                                data: [
-                                    { x: xAxis, y: yAxis },
-                                ],
-                                backgroundColor: themeColor,
-                                borderColor: themeColor,
+                                label: 'Spike Times',
+                                data: data,
+                                backgroundColor: "white",
+                                borderColor: "white",
+                                pointRadius: 1,
+                                pointHoverRadius: 1,
                             }
                         ]
                     };
 
                     const newChart = new Chart(ctx, {
                         type: 'scatter',
-                        data: exampleData,
+                        data: chartData,
                         options: chartOptions,
                     });
 
@@ -145,6 +199,20 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         } else {
             setError('Canvas reference is not available');
         }
+    };
+
+    const handleXAxisChange = (value: number) => {
+        const closestValue = xRange.reduce((prev, curr) =>
+            Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+        );
+        setXAxis(closestValue);
+    };
+
+    const handleYAxisChange = (value: number) => {
+        const closestValue = yRange.reduce((prev, curr) =>
+            Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+        );
+        setYAxis(closestValue);
     };
 
     const themeColor = getThemeColor(theme);
@@ -166,10 +234,11 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                     <input
                         id="xAxisSlider"
                         type="range"
-                        min="0"
-                        max="50"
-                        value={xAxis}
-                        onChange={(e) => setXAxis(Number(e.target.value))}
+                        min={0}
+                        max={xRange.length - 1}
+                        step={1}
+                        value={xRange.indexOf(xAxis)}
+                        onChange={(e) => handleXAxisChange(xRange[parseInt(e.target.value)])}
                         className={styles.slider}
                         style={{ '--slider-color': themeColor } as React.CSSProperties}
                     />
@@ -181,10 +250,11 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                     <input
                         id="yAxisSlider"
                         type="range"
-                        min="0"
-                        max="50"
-                        value={yAxis}
-                        onChange={(e) => setYAxis(Number(e.target.value))}
+                        min={0}
+                        max={yRange.length - 1}
+                        step={1}
+                        value={yRange.indexOf(yAxis)}
+                        onChange={(e) => handleYAxisChange(yRange[parseInt(e.target.value)])}
                         className={styles.slider}
                         style={{ '--slider-color': themeColor } as React.CSSProperties}
                     />

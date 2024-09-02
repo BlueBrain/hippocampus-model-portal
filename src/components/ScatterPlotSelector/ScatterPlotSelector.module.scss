@@ -17,9 +17,9 @@ $theme: (
 }
 
 .chartContainer {
-  height: 400px;
+  aspect-ratio: 1/1;
   width: 100%;
-
+  padding: 0rem;
 }
 
 .sliderContainer {
@@ -39,10 +39,11 @@ $theme: (
 .sliderLabel {
   font-size: 1rem;
   margin-bottom: 0.5rem;
+
 }
 
 .sliderValue {
-  font-weight: bold;
+  color: white;
 }
 
 .slider {

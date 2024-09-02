@@ -1,0 +1,12 @@
+[
+    {
+        "name": "minis_rate",
+        "description": "Spontaneous firing rate of the synapses.",
+        "value": 0.0015
+    },
+    {
+        "name": "ca_o",
+        "description": "Extracellular calcium concentration in mM.",
+        "value": 1
+    }
+]
