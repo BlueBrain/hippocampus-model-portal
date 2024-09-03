@@ -19,6 +19,9 @@ type ScatterPlotSelectorProps = {
     xRange: number[];
     yRange: number[];
     theme: number;
+    onSelect: (x: number, y: number) => void;
+    selectedX?: number;
+    selectedY?: number;
 };
 
 const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
@@ -27,14 +30,17 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     yAxisLabel = "ca_0",
     xRange,
     yRange,
-    theme
+    theme,
+    onSelect,
+    selectedX,
+    selectedY
 }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<{ x: number, y: number }[]>([]);
-    const [xAxis, setXAxis] = useState<number>(xRange[0]);
-    const [yAxis, setYAxis] = useState<number>(yRange[0]);
+    const [xAxis, setXAxis] = useState<number>(selectedX || xRange[0]);
+    const [yAxis, setYAxis] = useState<number>(selectedY || yRange[0]);
 
     const getThemeColor = (theme: number): string => {
         const colorKeys = Object.keys(themeColors) as (keyof typeof themeColors)[];
@@ -53,6 +59,15 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             createChart();
         }
     }, [data, xAxisLabel, yAxisLabel, theme]);
+
+    useEffect(() => {
+        if (selectedX !== undefined && selectedX !== xAxis) {
+            setXAxis(selectedX);
+        }
+        if (selectedY !== undefined && selectedY !== yAxis) {
+            setYAxis(selectedY);
+        }
+    }, [selectedX, selectedY]);
 
     const fetchData = async () => {
         try {
@@ -206,6 +221,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
         );
         setXAxis(closestValue);
+        onSelect(closestValue, yAxis);
     };
 
     const handleYAxisChange = (value: number) => {
@@ -213,6 +229,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
         );
         setYAxis(closestValue);
+        onSelect(xAxis, closestValue);
     };
 
     const themeColor = getThemeColor(theme);
