@@ -154,7 +154,7 @@ export type QuickSelectorEntry = {
   title: string;
   key: string;
   values?: string[];
-  getValuesFn?: (param: string) => string[];
+  getValuesFn?: (param: string) => string[] | number[];
   getValuesParam?: string;
   paramsToKeepOnChange?: string[];
   setFn?: (value: string) => void;

@@ -16,6 +16,7 @@ import TimeSpikePlot from './spontaneous-activity/TimeSpikePlot';
 import { QuickSelectorEntry } from '@/types';
 import models from "@/models.json";
 import { dataPath } from '@/config';
+import DistributionPlot from '@/components/DistributionPlot';
 
 
 const MinisRate = [
@@ -23,6 +24,15 @@ const MinisRate = [
 ];
 
 const CA_O = [1, 1.5, 2];
+
+const getMinisRate = (): number[] => {
+    return MinisRate;
+}
+
+
+const getCa0 = (): number[] => {
+    return CA_O;
+}
 
 const getMtypes = (): string[] => {
     return [...new Set(models.map(model => model.mtype))].sort();
@@ -38,6 +48,7 @@ const SpontaneousActivityView: React.FC = () => {
 
     const [quickSelection, setQuickSelection] = useState<Record<string, string | number>>({});
     const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
+    const [meanFiringRateData, setMeanFiringRateData] = useState<any>(null);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -75,6 +86,7 @@ const SpontaneousActivityView: React.FC = () => {
     }, [router.isReady, router.query]);
 
     useEffect(() => {
+
         const fetchSpikeTimeData = async () => {
             const { ca_o, minis_rate } = quickSelection;
             if (ca_o !== undefined && minis_rate !== undefined) {
@@ -90,7 +102,32 @@ const SpontaneousActivityView: React.FC = () => {
         };
 
         fetchSpikeTimeData();
+
     }, [quickSelection.ca_o, quickSelection.minis_rate]);
+
+    useEffect(() => {
+
+        const fetchMeanFiringRateData = async () => {
+            const { ca_o, minis_rate, mtype, etype } = quickSelection;
+            if (ca_o !== undefined && minis_rate !== undefined && mtype && etype) {
+                try {
+                    const response = await fetch(`${dataPath}/5_prediction/spontaneous-activity/${minis_rate}-${ca_o}/mean-firing-rate.json`);
+                    const data = await response.json();
+
+                    // Filter the data based on the selected mtype and etype
+                    const filteredData = data.find(item => item.id === `MFR_${mtype}-${etype}`);
+
+                    setMeanFiringRateData(filteredData || null);
+                } catch (error) {
+                    console.error('Error fetching mean firing rate data:', error);
+                    setMeanFiringRateData(null);
+                }
+            }
+        };
+
+        fetchMeanFiringRateData();
+
+    }, [quickSelection.ca_o, quickSelection.minis_rate, quickSelection.mtype, quickSelection.etype]);
 
     const setParams = (params: Record<string, string | number>): void => {
         const newQuery = { ...router.query, ...params };
@@ -115,6 +152,19 @@ const SpontaneousActivityView: React.FC = () => {
     };
 
     const qsEntries: QuickSelectorEntry[] = [
+
+        {
+            title: 'CA_0',
+            key: 'ca_o',
+            getValuesFn: getCa0,
+            sliderRange: CA_O
+        },
+        {
+            title: 'Minis Rate',
+            key: 'minis_rate',
+            getValuesFn: getMinisRate,
+            sliderRange: MinisRate
+        },
         {
             title: 'M-type',
             key: 'mtype',
@@ -204,15 +254,12 @@ const SpontaneousActivityView: React.FC = () => {
                 quickSelectorEntries={qsEntries}
             >
                 <Collapsible id='spikeTimeSection' title="Spike Time">
-                    <TimeSpikePlot
-                        plotData={spikeTimeData}
-                        mType={quickSelection.mtype as string}
-                        eType={quickSelection.etype as string}
-                    />
+                    <TimeSpikePlot plotData={spikeTimeData} />
                 </Collapsible>
 
-                <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype, quickSelection.etype]} title="Mean Firing Rate">
-                    <p>Mean Firing Rate visualization to be implemented</p>
+                <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                    {/*  <DistributionPlot plotData={meanFiringRateData} /> */}
+                    <p></p>
                 </Collapsible>
 
                 <Collapsible id='traceSection' title="Traces">
