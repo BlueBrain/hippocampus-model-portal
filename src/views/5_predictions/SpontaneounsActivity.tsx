@@ -9,11 +9,14 @@ import List from '@/components/List';
 import ScatterPlotSelector from '@/components/ScatterPlotSelector';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import ScatterPlot from '@/components/ScatterPlot';
+
+import TimeSpikePlot from './spontaneous-activity/TimeSpikePlot';
+
 
 import { QuickSelectorEntry } from '@/types';
 import models from "@/models.json";
 import { dataPath } from '@/config';
+
 
 const MinisRate = [
     0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002
@@ -34,6 +37,7 @@ const SpontaneousActivityView: React.FC = () => {
     const theme = 5;
 
     const [quickSelection, setQuickSelection] = useState<Record<string, string | number>>({});
+    const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -45,7 +49,6 @@ const SpontaneousActivityView: React.FC = () => {
         if (typeof ca_o === 'string') newQuickSelection.ca_o = parseFloat(ca_o);
         if (typeof minis_rate === 'string') newQuickSelection.minis_rate = parseFloat(minis_rate);
 
-        // Handle etype selection
         if (typeof mtype === 'string') {
             const availableEtypes = getEtypes(mtype);
             if (typeof etype === 'string' && availableEtypes.includes(etype)) {
@@ -70,6 +73,24 @@ const SpontaneousActivityView: React.FC = () => {
             router.replace({ query: defaultSelection }, undefined, { shallow: true });
         }
     }, [router.isReady, router.query]);
+
+    useEffect(() => {
+        const fetchSpikeTimeData = async () => {
+            const { ca_o, minis_rate } = quickSelection;
+            if (ca_o !== undefined && minis_rate !== undefined) {
+                try {
+                    const response = await fetch(`${dataPath}/5_prediction/spontaneous-activity/${minis_rate}-${ca_o}/spike-time.json`);
+                    const data = await response.json();
+                    setSpikeTimeData(data);
+                } catch (error) {
+                    console.error('Error fetching spike time data:', error);
+                    setSpikeTimeData(null);
+                }
+            }
+        };
+
+        fetchSpikeTimeData();
+    }, [quickSelection.ca_o, quickSelection.minis_rate]);
 
     const setParams = (params: Record<string, string | number>): void => {
         const newQuery = { ...router.query, ...params };
@@ -173,7 +194,6 @@ const SpontaneousActivityView: React.FC = () => {
                 </div>
             </Filters>
 
-
             <DataContainer
                 theme={theme}
                 navItems={[
@@ -183,8 +203,12 @@ const SpontaneousActivityView: React.FC = () => {
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-                <Collapsible id='spikeTimeSection' properties={[quickSelection.mtype, quickSelection.etype]} title="Spike Time">
-                    <ScatterPlot plotData={""} />
+                <Collapsible id='spikeTimeSection' title="Spike Time">
+                    <TimeSpikePlot
+                        plotData={spikeTimeData}
+                        mType={quickSelection.mtype as string}
+                        eType={quickSelection.etype as string}
+                    />
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype, quickSelection.etype]} title="Mean Firing Rate">
@@ -200,5 +224,3 @@ const SpontaneousActivityView: React.FC = () => {
 };
 
 export default SpontaneousActivityView;
-
-
