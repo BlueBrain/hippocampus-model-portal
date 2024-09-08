@@ -236,14 +236,14 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'LaminarDistributionSynapsesSection', label: 'Laminar dist. of synapses' },
           { id: 'SampleConvergenceByConnectionSection', label: 'Convergence connections dist.' },
           { id: 'SampleConvergenceBySynapsesSection', label: 'Convergence synapses dist.' },
-          { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability' },
+          /* { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability'  }, */
           { label: 'Physiology', isTitle: true },
           { id: 'PSPAmplitudeSection', label: 'PSP Amplitude dist.' },
           { id: 'PSPCVSection', label: 'PSP CV dist.' },
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
           { id: 'RiseTimeSection', label: 'Rise time constant dist.' },
           { id: 'DecayTimeConstantSection', label: 'Decay time constant dist.' },
-          { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' },
+          /* { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' }, */
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
@@ -616,9 +616,11 @@ const SchafferCollateralsView: React.FC = () => {
           )
         }
 
+        { /*
         <Collapsible title='Short-term plasticity: average traces + mean traces' id='ShortTermPlasticitySection' properties={["Physiology"]}>
           <p>Short-term plasticity: average traces + mean traces</p>
         </Collapsible>
+        */ }
 
         <Collapsible
           title="Distribution + mean and std of U, D, F, NRRP"
