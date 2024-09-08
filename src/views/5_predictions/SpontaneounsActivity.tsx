@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -10,37 +12,26 @@ import ScatterPlotSelector from '@/components/ScatterPlotSelector';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 
-import TimeSpikePlot from './spontaneous-activity/TimeSpikePlot';
-
+import TimeSpikePlot from './components/TimeSpikePlot';
+import MeanFiringRatePlot from './components/MeanFiringRatePlot';
 
 import { QuickSelectorEntry } from '@/types';
 import models from "@/models.json";
 import { dataPath } from '@/config';
-import DistributionPlot from '@/components/DistributionPlot';
-
+import DownloadButton from '@/components/DownloadButton';
+import TraceGraph from './components/Trace';
 
 const MinisRate = [
     0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002
 ];
 
-const CA_O = [1, 1.5, 2];
+const CA_O = [1.0, 1.5, 2.0];
 
-const getMinisRate = (): number[] => {
-    return MinisRate;
-}
+const getMinisRate = (): number[] => MinisRate;
+const getCa0 = (): number[] => CA_O;
+const getMtypes = (): string[] => [...new Set(models.map(model => model.mtype))].sort();
+const getEtypes = (mtype: string): string[] => [...new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))].sort();
 
-
-const getCa0 = (): number[] => {
-    return CA_O;
-}
-
-const getMtypes = (): string[] => {
-    return [...new Set(models.map(model => model.mtype))].sort();
-};
-
-const getEtypes = (mtype: string): string[] => {
-    return [...new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))].sort();
-};
 
 const SpontaneousActivityView: React.FC = () => {
     const router = useRouter();
@@ -49,6 +40,7 @@ const SpontaneousActivityView: React.FC = () => {
     const [quickSelection, setQuickSelection] = useState<Record<string, string | number>>({});
     const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
     const [meanFiringRateData, setMeanFiringRateData] = useState<any>(null);
+    const [traceData, setTraceData] = useState<any>(null);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -72,7 +64,6 @@ const SpontaneousActivityView: React.FC = () => {
         setQuickSelection(newQuickSelection);
 
         if (Object.keys(newQuickSelection).length === 0) {
-            // Set default values if no query parameters are present
             const defaultMtype = getMtypes()[0];
             const defaultSelection = {
                 mtype: defaultMtype,
@@ -86,48 +77,32 @@ const SpontaneousActivityView: React.FC = () => {
     }, [router.isReady, router.query]);
 
     useEffect(() => {
-
-        const fetchSpikeTimeData = async () => {
-            const { ca_o, minis_rate } = quickSelection;
-            if (ca_o !== undefined && minis_rate !== undefined) {
-                try {
-                    const response = await fetch(`${dataPath}/5_prediction/spontaneous-activity/${minis_rate}-${ca_o}/spike-time.json`);
-                    const data = await response.json();
-                    setSpikeTimeData(data);
-                } catch (error) {
-                    console.error('Error fetching spike time data:', error);
-                    setSpikeTimeData(null);
-                }
-            }
-        };
-
-        fetchSpikeTimeData();
-
-    }, [quickSelection.ca_o, quickSelection.minis_rate]);
-
-    useEffect(() => {
-
-        const fetchMeanFiringRateData = async () => {
+        const fetchData = async () => {
             const { ca_o, minis_rate, mtype, etype } = quickSelection;
-            if (ca_o !== undefined && minis_rate !== undefined && mtype && etype) {
+            if (ca_o === undefined || minis_rate === undefined || !mtype || !etype) return;
+
+            const baseUrl = `${dataPath}/5_prediction/spontaneous-activity/${ca_o}-${minis_rate}/${mtype}-${etype}`;
+
+            const dataTypes = [
+                { name: 'spike-time', setter: setSpikeTimeData },
+                { name: 'mean-firing-rate', setter: setMeanFiringRateData },
+                { name: 'trace', setter: setTraceData }
+            ];
+
+            for (const { name, setter } of dataTypes) {
                 try {
-                    const response = await fetch(`${dataPath}/5_prediction/spontaneous-activity/${minis_rate}-${ca_o}/mean-firing-rate.json`);
+                    const response = await fetch(`${baseUrl}/${name}.json`);
                     const data = await response.json();
-
-                    // Filter the data based on the selected mtype and etype
-                    const filteredData = data.find(item => item.id === `MFR_${mtype}-${etype}`);
-
-                    setMeanFiringRateData(filteredData || null);
+                    setter(data);
                 } catch (error) {
-                    console.error('Error fetching mean firing rate data:', error);
-                    setMeanFiringRateData(null);
+                    console.error(`Error fetching ${name} data:`, error);
+                    setter(null);
                 }
             }
         };
 
-        fetchMeanFiringRateData();
-
-    }, [quickSelection.ca_o, quickSelection.minis_rate, quickSelection.mtype, quickSelection.etype]);
+        fetchData();
+    }, [quickSelection]);
 
     const setParams = (params: Record<string, string | number>): void => {
         const newQuery = { ...router.query, ...params };
@@ -151,8 +126,10 @@ const SpontaneousActivityView: React.FC = () => {
         setParams({ ca_o, minis_rate });
     };
 
-    const qsEntries: QuickSelectorEntry[] = [
+    const mtypes = getMtypes();
+    const etypes = getEtypes(quickSelection.mtype as string);
 
+    const qsEntries: QuickSelectorEntry[] = [
         {
             title: 'CA_0',
             key: 'ca_o',
@@ -168,22 +145,22 @@ const SpontaneousActivityView: React.FC = () => {
         {
             title: 'M-type',
             key: 'mtype',
-            getValuesFn: getMtypes,
+            values: mtypes,
             setFn: handleMtypeSelect,
         },
         {
             title: 'E-Type',
             key: 'etype',
-            getValuesFn: () => getEtypes(quickSelection.mtype as string),
+            values: etypes,
             setFn: handleEtypeSelect,
         },
     ];
 
-    const mtypes = getMtypes();
-    const etypes = getEtypes(quickSelection.mtype as string);
+
 
     return (
         <>
+
             <Filters theme={theme}>
                 <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
                     <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
@@ -253,17 +230,22 @@ const SpontaneousActivityView: React.FC = () => {
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-                <Collapsible id='spikeTimeSection' title="Spike Time">
-                    <TimeSpikePlot plotData={spikeTimeData} />
+                <Collapsible id='spikeTimeSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Spike Time">
+                    <div className="graph">
+                        <TimeSpikePlot plotData={spikeTimeData} />
+                    </div>
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
-                    {/*  <DistributionPlot plotData={meanFiringRateData} /> */}
-                    <p></p>
+                    <div className="graph">
+                        <MeanFiringRatePlot plotData={meanFiringRateData} />
+                    </div>
+
                 </Collapsible>
 
                 <Collapsible id='traceSection' title="Traces">
-                    <p>Traces visualization to be implemented</p>
+                    {/*  <TraceGraph plotData={traceData} /> */}
+                    <p></p>
                 </Collapsible>
             </DataContainer>
         </>
