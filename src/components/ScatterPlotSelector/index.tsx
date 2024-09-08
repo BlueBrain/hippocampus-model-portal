@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import {
     Chart,
     ScatterController,
@@ -9,13 +9,14 @@ import {
 import { themeColors } from "@/constants";
 import { dataPath } from "@/config";
 import styles from './ScatterPlotSelector.module.scss';
+import { Loader2 } from 'lucide-react';
 
 Chart.register(ScatterController, LinearScale, PointElement);
 
 type ScatterPlotSelectorProps = {
     path: string;
-    xAxisLabel?: string;
-    yAxisLabel?: string;
+    xAxisLabel: string;
+    yAxisLabel: string;
     xRange: number[];
     yRange: number[];
     theme: number;
@@ -24,10 +25,20 @@ type ScatterPlotSelectorProps = {
     selectedY?: number;
 };
 
+interface SpikeTimeData {
+    name: string;
+    description: string;
+    units: null;
+    value_map: {
+        t: { [key: string]: number };
+        gid: { [key: string]: number };
+    };
+}
+
 const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     path,
-    xAxisLabel = "Minis Rate",
-    yAxisLabel = "ca_0",
+    xAxisLabel,
+    yAxisLabel,
     xRange,
     yRange,
     theme,
@@ -37,10 +48,11 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
 }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const [chart, setChart] = useState<Chart | null>(null);
-    const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<{ x: number, y: number }[]>([]);
     const [xAxis, setXAxis] = useState<number>(selectedX || xRange[0]);
     const [yAxis, setYAxis] = useState<number>(selectedY || yRange[0]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [maxY, setMaxY] = useState<number>(0);
 
     const getThemeColor = (theme: number): string => {
         const colorKeys = Object.keys(themeColors) as (keyof typeof themeColors)[];
@@ -58,7 +70,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         if (chartRef.current && data.length > 0) {
             createChart();
         }
-    }, [data, xAxisLabel, yAxisLabel, theme]);
+    }, [data, xAxisLabel, yAxisLabel, theme, maxY]);
 
     useEffect(() => {
         if (selectedX !== undefined && selectedX !== xAxis) {
@@ -70,166 +82,142 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     }, [selectedX, selectedY]);
 
     const fetchData = async () => {
+        setIsLoading(true);
         try {
-            const fullUrl = `${dataPath}${path}${yAxis}-${xAxis}/spike-time.json`;
+            const fullUrl = `${dataPath}${path}${xAxis}-${yAxis}/spike-time-all.json`;
+            console.log("Fetching data from:", fullUrl);
             const response = await fetch(fullUrl);
-            const jsonData = await response.json();
-            const spikeTimes = jsonData.find((item: any) => item.name === "Spike Times for SP_PC-cACpyr");
+            const jsonData: SpikeTimeData[] = await response.json();
+
+            const spikeTimes = jsonData.find(item => item.name === "Spike Times for SP_PC-cACpyr");
+
             if (spikeTimes && spikeTimes.value_map) {
                 const { t, gid } = spikeTimes.value_map;
                 const processedData = Object.keys(t).map(key => ({
-                    x: parseFloat(t[key]),
-                    y: parseInt(gid[key])
+                    x: t[key],
+                    y: gid[key]
                 }));
                 setData(processedData);
+                setMaxY(Math.max(...processedData.map(point => point.y)));
             } else {
-                setError('No valid data found in the JSON file');
+                console.error('No spike time data found for SP_PC-cACpyr');
+                setData([]);
+                setMaxY(0);
             }
         } catch (err) {
             console.error('Error fetching data:', err);
-            setError('Failed to fetch data. Please try again.');
+            setData([]);
+            setMaxY(0);
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    const getRoundedTicks = useMemo(() => (max: number) => {
+        const ticks = [];
+        const step = Math.pow(10, Math.floor(Math.log10(max / 10)));
+        for (let i = 0; i <= max; i += step) {
+            ticks.push(Math.round(i));
+        }
+        if (ticks[ticks.length - 1] < max) {
+            ticks.push(Math.ceil(max / step) * step);
+        }
+        return ticks;
+    }, []);
 
     const createChart = () => {
         if (chartRef.current) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                try {
-                    const themeColor = getThemeColor(theme);
-                    const yMin = Math.min(...data.map(d => d.y));
-                    const yMax = Math.max(...data.map(d => d.y));
-                    const chartOptions: ChartOptions<'scatter'> = {
-                        responsive: true,
-                        animation: {
-                            duration: 0
-                        },
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: xAxisLabel,
-                                    color: themeColor,
-                                },
-                                min: Math.min(...data.map(d => d.x)),
-                                max: Math.max(...data.map(d => d.x)),
-                                ticks: {
-                                    color: themeColor,
-                                    font: {
-                                        size: 10,
-                                    },
-                                    maxRotation: 0,
-                                    minRotation: 0,
-                                    callback: function (value, index, ticks) {
-                                        if (index === 0 || index === ticks.length - 1) {
-                                            return this.getLabelForValue(value as number);
-                                        }
-                                        return '';
-                                    }
-                                },
-                                grid: {
-                                    display: true,
-                                    drawOnChartArea: false,
-                                    color: themeColor,
-                                    lineWidth: 2
-                                },
-                                border: {
-                                    color: themeColor,
-                                    width: 2
-                                },
+                const themeColor = getThemeColor(theme);
+                const yTicks = getRoundedTicks(maxY);
+                const chartOptions: ChartOptions<'scatter'> = {
+                    responsive: true,
+                    animation: { duration: 0 },
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: xAxisLabel,
+                                color: themeColor,
                             },
-                            y: {
-                                type: 'linear',
-                                position: 'left',
-                                title: {
-                                    display: false,
-                                    text: yAxisLabel,
-                                    color: themeColor,
-                                },
-                                min: yMin,
-                                max: yMax,
-                                ticks: {
-                                    color: themeColor,
-                                    font: {
-                                        size: 10,
-                                    },
-                                    callback: function (value, index, ticks) {
-                                        if (index === 0 || index === ticks.length - 1) {
-                                            return this.getLabelForValue(value as number);
-                                        }
-                                        return '';
-                                    },
-
-                                },
-                                grid: {
-                                    display: true,
-                                    drawOnChartArea: false,
-                                    color: themeColor,
-                                    lineWidth: 2
-                                },
-                                border: {
-                                    color: themeColor,
-                                    width: 2
-                                },
-                            }
+                            ticks: {
+                                color: themeColor,
+                                font: { size: 10 },
+                            },
+                            grid: {
+                                color: themeColor,
+                                lineWidth: 0.5
+                            },
+                            border: {
+                                color: themeColor,
+                                width: 1
+                            },
                         },
-                    };
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: yAxisLabel,
+                                color: themeColor,
+                            },
+                            min: 0,
+                            max: maxY,
+                            ticks: {
+                                color: themeColor,
+                                font: { size: 10 },
+                                callback: (value) => yTicks.includes(value as number) ? value : '',
+                            },
+                            grid: {
+                                color: themeColor,
+                                lineWidth: 0.5
+                            },
+                            border: {
+                                color: themeColor,
+                                width: 1
+                            },
+                        }
+                    },
+                };
 
-                    const chartData = {
-                        datasets: [
-                            {
-                                label: 'Spike Times',
-                                data: data,
-                                backgroundColor: "white",
-                                borderColor: "white",
-                                pointRadius: 1,
-                                pointHoverRadius: 1,
-                            }
-                        ]
-                    };
+                const newChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            data: data,
 
-                    const newChart = new Chart(ctx, {
-                        type: 'scatter',
-                        data: chartData,
-                        options: chartOptions,
-                    });
+                            borderColor: themeColor,
+                            pointRadius: .1,
+                        }]
+                    },
+                    options: chartOptions,
+                });
 
-                    setChart(newChart);
-                    setError(null);
-                } catch (err) {
-                    console.error('Error creating chart:', err);
-                    setError('Failed to create chart. Please try again.');
-                }
-            } else {
-                setError('Could not get 2D context from canvas element');
+                setChart(newChart);
             }
-        } else {
-            setError('Canvas reference is not available');
         }
     };
 
-    const handleXAxisChange = (value: number) => {
-        const closestValue = xRange.reduce((prev, curr) =>
+    const handleAxisChange = (axis: 'x' | 'y', value: number) => {
+        const range = axis === 'x' ? xRange : yRange;
+        const closestValue = range.reduce((prev, curr) =>
             Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
         );
-        setXAxis(closestValue);
-        onSelect(closestValue, yAxis);
-    };
-
-    const handleYAxisChange = (value: number) => {
-        const closestValue = yRange.reduce((prev, curr) =>
-            Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
-        );
-        setYAxis(closestValue);
-        onSelect(xAxis, closestValue);
+        if (axis === 'x') {
+            setXAxis(closestValue);
+            onSelect(closestValue, yAxis);
+        } else {
+            setYAxis(closestValue);
+            onSelect(xAxis, closestValue);
+        }
     };
 
     const themeColor = getThemeColor(theme);
@@ -237,8 +225,10 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     return (
         <div className={styles.container} style={{ '--current-theme-color': themeColor } as React.CSSProperties}>
             <div className={styles.chartContainer}>
-                {error ? (
-                    <div className={styles.errorMessage}>{error}</div>
+                {isLoading ? (
+                    <div className={styles.loaderContainer}>
+                        <Loader2 className={styles.loader} style={{ color: themeColor }} />
+                    </div>
                 ) : (
                     <canvas ref={chartRef} />
                 )}
@@ -246,7 +236,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             <div className={styles.sliderContainer}>
                 <div className={styles.sliderWrapper}>
                     <label htmlFor="xAxisSlider" className={styles.sliderLabel} style={{ color: themeColor }}>
-                        {xAxisLabel}: <span className={styles.sliderValue}>{xAxis}</span>
+                        {xAxisLabel}: <span className={styles.sliderValue}>{xAxis.toFixed(1)}</span>
                     </label>
                     <input
                         id="xAxisSlider"
@@ -255,7 +245,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                         max={xRange.length - 1}
                         step={1}
                         value={xRange.indexOf(xAxis)}
-                        onChange={(e) => handleXAxisChange(xRange[parseInt(e.target.value)])}
+                        onChange={(e) => handleAxisChange('x', xRange[parseInt(e.target.value)])}
                         className={styles.slider}
                         style={{ '--slider-color': themeColor } as React.CSSProperties}
                     />
@@ -271,7 +261,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                         max={yRange.length - 1}
                         step={1}
                         value={yRange.indexOf(yAxis)}
-                        onChange={(e) => handleYAxisChange(yRange[parseInt(e.target.value)])}
+                        onChange={(e) => handleAxisChange('y', yRange[parseInt(e.target.value)])}
                         className={styles.slider}
                         style={{ '--slider-color': themeColor } as React.CSSProperties}
                     />
