@@ -37,7 +37,7 @@ const ConnectionsView: React.FC = () => {
     if (!router.isReady) return;
 
     if (!volume_section && !prelayer && !postlayer) {
-      const defaultParams = defaultSelection.digitalReconstruction.synapticPathways;
+      const defaultParams = defaultSelection.digitalReconstruction.connectionAnatomy;
       setQuickSelection({
         volume_section: defaultParams.volume_section as VolumeSection,
         prelayer: defaultParams.prelayer as Layer,

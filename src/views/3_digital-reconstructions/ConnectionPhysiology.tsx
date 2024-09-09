@@ -45,7 +45,7 @@ const SynapsesView: React.FC = () => {
     if (!router.isReady) return;
 
     if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
-      const query = defaultSelection.digitalReconstruction.synapticPathways;
+      const query = defaultSelection.digitalReconstruction.connectionPhysiology;
       const { volume_section, prelayer, postlayer } = query;
       setQuickSelection({ volume_section, prelayer, postlayer });
       router.replace({ query }, undefined, { shallow: true });

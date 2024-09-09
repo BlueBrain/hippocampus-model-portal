@@ -92,15 +92,35 @@ export const defaultSelection = {
   },
   reconstructionData: {
     volume: {
-      volume_section: 'slice',
+      volume_section: 'region',
     },
     cellComposition: {
-      volume_section: 'slice',
+      volume_section: 'region',
     },
   },
   digitalReconstruction: {
     region: {
-      volume_section: 'slice',
+      volume_section: 'region',
+    },
+    schafferCollateral: {
+      volume_section: 'region',
+      prelayer: 'all',
+      postlayer: 'all'
+    },
+    connectionAnatomy: {
+      volume_section: 'region',
+      prelayer: 'all',
+      postlayer: 'all'
+    },
+    connectionPhysiology: {
+      volume_section: 'region',
+      prelayer: 'all',
+      postlayer: 'all'
+    },
+    acetylcholineEffectsOnSynapses: {
+      ach_concentration: '0um',
+      prelayer: 'all',
+      postlayer: 'all'
     },
     neurons: {
       layer: 'SLM',
