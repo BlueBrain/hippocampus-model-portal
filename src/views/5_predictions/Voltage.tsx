@@ -15,6 +15,7 @@ import models from "@/models.json";
 import { dataPath } from '@/config';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import { volumeSections } from '@/constants';
+import TraceGraph from './components/Trace';
 
 const voltageSectionStructure = {
     cylinder: {
@@ -226,7 +227,7 @@ const VoltageView: React.FC = () => {
                     </div>
                 </Collapsible>
                 <Collapsible id='traceSection' title="Traces">
-                    <p></p>
+                    <TraceGraph plotData={traceData} />
                 </Collapsible>
             </DataContainer>
         </>

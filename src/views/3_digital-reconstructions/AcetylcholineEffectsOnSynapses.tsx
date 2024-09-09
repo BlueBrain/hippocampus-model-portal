@@ -9,7 +9,7 @@ import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import CustomPlot from './acetylcholine/CustomPlot';
-import TraceGraph from '@/components/TraceGraph/TraceGraph';
+import TraceGraph from './components/Trace';
 import List from '@/components/List';
 import DownloadButton from '@/components/DownloadButton';
 
@@ -242,11 +242,9 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
 
         <Collapsible title="Trace" id="traceSection" className="mt-4">
           {traceData && traceData.individual_trace && traceData.mean_trace && (
-            <TraceGraph
-              individualTrace={traceData.individual_trace}
-              meanTrace={traceData.mean_trace}
-              title="Individual and Mean Traces"
-            />
+            <div className="graph">
+              <TraceGraph plotData={traceData} />
+            </div>
           )}
         </Collapsible>
       </DataContainer>

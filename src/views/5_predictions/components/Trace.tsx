@@ -1,30 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    ChartOptions,
-    ChartData,
-    Plugin
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import CrosshairPlugin from 'chartjs-plugin-crosshair';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    CrosshairPlugin as unknown as Plugin
-);
+import React, { useEffect, useState } from 'react';
+import Plot from 'react-plotly.js';
+import { Loader2 } from 'lucide-react';
 
 interface TraceDataProps {
     plotData?: {
@@ -35,117 +11,108 @@ interface TraceDataProps {
     };
 }
 
-// Extend the ChartOptions type to include the crosshair plugin options
-interface ExtendedChartOptions extends ChartOptions<'line'> {
-    plugins: {
-        crosshair?: {
-            line?: {
-                color?: string;
-                width?: number;
-            };
-            sync?: {
-                enabled?: boolean;
-            };
-            zoom?: {
-                enabled?: boolean;
-            };
-        };
-    };
-}
-
-const ChartJSTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
-    const [chartData, setChartData] = useState<ChartData<'line'>>({ datasets: [] });
-    const [options, setOptions] = useState<ExtendedChartOptions>({});
-    const chartRef = useRef<ChartJS>(null);
+const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
+    const [data, setData] = useState<any[]>([]);
+    const [layout, setLayout] = useState<any>({});
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [hasError, setHasError] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!plotData || plotData.value_map.length === 0) {
+        if (!plotData || !plotData.value_map || !Array.isArray(plotData.value_map) || plotData.value_map.length === 0) {
             console.log('No plot data available');
+            setIsLoading(false);
+            setHasError(true);
             return;
         }
 
-        const datasets = plotData.value_map.map((trace, index) => ({
-            label: `Trace ${index + 1}`,
-            data: trace,
-            borderColor: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
-            pointRadius: 0,
-            borderWidth: 1,
-        }));
+        try {
+            setIsLoading(true);
+            setHasError(false);
 
-        const labels = Array.from({ length: plotData.value_map[0].length }, (_, i) => i.toString());
+            // Prepare data for Plotly
+            const traces = plotData.value_map.map((trace, index) => ({
+                x: Array.from({ length: trace.length }, (_, i) => i),
+                y: trace,
+                type: 'scatter',
+                mode: 'lines',
+                name: `Trace ${index + 1}`,
+                line: {
+                    color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
+                    width: 1,
+                },
+            }));
 
-        setChartData({
-            labels,
-            datasets,
-        });
+            setData(traces);
 
-        setOptions({
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top' as const,
+            // Set up the layout
+            setLayout({
+                xaxis: {
+                    title: 'Time',
+                    showticklabels: false,
                 },
-                title: {
-                    display: true,
-                    text: plotData.name || 'Trace Data',
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        label: function (context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(10);
-                            }
-                            return label;
-                        }
-                    }
-                },
-                crosshair: {
-                    line: {
-                        color: '#F66',
-                        width: 1
-                    },
-                    sync: {
-                        enabled: true,
-                    },
-                    zoom: {
-                        enabled: true,
-                    },
-                },
-            },
-            scales: {
-                x: {
+                yaxis: {
                     title: {
-                        display: true,
-                        text: 'Time',
+                        text: plotData.units || 'mV',
+                        standoff: 15,
                     },
+                    showticklabels: true,
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: plotData.units || 'Value',
-                    },
-                    ticks: {
-                        callback: function (value) {
-                            return (typeof value === 'number' ? value.toFixed(10) : value);
-                        }
-                    }
+                autosize: true,
+                margin: {
+                    l: 60,
+                    r: 50,
+                    b: 50,
+                    t: 50,
+                    pad: 4,
                 },
-            },
-        });
+                hovermode: 'x unified',
+                showlegend: false,
+                plot_bgcolor: '#EFF1F8',
+                paper_bgcolor: '#EFF1F8',
+            });
+
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error processing plot data:', error);
+            setIsLoading(false);
+            setHasError(true);
+        }
     }, [plotData]);
 
+    const containerStyle = {
+        width: '100%',
+        height: '500px',
+        position: 'relative' as const,
+    };
+
+    const loaderStyle = {
+        position: 'absolute' as const,
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+    };
+
     return (
-        <div style={{ height: '500px', width: '100%' }}>
-            <Line options={options} data={chartData} />
+        <div style={containerStyle}>
+            {isLoading ? (
+                <div style={loaderStyle}>
+                    <Loader2 className="w-8 h-8 animate-spin" />
+                </div>
+            ) : hasError || !data.length ? (
+                <p className="text-center text-gray-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    No data available.
+                </p>
+            ) : (
+                <Plot
+                    data={data}
+                    layout={layout}
+                    useResizeHandler={true}
+                    style={{ width: '100%', height: '100%' }}
+                    config={{ responsive: true }}
+                />
+            )}
         </div>
     );
 };
 
-export default ChartJSTraceGraph;
+export default PlotlyTraceGraph;

@@ -11,7 +11,7 @@ import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import List from '@/components/List';
 import DistrbutionPlot from '@/components/DistributionPlot';
 import LaminarGraph from '@/components/LaminarGraph';
-import TraceGraph from '@/components/TraceGraph/TraceGraph';
+import TraceGraph from './components/Trace';
 
 import Filters from '@/layouts/Filters';
 
@@ -762,11 +762,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         <Collapsible title='Traces' id='TracesSection' properties={["Physiology"]}>
           {traceData && traceData.individual_trace && traceData.mean_trace && (
-            <TraceGraph
-              individualTrace={traceData.individual_trace}
-              meanTrace={traceData.mean_trace}
-              title="Individual and Mean Traces"
-            />
+            <TraceGraph plotData={traceData} />
           )}
         </Collapsible>
 
