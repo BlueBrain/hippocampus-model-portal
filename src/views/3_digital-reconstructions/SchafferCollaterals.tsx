@@ -22,6 +22,7 @@ import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
+import Factsheet from '@/components/Factsheet';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -243,7 +244,6 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
           { id: 'RiseTimeSection', label: 'Rise time constant dist.' },
           { id: 'DecayTimeConstantSection', label: 'Decay time constant dist.' },
-          { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' },
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
@@ -368,7 +368,12 @@ const SchafferCollateralsView: React.FC = () => {
         )}
 
         <Collapsible title='Mean connection probability + std' id='MeanConnectionProbabilitySection' properties={["Anatomy"]}>
-          <p>Mean connection</p>
+          <Factsheet facts={[{
+            name: 'Value',
+            description: "",
+            value: 0.07157589478256018,
+
+          }]} />
         </Collapsible>
 
         {availablePlots.PSPAmplitude && (

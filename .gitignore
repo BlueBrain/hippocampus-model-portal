@@ -43,3 +43,6 @@ yarn-error.log*
 
 # python env
 venv
+
+# data 
+public/resources/data
