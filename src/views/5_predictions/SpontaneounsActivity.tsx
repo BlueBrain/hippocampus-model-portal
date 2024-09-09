@@ -243,9 +243,10 @@ const SpontaneousActivityView: React.FC = () => {
 
                 </Collapsible>
 
-                <Collapsible id='traceSection' title="Traces">
-                    {/*  <TraceGraph plotData={traceData} /> */}
-                    <p></p>
+                <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
+                    <div className="graph">
+                        <TraceGraph plotData={traceData} />
+                    </div>
                 </Collapsible>
             </DataContainer>
         </>
