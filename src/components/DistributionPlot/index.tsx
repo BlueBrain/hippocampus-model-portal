@@ -6,7 +6,7 @@ import { graphTheme } from '@/constants';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface PlotDetailsProps {
-    plotData: number[] | Record<string, any> | { bins: number[], counts: number[] };
+    plotData: any;
     xAxis?: string;
     yAxis?: string;
 }
@@ -16,23 +16,32 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
     xAxis = 'Value',
     yAxis = 'Frequency',
 }) => {
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
-        const handleResize = () => {
+        if (typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
-        };
 
-        window.addEventListener('resize', handleResize);
+            const handleResize = () => {
+                setWindowWidth(window.innerWidth);
+            };
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
+        }
     }, []);
 
-    const { labels, datasets } = useMemo(() => {
+    const { labels, datasets, units, name, description } = useMemo(() => {
+        if (!plotData) {
+            console.error('Plot data is undefined or null');
+            return { labels: [], datasets: [], units: null, name: '', description: '' };
+        }
+
         const createHistogram = (data: number[]) => {
-            const binCount = Math.min(20, data.length); // Limit to 20 bins max
+            const binCount = Math.min(20, data.length);
             const min = Math.min(...data);
             const max = Math.max(...data);
             const binWidth = (max - min) / binCount;
@@ -59,10 +68,28 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     backgroundColor: graphTheme.blue,
                     borderColor: '#050A30',
                     borderWidth: 1,
-                }]
+                }],
+                units: null,
+                name: '',
+                description: ''
             };
-        } else if (typeof plotData === 'object') {
-            if ('bins' in plotData && 'counts' in plotData) {
+        } else if (typeof plotData === 'object' && plotData !== null) {
+            if ('freq' in plotData && 'bins' in plotData) {
+                // Handle new data structure
+                return {
+                    labels: plotData.bins,
+                    datasets: [{
+                        label: plotData.name || 'Frequency',
+                        data: plotData.freq,
+                        backgroundColor: graphTheme.blue,
+                        borderColor: '#050A30',
+                        borderWidth: 1,
+                    }],
+                    units: plotData.units,
+                    name: plotData.name || '',
+                    description: plotData.description || ''
+                };
+            } else if ('bins' in plotData && 'counts' in plotData) {
                 // Handle pre-computed histogram data
                 return {
                     labels: plotData.bins.map((bin: number) => bin.toFixed(2)),
@@ -72,7 +99,10 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                         backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
-                    }]
+                    }],
+                    units: null,
+                    name: '',
+                    description: ''
                 };
             } else if ('values' in plotData && Array.isArray(plotData.values)) {
                 // Handle nested 'values' array
@@ -86,7 +116,10 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                         backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
-                    }]
+                    }],
+                    units: null,
+                    name: '',
+                    description: ''
                 };
             } else {
                 // Handle object data directly
@@ -99,13 +132,15 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                         backgroundColor: graphTheme.blue,
                         borderColor: '#050A30',
                         borderWidth: 1,
-                    }]
+                    }],
+                    units: null,
+                    name: '',
+                    description: ''
                 };
             }
         } else {
-            // Handle unexpected data format
-            console.error('Unexpected data format');
-            return { labels: [], datasets: [] };
+            console.error('Unexpected data format', plotData);
+            return { labels: [], datasets: [], units: null, name: '', description: '' };
         }
     }, [plotData]);
 
@@ -116,6 +151,19 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
             legend: {
                 display: false,
             },
+            tooltip: {
+                callbacks: {
+                    title: (tooltipItems: any) => {
+                        const index = tooltipItems[0].dataIndex;
+                        if (Array.isArray(labels)) {
+                            const binStart = labels[index];
+                            const binEnd = labels[index + 1] || (parseFloat(binStart) + (parseFloat(labels[1]) - parseFloat(labels[0]))).toFixed(2);
+                            return `${binStart} - ${binEnd} ${units || ''}`;
+                        }
+                        return labels[index];
+                    }
+                }
+            }
         },
         scales: {
             x: {
@@ -143,9 +191,17 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
         },
     };
 
+    if (labels.length === 0 || datasets.length === 0) {
+        return <div>No data available for the plot.</div>;
+    }
+
     return (
-        <div style={{ width: '100%', height: '400px' }}>
-            <Bar data={{ labels, datasets }} options={options} />
+        <div>
+            {name && <h2>{name}</h2>}
+            {description && <p>{description}</p>}
+            <div style={{ width: '100%', height: '400px' }}>
+                <Bar data={{ labels, datasets }} options={options} />
+            </div>
         </div>
     );
 };

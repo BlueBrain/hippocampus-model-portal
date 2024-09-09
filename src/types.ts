@@ -12,6 +12,14 @@ export type CellGroup = 'All' | 'Excitatory' | 'Inhibitory' | 'SLM_PPA' | 'SO_BP
 
 export type AchConcentration = '0um' | '10um' | '100um';
 
+export type ThemeColors = {
+  experimental_data: string;
+  reconstruction_data: string;
+  digital_reconstruction: string;
+  validations: string;
+  predictions: string;
+};
+
 export type GraphTheme = {
   red: string;
   blue: string;
@@ -19,6 +27,7 @@ export type GraphTheme = {
   purple: string;
   yellow: string;
 };
+
 
 export type Color =
   | 'yellow'
@@ -145,10 +154,11 @@ export type QuickSelectorEntry = {
   title: string;
   key: string;
   values?: string[];
-  getValuesFn?: (param: string) => string[];
+  getValuesFn?: (param: string) => string[] | number[];
   getValuesParam?: string;
   paramsToKeepOnChange?: string[];
   setFn?: (value: string) => void;
+  sliderRange?: number[];
 };
 
 

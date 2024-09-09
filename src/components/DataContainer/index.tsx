@@ -27,7 +27,7 @@ const DataContainer: React.FC<DataContainerProps> = ({
   theme,
   quickSelectorEntries,
 }) => {
-  const navItemsLength = navItems.length; // No need for optional chaining now
+  const navItemsLength = navItems.length;
 
   return (
     <>

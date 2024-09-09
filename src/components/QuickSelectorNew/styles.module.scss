@@ -1,6 +1,12 @@
 @import '@/styles/config/_queries';
 @import '@/styles/config/_colors';
 
+
+
+.container {
+  max-width: 200px;
+}
+
 .label {
   @apply text-sm mb-2;
   color: map-get($basePalette, "navy-2");
@@ -74,4 +80,42 @@
   position: absolute;
   right: 10px;
   pointer-events: none;
+}
+
+
+.sliderWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sliderLabel {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  background-color: rgba(map-get($basePalette, "navy-1"), 0.05);
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: initial;
+    width: 5px;
+    height: .8dvi;
+    border-radius: 0;
+    background-color: map-get($basePalette, "navy-1");
+    /* Add a fallback color */
+    cursor: pointer;
+    opacity: .8;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }

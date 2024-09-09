@@ -20,7 +20,7 @@ type VolumeSectionSelectProps = {
 const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
   value = 'region',
   onSelect = () => { },
-  theme: themeProp = 1,
+  theme: themeProp = 2,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const hoveredObjectRef = useRef<THREE.Object3D | null>(null);
