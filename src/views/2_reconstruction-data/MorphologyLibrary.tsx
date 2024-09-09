@@ -237,6 +237,7 @@ const MorphologyLibrary: React.FC = () => {
                     <>
                       <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
                       <div className="mt-4">
+
                         <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${instances}-factsheet.json`)} theme={theme}>
                           Factsheet
                         </DownloadButton>

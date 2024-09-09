@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
-import { basePath } from "../../../config";
+import { basePath, dataPath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
 import Link from 'next/link';
 import DownloadButton from '@/components/DownloadButton';
@@ -128,7 +128,10 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             dataIndex: 'name',
             render: (name: string) => (
                 <div>
-                    <DownloadButton theme={theme} onClick={() => { downloadHref(`${basePath}/resources/images/1_experimental-data/neuronal-morphology/${name}.png`) }}>
+                    <DownloadButton
+                        theme={theme}
+                        href={`${dataPath}1_experimental-data/neuronal-morphology/asc/${name}.asc`}
+                    >
                         ASC
                     </DownloadButton>
                 </div>
