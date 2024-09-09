@@ -237,9 +237,8 @@ const ThetaMSInputView: React.FC = () => {
 
                 </Collapsible>
 
-                <Collapsible id='traceSection' title="Traces">
-                    {/*  <TraceGraph plotData={traceData} /> */}
-                    <p></p>
+                <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
+                    <TraceGraph plotData={traceData} />
                 </Collapsible>
             </DataContainer>
         </>
