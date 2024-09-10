@@ -17,11 +17,13 @@ import TraceGraph from '../5_predictions/components/Trace';
 import MeanFiringRatePlot from '../5_predictions/components/MeanFiringRatePlot';
 import TimeSpikePlot from '../5_predictions/components/TimeSpikePlot';
 
-const concentration = [0, 1, 5, 10, 20, 50, 100, 200, 500, 1000];
+const concentrations = [0, 1, 5, 10, 20, 50, 100, 200, 500, 1000];
 
-const getConcentration = (): number[] => concentration;
+const getConcentration = (): number[] => concentrations;
 const getMtypes = (): string[] => [...new Set(models.map(model => model.mtype))].sort();
 const getEtypes = (mtype: string): string[] => [...new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))].sort();
+
+const formatConcentration = (value: number): string => `[ACh] = ${value}μM`;
 
 const AcetylcholineView: React.FC = () => {
     const router = useRouter();
@@ -39,7 +41,7 @@ const AcetylcholineView: React.FC = () => {
         const newQuickSelection: Record<string, string | number> = {};
 
         if (typeof mtype === 'string') newQuickSelection.mtype = mtype;
-        if (typeof concentration === 'string') newQuickSelection.concentration = parseFloat(concentration);
+        if (typeof concentration === 'string') newQuickSelection.concentration = parseInt(concentration);
 
         if (typeof mtype === 'string') {
             const availableEtypes = getEtypes(mtype);
@@ -73,7 +75,6 @@ const AcetylcholineView: React.FC = () => {
                 const response = await fetch(`${dataPath}/4_validations/acetylcholine/${concentration}/spike-time.json`);
                 const data = await response.json();
                 setSpikeTimeData(data);
-                console.log('Spike-time data fetched:', data);
             } catch (error) {
                 console.error('Error fetching spike-time data:', error);
                 setSpikeTimeData(null);
@@ -113,11 +114,9 @@ const AcetylcholineView: React.FC = () => {
         router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
     };
 
-    const handleConcentrationSelect = (concentration: string) => {
-        const numConcentration = parseFloat(concentration);
-        setQuickSelection(prev => ({ ...prev, concentration: numConcentration }));
-        setParams({ concentration: numConcentration });
-        console.log('Concentration changed:', numConcentration);
+    const handleConcentrationSelect = (concentration: number) => {
+        setQuickSelection(prev => ({ ...prev, concentration }));
+        setParams({ concentration });
     }
 
     const handleMtypeSelect = (mtype: string) => {
@@ -132,7 +131,6 @@ const AcetylcholineView: React.FC = () => {
         setParams({ etype });
     };
 
-    const concentrations = getConcentration();
     const mtypes = getMtypes();
     const etypes = getEtypes(quickSelection.mtype as string);
 
@@ -142,6 +140,7 @@ const AcetylcholineView: React.FC = () => {
             key: 'concentration',
             values: concentrations,
             setFn: handleConcentrationSelect,
+            formatFn: formatConcentration,
         },
         {
             title: 'M-type',
@@ -201,14 +200,15 @@ const AcetylcholineView: React.FC = () => {
                         </div>
                         <div className={`selector__column theme-${theme} w-full`}>
                             <div className={`selector__head theme-${theme}`}>Select a concentration</div>
-                            <div className="selector__body">
+                            <div className="selector__body flex">
                                 <List
                                     block
-                                    list={concentrations.map(String)}
-                                    value={String(quickSelection.concentration)}
+                                    list={concentrations.map(formatConcentration)}
+                                    value={formatConcentration(quickSelection.concentration as number)}
                                     title={`Concentration ${concentrations.length ? '(' + concentrations.length + ')' : ''}`}
-                                    onSelect={handleConcentrationSelect}
+                                    onSelect={(value: string) => handleConcentrationSelect(parseInt(value.split(' ')[2].replace('μM', '')))}
                                     theme={theme}
+                                    grow={true}
                                 />
                             </div>
                         </div>
@@ -224,7 +224,7 @@ const AcetylcholineView: React.FC = () => {
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-                <Collapsible id='spikeTimeSection' title="Spike Time">
+                <Collapsible id='spikeTimeSection' properties={[quickSelection.concentration]} title="Spike Time">
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
