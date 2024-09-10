@@ -142,8 +142,8 @@ const SchafferCollateralsView: React.FC = () => {
                             </div>
                         </StickyContainer>
                     </div>
-                    <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none">
-                        <div className={`selector__column theme-${theme} w-full`}>
+                    <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none lg:pl-24">
+                        <div className={`selector__column theme-${theme} w-full lg:w-1/2`}>
                             <div className={`selector__head theme-${theme}`}>Select a cell</div>
                             <div className="selector__body flex flex-col">
                                 <List
@@ -154,7 +154,6 @@ const SchafferCollateralsView: React.FC = () => {
                                     onSelect={handleMtypeSelect}
                                     theme={theme}
                                     grow={true}
-
                                 />
                                 <List
                                     block
@@ -164,45 +163,67 @@ const SchafferCollateralsView: React.FC = () => {
                                     onSelect={handleEtypeSelect}
                                     theme={theme}
                                     grow={true}
-
                                 />
                             </div>
                         </div>
-                        <div className={`selector__column theme-${theme} w-full`}>
-                            <div className={`selector__head theme-${theme}`}>Select parameters</div>
-                            <div className="selector__body">
-                                <List
-                                    block
-                                    list={mtypes}
-                                    value={quickSelection.mtype as string}
-                                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                                    onSelect={handleMtypeSelect}
-                                    theme={theme}
-                                />
-                                <List
-                                    block
-                                    list={etypes}
-                                    value={quickSelection.etype as string}
-                                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                                    onSelect={handleEtypeSelect}
-                                    theme={theme}
-                                />
-                                <List
-                                    block
-                                    list={etypes}
-                                    value={quickSelection.etype as string}
-                                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                                    onSelect={handleEtypeSelect}
-                                    theme={theme}
-                                />
-                                <List
-                                    block
-                                    list={etypes}
-                                    value={quickSelection.etype as string}
-                                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                                    onSelect={handleEtypeSelect}
-                                    theme={theme}
-                                />
+
+                        <div className="flex flex-col gap-8 w-full lg:w-1/2">
+                            <div className={`selector__column theme-${theme} w-full`}>
+                                <div className={`selector__head theme-${theme}`}>Select parameters</div>
+                                <div className="selector__body">
+                                    <List
+                                        block
+                                        list={mtypes}
+                                        value={quickSelection.mtype as string}
+                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                                        onSelect={handleMtypeSelect}
+                                        theme={theme}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={`selector__column theme-${theme} w-full`}>
+                                <div className={`selector__head theme-${theme}`}>Select parameters</div>
+                                <div className="selector__body">
+                                    <List
+                                        block
+                                        list={mtypes}
+                                        value={quickSelection.mtype as string}
+                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                                        onSelect={handleMtypeSelect}
+                                        theme={theme}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-8 w-full lg:w-1/2">
+                            <div className={`selector__column theme-${theme} w-full`}>
+                                <div className={`selector__head theme-${theme}`}>Select parameters</div>
+                                <div className="selector__body">
+                                    <List
+                                        block
+                                        list={mtypes}
+                                        value={quickSelection.mtype as string}
+                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                                        onSelect={handleMtypeSelect}
+                                        theme={theme}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={`selector__column theme-${theme} w-full`}>
+                                <div className={`selector__head theme-${theme}`}>Select parameters</div>
+                                <div className="selector__body">
+                                    <List
+                                        block
+                                        list={mtypes}
+                                        value={quickSelection.mtype as string}
+                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                                        onSelect={handleMtypeSelect}
+                                        theme={theme}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
