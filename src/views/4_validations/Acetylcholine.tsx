@@ -8,7 +8,7 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import List from '@/components/List';
 
-import models from "@/models.json";
+import models from "./models.json";
 import { dataPath } from '@/config';
 import { QuickSelectorEntry } from '@/types';
 import DataContainer from '@/components/DataContainer';
