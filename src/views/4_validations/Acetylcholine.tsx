@@ -65,9 +65,9 @@ const AcetylcholineView: React.FC = () => {
     }, [router.isReady, router.query]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const { concentration, mtype, etype } = quickSelection;
-            if (concentration === undefined || !mtype || !etype) return;
+        const fetchSpikeTimeData = async () => {
+            const { concentration } = quickSelection;
+            if (concentration === undefined) return;
 
             try {
                 const response = await fetch(`${dataPath}/4_validations/acetylcholine/${concentration}/spike-time.json`);
@@ -78,6 +78,15 @@ const AcetylcholineView: React.FC = () => {
                 console.error('Error fetching spike-time data:', error);
                 setSpikeTimeData(null);
             }
+        };
+
+        fetchSpikeTimeData();
+    }, [quickSelection.concentration]);
+
+    useEffect(() => {
+        const fetchOtherData = async () => {
+            const { concentration, mtype, etype } = quickSelection;
+            if (concentration === undefined || !mtype || !etype) return;
 
             const otherDataTypes = [
                 { name: 'mean-firing-rate', setter: setMeanFiringRateData },
@@ -96,7 +105,7 @@ const AcetylcholineView: React.FC = () => {
             }
         };
 
-        fetchData();
+        fetchOtherData();
     }, [quickSelection]);
 
     const setParams = (params: Record<string, string | number>): void => {
