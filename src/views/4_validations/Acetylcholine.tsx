@@ -16,6 +16,8 @@ import Collapsible from '@/components/Collapsible';
 import TraceGraph from '../5_predictions/components/Trace';
 import MeanFiringRatePlot from '../5_predictions/components/MeanFiringRatePlot';
 import TimeSpikePlot from '../5_predictions/components/TimeSpikePlot';
+import DownloadButton from '@/components/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const concentrations = [0, 1, 5, 10, 20, 50, 100, 200, 500, 1000];
 
@@ -224,24 +226,56 @@ const AcetylcholineView: React.FC = () => {
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-                <Collapsible id='spikeTimeSection' properties={[quickSelection.concentration]} title="Spike Time">
+                <Collapsible id='spikeTimeSection' properties={["[Ach]=" + quickSelection.concentration + "μm"]} title="Spike Time">
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(spikeTimeData, 'layer-anatommy-summary.json')} theme={theme}>
+
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>[Ach]={quickSelection.concentration}μM</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+
+                            Spike Time
+                        </DownloadButton>
+
+                    </div>
+
                 </Collapsible>
 
-                <Collapsible id='meanFiringRateSection' properties={[quickSelection.concentration + "", quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                <Collapsible id='meanFiringRateSection' properties={["[Ach]=" + quickSelection.concentration + "μm", quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} />
                     </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(meanFiringRateData, 'layer-anatommy-summary.json')} theme={theme}>
+
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>[Ach]={quickSelection.concentration}μM</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+
+                            Mean Firing Rate
+                        </DownloadButton>
+
+                    </div>
+
                 </Collapsible>
 
-                <Collapsible id='traceSection' properties={[quickSelection.concentration + "", quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
+                <Collapsible id='traceSection' properties={["[Ach]=" + quickSelection.concentration + "μm", quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
                     <div className="graph">
                         <TraceGraph plotData={traceData} />
                     </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(traceData, 'layer-anatommy-summary.json')} theme={theme}>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>[Ach]={quickSelection.concentration}μM</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+
+                            Trace
+                        </DownloadButton>
+
+                    </div>
+
                 </Collapsible>
-            </DataContainer>
+            </DataContainer >
         </>
     );
 };
