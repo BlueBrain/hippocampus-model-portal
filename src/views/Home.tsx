@@ -118,7 +118,7 @@ const Home: React.FC = () => (
               },
               {
                 label: 'Connection anatomy',
-                href: '/reconstruction-data/connection/',
+                href: '/reconstruction-data/connection-anatomy/',
               },
               {
                 label: 'Connection Physiology',

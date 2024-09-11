@@ -55,7 +55,7 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
                     height={125}
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        setLightboxSlides(data.map(entry => ({ src: `${imagesPath}/1_experimental-data/layer-anatomy/${entry.cell_id}.jpeg` })));
+                        setLightboxSlides(data.map(entry => ({ src: `${imagesPath}/1_experimental-data/slices/${entry.cell_id}.jpeg` })));
                         setLightboxIndex(index);
                         setLightboxOpen(true);
                     }}

@@ -150,7 +150,7 @@ const VolumeView: React.FC = () => {
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
           <p>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</p>
-          <div className="graph flex-col">
+          <div className="graph no-padding flex-col">
             <Spin spinning={!volumeViewerReady}>
               <CoordinatesViewer />
             </Spin>

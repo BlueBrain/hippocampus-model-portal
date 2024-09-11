@@ -220,7 +220,7 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
             <div className='graph' style={{ width: `${chartSize}px`, height: `${chartSize}px` }}>
                 <canvas ref={chartRef} />
             </div>
-            <div className="mt-4 text-center">
+            <div className="mt-4 ">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, 'Synapses-Per-Connection-Data.json')}
