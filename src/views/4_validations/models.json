@@ -1,0 +1,66 @@
+[
+    {
+        "etype": "bAC",
+        "mtype": "SLM_PPA"
+    },
+    {
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "etype": "bAC",
+        "mtype": "SO_BS"
+    },
+    {
+        "etype": "cNAC",
+        "mtype": "SO_BS"
+    },
+    {
+        "etype": "cAC",
+        "mtype": "SO_OLM"
+    },
+    {
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "etype": "bAC",
+        "mtype": "SP_AA"
+    },
+    {
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    }
+]
