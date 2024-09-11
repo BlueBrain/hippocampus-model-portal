@@ -14,28 +14,39 @@ import { QuickSelectorEntry } from '@/types';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
 import TraceGraph from '../5_predictions/components/Trace';
-import MeanFiringRatePlot from '../5_predictions/components/MeanFiringRatePlot';
 import TimeSpikePlot from '../5_predictions/components/TimeSpikePlot';
+import MeanFiringRatePlot from '../5_predictions/components/MeanFiringRatePlot';
+
+const simAndSliceSeeds = ['10', '15', '20', '25', '30'];
+const stimulusPercentOptions = ['5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'];
+const maxSCOptions = ['350'];
+const inhibitionOptions = ['0', '1'];
 
 const getMtypes = (): string[] => [...new Set(models.map(model => model.mtype))].sort();
 const getEtypes = (mtype: string): string[] => [...new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))].sort();
 
+const formatInhibition = (value: string): string => value === '0' ? 'No Inhibition' : 'With Inhibition';
 
 const SchafferCollateralsView: React.FC = () => {
     const router = useRouter();
     const theme = 4;
 
-    const [quickSelection, setQuickSelection] = useState<Record<string, string | number>>({});
+    const [quickSelection, setQuickSelection] = useState<Record<string, string>>({});
     const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
+    const [meanFiringData, setMeanFiringRateData] = useState<any>(null);
     const [traceData, setTraceData] = useState<any>(null);
 
     useEffect(() => {
         if (!router.isReady) return;
 
-        const { mtype, etype } = router.query;
-        const newQuickSelection: Record<string, string | number> = {};
+        const { mtype, etype, simAndSliceSeed, stimulusPercent, maxSC, inhibition } = router.query;
+        const newQuickSelection: Record<string, string> = {};
 
         if (typeof mtype === 'string') newQuickSelection.mtype = mtype;
+        if (typeof simAndSliceSeed === 'string') newQuickSelection.simAndSliceSeed = simAndSliceSeed;
+        if (typeof stimulusPercent === 'string') newQuickSelection.stimulusPercent = stimulusPercent;
+        if (typeof maxSC === 'string') newQuickSelection.maxSC = maxSC;
+        if (typeof inhibition === 'string') newQuickSelection.inhibition = inhibition;
 
         if (typeof mtype === 'string') {
             const availableEtypes = getEtypes(mtype);
@@ -53,6 +64,10 @@ const SchafferCollateralsView: React.FC = () => {
             const defaultSelection = {
                 mtype: defaultMtype,
                 etype: getEtypes(defaultMtype)[0] || '',
+                simAndSliceSeed: simAndSliceSeeds[0],
+                stimulusPercent: stimulusPercentOptions[0],
+                maxSC: maxSCOptions[0],
+                inhibition: inhibitionOptions[0],
             };
             setQuickSelection(defaultSelection);
             router.replace({ query: defaultSelection }, undefined, { shallow: true });
@@ -60,16 +75,19 @@ const SchafferCollateralsView: React.FC = () => {
     }, [router.isReady, router.query]);
 
     useEffect(() => {
-        const fetchOtherData = async () => {
-            const { mtype, etype } = quickSelection;
-            const otherDataTypes = [
+        const fetchData = async () => {
+            const { simAndSliceSeed, stimulusPercent, maxSC, inhibition, mtype, etype } = quickSelection;
+            if (!simAndSliceSeed || !stimulusPercent || !maxSC || !inhibition || !mtype || !etype) return;
+
+            const dataTypes = [
                 { name: 'spike-time', setter: setSpikeTimeData },
+                { name: 'mean-firing-rate', setter: setMeanFiringRateData },
                 { name: 'trace', setter: setTraceData }
             ];
 
-            for (const { name, setter } of otherDataTypes) {
+            for (const { name, setter } of dataTypes) {
                 try {
-                    const response = await fetch(`${dataPath}/4_validations/acetylcholine/${concentration}/${mtype}-${etype}/${name}.json`);
+                    const response = await fetch(`${dataPath}/4_validations/schaffer-collaterals-2/${simAndSliceSeed}-${stimulusPercent}-${maxSC}-${inhibition}/${mtype}-${etype}/${name}.json`);
                     const data = await response.json();
                     setter(data);
                 } catch (error) {
@@ -79,17 +97,32 @@ const SchafferCollateralsView: React.FC = () => {
             }
         };
 
-        fetchOtherData();
+        fetchData();
     }, [quickSelection]);
 
-    const setParams = (params: Record<string, string | number>): void => {
+    const setParams = (params: Record<string, string>): void => {
         const newQuery = { ...router.query, ...params };
         router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
     };
 
-    const handleConcentrationSelect = (concentration: number) => {
-        setQuickSelection(prev => ({ ...prev, concentration }));
-        setParams({ concentration });
+    const handleSimAndSliceSeedSelect = (simAndSliceSeed: string) => {
+        setQuickSelection(prev => ({ ...prev, simAndSliceSeed }));
+        setParams({ simAndSliceSeed });
+    }
+
+    const handleStimulusPercentSelect = (stimulusPercent: string) => {
+        setQuickSelection(prev => ({ ...prev, stimulusPercent }));
+        setParams({ stimulusPercent });
+    }
+
+    const handleMaxSCSelect = (maxSC: string) => {
+        setQuickSelection(prev => ({ ...prev, maxSC }));
+        setParams({ maxSC });
+    }
+
+    const handleInhibitionSelect = (inhibition: string) => {
+        setQuickSelection(prev => ({ ...prev, inhibition }));
+        setParams({ inhibition });
     }
 
     const handleMtypeSelect = (mtype: string) => {
@@ -105,9 +138,33 @@ const SchafferCollateralsView: React.FC = () => {
     };
 
     const mtypes = getMtypes();
-    const etypes = getEtypes(quickSelection.mtype as string);
+    const etypes = getEtypes(quickSelection.mtype || '');
 
     const qsEntries: QuickSelectorEntry[] = [
+        {
+            title: 'Simulation and slice seed',
+            key: 'simAndSliceSeed',
+            values: simAndSliceSeeds,
+            setFn: handleSimAndSliceSeedSelect,
+        },
+        {
+            title: 'Stimulus Percent',
+            key: 'stimulusPercent',
+            values: stimulusPercentOptions,
+            setFn: handleStimulusPercentSelect,
+        },
+        {
+            title: 'Max SC',
+            key: 'maxSC',
+            values: maxSCOptions,
+            setFn: handleMaxSCSelect,
+        },
+        {
+            title: 'Inhibition',
+            key: 'inhibition',
+            values: inhibitionOptions,
+            setFn: handleInhibitionSelect,
+        },
         {
             title: 'M-type',
             key: 'mtype',
@@ -149,7 +206,7 @@ const SchafferCollateralsView: React.FC = () => {
                                 <List
                                     block
                                     list={mtypes}
-                                    value={quickSelection.mtype as string}
+                                    value={quickSelection.mtype}
                                     title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
                                     onSelect={handleMtypeSelect}
                                     theme={theme}
@@ -158,7 +215,7 @@ const SchafferCollateralsView: React.FC = () => {
                                 <List
                                     block
                                     list={etypes}
-                                    value={quickSelection.etype as string}
+                                    value={quickSelection.etype}
                                     title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
                                     onSelect={handleEtypeSelect}
                                     theme={theme}
@@ -173,11 +230,12 @@ const SchafferCollateralsView: React.FC = () => {
                                 <div className="selector__body">
                                     <List
                                         block
-                                        list={mtypes}
-                                        value={quickSelection.mtype as string}
-                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                                        onSelect={handleMtypeSelect}
+                                        list={simAndSliceSeeds}
+                                        value={quickSelection.simAndSliceSeed}
+                                        title={`Simulation and slice seed ${simAndSliceSeeds.length ? '(' + simAndSliceSeeds.length + ')' : ''}`}
+                                        onSelect={handleSimAndSliceSeedSelect}
                                         theme={theme}
+                                        grow={true}
                                     />
                                 </div>
                             </div>
@@ -187,27 +245,28 @@ const SchafferCollateralsView: React.FC = () => {
                                 <div className="selector__body">
                                     <List
                                         block
-                                        list={mtypes}
-                                        value={quickSelection.mtype as string}
-                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                                        onSelect={handleMtypeSelect}
+                                        list={stimulusPercentOptions}
+                                        value={quickSelection.stimulusPercent}
+                                        title={`Stimulus percent ${stimulusPercentOptions.length ? '(' + stimulusPercentOptions.length + ')' : ''}`}
+                                        onSelect={handleStimulusPercentSelect}
                                         theme={theme}
+                                        grow={true}
                                     />
                                 </div>
                             </div>
                         </div>
-
                         <div className="flex flex-col gap-8 w-full lg:w-1/2">
                             <div className={`selector__column theme-${theme} w-full`}>
                                 <div className={`selector__head theme-${theme}`}>Select parameters</div>
                                 <div className="selector__body">
                                     <List
                                         block
-                                        list={mtypes}
-                                        value={quickSelection.mtype as string}
-                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                                        onSelect={handleMtypeSelect}
+                                        list={maxSCOptions}
+                                        value={quickSelection.maxSC}
+                                        title={`Max SC ${maxSCOptions.length ? '(' + maxSCOptions.length + ')' : ''}`}
+                                        onSelect={handleMaxSCSelect}
                                         theme={theme}
+                                        grow={true}
                                     />
                                 </div>
                             </div>
@@ -217,11 +276,12 @@ const SchafferCollateralsView: React.FC = () => {
                                 <div className="selector__body">
                                     <List
                                         block
-                                        list={mtypes}
-                                        value={quickSelection.mtype as string}
-                                        title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                                        onSelect={handleMtypeSelect}
+                                        list={inhibitionOptions.map(formatInhibition)}
+                                        value={formatInhibition(quickSelection.inhibition || '0')}
+                                        title={`Inhibition ${inhibitionOptions.length ? '(' + inhibitionOptions.length + ')' : ''}`}
+                                        onSelect={(value: string) => handleInhibitionSelect(value === 'No Inhibition' ? '0' : '1')}
                                         theme={theme}
+                                        grow={true}
                                     />
                                 </div>
                             </div>
@@ -237,16 +297,23 @@ const SchafferCollateralsView: React.FC = () => {
                 ]}
                 quickSelectorEntries={qsEntries}
             >
-                <Collapsible id='spikeTimeSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Spike Time">
+                <Collapsible id='spikeTimeSection' properties={[quickSelection.simAndSliceSeed, quickSelection.stimulusPercent, quickSelection.maxSC, quickSelection.inhibition, quickSelection.mtype + "-" + quickSelection.etype]} title="Spike Time">
                     <div className="graph">
-                        {/*  <TimeSpikePlot plotData={spikeTimeData} /> */}
-
+                        <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
                 </Collapsible>
 
-                <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
+                <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        {/*  <TraceGraph plotData={traceData} /> */}
+                        <MeanFiringRatePlot plotData={meanFiringData} />
+                    </div>
+
+                </Collapsible>
+
+
+                <Collapsible id='traceSection' properties={[quickSelection.simAndSliceSeed, quickSelection.stimulusPercent, quickSelection.maxSC, quickSelection.inhibition, quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
+                    <div className="graph">
+                        <TraceGraph plotData={traceData} />
                     </div>
                 </Collapsible>
             </DataContainer>
