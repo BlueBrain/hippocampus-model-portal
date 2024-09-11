@@ -10,6 +10,7 @@ import {
     LineElement,
     Tooltip,
     Title,
+    ChartConfiguration
 } from 'chart.js';
 
 import HttpDownloadButton from '@/components/HttpDownloadButton';
@@ -88,18 +89,19 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
             });
     }, []);
 
-    useEffect(() => {
-        if (chartInstanceRef.current) {
-            chartInstanceRef.current.destroy();
-        }
-
+    const createChart = () => {
         if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const formulaPoints = calculateFormulaPoints();
                 const { solidPoints, dottedPoints } = splitFormulaPoints(formulaPoints);
 
-                chartInstanceRef.current = new Chart(ctx, {
+                // Destroy existing chart if it exists
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.destroy();
+                }
+
+                const chartConfig: ChartConfiguration = {
                     type: 'scatter',
                     data: {
                         datasets: [
@@ -135,6 +137,9 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        animation: { duration: 0 },
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 type: 'logarithmic',
@@ -148,7 +153,6 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 },
                                 grid: {
                                     color: 'rgba(0, 0, 0, 0.1)',
-                                    // drawBorder: true,
                                     drawOnChartArea: true,
                                 },
                                 ticks: {
@@ -175,7 +179,6 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 },
                                 grid: {
                                     color: 'rgba(0, 0, 0, 0.1)',
-                                    // drawBorder: true,
                                     drawOnChartArea: true,
                                 },
                                 ticks: {
@@ -185,16 +188,30 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                             }
                         }
                     }
+                };
 
-                });
+                chartInstanceRef.current = new Chart(ctx, chartConfig);
             }
         }
+    };
 
-        return () => {
-            if (chartInstanceRef.current) {
-                chartInstanceRef.current.destroy();
-            }
-        };
+    useEffect(() => {
+        if (data) {
+            createChart();
+
+            const handleResize = () => {
+                createChart();
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.destroy();
+                }
+            };
+        }
     }, [data]);
 
     return (
@@ -204,7 +221,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                     {data ? `\\[${data.equation}\\]` : ''}
                 </MathJax>
             </MathJaxContext>
-            <div className="graph mb-4">
+            <div className="graph mb-4" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">
