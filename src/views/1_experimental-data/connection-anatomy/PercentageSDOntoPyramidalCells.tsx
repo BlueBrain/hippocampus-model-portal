@@ -97,7 +97,7 @@ const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsPro
                 data={data}
             />
 
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Percentage-of-Synapse-Divergence-Onto-Pyramidal-Cells-And-Interneurons-Data.json`)}

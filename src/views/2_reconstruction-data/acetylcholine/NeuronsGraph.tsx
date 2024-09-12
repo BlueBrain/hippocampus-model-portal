@@ -9,6 +9,7 @@ import {
     PointElement,
     LineElement,
     Tooltip,
+    ChartConfiguration
 } from 'chart.js';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
@@ -76,6 +77,7 @@ export type NeuronsGraphProps = {
 
 const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
+    const chartInstanceRef = useRef<Chart | null>(null);
     const [data, setData] = useState<NeuronGraphData | null>(null);
 
     useEffect(() => {
@@ -90,14 +92,19 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
             });
     }, []);
 
-    useEffect(() => {
+    const createChart = () => {
         if (chartRef.current && data) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
                 const lineData = generateLineData();
                 const { solidData, dottedData } = splitLineData(lineData);
 
-                new Chart(ctx, {
+                // Destroy existing chart if it exists
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.destroy();
+                }
+
+                const chartConfig: ChartConfiguration = {
                     type: 'scatter',
                     data: {
                         datasets: [
@@ -131,6 +138,10 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                         ]
                     },
                     options: {
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+                        animation: { duration: 0 },
                         scales: {
                             x: {
                                 type: 'logarithmic' as const,
@@ -144,7 +155,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 },
                                 grid: {
                                     color: 'rgba(0, 0, 0, 0.1)',
-                                    // drawBorder: true,
                                     drawOnChartArea: true,
                                 },
                                 ticks: {
@@ -171,7 +181,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 },
                                 grid: {
                                     color: 'rgba(0, 0, 0, 0.1)',
-                                    //drawBorder: true,
                                     drawOnChartArea: true,
                                 },
                                 ticks: {
@@ -188,11 +197,32 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                         },
                         backgroundColor: 'white',
                     }
-                });
+                };
+
+                chartInstanceRef.current = new Chart(ctx, chartConfig);
             }
         }
+    };
 
+    useEffect(() => {
+        if (data) {
+            createChart();
+
+            const handleResize = () => {
+                createChart();
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                if (chartInstanceRef.current) {
+                    chartInstanceRef.current.destroy();
+                }
+            };
+        }
     }, [data]);
+
     return (
         <div>
             <MathJaxContext>
@@ -200,7 +230,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     {data ? `\\[${data.equation}\\]` : ''}
                 </MathJax>
             </MathJaxContext>
-            <div className="graph">
+            <div className="graph" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
             <div className="mt-4">

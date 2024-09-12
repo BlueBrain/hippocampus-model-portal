@@ -166,7 +166,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       // additionalData={doiIndex}
       />
-      <div className="text-right mt-2">
+      <div className="mt-2">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(PSCRiseTimeData, `PSC-Rise-Time-Data.json`)}
@@ -182,7 +182,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       // additionalData={doiIndex}
       />
-      <div className="text-right mt-2">
+      <div className="mt-2">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(PSCTauDecayData, `PSC-Tau-Decay-Data.json`)}

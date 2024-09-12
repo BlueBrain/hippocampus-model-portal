@@ -16,6 +16,8 @@ import Collapsible from '@/components/Collapsible';
 import TraceGraph from '../5_predictions/components/Trace';
 import TimeSpikePlot from '../5_predictions/components/TimeSpikePlot';
 import MeanFiringRatePlot from '../5_predictions/components/MeanFiringRatePlot';
+import DownloadButton from '@/components/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const simAndSliceSeeds = ['10', '15', '20', '25', '30'];
 const stimulusPercentOptions = ['5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'];
@@ -301,11 +303,34 @@ const SchafferCollateralsView: React.FC = () => {
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(spikeTimeData, 'layer-anatommy-summary.json')} theme={theme}>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Simulation and slice seed: {quickSelection.simAndSliceSeed}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Stimulus Percent {quickSelection.stimulusPercent}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Max SC {quickSelection.maxSC}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{(quickSelection.inhibition === "1" ? "With Inibition" : "No Inibition")}</span>
+                            Spike Time
+                        </DownloadButton>
+
+                    </div>
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringData} />
+                    </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(meanFiringData, 'layer-anatommy-summary.json')} theme={theme}>
+
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Simulation and slice seed: {quickSelection.simAndSliceSeed}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Stimulus Percent {quickSelection.stimulusPercent}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Max SC {quickSelection.maxSC}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{(quickSelection.inhibition === "1" ? "With Inibition" : "No Inibition")}</span>
+                            Mean Firing Rate
+                        </DownloadButton>
+
                     </div>
 
                 </Collapsible>
@@ -314,6 +339,18 @@ const SchafferCollateralsView: React.FC = () => {
                 <Collapsible id='traceSection' properties={[quickSelection.simAndSliceSeed, quickSelection.stimulusPercent, quickSelection.maxSC, quickSelection.inhibition, quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
                     <div className="graph">
                         <TraceGraph plotData={traceData} />
+                    </div>
+                    <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(traceData, 'layer-anatommy-summary.json')} theme={theme}>
+
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.mtype}-{quickSelection.etype}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Simulation and slice seed: {quickSelection.simAndSliceSeed}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Stimulus Percent {quickSelection.stimulusPercent}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>Max SC {quickSelection.maxSC}</span>
+                            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{(quickSelection.inhibition === "1" ? "With Inibition" : "No Inibition")}</span>
+                            Trace
+                        </DownloadButton>
+
                     </div>
                 </Collapsible>
             </DataContainer>

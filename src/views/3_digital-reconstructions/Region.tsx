@@ -149,7 +149,7 @@ const RegionView: React.FC = () => {
                       <h3 className="mt-3">Schaffer collaterals</h3>
                       <Factsheet facts={data.schafferCollaterals} />
 
-                      <div className="text-right mt-2">
+                      <div className="mt-4">
                         <DownloadButton
                           theme={theme} onClick={() => downloadAsJson(data, `region-factsheet.json`)} >
                           Region Factsheet

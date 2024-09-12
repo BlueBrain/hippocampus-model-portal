@@ -54,10 +54,12 @@ const VolumeView: React.FC = () => {
   return (
     <>
       <Filters theme={theme} hasData={true}>
-        <Row className="w-100" gutter={[0, 20]}>
-          <Col className="mb-2" xs={24} lg={12}>
+        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
+          <div className="w-full lg:w-1/2 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
             <StickyContainer>
-              <Title primaryColor={colorName} title="Volume" subtitle="Reconstruction Data" theme={theme} />
+              <Title
+                title="Volume" subtitle="Reconstruction Data" theme={theme}
+              />
               <div role="information">
                 <InfoBox>
                   <p>
@@ -66,20 +68,22 @@ const VolumeView: React.FC = () => {
                 </InfoBox>
               </div>
             </StickyContainer>
-          </Col>
-          <Col className={`set-accent-color--${'grey'} mb-2`} xs={24} lg={12}>
-            <div className={selectorStyle.row}>
-              <div className={"selector__column mt-3 theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select a volume section</div>
-                <div className={"selector__body"}>
-                  <VolumeSectionSelector3D value={volumeSection} onSelect={setVolumeSectionQuery} theme={theme} />
-                </div>
+          </div>
+
+          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-1/2 md:w-full flex-grow md:flex-none justify-center">
+            <div className={`selector__column selector__column--lg theme-${theme} w-full`}>
+              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+              <div className="selector__body">
+                <VolumeSectionSelector3D
+                  value={volumeSection}
+                  onSelect={setVolumeSectionQuery}
+                  theme={theme}
+                />
               </div>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Filters>
-
       <DataContainer
         theme={theme}
         navItems={[
@@ -146,11 +150,12 @@ const VolumeView: React.FC = () => {
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
           <p>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</p>
-          <div className="graph no-padding">
+          <div className="graph no-padding flex-col">
             <Spin spinning={!volumeViewerReady}>
               <CoordinatesViewer />
             </Spin>
           </div>
+
         </Collapsible>
       </DataContainer>
     </>

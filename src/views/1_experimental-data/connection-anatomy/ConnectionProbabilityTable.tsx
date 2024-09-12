@@ -115,7 +115,7 @@ const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({
                 data={data}
             />
 
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Connection-Probability-Data.json`)}

@@ -118,7 +118,7 @@ const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
         <sup>[4]</sup> Calculated (see below).
       </small>
 
-      <div className="text-right mt-2">
+      <div className="mt-2">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(data, `Bouton-Density-Data.json`)}

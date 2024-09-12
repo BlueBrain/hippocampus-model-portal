@@ -108,7 +108,7 @@ const SynDivLay: React.FC<SynDivLayProps> = ({ theme }) => {
                 data={data}
                 rowKey={(record) => record['m-type']}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Percentage-of-synapse-divergence-per-layer-Data.json`)}

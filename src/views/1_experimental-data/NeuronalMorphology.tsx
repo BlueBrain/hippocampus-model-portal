@@ -280,7 +280,7 @@ const NeuronalMorphologyView: React.FC = () => {
                             )}
                         </HttpData>
                     </div>
-                    <div className="mt-16 ">
+                    <div className="mt-16">
                         <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}>
                             {(tableData) => (
                                 <>

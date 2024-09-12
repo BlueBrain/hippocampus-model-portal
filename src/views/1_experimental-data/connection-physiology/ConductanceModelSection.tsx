@@ -275,7 +275,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         see <TextWithRefs text="Moradi and Ascoli, 2020" doiIndex={doiIndex} />). Metadata (species, age, weight,
         and region) were taken from the original experimental study on which these values were based.
       </small>
-      <div className="text-right mt-3">
+      <div className="mt-3">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(reversalPotentialData, `Reversal-Potential-Data.json`)}
@@ -291,7 +291,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(PSPAmplitudeData, `exp-connection-physiology_-_conductance_model_-_psp-amplitude-table.json`)}
@@ -307,14 +307,14 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(PSPCVData, `PSP-CV-Data.json`)}
         >
           PSP CV Data
         </DownloadButton>
-      </div>
+      </div >
 
       <h3 className="text-lg mb-2 mt-12">PSC amplitude</h3>
       <ResponsiveTable<TableEntry>
@@ -323,7 +323,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(PSCAmplitudeData, `PSC-Amplitude-Data.json`)}

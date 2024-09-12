@@ -112,7 +112,7 @@ const SynsPerConnTable: React.FC<SynsPerConnTableProps> = ({ theme }) => {
         data={data}
         rowKey={({ from, to }) => `${from}_${to}`}
       />
-      <div className="text-right mt-2">
+      <div className="mt-2">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(data, `exp-connection-anatomy_-_syns-per-conn-table.json`)}

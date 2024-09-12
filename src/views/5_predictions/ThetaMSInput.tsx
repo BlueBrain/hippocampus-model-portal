@@ -16,7 +16,7 @@ import TimeSpikePlot from './components/TimeSpikePlot';
 import MeanFiringRatePlot from './components/MeanFiringRatePlot';
 
 import { QuickSelectorEntry } from '@/types';
-import models from "@/models.json";
+import models from "./models.json";
 import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
