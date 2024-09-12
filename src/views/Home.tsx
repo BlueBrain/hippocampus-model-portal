@@ -248,6 +248,10 @@ const Home: React.FC = () => (
               {
                 label: 'Theta - MS input',
                 href: '/predictions/theta-ms-input',
+              },
+              {
+                label: 'Other Frequencies',
+                href: '/predictions/other-frequencies',
               }
             ]}
           />
