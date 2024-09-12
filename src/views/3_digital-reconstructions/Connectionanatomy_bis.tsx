@@ -20,6 +20,7 @@ import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { dataPath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
+import LaminarGraph from '@/components/LaminarGraph';
 
 
 const SynapsesView: React.FC = () => {
@@ -44,7 +45,7 @@ const SynapsesView: React.FC = () => {
     if (!router.isReady) return;
 
     if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
-      const query = defaultSelection.digitalReconstruction.synapticPathways;
+      const query = defaultSelection.digitalReconstruction.connectionPhysiology;
       const { volume_section, prelayer, postlayer } = query;
       setQuickSelection({ volume_section, prelayer, postlayer });
       router.replace({ query }, undefined, { shallow: true });
@@ -108,7 +109,18 @@ const SynapsesView: React.FC = () => {
   useEffect(() => {
     if (volume_section && prelayer && postlayer) {
       const distributionPlotFile = `${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const ConnectionsFile = `${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
 
+      // Fetch data from Connections.json for laminar distribution
+      fetch(ConnectionsFile)
+        .then(response => response.json())
+        .then(scData => {
+          const laminarData = scData.values.find(plot => plot.id === 'laminar-distribution');
+          laminarData && setLaminarPlots(laminarData);
+        })
+        .catch(error => console.error('Error fetching schaffer-collaterals data:', error));
+
+      // Fetch data from distributionPlotFile only
       fetch(distributionPlotFile)
         .then(response => response.json())
         .then(distributionData => {
@@ -116,19 +128,11 @@ const SynapsesView: React.FC = () => {
             const plots = distributionData.values;
 
             const availablePlots = {
-              PSPAmplitude: plots.some(plot => plot.id === 'psp-amplitude'),
-              PSPCV: plots.some(plot => plot.id === 'psp-cv'),
-              SynapsesLatency: plots.some(plot => plot.id === 'synapse-latency'),
-              SynapsesLatencyFromSimulation: plots.some(plot => plot.id === 'synapse-latency-from-simulation'),
-              RiseTimeCOnstant: plots.some(plot => plot.id === 'rise-time-constant'),
-              DecayTimeConstant: plots.some(plot => plot.id === 'decay-time-constant'),
-              DecayTimeConstantFromSimulation: plots.some(plot => plot.id === 'decay-time-constant-from-sumluation'),
-              NMDAAMPARatio: plots.some(plot => plot.id === 'nmda-ampa-ratio'),
-              UParameter: plots.some(plot => plot.id === 'u-parameter'),
-              DParameter: plots.some(plot => plot.id === 'd-parameter'),
-              FParameter: plots.some(plot => plot.id === 'f-parameter'),
-              NRRPParameter: plots.some(plot => plot.id === 'nrrp-parameter'),
-              GSYNX: plots.some(plot => plot.id === 'g-synx'),
+              boutonDenstiy: plots.some(plot => plot.id === 'bouton-density'),
+              sampleConvergenceByConnection: plots.some(plot => plot.id === 'sample-convergence-by-connection'),
+              sampleConvergenceBySynapses: plots.some(plot => plot.id === 'sample-convergence-by-synapse'),
+              sampleDivergenceConnections: plots.some(plot => plot.id === 'sample-divergence-by-connection'),
+              sampleDivergenceBySynapses: plots.some(plot => plot.id === 'sample-divergence-by-synapse'),
             };
 
             setAvailablePlots(availablePlots);
@@ -160,7 +164,6 @@ const SynapsesView: React.FC = () => {
                 <InfoBox>
                   <p>
                     We assigned <Link href={"/experimental-data/connection-physiology/"} className={`link theme-${theme}`}>synapse properties</Link> to the <Link href={"/digital-reconstructions/connection-anatomy/"} className={`link theme-${theme}`}>established connections</Link>. For each circuit, each pathway is analyzed in terms of PSP, latency, kinetics, NMDA/AMPA ratio, and short-term plasticity.
-
                   </p>
                 </InfoBox>
               </div>
@@ -171,11 +174,13 @@ const SynapsesView: React.FC = () => {
             <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
               <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
               <div className="selector__body">
+
                 <VolumeSectionSelector3D
                   value={volume_section}
                   onSelect={setVolumeSectionQuery}
                   theme={theme}
                 />
+
               </div>
 
             </div>
@@ -210,224 +215,91 @@ const SynapsesView: React.FC = () => {
 
       <DataContainer theme={theme}
         navItems={[
-          { id: 'PSPAmplitudeSection', label: 'PSP Amplitude' },
-          { id: 'PSPCVSection', label: 'PSP CV' },
-          { id: 'SynapsesLatencySection', label: 'Synapses Latency' },
-          { id: 'RiseTimeCOnstantSection', label: 'Rise Time Constant' },
-          { id: 'DecayTimeConstantSection', label: 'Decay Time Constant' },
-          { id: 'NMDAAMPARatioSection', label: 'NMAA/AMPA Ratio' },
-          { id: 'UDFNRRPSection', label: 'U, D, F, NRRP Parameters and G-SYNX ' },
+          { id: 'BoutonDenstiySection', label: 'Bouton density' },
+          { id: 'SampleConvergenceByConnectionSection', label: 'Sample convergence by connection' },
+          { id: 'SampleConvergenceBySynapsesSection', label: 'Sample convergence by synapses' },
+          { id: 'LaminarDistributionSection', label: 'Laminar distribution' },
+          { id: 'SampleDivergenceConnectionsSection', label: 'Sample divergence by connection' },
+          { id: 'SampleDivergenceBySynapsesSection', label: 'Sample divergence by synapses' },
         ]}
         quickSelectorEntries={qsEntries}
       >
 
-
-        {availablePlots.PSPAmplitude && (
-          <Collapsible title="PSP Amplitude" id="PSPAmplitudeSection" className="mt-4">
+        {availablePlots.boutonDenstiy && (
+          <Collapsible title="Bouton Desnity" id="BoutonDenstiySection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('psp-amplitude')} />
+              <DistibutionPlot plotData={getPlotDataById('bouton-density')} />
             </div>
             <div className="mt-4">
-              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-amplitude'), `psp-amplitude-${volume_section}-${prelayer}-${postlayer}.json`)}>
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('bouton-density'), `bouton-density-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                PSP Amplitude
+                Bouton density
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
               </DownloadButton>
             </div>
           </Collapsible>
         )}
 
-        {availablePlots.PSPCV && (
-          <Collapsible title="PSP CV" id="PSPCVSection" className="mt-4">
+        {availablePlots.sampleConvergenceByConnection && (
+          <Collapsible title="Sample convergence by connection" id="SampleConvergenceByConnectionSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('psp-cv')} />
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-connection')} />
             </div>
             <div className="mt-4">
-              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-cv'), `psp-cv-${volume_section}-${prelayer}-${postlayer}.json`)}>
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-connection'), `sample-convergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                PSP CV
+                Sample convergence by connection
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
               </DownloadButton>
             </div>
           </Collapsible>
         )}
 
-        {(availablePlots.SynapsesLatency || availablePlots.SynapseLatencyFromSimulation) && (
-          <Collapsible
-            title="Synapse latency"
-            id="SynapsesLatencySection"
-          >
-            <div className="flex flex-col gap-12">
-
-              {availablePlots.SynapsesLatency && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Synapse Latency</div>
-                    <div className="graph">
-                      <DistibutionPlot
-                        plotData={getPlotDataById('synapse-latency')}
-                        xAxis='Latency'
-                        yAxis='Frequency'
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('synapse-latency'),
-                            `synapse-latency-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        Synapse latency distribution
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {availablePlots.SynapsesLatencyFromSimulation && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Synapse Latency for simulation</div>
-                    <div className="graph">
-                      <DistibutionPlot
-                        plotData={getPlotDataById('synapse-latency-from-simulation')}
-                        xAxis='Latency'
-                        yAxis='Frequency'
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('synapses-latency-for-simulation'),
-                            `synapses-latency-for-simulation-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        Synapse latency from simulation
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </Collapsible >
-        )}
-
-        {availablePlots.RiseTimeCOnstant && (
-          <Collapsible title="Rise Time Constant" id="RiseTimeCOnstantSection" className="mt-4">
+        {availablePlots.sampleConvergenceBySynapses && (
+          <Collapsible title="Sample convergence by synapses" id="SampleConvergenceBySynapsesSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('rise-time-constant')} />
+              <DistibutionPlot plotData={getPlotDataById('sample-convergence-by-synapse')} />
             </div>
             <div className="mt-4">
-              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('rise-time-constant'), `rise-time-constant-${volume_section}-${prelayer}-${postlayer}.json`)}>
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-convergence-by-synapses'), `sample-convergence-by-synapses-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                Rise Time Constant
+                Sample convergence by synapses
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
               </DownloadButton>
             </div>
           </Collapsible>
         )}
 
-        {(availablePlots.DecayTimeConstant || availablePlots.DecayTimeConstantFromSimulation) && (
-          <Collapsible
-            title="Decay Time Constant"
-            id="DecayTimeConstantSection"
-          >
-            <div className="flex flex-col gap-12">
-
-              {availablePlots.DecayTimeConstant && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Decay time constant</div>
-                    <div className="graph">
-                      <DistibutionPlot
-                        plotData={getPlotDataById('decay-time-constant')}
-                        xAxis='Latency'
-                        yAxis='Frequency'
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('decay-time-constant'),
-                            `decay-time-constant-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        Synapse latency distribution
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {availablePlots.DecayTimeConstantFromSimulation && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Decay time constant from simulation</div>
-                    <div className="graph">
-                      <DistibutionPlot
-                        plotData={getPlotDataById('decay-time-constant-from-sumluation')}
-                        xAxis='Latency'
-                        yAxis='Frequency'
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('decay-time-constant-from-simulation'),
-                            `decay-time-constant-from-simulation-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        Synapse latency from simulation
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </Collapsible >
+        {laminarPlots && (
+          <Collapsible title='Laminar distribution of synapses' id='LaminarDistributionSection'>
+            <LaminarGraph data={laminarPlots} title={undefined} yAxisLabel={undefined} />
+          </Collapsible>
         )}
 
-        {availablePlots.RiseTimeCOnstant && (
-          <Collapsible title="NMAA/AMPA Ratio" id="NMDAAMPARatioSection" className="mt-4">
+        {availablePlots.sampleDivergenceConnections && (
+          <Collapsible title="Sample divergence by connection" id="SampleDivergenceByConnectionSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('nmda-ampa-ratio')} />
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-connection')} />
             </div>
             <div className="mt-4">
-              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('nmda-ampa-ratio'), `nmda-ampa-ratio-${volume_section}-${prelayer}-${postlayer}.json`)}>
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-connection'), `sample-divergence-by-connection-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                NMAA/AMPA Ratio
+                Sample divergence by connection
+                <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+              </DownloadButton>
+            </div>
+          </Collapsible>
+        )}
+
+        {availablePlots.sampleDivergenceBySynapses && (
+          <Collapsible title="Sample divergence by synapses" id="SampleDivergenceBySynapsesSection" className="mt-4">
+            <div className="graph">
+              <DistibutionPlot plotData={getPlotDataById('sample-divergence-by-synapse')} />
+            </div>
+            <div className="mt-4">
+              <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('sample-divergence-by-synapses'), `sample-divergence-by-synapses-${volume_section}-${prelayer}-${postlayer}.json`)}>
+                <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
+                Sample divergence by synapses
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
               </DownloadButton>
             </div>
@@ -435,8 +307,8 @@ const SynapsesView: React.FC = () => {
         )}
 
         <Collapsible
-          title="U, D, F, NRRP Parameters and G-SYNX "
-          id="UDFNRRPSection"
+          title="Distribution + mean and std of U, D, F, NRRP"
+          id="UParameterSection"
           properties={["Physiology"]}
         >
           <div className="flex flex-col gap-12">
@@ -495,37 +367,6 @@ const SynapsesView: React.FC = () => {
                       {volume_section}
                     </span>
                     D Parameter
-                    <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                    <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                  </DownloadButton>
-                </div>
-              </div>
-            )}
-
-            {availablePlots.FParameter && (
-              <div className='flex flex-col gap-2'>
-                <div className="text-lg mb-2">F Parameter</div>
-                <div className="graph">
-                  <DistibutionPlot
-                    plotData={getPlotDataById('f-parameter')}
-                    xAxis='f_syn'
-                    yAxis='Frequency'
-                  />
-                </div>
-                <div className="mt-2">
-                  <DownloadButton
-                    theme={theme}
-                    onClick={() =>
-                      downloadAsJson(
-                        getPlotDataById('f-parameter'),
-                        `f-parameter-${volume_section}-${prelayer}-${postlayer}.json`
-                      )
-                    }
-                  >
-                    <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                      {volume_section}
-                    </span>
-                    F Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
                   </DownloadButton>
@@ -596,6 +437,7 @@ const SynapsesView: React.FC = () => {
             )}
           </div>
         </Collapsible>
+
       </DataContainer >
     </>
   );

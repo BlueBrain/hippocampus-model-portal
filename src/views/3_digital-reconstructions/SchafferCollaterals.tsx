@@ -208,7 +208,8 @@ const SchafferCollateralsView: React.FC = () => {
                     value={prelayer}
                     title="m-type"
                     onSelect={setPreLayerQuery}
-                    theme={theme} />
+                    theme={theme}
+                  />
                 </div>
               </div>
               <div className={`selector__column theme-${theme} flex-1`}>

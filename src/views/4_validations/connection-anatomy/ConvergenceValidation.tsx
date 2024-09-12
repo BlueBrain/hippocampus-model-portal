@@ -110,7 +110,7 @@ const ConvergenceValidationGraph = ({ theme, data }) => {
                                 type: 'category',
                                 position: 'bottom',
                                 title: {
-                                    display: true,
+                                    display: false,
                                     text: 'Region'
                                 },
                                 offset: true,

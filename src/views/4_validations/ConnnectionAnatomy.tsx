@@ -25,17 +25,13 @@ const ConnectionAnatomyView: React.FC = () => {
 
     const theme = 4;
 
-    const [convergenceValidatonApicalBasal, setConvergenceValidatonApicalBasal] = useState(null);
-    const [convergenceValidatonSomaAxon, setConvergenceValidatonSomaAxon] = useState(null);
+    const [convergenceValidaton, setConvergenceValidaton] = useState(null);
 
     useEffect(() => {
-        fetch(dataPath + '/4_validations/convergence-validation-apical-basal.json')
+        fetch(dataPath + '/4_validations/connection-anatomy/convergence-validation.json')
             .then((response) => response.json())
-            .then((data) => setConvergenceValidatonSomaAxon(data));
+            .then((data) => setConvergenceValidaton(data));
 
-        fetch(dataPath + '/4_validations/connection-anatomy/convergence-validation-soma-axon.json')
-            .then((response) => response.json())
-            .then((data) => setConvergenceValidatonSomaAxon(data));
     }, []);
 
     return (
@@ -82,17 +78,9 @@ const ConnectionAnatomyView: React.FC = () => {
                 <Collapsible id="ConvergenceValidationSection" title={`Convergence validation`}>
 
                     <div className="flex flex-col gap-8">
-                        {convergenceValidatonSomaAxon && (
-                            <ConvergenceValidation data={convergenceValidatonSomaAxon} theme={theme} />
+                        {convergenceValidaton && (
+                            <ConvergenceValidation data={convergenceValidaton} theme={theme} />
                         )}
-
-                        {convergenceValidatonApicalBasal && (
-                            <ConvergenceValidation data={convergenceValidatonApicalBasal} theme={theme} />
-                        )}
-
-
-
-
                     </div>
 
                 </Collapsible>
