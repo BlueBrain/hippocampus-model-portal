@@ -274,6 +274,7 @@ const MainNav: React.FC = () => {
               <SubmenuLink label="Voltage - Calcium Scan" href='/predictions/voltage' />
               <SubmenuLink label="Theta - Oscillatory input" href='/predictions/theta-oscillatory-input' />
               <SubmenuLink label="Theta - MS input" href='/predictions/theta-ms-input' />
+              <SubmenuLink label="Other Frequencies" href='/predictions/other-frequencies' />
             </SubmenuGroup>
 
             <SubmenuLink label="Glossary" href={`${basePath}/glossary/`} external highlight />
