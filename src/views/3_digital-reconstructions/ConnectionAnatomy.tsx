@@ -8,10 +8,11 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import DistibutionPlot from '@/components/DistributionPlot';
+import DistributionPlot from '@/components/DistributionPlot';
 import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
+import LaminarGraph from '@/components/LaminarGraph';
 
 import { cellGroup, defaultSelection, volumeSections } from '@/constants';
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
@@ -19,7 +20,7 @@ import { basePath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
 
-const ConnectionsView: React.FC = () => {
+const MergedConnectionsView: React.FC = () => {
   const router = useRouter();
   const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
 
@@ -30,6 +31,7 @@ const ConnectionsView: React.FC = () => {
   });
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
+  const [laminarData, setLaminarData] = useState<any>(null);
 
   const theme = 3;
 
@@ -37,7 +39,7 @@ const ConnectionsView: React.FC = () => {
     if (!router.isReady) return;
 
     if (!volume_section && !prelayer && !postlayer) {
-      const defaultParams = defaultSelection.digitalReconstruction.synapticPathways;
+      const defaultParams = defaultSelection.digitalReconstruction.connectionAnatomy;
       setQuickSelection({
         volume_section: defaultParams.volume_section as VolumeSection,
         prelayer: defaultParams.prelayer as Layer,
@@ -56,6 +58,7 @@ const ConnectionsView: React.FC = () => {
   useEffect(() => {
     if (quickSelection.volume_section && quickSelection.prelayer && quickSelection.postlayer) {
       fetchFactsheetData();
+      fetchLaminarData();
     }
   }, [quickSelection]);
 
@@ -77,13 +80,27 @@ const ConnectionsView: React.FC = () => {
     }
   };
 
+  const fetchLaminarData = async () => {
+    try {
+      const { volume_section, prelayer, postlayer } = quickSelection;
+      const filePath = `${basePath}/resources/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const response = await fetch(filePath);
+      const data = await response.json();
+
+      const laminarDistribution = data.values.find((plot: any) => plot.id === 'laminar-distribution');
+      setLaminarData(laminarDistribution);
+    } catch (error) {
+      console.error('Error fetching laminar data:', error);
+    }
+  };
+
   const updateAvailablePlots = (plots: any[]) => {
     const plotIds = [
       'bouton-density',
       'sample-convergence-by-connection',
+      'sample-convergence-by-synapse',
       'sample-divergence-by-connection',
       'sample-divergence-by-synapse',
-      'laminar-distribution-synapses',
       'connection-probability-vs-inter-somatic-distance',
     ];
 
@@ -97,7 +114,6 @@ const ConnectionsView: React.FC = () => {
 
   const setParams = (params: Partial<Record<string, VolumeSection | Layer>>) => {
     const newSelection = { ...quickSelection, ...params };
-    //setQuickSelection(newSelection);
     const query = { ...router.query, ...newSelection };
     router.push({ query }, undefined, { shallow: true });
   };
@@ -114,14 +130,14 @@ const ConnectionsView: React.FC = () => {
 
   const getPlotDataById = (id: string) => factsheetData?.find((plot: any) => plot.id === id);
 
-  const renderPlot = (id: string, title: string) => {
+  const renderPlot = (id: string, title: string, xAxis: string, yAxis: string) => {
     if (!availablePlots[id]) return null;
 
     const plotData = getPlotDataById(id);
     return (
       <Collapsible title={title} id={id} className="mt-4">
         <div className="graph">
-          <DistibutionPlot plotData={plotData} />
+          <DistributionPlot plotData={plotData} xAxis={xAxis} yAxis={yAxis} />
         </div>
         <div className="mt-4">
           <DownloadButton
@@ -150,7 +166,7 @@ const ConnectionsView: React.FC = () => {
               <div role="information">
                 <InfoBox>
                   <p>
-                    We combined <Link href="/experimental-data/connection-anatomy/" className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href="/reconstruction-data/connections/" className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, and connection probability.
+                    We combined <Link href="/experimental-data/connection-anatomy/" className={`link theme-${theme}`}>literature data</Link> and predictions on <Link href="/reconstruction-data/connections/" className={`link theme-${theme}`}>uncharacterized pathways</Link> to reconstruct the CA1 internal connection anatomy and physiology. The resulting connectome consists of 821 M synapses. For each circuit, each pathway is analyzed in terms of number of synapses per connection, divergence, convergence, connection probability, and synaptic properties.
                   </p>
                 </InfoBox>
               </div>
@@ -161,13 +177,11 @@ const ConnectionsView: React.FC = () => {
             <div className={`selector__column selector__column--lg mt-3 theme-${theme}`} style={{ maxWidth: "auto" }}>
               <div className={`selector__head theme-${theme}`}>1. Select a volume section</div>
               <div className="selector__body">
-
                 <VolumeSectionSelector3D
                   value={quickSelection.volume_section}
                   onSelect={(value) => updateQuickSelection('volume_section', value)}
                   theme={theme}
                 />
-
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-8 flex-grow p-0 m-0">
@@ -207,22 +221,26 @@ const ConnectionsView: React.FC = () => {
         navItems={[
           { id: 'bouton-density', label: 'Bouton density of the presynaptic cells' },
           { id: 'sample-convergence-by-connection', label: 'Number of synapses per connection' },
-          { id: 'sample-divergence-by-connection', label: 'Divergence (connections) distribution + mean and std' },
-          { id: 'sample-divergence-by-synapse', label: 'Divergence (synapses) distribution + mean and std' },
+          { id: 'sample-convergence-by-synapse', label: 'Convergence (synapses)' },
+          { id: 'sample-divergence-by-connection', label: 'Divergence (connections)' },
+          { id: 'sample-divergence-by-synapse', label: 'Divergence (synapses)' },
           { id: 'laminar-distribution-synapses', label: 'Laminar distribution of synapses' },
-          { id: 'connection-probability-vs-inter-somatic-distance', label: 'Connection probability distribution vs inter-somatic distance + mean and std' },
+          { id: 'connection-probability-vs-inter-somatic-distance', label: 'Connection probability vs inter-somatic distance' },
         ]}
         quickSelectorEntries={qsEntries}
       >
-        {renderPlot('bouton-density', 'Bouton density of the presynaptic cells')}
-        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection')}
-        {renderPlot('sample-divergence-by-connection', 'Divergence (connections) distribution + mean and std')}
-        {renderPlot('sample-divergence-by-synapse', 'Divergence (synapses) distribution + mean and std')}
-        {renderPlot('laminar-distribution-synapses', 'Laminar distribution of synapses')}
-        {renderPlot('connection-probability-vs-inter-somatic-distance', 'Connection probability distribution vs inter-somatic distance + mean and std')}
+        {renderPlot('bouton-density', 'Bouton density of the presynaptic cells', 'Bouton density (µm⁻¹)', 'Count')}
+        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection', 'Synapse/connection', 'Count')}
+        {renderPlot('sample-convergence-by-synapse', 'Convergence (synapses)', 'Synapses', 'Count')}
+        <Collapsible title="Laminar distribution of synapses" id="laminar-distribution-synapses">
+          <LaminarGraph data={laminarData} title="Laminar Distribution of Synapses" yAxisLabel="Percentage of synapses" />
+        </Collapsible>
+        {renderPlot('sample-divergence-by-connection', 'Divergence (connections)', 'Connections', 'Count')}
+        {renderPlot('sample-divergence-by-synapse', 'Divergence (synapses)', 'Synapses', 'Count')}
+        {renderPlot('connection-probability-vs-inter-somatic-distance', 'Connection probability vs inter-somatic distance', 'Inter-somatic distance (µm)', 'Connection probability')}
       </DataContainer>
     </>
   );
 };
 
-export default ConnectionsView;
+export default MergedConnectionsView;

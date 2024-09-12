@@ -123,7 +123,7 @@ const SCAnatomySection: React.FC<SCAnatomySectionProps> = ({ theme }) => {
         columns={anatomyColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(

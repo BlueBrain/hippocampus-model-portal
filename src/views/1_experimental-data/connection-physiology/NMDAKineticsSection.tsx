@@ -206,7 +206,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(RatioData, `NMDAAMPA-Ratio-Data.json`)}
@@ -222,7 +222,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(TauDecayData, `NMDA-Tau-Decay-Data.json`)}
@@ -238,7 +238,7 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
       //additionalData={doiIndex}
       />
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(TauRiseData, `NMDA-Tau-Rise.json`)}

@@ -38,7 +38,7 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
     if (!router.isReady) return;
 
     if (!ach_concentration && !prelayer && !postlayer) {
-      const { ach_concentration, prelayer, postlayer } = defaultSelection.digitalReconstruction.acetylcholine;
+      const { ach_concentration, prelayer, postlayer } = defaultSelection.digitalReconstruction.acetylcholineEffectsOnSynapses;
       setQuickSelection({ ach_concentration, prelayer, postlayer });
       router.replace({ query: { ach_concentration, prelayer, postlayer } }, undefined, { shallow: true });
     } else {

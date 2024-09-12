@@ -107,7 +107,7 @@ const SDPerPresynapticTypeTable: React.FC<SDPerPresynapticTypeTableProps> = ({ t
                 columns={columns}
                 data={data}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Synapse-Divergence-Per-Presynaptic-Type-Data.json`)}

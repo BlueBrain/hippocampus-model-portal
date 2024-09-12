@@ -11,7 +11,7 @@ import Collapsible from '@/components/Collapsible';
 import TimeSpikePlot from './components/TimeSpikePlot';
 import MeanFiringRatePlot from './components/MeanFiringRatePlot';
 import { QuickSelectorEntry, VolumeSection } from '@/types';
-import models from "@/models.json";
+import models from "./models.json";
 import { dataPath } from '@/config';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import { volumeSections } from '@/constants';

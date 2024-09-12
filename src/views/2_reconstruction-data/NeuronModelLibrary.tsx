@@ -135,8 +135,8 @@ const Neurons: React.FC = () => {
   return (
     <>
       <Filters theme={theme}>
-        <div className="row bottom-xs w-100">
-          <div className="col-xs-12 col-lg-6">
+        <div className="row w-100 content-center">
+          <div className="col-xs-12 col-lg-6 content-center">
             <Title
               title="Neuron model library"
               subtitle="Reconstruction Data"
