@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Plot from 'react-plotly.js';
 import { Loader2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { PlotParams } from 'react-plotly.js';
+
+// Define the Plot component with correct typing
+const Plot = dynamic(() => import('react-plotly.js'), { ssr: false }) as React.ComponentType<PlotParams>;
 
 interface TraceDataProps {
     plotData?: {
@@ -33,8 +37,8 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             const traces = plotData.value_map.map((trace, index) => ({
                 x: Array.from({ length: trace.length }, (_, i) => i),
                 y: trace,
-                type: 'scatter',
-                mode: 'lines',
+                type: 'scatter' as const,
+                mode: 'lines' as const,
                 name: `Trace ${index + 1}`,
                 line: {
                     color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
@@ -65,7 +69,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                     t: 50,
                     pad: 4,
                 },
-                hovermode: 'x unified',
+                hovermode: 'x unified' as const,
                 showlegend: false,
                 plot_bgcolor: '#EFF1F8',
                 paper_bgcolor: '#EFF1F8',

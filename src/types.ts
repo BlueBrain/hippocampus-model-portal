@@ -153,12 +153,13 @@ export type NexusTrace = {
 export type QuickSelectorEntry = {
   title: string;
   key: string;
-  values?: string[];
+  values?: (string | number)[];
   getValuesFn?: (param: string) => string[] | number[];
   getValuesParam?: string;
   paramsToKeepOnChange?: string[];
-  setFn?: (value: string) => void;
+  setFn?: (value: string | number) => void;
   sliderRange?: number[];
+  formatFn?: (value: string | number) => string;
 };
 
 

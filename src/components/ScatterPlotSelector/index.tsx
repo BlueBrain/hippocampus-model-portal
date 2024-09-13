@@ -113,8 +113,8 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         }
     };
 
-    const getRoundedTicks = useMemo(() => (max: number) => {
-        const ticks = [];
+    const getRoundedTicks = useMemo(() => (max: number): number[] => {
+        const ticks: number[] = [];
         const step = Math.pow(10, Math.floor(Math.log10(max / 10)));
         for (let i = 0; i <= max; i += step) {
             ticks.push(Math.round(i));

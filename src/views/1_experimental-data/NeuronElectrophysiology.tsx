@@ -24,6 +24,7 @@ import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
 import Metadata from '@/components/Metadata';
+import { QuickSelectorEntry } from '@/types';
 
 type Distribution = {
   name: string;
@@ -78,7 +79,7 @@ const NeuronElectrophysiology: React.FC = () => {
     [currentEtype]
   );
 
-  const qsEntries = [
+  const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'E-type',
       key: 'etype',
@@ -88,8 +89,7 @@ const NeuronElectrophysiology: React.FC = () => {
     {
       title: 'Instance',
       key: 'etype_instance',
-      getValuesFn: getInstance,
-      getValuesParam: 'etype',
+      values: instances,
       setFn: setInstance,
     },
   ];
