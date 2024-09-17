@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-
 import { QuickSelectorEntry } from '@/types';
 import style from './styles.module.scss';
 
@@ -29,7 +28,7 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
     }
   };
 
-  const getValues = (entry: QuickSelectorEntry): string[] => {
+  const getValues = (entry: QuickSelectorEntry): (string | number)[] => {
     if (entry.values) {
       return entry.values;
     }
@@ -43,8 +42,8 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
   return (
     <div>
       {entries.map((entry) => (
-        <div className={style.container}>
-          <div key={entry.key} className="flex flex-col mb-4">
+        <div key={entry.key} className={style.container}>
+          <div className="flex flex-col mb-4">
             {entry.sliderRange ? (
               <>
                 <div className="flex justify-between items-center">
@@ -57,18 +56,19 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
                   <input
                     type="range"
                     min={0}
-                    max={entry.sliderRange.length - 1}
+                    max={(entry.sliderRange?.length ?? 1) - 1}
                     step={1}
-                    value={entry.sliderRange.indexOf(Number(router.query[entry.key]))}
+                    value={entry.sliderRange ? entry.sliderRange.indexOf(Number(router.query[entry.key])) : 0}
                     onChange={(e) => {
                       const index = Number(e.target.value);
-                      handleChange(entry, entry.sliderRange[index].toString());
+                      if (entry.sliderRange && index >= 0 && index < entry.sliderRange.length) {
+                        handleChange(entry, entry.sliderRange[index].toString());
+                      }
                     }}
                     className={`${style.slider} w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer`}
                   />
                 </div>
               </>
-
             ) : (
               <>
                 <label className={style.label}>{entry.title}</label>
@@ -79,8 +79,8 @@ const QuickSelector: React.FC<QuickSelectorProps> = ({ entries, theme }) => {
                 >
                   <option value="">Select {entry.title}</option>
                   {getValues(entry).map((value) => (
-                    <option key={value} value={value}>
-                      {value}
+                    <option key={value.toString()} value={value.toString()}>
+                      {value.toString()}
                     </option>
                   ))}
                 </select>

@@ -37,7 +37,7 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         dataIndex: 'cell_id' as keyof TableEntry,
         fixed: 'left' as FixedType,
         render: (text: string, record: TableEntry) => (
-            <a href={`${basePath}experimental-data/neuronal-morphology/?layer=${record.layer}&mtype=${record.m_type}&instance=${record.cell_id}`} rel="noopener noreferrer">
+            <a href={`${basePath}/experimental-data/neuronal-morphology/?layer=${record.layer}&mtype=${record.m_type}&instance=${record.cell_id}`} rel="noopener noreferrer">
                 {record.cell_id}
             </a>
         ),

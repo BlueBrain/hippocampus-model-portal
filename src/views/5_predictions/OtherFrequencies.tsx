@@ -176,7 +176,7 @@ const OtherFrequenciesView: React.FC = () => {
                                         theme={theme}
                                         onSelect={handleScatterPlotSelect}
                                         selectedX={quickSelection.cell_frequency as number}
-                                        yx selectedY={quickSelection.signal_frequency as number}
+                                        selectedY={quickSelection.signal_frequency as number}
                                     />
                                 </div>
                             </div>

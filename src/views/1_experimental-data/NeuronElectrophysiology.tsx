@@ -18,12 +18,18 @@ import AuthorBox from '@/components/AuthorBox/AuthorBox';
 import IfCurvePerCellGraph from './neuron-electrophysiology/IfCurvePerCellGraph';
 import IfCurvePerETypeGraph from './neuron-electrophysiology/IfCurvePerETypeGraph';
 import { electroPhysiologyDataQuery, etypeTracesDataQuery } from '@/queries/es';
-import { deploymentUrl, hippocampus, basePath } from '@/config';
+import { deploymentUrl, hippocampus, basePath, dataPath } from '@/config';
 import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
 import Metadata from '@/components/Metadata';
+import { QuickSelectorEntry } from '@/types';
+import HttpData from '@/components/HttpData';
+import NeuronFactsheet from './neuron-electrophysiology/NeuronFactsheet';
+import DownloadButton from '@/components/DownloadButton';
+import { downloadAsJson } from '@/utils';
+import NeuronTable from './neuronal-morphology/NeuronTable';
 
 type Distribution = {
   name: string;
@@ -78,7 +84,7 @@ const NeuronElectrophysiology: React.FC = () => {
     [currentEtype]
   );
 
-  const qsEntries = [
+  const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'E-type',
       key: 'etype',
@@ -88,8 +94,7 @@ const NeuronElectrophysiology: React.FC = () => {
     {
       title: 'Instance',
       key: 'etype_instance',
-      getValuesFn: getInstance,
-      getValuesParam: 'etype',
+      values: instances,
       setFn: setInstance,
     },
   ];
@@ -218,6 +223,25 @@ const NeuronElectrophysiology: React.FC = () => {
             )}
           </ESData>
           <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
+          <div className="mb-4">
+            <HttpData path={`${dataPath}1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/features.json`}>
+              {(factsheetData) => (
+                <>
+                  {factsheetData && (
+                    <>
+                      <NeuronFactsheet id="morphometrics" facts={factsheetData} />
+                      <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentEtype}-factsheet.json`)} theme={theme}>
+                          Factsheet
+                        </DownloadButton>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </HttpData>
+          </div>
+
         </Collapsible>
         <Collapsible
           id="etypeSection"
@@ -228,6 +252,27 @@ const NeuronElectrophysiology: React.FC = () => {
           {currentEtype && (
             <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
           )}
+
+
+          <div className="mb-4">
+            <HttpData path={`${dataPath}1_experimental-data/neuronal-electophysiology/efeatures-per-cell/${currentInstance}/features.json`}>
+              {(factsheetData) => (
+                <>
+                  {factsheetData && (
+                    <>
+                      <NeuronFactsheet id="morphometrics" facts={factsheetData} />
+                      <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentEtype}-factsheet.json`)} theme={theme}>
+                          Factsheet
+                        </DownloadButton>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </HttpData>
+          </div>
+
         </Collapsible>
       </DataContainer>
     </>

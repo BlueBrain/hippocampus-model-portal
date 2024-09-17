@@ -12,7 +12,7 @@ import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
 import DataContainer from '@/components/DataContainer';
 import Collapsible from '@/components/Collapsible';
-import { VolumeSection } from '@/types';
+import { VolumeSection, QuickSelectorEntry } from '@/types';
 import { defaultSelection, volumeSections } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import withQuickSelector from '@/hoc/with-quick-selector';
@@ -36,12 +36,12 @@ const RegionView: React.FC = () => {
     router.push({ query }, undefined, { shallow: true });
   };
 
-  const qsEntries = [{
+  const qsEntries: QuickSelectorEntry[] = [{
     title: 'Volume section',
     key: 'volume_section',
     values: volumeSections,
+    setFn: setVolumeSectionQuery,
   }];
-
 
   const validVolumeSection: VolumeSection = volumeSection ?? defaultSelection.digitalReconstruction.region.volume_section as VolumeSection;
 
@@ -98,7 +98,6 @@ const RegionView: React.FC = () => {
         </div>
       </Filters>
 
-
       <DataContainer theme={theme}
         visible={!!volumeSection}
         navItems={[
@@ -107,7 +106,6 @@ const RegionView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-
         <Collapsible id='viewerSection' title={'Viewer'}>
           <h3>{getVolumeDescription(validVolumeSection)}</h3>
           <div className="text-base mb-2">The image shows soma positions.</div>
@@ -121,12 +119,8 @@ const RegionView: React.FC = () => {
         </Collapsible>
 
         <Collapsible id="factsheetSection" title="Factsheet">
-
-
           {validVolumeSection && (
-
             <HttpData path={`${dataPath}3_digital-reconstruction/region/${volumeSection}/factsheet.json`}>
-
               {(data, loading) => (
                 <Spin spinning={loading}>
                   {data && (
@@ -167,8 +161,6 @@ const RegionView: React.FC = () => {
   );
 };
 
-
-
 export default withPreselection(
   RegionView,
   {
@@ -176,5 +168,3 @@ export default withPreselection(
     defaultQuery: defaultSelection.digitalReconstruction.region,
   },
 );
-
-
