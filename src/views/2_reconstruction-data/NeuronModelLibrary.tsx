@@ -20,6 +20,7 @@ import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import ModelFactsheet from './components/ModelFactsheet';
 import TraceGraph from '../5_predictions/components/Trace';
+import Factsheet from '@/components/Factsheet';
 
 const getMtypes = (): string[] => {
   return Array.from(new Set(models.map(model => model.mtype))).sort();
@@ -162,12 +163,48 @@ const Neurons: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
-          { id: 'traceSection', label: 'Trace' },
+          { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
-          { id: 'bPAPPSPSection', label: 'bPAP & PSP' }
+          { id: 'traceSection', label: 'Trace' }
+
         ]}
         quickSelectorEntries={qsEntries}
       >
+
+
+        <Collapsible
+          id="bPAPPSPSection"
+          className="mt-4"
+          title="bPAP & PSP"
+        >
+          <div className="graph">
+            {/* Add bPAP & PSP graph component here */}
+          </div>
+        </Collapsible>
+
+        <Collapsible
+          id="factsheetSection"
+          className="mt-4"
+          title="Factsheet"
+        >
+          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`}>
+            {(factsheetData) => (
+              <>
+                {factsheetData && (
+                  <>
+                    <Factsheet facts={factsheetData} />
+                    <div className="mt-4">
+                      <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-${currentEtype}-factsheet.json`)} theme={theme}>
+                        Factsheet
+                      </DownloadButton>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </HttpData>
+        </Collapsible>
+
         <Collapsible
           id="traceSection"
           className="mt-4"
@@ -183,38 +220,6 @@ const Neurons: React.FC = () => {
           </div>
         </Collapsible>
 
-        <Collapsible
-          id="factsheetSection"
-          className="mt-4"
-          title="Factsheet"
-        >
-          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`}>
-            {(factsheetData) => (
-              <>
-                {factsheetData && (
-                  <>
-                    <ModelFactsheet data={factsheetData} />
-                    <div className="mt-4">
-                      <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-${currentEtype}-factsheet.json`)} theme={theme}>
-                        Factsheet
-                      </DownloadButton>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </HttpData>
-        </Collapsible>
-
-        <Collapsible
-          id="bPAPPSPSection"
-          className="mt-4"
-          title="bPAP & PSP"
-        >
-          <div className="graph">
-            {/* Add bPAP & PSP graph component here */}
-          </div>
-        </Collapsible>
       </DataContainer>
     </>
   );
