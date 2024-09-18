@@ -123,10 +123,8 @@ export const defaultSelection = {
       postlayer: 'all'
     },
     neurons: {
-      layer: 'SLM',
-      etype: 'bAC',
-      mtype: 'SLM_PPA',
-      instance: 'CA1_int_bAC_011127HP1_20190329115610',
+      etype: 'SO_BP',
+      mtype: 'cNAC',
     },
     synapticPathways: {
       volume_section: 'slice',

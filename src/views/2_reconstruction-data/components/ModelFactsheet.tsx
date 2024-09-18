@@ -10,23 +10,21 @@ import { downloadAsJson } from '@/utils';
 
 
 export type InstanceViewerProps = {
-    theme?: number,
-    facts: any,
-    id: any
+    data: any
 };
 
-const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) => {
-    const factsGrouped = groupBy(facts, fact => neuriteTypes.find(entryType => fact.type === entryType));
+const ModelFactsheet: React.FC<InstanceViewerProps> = ({ data }) => {
+    const factsGrouped = groupBy(data, fact => neuriteTypes.find(entryType => fact.type === entryType));
 
     return (
         <>
-            <h3 className="text-xl mb-2 mt-10">Factsheet</h3>
-            <div id={id}>
+
+            <div >
                 {neuriteTypes
                     .filter(entryType => factsGrouped[entryType])
                     .map(entryType => (
                         <div key={entryType}>
-                            <h4 className="capitalize text-right">{entryType}</h4>
+                            <h4 className="capitalize">{entryType}</h4>
                             <Factsheet facts={factsGrouped[entryType]} />
                         </div>
                     )
@@ -38,4 +36,4 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
     );
 }
 
-export default NeuronFactsheet
+export default ModelFactsheet
