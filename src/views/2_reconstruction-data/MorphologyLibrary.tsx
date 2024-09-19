@@ -11,6 +11,8 @@ import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 
 import models from '@/models.json';
+
+import morphologyLibrary from './morphology-library.json'
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
@@ -28,6 +30,13 @@ const getMtypes = (): string[] => {
     .sort();
 }
 
+// Function to get all unique instances
+const getAllInstances = (): string[] => {
+  const morphologies = morphologyLibrary.morphologies;
+  const uniqueInstances = Array.from(new Set(morphologies));
+  return uniqueInstances.sort();
+}
+
 // React Functional Component
 const MorphologyLibrary: React.FC = () => {
   const router = useRouter();
@@ -35,25 +44,31 @@ const MorphologyLibrary: React.FC = () => {
 
   const { query } = router;
   const currentMtype: string = query.mtype as string;
+  const currentInstance: string = query.instance as string;
 
   // Function to set URL parameters
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
       ...{
         mtype: currentMtype,
+        instance: currentInstance,
       },
       ...params,
     };
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  // Function to set M-type
+  // Functions to set specific parameters
   const setMtype = (mtype: string) => {
     setParams({ mtype });
   };
+  const setInstance = (instance: string) => {
+    setParams({ instance });
+  };
 
-  // Generate options based on current parameters
+  // Generate options
   const mtypes = getMtypes();
+  const instances = getAllInstances();
 
   // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
@@ -62,6 +77,12 @@ const MorphologyLibrary: React.FC = () => {
       key: 'mtype',
       values: mtypes,
       setFn: setMtype,
+    },
+    {
+      title: 'Instance',
+      key: 'instance',
+      values: instances,
+      setFn: setInstance,
     },
   ];
 
@@ -99,6 +120,21 @@ const MorphologyLibrary: React.FC = () => {
                   />
                 </div>
               </div>
+              <div className={"selector__column theme-" + theme}>
+                <div className={"selector__head theme-" + theme}>Select instance</div>
+                <div className={"selector__body"}>
+                  <List
+                    block
+                    list={instances}
+                    value={currentInstance}
+                    title={`Instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                    color={colorName}
+                    onSelect={setInstance}
+                    theme={theme}
+                    grow={true}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -106,12 +142,38 @@ const MorphologyLibrary: React.FC = () => {
 
       <DataContainer
         theme={theme}
-        visible={!!currentMtype}
+        visible={!!(currentMtype || currentInstance)}
         navItems={[
+          { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
         ]}
         quickSelectorEntries={qsEntries}
       >
+        <Collapsible
+          id="morphologySection"
+          title="Neuron Morphology"
+          properties={[currentMtype, currentInstance]}
+        >
+          <p className='text-lg mb-2'>
+            We provide visualization and morphometrics for the selected morphology.
+          </p>
+          <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/all/${currentInstance}/factsheet.json`}>
+            {(factsheetData) => (
+              <>
+                {factsheetData && (
+                  <>
+                    <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
+                    <div className="mt-4">
+                      <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-factsheet.json`)} theme={theme}>
+                        Factsheet
+                      </DownloadButton>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </HttpData>
+        </Collapsible>
         <Collapsible
           id="populationSection"
           title="Population"
@@ -120,7 +182,8 @@ const MorphologyLibrary: React.FC = () => {
             We provide morphometrics for the entire m-type group selected.
           </p>
           <div className="mb-4">
-            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/mtype/${currentMtype}/factsheet.json`}>
+
+            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (
