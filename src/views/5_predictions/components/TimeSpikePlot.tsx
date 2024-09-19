@@ -1,10 +1,7 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend } from 'chart.js';
-import { graphTheme } from '@/constants';
-import { Scatter } from 'react-chartjs-2';
+import React, { useState, useEffect } from 'react';
+import Plot from 'react-plotly.js';
 import { Loader2 } from 'lucide-react';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
+import { graphTheme } from '@/constants';
 
 interface PlotData {
     name: string;
@@ -20,7 +17,7 @@ interface PlotDetailsProps {
     plotData: PlotData | PlotData[] | null;
 }
 
-const TimeSpikePlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
+const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState<any>(null);
 
@@ -37,32 +34,30 @@ const TimeSpikePlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
             const worker = new Worker(URL.createObjectURL(new Blob([`
                 self.onmessage = function(e) {
                     const { t, gid } = e.data;
-                    const dataPoints = Object.keys(t).map(key => ({
-                        x: t[key],
-                        y: gid[key]
-                    }));
+                    const x = Object.values(t);
+                    const y = Object.values(gid);
                     
                     const maxPoints = 100000;
-                    let finalDataPoints = dataPoints;
-                    if (dataPoints.length > maxPoints) {
-                        const skipFactor = Math.ceil(dataPoints.length / maxPoints);
-                        finalDataPoints = dataPoints.filter((_, index) => index % skipFactor === 0);
+                    let finalX = x;
+                    let finalY = y;
+                    if (x.length > maxPoints) {
+                        const skipFactor = Math.ceil(x.length / maxPoints);
+                        finalX = x.filter((_, index) => index % skipFactor === 0);
+                        finalY = y.filter((_, index) => index % skipFactor === 0);
                     }
                     
-                    self.postMessage(finalDataPoints);
+                    self.postMessage({ x: finalX, y: finalY });
                 }
             `], { type: 'text/javascript' })));
 
             worker.onmessage = function (e) {
-                setChartData({
-                    datasets: [{
-                        label: data.name,
-                        data: e.data,
-                        backgroundColor: graphTheme.blue,
-                        pointRadius: 1,
-                        pointHoverRadius: 1,
-                    }]
-                });
+                setChartData([{
+                    x: e.data.x,
+                    y: e.data.y,
+                    type: 'scattergl',
+                    mode: 'markers',
+                    marker: { color: graphTheme.blue, size: 2 },
+                }]);
                 setIsLoading(false);
             };
 
@@ -81,70 +76,54 @@ const TimeSpikePlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
         }
     }, [plotData]);
 
-    const options = useMemo(() => ({
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 0 },
-        scales: {
-            x: {
-                type: 'linear' as const,
-                position: 'bottom' as const,
-                title: {
-                    display: true,
-                    text: 'Time (s)',
-                    color: graphTheme.blue,
-                },
-                ticks: {
-                    color: graphTheme.blue,
-                },
-            },
-            y: {
-                type: 'linear' as const,
-                position: 'left' as const,
-                title: {
-                    display: true,
-                    text: 'Neuron Index',
-                },
-            },
+    const layout = {
+        xaxis: {
+            title: 'Time (s)',
+            color: '#666666',
+            titlefont: { size: 12 },
+            tickfont: { color: '#666666', size: 10 },
+            showgrid: false,
         },
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: { enabled: false },
+        yaxis: {
+            title: 'Neuron Index',
+            color: '#666666',
+            titlefont: { size: 12 },
+            tickfont: { color: '#666666', size: 10 },
+            showgrid: false,
             title: {
-                display: true,
-                color: graphTheme.blue,
+                standoff: 20  // Increase this value to move the title further from the axis
             },
         },
-    }), []);
-
-    const containerStyle = {
-        width: '100%',
-        height: '400px',
-        position: 'relative' as const,
+        autosize: true,
+        plot_bgcolor: '#EFF1F8',
+        paper_bgcolor: '#EFF1F8',
+        showlegend: false,
+        margin: { l: 60, r: 10, b: 50, t: 10, pad: 4 }
     };
 
-    const loaderStyle = {
-        position: 'absolute' as const,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+    const config = {
+        responsive: true,
+        displayModeBar: false,
     };
 
     return (
-        <div style={containerStyle}>
+        <div style={{ width: '100%', height: '400px', position: 'relative', backgroundColor: '#EFF1F8' }}>
             {isLoading ? (
-                <div style={loaderStyle}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                     <Loader2 className="w-8 h-8 animate-spin" />
                 </div>
             ) : !chartData ? (
                 <p className="text-center text-gray-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">No data available.</p>
             ) : (
-                <Scatter options={options} data={chartData} />
+                <Plot
+                    data={chartData}
+                    layout={layout}
+                    config={config}
+                    style={{ width: '100%', height: '100%' }}
+                />
             )}
         </div>
     );
 };
 
-export default TimeSpikePlot;
+export default LargeDatasetScatterPlot;
