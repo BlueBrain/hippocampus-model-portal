@@ -10,6 +10,7 @@ import { themeColors } from "@/constants";
 import { dataPath } from "@/config";
 import styles from './ScatterPlotSelector.module.scss';
 import { Loader2 } from 'lucide-react';
+import { imagesPath } from "@/config";
 
 Chart.register(ScatterController, LinearScale, PointElement);
 
@@ -234,6 +235,9 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                 )}
             </div>
             <div className={styles.sliderContainer}>
+
+
+
                 <div className={styles.sliderWrapper}>
                     <label htmlFor="xAxisSlider" className={styles.sliderLabel} style={{ color: themeColor }}>
                         {xAxisLabel}: <span className={styles.sliderValue}>{xAxis.toFixed(1)}</span>
