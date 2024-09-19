@@ -1,17 +1,9 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
-import {
-    Chart,
-    ScatterController,
-    LinearScale,
-    PointElement,
-    ChartOptions,
-} from 'chart.js';
+import React, { useState, useEffect, useMemo } from "react";
+import Plot from 'react-plotly.js';
 import { themeColors } from "@/constants";
 import { dataPath } from "@/config";
 import styles from './ScatterPlotSelector.module.scss';
 import { Loader2 } from 'lucide-react';
-
-Chart.register(ScatterController, LinearScale, PointElement);
 
 type ScatterPlotSelectorProps = {
     path: string;
@@ -46,9 +38,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     selectedX,
     selectedY
 }) => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const [chart, setChart] = useState<Chart | null>(null);
-    const [data, setData] = useState<{ x: number, y: number }[]>([]);
+    const [data, setData] = useState<{ x: number[], y: number[] }>({ x: [], y: [] });
     const [xAxis, setXAxis] = useState<number>(selectedX || xRange[0]);
     const [yAxis, setYAxis] = useState<number>(selectedY || yRange[0]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -62,15 +52,6 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     useEffect(() => {
         fetchData();
     }, [path, xAxis, yAxis]);
-
-    useEffect(() => {
-        if (chart) {
-            chart.destroy();
-        }
-        if (chartRef.current && data.length > 0) {
-            createChart();
-        }
-    }, [data, xAxisLabel, yAxisLabel, theme, maxY]);
 
     useEffect(() => {
         if (selectedX !== undefined && selectedX !== xAxis) {
@@ -93,20 +74,18 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
 
             if (spikeTimes && spikeTimes.value_map) {
                 const { t, gid } = spikeTimes.value_map;
-                const processedData = Object.keys(t).map(key => ({
-                    x: t[key],
-                    y: gid[key]
-                }));
-                setData(processedData);
-                setMaxY(Math.max(...processedData.map(point => point.y)));
+                const x = Object.values(t);
+                const y = Object.values(gid);
+                setData({ x, y });
+                setMaxY(Math.max(...y));
             } else {
                 console.error('No spike time data found for SP_PC-cACpyr');
-                setData([]);
+                setData({ x: [], y: [] });
                 setMaxY(0);
             }
         } catch (err) {
             console.error('Error fetching data:', err);
-            setData([]);
+            setData({ x: [], y: [] });
             setMaxY(0);
         } finally {
             setIsLoading(false);
@@ -114,96 +93,82 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     };
 
     const getRoundedTicks = useMemo(() => (max: number): number[] => {
+        if (max <= 0) return [0];
+        const log10 = Math.floor(Math.log10(max));
+        const step = Math.pow(10, log10 - 1);
+        const numTicks = 10;
         const ticks: number[] = [];
-        const step = Math.pow(10, Math.floor(Math.log10(max / 10)));
-        for (let i = 0; i <= max; i += step) {
-            ticks.push(Math.round(i));
+        for (let i = 0; i < numTicks; i++) {
+            const tick = Math.round((i * max) / (numTicks - 1) / step) * step;
+            if (tick <= max && !ticks.includes(tick)) {
+                ticks.push(tick);
+            }
         }
         if (ticks[ticks.length - 1] < max) {
-            ticks.push(Math.ceil(max / step) * step);
+            ticks.push(max);
         }
         return ticks;
     }, []);
 
-    const createChart = () => {
-        if (chartRef.current) {
-            const ctx = chartRef.current.getContext('2d');
-            if (ctx) {
-                const themeColor = getThemeColor(theme);
-                const yTicks = getRoundedTicks(maxY);
-                const chartOptions: ChartOptions<'scatter'> = {
-                    responsive: true,
-                    animation: { duration: 0 },
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false },
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: xAxisLabel,
-                                color: themeColor,
-                            },
-                            ticks: {
-                                color: themeColor,
-                                font: { size: 10 },
-                            },
-                            grid: {
-                                color: themeColor,
-                                lineWidth: 0.5
-                            },
-                            border: {
-                                color: themeColor,
-                                width: 1
-                            },
-                        },
-                        y: {
-                            type: 'linear',
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: yAxisLabel,
-                                color: themeColor,
-                            },
-                            min: 0,
-                            max: maxY,
-                            ticks: {
-                                color: themeColor,
-                                font: { size: 10 },
-                                callback: (value) => yTicks.includes(value as number) ? value : '',
-                            },
-                            grid: {
-                                color: themeColor,
-                                lineWidth: 0.5
-                            },
-                            border: {
-                                color: themeColor,
-                                width: 1
-                            },
-                        }
-                    },
-                };
+    const themeColor = getThemeColor(theme);
+    const yTicks = getRoundedTicks(maxY);
 
-                const newChart = new Chart(ctx, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [{
-                            data: data,
+    const plotLayout = {
+        autosize: true,
+        margin: { l: 60, r: 20, t: 20, b: 40 },
+        showlegend: false,
+        xaxis: {
+            title: {
+                text: xAxisLabel,
+                font: { size: 10 },
+                standoff: 10,
+            },
+            color: themeColor,
+            tickfont: { size: 8 },
+            gridcolor: themeColor,
+            gridwidth: 0.5,
+            gridopacity: 0.75,
+            linecolor: themeColor,
+            linewidth: 1,
+            zerolinecolor: themeColor,
+            zerolinewidth: 1,
+            range: [0, Math.max(...data.x)], // Set the range to start at 0
+        },
+        yaxis: {
+            title: {
+                text: yAxisLabel,
+                font: { size: 10 },
+                standoff: 15,
+            },
+            color: themeColor,
+            tickfont: { size: 8 },
+            gridcolor: themeColor,
+            gridwidth: 0.5,
+            gridopacity: 0.75,
+            linecolor: themeColor,
+            linewidth: 1,
+            zerolinecolor: themeColor,
+            zerolinewidth: 1,
+            range: [0, maxY], // We're already setting this
+            tickmode: 'array',
+            tickvals: yTicks,
+            ticktext: yTicks.map(String),
+        },
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+    };
 
-                            borderColor: themeColor,
-                            pointRadius: .1,
-                        }]
-                    },
-                    options: chartOptions,
-                });
+    const plotData = [{
+        x: data.x,
+        y: data.y,
+        type: 'scattergl',
+        mode: 'markers',
+        marker: { color: themeColor, size: 1.5, opacity: 0.7 },
+    }];
 
-                setChart(newChart);
-            }
-        }
+    const plotConfig = {
+        responsive: true,
+        displayModeBar: false,
     };
 
     const handleAxisChange = (axis: 'x' | 'y', value: number) => {
@@ -220,8 +185,6 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         }
     };
 
-    const themeColor = getThemeColor(theme);
-
     return (
         <div className={styles.container} style={{ '--current-theme-color': themeColor } as React.CSSProperties}>
             <div className={styles.chartContainer}>
@@ -230,7 +193,12 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                         <Loader2 className={styles.loader} style={{ color: themeColor }} />
                     </div>
                 ) : (
-                    <canvas ref={chartRef} />
+                    <Plot
+                        data={plotData}
+                        layout={plotLayout}
+                        config={plotConfig}
+                        style={{ width: '100%', height: '100%' }}
+                    />
                 )}
             </div>
             <div className={styles.sliderContainer}>
