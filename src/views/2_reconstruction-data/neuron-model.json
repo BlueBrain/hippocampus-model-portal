@@ -1,0 +1,158 @@
+[
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_011017HP2_20190329115307"
+    },
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_011023HP2_20190329115556"
+    },
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_011127HP1_20190329115610"
+    },
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_060314AM2_20190329115909"
+    },
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_971114B_20190329120113"
+    },
+    {
+        "etype": "bAC",
+        "instance": "CA1_int_bAC_980120A_20190329120234"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_010710HP2_20190328145252"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_011017HP2_20190328145524"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_031031AM1_20190328150015"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_970627BHP1_20190328160727"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_980120A_20190328160925"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_980513B_20190328161527"
+    },
+    {
+        "etype": "cAC",
+        "instance": "CA1_int_cAC_990611HP2_20190328162145"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_010710HP2_20190328163258"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_011017HP2_20190328164612"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_011023HP2_20190328164923"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_060314AM2_20190328165336"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_970509HP2_20190305115627"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_970627BHP1_20190306162834"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_970717D_20190307182510"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_970911C_20190305120404"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_971114B_20190329154607"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_980120A_20190329155034"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_980513B_20190329155523"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_990111HP2_20190329155703"
+    },
+    {
+        "etype": "cNAC",
+        "instance": "CA1_int_cNAC_990611HP2_20190328165521"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg141017_a1-2_idC_20190328143405"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg141208_B_idA_20190328144006"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg141209_A_idA_20190328144646"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg141216_A_idA_20190305133333"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg141217_A_idB_20190305112803"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_mpg150305_A_idB_20190305112012"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idA_20190305112828"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idB_20190305105211"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idC_20190305103627"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idF_20190305115459"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idG_20190328143451"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idH_20190328143152"
+    },
+    {
+        "etype": "cACpyr",
+        "instance": "CA1_pyr_cACpyr_oh140807_A0_idJ_20190328142723"
+    }
+]

@@ -18,7 +18,6 @@ import HttpData from '@/components/HttpData';
 import { dataPath } from '@/config';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
-import ModelFactsheet from './components/ModelFactsheet';
 import TraceGraph from '../5_predictions/components/Trace';
 import Factsheet from '@/components/Factsheet';
 
