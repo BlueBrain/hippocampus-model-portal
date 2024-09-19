@@ -125,9 +125,9 @@ const ThetaOscillatoryInputView: React.FC = () => {
         setParams({ etype });
     };
 
-    const handleScatterPlotSelect = (signal_frequency: number, cell_frequency: number) => {
-        setQuickSelection(prev => ({ ...prev, signal_frequency, cell_frequency }));
-        setParams({ signal_frequency, cell_frequency });
+    const handleScatterPlotSelect = (cell_frequency: number, signal_frequency: number) => {
+        setQuickSelection(prev => ({ ...prev, cell_frequency, signal_frequency }));
+        setParams({ cell_frequency, signal_frequency });
     };
 
     const mtypes = getMtypes();
@@ -140,7 +140,6 @@ const ThetaOscillatoryInputView: React.FC = () => {
             values: volumeSections,
             setFn: handleVolumeSelect,
         },
-
         {
             title: 'Cell Frequency',
             key: 'cell_frequency',
@@ -148,7 +147,7 @@ const ThetaOscillatoryInputView: React.FC = () => {
             sliderRange: voltageSectionStructure[getVolumeSection()].cell_frequency
         },
         {
-            title: 'signal Frequency',
+            title: 'Signal Frequency',
             key: 'signal_frequency',
             getValuesFn: () => voltageSectionStructure[getVolumeSection()].signal_frequency,
             sliderRange: voltageSectionStructure[getVolumeSection()].signal_frequency
@@ -201,8 +200,8 @@ const ThetaOscillatoryInputView: React.FC = () => {
                                         path={`5_prediction/theta-oscillation-input/${quickSelection.volume_section}/`}
                                         xRange={voltageSectionStructure[getVolumeSection()].cell_frequency}
                                         yRange={voltageSectionStructure[getVolumeSection()].signal_frequency}
-                                        xAxisLabel='signal_frequency'
-                                        yAxisLabel='Cell Frequency'
+                                        xAxisLabel='Cell Frequency'
+                                        yAxisLabel='Signal Frequency'
                                         theme={theme}
                                         onSelect={handleScatterPlotSelect}
                                         selectedX={quickSelection.cell_frequency as number}

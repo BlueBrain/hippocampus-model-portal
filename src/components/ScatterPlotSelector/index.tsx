@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Plot from 'react-plotly.js';
 import { themeColors } from "@/constants";
 import { dataPath } from "@/config";
@@ -44,25 +44,12 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [maxY, setMaxY] = useState<number>(0);
 
-    const getThemeColor = (theme: number): string => {
+    const getThemeColor = useCallback((theme: number): string => {
         const colorKeys = Object.keys(themeColors) as (keyof typeof themeColors)[];
         return themeColors[colorKeys[theme - 1]] || themeColors.experimental_data;
-    };
+    }, []);
 
-    useEffect(() => {
-        fetchData();
-    }, [path, xAxis, yAxis]);
-
-    useEffect(() => {
-        if (selectedX !== undefined && selectedX !== xAxis) {
-            setXAxis(selectedX);
-        }
-        if (selectedY !== undefined && selectedY !== yAxis) {
-            setYAxis(selectedY);
-        }
-    }, [selectedX, selectedY]);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         setIsLoading(true);
         try {
             const fullUrl = `${dataPath}${path}${xAxis}-${yAxis}/spike-time-all.json`;
@@ -90,7 +77,20 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [path, xAxis, yAxis]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    useEffect(() => {
+        if (selectedX !== undefined && selectedX !== xAxis) {
+            setXAxis(selectedX);
+        }
+        if (selectedY !== undefined && selectedY !== yAxis) {
+            setYAxis(selectedY);
+        }
+    }, [selectedX, selectedY]);
 
     const getRoundedTicks = useMemo(() => (max: number): number[] => {
         if (max <= 0) return [0];
@@ -110,10 +110,10 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
         return ticks;
     }, []);
 
-    const themeColor = getThemeColor(theme);
-    const yTicks = getRoundedTicks(maxY);
+    const themeColor = useMemo(() => getThemeColor(theme), [getThemeColor, theme]);
+    const yTicks = useMemo(() => getRoundedTicks(maxY), [getRoundedTicks, maxY]);
 
-    const plotLayout = {
+    const plotLayout = useMemo(() => ({
         autosize: true,
         margin: { l: 60, r: 20, t: 20, b: 40 },
         showlegend: false,
@@ -132,7 +132,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             linewidth: 1,
             zerolinecolor: themeColor,
             zerolinewidth: 1,
-            range: [0, Math.max(...data.x)], // Set the range to start at 0
+            range: [0, Math.max(...data.x)],
         },
         yaxis: {
             title: {
@@ -149,29 +149,29 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             linewidth: 1,
             zerolinecolor: themeColor,
             zerolinewidth: 1,
-            range: [0, maxY], // We're already setting this
+            range: [0, maxY],
             tickmode: 'array',
             tickvals: yTicks,
             ticktext: yTicks.map(String),
         },
         plot_bgcolor: 'rgba(0,0,0,0)',
         paper_bgcolor: 'rgba(0,0,0,0)',
-    };
+    }), [xAxisLabel, yAxisLabel, themeColor, data.x, maxY, yTicks]);
 
-    const plotData = [{
+    const plotData = useMemo(() => [{
         x: data.x,
         y: data.y,
         type: 'scattergl',
         mode: 'markers',
         marker: { color: themeColor, size: 1.5, opacity: 0.7 },
-    }];
+    }], [data, themeColor]);
 
     const plotConfig = {
         responsive: true,
         displayModeBar: false,
     };
 
-    const handleAxisChange = (axis: 'x' | 'y', value: number) => {
+    const handleAxisChange = useCallback((axis: 'x' | 'y', value: number) => {
         const range = axis === 'x' ? xRange : yRange;
         const closestValue = range.reduce((prev, curr) =>
             Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
@@ -183,7 +183,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
             setYAxis(closestValue);
             onSelect(xAxis, closestValue);
         }
-    };
+    }, [xRange, yRange, onSelect, xAxis, yAxis]);
 
     return (
         <div className={styles.container} style={{ '--current-theme-color': themeColor } as React.CSSProperties}>

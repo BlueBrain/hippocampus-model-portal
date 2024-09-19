@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -22,7 +20,7 @@ import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 
 const ACh = [0, 0.1, 1, 3, 5];
-const Depolarisation = [105, 120, 125, 120, 125];
+const Depolarisation = [105, 120, 125]; // Updated to include all unique values
 
 const getaCh = (): number[] => ACh;
 const getDepolarisation = (): number[] => Depolarisation;
@@ -202,7 +200,7 @@ const ThetaMSInputView: React.FC = () => {
                                     xRange={ACh}
                                     yRange={Depolarisation}
                                     xAxisLabel='Acetylcholine concentration'
-                                    yAxisLabel='depolarisation'
+                                    yAxisLabel='Depolarisation'
                                     theme={theme}
                                     onSelect={handleScatterPlotSelect}
                                     selectedX={quickSelection.ach as number}
@@ -213,7 +211,6 @@ const ThetaMSInputView: React.FC = () => {
                     </div>
                 </div>
             </Filters>
-
 
             <DataContainer
                 theme={theme}
@@ -234,7 +231,6 @@ const ThetaMSInputView: React.FC = () => {
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} />
                     </div>
-
                 </Collapsible>
 
                 <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
