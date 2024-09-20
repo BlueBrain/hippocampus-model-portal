@@ -53,17 +53,18 @@ const Neurons: React.FC = () => {
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentInstance, setCurrentInstance] = useState<string>('');
   const [traceData, setTraceData] = useState<any>(null);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [mechanismsData, setMechanismsData] = useState<any>(null);
 
   const layers = useMemo(() => getUniqueValues('layer'), []);
-  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer || query.layer as string), [currentLayer, query.layer]);
-  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer || query.layer as string, 'mtype', currentMtype || query.mtype as string), [currentLayer, currentMtype, query.layer, query.mtype]);
-  const instances = useMemo(() => getFilteredInstances(
-    currentLayer || query.layer as string,
-    currentMtype || query.mtype as string,
-    currentEtype || query.etype as string
-  ), [currentLayer, currentMtype, currentEtype, query]);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer), [currentLayer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype), [currentLayer, currentMtype]);
+  const instances = useMemo(() => getFilteredInstances(currentLayer, currentMtype, currentEtype), [currentLayer, currentMtype, currentEtype]);
 
   useEffect(() => {
+    console.log('Query changed:', query);
+    if (Object.keys(query).length === 0) return;
+
     const newLayer = query.layer && typeof query.layer === 'string' && layers.includes(query.layer)
       ? query.layer
       : layers[0] || '';
@@ -83,6 +84,7 @@ const Neurons: React.FC = () => {
       ? query.instance
       : newInstances[0] || '';
 
+    console.log('Updating states:', { newLayer, newMtype, newEtype, newInstance });
     setCurrentLayer(newLayer);
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
@@ -93,12 +95,24 @@ const Neurons: React.FC = () => {
     const fetchData = async () => {
       if (currentInstance) {
         try {
-          const response = await fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/trace.json`);
-          const data = await response.json();
-          setTraceData(data);
+          const [traceResponse, factsheetResponse, mechanismsResponse] = await Promise.all([
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/trace.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`)
+          ]);
+
+          const traceData = await traceResponse.json();
+          const factsheetData = await factsheetResponse.json();
+          const mechanismsData = await mechanismsResponse.json();
+
+          setTraceData(traceData);
+          setFactsheetData(factsheetData);
+          setMechanismsData(mechanismsData);
         } catch (error) {
-          console.error('Error fetching trace data:', error);
+          console.error('Error fetching data:', error);
           setTraceData(null);
+          setFactsheetData(null);
+          setMechanismsData(null);
         }
       }
     };
@@ -111,6 +125,7 @@ const Neurons: React.FC = () => {
       ...router.query,
       ...params,
     };
+    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
@@ -186,6 +201,8 @@ const Neurons: React.FC = () => {
     },
   ];
 
+  console.log('Current states:', { currentLayer, currentMtype, currentEtype, currentInstance });
+
   return (
     <>
       <Filters theme={theme}>
@@ -237,7 +254,6 @@ const Neurons: React.FC = () => {
                     onSelect={setEtype}
                     theme={theme}
                   />
-                  {currentEtype}
                   <List
                     block
                     list={instances}
@@ -266,14 +282,11 @@ const Neurons: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <Collapsible
-          id="traceSection"
-          className="mt-4"
-          title="Trace"
-        >
+        <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
             {traceData && <TraceGraph plotData={traceData} />}
           </div>
+
           {traceData && (
             <div className="mt-4">
               <DownloadButton onClick={() => downloadAsJson(traceData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`)} theme={theme}>
@@ -283,55 +296,33 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
-        <Collapsible
-          id="bPAPPSPSection"
-          className="mt-4"
-          title="bPAP & PSP"
-        >
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <div className="graph">
             {/* Add bPAP & PSP graph component here */}
           </div>
         </Collapsible>
 
-        <Collapsible
-          id="factsheetSection"
-          className="mt-4"
-          title="Factsheet"
-        >
-          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`}>
-            {(factsheetData) => (
-              <>
-                {factsheetData && (
-                  <>
-                    <Factsheet facts={factsheetData} />
-                    <div className="mt-4">
-                      <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-factsheet.json`)} theme={theme}>
-                        Factsheet
-                      </DownloadButton>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </HttpData>
+        <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
+          {factsheetData && (
+            <>
+              <Factsheet facts={factsheetData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-factsheet.json`)} theme={theme}>
+                  Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
         </Collapsible>
 
-        <Collapsible
-          id="mechansimsSection"
-          className="mt-4"
-          title="Mechanisms"
-        >
-          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`}>
-            {(factsheetData) => (
-              <>
-                {factsheetData && (
-                  <>
-                    <MechanismTable data={factsheetData} instance={currentInstance} />
-                  </>
-                )}
-              </>
-            )}
-          </HttpData>
+        <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
+          <p></p>
+        </Collapsible>
+
+        <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
+          {mechanismsData && (
+            <MechanismTable data={mechanismsData} instance={currentInstance} />
+          )}
         </Collapsible>
       </DataContainer>
     </>
