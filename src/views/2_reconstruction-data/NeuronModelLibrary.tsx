@@ -192,8 +192,8 @@ const NeuronsModelLibrary: React.FC = () => {
         theme={theme}
         navItems={[
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
-          { id: 'factsheetSection', label: 'Factsheet' },
-          { id: 'traceSection', label: 'Trace' }
+          { id: 'traceSection', label: 'Trace' },
+          { id: 'factsheetSection', label: 'Factsheet' }
         ]}
         quickSelectorEntries={qsEntries}
       >

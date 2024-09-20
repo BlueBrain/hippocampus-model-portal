@@ -23,6 +23,7 @@ import Factsheet from '@/components/Factsheet';
 import modelsData from './neuron-model.json';
 import LayerSelector3D from '@/components/LayerSelector3D';
 import MechanismTable from './neuron-model/MechanismTable';
+import ExperimentalRecordingsTable from './neuron-model/ExperimentalRecordingsTable';
 
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
   return Array.from(new Set(modelsData
@@ -54,6 +55,7 @@ const Neurons: React.FC = () => {
   const [currentInstance, setCurrentInstance] = useState<string>('');
   const [traceData, setTraceData] = useState<any>(null);
   const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [experimentalRecordingData, setExperimentalRecordingData] = useState<any>(null);
   const [mechanismsData, setMechanismsData] = useState<any>(null);
 
   const layers = useMemo(() => getUniqueValues('layer'), []);
@@ -95,24 +97,28 @@ const Neurons: React.FC = () => {
     const fetchData = async () => {
       if (currentInstance) {
         try {
-          const [traceResponse, factsheetResponse, mechanismsResponse] = await Promise.all([
+          const [traceResponse, factsheetResponse, mechanismsResponse, experimentalRecordingResponse] = await Promise.all([
             fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/trace.json`),
             fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`),
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`)
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/experimental-recordings.json`)
           ]);
 
           const traceData = await traceResponse.json();
           const factsheetData = await factsheetResponse.json();
           const mechanismsData = await mechanismsResponse.json();
+          const experimentalRecordingData = await experimentalRecordingResponse.json();
 
           setTraceData(traceData);
           setFactsheetData(factsheetData);
           setMechanismsData(mechanismsData);
+          setExperimentalRecordingData(experimentalRecordingData)
         } catch (error) {
           console.error('Error fetching data:', error);
           setTraceData(null);
           setFactsheetData(null);
           setMechanismsData(null);
+          setExperimentalRecordingData(null)
         }
       }
     };
@@ -277,6 +283,7 @@ const Neurons: React.FC = () => {
           { id: 'traceSection', label: 'Trace' },
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
+          { id: 'experimentalRecordingsSection', label: 'Experimental recordings' },
           { id: 'efeaturesSection', label: 'E-features' },
           { id: 'mechansimsSection', label: 'Mechanisms' },
         ]}
@@ -312,6 +319,12 @@ const Neurons: React.FC = () => {
                 </DownloadButton>
               </div>
             </>
+          )}
+        </Collapsible>
+
+        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings">
+          {experimentalRecordingData && (
+            <ExperimentalRecordingsTable data={experimentalRecordingData} />
           )}
         </Collapsible>
 
