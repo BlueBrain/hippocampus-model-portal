@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -10,7 +10,6 @@ import { QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 
-import models from './neuron-model-libraries.json';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
@@ -21,15 +20,26 @@ import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
 import Factsheet from '@/components/Factsheet';
 
-const getMtypes = (): string[] => {
-  return Array.from(new Set(models.map(model => model.mtype))).sort();
+import modelsData from './neuron-model-libraries.json';
+import MechanismTable from './neuron-model/MechanismTable';
+
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string): string[] => {
+  return Array.from(new Set(modelsData
+    .filter(model =>
+      (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1)
+    )
+    .map(model => model[key]))).sort();
 };
 
-const getEtypes = (mtype: string): string[] => {
-  return Array.from(new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))).sort();
+const getFilteredData = (mtype: string, etype: string): any[] => {
+  return modelsData
+    .filter(model =>
+      (!mtype || model.mtype === mtype) &&
+      (!etype || model.etype === etype)
+    );
 };
 
-const Neurons: React.FC = () => {
+const NeuronsModelLibrary: React.FC = () => {
   const router = useRouter();
   const theme = 3;
 
@@ -37,43 +47,73 @@ const Neurons: React.FC = () => {
   const [currentMtype, setCurrentMtype] = useState<string>('');
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [traceData, setTraceData] = useState<any>(null);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
 
-  const mtypes = getMtypes();
-  const etypes = getEtypes(currentMtype);
-
-  useEffect(() => {
-    if (query.mtype && typeof query.mtype === 'string' && mtypes.includes(query.mtype)) {
-      setCurrentMtype(query.mtype);
-    } else if (mtypes.length > 0) {
-      setCurrentMtype(mtypes[0]);
-    }
-  }, [query.mtype, mtypes]);
+  const mtypes = useMemo(() => getUniqueValues('mtype'), []);
+  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
 
   useEffect(() => {
-    if (currentMtype) {
-      const availableEtypes = getEtypes(currentMtype);
-      if (query.etype && typeof query.etype === 'string' && availableEtypes.includes(query.etype)) {
-        setCurrentEtype(query.etype);
-      } else if (availableEtypes.length > 0) {
-        setCurrentEtype(availableEtypes[0]);
-      } else {
-        setCurrentEtype('');
+    console.log('Query changed:', query);
+    if (Object.keys(query).length === 0) return;
+
+    const newMtype = query.mtype && typeof query.mtype === 'string' && mtypes.includes(query.mtype)
+      ? query.mtype
+      : mtypes[0] || '';
+
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype);
+    const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
+      ? query.etype
+      : newEtypes[0] || '';
+
+    console.log('Updating states:', { newMtype, newEtype });
+    setCurrentMtype(newMtype);
+    setCurrentEtype(newEtype);
+  }, [query, mtypes]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentMtype && currentEtype) {
+        try {
+          const filteredData = getFilteredData(currentMtype, currentEtype)[0];
+          if (filteredData) {
+            const [traceResponse, factsheetResponse] = await Promise.all([
+              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/trace.json`),
+              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`),
+            ]);
+
+            const traceData = await traceResponse.json();
+            const factsheetData = await factsheetResponse.json();
+
+            setTraceData(traceData);
+            setFactsheetData(factsheetData);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setTraceData(null);
+          setFactsheetData(null);
+        }
       }
-    }
-  }, [query.etype, currentMtype]);
+    };
+
+    fetchData();
+  }, [currentMtype, currentEtype]);
 
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
       ...router.query,
       ...params,
     };
+    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
   const setMtype = (mtype: string) => {
+    const newEtypes = getUniqueValues('etype', 'mtype', mtype);
+    const newEtype = newEtypes[0] || '';
+
     setParams({
       mtype,
-      etype: '',
+      etype: newEtype,
     });
   };
 
@@ -83,25 +123,9 @@ const Neurons: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (currentMtype && currentEtype) {
-        try {
-          const response = await fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/trace.json`);
-          const data = await response.json();
-          setTraceData(data);
-        } catch (error) {
-          setTraceData(null);
-        }
-      }
-    };
-
-    fetchData();
-  }, [currentEtype, currentMtype]);
-
   const qsEntries: QuickSelectorEntry[] = [
     {
-      title: 'M-type',
+      title: 'M-Type',
       key: 'mtype',
       values: mtypes,
       setFn: setMtype,
@@ -113,6 +137,8 @@ const Neurons: React.FC = () => {
       setFn: setEtype,
     },
   ];
+
+  console.log('Current states:', { currentMtype, currentEtype });
 
   return (
     <>
@@ -132,27 +158,30 @@ const Neurons: React.FC = () => {
           </div>
 
           <div className="col-xs-12 col-lg-6">
-            <div className={`selector__column theme-${theme}`}>
-              <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
-              <div className="selector__body">
-                <List
-                  block
-                  list={mtypes}
-                  value={currentMtype}
-                  title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
-                  color={colorName}
-                  onSelect={setMtype}
-                  theme={theme}
-                />
-                <List
-                  block
-                  list={etypes}
-                  value={currentEtype}
-                  title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
-                  color={colorName}
-                  onSelect={setEtype}
-                  theme={theme}
-                />
+            <div className="selector">
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={mtypes}
+                    value={currentMtype}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
+                    color={colorName}
+                    onSelect={setMtype}
+                    theme={theme}
+                  />
+                  <List
+                    block
+                    list={etypes}
+                    value={currentEtype}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
+                    color={colorName}
+                    onSelect={setEtype}
+                    anchor="data"
+                    theme={theme}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -165,12 +194,9 @@ const Neurons: React.FC = () => {
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
           { id: 'traceSection', label: 'Trace' }
-
         ]}
         quickSelectorEntries={qsEntries}
       >
-
-
         <Collapsible
           id="bPAPPSPSection"
           className="mt-4"
@@ -181,42 +207,32 @@ const Neurons: React.FC = () => {
           </div>
         </Collapsible>
 
-        <Collapsible
-          id="factsheetSection"
-          className="mt-4"
-          title="Factsheet"
-        >
-          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`}>
-            {(factsheetData) => (
-              <>
-                {factsheetData && (
-                  <>
-                    <Factsheet facts={factsheetData} />
-                    <div className="mt-4">
-                      <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-${currentEtype}-factsheet.json`)} theme={theme}>
-                        Factsheet
-                      </DownloadButton>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </HttpData>
+
+        <Collapsible id="traceSection" className="mt-4" title="Trace">
+          <div className="graph">
+            {traceData && <TraceGraph plotData={traceData} />}
+          </div>
+
+          {traceData && (
+            <div className="mt-4">
+              <DownloadButton onClick={() => downloadAsJson(traceData, `${currentMtype}-${currentEtype}-trace.json`)} theme={theme}>
+                Trace data
+              </DownloadButton>
+            </div>
+          )}
         </Collapsible>
 
-        <Collapsible
-          id="traceSection"
-          className="mt-4"
-          title="Trace"
-        >
-          <div className="graph">
-            <TraceGraph plotData={traceData} />
-          </div>
-          <div className="mt-4">
-            <DownloadButton onClick={() => downloadAsJson(traceData, `${currentMtype}-${currentEtype}-trace.json`)} theme={theme}>
-              Trace data
-            </DownloadButton>
-          </div>
+        <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
+          {factsheetData && (
+            <>
+              <Factsheet facts={factsheetData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentMtype}-${currentEtype}-factsheet.json`)} theme={theme}>
+                  Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
         </Collapsible>
 
       </DataContainer>
@@ -225,7 +241,7 @@ const Neurons: React.FC = () => {
 };
 
 export default withPreselection(
-  Neurons,
+  NeuronsModelLibrary,
   {
     key: 'mtype',
     defaultQuery: defaultSelection.digitalReconstruction.NeuronModelLibrary,
