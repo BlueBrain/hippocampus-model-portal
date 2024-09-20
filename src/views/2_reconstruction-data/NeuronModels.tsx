@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -20,14 +20,16 @@ import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
 import Factsheet from '@/components/Factsheet';
 
-// Import the models data
 import modelsData from './neuron-model.json';
 import LayerSelector3D from '@/components/LayerSelector3D';
 import MechanismTable from './neuron-model/MechanismTable';
 
-const getUniqueValues = (key: string, filterKey?: string, filterValue?: string): string[] => {
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
   return Array.from(new Set(modelsData
-    .filter(model => !filterKey || !filterValue || model[filterKey] === filterValue)
+    .filter(model =>
+      (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
+      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+    )
     .map(model => model[key]))).sort();
 };
 
@@ -52,103 +54,40 @@ const Neurons: React.FC = () => {
   const [currentInstance, setCurrentInstance] = useState<string>('');
   const [traceData, setTraceData] = useState<any>(null);
 
-  const layers = getUniqueValues('layer');
-  const mtypes = getUniqueValues('mtype', 'layer', currentLayer);
-  const etypes = getUniqueValues('etype', 'mtype', currentMtype);
-  const instances = getFilteredInstances(currentLayer, currentMtype, currentEtype);
+  const layers = useMemo(() => getUniqueValues('layer'), []);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer || query.layer as string), [currentLayer, query.layer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer || query.layer as string, 'mtype', currentMtype || query.mtype as string), [currentLayer, currentMtype, query.layer, query.mtype]);
+  const instances = useMemo(() => getFilteredInstances(
+    currentLayer || query.layer as string,
+    currentMtype || query.mtype as string,
+    currentEtype || query.etype as string
+  ), [currentLayer, currentMtype, currentEtype, query]);
 
   useEffect(() => {
-    if (query.layer && typeof query.layer === 'string' && layers.includes(query.layer)) {
-      setCurrentLayer(query.layer);
-    } else if (layers.length > 0) {
-      setCurrentLayer(layers[0]);
-    }
-  }, [query.layer, layers]);
+    const newLayer = query.layer && typeof query.layer === 'string' && layers.includes(query.layer)
+      ? query.layer
+      : layers[0] || '';
 
-  useEffect(() => {
-    if (query.mtype && typeof query.mtype === 'string' && mtypes.includes(query.mtype)) {
-      setCurrentMtype(query.mtype);
-    } else if (mtypes.length > 0) {
-      setCurrentMtype(mtypes[0]);
-    } else {
-      setCurrentMtype('');
-    }
-  }, [query.mtype, mtypes, currentLayer]);
+    const newMtypes = getUniqueValues('mtype', 'layer', newLayer);
+    const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
+      ? query.mtype
+      : newMtypes[0] || '';
 
-  useEffect(() => {
-    if (query.etype && typeof query.etype === 'string' && etypes.includes(query.etype)) {
-      setCurrentEtype(query.etype);
-    } else if (etypes.length > 0) {
-      setCurrentEtype(etypes[0]);
-    } else {
-      setCurrentEtype('');
-    }
-  }, [query.etype, etypes, currentMtype]);
+    const newEtypes = getUniqueValues('etype', 'layer', newLayer, 'mtype', newMtype);
+    const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
+      ? query.etype
+      : newEtypes[0] || '';
 
-  useEffect(() => {
-    if (instances.length > 0) {
-      if (query.instance && typeof query.instance === 'string' && instances.includes(query.instance)) {
-        setCurrentInstance(query.instance);
-      } else {
-        setCurrentInstance(instances[0]);
-      }
-    } else {
-      setCurrentInstance('');
-    }
-  }, [query.instance, instances, currentEtype]);
+    const newInstances = getFilteredInstances(newLayer, newMtype, newEtype);
+    const newInstance = query.instance && typeof query.instance === 'string' && newInstances.includes(query.instance)
+      ? query.instance
+      : newInstances[0] || '';
 
-  const setParams = (params: Record<string, string>): void => {
-    const newQuery = {
-      ...router.query,
-      ...params,
-    };
-    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
-  };
-
-  const setLayer = (layer: string) => {
-    const newMtypes = getUniqueValues('mtype', 'layer', layer);
-    const newMtype = newMtypes.includes(currentMtype) ? currentMtype : newMtypes[0] || '';
-    const newEtypes = getUniqueValues('etype', 'mtype', newMtype);
-    const newEtype = newEtypes.includes(currentEtype) ? currentEtype : newEtypes[0] || '';
-    const newInstances = getFilteredInstances(layer, newMtype, newEtype);
-    const newInstance = newInstances.includes(currentInstance) ? currentInstance : newInstances[0] || '';
-
-    setParams({
-      layer,
-      mtype: newMtype,
-      etype: newEtype,
-      instance: newInstance,
-    });
-  };
-
-  const setMtype = (mtype: string) => {
-    const newEtypes = getUniqueValues('etype', 'mtype', mtype);
-    const newEtype = newEtypes.includes(currentEtype) ? currentEtype : newEtypes[0] || '';
-    const newInstances = getFilteredInstances(currentLayer, mtype, newEtype);
-    const newInstance = newInstances.includes(currentInstance) ? currentInstance : newInstances[0] || '';
-
-    setParams({
-      mtype,
-      etype: newEtype,
-      instance: newInstance,
-    });
-  };
-
-  const setEtype = (etype: string) => {
-    const newInstances = getFilteredInstances(currentLayer, currentMtype, etype);
-    const newInstance = newInstances.includes(currentInstance) ? currentInstance : newInstances[0] || '';
-
-    setParams({
-      etype,
-      instance: newInstance,
-    });
-  };
-
-  const setInstance = (instance: string) => {
-    setParams({
-      instance,
-    });
-  };
+    setCurrentLayer(newLayer);
+    setCurrentMtype(newMtype);
+    setCurrentEtype(newEtype);
+    setCurrentInstance(newInstance);
+  }, [query, layers]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,6 +105,59 @@ const Neurons: React.FC = () => {
 
     fetchData();
   }, [currentInstance]);
+
+  const setParams = (params: Record<string, string>): void => {
+    const newQuery = {
+      ...router.query,
+      ...params,
+    };
+    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
+  };
+
+  const setLayer = (layer: string) => {
+    const newMtypes = getUniqueValues('mtype', 'layer', layer);
+    const newMtype = newMtypes[0] || '';
+    const newEtypes = getUniqueValues('etype', 'layer', layer, 'mtype', newMtype);
+    const newEtype = newEtypes[0] || '';
+    const newInstances = getFilteredInstances(layer, newMtype, newEtype);
+    const newInstance = newInstances[0] || '';
+
+    setParams({
+      layer,
+      mtype: newMtype,
+      etype: newEtype,
+      instance: newInstance,
+    });
+  };
+
+  const setMtype = (mtype: string) => {
+    const newEtypes = getUniqueValues('etype', 'layer', currentLayer, 'mtype', mtype);
+    const newEtype = newEtypes[0] || '';
+    const newInstances = getFilteredInstances(currentLayer, mtype, newEtype);
+    const newInstance = newInstances[0] || '';
+
+    setParams({
+      mtype,
+      etype: newEtype,
+      instance: newInstance,
+    });
+  };
+
+  const setEtype = (etype: string) => {
+    const newInstances = getFilteredInstances(currentLayer, currentMtype, etype);
+    const newInstance = newInstances[0] || '';
+
+    setParams({
+      etype,
+      instance: newInstance,
+    });
+  };
+
+  const setInstance = (instance: string) => {
+    setParams({
+      instance,
+    });
+  };
 
   const qsEntries: QuickSelectorEntry[] = [
     {
@@ -187,7 +179,7 @@ const Neurons: React.FC = () => {
       setFn: setEtype,
     },
     {
-      title: 'Instances',
+      title: 'Instance',
       key: 'instance',
       values: instances,
       setFn: setInstance,
@@ -245,6 +237,7 @@ const Neurons: React.FC = () => {
                     onSelect={setEtype}
                     theme={theme}
                   />
+                  {currentEtype}
                   <List
                     block
                     list={instances}
@@ -270,7 +263,6 @@ const Neurons: React.FC = () => {
           { id: 'factsheetSection', label: 'Factsheet' },
           { id: 'efeaturesSection', label: 'E-features' },
           { id: 'mechansimsSection', label: 'Mechanisms' },
-
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -341,7 +333,6 @@ const Neurons: React.FC = () => {
             )}
           </HttpData>
         </Collapsible>
-
       </DataContainer>
     </>
   );

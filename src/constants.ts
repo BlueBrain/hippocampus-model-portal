@@ -129,8 +129,8 @@ export const defaultSelection = {
     neurons: {
       layer: 'SLM',
       mtype: 'SLM_PPA',
-      etype: 'SO_BP',
-      instance: 'cNAC',
+      etype: 'bAC',
+      instance: 'CA1_int_bAC_011127HP1_20190329115610',
     },
     NeuronModelLibrary: {
       mtype: 'SO_BP',
