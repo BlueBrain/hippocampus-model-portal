@@ -334,7 +334,7 @@ const Neurons: React.FC = () => {
               <>
                 {factsheetData && (
                   <>
-                    <MechanismTable data={factsheetData} />
+                    <MechanismTable data={factsheetData} instance={currentInstance} />
                   </>
                 )}
               </>
