@@ -1,326 +1,289 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Button, Spin } from 'antd';
+import { useRouter } from 'next/router';
 
-import { etypeFactsheetPath } from '@/queries/http';
 import Title from '@/components/Title';
-import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
-import HttpData from '@/components/HttpData';
 import DataContainer from '@/components/DataContainer';
-import { Layer } from '@/types';
+import { QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
-import EtypeFactsheet from '@/components/EtypeFactsheet';
-import ModelMorphologyFactsheet from '@/components/ModelMorphologyFactsheet';
-import { dataPath } from '@/config';
-import models from '@/models.json';
-import { defaultSelection, layers } from '@/constants';
+
+import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import withQuickSelector from '@/hoc/with-quick-selector';
 import { colorName } from './config';
+import HttpData from '@/components/HttpData';
+import { dataPath } from '@/config';
+import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton';
+import TraceGraph from '../5_predictions/components/Trace';
+import Factsheet from '@/components/Factsheet';
 
-import StickyContainer from '@/components/StickyContainer';
+import modelsData from './neurons.json';
 
-const modelMorphologyRe = /^[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_[a-zA-Z0-9]+\_(.+)\_[a-zA-Z0-9]+$/;
 
-const getMtypes = (layer: Layer) => {
-  return layer
-    ? models
-      .filter(model => model.layer === layer)
-      .map(model => model.mtype)
-      .reduce<string[]>((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
+  return Array.from(new Set(modelsData
+    .filter(model =>
+      (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
+      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+    )
+    .map(model => model[key]))).sort();
 };
 
-const getEtypes = (mtype: string) => {
-  return mtype
-    ? models
-      .filter(model => model.mtype === mtype)
-      .map(model => model.etype)
-      .reduce<string[]>((acc, cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
-};
-
-const getInstances = (mtype: string, etype: string) => {
-  return etype
-    ? models
-      .filter(model => model.mtype === mtype && model.etype === etype)
-      .map(model => model.name)
-      .sort()
-    : [];
+const getFilteredMorphologies = (mtype: string, etype: string): string[] => {
+  return modelsData
+    .filter(model =>
+      (!mtype || model.mtype === mtype) &&
+      (!etype || model.etype === etype)
+    )
+    .map(model => model.morphology);
 };
 
 const Neurons: React.FC = () => {
   const router = useRouter();
-
   const theme = 3;
 
   const { query } = router;
+  const [currentMtype, setCurrentMtype] = useState<string>('');
+  const [currentEtype, setCurrentEtype] = useState<string>('');
+  const [currentMorphology, setCurrentMorphology] = useState<string>('');
+  const [traceData, setTraceData] = useState<any>(null);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [experimentalRecordingData, setExperimentalRecordingData] = useState<any>(null);
+  const [mechanismsData, setMechanismsData] = useState<any>(null);
 
-  const currentLayer: Layer = query.layer as Layer;
-  const currentMtype: string = query.mtype as string;
-  const currentEtype: string = query.etype as string;
-  const currentInstance: string = query.instance as string;
+  const mtypes = useMemo(() => getUniqueValues('mtype'), []);
+  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
+  const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
+
+  useEffect(() => {
+    console.log('Query changed:', query);
+    if (Object.keys(query).length === 0) return;
+
+    const newMtypes = getUniqueValues('mtype');
+    const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
+      ? query.mtype
+      : newMtypes[0] || '';
+
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype);
+    const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
+      ? query.etype
+      : newEtypes[0] || '';
+
+    const newMorphologies = getFilteredMorphologies(newMtype, newEtype);
+    const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
+      ? query.morphology
+      : newMorphologies[0] || '';
+
+    console.log('Updating states:', { newMtype, newEtype, newMorphology });
+    setCurrentMtype(newMtype);
+    setCurrentEtype(newEtype);
+    setCurrentMorphology(newMorphology);
+  }, [query]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentMorphology) {
+        try {
+          const [traceResponse, factsheetResponse] = await Promise.all([
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentMorphology}/trace.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentMorphology}/features_with_rheobase.json`),
+
+          ]);
+
+          const traceData = await traceResponse.json();
+          const factsheetData = await factsheetResponse.json();
+
+
+          setTraceData(traceData);
+          setFactsheetData(factsheetData);
+          setMechanismsData(mechanismsData);
+          setExperimentalRecordingData(experimentalRecordingData)
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setTraceData(null);
+          setFactsheetData(null);
+          setMechanismsData(null);
+          setExperimentalRecordingData(null)
+        }
+      }
+    };
+
+    fetchData();
+  }, [currentMorphology]);
 
   const setParams = (params: Record<string, string>): void => {
-    const query = {
-      ...{
-        layer: currentLayer,
-        mtype: currentMtype,
-        etype: currentEtype,
-        instance: currentInstance,
-      },
+    const newQuery = {
+      ...router.query,
       ...params,
     };
-    router.push({ query, pathname: router.pathname }, undefined, { shallow: true });
+    console.log('Setting new params:', newQuery);
+    router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setLayer = (layer: Layer) => {
-    setParams({
-      layer,
-      mtype: '',
-      etype: '',
-      instance: '',
-    });
-  };
   const setMtype = (mtype: string) => {
+    const newEtypes = getUniqueValues('etype', 'mtype', mtype);
+    const newEtype = newEtypes[0] || '';
+    const newMorphologies = getFilteredMorphologies(mtype, newEtype);
+    const newMorphology = newMorphologies[0] || '';
+
     setParams({
       mtype,
-      etype: '',
-      instance: '',
+      etype: newEtype,
+      morphology: newMorphology,
     });
   };
+
   const setEtype = (etype: string) => {
+    const newMorphologies = getFilteredMorphologies(currentMtype, etype);
+    const newMorphology = newMorphologies[0] || '';
+
     setParams({
       etype,
-      instance: '',
+      morphology: newMorphology,
     });
   };
-  const setInstance = (instance: string) => {
-    setParams({ instance });
+
+  const setMorphology = (morphology: string) => {
+    setParams({
+      morphology,
+    });
   };
 
-  const mtypes = getMtypes(currentLayer);
-  const etypes = getEtypes(currentMtype);
-  const instances = getInstances(currentMtype, currentEtype);
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'M-Type',
+      key: 'mtype',
+      values: mtypes,
+      setFn: setMtype,
+    },
+    {
+      title: 'E-Type',
+      key: 'etype',
+      values: etypes,
+      setFn: setEtype,
+    },
+    {
+      title: 'Morphology',
+      key: 'morphology',
+      values: morphologies,
+      setFn: setMorphology,
+    },
+  ];
 
-  const getMorphologyDistribution = (morphologyResource: any) => {
-    return morphologyResource.distribution.find((d: any) => d.name.match(/\.asc$/i));
-  };
-
-  const memodelArchiveHref = `https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/hippocampus_optimization/rat/CA1/v4.0.5/optimizations_Python3/${currentInstance}/${currentInstance}.zip?bluenaas=true`;
-
-  const morphologyName = currentInstance
-    ? currentInstance.match(modelMorphologyRe)?.[1] ?? ''
-    : '';
+  console.log('Current states:', { currentMtype, currentEtype, currentMorphology });
 
   return (
     <>
-
-      <Filters theme={theme} hasData={!!currentInstance}>
-        <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
-          <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
-            <StickyContainer>
-              <Title
-                title="Neurons"
-                subtitle="Digital Reconstructions"
-                theme={theme}
-              />
-              <div className='w-full' role="information">
-                <InfoBox>
-                  <p>
-                    We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
-                  </p>
-                </InfoBox>
-              </div>
-            </StickyContainer>
+      <Filters theme={theme}>
+        <div className="row w-100 content-center">
+          <div className="col-xs-12 col-lg-6 content-center">
+            <Title
+              title="Neurons"
+              subtitle="Digital Reconstructions"
+              theme={theme}
+            />
+            <div className='w-full' role="information">
+              <InfoBox>
+                <p>
+                  We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
+                </p>
+              </InfoBox>
+            </div>
           </div>
 
-          <div className="flex flex-col-reverse md:flex-row-reverse gap-8 mb-12 md:mb-0 mx-8 md:mx-0 lg:w-2/3 md:w-full flex-grow md:flex-none">
-            <div className={`selector__column theme-${theme} w-full`}>
-              <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
-              <div className="selector__body">
-                <List
-                  className="mb-2"
-                  block
-                  list={mtypes}
-                  value={currentMtype}
-                  title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
-                  color={colorName}
-                  onSelect={setMtype}
-                  theme={theme}
-                />
-                <List
-                  className="mb-2"
-                  block
-                  list={etypes}
-                  value={currentEtype}
-                  title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
-                  color={colorName}
-                  onSelect={setEtype}
-                  theme={theme}
-                />
-                <List
-                  block
-                  list={instances}
-                  value={currentInstance}
-                  title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
-                  color={colorName}
-                  onSelect={setInstance}
-                  anchor="data"
-                  theme={theme}
-                />
-              </div>
-            </div>
-            <div className={`selector__column theme-${theme} w-full`}>
-              <div className={`selector__head theme-${theme}`}>Choose a layer</div>
-              <div className="selector__body">
-                <LayerSelector3D
-                  value={currentLayer}
-                  onSelect={setLayer}
-                  theme={theme}
-                />
+          <div className="col-xs-12 col-lg-6">
+            <div className="selector">
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
+                  <List
+                    block
+                    list={mtypes}
+                    value={currentMtype}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
+                    color={colorName}
+                    onSelect={setMtype}
+                    theme={theme}
+                  />
+                  <List
+                    block
+                    list={etypes}
+                    value={currentEtype}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
+                    color={colorName}
+                    onSelect={setEtype}
+                    theme={theme}
+                  />
+                  <List
+                    block
+                    list={morphologies}
+                    value={currentMorphology}
+                    title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ''}`}
+                    color={colorName}
+                    onSelect={setMorphology}
+                    anchor="data"
+                    theme={theme}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </Filters>
 
-      <DataContainer theme={theme}
-        visible={!!currentInstance}
+      <DataContainer
+        theme={theme}
         navItems={[
-          { id: 'modelInstance', label: 'Instance' },
-          { id: 'mtypeSection', label: 'M-Type' },
-          { id: 'etypeSection', label: 'E-Type' },
+          { id: 'traceSection', label: 'Trace' },
+          { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
+          { id: 'factsheetSection', label: 'Factsheet' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
-        <Collapsible
-          id="modelInstance"
-          className="mt-4"
-          title={`Model instance ${currentInstance} Factsheet`}
-        >
-          <h3>Anatomy</h3>
-          <ModelMorphologyFactsheet morphologyName={morphologyName} />
+        <Collapsible id="traceSection" className="mt-4" title="Trace">
+          <div className="graph">
+            {traceData && <TraceGraph plotData={traceData} />}
+          </div>
 
-          <div className="row end-xs mt-3 mb-4">
-            <div className="col">
-              <Button
-                type="primary"
-                download
-                href={memodelArchiveHref}
-              >
-                Download model
-              </Button>
+          {traceData && (
+            <div className="mt-4">
+              <DownloadButton onClick={() => downloadAsJson(traceData, `${currentMtype}-${currentEtype}-${currentMorphology}-trace.json`)} theme={theme}>
+                Trace data
+              </DownloadButton>
             </div>
-          </div>
-
-          <h3 className="mb-3">Morphology</h3>
-          <div className="row end-xs mt-3 mb-3">
-            <div className="col">
-              <Button
-                type="primary"
-                download
-                href={`${dataPath}/model-morphologies-asc/${morphologyName}.asc`}
-              >
-                Download morphology
-              </Button>
-            </div>
-          </div>
-
-          <h3 className="text-tmp">Table: experimental morphologies used for this model</h3>
-
-          <h3 className="text-tmp">EPSP and bAP attenuation videos?</h3>
+          )}
         </Collapsible>
 
-        <Collapsible
-          id="mtypeSection"
-          className="mt-4"
-          title="M-Type <X>"
-        >
-          <h3 className="text-tmp">Text?</h3>
-          <h3 className="text-tmp">M-type population factsheet</h3>
-          <h3 className="text-tmp">M-type population distribution plots</h3>
-        </Collapsible>
-
-        <Collapsible
-          id="etypeSection"
-          className="mt-4"
-          title={`E-Type ${currentEtype} Factsheet`}
-        >
-          <h3 className="text-tmp">Text?</h3>
-
-          <HttpData path={etypeFactsheetPath(currentInstance)}>
-            {(data, loading) => (
-              <Spin spinning={loading}>
-                {data && (
-                  <EtypeFactsheet data={data} />
-                )}
-              </Spin>
-            )}
-          </HttpData>
-
-          <div className="text-right mt-3 mb-3">
-            <Button
-              type="primary"
-              href={etypeFactsheetPath(currentInstance)}
-              download
-            >
-              Download factsheet
-            </Button>
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <div className="graph">
+            {/* Add bPAP & PSP graph component here */}
           </div>
-          <h3 className="text-tmp">List of experimental traces used for model fitting (with trace viewer) ?</h3>
         </Collapsible>
-      </DataContainer >
+
+        <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
+          {factsheetData && (
+            <>
+              <Factsheet facts={factsheetData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentMtype}-${currentEtype}-${currentMorphology}-factsheet.json`)} theme={theme}>
+                  Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+      </DataContainer>
     </>
   );
 };
 
-const hocPreselection = withPreselection(
+export default withPreselection(
   Neurons,
   {
-    key: 'layer',
-    defaultQuery: defaultSelection.digitalReconstruction.neurons,
-  },
-);
-
-const qsEntries = [
-  {
-    title: 'Layer',
-    key: 'layer',
-    values: layers,
-  },
-  {
-    title: 'M-type',
     key: 'mtype',
-    getValuesFn: getMtypes,
-    getValuesParam: 'layer',
-    paramsToKeepOnChange: ['layer'],
-  },
-  {
-    title: 'E-Type',
-    key: 'etype',
-    getValuesFn: getEtypes,
-    getValuesParam: 'mtype',
-    paramsToKeepOnChange: ['layer', 'mtype'],
-  },
-  {
-    title: 'Instance',
-    key: 'instance',
-    getValuesFn: getInstances,
-    getValuesParam: ['mtype', 'etype'],
-    paramsToKeepOnChange: ['layer', 'mtype', 'etype'],
-  },
-];
-
-export default withQuickSelector(
-  hocPreselection,
-  {
-    entries: qsEntries,
-    color: colorName,
+    defaultQuery: defaultSelection.digitalReconstruction.neurons,
   },
 );
