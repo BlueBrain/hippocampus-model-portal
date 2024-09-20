@@ -228,6 +228,6 @@ export default withPreselection(
   Neurons,
   {
     key: 'mtype',
-    defaultQuery: defaultSelection.digitalReconstruction.neurons,
+    defaultQuery: defaultSelection.digitalReconstruction.NeuronModelLibrary,
   },
 );

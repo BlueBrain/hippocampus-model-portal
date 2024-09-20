@@ -1,4 +1,5 @@
 import { Layer, NeuriteType, VolumeSection, AchConcentration, CellGroup, Theme, GraphTheme, ThemeColors } from './types';
+import NeuronModelLibrary from './views/2_reconstruction-data/NeuronModelLibrary';
 import AcetylcholineView from './views/4_validations/Acetylcholine';
 
 export const layers: Layer[] = [
@@ -127,7 +128,11 @@ export const defaultSelection = {
     },
     neurons: {
       etype: 'SO_BP',
-      mtype: 'cNAC',
+      instance: 'cNAC',
+    },
+    NeuronModelLibrary: {
+      mtype: 'SO_BP',
+      etype: 'cNAC'
     },
     synapticPathways: {
       volume_section: 'slice',

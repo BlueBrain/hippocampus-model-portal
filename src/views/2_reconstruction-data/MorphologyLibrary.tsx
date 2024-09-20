@@ -31,7 +31,7 @@ const getMtypes = (): string[] => {
 }
 
 // Function to get all unique instances
-const getAllInstances = (): string[] => {
+const getInstances = (): string[] => {
   const morphologies = morphologyLibrary.morphologies;
   const uniqueInstances = Array.from(new Set(morphologies));
   return uniqueInstances.sort();
@@ -68,22 +68,23 @@ const MorphologyLibrary: React.FC = () => {
 
   // Generate options
   const mtypes = getMtypes();
-  const instances = getAllInstances();
+  const instances = getInstances();
 
   // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
+
+    {
+      title: 'Instance',
+      key: 'instances',
+      getValuesFn: getInstances,
+      setFn: setInstance,
+    },
     {
       title: 'M-type',
       key: 'mtype',
       values: mtypes,
       setFn: setMtype,
-    },
-    {
-      title: 'Instance',
-      key: 'instance',
-      values: instances,
-      setFn: setInstance,
-    },
+    }
   ];
 
   return (
@@ -110,11 +111,11 @@ const MorphologyLibrary: React.FC = () => {
                 <div className={"selector__body"}>
                   <List
                     block
-                    list={mtypes}
-                    value={currentMtype}
-                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                    list={instances}
+                    value={currentInstance}
+                    title={`Instance ${instances.length ? '(' + instances.length + ')' : ''}`}
                     color={colorName}
-                    onSelect={setMtype}
+                    onSelect={setInstance}
                     theme={theme}
                     grow={true}
                   />
@@ -125,11 +126,11 @@ const MorphologyLibrary: React.FC = () => {
                 <div className={"selector__body"}>
                   <List
                     block
-                    list={instances}
-                    value={currentInstance}
-                    title={`Instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                    list={mtypes}
+                    value={currentMtype}
+                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
                     color={colorName}
-                    onSelect={setInstance}
+                    onSelect={setMtype}
                     theme={theme}
                     grow={true}
                   />
@@ -152,7 +153,7 @@ const MorphologyLibrary: React.FC = () => {
         <Collapsible
           id="morphologySection"
           title="Neuron Morphology"
-          properties={[currentMtype, currentInstance]}
+          properties={[currentInstance]}
         >
           <p className='text-lg mb-2'>
             We provide visualization and morphometrics for the selected morphology.
@@ -177,6 +178,7 @@ const MorphologyLibrary: React.FC = () => {
         <Collapsible
           id="populationSection"
           title="Population"
+          properties={[currentMtype]}
         >
           <p className='text-lg mb-2'>
             We provide morphometrics for the entire m-type group selected.
