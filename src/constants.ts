@@ -127,6 +127,8 @@ export const defaultSelection = {
       postlayer: 'all'
     },
     neurons: {
+      layer: 'SLM',
+      mtype: 'SLM_PPA',
       etype: 'SO_BP',
       instance: 'cNAC',
     },
