@@ -266,7 +266,9 @@ const Neurons: React.FC = () => {
         navItems={[
           { id: 'traceSection', label: 'Trace' },
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
-          { id: 'factsheetSection', label: 'Factsheet' }
+          { id: 'factsheetSection', label: 'Factsheet' },
+          { id: 'efeaturesSection', label: 'E-features' },
+          { id: 'mechanismsSection', label: 'Mechanisms' }
         ]}
         quickSelectorEntries={qsEntries}
       >
