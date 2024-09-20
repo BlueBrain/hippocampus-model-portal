@@ -23,6 +23,7 @@ import Factsheet from '@/components/Factsheet';
 // Import the models data
 import modelsData from './neuron-model.json';
 import LayerSelector3D from '@/components/LayerSelector3D';
+import MechanismTable from './neuron-model/MechanismTable';
 
 const getUniqueValues = (key: string, filterKey?: string, filterValue?: string): string[] => {
   return Array.from(new Set(modelsData
@@ -268,7 +269,8 @@ const Neurons: React.FC = () => {
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
           { id: 'efeaturesSection', label: 'E-features' },
-          { id: 'mechanismsSection', label: 'Mechanisms' }
+          { id: 'mechansimsSection', label: 'Mechanisms' },
+
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -321,6 +323,25 @@ const Neurons: React.FC = () => {
             )}
           </HttpData>
         </Collapsible>
+
+        <Collapsible
+          id="mechansimsSection"
+          className="mt-4"
+          title="Mechanisms"
+        >
+          <HttpData path={`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`}>
+            {(factsheetData) => (
+              <>
+                {factsheetData && (
+                  <>
+                    <MechanismTable data={factsheetData} />
+                  </>
+                )}
+              </>
+            )}
+          </HttpData>
+        </Collapsible>
+
       </DataContainer>
     </>
   );
