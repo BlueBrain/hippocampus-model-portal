@@ -104,7 +104,10 @@ export const defaultSelection = {
       volume_section: 'region',
     },
     morphologyLibrary: {
-      mtype: 'SLM_PPA'
+      layer: 'SLM',
+      mtype: 'SLM_PPA',
+      etype: 'bAC',
+      morphology: '011127HP1',
     },
     schafferCollateral: {
       volume_section: 'region',
