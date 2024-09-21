@@ -1,317 +1,317 @@
 [
     {
         "morphology": "455995",
-        "mtype": "cNAC",
-        "etype": "SO_BP"
+        "etype": "cNAC",
+        "mtype": "SO_BP"
     },
     {
         "morphology": "455996",
-        "mtype": "cNAC",
-        "etype": "SO_BP"
+        "etype": "cNAC",
+        "mtype": "SO_BP"
     },
     {
         "morphology": "455997",
-        "mtype": "cNAC",
-        "etype": "SO_BP"
+        "etype": "cNAC",
+        "mtype": "SO_BP"
     },
     {
         "morphology": "455998",
-        "mtype": "cNAC",
-        "etype": "SO_BP"
+        "etype": "cNAC",
+        "mtype": "SO_BP"
     },
     {
         "morphology": "455999",
-        "mtype": "cNAC",
-        "etype": "SO_BP"
+        "etype": "cNAC",
+        "mtype": "SO_BP"
     },
     {
         "morphology": "450290",
-        "mtype": "cAC",
-        "etype": "SO_OLM"
+        "etype": "cAC",
+        "mtype": "SO_OLM"
     },
     {
         "morphology": "450291",
-        "mtype": "cAC",
-        "etype": "SO_OLM"
+        "etype": "cAC",
+        "mtype": "SO_OLM"
     },
     {
         "morphology": "450292",
-        "mtype": "cAC",
-        "etype": "SO_OLM"
+        "etype": "cAC",
+        "mtype": "SO_OLM"
     },
     {
         "morphology": "450294",
-        "mtype": "cAC",
-        "etype": "SO_OLM"
+        "etype": "cAC",
+        "mtype": "SO_OLM"
     },
     {
         "morphology": "454569",
-        "mtype": "cAC",
-        "etype": "SO_Tri"
+        "etype": "cAC",
+        "mtype": "SO_Tri"
     },
     {
         "morphology": "454570",
-        "mtype": "cAC",
-        "etype": "SO_Tri"
+        "etype": "cAC",
+        "mtype": "SO_Tri"
     },
     {
         "morphology": "454571",
-        "mtype": "cAC",
-        "etype": "SO_Tri"
+        "etype": "cAC",
+        "mtype": "SO_Tri"
     },
     {
         "morphology": "454572",
-        "mtype": "cAC",
-        "etype": "SO_Tri"
+        "etype": "cAC",
+        "mtype": "SO_Tri"
     },
     {
         "morphology": "454573",
-        "mtype": "cAC",
-        "etype": "SO_Tri"
+        "etype": "cAC",
+        "mtype": "SO_Tri"
     },
     {
         "morphology": "430019",
-        "mtype": "bAC",
-        "etype": "SP_AA"
+        "etype": "bAC",
+        "mtype": "SP_AA"
     },
     {
         "morphology": "430020",
-        "mtype": "bAC",
-        "etype": "SP_AA"
+        "etype": "bAC",
+        "mtype": "SP_AA"
     },
     {
         "morphology": "430021",
-        "mtype": "bAC",
-        "etype": "SP_AA"
+        "etype": "bAC",
+        "mtype": "SP_AA"
     },
     {
         "morphology": "430022",
-        "mtype": "bAC",
-        "etype": "SP_AA"
+        "etype": "bAC",
+        "mtype": "SP_AA"
     },
     {
         "morphology": "426580",
-        "mtype": "bAC",
-        "etype": "SP_BS"
+        "etype": "bAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426587",
-        "mtype": "bAC",
-        "etype": "SP_BS"
+        "etype": "bAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426595",
-        "mtype": "bAC",
-        "etype": "SP_BS"
+        "etype": "bAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426598",
-        "mtype": "bAC",
-        "etype": "SP_BS"
+        "etype": "bAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426603",
-        "mtype": "bAC",
-        "etype": "SP_BS"
+        "etype": "bAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426576",
-        "mtype": "cNAC",
-        "etype": "SP_BS"
+        "etype": "cNAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426577",
-        "mtype": "cNAC",
-        "etype": "SP_BS"
+        "etype": "cNAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426578",
-        "mtype": "cNAC",
-        "etype": "SP_BS"
+        "etype": "cNAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426579",
-        "mtype": "cNAC",
-        "etype": "SP_BS"
+        "etype": "cNAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "426581",
-        "mtype": "cNAC",
-        "etype": "SP_BS"
+        "etype": "cNAC",
+        "mtype": "SP_BS"
     },
     {
         "morphology": "419490",
-        "mtype": "cAC",
-        "etype": "SP_CCKBC"
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
     },
     {
         "morphology": "419491",
-        "mtype": "cAC",
-        "etype": "SP_CCKBC"
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
     },
     {
         "morphology": "419492",
-        "mtype": "cAC",
-        "etype": "SP_CCKBC"
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
     },
     {
         "morphology": "419493",
-        "mtype": "cAC",
-        "etype": "SP_CCKBC"
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
     },
     {
         "morphology": "419494",
-        "mtype": "cAC",
-        "etype": "SP_CCKBC"
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
     },
     {
         "morphology": "432267",
-        "mtype": "bAC",
-        "etype": "SP_Ivy"
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432268",
-        "mtype": "bAC",
-        "etype": "SP_Ivy"
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432272",
-        "mtype": "bAC",
-        "etype": "SP_Ivy"
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432273",
-        "mtype": "bAC",
-        "etype": "SP_Ivy"
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432275",
-        "mtype": "bAC",
-        "etype": "SP_Ivy"
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432269",
-        "mtype": "cNAC",
-        "etype": "SP_Ivy"
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432270",
-        "mtype": "cNAC",
-        "etype": "SP_Ivy"
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432271",
-        "mtype": "cNAC",
-        "etype": "SP_Ivy"
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432274",
-        "mtype": "cNAC",
-        "etype": "SP_Ivy"
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "432280",
-        "mtype": "cNAC",
-        "etype": "SP_Ivy"
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
     },
     {
         "morphology": "1672",
-        "mtype": "cACpyr",
-        "etype": "SP_PC"
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
     },
     {
         "morphology": "1673",
-        "mtype": "cACpyr",
-        "etype": "SP_PC"
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
     },
     {
         "morphology": "1674",
-        "mtype": "cACpyr",
-        "etype": "SP_PC"
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
     },
     {
         "morphology": "1675",
-        "mtype": "cACpyr",
-        "etype": "SP_PC"
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
     },
     {
         "morphology": "1676",
-        "mtype": "cACpyr",
-        "etype": "SP_PC"
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
     },
     {
         "morphology": "408342",
-        "mtype": "bAC",
-        "etype": "SP_PVBC"
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408353",
-        "mtype": "bAC",
-        "etype": "SP_PVBC"
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408359",
-        "mtype": "bAC",
-        "etype": "SP_PVBC"
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408361",
-        "mtype": "bAC",
-        "etype": "SP_PVBC"
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408370",
-        "mtype": "bAC",
-        "etype": "SP_PVBC"
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408338",
-        "mtype": "cNAC",
-        "etype": "SP_PVBC"
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408339",
-        "mtype": "cNAC",
-        "etype": "SP_PVBC"
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408340",
-        "mtype": "cNAC",
-        "etype": "SP_PVBC"
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408341",
-        "mtype": "cNAC",
-        "etype": "SP_PVBC"
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "408343",
-        "mtype": "cNAC",
-        "etype": "SP_PVBC"
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
     },
     {
         "morphology": "864",
-        "mtype": "cAC",
-        "etype": "SR_SCA"
+        "etype": "cAC",
+        "mtype": "SR_SCA"
     },
     {
         "morphology": "865",
-        "mtype": "cAC",
-        "etype": "SR_SCA"
+        "etype": "cAC",
+        "mtype": "SR_SCA"
     },
     {
         "morphology": "866",
-        "mtype": "cAC",
-        "etype": "SR_SCA"
+        "etype": "cAC",
+        "mtype": "SR_SCA"
     },
     {
         "morphology": "867",
-        "mtype": "cAC",
-        "etype": "SR_SCA"
+        "etype": "cAC",
+        "mtype": "SR_SCA"
     },
     {
         "morphology": "868",
-        "mtype": "cAC",
-        "etype": "SR_SCA"
+        "etype": "cAC",
+        "mtype": "SR_SCA"
     }
 ]
