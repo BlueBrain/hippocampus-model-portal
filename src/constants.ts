@@ -130,6 +130,11 @@ export const defaultSelection = {
       prelayer: 'all',
       postlayer: 'all'
     },
+    acetylcholineEffectsOnCell: {
+      morphology: "450290",
+      mtype: "cAC",
+      etype: "SO_BP"
+    },
     acetylcholineEffectsOnSynapses: {
       ach_concentration: '0um',
       prelayer: 'all',

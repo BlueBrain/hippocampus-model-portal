@@ -12,16 +12,11 @@ import Collapsible from '@/components/Collapsible';
 
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import { colorName } from './config';
-import HttpData from '@/components/HttpData';
 import { dataPath } from '@/config';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
-import Factsheet from '@/components/Factsheet';
-
 import modelsData from './neurons.json';
-import StickyContainer from '@/components/StickyContainer';
 
 
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
@@ -167,22 +162,19 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       <Filters theme={theme}>
         <div className="row w-100 content-center">
           <div className="col-xs-12 col-lg-6 content-center">
-            <StickyContainer>
-              <Title
-                title="Acetylcholine - Effects on Cells"
-                subtitle="Digital Reconstructions"
-                theme={theme}
-              />
-              <div role="information">
-                <InfoBox>
-                  <p>
-                    We applied the  <Link className={`link theme-${theme}`} href={'/reconstruction-data/acetylcholine/'}>dose-effect curves</Link> to predict the effect of acetylcholine on neuron membrane resting potential or firing rate.
-                  </p>
-                </InfoBox>
-              </div>
-            </StickyContainer>
+            <Title
+              title="Acetylcholine - Effects on Cells"
+              subtitle="Digital Reconstructions"
+              theme={theme}
+            />
+            <div className='w-full' role="information">
+              <InfoBox>
+                <p>
+                  We applied the  <Link className={`link theme-${theme}`} href={'/reconstruction-data/acetylcholine/'}>dose-effect curves</Link> to predict the effect of acetylcholine on neuron membrane resting potential or firing rate.
+                </p>
+              </InfoBox>
+            </div>
           </div>
-
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
@@ -193,7 +185,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
                     list={mtypes}
                     value={currentMtype}
                     title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
-                    color={colorName}
                     onSelect={setMtype}
                     theme={theme}
                   />
@@ -202,7 +193,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
                     list={etypes}
                     value={currentEtype}
                     title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
-                    color={colorName}
                     onSelect={setEtype}
                     theme={theme}
                   />
@@ -211,7 +201,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
                     list={morphologies}
                     value={currentMorphology}
                     title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ''}`}
-                    color={colorName}
                     onSelect={setMorphology}
                     anchor="data"
                     theme={theme}
@@ -222,6 +211,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
           </div>
         </div>
       </Filters>
+
 
       <DataContainer
         theme={theme}
@@ -253,6 +243,6 @@ export default withPreselection(
   AcetylcholineEffectsOnCellView,
   {
     key: 'mtype',
-    defaultQuery: defaultSelection.digitalReconstruction.neurons,
+    defaultQuery: defaultSelection.digitalReconstruction.acetylcholineEffectsOnCell,
   },
 );
