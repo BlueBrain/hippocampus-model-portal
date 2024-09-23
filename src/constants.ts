@@ -98,6 +98,12 @@ export const defaultSelection = {
     cellComposition: {
       volume_section: 'region',
     },
+    neurons: {
+      layer: 'SLM',
+      etype: 'bAC',
+      mtype: 'SLM_PPA',
+      instance: 'CA1_int_bAC_011127HP1_20190329115610',
+    },
   },
   digitalReconstruction: {
     region: {
@@ -129,11 +135,11 @@ export const defaultSelection = {
       prelayer: 'all',
       postlayer: 'all'
     },
+
     neurons: {
-      layer: 'SLM',
-      mtype: 'SLM_PPA',
-      etype: 'bAC',
-      instance: 'CA1_int_bAC_011127HP1_20190329115610',
+      morphology: "455995",
+      mtype: "cNAC",
+      etype: "SO_BP"
     },
     NeuronModelLibrary: {
       mtype: 'SO_BP',
@@ -150,6 +156,7 @@ export const defaultSelection = {
       postlayer: 'Excitatory',
     },
   },
+
 };
 
 export const neuriteColor: Record<NeuriteType, string> = {

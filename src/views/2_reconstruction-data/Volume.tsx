@@ -88,7 +88,6 @@ const VolumeView: React.FC = () => {
         theme={theme}
         navItems={[
           { id: 'volumeSection', label: 'Volume' },
-          { id: 'vectorsSection', label: 'Vectors' },
           { id: 'coordinatesSection', label: 'Coordinates' }
         ]}
         quickSelectorEntries={qsEntries}
@@ -142,10 +141,6 @@ const VolumeView: React.FC = () => {
           <p className="mt-3">
             Related: <Link href="/experimental-data/layer-anatomy/">Experimental data - Layer anatomy</Link>
           </p>
-        </Collapsible>
-
-        <Collapsible id="vectorsSection" title="Vectors" className="mt-4">
-          <p>We define a series of vectors that are aligned to the hippocampal axes (longitudinal, transverse, radial). They are useful to correctly place the single cell models into the volume.</p>
         </Collapsible>
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
