@@ -1,115 +1,160 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Title from '@/components/Title';
-import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
 import DataContainer from '@/components/DataContainer';
-import { Layer, QuickSelectorEntry } from '@/types';
+import { QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 
-import models from '@/models.json';
-import { defaultSelection, layers } from '@/constants';
+import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
-import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
-import DownloadButton from '@/components/DownloadButton';
-import { downloadAsJson } from '@/utils';
 import HttpData from '@/components/HttpData';
+import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton';
+import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
+
+import modelsData from './morphology-library.json';
+import LayerSelector3D from '@/components/LayerSelector3D';
 import { basePath } from '@/config';
 
-// Function to get unique M-types for a given layer
-const getMtypes = (layer: Layer): string[] => {
-  return layer
-    ? models
-      .filter(model => model.layer === layer)
-      .map(model => model.mtype)
-      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
-}
+// Helper function to get unique values
+const getUniqueValues = (
+  key: string,
+  filterKey1?: string,
+  filterValue1?: string,
+  filterKey2?: string,
+  filterValue2?: string
+): string[] => {
+  return Array.from(
+    new Set(
+      modelsData
+        .filter(
+          (model) =>
+            (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
+            (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+        )
+        .map((model) => model[key])
+    )
+  ).sort();
+};
 
-// Function to get unique E-types for a given M-type
-const getEtypes = (mtype: string): string[] => {
-  return mtype
-    ? models
-      .filter(model => model.mtype === mtype)
-      .map(model => model.etype)
-      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
-}
+// Updated helper function to get filtered morphologies
+const getFilteredMorphologies = (layer: string, mtype: string, etype: string): string[] => {
+  return modelsData
+    .filter(
+      (model) =>
+        (layer === '' || model.layer === layer) &&
+        (mtype === '' || model.mtype === mtype) &&
+        (etype === '' || model.etype === etype)
+    )
+    .map((model) => model.morphology)
+    .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
+    .sort();
+};
 
-// Function to get unique instances for given M-type and E-type
-const getInstances = (mtype: string, etype: string): string[] => {
-  return etype
-    ? models
-      .filter(model => model.mtype === mtype && model.etype === etype)
-      .map(model => model.name)
-      .sort()
-    : [];
-}
-
-// React Functional Component
 const MorphologyLibrary: React.FC = () => {
   const router = useRouter();
   const theme = 3;
 
   const { query } = router;
-  const currentLayer: Layer = query.layer as Layer;
-  const currentMtype: string = query.mtype as string;
-  const currentEtype: string = query.etype as string;
-  const currentInstance: string = query.instance as string;
+  const [currentLayer, setCurrentLayer] = useState<string>(query.layer || '');
+  const [currentMtype, setCurrentMtype] = useState<string>(query.mtype || '');
+  const [currentEtype, setCurrentEtype] = useState<string>(query.etype || '');
+  const [currentMorphology, setCurrentMorphology] = useState<string>(query.morphology || '');
 
-  // Function to set URL parameters
+  const layers = useMemo(() => getUniqueValues('layer'), []);
+  const mtypes = useMemo(
+    () => getUniqueValues('mtype', 'layer', currentLayer),
+    [currentLayer]
+  );
+  const etypes = useMemo(
+    () => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype),
+    [currentLayer, currentMtype]
+  );
+  const morphologies = useMemo(
+    () => getFilteredMorphologies(currentLayer, currentMtype, currentEtype),
+    [currentLayer, currentMtype, currentEtype]
+  );
+
+  // Automatically select the first mtype and etype when the layer is selected
+  useEffect(() => {
+    if (currentLayer) {
+      const newMtype = mtypes.length > 0 ? mtypes[0] : '';
+      const newEtype = getUniqueValues('etype', 'layer', currentLayer, 'mtype', newMtype)[0] || '';
+      const newMorphology = getFilteredMorphologies(currentLayer, newMtype, newEtype)[0] || '';
+
+      setCurrentMtype(newMtype);
+      setCurrentEtype(newEtype);
+      setCurrentMorphology(newMorphology);
+      setParams({
+        layer: currentLayer,
+        mtype: newMtype,
+        etype: newEtype,
+        morphology: newMorphology,
+      });
+    }
+  }, [currentLayer, mtypes]);
+
+  // Automatically select the first etype when the mtype is selected
+  useEffect(() => {
+    if (currentMtype) {
+      const newEtype = etypes.length > 0 ? etypes[0] : '';
+      const newMorphology = getFilteredMorphologies(currentLayer, currentMtype, newEtype)[0] || '';
+
+      setCurrentEtype(newEtype);
+      setCurrentMorphology(newMorphology);
+      setParams({
+        mtype: currentMtype,
+        etype: newEtype,
+        morphology: newMorphology,
+      });
+    }
+  }, [currentMtype, etypes]);
+
+  // Ensure etype selection works and updates the state
+  useEffect(() => {
+    if (currentEtype) {
+      const newMorphology = getFilteredMorphologies(currentLayer, currentMtype, currentEtype)[0] || '';
+      setCurrentMorphology(newMorphology);
+      setParams({
+        etype: currentEtype,
+        morphology: newMorphology,
+      });
+    }
+  }, [currentEtype]);
+
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
-      ...{
-        layer: currentLayer,
-        mtype: currentMtype,
-        etype: currentEtype,
-        instance: currentInstance,
-      },
+      ...router.query,
       ...params,
     };
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  // Functions to set specific parameters
-  const setLayer = (layer: Layer) => {
-    setParams({
-      layer,
-      mtype: '',
-      etype: '',
-      instance: '',
-    });
+  const setLayer = (layer: string) => {
+    setCurrentLayer(layer);
   };
+
   const setMtype = (mtype: string) => {
-    setParams({
-      mtype,
-      etype: '',
-      instance: '',
-    });
+    setCurrentMtype(mtype);
   };
+
   const setEtype = (etype: string) => {
+    setCurrentEtype(etype);
+  };
+
+  const setMorphology = (morphology: string) => {
+    setCurrentMorphology(morphology);
     setParams({
-      etype,
-      instance: '',
+      morphology,
     });
   };
-  const setInstance = (instance: string) => {
-    setParams({ instance });
-  };
 
-  // Generate options based on current parameters
-  const mtypes = getMtypes(currentLayer);
-  const etypes = getEtypes(currentMtype);
-  const instances = getInstances(currentMtype, currentEtype);
-
-  // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'Layer',
@@ -118,25 +163,25 @@ const MorphologyLibrary: React.FC = () => {
       setFn: setLayer,
     },
     {
-      title: 'M-type',
+      title: 'M-Type',
       key: 'mtype',
-      getValuesFn: getMtypes,
+      values: mtypes,
       setFn: setMtype,
     },
     {
       title: 'E-Type',
       key: 'etype',
-      getValuesFn: getEtypes,
+      values: etypes,
       setFn: setEtype,
     },
     {
-      title: 'Instance',
-      key: 'instance',
-      // Wrap the getInstances function to match expected signature
-      getValuesFn: (etype: string) => getInstances(currentMtype, etype),
-      setFn: setInstance,
+      title: 'Morphology',
+      key: 'morphology',
+      values: morphologies,
+      setFn: setMorphology,
     },
   ];
+
   return (
     <>
       <Filters theme={theme}>
@@ -156,9 +201,9 @@ const MorphologyLibrary: React.FC = () => {
 
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__selector-container"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+                <div className="selector__selector-container">
                   <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
@@ -166,14 +211,14 @@ const MorphologyLibrary: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
-                <div className={"selector__body"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
                   <List
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -182,18 +227,18 @@ const MorphologyLibrary: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
                   />
                   <List
                     block
-                    list={instances}
-                    value={currentInstance}
-                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                    list={morphologies}
+                    value={currentMorphology}
+                    title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ''}`}
                     color={colorName}
-                    onSelect={setInstance}
+                    onSelect={setMorphology}
                     anchor="data"
                     theme={theme}
                   />
@@ -206,39 +251,54 @@ const MorphologyLibrary: React.FC = () => {
 
       <DataContainer
         theme={theme}
-        visible={!!currentInstance}
+        visible={!!(currentMtype || currentMorphology)}
         navItems={[
           { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
         ]}
-        quickSelectorEntries={qsEntries}
       >
         <Collapsible
           id="morphologySection"
           title="Neuron Morphology"
-          properties={[currentLayer, currentMtype, currentEtype, currentInstance]}
+          properties={[currentLayer, currentMtype, currentEtype, currentMorphology]}
         >
           <p className='text-lg mb-2'>
             We provide visualization and morphometrics for the selected morphology.
           </p>
+          <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}>
+            {(factsheetData) => (
+              <>
+                {factsheetData && (
+                  <>
+                    <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
+                    <div className="mt-4">
+                      <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-factsheet.json`)} theme={theme}>
+                        Factsheet
+                      </DownloadButton>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </HttpData>
         </Collapsible>
         <Collapsible
           id="populationSection"
           title="Population"
+          properties={[currentMtype]}
         >
           <p className='text-lg mb-2'>
             We provide morphometrics for the entire m-type group selected.
           </p>
           <div className="mb-4">
-            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/mtype/${currentEtype}/factsheet.json`}>
+            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (
                     <>
                       <NeuronFactsheet id="morphometrics" facts={factsheetData.values} />
                       <div className="mt-4">
-
-                        <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${instances}-factsheet.json`)} theme={theme}>
+                        <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-factsheet.json`)} theme={theme}>
                           Factsheet
                         </DownloadButton>
                       </div>
@@ -257,9 +317,7 @@ const MorphologyLibrary: React.FC = () => {
 export default withPreselection(
   MorphologyLibrary,
   {
-    key: 'layer',
-    defaultQuery: defaultSelection.digitalReconstruction.neurons,
+    key: 'mtype',
+    defaultQuery: defaultSelection.digitalReconstruction.morphologyLibrary,
   },
 );
-
-
