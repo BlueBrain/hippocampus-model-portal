@@ -26,7 +26,7 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
                     .filter(entryType => factsGrouped[entryType])
                     .map(entryType => (
                         <div key={entryType}>
-                            <h4 className="capitalize">{entryType}</h4>
+                            <h4 className="capitalize text-right">{entryType}</h4>
                             <Factsheet facts={factsGrouped[entryType]} />
                         </div>
                     )

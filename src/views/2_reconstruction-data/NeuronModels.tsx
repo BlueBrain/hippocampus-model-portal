@@ -1,110 +1,191 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Title from '@/components/Title';
-import LayerSelector3D from '@/components/LayerSelector3D/index';
 import InfoBox from '@/components/InfoBox';
 import Filters from '@/layouts/Filters';
 import DataContainer from '@/components/DataContainer';
-import { Layer, QuickSelectorEntry } from '@/types';
+import { QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
 
-import models from '@/models.json';
-import { defaultSelection, layers } from '@/constants';
+import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
+import HttpData from '@/components/HttpData';
+import { dataPath } from '@/config';
+import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton';
+import TraceGraph from '../5_predictions/components/Trace';
+import Factsheet from '@/components/Factsheet';
 
-// Function to get unique M-types for a given layer
-const getMtypes = (layer: Layer): string[] => {
-  return layer
-    ? models
-      .filter(model => model.layer === layer)
-      .map(model => model.mtype)
-      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
-}
+import modelsData from './neuron-model.json';
+import LayerSelector3D from '@/components/LayerSelector3D';
+import MechanismTable from './neuron-model/MechanismTable';
+import ExperimentalRecordingsTable from './neuron-model/ExperimentalRecordingsTable';
+import EFeature from './neuron-model/EFeature';
 
-// Function to get unique E-types for a given M-type
-const getEtypes = (mtype: string): string[] => {
-  return mtype
-    ? models
-      .filter(model => model.mtype === mtype)
-      .map(model => model.etype)
-      .reduce((acc: string[], cur) => acc.includes(cur) ? acc : [...acc, cur], [])
-      .sort()
-    : [];
-}
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
+  return Array.from(new Set(modelsData
+    .filter(model =>
+      (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
+      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+    )
+    .map(model => model[key]))).sort();
+};
 
-// Function to get unique instances for given M-type and E-type
-const getInstances = (mtype: string, etype: string): string[] => {
-  return etype
-    ? models
-      .filter(model => model.mtype === mtype && model.etype === etype)
-      .map(model => model.name)
-      .sort()
-    : [];
-}
+const getFilteredInstances = (layer: string, mtype: string, etype: string): string[] => {
+  return modelsData
+    .filter(model =>
+      (!layer || model.layer === layer) &&
+      (!mtype || model.mtype === mtype) &&
+      (!etype || model.etype === etype)
+    )
+    .map(model => model.instance);
+};
 
-// React Functional Component
-const NeuronModels: React.FC = () => {
+const Neurons: React.FC = () => {
   const router = useRouter();
   const theme = 3;
 
   const { query } = router;
-  const currentLayer: Layer = query.layer as Layer;
-  const currentMtype: string = query.mtype as string;
-  const currentEtype: string = query.etype as string;
-  const currentInstance: string = query.instance as string;
+  const [currentLayer, setCurrentLayer] = useState<string>('');
+  const [currentMtype, setCurrentMtype] = useState<string>('');
+  const [currentEtype, setCurrentEtype] = useState<string>('');
+  const [currentInstance, setCurrentInstance] = useState<string>('');
+  const [traceData, setTraceData] = useState<any>(null);
+  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [experimentalRecordingData, setExperimentalRecordingData] = useState<any>(null);
+  const [efeatureData, setEFeatureData] = useState<any>(null);
+  const [mechanismsData, setMechanismsData] = useState<any>(null);
 
-  // Function to set URL parameters
+  const layers = useMemo(() => getUniqueValues('layer'), []);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer), [currentLayer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype), [currentLayer, currentMtype]);
+  const instances = useMemo(() => getFilteredInstances(currentLayer, currentMtype, currentEtype), [currentLayer, currentMtype, currentEtype]);
+
+  useEffect(() => {
+    console.log('Query changed:', query);
+    if (Object.keys(query).length === 0) return;
+
+    const newLayer = query.layer && typeof query.layer === 'string' && layers.includes(query.layer)
+      ? query.layer
+      : layers[0] || '';
+
+    const newMtypes = getUniqueValues('mtype', 'layer', newLayer);
+    const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
+      ? query.mtype
+      : newMtypes[0] || '';
+
+    const newEtypes = getUniqueValues('etype', 'layer', newLayer, 'mtype', newMtype);
+    const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
+      ? query.etype
+      : newEtypes[0] || '';
+
+    const newInstances = getFilteredInstances(newLayer, newMtype, newEtype);
+    const newInstance = query.instance && typeof query.instance === 'string' && newInstances.includes(query.instance)
+      ? query.instance
+      : newInstances[0] || '';
+
+    console.log('Updating states:', { newLayer, newMtype, newEtype, newInstance });
+    setCurrentLayer(newLayer);
+    setCurrentMtype(newMtype);
+    setCurrentEtype(newEtype);
+    setCurrentInstance(newInstance);
+  }, [query, layers]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentInstance) {
+        try {
+          const [traceResponse, factsheetResponse, mechanismsResponse, eFeatureResponse, experimentalRecordingResponse] = await Promise.all([
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/trace.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/efeature.json`),
+            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/experimental-recordings.json`)
+          ]);
+
+          const traceData = await traceResponse.json();
+          const factsheetData = await factsheetResponse.json();
+          const mechanismsData = await mechanismsResponse.json();
+          const eFeatureData = await eFeatureResponse.json();
+          const experimentalRecordingData = await experimentalRecordingResponse.json();
+
+          setTraceData(traceData);
+          setFactsheetData(factsheetData);
+          setMechanismsData(mechanismsData);
+          setEFeatureData(eFeatureData);
+          setExperimentalRecordingData(experimentalRecordingData)
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setTraceData(null);
+          setFactsheetData(null);
+          setMechanismsData(null);
+          setEFeatureData(null);
+          setExperimentalRecordingData(null)
+        }
+      }
+    };
+
+    fetchData();
+  }, [currentInstance]);
+
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
-      ...{
-        layer: currentLayer,
-        mtype: currentMtype,
-        etype: currentEtype,
-        instance: currentInstance,
-      },
+      ...router.query,
       ...params,
     };
+    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  // Functions to set specific parameters
-  const setLayer = (layer: Layer) => {
+  const setLayer = (layer: string) => {
+    const newMtypes = getUniqueValues('mtype', 'layer', layer);
+    const newMtype = newMtypes[0] || '';
+    const newEtypes = getUniqueValues('etype', 'layer', layer, 'mtype', newMtype);
+    const newEtype = newEtypes[0] || '';
+    const newInstances = getFilteredInstances(layer, newMtype, newEtype);
+    const newInstance = newInstances[0] || '';
+
     setParams({
       layer,
-      mtype: '',
-      etype: '',
-      instance: '',
+      mtype: newMtype,
+      etype: newEtype,
+      instance: newInstance,
     });
   };
+
   const setMtype = (mtype: string) => {
+    const newEtypes = getUniqueValues('etype', 'layer', currentLayer, 'mtype', mtype);
+    const newEtype = newEtypes[0] || '';
+    const newInstances = getFilteredInstances(currentLayer, mtype, newEtype);
+    const newInstance = newInstances[0] || '';
+
     setParams({
       mtype,
-      etype: '',
-      instance: '',
+      etype: newEtype,
+      instance: newInstance,
     });
   };
+
   const setEtype = (etype: string) => {
+    const newInstances = getFilteredInstances(currentLayer, currentMtype, etype);
+    const newInstance = newInstances[0] || '';
+
     setParams({
       etype,
-      instance: '',
+      instance: newInstance,
     });
   };
+
   const setInstance = (instance: string) => {
-    setParams({ instance });
+    setParams({
+      instance,
+    });
   };
 
-  // Generate options based on current parameters
-  const mtypes = getMtypes(currentLayer);
-  const etypes = getEtypes(currentMtype);
-  const instances = getInstances(currentMtype, currentEtype);
-
-  // Quick selector entries
   const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'Layer',
@@ -113,25 +194,27 @@ const NeuronModels: React.FC = () => {
       setFn: setLayer,
     },
     {
-      title: 'M-type',
+      title: 'M-Type',
       key: 'mtype',
-      getValuesFn: getMtypes,
+      values: mtypes,
       setFn: setMtype,
     },
     {
       title: 'E-Type',
       key: 'etype',
-      getValuesFn: getEtypes,
+      values: etypes,
       setFn: setEtype,
     },
     {
       title: 'Instance',
       key: 'instance',
-      // Wrap the getInstances function to match expected signature
-      getValuesFn: (etype: string) => getInstances(currentMtype, etype),
+      values: instances,
       setFn: setInstance,
     },
   ];
+
+  console.log('Current states:', { currentLayer, currentMtype, currentEtype, currentInstance });
+
   return (
     <>
       <Filters theme={theme}>
@@ -152,9 +235,9 @@ const NeuronModels: React.FC = () => {
 
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Choose a layer</div>
-                <div className={"selector__selector-container"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Choose a layer</div>
+                <div className="selector__selector-container">
                   <LayerSelector3D
                     value={currentLayer}
                     onSelect={setLayer}
@@ -162,14 +245,14 @@ const NeuronModels: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className={"selector__column theme-" + theme}>
-                <div className={"selector__head theme-" + theme}>Select reconstruction</div>
-                <div className={"selector__body"}>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className="selector__body">
                   <List
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${mtypes.length ? '(' + mtypes.length + ')' : ''}`}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -178,7 +261,7 @@ const NeuronModels: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${etypes.length ? '(' + etypes.length + ')' : ''}`}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -187,7 +270,7 @@ const NeuronModels: React.FC = () => {
                     block
                     list={instances}
                     value={currentInstance}
-                    title={`ME-type instance ${instances.length ? '(' + instances.length + ')' : ''}`}
+                    title={`Instance ${instances.length ? `(${instances.length})` : ''}`}
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
@@ -202,11 +285,72 @@ const NeuronModels: React.FC = () => {
 
       <DataContainer
         theme={theme}
-        navItems={[]}
+        navItems={[
+          { id: 'traceSection', label: 'Trace' },
+          { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
+          { id: 'factsheetSection', label: 'Factsheet' },
+          { id: 'experimentalRecordingsSection', label: 'Experimental recordings' },
+          { id: 'efeaturesSection', label: 'E-features' },
+          { id: 'mechansimsSection', label: 'Mechanisms' },
+        ]}
         quickSelectorEntries={qsEntries}
       >
-        <Collapsible id="tbd" title="TBD">
-          <h3 className="text-tmp">Text description</h3>
+        <Collapsible id="traceSection" className="mt-4" title="Trace">
+          <div className="graph">
+            {traceData && <TraceGraph plotData={traceData} />}
+          </div>
+
+          {traceData && (
+            <div className="mt-4">
+              <DownloadButton onClick={() => downloadAsJson(traceData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`)} theme={theme}>
+                Trace data
+              </DownloadButton>
+            </div>
+          )}
+        </Collapsible>
+
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <div className="graph">
+            {/* Add bPAP & PSP graph component here */}
+          </div>
+        </Collapsible>
+
+        <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
+          {factsheetData && (
+            <>
+              <Factsheet facts={factsheetData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-factsheet.json`)} theme={theme}>
+                  Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+
+        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings">
+          {experimentalRecordingData && (
+            <ExperimentalRecordingsTable data={experimentalRecordingData} />
+          )}
+        </Collapsible>
+
+        <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
+          {efeatureData && (
+            <>
+              <EFeature data={efeatureData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-factsheet.json`)} theme={theme}>
+                  Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+
+        <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
+          {mechanismsData && (
+            <MechanismTable data={mechanismsData} instance={currentInstance} />
+          )}
         </Collapsible>
       </DataContainer>
     </>
@@ -214,16 +358,9 @@ const NeuronModels: React.FC = () => {
 };
 
 export default withPreselection(
-  NeuronModels,
+  Neurons,
   {
     key: 'layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
   },
 );
-
-
-
-
-
-
-

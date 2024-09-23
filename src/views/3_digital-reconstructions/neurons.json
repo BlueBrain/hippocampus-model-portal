@@ -1,0 +1,317 @@
+[
+    {
+        "morphology": "455995",
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "morphology": "455996",
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "morphology": "455997",
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "morphology": "455998",
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "morphology": "455999",
+        "etype": "cNAC",
+        "mtype": "SO_BP"
+    },
+    {
+        "morphology": "450290",
+        "etype": "cAC",
+        "mtype": "SO_OLM"
+    },
+    {
+        "morphology": "450291",
+        "etype": "cAC",
+        "mtype": "SO_OLM"
+    },
+    {
+        "morphology": "450292",
+        "etype": "cAC",
+        "mtype": "SO_OLM"
+    },
+    {
+        "morphology": "450294",
+        "etype": "cAC",
+        "mtype": "SO_OLM"
+    },
+    {
+        "morphology": "454569",
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "morphology": "454570",
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "morphology": "454571",
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "morphology": "454572",
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "morphology": "454573",
+        "etype": "cAC",
+        "mtype": "SO_Tri"
+    },
+    {
+        "morphology": "430019",
+        "etype": "bAC",
+        "mtype": "SP_AA"
+    },
+    {
+        "morphology": "430020",
+        "etype": "bAC",
+        "mtype": "SP_AA"
+    },
+    {
+        "morphology": "430021",
+        "etype": "bAC",
+        "mtype": "SP_AA"
+    },
+    {
+        "morphology": "430022",
+        "etype": "bAC",
+        "mtype": "SP_AA"
+    },
+    {
+        "morphology": "426580",
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426587",
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426595",
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426598",
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426603",
+        "etype": "bAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426576",
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426577",
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426578",
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426579",
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "426581",
+        "etype": "cNAC",
+        "mtype": "SP_BS"
+    },
+    {
+        "morphology": "419490",
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "morphology": "419491",
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "morphology": "419492",
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "morphology": "419493",
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "morphology": "419494",
+        "etype": "cAC",
+        "mtype": "SP_CCKBC"
+    },
+    {
+        "morphology": "432267",
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432268",
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432272",
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432273",
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432275",
+        "etype": "bAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432269",
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432270",
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432271",
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432274",
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "432280",
+        "etype": "cNAC",
+        "mtype": "SP_Ivy"
+    },
+    {
+        "morphology": "1672",
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "morphology": "1673",
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "morphology": "1674",
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "morphology": "1675",
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "morphology": "1676",
+        "etype": "cACpyr",
+        "mtype": "SP_PC"
+    },
+    {
+        "morphology": "408342",
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408353",
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408359",
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408361",
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408370",
+        "etype": "bAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408338",
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408339",
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408340",
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408341",
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "408343",
+        "etype": "cNAC",
+        "mtype": "SP_PVBC"
+    },
+    {
+        "morphology": "864",
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    },
+    {
+        "morphology": "865",
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    },
+    {
+        "morphology": "866",
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    },
+    {
+        "morphology": "867",
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    },
+    {
+        "morphology": "868",
+        "etype": "cAC",
+        "mtype": "SR_SCA"
+    }
+]

@@ -1,4 +1,5 @@
 import { Layer, NeuriteType, VolumeSection, AchConcentration, CellGroup, Theme, GraphTheme, ThemeColors } from './types';
+import NeuronModelLibrary from './views/2_reconstruction-data/NeuronModelLibrary';
 import AcetylcholineView from './views/4_validations/Acetylcholine';
 
 export const layers: Layer[] = [
@@ -97,10 +98,22 @@ export const defaultSelection = {
     cellComposition: {
       volume_section: 'region',
     },
+    neurons: {
+      layer: 'SLM',
+      etype: 'bAC',
+      mtype: 'SLM_PPA',
+      instance: 'CA1_int_bAC_011127HP1_20190329115610',
+    },
   },
   digitalReconstruction: {
     region: {
       volume_section: 'region',
+    },
+    morphologyLibrary: {
+      layer: 'SLM',
+      mtype: 'SLM_PPA',
+      etype: 'bAC',
+      morphology: '011127HP1',
     },
     schafferCollateral: {
       volume_section: 'region',
@@ -117,16 +130,25 @@ export const defaultSelection = {
       prelayer: 'all',
       postlayer: 'all'
     },
+    acetylcholineEffectsOnCell: {
+      morphology: "450290",
+      mtype: "cAC",
+      etype: "SO_BP"
+    },
     acetylcholineEffectsOnSynapses: {
       ach_concentration: '0um',
       prelayer: 'all',
       postlayer: 'all'
     },
+
     neurons: {
-      layer: 'SLM',
-      etype: 'bAC',
-      mtype: 'SLM_PPA',
-      instance: 'CA1_int_bAC_011127HP1_20190329115610',
+      morphology: "455995",
+      mtype: "cNAC",
+      etype: "SO_BP"
+    },
+    NeuronModelLibrary: {
+      mtype: 'SO_BP',
+      etype: 'cNAC'
     },
     synapticPathways: {
       volume_section: 'slice',
@@ -139,6 +161,7 @@ export const defaultSelection = {
       postlayer: 'Excitatory',
     },
   },
+
 };
 
 export const neuriteColor: Record<NeuriteType, string> = {

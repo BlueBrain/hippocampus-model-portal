@@ -38,7 +38,7 @@ function App({ Component, pageProps }) {
       </Head>
 
       <GoogleAnalytics />
-      <Feedback />
+      { /* <Feedback /> */}
 
       <MainLayout>
         <Component {...pageProps} />

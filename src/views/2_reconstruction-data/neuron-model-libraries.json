@@ -1,0 +1,46 @@
+[
+    {
+        "mtype": "SO_BP",
+        "etype": "cNAC"
+    },
+    {
+        "mtype": "SO_BS",
+        "etype": "bAC"
+    },
+    {
+        "mtype": "SO_BS",
+        "etype": "cNAC"
+    },
+    {
+        "mtype": "SP_AA",
+        "etype": "bAC"
+    },
+    {
+        "mtype": "SP_BS",
+        "etype": "bAC"
+    },
+    {
+        "mtype": "SP_BS",
+        "etype": "cNAC"
+    },
+    {
+        "mtype": "SP_Ivy",
+        "etype": "bAC"
+    },
+    {
+        "mtype": "SP_Ivy",
+        "etype": "cNAC"
+    },
+    {
+        "mtype": "SP_PC",
+        "etype": "cACpyr"
+    },
+    {
+        "mtype": "SP_PVBC",
+        "etype": "bAC"
+    },
+    {
+        "mtype": "SP_PVBC",
+        "etype": "cNAC"
+    }
+]
