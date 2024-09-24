@@ -1,11 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Factsheet from '@/components/Factsheet';
 
+type MetricData = {
+    name: string;
+    values: number | number[];
+};
+
 type PopulationData = {
-    [key: string]: Array<{
-        name: string;
-        values: number[];
-    }>;
+    [key: string]: MetricData[];
 };
 
 type PopulationProps = {
@@ -31,7 +33,15 @@ const Population: React.FC<PopulationProps> = ({ data }) => {
 
     const factsheetData = useMemo(() => {
         if (!selectedStep) return [];
-        return data[selectedStep];
+        const stepData = data[selectedStep];
+        if (!Array.isArray(stepData)) {
+            console.error(`Data for step ${selectedStep} is not an array`);
+            return [];
+        }
+        return stepData.map(item => ({
+            ...item,
+            values: Array.isArray(item.values) ? item.values : [item.values]
+        }));
     }, [selectedStep, data]);
 
     return (
@@ -55,10 +65,10 @@ const Population: React.FC<PopulationProps> = ({ data }) => {
             </div>
 
             <div className="mt-4">
-                {selectedStep ? (
+                {selectedStep && factsheetData.length > 0 ? (
                     <Factsheet facts={factsheetData} />
                 ) : (
-                    <p>Please select a step to view the metrics</p>
+                    <p>No data available for the selected step</p>
                 )}
             </div>
         </div>

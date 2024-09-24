@@ -46,6 +46,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   const [currentMtype, setCurrentMtype] = useState<string>('');
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentMorphology, setCurrentMorphology] = useState<string>('');
+  const [singleCellData, setSingleCellData] = useState<any>(null);
   const [traceData, setTraceData] = useState<any>(null);
   const [populationData, setPopulationData] = useState<any>(null);
 
@@ -82,18 +83,23 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
     const fetchData = async () => {
       if (currentMorphology) {
         try {
-          const [traceResponse, populationResponse] = await Promise.all([
+          const [singleCellResponse, traceResponse, populationResponse] = await Promise.all([
+            fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/ach_features_processed.json`),
             fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
             fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/ach_population_agg_processed.json`),
           ]);
 
+          const singleCellData = await singleCellResponse.json();
           const traceData = await traceResponse.json();
           const populationData = await populationResponse.json();
 
+          setSingleCellData(singleCellData);
           setTraceData(traceData);
           setPopulationData(populationData);
         } catch (error) {
           console.error('Error fetching data:', error);
+
+          setSingleCellData(null);
           setTraceData(null);
           setPopulationData(null);
         }
@@ -225,11 +231,27 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: 'singleCellSection', label: 'Single Cell' },
           { id: 'traceSection', label: 'Trace' },
           { id: 'populationSection', label: 'Population' },
         ]}
         quickSelectorEntries={qsEntries}
       >
+
+        <Collapsible id="singleCellSection" className="mt-4" title="Single Cell">
+          {singleCellData && (
+            <>
+
+              <PopulationFactsheet data={singleCellData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(singleCellData, `Single-Cell-factsheet.json`)} theme={theme}>
+                  Population Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
             {traceData && <TraceGraph plotData={traceData} />}
