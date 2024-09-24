@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Plot from 'react-plotly.js';
 import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
+import debounce from 'lodash/debounce';
 
 interface PlotData {
     name: string;
@@ -20,61 +21,73 @@ interface PlotDetailsProps {
 const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState<any>(null);
+    const workerRef = useRef<Worker | null>(null);
 
-    useEffect(() => {
-        const processData = (data: PlotData) => {
-            if (!data || !data.value_map || !data.value_map.t || !data.value_map.gid) {
-                setChartData(null);
-                setIsLoading(false);
-                return;
-            }
+    const processData = useCallback((data: PlotData) => {
+        if (!data || !data.value_map || !data.value_map.t || !data.value_map.gid) {
+            setChartData(null);
+            setIsLoading(false);
+            return;
+        }
 
-            setIsLoading(true);
+        setIsLoading(true);
 
-            const worker = new Worker(URL.createObjectURL(new Blob([`
-                self.onmessage = function(e) {
-                    const { t, gid } = e.data;
-                    const x = Object.values(t);
-                    const y = Object.values(gid);
-                    
-                    const maxPoints = 100000;
-                    let finalX = x;
-                    let finalY = y;
-                    if (x.length > maxPoints) {
-                        const skipFactor = Math.ceil(x.length / maxPoints);
-                        finalX = x.filter((_, index) => index % skipFactor === 0);
-                        finalY = y.filter((_, index) => index % skipFactor === 0);
-                    }
-                    
-                    self.postMessage({ x: finalX, y: finalY });
+        if (workerRef.current) {
+            workerRef.current.terminate();
+        }
+
+        workerRef.current = new Worker(URL.createObjectURL(new Blob([`
+            self.onmessage = function(e) {
+                const { t, gid } = e.data;
+                const x = Object.values(t);
+                const y = Object.values(gid);
+                
+                const maxPoints = 100000;
+                let finalX = x;
+                let finalY = y;
+                if (x.length > maxPoints) {
+                    const skipFactor = Math.ceil(x.length / maxPoints);
+                    finalX = x.filter((_, index) => index % skipFactor === 0);
+                    finalY = y.filter((_, index) => index % skipFactor === 0);
                 }
-            `], { type: 'text/javascript' })));
+                
+                self.postMessage({ x: finalX, y: finalY });
+            }
+        `], { type: 'text/javascript' })));
 
-            worker.onmessage = function (e) {
-                setChartData([{
-                    x: e.data.x,
-                    y: e.data.y,
-                    type: 'scattergl',
-                    mode: 'markers',
-                    marker: { color: graphTheme.blue, size: 2 },
-                }]);
-                setIsLoading(false);
-            };
-
-            worker.postMessage(data.value_map);
-
-            return () => worker.terminate();
+        workerRef.current.onmessage = function (e) {
+            setChartData([{
+                x: e.data.x,
+                y: e.data.y,
+                type: 'scattergl',
+                mode: 'markers',
+                marker: { color: graphTheme.blue, size: 2 },
+            }]);
+            setIsLoading(false);
         };
 
+        workerRef.current.postMessage(data.value_map);
+    }, []);
+
+    const debouncedProcessData = useCallback(debounce(processData, 300), [processData]);
+
+    useEffect(() => {
         if (Array.isArray(plotData)) {
-            processData(plotData[0]);
+            debouncedProcessData(plotData[0]);
         } else if (plotData) {
-            processData(plotData);
+            debouncedProcessData(plotData);
         } else {
             setChartData(null);
             setIsLoading(false);
         }
-    }, [plotData]);
+
+        return () => {
+            debouncedProcessData.cancel();
+            if (workerRef.current) {
+                workerRef.current.terminate();
+            }
+        };
+    }, [plotData, debouncedProcessData]);
 
     const layout = {
         xaxis: {
@@ -91,7 +104,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
             tickfont: { color: '#666666', size: 10 },
             showgrid: false,
             title: {
-                standoff: 20  // Increase this value to move the title further from the axis
+                standoff: 20
             },
         },
         autosize: true,
