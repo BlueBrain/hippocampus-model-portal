@@ -17,6 +17,7 @@ import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
 import modelsData from './neurons.json';
+import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
 
 
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
@@ -46,6 +47,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentMorphology, setCurrentMorphology] = useState<string>('');
   const [traceData, setTraceData] = useState<any>(null);
+  const [populationData, setPopulationData] = useState<any>(null);
 
   const mtypes = useMemo(() => getUniqueValues('mtype'), []);
   const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
@@ -80,21 +82,28 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
     const fetchData = async () => {
       if (currentMorphology) {
         try {
-          const [traceResponse] = await Promise.all([
+          const [traceResponse, populationResponse] = await Promise.all([
             fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
-
+            fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/ach_population_agg_processed.json`),
           ]);
+
           const traceData = await traceResponse.json();
+          const populationData = await populationResponse.json();
+
           setTraceData(traceData);
+          setPopulationData(populationData);
         } catch (error) {
           console.error('Error fetching data:', error);
           setTraceData(null);
+          setPopulationData(null);
         }
       }
     };
 
     fetchData();
   }, [currentMorphology]);
+
+
 
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
@@ -217,6 +226,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
         theme={theme}
         navItems={[
           { id: 'traceSection', label: 'Trace' },
+          { id: 'populationSection', label: 'Population' },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -234,7 +244,21 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
           )}
         </Collapsible>
 
+        <Collapsible id="populationSection" className="mt-4" title="Population">
+          {populationData && (
+            <>
+              <PopulationFactsheet data={populationData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(populationData, `Population-factsheet.json`)} theme={theme}>
+                  Population Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+
       </DataContainer>
+
     </>
   );
 };

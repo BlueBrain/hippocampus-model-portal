@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -23,7 +23,9 @@ import Factsheet from '@/components/Factsheet';
 import modelsData from './neuron-model-libraries.json';
 import MechanismTable from './neuron-model/MechanismTable';
 
-const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string): string[] => {
+import { MorphologyCanvas } from "@bbp/morphoviewer";
+
+const getUniqueValues = (key, filterKey1, filterValue1) => {
   return Array.from(new Set(modelsData
     .filter(model =>
       (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1)
@@ -31,7 +33,7 @@ const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string
     .map(model => model[key]))).sort();
 };
 
-const getFilteredData = (mtype: string, etype: string): any[] => {
+const getFilteredData = (mtype, etype) => {
   return modelsData
     .filter(model =>
       (!mtype || model.mtype === mtype) &&
@@ -39,21 +41,21 @@ const getFilteredData = (mtype: string, etype: string): any[] => {
     );
 };
 
-const NeuronsModelLibrary: React.FC = () => {
+const NeuronsModelLibrary = () => {
   const router = useRouter();
   const theme = 3;
 
   const { query } = router;
-  const [currentMtype, setCurrentMtype] = useState<string>('');
-  const [currentEtype, setCurrentEtype] = useState<string>('');
-  const [traceData, setTraceData] = useState<any>(null);
-  const [factsheetData, setFactsheetData] = useState<any>(null);
+  const [currentMtype, setCurrentMtype] = useState('');
+  const [currentEtype, setCurrentEtype] = useState('');
+  const [traceData, setTraceData] = useState(null);
+  const [factsheetData, setFactsheetData] = useState(null);
+  const [morphologyData, setMorphologyData] = useState(null);
 
   const mtypes = useMemo(() => getUniqueValues('mtype'), []);
   const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
 
   useEffect(() => {
-    console.log('Query changed:', query);
     if (Object.keys(query).length === 0) return;
 
     const newMtype = query.mtype && typeof query.mtype === 'string' && mtypes.includes(query.mtype)
@@ -65,7 +67,6 @@ const NeuronsModelLibrary: React.FC = () => {
       ? query.etype
       : newEtypes[0] || '';
 
-    console.log('Updating states:', { newMtype, newEtype });
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
   }, [query, mtypes]);
@@ -76,21 +77,25 @@ const NeuronsModelLibrary: React.FC = () => {
         try {
           const filteredData = getFilteredData(currentMtype, currentEtype)[0];
           if (filteredData) {
-            const [traceResponse, factsheetResponse] = await Promise.all([
+            const [traceResponse, factsheetResponse, morphologyResponse] = await Promise.all([
               fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/trace.json`),
               fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`),
+              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/morphology.swc`),
             ]);
 
             const traceData = await traceResponse.json();
             const factsheetData = await factsheetResponse.json();
+            const morphologyData = await morphologyResponse.text(); // Changed from .json() to .text()
 
             setTraceData(traceData);
             setFactsheetData(factsheetData);
+            setMorphologyData(morphologyData);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
           setTraceData(null);
           setFactsheetData(null);
+          setMorphologyData(null);
         }
       }
     };
@@ -98,16 +103,16 @@ const NeuronsModelLibrary: React.FC = () => {
     fetchData();
   }, [currentMtype, currentEtype]);
 
-  const setParams = (params: Record<string, string>): void => {
+
+  const setParams = (params) => {
     const newQuery = {
       ...router.query,
       ...params,
     };
-    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setMtype = (mtype: string) => {
+  const setMtype = (mtype) => {
     const newEtypes = getUniqueValues('etype', 'mtype', mtype);
     const newEtype = newEtypes[0] || '';
 
@@ -117,13 +122,13 @@ const NeuronsModelLibrary: React.FC = () => {
     });
   };
 
-  const setEtype = (etype: string) => {
+  const setEtype = (etype) => {
     setParams({
       etype,
     });
   };
 
-  const qsEntries: QuickSelectorEntry[] = [
+  const qsEntries = [
     {
       title: 'M-Type',
       key: 'mtype',
@@ -138,7 +143,20 @@ const NeuronsModelLibrary: React.FC = () => {
     },
   ];
 
-  console.log('Current states:', { currentMtype, currentEtype });
+  const MorphologyViewer: React.FC<{ swc: string }> = ({ swc }) => {
+    const refViewer = useRef<MorphologyCanvas | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    useEffect(() => {
+      if (canvasRef.current && !refViewer.current) {
+        refViewer.current = new MorphologyCanvas();
+        refViewer.current.canvas = canvasRef.current;
+        refViewer.current.swc = swc;
+      }
+    }, [swc]);
+
+    return <canvas ref={canvasRef} style={{ width: '100%', height: '400px' }} />;
+  };
 
   return (
     <>
@@ -203,10 +221,16 @@ const NeuronsModelLibrary: React.FC = () => {
           title="bPAP & PSP"
         >
           <div className="graph">
-            {/* Add bPAP & PSP graph component here */}
+            {morphologyData && <MorphologyViewer swc={morphologyData} />}
           </div>
+          {morphologyData && (
+            <div className="mt-4">
+              <DownloadButton onClick={() => downloadAsJson(morphologyData, `${currentMtype}-${currentEtype}-morphology.json`)} theme={theme}>
+                Morphology data
+              </DownloadButton>
+            </div>
+          )}
         </Collapsible>
-
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
@@ -234,7 +258,6 @@ const NeuronsModelLibrary: React.FC = () => {
             </>
           )}
         </Collapsible>
-
       </DataContainer>
     </>
   );
