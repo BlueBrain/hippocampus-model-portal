@@ -15,6 +15,8 @@ import models from "./models.json";
 import { dataPath } from '@/config';
 import { volumeSections } from '@/constants';
 import TraceGraph from './components/Trace';
+import DownloadButton from '@/components/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const cell_frequency: number[] = [0.1, 0.2, 0.4, 0.8];
 const signal_frequency: number[] = [0, 1, 2, 4, 6, 8, 10, 12, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200];
@@ -196,14 +198,37 @@ const OtherFrequenciesView: React.FC = () => {
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Spike time{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} />
                     </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Mean Firing Rate{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
                 <Collapsible id='traceSection' title="Traces">
-                    <TraceGraph plotData={traceData} />
+                    <div className="graph">
+                        <TraceGraph plotData={traceData} />
+                    </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Trace{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
             </DataContainer>
         </>

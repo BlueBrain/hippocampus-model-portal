@@ -114,12 +114,13 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                     </div>
                 ) : svgExists === false ? (
                     <p style={{ color: themeColor }} className="text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        No data available.
+                        Data not available.
                     </p>
                 ) : svgExists === true ? (
                     <img
                         src={`${dataPath}${path}${xAxis}-${yAxis}/spike-time-all.svg`}
                         alt="Spike Time Data"
+                        onError={() => setSvgExists(false)}
                     />
                 ) : null}
             </div>

@@ -16,6 +16,8 @@ import { dataPath } from '@/config';
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 import { volumeSections } from '@/constants';
 import TraceGraph from './components/Trace';
+import DownloadButton from '@/components/DownloadButton';
+import { downloadAsJson } from '@/utils';
 
 const voltageSectionStructure = {
     cylinder: {
@@ -103,15 +105,27 @@ const ThetaOscillatoryInputView: React.FC = () => {
     };
 
     const handleVolumeSelect = (volume_section: VolumeSection) => {
+        const currentMtype = quickSelection.mtype as string;
+        const currentEtype = quickSelection.etype as string;
+
+        const availableMtypes = getMtypes();
+        const newMtype = availableMtypes.includes(currentMtype) ? currentMtype : availableMtypes[0];
+
+        const availableEtypes = getEtypes(newMtype);
+        const newEtype = availableEtypes.includes(currentEtype) ? currentEtype : availableEtypes[0];
+
         const newSelection = {
             ...quickSelection,
             volume_section,
-            signal_frequency: voltageSectionStructure[volume_section].signal_frequency[0],
-            cell_frequency: voltageSectionStructure[volume_section].cell_frequency[0]
+            ca_o: voltageSectionStructure[volume_section].signal_frequency[0],
+            k_inj: voltageSectionStructure[volume_section].cell_frequency[0],
+            mtype: newMtype,
+            etype: newEtype
         };
         setQuickSelection(newSelection);
         setParams(newSelection);
     };
+
 
     const handleMtypeSelect = (mtype: string) => {
         const availableEtypes = getEtypes(mtype);
@@ -225,15 +239,42 @@ const ThetaOscillatoryInputView: React.FC = () => {
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Spike time{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} />
                     </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Mean Firing Rate{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
                 <Collapsible id='traceSection' title="Traces">
-                    <TraceGraph plotData={traceData} />
+                    <div className="graph">
+                        <TraceGraph plotData={traceData} />
+                    </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
+                        Trace{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.signal_frequency}-{quickSelection.cell_frequency}</span>
+                    </DownloadButton>
                 </Collapsible>
+
             </DataContainer>
         </>
     );
