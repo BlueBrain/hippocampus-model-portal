@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -20,9 +18,10 @@ import models from "./models.json";
 import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
+import { downloadAsJson } from '@/utils';
 
 const ACh = [0, 0.1, 1, 3, 5];
-const Depolarisation = [105, 120, 125, 120, 125];
+const Depolarisation = [105, 120, 125]; // Updated to include all unique values
 
 const getaCh = (): number[] => ACh;
 const getDepolarisation = (): number[] => Depolarisation;
@@ -202,7 +201,7 @@ const ThetaMSInputView: React.FC = () => {
                                     xRange={ACh}
                                     yRange={Depolarisation}
                                     xAxisLabel='Acetylcholine concentration'
-                                    yAxisLabel='depolarisation'
+                                    yAxisLabel='Depolarisation'
                                     theme={theme}
                                     onSelect={handleScatterPlotSelect}
                                     selectedX={quickSelection.ach as number}
@@ -213,7 +212,6 @@ const ThetaMSInputView: React.FC = () => {
                     </div>
                 </div>
             </Filters>
-
 
             <DataContainer
                 theme={theme}
@@ -228,17 +226,39 @@ const ThetaMSInputView: React.FC = () => {
                     <div className="graph">
                         <TimeSpikePlot plotData={spikeTimeData} />
                     </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
+                        Spike time{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.ach}-{quickSelection.depolarisation}</span>
+                    </DownloadButton>
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} />
                     </div>
-
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
+                        Mean Firing Rate{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.ach}-{quickSelection.depolarisation}</span>
+                    </DownloadButton>
                 </Collapsible>
 
                 <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
-                    <TraceGraph plotData={traceData} />
+                    <div className="graph">
+                        <TraceGraph plotData={traceData} />
+                    </div>
+                    <DownloadButton
+                        theme={theme}
+                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
+                        Trace{"  "}
+                        <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.ach}-{quickSelection.depolarisation}</span>
+                    </DownloadButton>
                 </Collapsible>
             </DataContainer>
         </>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 const MeanFiringRatePlot = ({ plotData }) => {
-    const options = {
+    const options = useMemo(() => ({
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -54,29 +54,48 @@ const MeanFiringRatePlot = ({ plotData }) => {
                 beginAtZero: true,
             },
         },
-    };
+    }), [plotData?.name]);
 
-    const chartData = {
-        labels: plotData?.bins || [],
-        datasets: [
-            {
-                data: plotData?.freq || [],
-                backgroundColor: graphTheme.blue,
-                borderColor: graphTheme.blue,
-                borderWidth: 1,
-            },
-        ],
-    };
+    const chartData = useMemo(() => {
+        if (!plotData || !plotData.bins || !plotData.freq || plotData.bins.length === 0 || plotData.freq.length === 0) {
+            return null;
+        }
 
-    if (!plotData || !plotData.bins || !plotData.freq || plotData.bins.length === 0 || plotData.freq.length === 0) {
-        return <p className="text-center text-gray-500">No data available.</p>;
-    }
+        const maxDataPoints = 1000;
+        let bins = plotData.bins;
+        let freq = plotData.freq;
+
+        if (bins.length > maxDataPoints) {
+            const skipFactor = Math.ceil(bins.length / maxDataPoints);
+            bins = bins.filter((_, index) => index % skipFactor === 0);
+            freq = freq.filter((_, index) => index % skipFactor === 0);
+        }
+
+        return {
+            labels: bins,
+            datasets: [
+                {
+                    data: freq,
+                    backgroundColor: graphTheme.blue,
+                    borderColor: graphTheme.blue,
+                    borderWidth: 1,
+                },
+            ],
+        };
+    }, [plotData]);
+
+    const renderChart = useCallback(() => {
+        if (!chartData) {
+            return <p className="text-center text-gray-500">No data available.</p>;
+        }
+        return <Bar options={options} data={chartData} />;
+    }, [chartData, options]);
 
     return (
         <div style={{ width: '100%', height: '400px' }}>
-            <Bar options={options} data={chartData} />
+            {renderChart()}
         </div>
     );
 };
 
-export default MeanFiringRatePlot;
+export default React.memo(MeanFiringRatePlot);
