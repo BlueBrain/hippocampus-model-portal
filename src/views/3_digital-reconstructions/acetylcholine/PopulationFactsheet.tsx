@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import Factsheet from '@/components/Factsheet';
+import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
 
 type MetricData = {
     name: string;
@@ -17,13 +17,11 @@ type PopulationProps = {
 const Population: React.FC<PopulationProps> = ({ data }) => {
     const [selectedStep, setSelectedStep] = useState<string>('');
 
-    // Get all available steps from the data
     const steps = useMemo(() => Object.keys(data), [data]);
 
-    // Automatically select the first step when data is available
     useEffect(() => {
         if (steps.length > 0) {
-            setSelectedStep(steps[0]); // Set the first available step as default
+            setSelectedStep(steps[0]);
         }
     }, [steps]);
 
@@ -39,16 +37,17 @@ const Population: React.FC<PopulationProps> = ({ data }) => {
             return [];
         }
         return stepData.map(item => ({
-            ...item,
+            name: item.name,
+            description: `Metric: ${item.name}`, // Adding a default description
             values: Array.isArray(item.values) ? item.values : [item.values]
-        }));
+        } as FactsheetEntryType));
     }, [selectedStep, data]);
 
     return (
         <div className="population-container">
             <div className="row">
                 <div className="col-xs-6 flex">
-                    <label htmlFor="stepSelect"></label>
+
                     <select
                         id="stepSelect"
                         value={selectedStep}

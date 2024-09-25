@@ -26,16 +26,25 @@ import MechanismTable from './neuron-model/MechanismTable';
 import ExperimentalRecordingsTable from './neuron-model/ExperimentalRecordingsTable';
 import EFeature from './neuron-model/EFeature';
 
-const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
+import { Layer } from '@/types';
+
+type ModelData = {
+  layer: Layer;
+  mtype: string;
+  etype: string;
+  instance: string;
+};
+
+const getUniqueValues = (key: keyof ModelData, filterKey1?: keyof ModelData, filterValue1?: string | Layer, filterKey2?: keyof ModelData, filterValue2?: string): (string | Layer)[] => {
   return Array.from(new Set(modelsData
     .filter(model =>
       (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
       (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
     )
-    .map(model => model[key]))).sort();
+    .map(model => model[key]))).sort((a, b) => a.toString().localeCompare(b.toString()));
 };
 
-const getFilteredInstances = (layer: string, mtype: string, etype: string): string[] => {
+const getFilteredInstances = (layer: Layer | '', mtype: string, etype: string): string[] => {
   return modelsData
     .filter(model =>
       (!layer || model.layer === layer) &&
@@ -50,7 +59,7 @@ const Neurons: React.FC = () => {
   const theme = 3;
 
   const { query } = router;
-  const [currentLayer, setCurrentLayer] = useState<string>('');
+  const [currentLayer, setCurrentLayer] = useState<Layer | ''>('');
   const [currentMtype, setCurrentMtype] = useState<string>('');
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentInstance, setCurrentInstance] = useState<string>('');
@@ -60,25 +69,25 @@ const Neurons: React.FC = () => {
   const [efeatureData, setEFeatureData] = useState<any>(null);
   const [mechanismsData, setMechanismsData] = useState<any>(null);
 
-  const layers = useMemo(() => getUniqueValues('layer'), []);
-  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer), [currentLayer]);
-  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype), [currentLayer, currentMtype]);
+  const layers = useMemo(() => getUniqueValues('layer') as Layer[], []);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer) as string[], [currentLayer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype) as string[], [currentLayer, currentMtype]);
   const instances = useMemo(() => getFilteredInstances(currentLayer, currentMtype, currentEtype), [currentLayer, currentMtype, currentEtype]);
 
   useEffect(() => {
     console.log('Query changed:', query);
     if (Object.keys(query).length === 0) return;
 
-    const newLayer = query.layer && typeof query.layer === 'string' && layers.includes(query.layer)
-      ? query.layer
+    const newLayer = query.layer && typeof query.layer === 'string' && layers.includes(query.layer as Layer)
+      ? query.layer as Layer
       : layers[0] || '';
 
-    const newMtypes = getUniqueValues('mtype', 'layer', newLayer);
+    const newMtypes = getUniqueValues('mtype', 'layer', newLayer) as string[];
     const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
       ? query.mtype
       : newMtypes[0] || '';
 
-    const newEtypes = getUniqueValues('etype', 'layer', newLayer, 'mtype', newMtype);
+    const newEtypes = getUniqueValues('etype', 'layer', newLayer, 'mtype', newMtype) as string[];
     const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
       ? query.etype
       : newEtypes[0] || '';
@@ -117,14 +126,14 @@ const Neurons: React.FC = () => {
           setFactsheetData(factsheetData);
           setMechanismsData(mechanismsData);
           setEFeatureData(eFeatureData);
-          setExperimentalRecordingData(experimentalRecordingData)
+          setExperimentalRecordingData(experimentalRecordingData);
         } catch (error) {
           console.error('Error fetching data:', error);
           setTraceData(null);
           setFactsheetData(null);
           setMechanismsData(null);
           setEFeatureData(null);
-          setExperimentalRecordingData(null)
+          setExperimentalRecordingData(null);
         }
       }
     };
@@ -141,10 +150,10 @@ const Neurons: React.FC = () => {
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setLayer = (layer: string) => {
-    const newMtypes = getUniqueValues('mtype', 'layer', layer);
+  const setLayer = (layer: Layer) => {
+    const newMtypes = getUniqueValues('mtype', 'layer', layer) as string[];
     const newMtype = newMtypes[0] || '';
-    const newEtypes = getUniqueValues('etype', 'layer', layer, 'mtype', newMtype);
+    const newEtypes = getUniqueValues('etype', 'layer', layer, 'mtype', newMtype) as string[];
     const newEtype = newEtypes[0] || '';
     const newInstances = getFilteredInstances(layer, newMtype, newEtype);
     const newInstance = newInstances[0] || '';
@@ -158,7 +167,7 @@ const Neurons: React.FC = () => {
   };
 
   const setMtype = (mtype: string) => {
-    const newEtypes = getUniqueValues('etype', 'layer', currentLayer, 'mtype', mtype);
+    const newEtypes = getUniqueValues('etype', 'layer', currentLayer, 'mtype', mtype) as string[];
     const newEtype = newEtypes[0] || '';
     const newInstances = getFilteredInstances(currentLayer, mtype, newEtype);
     const newInstance = newInstances[0] || '';
@@ -239,7 +248,7 @@ const Neurons: React.FC = () => {
                 <div className={`selector__head theme-${theme}`}>Choose a layer</div>
                 <div className="selector__selector-container">
                   <LayerSelector3D
-                    value={currentLayer}
+                    value={currentLayer || undefined}
                     onSelect={setLayer}
                     theme={theme}
                   />

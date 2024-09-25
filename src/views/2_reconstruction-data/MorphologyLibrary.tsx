@@ -18,18 +18,31 @@ import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
 
-import modelsData from './morphology-library.json';
 import LayerSelector3D from '@/components/LayerSelector3D';
+import { Layer } from '@/types';
 import { basePath } from '@/config';
+
+// Import modelsData and define its type
+import modelsDataImport from './morphology-library.json';
+
+type ModelData = {
+  layer: Layer;
+  mtype: string;
+  etype: string;
+  morphology: string;
+};
+
+// Ensure modelsData is an array of ModelData
+const modelsData: ModelData[] = (Array.isArray(modelsDataImport) ? modelsDataImport : [modelsDataImport]) as ModelData[];
 
 // Helper function to get unique values
 const getUniqueValues = (
-  key: string,
-  filterKey1?: string,
-  filterValue1?: string,
-  filterKey2?: string,
+  key: keyof ModelData,
+  filterKey1?: keyof ModelData,
+  filterValue1?: Layer | string,
+  filterKey2?: keyof ModelData,
   filterValue2?: string
-): string[] => {
+): (Layer | string)[] => {
   return Array.from(
     new Set(
       modelsData
@@ -40,11 +53,11 @@ const getUniqueValues = (
         )
         .map((model) => model[key])
     )
-  ).sort();
+  ).sort((a, b) => a.toString().localeCompare(b.toString()));
 };
 
 // Updated helper function to get filtered morphologies
-const getFilteredMorphologies = (layer: string, mtype: string, etype: string): string[] => {
+const getFilteredMorphologies = (layer: Layer | '', mtype: string, etype: string): string[] => {
   return modelsData
     .filter(
       (model) =>
@@ -62,18 +75,18 @@ const MorphologyLibrary: React.FC = () => {
   const theme = 3;
 
   const { query } = router;
-  const [currentLayer, setCurrentLayer] = useState<string>(query.layer || '');
-  const [currentMtype, setCurrentMtype] = useState<string>(query.mtype || '');
-  const [currentEtype, setCurrentEtype] = useState<string>(query.etype || '');
-  const [currentMorphology, setCurrentMorphology] = useState<string>(query.morphology || '');
+  const [currentLayer, setCurrentLayer] = useState<Layer | ''>((query.layer as Layer) || '');
+  const [currentMtype, setCurrentMtype] = useState<string>((query.mtype as string) || '');
+  const [currentEtype, setCurrentEtype] = useState<string>((query.etype as string) || '');
+  const [currentMorphology, setCurrentMorphology] = useState<string>((query.morphology as string) || '');
 
-  const layers = useMemo(() => getUniqueValues('layer'), []);
+  const layers = useMemo(() => getUniqueValues('layer') as Layer[], []);
   const mtypes = useMemo(
-    () => getUniqueValues('mtype', 'layer', currentLayer),
+    () => getUniqueValues('mtype', 'layer', currentLayer) as string[],
     [currentLayer]
   );
   const etypes = useMemo(
-    () => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype),
+    () => getUniqueValues('etype', 'layer', currentLayer, 'mtype', currentMtype) as string[],
     [currentLayer, currentMtype]
   );
   const morphologies = useMemo(
@@ -85,7 +98,7 @@ const MorphologyLibrary: React.FC = () => {
   useEffect(() => {
     if (currentLayer) {
       const newMtype = mtypes.length > 0 ? mtypes[0] : '';
-      const newEtype = getUniqueValues('etype', 'layer', currentLayer, 'mtype', newMtype)[0] || '';
+      const newEtype = getUniqueValues('etype', 'layer', currentLayer, 'mtype', newMtype)[0] as string || '';
       const newMorphology = getFilteredMorphologies(currentLayer, newMtype, newEtype)[0] || '';
 
       setCurrentMtype(newMtype);
@@ -128,7 +141,7 @@ const MorphologyLibrary: React.FC = () => {
     }
   }, [currentEtype]);
 
-  const setParams = (params: Record<string, string>): void => {
+  const setParams = (params: Record<string, string | Layer>): void => {
     const newQuery = {
       ...router.query,
       ...params,
@@ -136,7 +149,7 @@ const MorphologyLibrary: React.FC = () => {
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setLayer = (layer: string) => {
+  const setLayer = (layer: Layer) => {
     setCurrentLayer(layer);
   };
 
@@ -205,7 +218,7 @@ const MorphologyLibrary: React.FC = () => {
                 <div className={`selector__head theme-${theme}`}>Choose a layer</div>
                 <div className="selector__selector-container">
                   <LayerSelector3D
-                    value={currentLayer}
+                    value={currentLayer || undefined}
                     onSelect={setLayer}
                     theme={theme}
                   />
@@ -266,7 +279,7 @@ const MorphologyLibrary: React.FC = () => {
             We provide visualization and morphometrics for the selected morphology.
           </p>
           <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}>
-            {(factsheetData) => (
+            {(factsheetData: any) => (
               <>
                 {factsheetData && (
                   <>
@@ -292,7 +305,7 @@ const MorphologyLibrary: React.FC = () => {
           </p>
           <div className="mb-4">
             <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}>
-              {(factsheetData) => (
+              {(factsheetData: any) => (
                 <>
                   {factsheetData && (
                     <>

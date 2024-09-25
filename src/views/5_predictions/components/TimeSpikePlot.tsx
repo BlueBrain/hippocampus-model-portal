@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Plot from 'react-plotly.js';
+import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
 import debounce from 'lodash/debounce';
+
+import * as Plotly from 'plotly.js';
+
+const Plot = dynamic(() => import('react-plotly.js').then((mod) => mod.default), {
+    ssr: false,
+}) as unknown as React.ComponentType<Plotly.Plot>;
 
 interface PlotData {
     name: string;
@@ -32,41 +38,43 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
         setIsLoading(true);
 
-        if (workerRef.current) {
-            workerRef.current.terminate();
-        }
-
-        workerRef.current = new Worker(URL.createObjectURL(new Blob([`
-            self.onmessage = function(e) {
-                const { t, gid } = e.data;
-                const x = Object.values(t);
-                const y = Object.values(gid);
-                
-                const maxPoints = 100000;
-                let finalX = x;
-                let finalY = y;
-                if (x.length > maxPoints) {
-                    const skipFactor = Math.ceil(x.length / maxPoints);
-                    finalX = x.filter((_, index) => index % skipFactor === 0);
-                    finalY = y.filter((_, index) => index % skipFactor === 0);
-                }
-                
-                self.postMessage({ x: finalX, y: finalY });
+        if (typeof window !== 'undefined') {
+            if (workerRef.current) {
+                workerRef.current.terminate();
             }
-        `], { type: 'text/javascript' })));
 
-        workerRef.current.onmessage = function (e) {
-            setChartData([{
-                x: e.data.x,
-                y: e.data.y,
-                type: 'scattergl',
-                mode: 'markers',
-                marker: { color: graphTheme.blue, size: 2 },
-            }]);
-            setIsLoading(false);
-        };
+            workerRef.current = new Worker(URL.createObjectURL(new Blob([`
+                self.onmessage = function(e) {
+                    const { t, gid } = e.data;
+                    const x = Object.values(t);
+                    const y = Object.values(gid);
+                    
+                    const maxPoints = 100000;
+                    let finalX = x;
+                    let finalY = y;
+                    if (x.length > maxPoints) {
+                        const skipFactor = Math.ceil(x.length / maxPoints);
+                        finalX = x.filter((_, index) => index % skipFactor === 0);
+                        finalY = y.filter((_, index) => index % skipFactor === 0);
+                    }
+                    
+                    self.postMessage({ x: finalX, y: finalY });
+                }
+            `], { type: 'text/javascript' })));
 
-        workerRef.current.postMessage(data.value_map);
+            workerRef.current.onmessage = function (e) {
+                setChartData([{
+                    x: e.data.x,
+                    y: e.data.y,
+                    type: 'scattergl',
+                    mode: 'markers',
+                    marker: { color: graphTheme.blue, size: 2 },
+                }]);
+                setIsLoading(false);
+            };
+
+            workerRef.current.postMessage(data.value_map);
+        }
     }, []);
 
     const debouncedProcessData = useCallback(debounce(processData, 300), [processData]);
@@ -98,14 +106,14 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
             showgrid: false,
         },
         yaxis: {
-            title: 'Neuron Index',
+            title: {
+                text: 'Neuron Index',
+                standoff: 20,
+            },
             color: '#666666',
             titlefont: { size: 12 },
             tickfont: { color: '#666666', size: 10 },
             showgrid: false,
-            title: {
-                standoff: 20
-            },
         },
         autosize: true,
         plot_bgcolor: '#EFF1F8',
@@ -116,7 +124,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
     const config = {
         responsive: true,
-        displayModeBar: false,
+        displayModeBar: true,
     };
 
     return (

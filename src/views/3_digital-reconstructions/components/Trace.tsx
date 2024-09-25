@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Plot from 'react-plotly.js';
+import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
+
+import * as Plotly from 'plotly.js';
+
+const Plot = dynamic(() => import('react-plotly.js').then((mod) => mod.default), {
+    ssr: false,
+}) as unknown as React.ComponentType<Plotly.Plot>;
+
 
 interface TraceDataProps {
     plotData?: {

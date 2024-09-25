@@ -25,15 +25,21 @@ import MechanismTable from './neuron-model/MechanismTable';
 
 import { MorphologyCanvas } from "@bbp/morphoviewer";
 
-const getUniqueValues = (key, filterKey1, filterValue1) => {
-  return Array.from(new Set(modelsData
-    .filter(model =>
-      (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1)
-    )
-    .map(model => model[key]))).sort();
+type ModelData = {
+  mtype: string;
+  etype: string;
+  // Add other properties as needed
 };
 
-const getFilteredData = (mtype, etype) => {
+const getUniqueValues = (key: keyof ModelData, filterKey?: keyof ModelData, filterValue?: string): string[] => {
+  return Array.from(new Set(modelsData
+    .filter(model =>
+      (!filterKey || !filterValue || model[filterKey] === filterValue)
+    )
+    .map(model => model[key] as string))).sort();
+};
+
+const getFilteredData = (mtype: string, etype: string): ModelData[] => {
   return modelsData
     .filter(model =>
       (!mtype || model.mtype === mtype) &&
@@ -41,16 +47,16 @@ const getFilteredData = (mtype, etype) => {
     );
 };
 
-const NeuronsModelLibrary = () => {
+const NeuronsModelLibrary: React.FC = () => {
   const router = useRouter();
   const theme = 3;
 
   const { query } = router;
   const [currentMtype, setCurrentMtype] = useState('');
   const [currentEtype, setCurrentEtype] = useState('');
-  const [traceData, setTraceData] = useState(null);
-  const [factsheetData, setFactsheetData] = useState(null);
-  const [morphologyData, setMorphologyData] = useState(null);
+  const [traceData, setTraceData] = useState<any | null>(null);
+  const [factsheetData, setFactsheetData] = useState<any | null>(null);
+  const [morphologyData, setMorphologyData] = useState<string | null>(null);
 
   const mtypes = useMemo(() => getUniqueValues('mtype'), []);
   const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
@@ -85,7 +91,7 @@ const NeuronsModelLibrary = () => {
 
             const traceData = await traceResponse.json();
             const factsheetData = await factsheetResponse.json();
-            const morphologyData = await morphologyResponse.text(); // Changed from .json() to .text()
+            const morphologyData = await morphologyResponse.text();
 
             setTraceData(traceData);
             setFactsheetData(factsheetData);
@@ -103,8 +109,7 @@ const NeuronsModelLibrary = () => {
     fetchData();
   }, [currentMtype, currentEtype]);
 
-
-  const setParams = (params) => {
+  const setParams = (params: { mtype?: string; etype?: string }) => {
     const newQuery = {
       ...router.query,
       ...params,
@@ -112,7 +117,7 @@ const NeuronsModelLibrary = () => {
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
-  const setMtype = (mtype) => {
+  const setMtype = (mtype: string) => {
     const newEtypes = getUniqueValues('etype', 'mtype', mtype);
     const newEtype = newEtypes[0] || '';
 
@@ -122,13 +127,13 @@ const NeuronsModelLibrary = () => {
     });
   };
 
-  const setEtype = (etype) => {
+  const setEtype = (etype: string) => {
     setParams({
       etype,
     });
   };
 
-  const qsEntries = [
+  const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'M-Type',
       key: 'mtype',
@@ -205,6 +210,7 @@ const NeuronsModelLibrary = () => {
           </div>
         </div>
       </Filters>
+
 
       <DataContainer
         theme={theme}
