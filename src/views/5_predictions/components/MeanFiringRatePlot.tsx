@@ -32,13 +32,13 @@ const MeanFiringRatePlot = ({ plotData }) => {
                 display: false,
                 text: plotData?.name || 'Mean Firing Rate Distribution',
             },
-            tooltip: { enabled: false },
+            tooltip: { enabled: true },
         },
         scales: {
             x: {
                 title: {
-                    display: false,
-                    text: 'Time (ms)',
+                    display: true,
+                    text: 'Firing Rate (Hz)',
                 },
                 ticks: {
                     maxRotation: 0,
@@ -57,14 +57,36 @@ const MeanFiringRatePlot = ({ plotData }) => {
     }), [plotData?.name]);
 
     const chartData = useMemo(() => {
-        if (!plotData || !plotData.bins || !plotData.freq || plotData.bins.length === 0 || plotData.freq.length === 0) {
+        if (!plotData) {
+            return null;
+        }
+
+        let bins, freq;
+
+        if (plotData.bins && plotData.freq) {
+            // Original data format
+            bins = plotData.bins;
+            freq = plotData.freq;
+        } else if (Array.isArray(plotData.values)) {
+            // New data format (both current and shared)
+            const values = plotData.values.filter(v => v !== 0);
+            const binCount = Math.min(20, Math.ceil(Math.sqrt(values.length)));
+            const minVal = Math.min(...values);
+            const maxVal = Math.max(...values);
+            const binWidth = (maxVal - minVal) / binCount;
+
+            bins = Array.from({ length: binCount }, (_, i) => minVal + i * binWidth);
+            freq = Array(binCount).fill(0);
+
+            values.forEach(v => {
+                const index = Math.min(Math.floor((v - minVal) / binWidth), binCount - 1);
+                freq[index]++;
+            });
+        } else {
             return null;
         }
 
         const maxDataPoints = 1000;
-        let bins = plotData.bins;
-        let freq = plotData.freq;
-
         if (bins.length > maxDataPoints) {
             const skipFactor = Math.ceil(bins.length / maxDataPoints);
             bins = bins.filter((_, index) => index % skipFactor === 0);
@@ -72,7 +94,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
         }
 
         return {
-            labels: bins,
+            labels: bins.map(b => b.toFixed(4)),
             datasets: [
                 {
                     data: freq,
