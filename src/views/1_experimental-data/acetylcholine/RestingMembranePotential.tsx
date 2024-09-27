@@ -121,6 +121,7 @@ const RestingMembranePotential: React.FC<RestingMembranePotentialProps> = ({ the
 
     return (
         <>
+
             <ResponsiveTable<DataEntry>
                 className="mb-2"
                 columns={columns}

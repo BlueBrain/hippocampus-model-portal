@@ -80,7 +80,7 @@ const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsPro
     const [data, setData] = useState<DataEntry[] | null>(null);
 
     useEffect(() => {
-        fetch(`${dataPath}/1_experimental-data/connection-anatomy/percentage-sd-onto-pyramidal-cells.json`)
+        fetch(`${dataPath}/1_experimental-data/connection-anatomy/percentage-SD-onto-pyramidal-cells.json`)
             .then((response) => response.json())
             .then((fetchedData) => setData(fetchedData));
     }, []);

@@ -59,6 +59,11 @@ const CellDensityColumns = [
     {
         title: 'Reference',
         dataIndex: 'Reference' as keyof CellDensityEntry,
+        render: (value: string) => (
+            <a href="https://link.springer.com/content/pdf/10.1007/bf00239593.pdf" target="_blank" rel="noopener noreferrer">
+                {value}
+            </a>
+        ),
     },
 ];
 
