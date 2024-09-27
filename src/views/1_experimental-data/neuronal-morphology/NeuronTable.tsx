@@ -84,7 +84,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             className: 'preview-column',
             render: (name: string) => (
                 <div className="image-container">
-                    <Image
+                    <img
                         src={`${imagesPath}1_experimental-data/slices/thumbnails/${name}.jpeg`}
                         alt={`neuron image ${name}`}
                         width={300}

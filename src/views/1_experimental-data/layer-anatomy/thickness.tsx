@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+
 import { FixedType } from 'rc-table/lib/interface';
 import { basePath, imagesPath, dataPath } from "../../../config";
 
@@ -47,7 +47,7 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         dataIndex: 'cell_id' as keyof TableEntry,
         render: (link: string, record: TableEntry, index: number) => {
             return (
-                <Image
+                <img
                     src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${link}.jpeg`
                     }
                     alt={`slice image ${link}`

@@ -23,15 +23,13 @@ type IfCurveData = {
     };
 };
 
-interface IfCurvePerCellGraph {
-    instance?: string;
+interface IfCurvePerCellGraphProps {
+    instance: string;
     theme?: number;
 }
 
-const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme }) => {
+const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, theme }) => {
     const [data, setData] = useState<DataPoint[]>([]);
-    const [allInstances, setAllInstances] = useState<string[]>([]);
-    const [selectedInstance, setSelectedInstance] = useState<string | undefined>(instance);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,25 +37,19 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme })
                 const response = await fetch(`${dataPath}/1_experimental-data/neuronal-electophysiology/if-curve-per-cell-data.json`);
                 const jsonData: IfCurveData = await response.json();
 
-                setAllInstances(Object.keys(jsonData));
+                const instanceKey = instance.endsWith('.nwb') ? instance : `${instance}.nwb`;
 
-                if (selectedInstance) {
-                    const instanceKey = selectedInstance.endsWith('.nwb') ? selectedInstance : `${selectedInstance}.nwb`;
-
-                    if (jsonData[instanceKey]) {
-                        const instanceData = Object.values(jsonData[instanceKey])
-                            .map(item => ({
-                                amplitude: item.amplitude,
-                                mean_frequency: item.mean_frequency
-                            }))
-                            .sort((a, b) => a.amplitude - b.amplitude);
-                        setData(instanceData);
-                    } else {
-                        console.error(`No data found for instance: ${instanceKey}`);
-                        setData([]);
-                    }
-                } else if (allInstances.length > 0) {
-                    setSelectedInstance(allInstances[0]);
+                if (jsonData[instanceKey]) {
+                    const instanceData = Object.values(jsonData[instanceKey])
+                        .map(item => ({
+                            amplitude: item.amplitude,
+                            mean_frequency: item.mean_frequency
+                        }))
+                        .sort((a, b) => a.amplitude - b.amplitude);
+                    setData(instanceData);
+                } else {
+                    console.error(`No data found for instance: ${instanceKey}`);
+                    setData([]);
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -66,7 +58,7 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme })
         };
 
         fetchData();
-    }, [selectedInstance]);
+    }, [instance]);
 
     const chartData = {
         datasets: [
@@ -116,39 +108,20 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraph> = ({ instance, theme })
         },
     };
 
-    if (allInstances.length === 0) {
-        return <div>Loading instances...</div>;
+    if (data.length === 0) {
+        return <div>No data available for this instance.</div>;
     }
 
     return (
         <>
-            <div className="mb-4">
-                <label htmlFor="instance-select" className="mr-2">Select Instance:</label>
-                <select
-                    id="instance-select"
-                    value={selectedInstance}
-                    onChange={(e) => setSelectedInstance(e.target.value)}
-                    className="border rounded p-1"
-                >
-                    {allInstances.map((inst) => (
-                        <option key={inst} value={inst}>{inst}</option>
-                    ))}
-                </select>
+            <div className='graph'>
+                <Scatter data={chartData} options={options} />
             </div>
-            {data.length === 0 ? (
-                <div>No data available for this instance.</div>
-            ) : (
-                <>
-                    <div className='graph'>
-                        <Scatter data={chartData} options={options} />
-                    </div>
-                    <div className="mt-4">
-                        <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-data-${selectedInstance}.json`)}>
-                            IF curve data for {selectedInstance}
-                        </DownloadButton>
-                    </div>
-                </>
-            )}
+            <div className="mt-4">
+                <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-data-${instance}.json`)}>
+                    IF curve data for {instance}
+                </DownloadButton>
+            </div>
         </>
     );
 };
