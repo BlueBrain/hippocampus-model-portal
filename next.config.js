@@ -20,7 +20,7 @@ const nextConfig = {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 7 * day,
     formats: ['image/avif', 'image/webp'],
-    domains: ['hippocampus-portal-auth-proxy', 'localhost', 'hippocampus-portal.kcp.bbp.epfl.ch'],
+    domains: ['hippocampus-portal-auth-proxy', 'localhost', 'hippocampus-portal.kcp.bbp.epfl.ch', 'bbp.epfl.ch'],
   },
   eslint: {
     ignoreDuringBuilds: true,
