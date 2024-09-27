@@ -4,9 +4,6 @@ import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
 import debounce from 'lodash/debounce';
 
-// Import Plotly as a side effect to ensure it's available globally
-import 'plotly.js/dist/plotly';
-
 // Use dynamic import with no SSR for Plot
 const Plot = dynamic(() => import('react-plotly.js'), {
     ssr: false,
