@@ -4,11 +4,14 @@ import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
 import debounce from 'lodash/debounce';
 
-import * as Plotly from 'plotly.js';
+// Import Plotly as a side effect to ensure it's available globally
+import 'plotly.js/dist/plotly';
 
-const Plot = dynamic(() => import('react-plotly.js').then((mod) => mod.default), {
+// Use dynamic import with no SSR for Plot
+const Plot = dynamic(() => import('react-plotly.js'), {
     ssr: false,
-}) as unknown as React.ComponentType<Plotly.Plot>;
+    loading: () => <Loader2 className="w-8 h-8 animate-spin" />,
+}) as any;
 
 interface PlotData {
     name: string;
@@ -27,7 +30,6 @@ interface PlotDetailsProps {
 const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState<any>(null);
-    const [useWebGL, setUseWebGL] = useState(true);
     const workerRef = useRef<Worker | null>(null);
 
     const processData = useCallback((data: PlotData) => {
@@ -67,7 +69,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                 setChartData([{
                     x: e.data.x,
                     y: e.data.y,
-                    type: useWebGL ? 'scattergl' : 'scatter',
+                    type: 'scatter',
                     mode: 'markers',
                     marker: { color: graphTheme.blue, size: 2 },
                 }]);
@@ -76,16 +78,11 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
             workerRef.current.postMessage(data.value_map);
         }
-    }, [useWebGL]);
+    }, []);
 
     const debouncedProcessData = useCallback(debounce(processData, 300), [processData]);
 
     useEffect(() => {
-        // Check for WebGL support
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        setUseWebGL(!!gl);
-
         if (Array.isArray(plotData)) {
             debouncedProcessData(plotData[0]);
         } else if (plotData) {
