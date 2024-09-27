@@ -118,7 +118,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
                     </p>
                 ) : svgExists === true ? (
                     <img
-                        src={`${dataPath}${path}${xAxis}-${yAxis}/spike-time-all.svg`}
+                        src={`${dataPath}/${path}${xAxis}-${yAxis}/spike-time-all.svg`}
                         alt="Spike Time Data"
                         onError={() => setSvgExists(false)}
                     />

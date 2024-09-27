@@ -224,7 +224,7 @@ const NeuronElectrophysiology: React.FC = () => {
           </ESData>
           <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
           <div className="mb-4">
-            <HttpData path={`${dataPath}1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/features.json`}>
+            <HttpData path={`${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/features.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (
@@ -255,7 +255,7 @@ const NeuronElectrophysiology: React.FC = () => {
 
 
           <div className="mb-4">
-            <HttpData path={`${dataPath}1_experimental-data/neuronal-electophysiology/efeatures-per-cell/${currentInstance}/features.json`}>
+            <HttpData path={`${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-cell/${currentInstance}/features.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (

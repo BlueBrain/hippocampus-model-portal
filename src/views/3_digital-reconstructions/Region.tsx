@@ -120,7 +120,7 @@ const RegionView: React.FC = () => {
 
         <Collapsible id="factsheetSection" title="Factsheet">
           {validVolumeSection && (
-            <HttpData path={`${dataPath}3_digital-reconstruction/region/${volumeSection}/factsheet.json`}>
+            <HttpData path={`${dataPath}/3_digital-reconstruction/region/${volumeSection}/factsheet.json`}>
               {(data, loading) => (
                 <Spin spinning={loading}>
                   {data && (

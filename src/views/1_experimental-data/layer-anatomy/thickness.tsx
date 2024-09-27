@@ -48,8 +48,10 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         render: (link: string, record: TableEntry, index: number) => {
             return (
                 <Image
-                    src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${link}.jpeg`}
-                    alt={`slice image ${link}`}
+                    src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${link}.jpeg`
+                    }
+                    alt={`slice image ${link}`
+                    }
                     width={150}
                     height={125}
                     style={{ cursor: 'pointer' }}
