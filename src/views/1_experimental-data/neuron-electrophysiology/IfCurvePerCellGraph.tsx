@@ -24,7 +24,7 @@ type IfCurveData = {
 };
 
 interface IfCurvePerCellGraphProps {
-    instance: string;
+    instance?: string;  // Make instance optional
     theme?: number;
 }
 
@@ -33,6 +33,12 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, the
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!instance) {  // Add a check for instance
+                console.error("No instance provided");
+                setData([]);
+                return;
+            }
+
             try {
                 const response = await fetch(`${dataPath}/1_experimental-data/neuronal-electophysiology/if-curve-per-cell-data.json`);
                 const jsonData: IfCurveData = await response.json();
@@ -76,6 +82,7 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, the
     };
 
     const options = {
+
         scales: {
             x: {
                 type: 'linear' as const,
@@ -94,7 +101,9 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, the
                 },
             },
         },
+        animation: { duration: 0 },
         plugins: {
+
             legend: {
                 display: false,
             },
