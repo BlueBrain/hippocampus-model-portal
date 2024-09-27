@@ -27,6 +27,7 @@ interface PlotDetailsProps {
 const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState<any>(null);
+    const [useWebGL, setUseWebGL] = useState(true);
     const workerRef = useRef<Worker | null>(null);
 
     const processData = useCallback((data: PlotData) => {
@@ -66,7 +67,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                 setChartData([{
                     x: e.data.x,
                     y: e.data.y,
-                    type: 'scattergl',
+                    type: useWebGL ? 'scattergl' : 'scatter',
                     mode: 'markers',
                     marker: { color: graphTheme.blue, size: 2 },
                 }]);
@@ -75,11 +76,16 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
             workerRef.current.postMessage(data.value_map);
         }
-    }, []);
+    }, [useWebGL]);
 
     const debouncedProcessData = useCallback(debounce(processData, 300), [processData]);
 
     useEffect(() => {
+        // Check for WebGL support
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        setUseWebGL(!!gl);
+
         if (Array.isArray(plotData)) {
             debouncedProcessData(plotData[0]);
         } else if (plotData) {
