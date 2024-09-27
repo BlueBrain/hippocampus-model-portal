@@ -27,7 +27,7 @@ const MechanismTable: React.FC<MechanismTableProps> = ({ theme, data, instance }
         const validMechs: { [key: string]: boolean } = {};
         for (const section of sections) {
             for (const mech of mechanismsData[section] || []) {
-                const response = await fetch(`${dataPath}2_reconstruction-data/neuron-models/${instance}/mechanisms/${mech}.mod`);
+                const response = await fetch(`${dataPath}/2_reconstruction-data/neuron-models/${instance}/mechanisms/${mech}.mod`);
                 validMechs[mech] = response.ok;
             }
         }
@@ -37,7 +37,7 @@ const MechanismTable: React.FC<MechanismTableProps> = ({ theme, data, instance }
     const handleDownload = (filename: string) => {
         if (validMechanisms[filename]) {
             const link = document.createElement('a');
-            link.href = `${dataPath}2_reconstruction-data/neuron-models/${instance}/mechanisms/${filename}.mod`;
+            link.href = `${dataPath}/2_reconstruction-data/neuron-models/${instance}/mechanisms/${filename}.mod`;
             link.download = `${filename}.mod`;
             document.body.appendChild(link);
             link.click();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Loader2 } from 'lucide-react';
 import { graphTheme } from '@/constants';
@@ -30,7 +30,6 @@ interface PlotDetailsProps {
 const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState<any>(null);
-    const workerRef = useRef<Worker | null>(null);
 
     const processData = useCallback((data: PlotData) => {
         if (!data || !data.value_map || !data.value_map.t || !data.value_map.gid) {
@@ -41,43 +40,27 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
         setIsLoading(true);
 
-        if (typeof window !== 'undefined') {
-            if (workerRef.current) {
-                workerRef.current.terminate();
-            }
+        const { t, gid } = data.value_map;
+        const x = Object.values(t);
+        const y = Object.values(gid);
 
-            workerRef.current = new Worker(URL.createObjectURL(new Blob([`
-                self.onmessage = function(e) {
-                    const { t, gid } = e.data;
-                    const x = Object.values(t);
-                    const y = Object.values(gid);
-                    
-                    const maxPoints = 100000;
-                    let finalX = x;
-                    let finalY = y;
-                    if (x.length > maxPoints) {
-                        const skipFactor = Math.ceil(x.length / maxPoints);
-                        finalX = x.filter((_, index) => index % skipFactor === 0);
-                        finalY = y.filter((_, index) => index % skipFactor === 0);
-                    }
-                    
-                    self.postMessage({ x: finalX, y: finalY });
-                }
-            `], { type: 'text/javascript' })));
-
-            workerRef.current.onmessage = function (e) {
-                setChartData([{
-                    x: e.data.x,
-                    y: e.data.y,
-                    type: 'scatter',
-                    mode: 'markers',
-                    marker: { color: graphTheme.blue, size: 2 },
-                }]);
-                setIsLoading(false);
-            };
-
-            workerRef.current.postMessage(data.value_map);
+        const maxPoints = 100000;
+        let finalX = x;
+        let finalY = y;
+        if (x.length > maxPoints) {
+            const skipFactor = Math.ceil(x.length / maxPoints);
+            finalX = x.filter((_, index) => index % skipFactor === 0);
+            finalY = y.filter((_, index) => index % skipFactor === 0);
         }
+
+        setChartData([{
+            x: finalX,
+            y: finalY,
+            type: 'scatter',
+            mode: 'markers',
+            marker: { color: graphTheme.blue, size: 2 },
+        }]);
+        setIsLoading(false);
     }, []);
 
     const debouncedProcessData = useCallback(debounce(processData, 300), [processData]);
@@ -94,9 +77,6 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
 
         return () => {
             debouncedProcessData.cancel();
-            if (workerRef.current) {
-                workerRef.current.terminate();
-            }
         };
     }, [plotData, debouncedProcessData]);
 
