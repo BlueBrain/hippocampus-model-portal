@@ -84,9 +84,9 @@ const NeuronsModelLibrary: React.FC = () => {
           const filteredData = getFilteredData(currentMtype, currentEtype)[0];
           if (filteredData) {
             const [traceResponse, factsheetResponse, morphologyResponse] = await Promise.all([
-              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/trace.json`),
-              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`),
-              fetch(`${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/morphology.swc`),
+              fetch(`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/trace.json`),
+              fetch(`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/features_with_rheobase.json`),
+              fetch(`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/1/morphology.swc`),
             ]);
 
             const traceData = await traceResponse.json();

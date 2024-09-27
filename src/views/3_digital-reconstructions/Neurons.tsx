@@ -88,8 +88,8 @@ const Neurons: React.FC = () => {
       if (currentMorphology) {
         try {
           const [traceResponse, factsheetResponse] = await Promise.all([
-            fetch(`${dataPath}3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
-            fetch(`${dataPath}3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/features_with_rheobase.json`),
+            fetch(`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
+            fetch(`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/features_with_rheobase.json`),
 
           ]);
 

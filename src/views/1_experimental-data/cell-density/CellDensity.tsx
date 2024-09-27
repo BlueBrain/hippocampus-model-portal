@@ -70,7 +70,7 @@ const CellDensityTable: React.FC<CellDensityTableProps> = ({ theme }) => {
     const [data, setData] = useState<CellDensityEntry[]>([]);
 
     useEffect(() => {
-        fetch(`${dataPath}1_experimental-data/cell-density/cell-density.json`)
+        fetch(`${dataPath}/1_experimental-data/cell-density/cell-density.json`)
             .then(response => response.json())
             .then(fetchedData => setData(fetchedData));
     }, []);

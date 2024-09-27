@@ -57,7 +57,7 @@ const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
 
             setIsLoading(true);
             setSvgExists(null);
-            const svgUrl = `${dataPath}${path}${xAxis}-${yAxis}/spike-time-all.svg`;
+            const svgUrl = `${dataPath}/${path}${xAxis}-${yAxis}/spike-time-all.svg`;
             try {
                 const response = await fetch(svgUrl, {
                     method: 'HEAD',

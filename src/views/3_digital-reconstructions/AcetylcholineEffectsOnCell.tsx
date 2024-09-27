@@ -84,9 +84,9 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       if (currentMorphology) {
         try {
           const [singleCellResponse, traceResponse, populationResponse] = await Promise.all([
-            fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/ach_features_processed.json`),
-            fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
-            fetch(`${dataPath}3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/ach_population_agg_processed.json`),
+            fetch(`${dataPath}/3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/ach_features_processed.json`),
+            fetch(`${dataPath}/3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`),
+            fetch(`${dataPath}/3_digital-reconstruction/acteylcholine-effect-on-cells/${currentMtype}/${currentEtype}/ach_population_agg_processed.json`),
           ]);
 
           const singleCellData = await singleCellResponse.json();

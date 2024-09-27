@@ -109,11 +109,11 @@ const Neurons: React.FC = () => {
       if (currentInstance) {
         try {
           const [traceResponse, factsheetResponse, mechanismsResponse, eFeatureResponse, experimentalRecordingResponse] = await Promise.all([
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/trace.json`),
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`),
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`),
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/efeature.json`),
-            fetch(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/experimental-recordings.json`)
+            fetch(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/trace.json`),
+            fetch(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/features_with_rheobase.json`),
+            fetch(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.json`),
+            fetch(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/efeature.json`),
+            fetch(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/experimental-recordings.json`)
           ]);
 
           const traceData = await traceResponse.json();
