@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { PlotParams } from 'react-plotly.js';
+import { graphTheme, themeColors } from '@/constants';
 
-// Define the Plot component with correct typing
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false }) as React.ComponentType<PlotParams>;
 
 interface TraceDataProps {
@@ -20,6 +20,8 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
     const [layout, setLayout] = useState<any>({});
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [hasError, setHasError] = useState<boolean>(false);
+    const [hoveredTraceIndex, setHoveredTraceIndex] = useState<number | null>(null);
+    const [allTracesVisible, setAllTracesVisible] = useState<boolean>(true);
 
     useEffect(() => {
         if (!plotData || !plotData.value_map || !Array.isArray(plotData.value_map) || plotData.value_map.length === 0) {
@@ -44,6 +46,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                     color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
                     width: 1,
                 },
+                visible: allTracesVisible ? true : 'legendonly',
             }));
 
             setData(traces);
@@ -51,26 +54,21 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             // Set up the layout
             setLayout({
                 xaxis: {
-                    title: 'Time',
-                    showticklabels: false,
+                    title: { text: 'Time (ms)', standoff: 20 },
+                    showticklabels: true,
+                    tickmode: 'linear',
+                    tick0: 0,
+                    dtick: 50,
                 },
                 yaxis: {
-                    title: {
-                        text: plotData.units || 'mV',
-                        standoff: 15,
-                    },
+                    title: { text: plotData.units || 'Voltage (mV)', standoff: 40 },
                     showticklabels: true,
                 },
                 autosize: true,
-                margin: {
-                    l: 60,
-                    r: 50,
-                    b: 50,
-                    t: 50,
-                    pad: 4,
-                },
+                margin: { l: 60, r: 50, b: 100, t: 50, pad: 4 },
                 hovermode: 'x unified' as const,
-                showlegend: false,
+                showlegend: true,
+                legend: { orientation: 'h', x: 0, y: 1.2 },
                 plot_bgcolor: '#EFF1F8',
                 paper_bgcolor: '#EFF1F8',
             });
@@ -81,7 +79,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setIsLoading(false);
             setHasError(true);
         }
-    }, [plotData]);
+    }, [plotData, allTracesVisible]);
 
     const containerStyle = {
         width: '100%',
@@ -96,25 +94,61 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
         transform: 'translate(-50%, -50%)',
     };
 
+    const handleLegendHover = (event: any) => {
+        setHoveredTraceIndex(event.curveNumber);
+    };
+
+    const handleLegendUnhover = () => {
+        setHoveredTraceIndex(null);
+    };
+
+    const toggleAllTraces = () => {
+        setAllTracesVisible(!allTracesVisible);
+        const updatedData = data.map(trace => ({
+            ...trace,
+            visible: !allTracesVisible ? true : 'legendonly',
+        }));
+        setData(updatedData);
+    };
+
     return (
-        <div style={containerStyle}>
-            {isLoading ? (
-                <div style={loaderStyle}>
-                    <Loader2 className="w-8 h-8 animate-spin" />
-                </div>
-            ) : hasError || !data.length ? (
-                <p className="text-center text-gray-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    No data available.
-                </p>
-            ) : (
-                <Plot
-                    data={data}
-                    layout={layout}
-                    useResizeHandler={true}
-                    style={{ width: '100%', height: '100%' }}
-                    config={{ responsive: true }}
-                />
-            )}
+        <div>
+            <button
+                onClick={toggleAllTraces}
+                style={{
+                    marginBottom: '1rem',
+                    padding: '0.25rem .5rem',
+                    backgroundColor: graphTheme.blue,
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '3px',
+                    cursor: 'pointer'
+                }}
+            >
+                {allTracesVisible ? 'Hide All Traces' : 'Show All Traces'}
+            </button>
+            <div style={containerStyle}>
+                {isLoading ? (
+                    <div style={loaderStyle}>
+                        <Loader2 className="w-8 h-8 animate-spin" />
+                    </div>
+                ) : hasError || !data.length ? (
+                    <p className="text-center text-gray-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        No data available.
+                    </p>
+                ) : (
+                    <Plot
+                        data={data}
+                        layout={layout}
+                        useResizeHandler={true}
+                        style={{ width: '100%', height: '100%' }}
+                        config={{ responsive: true }}
+                        onLegendItemClick={() => false}
+                        onLegendItemHover={handleLegendHover}
+                        onLegendItemUnhover={handleLegendUnhover}
+                    />
+                )}
+            </div>
         </div>
     );
 };
