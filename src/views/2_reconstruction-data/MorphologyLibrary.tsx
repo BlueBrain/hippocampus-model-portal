@@ -278,7 +278,7 @@ const MorphologyLibrary: React.FC = () => {
           <p className='text-lg mb-2'>
             We provide visualization and morphometrics for the selected morphology.
           </p>
-          <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}>
+          <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}>
             {(factsheetData: any) => (
               <>
                 {factsheetData && (
@@ -304,7 +304,7 @@ const MorphologyLibrary: React.FC = () => {
             We provide morphometrics for the entire m-type group selected.
           </p>
           <div className="mb-4">
-            <HttpData path={`${basePath}/resources/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}>
+            <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}>
               {(factsheetData: any) => (
                 <>
                   {factsheetData && (

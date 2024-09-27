@@ -65,7 +65,7 @@ const MergedConnectionsView: React.FC = () => {
   const fetchFactsheetData = async () => {
     try {
       const { volume_section, prelayer, postlayer } = quickSelection;
-      const filePath = `${basePath}/resources/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const filePath = `${basePath}/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
       const response = await fetch(filePath);
       const data = await response.json();
 
@@ -83,7 +83,7 @@ const MergedConnectionsView: React.FC = () => {
   const fetchLaminarData = async () => {
     try {
       const { volume_section, prelayer, postlayer } = quickSelection;
-      const filePath = `${basePath}/resources/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const filePath = `${basePath}/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
       const response = await fetch(filePath);
       const data = await response.json();
 

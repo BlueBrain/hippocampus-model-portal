@@ -208,7 +208,7 @@ const NeuronalMorphologyView: React.FC = () => {
                     </p>
                     <InstanceViewer theme={theme} currentMtype={quickSelection.mtype} currentInstance={quickSelection.instance} />
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}>
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}>
                             {(factsheetData) => (
                                 <>
                                     {factsheetData && (
@@ -226,7 +226,7 @@ const NeuronalMorphologyView: React.FC = () => {
                         </HttpData>
                     </div>
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/distribution-plots.json`}>
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/distribution-plots.json`}>
                             {(plotsData) => (
                                 <>
                                     {plotsData && (
@@ -244,7 +244,7 @@ const NeuronalMorphologyView: React.FC = () => {
                         </HttpData>
                     </div>
                     <div className="mt-8 ">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/table.json`}>
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/table.json`}>
                             {(tableData) => (
                                 <>
                                     {tableData && (
@@ -263,7 +263,7 @@ const NeuronalMorphologyView: React.FC = () => {
                         We provide morphometrics for the entire m-type group selected.
                     </p>
                     <div className="mb-4">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/factsheet.json`}>
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/factsheet.json`}>
                             {(factsheetData) => (
                                 <>
                                     {factsheetData && (
@@ -281,7 +281,7 @@ const NeuronalMorphologyView: React.FC = () => {
                         </HttpData>
                     </div>
                     <div className="mt-16">
-                        <HttpData path={`${basePath}/resources/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}>
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}>
                             {(tableData) => (
                                 <>
                                     {tableData && (

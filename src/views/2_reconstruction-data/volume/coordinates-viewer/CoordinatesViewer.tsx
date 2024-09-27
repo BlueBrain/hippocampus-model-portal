@@ -10,9 +10,9 @@ const CoordinatesViewer: React.FC = () => {
 
     useEffect(() => {
         const start = async () => {
-            const info = await loadInfo(basePath + '/resources/3d/2_reconstruction-data/coordinates/mesh.json');
-            const elemData = new Uint32Array(await loadData(basePath + '/resources/3d/2_reconstruction-data/coordinates/elem.dat'));
-            const vertData = new Float32Array(await loadData(basePath + '/resources/3d/2_reconstruction-data/coordinates/vert.dat'));
+            const info = await loadInfo(basePath + '/data/3d/2_reconstruction-data/coordinates/mesh.json');
+            const elemData = new Uint32Array(await loadData(basePath + '/data/3d/2_reconstruction-data/coordinates/elem.dat'));
+            const vertData = new Float32Array(await loadData(basePath + '/data/3d/2_reconstruction-data/coordinates/vert.dat'));
             const container = document.getElementById('root') as HTMLElement;
             const root = createRoot(container);
             root.render(<Viewer meshInfo={info} vert={vertData} elem={Array.from(elemData)} />);

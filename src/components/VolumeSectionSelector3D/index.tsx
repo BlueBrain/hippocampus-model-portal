@@ -113,7 +113,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const loader = new OBJLoader();
     loader.load(
-      basePath + '/resources/3d/volume-selector/volume-selector.obj',
+      basePath + '/data/3d/volume-selector/volume-selector.obj',
       (obj) => {
         [obj1Ref, obj2Ref, obj3Ref].forEach((ref, index) => {
           const newObj = obj.clone();

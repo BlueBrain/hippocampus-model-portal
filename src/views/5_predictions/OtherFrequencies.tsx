@@ -12,7 +12,7 @@ import TimeSpikePlot from './components/TimeSpikePlot';
 import MeanFiringRatePlot from './components/MeanFiringRatePlot';
 import { QuickSelectorEntry, VolumeSection } from '@/types';
 import models from "./models.json";
-import { dataPath } from '@/config';
+import { basePath, dataPath } from '@/config';
 import { volumeSections } from '@/constants';
 import TraceGraph from './components/Trace';
 import DownloadButton from '@/components/DownloadButton';
@@ -62,7 +62,7 @@ const OtherFrequenciesView: React.FC = () => {
         const fetchData = async () => {
             const { signal_frequency, cell_frequency, mtype, etype } = quickSelection;
             if (signal_frequency === undefined || cell_frequency === undefined || !mtype || !etype) return;
-            const baseUrl = `${dataPath}/5_prediction/other-frequencies/${cell_frequency}-${signal_frequency}/${mtype}-${etype}`;
+            const baseUrl = `${basePath}/data/5_prediction/other-frequencies/${cell_frequency}-${signal_frequency}/${mtype}-${etype}`;
             const dataTypes = [
                 { name: 'spike-time', setter: setSpikeTimeData },
                 { name: 'mean-firing-rate', setter: setMeanFiringRateData },
