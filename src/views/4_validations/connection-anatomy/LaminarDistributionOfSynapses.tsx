@@ -187,6 +187,10 @@ const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapses
                 scales: {
                     x: {
                         stacked: true,
+                        title: {
+                            display: true,
+                            text: 'mtype',
+                        }
                     },
                     y: {
                         stacked: true,
