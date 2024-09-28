@@ -22,7 +22,6 @@ import LayerSelector3D from '@/components/LayerSelector3D';
 import { Layer } from '@/types';
 import { basePath } from '@/config';
 
-// Import modelsData and define its type
 import modelsDataImport from './morphology-library.json';
 
 type ModelData = {
@@ -32,10 +31,8 @@ type ModelData = {
   morphology: string;
 };
 
-// Ensure modelsData is an array of ModelData
 const modelsData: ModelData[] = (Array.isArray(modelsDataImport) ? modelsDataImport : [modelsDataImport]) as ModelData[];
 
-// Helper function to get unique values
 const getUniqueValues = (
   key: keyof ModelData,
   filterKey1?: keyof ModelData,
@@ -53,10 +50,11 @@ const getUniqueValues = (
         )
         .map((model) => model[key])
     )
-  ).sort((a, b) => a.toString().localeCompare(b.toString()));
+  )
+    .filter((value): value is Layer | string => value != null) // Remove null and undefined
+    .sort((a, b) => a.toString().localeCompare(b.toString()));
 };
 
-// Updated helper function to get filtered morphologies
 const getFilteredMorphologies = (layer: Layer | '', mtype: string, etype: string): string[] => {
   return modelsData
     .filter(
@@ -66,7 +64,8 @@ const getFilteredMorphologies = (layer: Layer | '', mtype: string, etype: string
         (etype === '' || model.etype === etype)
     )
     .map((model) => model.morphology)
-    .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
+    .filter((value): value is string => value != null) // Remove null and undefined
+    .filter((value, index, self) => self.indexOf(value) === index)
     .sort();
 };
 
@@ -94,7 +93,6 @@ const MorphologyLibrary: React.FC = () => {
     [currentLayer, currentMtype, currentEtype]
   );
 
-  // Automatically select the first mtype and etype when the layer is selected
   useEffect(() => {
     if (currentLayer) {
       const newMtype = mtypes.length > 0 ? mtypes[0] : '';
@@ -113,7 +111,6 @@ const MorphologyLibrary: React.FC = () => {
     }
   }, [currentLayer, mtypes]);
 
-  // Automatically select the first etype when the mtype is selected
   useEffect(() => {
     if (currentMtype) {
       const newEtype = etypes.length > 0 ? etypes[0] : '';
@@ -129,7 +126,6 @@ const MorphologyLibrary: React.FC = () => {
     }
   }, [currentMtype, etypes]);
 
-  // Ensure etype selection works and updates the state
   useEffect(() => {
     if (currentEtype) {
       const newMorphology = getFilteredMorphologies(currentLayer, currentMtype, currentEtype)[0] || '';
@@ -194,6 +190,7 @@ const MorphologyLibrary: React.FC = () => {
       setFn: setMorphology,
     },
   ];
+
 
   return (
     <>
@@ -269,6 +266,7 @@ const MorphologyLibrary: React.FC = () => {
           { id: 'morphologySection', label: 'Neuron Morphology' },
           { id: 'populationSection', label: 'Population' },
         ]}
+        quickSelectorEntries={qsEntries}
       >
         <Collapsible
           id="morphologySection"

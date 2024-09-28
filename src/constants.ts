@@ -111,8 +111,8 @@ export const defaultSelection = {
     },
     morphologyLibrary: {
       layer: 'SLM',
-      mtype: 'SLM_PPA',
       etype: 'bAC',
+      mtype: 'SLM_PPA',
       morphology: '011127HP1',
     },
     schafferCollateral: {
