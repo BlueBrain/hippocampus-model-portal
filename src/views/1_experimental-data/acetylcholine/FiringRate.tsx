@@ -97,7 +97,7 @@ const FiringRate: React.FC<FiringRateProps> = ({ theme }) => {
                 data={data}
                 rowKey={(record) => record.Reference}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Firing-Rate-Data.json`)}

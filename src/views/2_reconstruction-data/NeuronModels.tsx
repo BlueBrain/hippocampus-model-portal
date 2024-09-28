@@ -318,11 +318,13 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
+        {/*
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <div className="graph">
-            {/* Add bPAP & PSP graph component here */}
+            Add bPAP & PSP graph component here
           </div>
         </Collapsible>
+         */}
 
         <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
           {factsheetData && (
@@ -337,11 +339,7 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
-        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings">
-          {experimentalRecordingData && (
-            <ExperimentalRecordingsTable data={experimentalRecordingData} />
-          )}
-        </Collapsible>
+
 
         <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
           {efeatureData && (
@@ -359,6 +357,12 @@ const Neurons: React.FC = () => {
         <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
           {mechanismsData && (
             <MechanismTable data={mechanismsData} instance={currentInstance} />
+          )}
+        </Collapsible>
+
+        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings">
+          {experimentalRecordingData && (
+            <ExperimentalRecordingsTable data={experimentalRecordingData} />
           )}
         </Collapsible>
       </DataContainer>

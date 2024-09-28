@@ -174,12 +174,6 @@
         "mtype": "SP_Ivy"
     },
     {
-        "name": "011017HP2",
-        "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/bd3333b4-d61e-4d95-96a0-1ba70cab13bf",
-        "region": "SO",
-        "mtype": "SO_OLM"
-    },
-    {
         "name": "990803",
         "id": "https://bbp.epfl.ch/neurosciencegraph/data/neuronmorphologies/f8740320-f3e3-4f08-870f-69adef9c4e0c",
         "region": "SP",
