@@ -233,7 +233,7 @@ const NeuronalMorphologyView: React.FC = () => {
                                         <>
                                             <MorphDistributionPlots type="singleMorphology" data={plotsData} />
                                             <div className="mt-4">
-                                                <DownloadButton onClick={() => downloadAsJson(plotsData, `${quickSelection.instance}-plot-data.json`)} theme={theme}>
+                                                <DownloadButton onClick={() => downloadAsJson(plotsData, `${instances}-plot-data.json`)} theme={theme}>
                                                     Plot Data
                                                 </DownloadButton>
                                             </div>

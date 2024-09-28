@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useIntersection } from 'next/dist/client/use-intersection';
 import { requestIdleCallback } from 'next/dist/client/request-idle-callback';
+import Plotly from 'plotly.js-cartesian-dist';
 
 import style from './histogram.module.scss';
 
@@ -84,9 +85,9 @@ const Histogram: React.FC<HistogramProps> = ({ title, color, values, bins, count
 
     const data = getPlotData(values, bins, counts, color);
 
-    //requestIdleCallback(() => Plotly.newPlot(chartEl, data, { ...plotlyLayout, title }, plotlyConfig));
+    requestIdleCallback(() => Plotly.newPlot(chartEl, data, { ...plotlyLayout, title }, plotlyConfig));
 
-    //eturn () => Plotly.purge(chartEl);
+    return () => Plotly.purge(chartEl);
   }, [title, values, bins, counts, color, isIntersected]);
 
   return (
