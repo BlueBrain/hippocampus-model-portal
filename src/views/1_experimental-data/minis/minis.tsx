@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FixedType } from 'rc-table/lib/interface';
-
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
@@ -18,6 +16,7 @@ type TableEntry = {
     frequencyMean: number;
     frequencySEM: number;
     reference: string;
+    reference_link?: string;
     notes: string;
 };
 
@@ -65,6 +64,12 @@ const MinisColumns = [
     {
         title: 'Reference',
         dataIndex: 'reference' as keyof TableEntry,
+        render: (reference: string, record: TableEntry) =>
+            record.reference_link ? (
+                <a href={record.reference_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+            ) : (
+                reference
+            ),
     },
     {
         title: 'Notes',
@@ -88,7 +93,6 @@ const Minis: React.FC<MinisProps> = ({ theme }) => {
 
     return (
         <>
-
             <ResponsiveTable<TableEntry>
                 className="mt-3"
                 data={minisData}

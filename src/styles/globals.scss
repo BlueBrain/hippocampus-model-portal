@@ -651,7 +651,14 @@ $collapsible-padding: 2rem 2rem;
 
 
 
-
+.table-container {
+  width: 100%;
+  /* Adjust width as needed */
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
+  white-space: nowrap;
+  /* Prevent table content from wrapping */
+}
 
 
 

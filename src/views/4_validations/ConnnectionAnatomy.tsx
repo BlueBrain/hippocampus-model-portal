@@ -62,9 +62,9 @@ const ConnectionAnatomyView: React.FC = () => {
                     { id: 'ConnectionProbabilitySection', label: 'Connection probabilites validation' },
                     { id: 'ConvergenceValidationSection', label: 'Convergence validation' },
                     { id: 'DivergenceValidationSection', label: 'Divergence validation' },
-                    { id: 'NbOfSynapsesPConnectionSection', label: 'Nb. of Synapse p.connection validation' },
+                    { id: 'NbOfSynapsesPConnectionSection', label: 'Nb. of synapse p.connection validation' },
                     { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percetages' },
-                    { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model Laminar distribution of synapses' },
+                    { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model laminar distribution of synapses' },
                 ]}>
 
                 <Collapsible id="BoutonDensityValidationSection" title={`Bouton density validation`}>
@@ -89,7 +89,7 @@ const ConnectionAnatomyView: React.FC = () => {
                     <DivergenceValidation theme={theme} />
                 </Collapsible>
 
-                <Collapsible id="NbOfSynapsesPConnectionSection" title={`Number of Synapse per connection validation`}>
+                <Collapsible id="NbOfSynapsesPConnectionSection" title={`Number of synapse per connection validation`}>
                     <NbOfSynapsesPConnection theme={theme} />
                 </Collapsible>
 
@@ -98,7 +98,7 @@ const ConnectionAnatomyView: React.FC = () => {
                 </Collapsible>
 
 
-                <Collapsible id="ModelLaminarDistributionOfDynapsesSection" title={`Model Laminar distribution of synapses`}>
+                <Collapsible id="ModelLaminarDistributionOfDynapsesSection" title={`Model laminar distribution of synapses`}>
                     <LaminarDistributionOfDynapses theme={theme} />
                 </Collapsible>
 

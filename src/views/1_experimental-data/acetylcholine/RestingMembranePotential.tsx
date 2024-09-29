@@ -121,13 +121,14 @@ const RestingMembranePotential: React.FC<RestingMembranePotentialProps> = ({ the
 
     return (
         <>
+
             <ResponsiveTable<DataEntry>
                 className="mb-2"
                 columns={columns}
                 data={data}
                 rowKey={({ 'Neuron Type': neuronType }) => neuronType}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Resting-Membrane-Potential-Data.json`)}

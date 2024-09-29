@@ -20,13 +20,13 @@ export type InstanceViewerProps = {
 
 const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) => {
     const processedFacts: FactsheetEntryType[] = facts.map(fact => {
-        const [mainValue, uncertaintyValue] = fact.value;
+        const [meanValue, stdDevValue] = fact.value;
         return {
             name: fact.name,
-            value: Number(mainValue.toFixed(3)),
-            unit: `± ${Number(uncertaintyValue.toFixed(3))}`,
-            description: fact.description || '', // Provide an empty string if description is undefined
-            type: fact.type || '' // Ensure type is always a string
+            value: Number(meanValue.toFixed(3)),
+            unit: `± ${Number(stdDevValue.toFixed(3))}`,
+            description: fact.description || '',
+            type: fact.type || ''
         };
     });
 
@@ -36,7 +36,7 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
 
     const renderFactsheet = (groupedFacts: FactsheetEntryType[], title: string) => (
         <div key={title}>
-            <h4 className="capitalize">{title}</h4>
+            <h4 className="capitalize">{title || 'General'}</h4>
             <Factsheet facts={groupedFacts} />
         </div>
     );

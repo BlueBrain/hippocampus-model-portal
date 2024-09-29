@@ -47,6 +47,7 @@
 
 .content {
   @apply w-full;
+  max-width: 1200px;
 
   /* On screens smaller than 'lg', ensure the content takes up full width */
   @screen md {

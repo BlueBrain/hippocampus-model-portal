@@ -9,12 +9,14 @@ interface PlotDetailsProps {
     plotData: any;
     xAxis?: string;
     yAxis?: string;
+    xAxisTickStep?: number; // New prop for x-axis tick step
 }
 
 const DistributionPlot: React.FC<PlotDetailsProps> = ({
     plotData,
     xAxis = 'Value',
     yAxis = 'Frequency',
+    xAxisTickStep,
 }) => {
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -175,8 +177,16 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                     maxRotation: 0,
                     minRotation: 0,
                     callback: function (value: number, index: number, ticks: any[]) {
-                        if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
-                            return this.getLabelForValue(value);
+                        if (xAxisTickStep) {
+                            // Use the provided xAxisTickStep
+                            if (index % xAxisTickStep === 0) {
+                                return this.getLabelForValue(value);
+                            }
+                        } else {
+                            // Use the default adaptive tick step based on window width
+                            if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
+                                return this.getLabelForValue(value);
+                            }
                         }
                         return '';
                     },

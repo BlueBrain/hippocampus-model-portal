@@ -14,11 +14,12 @@ type DataEntry = {
   specie: string;
   age?: string;
   weight?: string;
-  mean: number;
-  std: number | 'n/a';
-  n: number;
-  sem: number | '-';
-  reference: string | React.ReactNode;
+  mean: number | string;
+  std: number | 'n/a' | string;
+  nConns: number | string;
+  sem: number | '-' | string;
+  ref: string;
+  ref_link?: string;
 };
 
 const termDescription = {
@@ -39,28 +40,36 @@ const columns = [
   {
     title: 'From',
     dataIndex: 'from' as keyof DataEntry,
-    render: from => (<Term term={from} description={getMtypeDescription(from)} />),
+    render: (from: string) => (
+      <Term term={from} description={getMtypeDescription(from)} />
+    ),
   },
   {
     title: 'To',
     dataIndex: 'to' as keyof DataEntry,
-    render: to => (<Term term={to} description={getMtypeDescription(to)} />),
+    render: (to: string) => (
+      <Term term={to} description={getMtypeDescription(to)} />
+    ),
   },
   {
     title: 'Region',
     dataIndex: 'region' as keyof DataEntry,
+    render: (region: string) => region || 'N/A',
   },
   {
     title: 'Specie',
     dataIndex: 'specie' as keyof DataEntry,
+    render: (specie: string) => specie || 'N/A',
   },
   {
     title: 'Age',
     dataIndex: 'age' as keyof DataEntry,
+    render: (age?: string) => age || 'N/A',
   },
   {
     title: 'Weight',
     dataIndex: 'weight' as keyof DataEntry,
+    render: (weight?: string) => weight || 'N/A',
   },
   {
     title: 'Synapses per connection',
@@ -68,23 +77,46 @@ const columns = [
       {
         title: 'Mean ± std',
         dataIndex: 'mean' as keyof DataEntry,
-        render: (mean, record) => <><NumberFormat value={mean} /> ± <NumberFormat value={record.std} /></>
+        render: (mean: number | string, record: DataEntry) => (
+          <>
+            {typeof mean === 'number' ? <NumberFormat value={mean} /> : 'N/A'} ±{' '}
+            {typeof record.std === 'number' ? <NumberFormat value={record.std} /> : 'N/A'}
+          </>
+        ),
       },
       {
         title: 'SEM',
         dataIndex: 'sem' as keyof DataEntry,
-        render: (sem) => (<NumberFormat value={sem} />),
+        render: (sem: number | '-' | string) => (
+          typeof sem === 'number' ? <NumberFormat value={sem} /> : 'N/A'
+        ),
       },
       {
         title: 'N. conns',
         dataIndex: 'nConns' as keyof DataEntry,
+        render: (nConns: number | string) => (
+          typeof nConns === 'number' ? nConns : 'N/A'
+        ),
       },
     ],
   },
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof DataEntry,
-  }
+    render: (ref: string, record: DataEntry) =>
+      record.ref_link && record.ref_link.trim() !== '' ? (
+        <a
+          href={record.ref_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Reference: ${ref}`}
+        >
+          {ref}
+        </a>
+      ) : (
+        ref
+      ),
+  },
 ];
 
 type SynsPerConnTableProps = {
@@ -93,12 +125,26 @@ type SynsPerConnTableProps = {
 
 const SynsPerConnTable: React.FC<SynsPerConnTableProps> = ({ theme }) => {
   const [data, setData] = useState<DataEntry[] | null>(null);
+  const [error, setError] = useState<string | null>(null); // State for handling errors
 
   useEffect(() => {
     fetch(`${dataPath}/1_experimental-data/connection-anatomy/syns-per-conn.json`)
-      .then((response) => response.json())
-      .then((fetchedData) => setData(fetchedData));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((fetchedData: DataEntry[]) => setData(fetchedData))
+      .catch((error) => {
+        console.error('Error fetching syns-per-conn data:', error);
+        setError('Failed to load data.');
+      });
   }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!data) {
     return <div>Loading...</div>;
@@ -110,7 +156,7 @@ const SynsPerConnTable: React.FC<SynsPerConnTableProps> = ({ theme }) => {
         className="mb-2"
         columns={columns}
         data={data}
-        rowKey={({ from, to }) => `${from}_${to}`}
+        rowKey={(record, index) => `${record.from}_${record.to}_${index}`} // Ensure uniqueness
       />
       <div className="mt-2">
         <DownloadButton

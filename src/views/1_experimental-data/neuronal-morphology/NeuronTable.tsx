@@ -85,7 +85,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             render: (name: string) => (
                 <div className="image-container">
                     <img
-                        src={`${imagesPath}1_experimental-data/slices/thumbnails/${name}.jpeg`}
+                        src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${name}.jpeg`}
                         alt={`neuron image ${name}`}
                         width={300}
                         height={187}
@@ -130,7 +130,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
                 <div>
                     <DownloadButton
                         theme={theme}
-                        href={`${imagesPath}1_experimental-data/slices/${name}.jpeg`}
+                        href={`${basePath}/data/images/1_experimental-data/slices/${name}.jpeg`}
                     >
                         Download image
                     </DownloadButton>

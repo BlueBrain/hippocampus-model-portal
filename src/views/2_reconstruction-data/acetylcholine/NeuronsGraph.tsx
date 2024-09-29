@@ -13,10 +13,8 @@ import {
 } from 'chart.js';
 import HttpDownloadButton from '@/components/HttpDownloadButton';
 import { downloadAsJson } from '@/utils';
-
 import DownloadButton from '@/components/DownloadButton';
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
-
 import { dataPath } from '@/config';
 
 Chart.register(
@@ -99,7 +97,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                 const lineData = generateLineData();
                 const { solidData, dottedData } = splitLineData(lineData);
 
-                // Destroy existing chart if it exists
                 if (chartInstanceRef.current) {
                     chartInstanceRef.current.destroy();
                 }
@@ -115,7 +112,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 pointRadius: 3
                             },
                             {
-                                label: 'Formula Line (Solid)',
+                                label: 'Fit',
                                 data: solidData,
                                 borderColor: '#3B4165',
                                 type: 'line',
@@ -125,7 +122,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 tension: 0
                             },
                             {
-                                label: 'Formula Line (Dotted)',
+                                label: 'Experimental data',
                                 data: dottedData,
                                 borderColor: '#3B4165',
                                 type: 'line',
@@ -139,7 +136,6 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     },
                     options: {
                         responsive: true,
-
                         maintainAspectRatio: false,
                         animation: { duration: 0 },
                         scales: {
@@ -160,10 +156,15 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 ticks: {
                                     callback: function (value) {
                                         const logValue = Math.log10(value as number);
-                                        if (logValue === -2 || logValue === -1 || logValue === 0 || logValue === 1 || logValue === 2 || logValue === 3) {
-                                            return `10 ^ ${logValue.toFixed(0)}`;
+                                        switch (logValue) {
+                                            case -2: return '10⁻²';
+                                            case -1: return '10⁻¹';
+                                            case 0: return '10';
+                                            case 1: return '10¹';
+                                            case 2: return '10²';
+                                            case 3: return '10³';
+                                            default: return '';
                                         }
-                                        return '';
                                     },
                                     autoSkip: false,
                                     maxTicksLimit: 6,

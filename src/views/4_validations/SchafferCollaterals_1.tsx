@@ -119,16 +119,16 @@ const SchafferCollateralsView: React.FC = () => {
                 navItems={[
                     { label: 'Anatomy', isTitle: true },
                     { id: 'AnatomyDensityOfSynapsesSection', label: 'Density of synapses along the radial axis' },
-                    { id: 'SynapsesConvergenceForPyramidalCellsSection', label: jsonData.SynapsesConvergenceForPyramidalCells?.name || 'Synapses Convergence For Pyramidal Cells' },
-                    { id: 'NumberOfSynapsesPerConectionsSection', label: jsonData.NumberOfSynapsesPerConections?.name || 'Number of Synapses Per Connections' },
-                    { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: jsonData.SynapsesConvergenceForPyramidalCellsTwo?.name || 'Synapses Convergence For Pyramidal Cells Two' },
+                    { id: 'SynapsesConvergenceForPyramidalCellsSection', label: jsonData.SynapsesConvergenceForPyramidalCells?.name || 'Synapses convergence dor pyramidal cells' },
+                    { id: 'NumberOfSynapsesPerConectionsSection', label: jsonData.NumberOfSynapsesPerConections?.name || 'Number of synapses per connections' },
+                    { id: 'SynapsesConvergenceForPyramidalCellsTwoSection', label: jsonData.SynapsesConvergenceForPyramidalCellsTwo?.name || 'Synapses Convergence For pyramidal cells two' },
                     { id: 'DivergenceSection', label: 'Anatomy ' + (jsonData.Divergence?.name || 'Divergence') },
                     { label: 'Physiology', isTitle: true },
                     { id: 'PSPAmplitudeSection', label: jsonData.PSPAmplitude?.name || 'PSP Amplitude' },
-                    { id: 'PSCRatioFromSCToCB1RPlusSection', label: jsonData.PSCRatioFromSCToCB1RPlus?.name || 'PSC Ratio From SC To CB1R+' },
-                    { id: 'PSCRatioFromSCToCB1RMinusSection', label: jsonData.PSCRatioFromSCToCB1RMinus?.name || 'PSC Ratio From SC To CB1R-' },
-                    { id: 'TemporalDynamicsOfSCToPCSynapticTransmissionSection', label: 'Temporal Dynamics of SC to PC Synaptic Transmission' },
-                    { id: 'ESPS_IPSPLatencySection', label: jsonData.ESPS_IPSPLatency?.name || 'ESPS IPSP Latency' },
+                    { id: 'PSCRatioFromSCToCB1RPlusSection', label: jsonData.PSCRatioFromSCToCB1RPlus?.name || 'PSC ratio from SC to CB1R+' },
+                    { id: 'PSCRatioFromSCToCB1RMinusSection', label: jsonData.PSCRatioFromSCToCB1RMinus?.name || 'PSC ratio from SC to CB1R-' },
+                    { id: 'TemporalDynamicsOfSCToPCSynapticTransmissionSection', label: 'Temporal dynamics of SC to PC synaptic transmission' },
+                    { id: 'ESPS_IPSPLatencySection', label: jsonData.ESPS_IPSPLatency?.name || 'ESPS IPSP latency' },
                 ]}>
 
                 <Collapsible id="AnatomyDensityOfSynapsesSection" properties={["Anatomy"]} title={"Density of synapses along the radial axis"} >
@@ -141,6 +141,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.SynapsesConvergenceForPyramidalCells}
                             xAxisTitle="Synapse Indegree from each CA1 PC"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -152,6 +153,7 @@ const SchafferCollateralsView: React.FC = () => {
                             xAxisTitle="Synapse Indegree from each CA1 INT"
                             yAxisTitle="Count"
                             isLogarithmic={true}
+                            xTickInterval={1}
                         />
                     </Collapsible>
                 )}
@@ -162,6 +164,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.SynapsesConvergenceForPyramidalCellsTwo}
                             xAxisTitle="Synapses/Connection"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -172,6 +175,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.Divergence}
                             xAxisTitle="Synapse Outdegree from each CA3 PC"
                             yAxisTitle=""
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -182,6 +186,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.PSPAmplitude}
                             xAxisTitle="PSP Amplitude (mV)"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -192,6 +197,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.PSCRatioFromSCToCB1RPlus}
                             xAxisTitle="PSC Ratio"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -202,17 +208,19 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.PSCRatioFromSCToCB1RMinus}
                             xAxisTitle="PSC Ratio"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
 
                 {jsonData.RiseTime && jsonData.TauDecay && jsonData.HalfWidth && (
-                    <Collapsible id="TemporalDynamicsOfSCToPCSynapticTransmissionSection" properties={["Physiology"]} title={"Temporal Dynamics of SC to PC Synaptic Transmission"}>
+                    <Collapsible id="TemporalDynamicsOfSCToPCSynapticTransmissionSection" properties={["Physiology"]} title={"Temporal dynamics of SC to PC synaptic transmission"}>
                         <h2 className="text-base  mb-2">{jsonData.RiseTime.name}</h2>
                         <SCDistibutionGraph
                             data={jsonData.RiseTime}
                             xAxisTitle="Rise Time (ms)"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
 
                         <h2 className="text-base mt-16 mb-2">{jsonData.TauDecay.name}</h2>
@@ -220,6 +228,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.TauDecay}
                             xAxisTitle="Tau Decay (ms)"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
 
                         <h2 className="text-base mt-16 mb-2">{jsonData.HalfWidth.name}</h2>
@@ -227,6 +236,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.HalfWidth}
                             xAxisTitle="Half-width (ms)"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}
@@ -237,6 +247,7 @@ const SchafferCollateralsView: React.FC = () => {
                             data={jsonData.ESPS_IPSPLatency}
                             xAxisTitle="EPSP IPSP Latency (ms)"
                             yAxisTitle="Count"
+                            xTickInterval={5}
                         />
                     </Collapsible>
                 )}

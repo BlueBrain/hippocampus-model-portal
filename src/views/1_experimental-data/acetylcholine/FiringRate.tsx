@@ -22,6 +22,7 @@ type DataEntry = {
     "Current (nA)": number;
     "n. cells": number;
     "Reference": string;
+    "Reference_link": string | null;
 };
 
 const termDescription = {
@@ -66,9 +67,14 @@ const columns: ColumnsType<DataEntry> = [
     { title: 'Current (nA)', dataIndex: 'Current (nA)' },
     { title: 'n. cells', dataIndex: 'n. cells' },
     {
-        title: 'Reference', dataIndex: 'Reference', render: (reference: string) => (
-            <a href="#" target="_blank" rel="noopener noreferrer">{reference}</a>
-        )
+        title: 'Reference',
+        dataIndex: 'Reference',
+        render: (reference: string, record: DataEntry) =>
+            record.Reference_link ? (
+                <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+            ) : (
+                <>{reference}</>
+            )
     },
 ];
 
@@ -97,7 +103,7 @@ const FiringRate: React.FC<FiringRateProps> = ({ theme }) => {
                 data={data}
                 rowKey={(record) => record.Reference}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Firing-Rate-Data.json`)}

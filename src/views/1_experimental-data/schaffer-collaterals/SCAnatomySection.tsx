@@ -3,8 +3,6 @@ import { FixedType } from 'rc-table/lib/interface';
 
 import ResponsiveTable from '@/components/ResponsiveTable';
 import NumberFormat from '@/components/NumberFormat';
-import HttpDownloadButton from '@/components/HttpDownloadButton';
-import TextWithRefs from '@/components/TextWithRefs';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
@@ -24,6 +22,7 @@ type TableEntry = {
   nAnimals: number | string;
   nSynapses: number | string;
   ref: string;
+  ref_link: string | null;
 };
 
 type SCAnatomySectionProps = {
@@ -32,17 +31,12 @@ type SCAnatomySectionProps = {
 
 const SCAnatomySection: React.FC<SCAnatomySectionProps> = ({ theme }) => {
   const [anatomyData, setAnatomyData] = useState<TableEntry[]>([]);
-  const [doiIndex, setDoiIndex] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchData = async () => {
       const anatomyResponse = await fetch(`${dataPath}/1_experimental-data/schaffer-collaterals/sc-anatomy.json`);
       const anatomyJson = await anatomyResponse.json();
       setAnatomyData(anatomyJson);
-
-      const doiResponse = await fetch(`${dataPath}/1_experimental-data/schaffer-collaterals/ref-doi.json`);
-      const doiJson = await doiResponse.json();
-      setDoiIndex(doiJson);
     };
 
     fetchData();
@@ -111,7 +105,14 @@ const SCAnatomySection: React.FC<SCAnatomySectionProps> = ({ theme }) => {
     {
       title: 'Reference',
       dataIndex: 'ref' as keyof TableEntry,
-      render: (text: string) => <TextWithRefs text={text} doiIndex={doiIndex} />
+      render: (text: string, record: TableEntry) =>
+        record.ref_link ? (
+          <a href={record.ref_link} target="_blank" rel="noopener noreferrer">
+            {text}
+          </a>
+        ) : (
+          text
+        ),
     },
   ];
 

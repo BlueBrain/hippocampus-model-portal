@@ -14,6 +14,7 @@ type TableEntry = {
     sdRateHz: number;
     recordingCondition: string;
     source: string;
+    sourceLink: string | null;
 };
 
 const preprocessData = (data: any[]): TableEntry[] => {
@@ -29,7 +30,8 @@ const preprocessData = (data: any[]): TableEntry[] => {
         n: item['n'],
         sdRateHz: item['SD_rate_Hz'],
         recordingCondition: item['recording_condition'],
-        source: item['source']
+        source: item['source'],
+        sourceLink: item['source_link'] || null, // Handle source_link
     }));
 };
 
@@ -73,6 +75,14 @@ const RateColumns = [
         title: 'Source',
         dataIndex: 'source',
         key: 'source',
+        render: (source: string, record: TableEntry) =>
+            record.sourceLink ? (
+                <a href={record.sourceLink} target="_blank" rel="noopener noreferrer">
+                    {source}
+                </a>
+            ) : (
+                <>{source}</>
+            ),
     }
 ];
 
