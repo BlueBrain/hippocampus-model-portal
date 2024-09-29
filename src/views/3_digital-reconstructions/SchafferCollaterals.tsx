@@ -260,6 +260,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('synapses-per-connection')}
                 xAxis='N_syn'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">

@@ -298,9 +298,9 @@ const Neurons: React.FC = () => {
           { id: 'traceSection', label: 'Trace' },
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
-          { id: 'experimentalRecordingsSection', label: 'Experimental recordings' },
           { id: 'efeaturesSection', label: 'E-features' },
           { id: 'mechansimsSection', label: 'Mechanisms' },
+          { id: 'experimentalRecordingsSection', label: 'Experimental recordings used for this model' }
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -360,7 +360,7 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
-        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings">
+        <Collapsible id="experimentalRecordingsSection" className="mt-4" title="Experimental recordings used for this model">
           {experimentalRecordingData && (
             <ExperimentalRecordingsTable data={experimentalRecordingData} />
           )}

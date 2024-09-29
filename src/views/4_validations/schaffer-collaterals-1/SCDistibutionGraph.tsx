@@ -29,6 +29,7 @@ export type SCDistibutionGraphProps = {
     yAxisTitle?: string;
     theme?: number;
     isLogarithmic?: boolean; // New prop to determine if y-axis should be logarithmic
+    xTickInterval?: number; // New optional prop for tick interval on x-axis
 };
 
 const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
@@ -37,6 +38,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
     yAxisTitle,
     theme,
     isLogarithmic = false, // Default value is false
+    xTickInterval, // New optional prop
 }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstance = useRef<Chart | null>(null); // Ref to keep track of the chart instance
@@ -68,6 +70,19 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                                 title: {
                                     display: !!xAxisTitle,
                                     text: xAxisTitle || '',
+                                },
+                                ticks: {
+                                    autoSkip: false, // Ensure no ticks are skipped if `xTickInterval` is provided
+                                    callback: (value, index) => {
+                                        // If xTickInterval is set, only show labels at specified intervals
+                                        if (xTickInterval && index % xTickInterval !== 0) {
+                                            return '';
+                                        }
+                                        return value;
+                                    },
+                                    maxRotation: 0, // Prevent slanted text
+                                    minRotation: 0, // Prevent slanted text
+                                    align: 'center', // Ensure numbers are centered and straight
                                 },
                             },
                             y: {
@@ -112,7 +127,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
             }
             window.removeEventListener('resize', handleResize);
         };
-    }, [data, xAxisTitle, yAxisTitle, isLogarithmic]); // Include isLogarithmic in the dependency array
+    }, [data, xAxisTitle, yAxisTitle, isLogarithmic, xTickInterval]); // Include xTickInterval in the dependency array
 
     return (
         <div>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Table } from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
+import { basePath } from '@/config';
+import traces from '@/traces.json';
 
 type ExperimentalRecordingsData = {
     specimen_id: string;
     specimen_type: string;
-    morphology: string;
-    mtype: string;
     etype: string;
-    layer: string;
     ephys_ids: string[];
 };
 
@@ -18,17 +18,17 @@ type ExperimentalRecordingsTableProps = {
 
 const ExperimentalRecordingsTable: React.FC<ExperimentalRecordingsTableProps> = ({ data }) => {
     const columns = [
+
         {
-            title: 'Layer',
-            dataIndex: 'layer',
-            key: 'layer',
-            width: 100, // Add a fixed width for responsiveness
-        },
-        {
-            title: 'M-type',
-            dataIndex: 'mtype',
-            key: 'mtype',
-            width: 100,
+            title: 'Electrophysiology',
+            dataIndex: 'ephys_id',
+            key: 'ephys_id',
+            width: 150,
+            render: (ephys_id: string, record: { etype: string }) => (
+                <Link href={`http://localhost:3000/hippocampus-portal-dev/experimental-data/neuronal-electrophysiology/?etype=${record.etype}&etype_instance=${ephys_id}`}>
+                    {ephys_id}
+                </Link>
+            ),
         },
         {
             title: 'E-type',
@@ -37,56 +37,45 @@ const ExperimentalRecordingsTable: React.FC<ExperimentalRecordingsTableProps> = 
             width: 100,
         },
         {
-            title: 'Morphology',
-            dataIndex: 'morphology',
-            key: 'morphology',
-            width: 150,
-        },
-        {
-            title: 'Electrophysiology',
-            dataIndex: 'ephys_ids',
-            key: 'ephys_ids',
-            width: 200, // Ensure enough space for links
-            render: (ephys_ids: string[]) => (
-                <>
-                    {ephys_ids.map((id) => (
-                        <>
-                            <Link key={id} href={`/experimental-data/neuronal-electrophysiology/?etype=${data.etype}&etype_instance=${id}`} rel="noopener noreferrer" className="mr-2">
-                                <span
-                                    key={id}
-                                    className='inline-block mr-2 mb-1 px-2 py-1 rounded cursor-pointer bg-blue-100 text-blue-800 hover:bg-blue-200'
-                                    onClick={() => handleDownload(id)}
-                                >
-                                    {id}
-                                </span>
-                            </Link>
-                            <br />
-                        </>
-                    ))}
-                </>
+            title: 'Preview',
+            dataIndex: 'ephys_id',
+            key: 'preview',
+            width: 220,
+            render: (ephys_id: string) => (
+                <Image
+                    src={`${basePath}/data/images/2_neuron-models/trace-preview/${ephys_id}.png`}
+                    alt={`neuron trace preview ${ephys_id}`}
+                    width={200}
+                    height={100}
+                    style={{ height: 'auto' }}
+                />
             ),
         },
     ];
 
-    const tableData = [
-        {
-            key: '1',
-            ...data,
-        },
-    ];
+    const getEtypeForEphysId = (ephysId: string): string => {
+        for (const [etype, ids] of Object.entries(traces)) {
+            if (ids.includes(ephysId)) {
+                return etype;
+            }
+        }
+        return 'Unknown';  // fallback if not found
+    };
+
+    const tableData = data.ephys_ids.map((ephys_id) => ({
+        key: ephys_id,
+        etype: getEtypeForEphysId(ephys_id),
+        ephys_id: ephys_id,
+    }));
 
     return (
         <Table
             columns={columns}
             dataSource={tableData}
             pagination={false}
-            scroll={{ x: 'max-content' }} // Makes the table horizontally scrollable
+            scroll={{ x: 'max-content' }}
         />
     );
 };
 
 export default ExperimentalRecordingsTable;
-
-function handleDownload(id: string): void {
-    throw new Error('Function not implemented.');
-}

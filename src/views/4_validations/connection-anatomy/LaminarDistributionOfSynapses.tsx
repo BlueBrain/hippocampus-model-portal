@@ -148,7 +148,7 @@ const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapses
             options: {
                 plugins: {
                     title: {
-                        display: false,
+                        display: true,
                         text: 'Laminar Distribution of Synapses',
                     },
                     tooltip: {
@@ -156,30 +156,8 @@ const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapses
                         intersect: false,
                     },
                     legend: {
-                        display: false,
+                        display: true,
                         position: 'right',
-                        labels: {
-                            filter: function (item) {
-                                return !item.text.includes('(');
-                            },
-                            generateLabels: function (chart) {
-                                const original = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-                                const uniqueLabels: any[] = [];
-                                const modelExp: any[] = [];
-
-                                original.forEach(label => {
-                                    if (label.text.includes('(Model)')) {
-                                        modelExp.push({ ...label, text: 'Model', fillStyle: 'rgb(0, 0, 0)', strokeStyle: 'rgb(0, 0, 0)' });
-                                    } else if (label.text.includes('(Exp)')) {
-                                        modelExp.push({ ...label, text: 'Exp', fillStyle: 'rgb(255, 255, 255)', strokeStyle: 'rgb(0, 0, 0)' });
-                                    } else {
-                                        uniqueLabels.push(label);
-                                    }
-                                });
-
-                                return [...modelExp, { text: '', fillStyle: 'rgba(0,0,0,0)' }, ...uniqueLabels];
-                            }
-                        }
                     },
                 },
                 responsive: true,
@@ -187,10 +165,6 @@ const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapses
                 scales: {
                     x: {
                         stacked: true,
-                        title: {
-                            display: true,
-                            text: 'mtype',
-                        }
                     },
                     y: {
                         stacked: true,

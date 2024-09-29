@@ -23,6 +23,7 @@ import { Layer } from '@/types';
 import { basePath } from '@/config';
 
 import modelsDataImport from './morphology-library.json';
+import MorphDistributionPlots from '@/components/MorphDistributionsPlots';
 
 type ModelData = {
   layer: Layer;
@@ -292,6 +293,25 @@ const MorphologyLibrary: React.FC = () => {
               </>
             )}
           </HttpData>
+          <div className="mt-4">
+
+            <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/section_features/${currentMorphology}/distribution-plots.json`}>
+              {(plotsData) => (
+                <>
+                  {plotsData && (
+                    <>
+                      <MorphDistributionPlots type="singleMorphology" data={plotsData} />
+                      <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(plotsData, `${currentMorphology}-plot-data.json`)} theme={theme}>
+                          Plot Data
+                        </DownloadButton>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </HttpData>
+          </div>
         </Collapsible>
         <Collapsible
           id="populationSection"
@@ -311,6 +331,25 @@ const MorphologyLibrary: React.FC = () => {
                       <div className="mt-4">
                         <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentMtype}-factsheet.json`)} theme={theme}>
                           Factsheet
+                        </DownloadButton>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </HttpData>
+          </div>
+          <div className="mt-4">
+            public/data/
+            <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/distribution-plot.json`}>
+              {(plotsData) => (
+                <>
+                  {plotsData && (
+                    <>
+                      <MorphDistributionPlots type="singleMorphology" data={plotsData} />
+                      <div className="mt-4">
+                        <DownloadButton onClick={() => downloadAsJson(plotsData, `${currentMorphology}-plot-data.json`)} theme={theme}>
+                          Plot Data
                         </DownloadButton>
                       </div>
                     </>

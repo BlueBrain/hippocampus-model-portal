@@ -131,21 +131,24 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                         maintainAspectRatio: false,
                         scales: {
                             x: {
+                                title: {
+                                    display: true,
+                                    text: 'STD',
+                                },
                                 type: 'linear',
                                 position: 'bottom',
-                                title: {
-                                    display: false,
-                                    text: 'Experiment'
-                                },
+
                                 min: 0,
                                 max: 15,
+                                display: true,
+
                             },
                             y: {
                                 type: 'linear',
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: 'Model',
+                                    text: 'Mean',
                                 },
                                 min: 0,
                                 max: 18,

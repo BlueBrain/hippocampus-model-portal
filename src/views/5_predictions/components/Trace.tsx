@@ -37,7 +37,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare data for Plotly
             const traces = plotData.value_map.map((trace, index) => ({
-                x: Array.from({ length: trace.length }, (_, i) => i),
+                x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
                 y: trace,
                 type: 'scatter' as const,
                 mode: 'lines' as const,
@@ -58,7 +58,8 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                     showticklabels: true,
                     tickmode: 'linear',
                     tick0: 0,
-                    dtick: 50,
+                    dtick: 500,  // Changed from 1000 to 500
+                    range: [0, 5000],
                 },
                 yaxis: {
                     title: { text: plotData.units || 'Voltage (mV)', standoff: 40 },
