@@ -137,7 +137,7 @@ const MergedConnectionsView: React.FC = () => {
     return (
       <Collapsible title={title} id={id} className="mt-4">
         <div className="graph">
-          <DistributionPlot plotData={plotData} xAxis={xAxis} yAxis={yAxis} />
+          <DistributionPlot plotData={plotData} xAxis={xAxis} yAxis={yAxis} xAxisTickStep={1} />
         </div>
         <div className="mt-4">
           <DownloadButton

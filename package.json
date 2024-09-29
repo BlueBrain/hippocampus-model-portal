@@ -23,6 +23,7 @@
     "better-react-mathjax": "^2.0.3",
     "chart.js": "^4.4.3",
     "chartjs-plugin-error-bars": "^3.0.0",
+    "echarts": "^5.5.1",
     "expr-eval": "^2.0.2",
     "file-saver": "^2.0.5",
     "flexboxgrid": "^6.3.1",

@@ -1,5 +1,13 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { graphTheme } from '@/constants';
 
@@ -176,16 +184,20 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                 ticks: {
                     maxRotation: 0,
                     minRotation: 0,
-                    callback: function (value: number, index: number, ticks: any[]) {
-                        if (xAxisTickStep) {
-                            // Use the provided xAxisTickStep
-                            if (index % xAxisTickStep === 0) {
-                                return this.getLabelForValue(value);
-                            }
-                        } else {
-                            // Use the default adaptive tick step based on window width
-                            if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
-                                return this.getLabelForValue(value);
+                    callback: function (value: string, index: number, ticks: any[]) {
+                        const numericValue = parseFloat(value);
+                        if (!isNaN(numericValue)) {
+                            if (xAxisTickStep) {
+                                const epsilon = 0.0001;
+                                const remainder = numericValue % xAxisTickStep;
+                                if (Math.abs(remainder) < epsilon || Math.abs(remainder - xAxisTickStep) < epsilon) {
+                                    return value;
+                                }
+                            } else {
+                                // Use the default adaptive tick step based on window width
+                                if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
+                                    return value;
+                                }
                             }
                         }
                         return '';
@@ -196,6 +208,15 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                 title: {
                     display: true,
                     text: yAxis,
+                },
+                ticks: {
+                    callback: function (value: number, index: number, ticks: any[]) {
+                        const threshold = 1e6; // Define your threshold here
+                        if (value >= threshold || value <= -threshold) {
+                            return value.toExponential(2); // Adjust the number of decimals as needed
+                        }
+                        return value.toLocaleString(); // Default formatting
+                    },
                 },
             },
         },

@@ -9,6 +9,7 @@ import {
     LineElement,
     Tooltip,
     Title,
+    Legend,
 } from 'chart.js';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
@@ -23,7 +24,8 @@ Chart.register(
     PointElement,
     LineElement,
     Tooltip,
-    Title
+    Title,
+    Legend
 );
 
 export type NbOfSynapsesPConnectionProps = {
@@ -94,7 +96,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             ctx.stroke();
 
                             // Y error bars
-                            ctx.strokeStyle = 'black';
+                            ctx.strokeStyle = graphTheme.blue;
                             const yErrorPixels = Math.abs(y.getPixelForValue(datapoint.y + datapoint.yError) - y.getPixelForValue(datapoint.y));
                             ctx.beginPath();
                             ctx.moveTo(xPixel, yPixel - yErrorPixels);
@@ -118,11 +120,11 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                     type: 'scatter',
                     data: {
                         datasets: [{
+                            label: 'Model (Mean)',
                             data: dataPoints,
-                            backgroundColor: 'black',
+                            backgroundColor: graphTheme.blue,
                             pointStyle: 'circle',
-                            //radius: 5,
-                            borderColor: 'black',
+                            borderColor: graphTheme.blue,
                             borderWidth: 1,
                         }]
                     },
@@ -133,22 +135,20 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'STD',
+                                    text: 'Experiment (Mean)',
                                 },
                                 type: 'linear',
                                 position: 'bottom',
-
                                 min: 0,
                                 max: 15,
                                 display: true,
-
                             },
                             y: {
                                 type: 'linear',
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: 'Mean',
+                                    text: 'Model (Mean)',
                                 },
                                 min: 0,
                                 max: 18,
@@ -161,7 +161,21 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                         },
                         plugins: {
                             legend: {
-                                display: false
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: 6,
+                                    boxHeight: 6,
+                                    padding: 20,
+                                },
+                                title: {
+                                    padding: {
+                                        top: 10,
+                                        bottom: 10
+                                    }
+                                }
                             },
                             tooltip: {
                                 callbacks: {

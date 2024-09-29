@@ -283,6 +283,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-divergence-by-connection')}
                 xAxis='Divergence'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">
@@ -305,6 +306,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-divergence-by-synapse')}
                 xAxis='Divergence'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">
@@ -333,6 +335,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-convergence-by-connection')}
                 xAxis='Convergence'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">
@@ -355,6 +358,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-convergence-by-synapse')}
                 xAxis='Convergence'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">
@@ -387,6 +391,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('psp-amplitude')}
                 xAxis='PSP Amplitude'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
 
             </div>
@@ -410,6 +415,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('psp-cv')}
                 xAxis='PSP CV'
                 yAxis='Frequency'
+                xAxisTickStep={1}
               />
             </div>
             <div className="mt-4">
@@ -475,6 +481,7 @@ const SchafferCollateralsView: React.FC = () => {
                         plotData={getPlotDataById('synapse-latency-for-simulation')}
                         xAxis='Latency'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -510,6 +517,7 @@ const SchafferCollateralsView: React.FC = () => {
                   plotData={getPlotDataById('rise-time-constant-for-simulation')}
                   xAxis='Rise Time'
                   yAxis='Frequency'
+                  xAxisTickStep={1}
                 />
               </div>
               <div className="mt-4">
@@ -543,6 +551,7 @@ const SchafferCollateralsView: React.FC = () => {
                         plotData={getPlotDataById('decay-time-constant')}
                         xAxis='Decay Time'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -576,6 +585,7 @@ const SchafferCollateralsView: React.FC = () => {
                         plotData={getPlotDataById('decay-time-constant-for-simulation')}
                         xAxis='Decay Time'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -608,6 +618,7 @@ const SchafferCollateralsView: React.FC = () => {
             <Collapsible title="NMDA/AMPA ratio distribution + mean and std" id="NMDAAMPARatioSection" properties={["Physiology"]}>
               <div className="graph">
                 <DistrbutionPlot
+                  xAxisTickStep={1}
                   plotData={getPlotDataById('nmda-ampa-ratio')} />
               </div>
               <div className="mt-4">
@@ -644,6 +655,7 @@ const SchafferCollateralsView: React.FC = () => {
                     plotData={getPlotDataById('u-parameter')}
                     xAxis='u_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -675,6 +687,7 @@ const SchafferCollateralsView: React.FC = () => {
                     plotData={getPlotDataById('d-parameter')}
                     xAxis='d_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -706,6 +719,7 @@ const SchafferCollateralsView: React.FC = () => {
                     plotData={getPlotDataById('g-synx')}
                     xAxis='g_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -737,6 +751,7 @@ const SchafferCollateralsView: React.FC = () => {
                     plotData={getPlotDataById('nrrp-parameter')}
                     xAxis='NRRP'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">

@@ -1,213 +1,185 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-    Chart,
-    ChartConfiguration,
-    BarController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Tooltip,
-    Legend,
-    ChartData,
-    ChartDataset,
-} from 'chart.js';
+import React, { useEffect, useRef } from 'react';
+import * as echarts from 'echarts';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 
-Chart.register(
-    BarController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Tooltip,
-    Legend
-);
+const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
+    const chartRef = useRef(null);
 
-interface LaminarDistributionOfSynapsesGraphProps {
-    theme: number;
-}
-
-const LaminarDistributionOfSynapsesGraph: React.FC<LaminarDistributionOfSynapsesGraphProps> = ({ theme }) => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const [chart, setChart] = useState<Chart | null>(null);
-
-    const data: ChartData<'bar'> = {
-        labels: ['SLM_PPA', 'SR_SCA', 'SP_AA', 'SP_BS', 'SP_CCKBC', 'SP_Ivy', 'SP_PC', 'SP_PVBC', 'SO_BP', 'SO_BS', 'SO_OLM', 'SO_Tri'],
-        datasets: [
-            {
-                label: 'SO (Model)',
-                data: [0, 26.65, 5.52, 32.64, 34.76, 34.40, 77.47, 33.10, 31.11, 33.11, 0.39, 57.41],
-                backgroundColor: graphTheme.blue,
-                stack: 'Model',
-            },
-            {
-                label: 'SP (Model)',
-                data: [0, 14.45, 89.96, 20.86, 43.95, 36.26, 11.48, 43.00, 24.54, 17.90, 0.55, 27.02],
-                backgroundColor: graphTheme.yellow,
-                stack: 'Model',
-            },
-            {
-                label: 'SR (Model)',
-                data: [35.48, 56.15, 4.52, 45.85, 21.03, 29.12, 3.34, 23.58, 40.36, 47.46, 31.28, 14.39],
-                backgroundColor: graphTheme.green,
-                stack: 'Model',
-            },
-            {
-                label: 'SLM (Model)',
-                data: [64.18, 1.88, 0, 0.20, 0.03, 0.02, 0.02, 0.05, 3.56, 0.90, 65.60, 0.13],
-                backgroundColor: graphTheme.red,
-                stack: 'Model',
-            },
-            {
-                label: 'out (Model)',
-                data: [0.34, 0.86, 0, 0.46, 0.24, 0.20, 7.68, 0.27, 0.43, 0.64, 2.18, 1.06],
-                backgroundColor: graphTheme.purple,
-                stack: 'Model',
-            },
-            {
-                label: 'SO (Exp)',
-                data: [0, 0, null, 47.6, 29.4, null, null, null, null, 48.1, null, 58.12],
-                backgroundColor: graphTheme.blue,
-                stack: 'Exp',
-            },
-            {
-                label: 'SP (Exp)',
-                data: [0, 0.2, null, 9.85, 62.85, null, null, null, null, 12.4, null, 18.11],
-                backgroundColor: graphTheme.yellow,
-                stack: 'Exp',
-            },
-            {
-                label: 'SR (Exp)',
-                data: [37.7, 97.4, null, 42.55, 7.75, null, null, null, null, 39.5, null, 23.77],
-                backgroundColor: graphTheme.green,
-                stack: 'Exp',
-            },
-            {
-                label: 'SLM (Exp)',
-                data: [62.3, 2.4, null, 0, 0, null, null, null, null, 0, null, 0],
-                backgroundColor: graphTheme.red,
-                stack: 'Exp',
-            },
-        ],
-    };
-
-    const createChart = () => {
-        const ctx = chartRef.current?.getContext('2d');
-        if (!ctx) return;
-
-        const hachurePlugin = {
-            id: 'hachurePlugin',
-            afterDatasetsDraw(chart: Chart) {
-                const { ctx, data } = chart;
-
-                ctx.save();
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = 'white';
-
-                data.datasets.forEach((dataset: ChartDataset<'bar'>, datasetIndex) => {
-                    if (dataset.stack === 'Exp') {
-                        const meta = chart.getDatasetMeta(datasetIndex);
-                        meta.data.forEach((bar, index) => {
-                            const dataPoint = dataset.data[index];
-                            if (dataPoint != null && typeof dataPoint === 'number' && dataPoint > 0) {
-                                const { x, y, width, height } = bar.getProps(['x', 'y', 'width', 'height']);
-
-                                ctx.save();
-                                ctx.beginPath();
-                                ctx.rect(x - width / 2, y, width, height);
-                                ctx.clip();
-
-                                const lineSpacing = 4;
-                                const angle = Math.PI / 4;
-
-                                for (let i = -width; i < height + width; i += lineSpacing) {
-                                    const startX = x - width / 2;
-                                    const startY = y + i;
-                                    const endX = x + width / 2;
-                                    const endY = startY - width;
-
-                                    ctx.moveTo(startX, startY);
-                                    ctx.lineTo(endX, endY);
-                                }
-
-                                ctx.stroke();
-                                ctx.restore();
-                            }
-                        });
-                    }
-                });
-
-                ctx.restore();
-            }
-        };
-
-        const config: ChartConfiguration<'bar'> = {
-            type: 'bar',
-            data: data,
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Laminar Distribution of Synapses',
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    legend: {
-                        display: true,
-                        position: 'right',
-                    },
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                            text: 'Synapses (%)',
-                        },
-                    },
-                },
-            },
-            plugins: [hachurePlugin],
-        };
-
-        const newChart = new Chart(ctx, config);
-        setChart(newChart);
-    };
+    const data = [
+        { name: 'SLM_PPA', SO: [0, 0], SP: [0, 0], SR: [35.48, 37.7], SLM: [64.18, 62.3], out: [0.34, null] },
+        { name: 'SR_SCA', SO: [26.65, 0], SP: [14.45, 0.2], SR: [56.15, 97.4], SLM: [1.88, 2.4], out: [0.86, null] },
+        { name: 'SP_AA', SO: [5.52, null], SP: [89.96, null], SR: [4.52, null], SLM: [0, null], out: [0, null] },
+        { name: 'SP_BS', SO: [32.64, 47.6], SP: [20.86, 9.85], SR: [45.85, 42.55], SLM: [0.20, 0], out: [0.46, null] },
+        { name: 'SP_CCKBC', SO: [34.76, 29.4], SP: [43.95, 62.85], SR: [21.03, 7.75], SLM: [0.03, 0], out: [0.24, null] },
+        { name: 'SP_Ivy', SO: [34.40, null], SP: [36.26, null], SR: [29.12, null], SLM: [0.02, null], out: [0.20, null] },
+        { name: 'SP_PC', SO: [77.47, null], SP: [11.48, null], SR: [3.34, null], SLM: [0.02, null], out: [7.68, null] },
+        { name: 'SP_PVBC', SO: [33.10, null], SP: [43.00, null], SR: [23.58, null], SLM: [0.05, null], out: [0.27, null] },
+        { name: 'SO_BP', SO: [31.11, null], SP: [24.54, null], SR: [40.36, null], SLM: [3.56, null], out: [0.43, null] },
+        { name: 'SO_BS', SO: [33.11, 48.1], SP: [17.90, 12.4], SR: [47.46, 39.5], SLM: [0.90, 0], out: [0.64, null] },
+        { name: 'SO_OLM', SO: [0.39, null], SP: [0.55, null], SR: [31.28, null], SLM: [65.60, null], out: [2.18, null] },
+        { name: 'SO_Tri', SO: [57.41, 58.12], SP: [27.02, 18.11], SR: [14.39, 23.77], SLM: [0.13, 0], out: [1.06, null] },
+    ];
 
     useEffect(() => {
-        createChart();
+        const chart = echarts.init(chartRef.current);
 
-        const handleResize = () => {
-            if (chart) {
-                chart.resize();
-            }
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['SO (Model)', 'SP (Model)', 'SR (Model)', 'SLM (Model)', 'out (Model)',
+                    'SO (Exp)', 'SP (Exp)', 'SR (Exp)', 'SLM (Exp)']
+            },
+            xAxis: {
+                type: 'category',
+                data: data.map(item => item.name),
+                axisLabel: {
+                    interval: 0,
+                    rotate: 45,
+                    align: 'right',
+                    margin: 10
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Synapses (%)',
+                max: 100
+            },
+            grid: {
+                bottom: '15%'
+            },
+            series: [
+                {
+                    name: 'SO (Model)',
+                    type: 'bar',
+                    stack: 'Model',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SO[0]),
+                    color: graphTheme.blue
+                },
+                {
+                    name: 'SP (Model)',
+                    type: 'bar',
+                    stack: 'Model',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SP[0]),
+                    color: graphTheme.yellow
+                },
+                {
+                    name: 'SR (Model)',
+                    type: 'bar',
+                    stack: 'Model',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SR[0]),
+                    color: graphTheme.green
+                },
+                {
+                    name: 'SLM (Model)',
+                    type: 'bar',
+                    stack: 'Model',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SLM[0]),
+                    color: graphTheme.red
+                },
+                {
+                    name: 'out (Model)',
+                    type: 'bar',
+                    stack: 'Model',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.out[0]),
+                    color: graphTheme.purple
+                },
+                {
+                    name: 'SO (Exp)',
+                    type: 'bar',
+                    stack: 'Exp',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SO[1]),
+                    color: graphTheme.blue,
+                    itemStyle: {
+                        decal: {
+                            symbol: 'rect',
+                            symbolSize: 1,
+                            rotation: Math.PI / 4,
+                            dashArrayX: [1, 0],
+                            dashArrayY: [2, 5],
+                            color: 'white'
+                        }
+                    }
+                },
+                {
+                    name: 'SP (Exp)',
+                    type: 'bar',
+                    stack: 'Exp',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SP[1]),
+                    color: graphTheme.yellow,
+                    itemStyle: {
+                        decal: {
+                            symbol: 'rect',
+                            symbolSize: 1,
+                            rotation: Math.PI / 4,
+                            dashArrayX: [1, 0],
+                            dashArrayY: [2, 5],
+                            color: 'white'
+                        }
+                    }
+                },
+                {
+                    name: 'SR (Exp)',
+                    type: 'bar',
+                    stack: 'Exp',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SR[1]),
+                    color: graphTheme.green,
+                    itemStyle: {
+                        decal: {
+                            symbol: 'rect',
+                            symbolSize: 1,
+                            rotation: Math.PI / 4,
+                            dashArrayX: [1, 0],
+                            dashArrayY: [2, 5],
+                            color: 'white'
+                        }
+                    }
+                },
+                {
+                    name: 'SLM (Exp)',
+                    type: 'bar',
+                    stack: 'Exp',
+                    emphasis: { focus: 'series' },
+                    data: data.map(item => item.SLM[1]),
+                    color: graphTheme.red,
+                    itemStyle: {
+                        decal: {
+                            symbol: 'rect',
+                            symbolSize: 1,
+                            rotation: Math.PI / 4,
+                            dashArrayX: [1, 0],
+                            dashArrayY: [2, 5],
+                            color: 'white'
+                        }
+                    }
+                }
+            ]
         };
 
-        window.addEventListener('resize', handleResize);
+        chart.setOption(option);
 
         return () => {
-            window.removeEventListener('resize', handleResize);
-            if (chart) {
-                chart.destroy();
-            }
+            chart.dispose();
         };
     }, []);
 
     return (
         <div>
-            <div className="graph" style={{ height: "500px" }}>
-                <canvas ref={chartRef} />
-            </div>
+            <div ref={chartRef} style={{ width: '100%', height: '500px' }} />
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Laminar-Distribution-Of-Synapses-Data.json`)}>
                     Laminar Distribution Of Synapse Data

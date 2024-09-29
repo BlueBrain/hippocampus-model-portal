@@ -225,7 +225,7 @@ const SynapsesView: React.FC = () => {
         {availablePlots.PSPAmplitude && (
           <Collapsible title="PSP Amplitude" id="PSPAmplitudeSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('psp-amplitude')} />
+              <DistibutionPlot xAxisTickStep={1} plotData={getPlotDataById('psp-amplitude')} />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-amplitude'), `psp-amplitude-${volume_section}-${prelayer}-${postlayer}.json`)}>
@@ -240,7 +240,9 @@ const SynapsesView: React.FC = () => {
         {availablePlots.PSPCV && (
           <Collapsible title="PSP CV" id="PSPCVSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('psp-cv')} />
+              <DistibutionPlot
+                plotData={getPlotDataById('psp-cv')}
+                xAxisTickStep={1} />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-cv'), `psp-cv-${volume_section}-${prelayer}-${postlayer}.json`)}>
@@ -268,6 +270,7 @@ const SynapsesView: React.FC = () => {
                         plotData={getPlotDataById('synapse-latency')}
                         xAxis='Latency'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -301,6 +304,7 @@ const SynapsesView: React.FC = () => {
                         plotData={getPlotDataById('synapse-latency-from-simulation')}
                         xAxis='Latency'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -331,7 +335,8 @@ const SynapsesView: React.FC = () => {
         {availablePlots.RiseTimeCOnstant && (
           <Collapsible title="Rise Time Constant" id="RiseTimeCOnstantSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('rise-time-constant')} />
+              <DistibutionPlot xAxisTickStep={1} plotData={getPlotDataById('rise-time-constant')}
+              />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('rise-time-constant'), `rise-time-constant-${volume_section}-${prelayer}-${postlayer}.json`)}>
@@ -359,6 +364,7 @@ const SynapsesView: React.FC = () => {
                         plotData={getPlotDataById('decay-time-constant')}
                         xAxis='Latency'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -392,6 +398,7 @@ const SynapsesView: React.FC = () => {
                         plotData={getPlotDataById('decay-time-constant-from-sumluation')}
                         xAxis='Latency'
                         yAxis='Frequency'
+                        xAxisTickStep={1}
                       />
                     </div>
                     <div className="mt-2">
@@ -422,7 +429,8 @@ const SynapsesView: React.FC = () => {
         {availablePlots.RiseTimeCOnstant && (
           <Collapsible title="NMAA/AMPA Ratio" id="NMDAAMPARatioSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot plotData={getPlotDataById('nmda-ampa-ratio')} />
+              <DistibutionPlot xAxisTickStep={1} plotData={getPlotDataById('nmda-ampa-ratio')}
+              />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('nmda-ampa-ratio'), `nmda-ampa-ratio-${volume_section}-${prelayer}-${postlayer}.json`)}>
@@ -448,6 +456,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('u-parameter')}
                     xAxis='u_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -479,6 +488,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('d-parameter')}
                     xAxis='d_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -510,6 +520,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('f-parameter')}
                     xAxis='f_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -541,6 +552,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('g-synx')}
                     xAxis='g_syn'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">
@@ -572,6 +584,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('nrrp-parameter')}
                     xAxis='NRRP'
                     yAxis='Frequency'
+                    xAxisTickStep={1}
                   />
                 </div>
                 <div className="mt-2">

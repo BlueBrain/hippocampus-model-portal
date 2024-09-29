@@ -44,7 +44,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
                         const item = tooltipItems[0];
                         const binStart = parseFloat(item.label);
                         const binEnd = binStart + binWidth;
-                        return `${binStart.toFixed(4)} - ${binEnd.toFixed(4)} Hz`;
+                        return `${binStart.toFixed(1)} - ${binEnd.toFixed(1)} Hz`;
                     }
                 }
             },
@@ -60,7 +60,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
                     autoSkip: true,
                     maxTicksLimit: 10,
                     callback: (value, index, values) => {
-                        return parseFloat(value).toFixed(4);
+                        return parseFloat(value).toFixed(1);
                     }
                 },
             },
@@ -95,7 +95,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
 
         return {
             chartData: {
-                labels: bins.map(b => b.toFixed(4)),
+                labels: bins.map(b => b.toFixed(1)),
                 datasets: [{
                     data: freq,
                     backgroundColor: graphTheme.blue,
