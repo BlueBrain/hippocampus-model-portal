@@ -17,6 +17,7 @@ type CellDensityEntry = {
     std: number;
     SEM: number;
     Reference: string;
+    Reference_link: string | null;
 };
 
 const CellDensityColumns = [
@@ -59,11 +60,14 @@ const CellDensityColumns = [
     {
         title: 'Reference',
         dataIndex: 'Reference' as keyof CellDensityEntry,
-        render: (value: string) => (
-            <a href="https://link.springer.com/content/pdf/10.1007/bf00239593.pdf" target="_blank" rel="noopener noreferrer">
-                {value}
-            </a>
-        ),
+        render: (value: string, record: CellDensityEntry) =>
+            record.Reference_link ? (
+                <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">
+                    {value}
+                </a>
+            ) : (
+                <>{value}</>
+            ),
     },
 ];
 

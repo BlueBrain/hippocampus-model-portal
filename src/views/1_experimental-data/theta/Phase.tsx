@@ -16,6 +16,7 @@ type TableEntry = {
     n: number;
     specie: string;
     reference: string;
+    referenceLink: string | null;
 };
 
 const preprocessData = (data: any[]): TableEntry[] => {
@@ -28,7 +29,8 @@ const preprocessData = (data: any[]): TableEntry[] => {
         maxFiringRate: item['Max firing rate (Hz)'],
         n: item['n'],
         specie: item['Specie'],
-        reference: item['Reference']
+        reference: item['Reference'],
+        referenceLink: item['Reference_link'] || null,
     }));
 };
 
@@ -84,7 +86,15 @@ const PhaseColumns = [
         title: 'Reference',
         dataIndex: 'reference',
         key: 'reference',
-    }
+        render: (reference: string, record: TableEntry) =>
+            record.referenceLink ? (
+                <a href={record.referenceLink} target="_blank" rel="noopener noreferrer">
+                    {reference}
+                </a>
+            ) : (
+                <>{reference}</>
+            ),
+    },
 ];
 
 type PhaseProps = {
@@ -111,10 +121,7 @@ const Phase: React.FC<PhaseProps> = ({ theme }) => {
             <div className="text-right mt-4">
                 <DownloadButton
                     theme={theme}
-                    onClick={() => downloadAsJson(
-                        phaseData,
-                        `theta-phase-data.json`
-                    )}
+                    onClick={() => downloadAsJson(phaseData, `theta-phase-data.json`)}
                 >
                     Phase Data
                 </DownloadButton>

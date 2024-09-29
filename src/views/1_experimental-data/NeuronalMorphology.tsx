@@ -280,7 +280,26 @@ const NeuronalMorphologyView: React.FC = () => {
                             )}
                         </HttpData>
                     </div>
-                    <div className="mt-16">
+
+                    <div className="mt-8">
+                        <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/distribution-plots.json`}>
+                            {(plotsData) => (
+                                <>
+                                    {plotsData && (
+                                        <>
+                                            <MorphDistributionPlots type="singleMorphology" data={plotsData} />
+                                            <div className="mt-4">
+                                                <DownloadButton onClick={() => downloadAsJson(plotsData, `${instances}-plot-data.json`)} theme={theme}>
+                                                    Plot Data
+                                                </DownloadButton>
+                                            </div>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </HttpData>
+                    </div>
+                    <div>
                         <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}>
                             {(tableData) => (
                                 <>

@@ -8,13 +8,14 @@ import { dataPath } from '@/config';
 
 type DataEntry = {
     "m-type": string;
-    Specie: string;
-    Age: string;
-    Weight: string;
+    Specie: string | null;
+    Age: string | null;
+    Weight: string | null;
     PC: number;
     INT: number;
-    n: number;
+    n: number | null;
     Reference: string;
+    Reference_link?: string; // Optional field
 };
 
 const termDescription = {
@@ -35,40 +36,51 @@ const columns = [
     {
         title: 'MType',
         dataIndex: 'm-type' as keyof DataEntry,
-        render: mtype => (<Term term={mtype} description={getMtypeDescription(mtype)} />),
+        render: (mtype: string) => (
+            <Term term={mtype} description={getMtypeDescription(mtype)} />
+        ),
     },
     {
         title: 'Specie',
         dataIndex: 'Specie' as keyof DataEntry,
+        render: (specie: string | null) => specie || 'N/A',
     },
     {
         title: 'Age',
         dataIndex: 'Age' as keyof DataEntry,
+        render: (age: string | null) => age || 'N/A',
     },
     {
         title: 'Weight',
         dataIndex: 'Weight' as keyof DataEntry,
+        render: (weight: string | null) => weight || 'N/A',
     },
     {
         title: 'PC',
         dataIndex: 'PC' as keyof DataEntry,
+        render: (pc: number) => pc.toFixed(3),
     },
     {
         title: 'INT',
         dataIndex: 'INT' as keyof DataEntry,
+        render: (int: number) => int.toFixed(3),
     },
     {
         title: 'N',
         dataIndex: 'n' as keyof DataEntry,
+        render: (n: number | null) => (n !== null ? n : 'N/A'),
     },
     {
         title: 'Reference',
         dataIndex: 'Reference' as keyof DataEntry,
-        render: reference => (
-            <a href="#" target="_blank" rel="noopener noreferrer">
-                {reference}
-            </a>
-        ),
+        render: (reference: string, record: DataEntry) =>
+            record.Reference_link ? (
+                <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">
+                    {reference}
+                </a>
+            ) : (
+                reference
+            ),
     }
 ];
 
@@ -78,12 +90,26 @@ type PercentageSDOntoPyramidalCellsProps = {
 
 const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsProps> = ({ theme }) => {
     const [data, setData] = useState<DataEntry[] | null>(null);
+    const [error, setError] = useState<string | null>(null); // State for handling errors
 
     useEffect(() => {
         fetch(`${dataPath}/1_experimental-data/connection-anatomy/percentage-SD-onto-pyramidal-cells.json`)
-            .then((response) => response.json())
-            .then((fetchedData) => setData(fetchedData));
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((fetchedData: DataEntry[]) => setData(fetchedData))
+            .catch((error) => {
+                console.error('Error fetching percentage SD data:', error);
+                setError('Failed to load data.');
+            });
     }, []);
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     if (!data) {
         return <div>Loading...</div>;
@@ -95,6 +121,7 @@ const PercentageSDOntoPyramidalCells: React.FC<PercentageSDOntoPyramidalCellsPro
                 className="mb-2"
                 columns={columns}
                 data={data}
+                rowKey={(record, index) => `${record["m-type"]}-${index}`} // Ensure uniqueness
             />
 
             <div className="mt-4">

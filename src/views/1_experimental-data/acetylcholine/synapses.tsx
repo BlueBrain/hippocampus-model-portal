@@ -20,6 +20,7 @@ type DataEntry = {
     "Ratio ACh/Control": string;
     "n. connections": number;
     "Reference": string;
+    "Reference_link": string | null;
 };
 
 const termDescription = {
@@ -73,13 +74,14 @@ const columns = [
     },
     {
         title: 'Reference',
-        dataIndex: 'Reference' as keyof DataEntry,
-        render: reference => (
-            <a href="#" target="_blank" rel="noopener noreferrer">
-                {reference}
-            </a>
-        ),
-    }
+        dataIndex: 'Reference',
+        render: (reference: string, record: DataEntry) =>
+            record.Reference_link ? (
+                <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+            ) : (
+                <>{reference}</>
+            )
+    },
 ];
 
 type SynapsesProps = {

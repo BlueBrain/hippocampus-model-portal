@@ -25,6 +25,7 @@ type DataEntry = {
     Effects: string;
     "n slices": number | string;
     Reference: string;
+    "Reference_link": string | null;
 };
 
 const termDescription = {
@@ -54,18 +55,23 @@ const columns = [
     {
         title: 'ACSF (mM)',
         children: [
-            { title: 'Ca', dataIndex: ['ACSF (mM)', 'Ca'], render: (Ca: number | null) => <>{Ca !== null ? Ca : '-'}</> },
-            { title: 'Mg', dataIndex: ['ACSF (mM)', 'Mg'], render: (Mg: number | null) => <>{Mg !== null ? Mg : '-'}</> },
-            { title: 'K', dataIndex: ['ACSF (mM)', 'K'], render: (K: number | null) => <>{K !== null ? K : '-'}</> },
+            { title: 'Ca', dataIndex: ['ACSF (mM)', 'Ca'], render: (Ca: number | string) => <>{Ca !== null ? Ca : '-'}</> },
+            { title: 'Mg', dataIndex: ['ACSF (mM)', 'Mg'], render: (Mg: number | string) => <>{Mg !== null ? Mg : '-'}</> },
+            { title: 'K', dataIndex: ['ACSF (mM)', 'K'], render: (K: number | string) => <>{K !== null ? K : '-'}</> },
         ],
     },
     { title: 'Measurement', dataIndex: 'Measurement' as keyof DataEntry },
     { title: 'Effects', dataIndex: 'Effects' as keyof DataEntry },
     { title: 'N Slices', dataIndex: 'n slices' as keyof DataEntry },
     {
-        title: 'Reference', dataIndex: 'Reference' as keyof DataEntry, render: reference => (
-            <a href="#" target="_blank" rel="noopener noreferrer">{reference}</a>
-        )
+        title: 'Reference',
+        dataIndex: 'Reference',
+        render: (reference: string, record: DataEntry) =>
+            record.Reference_link ? (
+                <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+            ) : (
+                <>{reference}</>
+            )
     },
 ];
 
@@ -94,7 +100,7 @@ const Network: React.FC<NetworkProps> = ({ theme }) => {
                 data={data}
                 rowKey={(record) => record.Reference}
             />
-            <div className=" mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Network-Data.json`)}

@@ -20,6 +20,7 @@ type TableEntry = {
   region: string;
   nCells: number;
   ref: string;
+  ref_link?: string;
 };
 
 type DOIIndex = {
@@ -77,7 +78,12 @@ const PSCRiseTimeColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text, _, doiIndex) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    render: (reference: string, record: TableEntry) =>
+      record.ref_link ? (
+        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+      ) : (
+        reference
+      ),
   },
 ];
 
@@ -130,18 +136,22 @@ const PSCTauDecayColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text, _, doiIndex) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    render: (reference: string, record: TableEntry) =>
+      record.ref_link ? (
+        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{reference}</a>
+      ) : (
+        reference
+      ),
   },
 ];
 
 type AMPAKineticsSectionProps = {
   theme?: number;
-}
+};
 
 const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
   const [PSCRiseTimeData, setPSCRiseTimeData] = useState<TableEntry[]>([]);
   const [PSCTauDecayData, setPSCTauDecayData] = useState<TableEntry[]>([]);
-  const [doiIndex, setDoiIndex] = useState<DOIIndex>({});
 
   useEffect(() => {
     fetch(`${dataPath}/1_experimental-data/connection-physiology/ampa_kinetics_-_psc_rise_time.json`)
@@ -151,10 +161,6 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
     fetch(`${dataPath}/1_experimental-data/connection-physiology/ampa_kinetics_-_psc_tau_decay.json`)
       .then(response => response.json())
       .then(data => setPSCTauDecayData(data));
-
-    fetch(`${dataPath}/1_experimental-data/connection-physiology/ref-doi.json`)
-      .then(response => response.json())
-      .then(data => setDoiIndex(data));
   }, []);
 
   return (
@@ -164,7 +170,6 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         data={PSCRiseTimeData}
         columns={PSCRiseTimeColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-      // additionalData={doiIndex}
       />
       <div className="mt-2">
         <DownloadButton
@@ -180,7 +185,6 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
         data={PSCTauDecayData}
         columns={PSCTauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-      // additionalData={doiIndex}
       />
       <div className="mt-2">
         <DownloadButton

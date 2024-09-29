@@ -83,7 +83,12 @@ const RatioColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text, _, doiIndex) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    render: (text, record) =>
+      record.ref_link ? (
+        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{text}</a>
+      ) : (
+        text
+      ),
   },
 ];
 
@@ -126,7 +131,12 @@ const TauDecayColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text, _, doiIndex) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    render: (text, record) =>
+      record.ref_link ? (
+        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{text}</a>
+      ) : (
+        text
+      ),
   },
 ];
 
@@ -165,7 +175,12 @@ const TauRiseColumns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof TableEntry,
-    render: (text, _, doiIndex) => <TextWithRefs text={text} doiIndex={doiIndex} />
+    render: (text, record) =>
+      record.ref_link ? (
+        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{text}</a>
+      ) : (
+        text
+      ),
   },
 ];
 
@@ -204,7 +219,6 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={RatioData}
         columns={RatioColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-      //additionalData={doiIndex}
       />
       <div className="mt-4">
         <DownloadButton
@@ -220,7 +234,6 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={TauDecayData}
         columns={TauDecayColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-      //additionalData={doiIndex}
       />
       <div className="mt-4">
         <DownloadButton
@@ -236,7 +249,6 @@ const NMDAKineticsSection: React.FC<NMDAKineticsSectionProps> = ({ theme }) => {
         data={TauRiseData}
         columns={TauRiseColumns}
         rowKey={({ from, to, mean }) => `${from}_${to}_${mean}`}
-      //additionalData={doiIndex}
       />
       <div className="mt-4">
         <DownloadButton
