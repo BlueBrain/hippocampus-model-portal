@@ -33,7 +33,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
                 text: plotData?.name || 'Mean Firing Rate Distribution',
             },
             tooltip: {
-                enabled: true,
+                enabled: false,
                 callbacks: {
                     label: (context) => {
                         const label = context.dataset.label || '';
