@@ -96,7 +96,6 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                 const formulaPoints = calculateFormulaPoints();
                 const { solidPoints, dottedPoints } = splitFormulaPoints(formulaPoints);
 
-                // Destroy existing chart if it exists
                 if (chartInstanceRef.current) {
                     chartInstanceRef.current.destroy();
                 }
@@ -112,7 +111,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 pointRadius: 3
                             },
                             {
-                                label: 'Formula Line (Solid)',
+                                label: 'Fit',
                                 data: solidPoints,
                                 type: 'line',
                                 borderColor: '#3B4165',
@@ -123,7 +122,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 tension: 0.4
                             },
                             {
-                                label: 'Formula Line (Dotted)',
+                                label: 'Experimental data',
                                 data: dottedPoints,
                                 type: 'line',
                                 borderColor: '#3B4165',
@@ -158,10 +157,15 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
                                 ticks: {
                                     callback: function (value) {
                                         const logValue = Math.log10(value as number);
-                                        if (logValue === -2 || logValue === -1 || logValue === 0 || logValue === 1 || logValue === 2 || logValue === 3) {
-                                            return `10^${logValue.toFixed(0)}`;
+                                        switch (logValue) {
+                                            case -2: return '10⁻²';
+                                            case -1: return '10⁻¹';
+                                            case 0: return '10';
+                                            case 1: return '10¹';
+                                            case 2: return '10²';
+                                            case 3: return '10³';
+                                            default: return '';
                                         }
-                                        return '';
                                     },
                                     autoSkip: false,
                                     maxTicksLimit: 6,
