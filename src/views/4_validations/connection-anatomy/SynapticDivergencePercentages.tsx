@@ -1,36 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Chart,
-    BarController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Tooltip,
-    Title,
-    Legend,
-} from 'chart.js';
+import * as echarts from 'echarts';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { graphTheme } from '@/constants';
 import { dataPath } from '@/config';
-
-Chart.register(
-    BarController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Tooltip,
-    Title,
-    Legend
-);
 
 export type SynapticDivergencePercentagesProps = {
     theme?: number;
 };
 
 const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentagesProps> = ({ theme }) => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const [chart, setChart] = useState<Chart | null>(null);
+    const chartRef = useRef<HTMLDivElement | null>(null);
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -41,170 +21,156 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
 
     useEffect(() => {
         if (data && chartRef.current) {
-            createChart();
-        }
-    }, [data]);
-
-    const createChart = () => {
-        if (!data || !chartRef.current) return;
-
-        const ctx = chartRef.current.getContext('2d');
-        if (ctx) {
+            const chart = echarts.init(chartRef.current);
             const mtypes = Object.values(data.value_map.mtype);
             const spPcIndex = mtypes.indexOf('SP_PC');
 
-            const hachurePlugin = {
-                id: 'hachurePlugin',
-                afterDatasetsDraw(chart, args, options) {
-                    const { ctx, data } = chart;
-
-                    ctx.save();
-                    ctx.lineWidth = 1;
-                    ctx.strokeStyle = 'white';
-
-                    data.datasets.forEach((dataset, datasetIndex) => {
-                        if (dataset.stack === 'Exp') {
-                            const meta = chart.getDatasetMeta(datasetIndex);
-                            meta.data.forEach((bar, index) => {
-                                if (dataset.data[index] > 0) {
-                                    const { x, y, width, height } = bar.getProps(['x', 'y', 'width', 'height']);
-
-                                    ctx.save();
-                                    ctx.beginPath();
-                                    ctx.rect(x - width / 2, y, width, height);
-                                    ctx.clip();
-
-                                    const lineSpacing = 4;
-                                    const angle = Math.PI / 4;
-
-                                    for (let i = -width; i < height + width; i += lineSpacing) {
-                                        const startX = x - width / 2;
-                                        const startY = y + i;
-                                        const endX = x + width / 2;
-                                        const endY = startY - width;
-
-                                        ctx.moveTo(startX, startY);
-                                        ctx.lineTo(endX, endY);
-                                    }
-
-                                    ctx.stroke();
-                                    ctx.restore();
-                                }
-                            });
-                        }
-                    });
-
-                    ctx.restore();
-                }
-            };
-
-            const newChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: mtypes,
-                    datasets: [
-                        {
-                            label: 'Model I-E',
-                            data: mtypes.map((_, index) => data.value_map.model_PC[index]),
-                            backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.red : graphTheme.blue),
-                            stack: 'Model',
-                        },
-                        {
-                            label: 'Model I-I',
-                            data: mtypes.map((_, index) => data.value_map.model_INT[index]),
-                            backgroundColor: mtypes.map((_, index) => index === spPcIndex ? graphTheme.green : graphTheme.purple),
-                            stack: 'Model',
-                        },
-                        {
-                            label: 'Exp E-E',
-                            data: mtypes.map((_, index) => data.value_map.exp_PC[index] || 0),
-                            backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.red : graphTheme.blue),
-                            stack: 'Exp',
-                            borderWidth: 1,
-                        },
-                        {
-                            label: 'Exp E-I',
-                            data: mtypes.map((_, index) => data.value_map.exp_INT[index] || 0),
-                            backgroundColor: mtypes.map((_, index) => index === 6 ? graphTheme.green : graphTheme.purple),
-                            stack: 'Exp',
-                            borderWidth: 1,
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                            title: {
-                                display: true,
-                                text: 'mtype',
-                                font: { size: 14 }
-                            },
-                        },
-                        y: {
-                            stacked: true,
-                            title: {
-                                display: true,
-                                text: 'Divergence (%)',
-                                font: { size: 14 }
-                            },
-                            min: 0,
-                            max: 100,
-                        }
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
                     },
-                    plugins: {
-                        legend: {
-                            display: false,
-                            position: 'right',
-                            labels: {
-                                usePointStyle: true,
-                                pointStyle: 'rect',
-                                padding: 15,
-                                font: { size: 12 },
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const label = context.dataset.label;
-                                    const value = context.parsed.y.toFixed(2);
-                                    return `${label}: ${value}%`;
-                                }
-                            }
-                        }
+                    formatter: function (params) {
+                        let tooltip = params[0].axisValue + '<br/>';
+                        params.forEach(param => {
+                            tooltip += `${param.seriesName}: ${param.value.toFixed(2)}%<br/>`;
+                        });
+                        return tooltip;
                     }
                 },
-                plugins: [hachurePlugin],
-            });
+                legend: {
+                    data: [
+                        {
+                            name: 'Model I-E',
+                            itemStyle: { color: graphTheme.blue }
+                        },
+                        {
+                            name: 'Model I-I',
+                            itemStyle: { color: graphTheme.purple }
+                        },
+                        {
+                            name: 'Exp E-E',
+                            itemStyle: { color: graphTheme.blue }
+                        },
+                        {
+                            name: 'Exp E-I',
+                            itemStyle: { color: graphTheme.purple }
+                        }
+                    ],
+                    right: 10,
+                    top: 'center',
+                    orient: 'vertical',
+                },
+                xAxis: {
+                    type: 'category',
+                    data: mtypes,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 45,
+                        align: 'right',
+                        margin: 10
+                    },
+                    name: 'mtype',
+                    nameLocation: 'middle',
+                    nameGap: 40
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Divergence (%)',
+                    min: 0,
+                    max: 100
+                },
+                grid: {
+                    bottom: '15%',
+                    right: '15%'
+                },
+                series: [
+                    {
+                        name: 'Model I-E',
+                        type: 'bar',
+                        stack: 'Model',
+                        emphasis: { focus: 'series' },
+                        data: mtypes.map((_, index) => ({
+                            value: data.value_map.model_PC[index],
+                            itemStyle: {
+                                color: index === spPcIndex ? graphTheme.red : graphTheme.blue
+                            }
+                        }))
+                    },
+                    {
+                        name: 'Model I-I',
+                        type: 'bar',
+                        stack: 'Model',
+                        emphasis: { focus: 'series' },
+                        data: mtypes.map((_, index) => ({
+                            value: data.value_map.model_INT[index],
+                            itemStyle: {
+                                color: index === spPcIndex ? graphTheme.green : graphTheme.purple
+                            }
+                        }))
+                    },
+                    {
+                        name: 'Exp E-E',
+                        type: 'bar',
+                        stack: 'Exp',
+                        emphasis: { focus: 'series' },
+                        data: mtypes.map((_, index) => ({
+                            value: data.value_map.exp_PC[index] || 0,
+                            itemStyle: {
+                                color: index === 6 ? graphTheme.red : graphTheme.blue,
+                                decal: {
+                                    symbol: 'rect',
+                                    symbolSize: 1,
+                                    rotation: Math.PI / 4,
+                                    dashArrayX: [1, 0],
+                                    dashArrayY: [2, 5],
+                                    color: 'white'
+                                }
+                            }
+                        }))
+                    },
+                    {
+                        name: 'Exp E-I',
+                        type: 'bar',
+                        stack: 'Exp',
+                        emphasis: { focus: 'series' },
+                        data: mtypes.map((_, index) => ({
+                            value: data.value_map.exp_INT[index] || 0,
+                            itemStyle: {
+                                color: index === 6 ? graphTheme.green : graphTheme.purple,
+                                decal: {
+                                    symbol: 'rect',
+                                    symbolSize: 1,
+                                    rotation: Math.PI / 4,
+                                    dashArrayX: [1, 0],
+                                    dashArrayY: [2, 5],
+                                    color: 'white'
+                                }
+                            }
+                        }))
+                    }
+                ]
+            };
 
-            setChart(newChart);
-        }
-    };
+            chart.setOption(option);
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (chart) {
+            const handleResize = () => {
                 chart.resize();
-            }
-        };
+            };
 
-        window.addEventListener('resize', handleResize);
+            window.addEventListener('resize', handleResize);
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            if (chart) {
-                chart.destroy();
-            }
-        };
-    }, [chart]);
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                chart.dispose();
+            };
+        }
+    }, [data]);
 
     return (
         <div>
-            <div className="graph" style={{ height: "500px" }}>
-                <canvas ref={chartRef} />
-            </div>
+            <div className="graph" style={{ height: "500px" }} ref={chartRef} />
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Synaptic-Divergence-Percentages-Data.json`)}>
                     Synaptic Divergence Percentages Data

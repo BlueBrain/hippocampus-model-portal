@@ -257,11 +257,13 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
+        {/*
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <div className="graph">
-            {/* Add bPAP & PSP graph component here */}
+             Add bPAP & PSP graph component here 
           </div>
         </Collapsible>
+        */}
 
         <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
           {factsheetData && (
