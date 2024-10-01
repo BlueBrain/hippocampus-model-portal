@@ -18,6 +18,7 @@ import { volumeSections } from '@/constants';
 import TraceGraph from './components/Trace';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
+import DistributionPlot from '@/components/DistributionPlot';
 
 const voltageSectionStructure = {
     cylinder: {
@@ -250,7 +251,7 @@ const ThetaOscillatoryInputView: React.FC = () => {
                 </Collapsible>
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        <MeanFiringRatePlot plotData={meanFiringRateData} />
+                        <DistributionPlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={500} />
                     </div>
                     <DownloadButton
                         theme={theme}

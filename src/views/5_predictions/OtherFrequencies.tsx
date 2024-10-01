@@ -17,6 +17,7 @@ import { volumeSections } from '@/constants';
 import TraceGraph from './components/Trace';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
+import DistributionPlot from '@/components/DistributionPlot';
 
 const cell_frequency: number[] = [0.1, 0.2, 0.4, 0.8];
 const signal_frequency: number[] = [0, 1, 2, 4, 6, 8, 10, 12, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200];
@@ -208,7 +209,7 @@ const OtherFrequenciesView: React.FC = () => {
                 </Collapsible>
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        <MeanFiringRatePlot plotData={meanFiringRateData} />
+                        <DistributionPlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.05} />
                     </div>
                     <DownloadButton
                         theme={theme}

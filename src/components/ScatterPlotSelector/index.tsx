@@ -16,9 +16,6 @@ type ScatterPlotSelectorProps = {
     selectedY?: number;
 };
 
-http://localhost:3000/hippocampus-portal-dev/data/5_prediction/spontaneous-activity/1-0.002/spike-time-all.svg
-
-
 const ScatterPlotSelector: React.FC<ScatterPlotSelectorProps> = ({
     path,
     xAxisLabel,
