@@ -154,22 +154,31 @@ const MergedConnectionsView: React.FC = () => {
 
   const getPlotDataById = (id: string) => factsheetData?.find((plot: any) => plot.id === id);
 
-  const renderPlot = (id: string, title: string, xAxis: string, yAxis: string) => {
+  const renderPlot = (id: string, title: string, xAxis: string, yAxis: string, xAxisTickStep: number) => {
     if (!availablePlots[id]) return null;
 
     const plotData = getPlotDataById(id);
     return (
       <Collapsible title={title} id={id} className="mt-4">
         <div className="graph">
-          <DistributionPlot plotData={plotData} xAxis={xAxis} yAxis={yAxis} xAxisTickStep={1} />
+          <DistributionPlot plotData={plotData} xAxis={xAxis} yAxis={yAxis} xAxisTickStep={xAxisTickStep} />
         </div>
         <div className="mt-4">
           <DownloadButton
             theme={theme}
-            onClick={() => downloadAsJson(plotData, `${id}-${quickSelection.volume_section}-${quickSelection.prelayer}-${quickSelection.postlayer}.json`)}>
-            <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{quickSelection.volume_section}</span>
+            onClick={() =>
+              downloadAsJson(
+                plotData,
+                `${id}-${quickSelection.volume_section}-${quickSelection.prelayer}-${quickSelection.postlayer}.json`
+              )
+            }
+          >
+            <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+              {quickSelection.volume_section}
+            </span>
             {title}
-            <span className='!mr-0 collapsible-property small '>{quickSelection.prelayer}</span> - <span className='!ml-0 collapsible-property small '>{quickSelection.postlayer}</span>
+            <span className="!mr-0 collapsible-property small ">{quickSelection.prelayer}</span> -{" "}
+            <span className="!ml-0 collapsible-property small ">{quickSelection.postlayer}</span>
           </DownloadButton>
         </div>
       </Collapsible>
@@ -253,15 +262,15 @@ const MergedConnectionsView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        {renderPlot('bouton-density', 'Bouton density of the presynaptic cells', 'Bouton density (µm⁻¹)', 'Count')}
-        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection', 'Synapse/connection', 'Count')}
-        {renderPlot('sample-convergence-by-synapse', 'Convergence (synapses)', 'Synapses', 'Count')}
+        {renderPlot('bouton-density', 'Bouton density of the presynaptic cells', 'Bouton density (µm⁻¹)', 'Count', .1)}
+        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection', 'Synapse/connection', 'Count', 100)}
+        {renderPlot('sample-convergence-by-synapse', 'Convergence (synapses)', 'Synapses', 'Count', 1000)}
         <Collapsible title="Laminar distribution of synapses" id="laminar-distribution-synapses">
           <LaminarGraph data={laminarData} title="Laminar Distribution of Synapses" yAxisLabel="Percentage of synapses" />
         </Collapsible>
-        {renderPlot('sample-divergence-by-connection', 'Divergence (connections)', 'Connections', 'Count')}
-        {renderPlot('sample-divergence-by-synapse', 'Divergence (synapses)', 'Synapses', 'Count')}
-        {renderPlot('connection-probability-vs-inter-somatic-distance', 'Connection probability vs inter-somatic distance', 'Inter-somatic distance (µm)', 'Connection probability')}
+        {renderPlot('sample-divergence-by-connection', 'Divergence (connections)', 'Connections', 'Count', 500)}
+        {renderPlot('sample-divergence-by-synapse', 'Divergence (synapses)', 'Synapses', 'Count', 2000)}
+        {renderPlot('connection-probability-vs-inter-somatic-distance', 'Connection probability vs inter-somatic distance', 'Inter-somatic distance (µm)', 'Connection probability', 100)}
       </DataContainer>
     </>
   );

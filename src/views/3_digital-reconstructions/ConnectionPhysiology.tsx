@@ -242,7 +242,7 @@ const SynapsesView: React.FC = () => {
             <div className="graph">
               <DistibutionPlot
                 plotData={getPlotDataById('psp-cv')}
-                xAxisTickStep={1} />
+                xAxisTickStep={.2} />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-cv'), `psp-cv-${volume_section}-${prelayer}-${postlayer}.json`)}>
@@ -429,7 +429,7 @@ const SynapsesView: React.FC = () => {
         {availablePlots.RiseTimeCOnstant && (
           <Collapsible title="NMAA/AMPA Ratio" id="NMDAAMPARatioSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot xAxisTickStep={1} plotData={getPlotDataById('nmda-ampa-ratio')}
+              <DistibutionPlot xAxisTickStep={.5} plotData={getPlotDataById('nmda-ampa-ratio')}
               />
             </div>
             <div className="mt-4">
@@ -456,7 +456,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('u-parameter')}
                     xAxis='u_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={.1}
                   />
                 </div>
                 <div className="mt-2">
@@ -488,7 +488,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('d-parameter')}
                     xAxis='d_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={500}
                   />
                 </div>
                 <div className="mt-2">
@@ -520,7 +520,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('f-parameter')}
                     xAxis='f_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={500}
                   />
                 </div>
                 <div className="mt-2">

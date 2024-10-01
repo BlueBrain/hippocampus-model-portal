@@ -1,132 +1,48 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import {
     Chart as ChartJS,
-    CategoryScale,
     LinearScale,
     BarElement,
     Title,
     Tooltip,
     Legend,
-    ChartData,
-    ChartOptions
+    ChartOptions,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { graphTheme } from '@/constants';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface PlotDetailsProps {
-    plotData: number[] | Record<string, number> | {
-        freq: number[],
-        bins: number[],
-        name?: string,
-        description?: string,
-        units?: string
-    };
+    plotData: any;
     xAxis?: string;
     yAxis?: string;
     xAxisTickStep?: number;
-}
-
-interface ProcessedPlotData {
-    labels: string[];
-    datasets: {
-        label: string;
-        data: number[];
-        backgroundColor: string;
-        borderColor: string;
-        borderWidth: number;
-    }[];
-    units: string | null;
-    name: string;
-    description: string;
 }
 
 const DistributionPlot: React.FC<PlotDetailsProps> = ({
     plotData,
     xAxis = 'Value',
     yAxis = 'Frequency',
-    xAxisTickStep,
+    xAxisTickStep = 1,
 }) => {
     const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        if (typeof window !== 'undefined') {
+            setWindowWidth(window.innerWidth);
 
-    const processedData = useMemo<ProcessedPlotData>(() => {
-        if (!plotData) {
-            console.error('Plot data is undefined or null');
-            return { labels: [], datasets: [], units: null, name: '', description: '' };
-        }
-
-        const createHistogram = (data: number[], binCount = 20) => {
-            const min = Math.min(...data);
-            const max = Math.max(...data);
-            const binWidth = (max - min) / binCount;
-            const bins = Array.from({ length: binCount }, (_, i) => min + i * binWidth);
-            const counts = new Array(binCount).fill(0);
-            data.forEach(value => {
-                const binIndex = Math.min(Math.floor((value - min) / binWidth), binCount - 1);
-                counts[binIndex]++;
-            });
-            return { bins, counts };
-        };
-
-        if (Array.isArray(plotData)) {
-            const { bins, counts } = createHistogram(plotData);
-            return {
-                labels: bins.map(bin => bin.toFixed(2)),
-                datasets: [{
-                    label: 'Frequency',
-                    data: counts,
-                    backgroundColor: graphTheme.blue,
-                    borderColor: '#050A30',
-                    borderWidth: 1,
-                }],
-                units: null,
-                name: '',
-                description: ''
+            const handleResize = () => {
+                setWindowWidth(window.innerWidth);
             };
-        } else if (typeof plotData === 'object' && plotData !== null) {
-            if ('freq' in plotData && 'bins' in plotData) {
-                return {
-                    labels: plotData.bins.map(String),
-                    datasets: [{
-                        label: plotData.name || 'Frequency',
-                        data: plotData.freq,
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
-                    units: plotData.units || null,
-                    name: plotData.name || '',
-                    description: plotData.description || ''
-                };
-            } else {
-                const entries = Object.entries(plotData);
-                return {
-                    labels: entries.map(([key, _]) => key),
-                    datasets: [{
-                        label: 'Value',
-                        data: entries.map(([_, value]) => value as number),
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
-                    units: null,
-                    name: '',
-                    description: ''
-                };
-            }
-        } else {
-            console.error('Unexpected data format', plotData);
-            return { labels: [], datasets: [], units: null, name: '', description: '' };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
         }
-    }, [plotData]);
+    }, []);
 
     const formatScientificNotation = (value: number): string => {
         if (value === 0) return '0';
@@ -134,81 +50,176 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
         const mantissa = value / Math.pow(10, exponent);
         const roundedMantissa = Math.round(mantissa * 100) / 100;
         const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-        const superscriptExponent = Math.abs(exponent).toString().split('').map(digit => superscriptDigits[parseInt(digit)]).join('');
+        const superscriptExponent = Math.abs(exponent)
+            .toString()
+            .split('')
+            .map((digit) => superscriptDigits[parseInt(digit)])
+            .join('');
         return `${roundedMantissa}*10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
     };
 
-    const options: ChartOptions<'bar'> = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    title: (tooltipItems) => {
-                        const index = tooltipItems[0].dataIndex;
-                        const binStart = processedData.labels[index];
-                        const binEnd = processedData.labels[index + 1] ||
-                            (parseFloat(binStart) + (parseFloat(processedData.labels[1]) - parseFloat(processedData.labels[0]))).toFixed(2);
-                        return `${binStart} - ${binEnd} ${processedData.units || ''}`;
-                    }
-                }
-            }
-        },
-        scales: {
-            x: {
-                title: { display: true, text: xAxis },
-                ticks: {
-                    maxRotation: 0,
-                    minRotation: 0,
-                    callback: (value, index, ticks) => {
-                        const numericValue = parseFloat(value.toString());
-                        if (!isNaN(numericValue)) {
-                            if (xAxisTickStep) {
-                                const epsilon = 0.0001;
-                                const remainder = numericValue % xAxisTickStep;
-                                if (Math.abs(remainder) < epsilon || Math.abs(remainder - xAxisTickStep) < epsilon) {
-                                    return value;
-                                }
-                            } else if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
-                                return value;
-                            }
-                        }
-                        return '';
-                    },
-                },
-            },
-            y: {
-                title: { display: true, text: yAxis },
-                ticks: {
-                    callback: (value) => {
-                        const numericValue = Number(value);
-                        const threshold = 1e3;
-                        if (Math.abs(numericValue) >= threshold || (numericValue !== 0 && Math.abs(numericValue) <= 1 / threshold)) {
-                            return formatScientificNotation(numericValue);
-                        }
-                        return numericValue.toLocaleString();
-                    },
-                },
-            },
-        },
-    };
+    const { dataPoints, units, name, description } = useMemo(() => {
+        if (!plotData) {
+            console.error('Plot data is undefined or null');
+            return { dataPoints: [], units: null, name: '', description: '' };
+        }
 
-    if (processedData.labels.length === 0 || processedData.datasets.length === 0) {
+        const createHistogram = (data: number[]) => {
+            const binCount = Math.min(20, data.length);
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const binWidth = (max - min) / binCount;
+
+            const bins = Array.from({ length: binCount + 1 }, (_, i) => min + i * binWidth);
+            const counts = new Array(binCount).fill(0);
+
+            data.forEach((value) => {
+                const binIndex = Math.min(
+                    Math.floor((value - min) / binWidth),
+                    binCount - 1
+                );
+                counts[binIndex]++;
+            });
+
+            const dataPoints = counts.map((count, i) => ({
+                x: bins[i],
+                y: count,
+            }));
+
+            return { dataPoints };
+        };
+
+        if (Array.isArray(plotData)) {
+            const { dataPoints } = createHistogram(plotData);
+            return {
+                dataPoints,
+                units: null,
+                name: '',
+                description: '',
+            };
+        } else if (typeof plotData === 'object' && plotData !== null) {
+            if ('freq' in plotData && 'bins' in plotData) {
+                const dataPoints = plotData.bins.map((bin: number, index: number) => ({
+                    x: bin,
+                    y: plotData.freq[index],
+                }));
+                return {
+                    dataPoints,
+                    units: plotData.units,
+                    name: plotData.name || '',
+                    description: plotData.description || '',
+                };
+            } else if ('bins' in plotData && 'counts' in plotData) {
+                const dataPoints = plotData.bins.map((bin: number, index: number) => ({
+                    x: bin,
+                    y: plotData.counts[index],
+                }));
+                return {
+                    dataPoints,
+                    units: null,
+                    name: '',
+                    description: '',
+                };
+            } else if ('values' in plotData && Array.isArray(plotData.values)) {
+                const flatValues = plotData.values.flat();
+                const { dataPoints } = createHistogram(flatValues);
+                return {
+                    dataPoints,
+                    units: null,
+                    name: '',
+                    description: '',
+                };
+            } else {
+                const dataPoints = Object.entries(plotData).map(([key, value]) => ({
+                    x: parseFloat(key),
+                    y: value,
+                }));
+                return {
+                    dataPoints,
+                    units: null,
+                    name: '',
+                    description: '',
+                };
+            }
+        } else {
+            console.error('Unexpected data format', plotData);
+            return { dataPoints: [], units: null, name: '', description: '' };
+        }
+    }, [plotData]);
+
+    const options: ChartOptions<'bar'> = useMemo(
+        () => ({
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    callbacks: {
+                        title: (tooltipItems: any) => {
+                            const index = tooltipItems[0].dataIndex;
+                            const binStart = tooltipItems[0].parsed.x;
+                            const binEnd = dataPoints[index + 1]
+                                ? dataPoints[index + 1].x
+                                : binStart;
+                            return `${binStart} - ${binEnd} ${units || ''}`;
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    type: 'linear' as const,
+                    title: {
+                        display: true,
+                        text: xAxis,
+                    },
+                    ticks: {
+                        stepSize: xAxisTickStep,
+                        maxRotation: 0,
+                        minRotation: 0,
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: yAxis,
+                    },
+                    ticks: {
+                        callback: function (value) {
+                            return formatScientificNotation(Number(value));
+                        },
+                    },
+                },
+            },
+        }),
+        [xAxisTickStep, xAxis, yAxis, dataPoints, units]
+    );
+
+    if (dataPoints.length === 0) {
         return <div>No data available for the plot.</div>;
     }
 
-    const chartData: ChartData<'bar'> = {
-        labels: processedData.labels,
-        datasets: processedData.datasets
+    const data = {
+        datasets: [
+            {
+                label: 'Frequency',
+                data: dataPoints,
+                backgroundColor: graphTheme.blue,
+                borderWidth: 0, // Removed borders
+                barPercentage: 0.9, // Adjusted for spacing
+                categoryPercentage: 0.9, // Adjusted for spacing
+            },
+        ],
     };
 
     return (
         <div>
-            {processedData.name && <h2>{processedData.name}</h2>}
-            {processedData.description && <p>{processedData.description}</p>}
+            {name && <h2>{name}</h2>}
+            {description && <p>{description}</p>}
             <div style={{ width: '100%', height: '400px' }}>
-                <Bar data={chartData} options={options} />
+                <Bar data={data} options={options} />
             </div>
         </div>
     );
