@@ -6,7 +6,7 @@ import Factsheet, { FactsheetEntryType } from '@/components/Factsheet';
 
 export type Fact = {
     name: string;
-    value: [number, number];
+    value: number[];
     unit?: string;
     type?: string;
     description?: string;
@@ -24,7 +24,7 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
         return {
             name: fact.name,
             value: Number(meanValue.toFixed(3)),
-            unit: `± ${Number(stdDevValue.toFixed(3))}`,
+            unit: stdDevValue !== undefined ? `± ${Number(stdDevValue.toFixed(3))}` : '',
             description: fact.description || '',
             type: fact.type || ''
         };
@@ -54,3 +54,5 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
 };
 
 export default NeuronFactsheet;
+
+http://localhost:3000/hippocampus-portal-dev/data/5_prediction/spontaneous-activity/1-0.00025/SLM_PPA-bAC/trace.json

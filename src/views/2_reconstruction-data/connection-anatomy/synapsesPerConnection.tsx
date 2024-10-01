@@ -3,6 +3,7 @@ import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
+import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 Chart.register(...registerables);
 
@@ -217,6 +218,13 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
 
     return (
         <div className="w-full max-w-3xl">
+            <div className="flex flex-row">
+                <div className="flex flex-col">
+                    <span>  Pink line: <i>y = 0.1096x</i></span>
+                    <span>  Red line: <i>y=1.1690x</i></span>
+                    <span>  Dashed line: <i>y = x</i></span>
+                </div>
+            </div>
             <div className='graph' style={{ width: `${chartSize}px`, height: `${chartSize}px` }}>
                 <canvas ref={chartRef} />
             </div>

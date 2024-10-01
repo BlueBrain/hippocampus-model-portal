@@ -26,7 +26,8 @@ const MinisRate = [
     0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002
 ];
 
-const CA_O = [1.0, 1.5, 2.0];
+
+const CA_O = [1, 1.5, 2];
 
 const getMinisRate = (): number[] => MinisRate;
 const getCa0 = (): number[] => CA_O;

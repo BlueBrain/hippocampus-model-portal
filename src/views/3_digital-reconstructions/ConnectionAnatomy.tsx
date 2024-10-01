@@ -19,41 +19,81 @@ import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 import { basePath } from '@/config';
 
 import { downloadAsJson } from '@/utils';
+import withPreselection from '@/hoc/with-preselection';
 
 const MergedConnectionsView: React.FC = () => {
   const router = useRouter();
   const { volume_section, prelayer, postlayer } = router.query as Record<string, string>;
 
-  const [quickSelection, setQuickSelection] = useState<Record<string, VolumeSection | Layer>>({
-    volume_section: '' as VolumeSection,
-    prelayer: '' as Layer,
-    postlayer: '' as Layer
-  });
+  const [quickSelection, setQuickSelection] = useState<Record<string, string>>({ volume_section, prelayer, postlayer });
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
   const [laminarData, setLaminarData] = useState<any>(null);
 
   const theme = 3;
 
+  const setParams = (params: Record<string, string>): void => {
+    const query = { ...router.query, ...params };
+    router.push({ query }, undefined, { shallow: true });
+  };
+
   useEffect(() => {
     if (!router.isReady) return;
 
-    if (!volume_section && !prelayer && !postlayer) {
-      const defaultParams = defaultSelection.digitalReconstruction.connectionAnatomy;
-      setQuickSelection({
-        volume_section: defaultParams.volume_section as VolumeSection,
-        prelayer: defaultParams.prelayer as Layer,
-        postlayer: defaultParams.postlayer as Layer
-      });
-      router.replace({ query: defaultParams }, undefined, { shallow: true });
+    if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
+      const query = defaultSelection.digitalReconstruction.connectionAnatomy;
+      const { volume_section, prelayer, postlayer } = query;
+      setQuickSelection({ volume_section, prelayer, postlayer });
+      router.replace({ query }, undefined, { shallow: true });
     } else {
-      setQuickSelection({
-        volume_section: volume_section as VolumeSection,
-        prelayer: prelayer as Layer,
-        postlayer: postlayer as Layer
-      });
+      setQuickSelection({ volume_section, prelayer, postlayer });
     }
-  }, [router.isReady, volume_section, prelayer, postlayer]);
+  }, [router.query]);
+
+  const setVolumeSectionQuery = (volume_section: VolumeSection) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, volume_section };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
+  };
+
+  const setPreLayerQuery = (prelayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, prelayer };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
+  };
+
+  const setPostLayerQuery = (postlayer: Layer) => {
+    setQuickSelection(prev => {
+      const updatedSelection = { ...prev, postlayer };
+      setParams(updatedSelection);
+      return updatedSelection;
+    });
+  };
+
+  const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Volume section',
+      key: 'volume_section',
+      values: volumeSections,
+      setFn: setVolumeSectionQuery,
+    },
+    {
+      title: 'Pre-synaptic cell group',
+      key: 'prelayer',
+      values: cellGroup,
+      setFn: setPreLayerQuery,
+    },
+    {
+      title: 'Post-synaptic cell group',
+      key: 'postlayer',
+      values: cellGroup,
+      setFn: setPostLayerQuery,
+    },
+  ];
 
   useEffect(() => {
     if (quickSelection.volume_section && quickSelection.prelayer && quickSelection.postlayer) {
@@ -112,22 +152,6 @@ const MergedConnectionsView: React.FC = () => {
     setAvailablePlots(availablePlots);
   };
 
-  const setParams = (params: Partial<Record<string, VolumeSection | Layer>>) => {
-    const newSelection = { ...quickSelection, ...params };
-    const query = { ...router.query, ...newSelection };
-    router.push({ query }, undefined, { shallow: true });
-  };
-
-  const updateQuickSelection = (key: string, value: VolumeSection | Layer) => {
-    setParams({ [key]: value });
-  };
-
-  const qsEntries: QuickSelectorEntry[] = [
-    { title: 'Volume section', key: 'volume_section', values: volumeSections, setFn: (value) => updateQuickSelection('volume_section', value as VolumeSection) },
-    { title: 'Pre-synaptic cell group', key: 'prelayer', values: cellGroup, setFn: (value) => updateQuickSelection('prelayer', value as Layer) },
-    { title: 'Post-synaptic cell group', key: 'postlayer', values: cellGroup, setFn: (value) => updateQuickSelection('postlayer', value as Layer) },
-  ];
-
   const getPlotDataById = (id: string) => factsheetData?.find((plot: any) => plot.id === id);
 
   const renderPlot = (id: string, title: string, xAxis: string, yAxis: string) => {
@@ -179,7 +203,7 @@ const MergedConnectionsView: React.FC = () => {
               <div className="selector__body">
                 <VolumeSectionSelector3D
                   value={quickSelection.volume_section}
-                  onSelect={(value) => updateQuickSelection('volume_section', value)}
+                  onSelect={setVolumeSectionQuery}
                   theme={theme}
                 />
               </div>
@@ -193,7 +217,7 @@ const MergedConnectionsView: React.FC = () => {
                     list={cellGroup}
                     value={quickSelection.prelayer}
                     title="m-type"
-                    onSelect={(value) => updateQuickSelection('prelayer', value as Layer)}
+                    onSelect={setPreLayerQuery}
                     theme={theme}
                   />
                 </div>
@@ -206,7 +230,7 @@ const MergedConnectionsView: React.FC = () => {
                     list={cellGroup}
                     value={quickSelection.postlayer}
                     title="m-type"
-                    onSelect={(value) => updateQuickSelection('postlayer', value as Layer)}
+                    onSelect={setPostLayerQuery}
                     theme={theme}
                   />
                 </div>
@@ -243,4 +267,10 @@ const MergedConnectionsView: React.FC = () => {
   );
 };
 
-export default MergedConnectionsView;
+export default withPreselection(
+  MergedConnectionsView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.digitalReconstruction.connectionAnatomy,
+  },
+);

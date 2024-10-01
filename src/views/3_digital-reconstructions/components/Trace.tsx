@@ -63,7 +63,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setLayout({
                 title: '',  // Remove the title
                 xaxis: {
-                    title: '',
+                    title: 'Time (ms)',
                     showticklabels: false,  // Hide x-axis tick labels
                 },
                 yaxis: {

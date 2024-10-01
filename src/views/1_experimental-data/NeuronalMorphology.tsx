@@ -207,6 +207,16 @@ const NeuronalMorphologyView: React.FC = () => {
                         We provide visualization and morphometrics for the selected morphology.
                     </p>
                     <InstanceViewer theme={theme} currentMtype={quickSelection.mtype} currentInstance={quickSelection.instance} />
+                    <div className="mt-4">
+                        <DownloadButton
+                            theme={theme}
+
+                            href={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
+                        >
+                            Download SWC
+                        </DownloadButton>
+
+                    </div>
                     <div className="mb-4">
                         <HttpData path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}>
                             {(factsheetData) => (

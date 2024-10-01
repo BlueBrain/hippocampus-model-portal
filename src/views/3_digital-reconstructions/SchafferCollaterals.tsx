@@ -23,6 +23,7 @@ import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import Factsheet from '@/components/Factsheet';
+import withPreselection from '@/hoc/with-preselection';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -788,4 +789,10 @@ const SchafferCollateralsView: React.FC = () => {
   )
 }
 
-export default SchafferCollateralsView;
+export default withPreselection(
+  SchafferCollateralsView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.digitalReconstruction.connectionAnatomy,
+  },
+);
