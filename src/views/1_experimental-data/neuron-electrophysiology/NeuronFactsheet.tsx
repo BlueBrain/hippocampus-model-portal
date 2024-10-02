@@ -54,5 +54,3 @@ const NeuronFactsheet: React.FC<InstanceViewerProps> = ({ theme, facts, id }) =>
 };
 
 export default NeuronFactsheet;
-
-http://localhost:3000/hippocampus-portal-dev/data/5_prediction/spontaneous-activity/1-0.00025/SLM_PPA-bAC/trace.json
