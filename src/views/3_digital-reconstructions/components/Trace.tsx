@@ -9,11 +9,9 @@ const Plot = dynamic(() => import('react-plotly.js').then((mod) => mod.default),
     ssr: false,
 }) as unknown as React.ComponentType<Plotly.Plot>;
 
-
 interface TraceDataProps {
     plotData?: {
-        name: string;
-        individual_trace: number[][];
+        individual_traces: number[][];
         mean_trace: number[];
     };
 }
@@ -25,7 +23,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
     const [hasError, setHasError] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!plotData || !plotData.individual_trace || !plotData.mean_trace) {
+        if (!plotData || !plotData.individual_traces || !plotData.mean_trace) {
             console.log('No plot data available');
             setIsLoading(false);
             setHasError(true);
@@ -37,7 +35,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setHasError(false);
 
             // Prepare individual traces data
-            const individualTraces = plotData.individual_trace.map((trace, index) => ({
+            const individualTraces = plotData.individual_traces.map((trace, index) => ({
                 x: Array.from({ length: trace.length }, (_, i) => i),
                 y: trace,
                 type: 'scatter',
@@ -61,10 +59,10 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Set up the layout
             setLayout({
-                title: '',  // Remove the title
+                title: '',
                 xaxis: {
                     title: 'Time (ms)',
-                    showticklabels: false,  // Hide x-axis tick labels
+                    showticklabels: false,
                 },
                 yaxis: {
                     title: 'Value (mV)',

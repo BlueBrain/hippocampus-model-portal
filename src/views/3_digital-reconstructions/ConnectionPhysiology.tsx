@@ -12,6 +12,8 @@ import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
 import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
+import TraceGraph from './components/Trace';
+
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
@@ -32,6 +34,7 @@ const SynapsesView: React.FC = () => {
   const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
   const [laminarPlots, setLaminarPlots] = useState<Record<string, boolean>>({});
+  const [traceData, setTraceData] = useState<any>(null);
 
   const theme = 3;
 
@@ -100,6 +103,16 @@ const SynapsesView: React.FC = () => {
       setFn: setPostLayerQuery,
     },
   ];
+  const fetchTraceData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/trace.json`);
+      const data = await response.json();
+      setTraceData(data);
+    } catch (error) {
+      console.error('Error fetching trace data:', error);
+    }
+  };
+
 
   useEffect(() => {
     setConnViewerReady(false);
@@ -131,6 +144,7 @@ const SynapsesView: React.FC = () => {
               GSYNX: plots.some(plot => plot.id === 'g-synx'),
             };
 
+            fetchTraceData();
             setAvailablePlots(availablePlots);
             setFactsheetData([...plots]);
           } else {
@@ -609,6 +623,17 @@ const SynapsesView: React.FC = () => {
             )}
           </div>
         </Collapsible>
+
+
+        <Collapsible title="Trace" id="TracesSection" className="mt-4">
+
+          {traceData && traceData.individual_traces && traceData.mean_trace && (
+            <div className="graph">
+              <TraceGraph plotData={traceData} />
+            </div>
+          )}
+        </Collapsible>
+
       </DataContainer >
     </>
   );

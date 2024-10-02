@@ -778,9 +778,11 @@ const SchafferCollateralsView: React.FC = () => {
           </div>
         </Collapsible>
 
-        <Collapsible title='Traces' id='TracesSection' properties={["Physiology"]}>
-          {traceData && traceData.individual_trace && traceData.mean_trace && (
-            <TraceGraph plotData={traceData} />
+        <Collapsible title="Trace" id="TracesSection" className="mt-4">
+          {traceData && traceData.individual_traces && traceData.mean_trace && (
+            <div className="graph">
+              <TraceGraph plotData={traceData} />
+            </div>
           )}
         </Collapsible>
 
