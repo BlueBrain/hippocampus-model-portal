@@ -231,6 +231,7 @@ const SynapsesView: React.FC = () => {
           { id: 'DecayTimeConstantSection', label: 'Decay Time Constant' },
           { id: 'NMDAAMPARatioSection', label: 'NMAA/AMPA Ratio' },
           { id: 'UDFNRRPSection', label: 'U, D, F, NRRP Parameters and G-SYNX ' },
+          { id: 'TracesSection', label: 'Trace' }
         ]}
         quickSelectorEntries={qsEntries}
       >

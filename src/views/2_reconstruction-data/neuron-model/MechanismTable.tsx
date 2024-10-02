@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Tooltip } from 'antd';
 import { dataPath } from '@/config';
+import MechanismToolTip from './MechanismToolTip';
 
 type MechanismTableProps = {
     theme?: number;
@@ -47,6 +49,9 @@ const MechanismTable: React.FC<MechanismTableProps> = ({ theme, data, instance }
 
     return (
         <div className="p-4">
+            <style jsx global>{`
+             
+            `}</style>
             <table className="w-full border-collapse">
                 <thead>
                     <tr>
@@ -60,16 +65,24 @@ const MechanismTable: React.FC<MechanismTableProps> = ({ theme, data, instance }
                             <td className="p-2 font-medium">{section}</td>
                             <td className="p-2">
                                 {mechanisms[section]?.map((mech) => (
-                                    <span
+                                    <Tooltip
                                         key={mech}
-                                        className={`inline-block mr-2 mb-1 px-2 py-1 rounded cursor-pointer ${validMechanisms[mech]
-                                            ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                            }`}
-                                        onClick={() => handleDownload(mech)}
+                                        title={<MechanismToolTip equation={"U_{SE}^{ACh} = \\frac{1.0 ACh^{-0.576}}{4.541^{-0.576} + ACh^{-0.576}}"} />}
+                                        trigger="hover"
+                                        placement="top"
+                                        overlayInnerStyle={{
+                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                                        }}
                                     >
-                                        {mech}
-                                    </span>
+                                        <span
+                                            className={`inline-block mr-2 mb-1 px-2 py-1 ${validMechanisms[mech]
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                }`}
+                                        >
+                                            {mech}
+                                        </span>
+                                    </Tooltip>
                                 ))}
                             </td>
                         </tr>
