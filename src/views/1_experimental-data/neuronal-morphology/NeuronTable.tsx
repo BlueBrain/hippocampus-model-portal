@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import Image from 'next/image';
-import { basePath, dataPath, imagesPath } from "../../../config";
+import { basePath } from "../../../config";
 import ResponsiveTable from '@/components/ResponsiveTable';
 import Link from 'next/link';
 import DownloadButton from '@/components/DownloadButton';
