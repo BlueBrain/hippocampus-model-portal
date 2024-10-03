@@ -146,7 +146,7 @@ const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Connection-Probability-Data.json`)}
                 >
-                    Connection Probability Data
+                    Connection probability
                 </DownloadButton>
             </div>
         </>

@@ -75,8 +75,8 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, the
                 showLine: true,
                 borderColor: graphTheme.blue,
                 borderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 7,
+                pointRadius: 3,
+                pointHoverRadius: 5,
             },
         ],
     };

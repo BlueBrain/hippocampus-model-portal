@@ -47,7 +47,7 @@ const Anatomy: React.FC<AnatomyProps> = ({ theme }) => {
                 columns={AnatomyColumns}
                 rowKey={(record) => record.Pathway}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
@@ -55,7 +55,7 @@ const Anatomy: React.FC<AnatomyProps> = ({ theme }) => {
                         `Anatomy-Data.json`
                     )}
                 >
-                    Anatomy Data
+                    Anatomy
                 </DownloadButton>
             </div>
         </>

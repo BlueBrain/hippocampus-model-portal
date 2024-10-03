@@ -152,7 +152,7 @@ const SynDivLay: React.FC<SynDivLayProps> = ({ theme }) => {
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Percentage-of-synapse-divergence-per-layer-Data.json`)}
                 >
-                    Percentage Of Synapse Divergence Per Layer Data
+                    Percentage ff synapse divergence per layer
                 </DownloadButton>
             </div>
         </>

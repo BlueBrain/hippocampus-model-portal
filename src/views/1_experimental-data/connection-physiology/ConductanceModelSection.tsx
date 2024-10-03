@@ -229,7 +229,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
         </DownloadButton>
       </div>
 
-      <h2 className="text-lg mb-2 mt-12">PSP Amplitude</h2>
+      <h2 className="text-lg mb-2 mt-12">PSP amplitude</h2>
       <ResponsiveTable<TableEntry>
         data={PSPAmplitudeData}
         columns={PSPAmplitudeColumns}
@@ -240,7 +240,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
           theme={theme}
           onClick={() => downloadAsJson(PSPAmplitudeData, `PSP-Amplitude-Data.json`)}
         >
-          PSP Amplitude Data
+          PSP amplitude
         </DownloadButton>
       </div>
 
@@ -255,7 +255,7 @@ const ConductanceModelSection: React.FC<ConductanceModelSectionProps> = ({ theme
           theme={theme}
           onClick={() => downloadAsJson(PSCAmplitudeData, `PSC-Amplitude-Data.json`)}
         >
-          PSC Amplitude Data
+          PSC amplitude
         </DownloadButton>
       </div>
     </>

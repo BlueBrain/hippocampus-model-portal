@@ -142,7 +142,7 @@ const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
           theme={theme}
           onClick={() => downloadAsJson(data, `Bouton-Density-Data.json`)}
         >
-          Bouton Density Data
+          Bouton density
         </DownloadButton>
       </div>
 

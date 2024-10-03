@@ -227,7 +227,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(chartData, `Nb-Of-Synapses-Per-Connection-Data.json`)}>
-                    Number Of Synapses Per Connection Data
+                    Number of synapses per connection
                 </DownloadButton>
             </div>
         </div>

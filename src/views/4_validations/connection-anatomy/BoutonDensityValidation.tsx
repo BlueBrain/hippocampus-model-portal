@@ -207,7 +207,7 @@ const BoutonDensityValidationGraph: React.FC<BoutonDensityValidationProps> = ({ 
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Bouton-Density-Validation-Data.json`)}>
-                    Bouton density data
+                    Bouton density
                 </DownloadButton>
             </div>
         </div>

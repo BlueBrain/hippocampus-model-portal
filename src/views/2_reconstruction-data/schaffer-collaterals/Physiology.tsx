@@ -84,7 +84,7 @@ const Physiology: React.FC<PhysiologyProps> = ({ theme }) => {
                 columns={PhysiologyColumns}
                 rowKey={(record) => `${record.ruleN}_${record.from}_${record.to}`}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(
@@ -92,7 +92,7 @@ const Physiology: React.FC<PhysiologyProps> = ({ theme }) => {
                         `Physiology-table.json`
                     )}
                 >
-                    Physiology Data
+                    Physiology
                 </DownloadButton>
             </div>
         </>

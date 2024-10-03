@@ -92,7 +92,7 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
         )}
       />
 
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(
@@ -100,7 +100,7 @@ const CellCompositionTable: React.FC<CellCompositionTableProps> = ({ volumeSecti
             `Cell-Composition-Data-${volumeSection}.json`
           )}
         >
-          Cell Composition Data
+          <span className='collapsible-property small'>{volumeSection}</span> Cell Composition
         </DownloadButton>
       </div>
     </>

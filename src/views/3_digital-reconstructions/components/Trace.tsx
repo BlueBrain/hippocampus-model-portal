@@ -36,7 +36,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare individual traces data
             const individualTraces = plotData.individual_traces.map((trace, index) => ({
-                x: Array.from({ length: trace.length }, (_, i) => i),
+                x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
                 y: trace,
                 type: 'scatter',
                 mode: 'lines',
@@ -47,7 +47,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare mean trace data
             const meanTrace = {
-                x: Array.from({ length: plotData.mean_trace.length }, (_, i) => i),
+                x: Array.from({ length: plotData.mean_trace.length }, (_, i) => i * (5000 / (plotData.mean_trace.length - 1))),
                 y: plotData.mean_trace,
                 type: 'scatter',
                 mode: 'lines',
@@ -62,7 +62,10 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                 title: '',
                 xaxis: {
                     title: 'Time (ms)',
-                    showticklabels: false,
+                    showticklabels: true,
+                    range: [0, 5000],
+                    tickmode: 'linear',
+                    dtick: 1000,
                 },
                 yaxis: {
                     title: 'Value (mV)',

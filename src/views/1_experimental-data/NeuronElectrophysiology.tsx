@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button } from 'antd';
@@ -29,7 +29,6 @@ import HttpData from '@/components/HttpData';
 import NeuronFactsheet from './neuron-electrophysiology/NeuronFactsheet';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
-import NeuronTable from './neuronal-morphology/NeuronTable';
 
 type Distribution = {
   name: string;
@@ -57,22 +56,29 @@ const NeuronElectrophysiology: React.FC = () => {
   const theme = 1;
   const { query } = router;
 
-  const setQuery = (newQuery: Record<string, string | undefined>) => {
+  const setQuery = useCallback((newQuery: Record<string, string | undefined>) => {
     router.push(
       { query: { ...query, ...newQuery }, pathname: router.pathname },
       undefined,
       { shallow: true }
     );
-  };
+  }, [query, router]);
 
-  const setEtype = (etype: string) => setQuery({ etype, etype_instance: undefined });
-  const setInstance = (instance: string) => setQuery({ etype_instance: instance });
+  const setEtype = useCallback((etype: string) => {
+    const newInstances = getInstance(etype);
+    const firstInstance = newInstances.length > 0 ? newInstances[0] : undefined;
+    setQuery({ etype, etype_instance: firstInstance });
+  }, [setQuery]);
+
+  const setInstance = useCallback((instance: string) => {
+    setQuery({ etype_instance: instance });
+  }, [setQuery]);
 
   const currentEtype = typeof query.etype === 'string' ? query.etype : undefined;
   const currentInstance = typeof query.etype_instance === 'string' ? query.etype_instance : undefined;
 
-  const etypes = getEtype();
-  const instances = getInstance(currentEtype);
+  const etypes = useMemo(() => getEtype(), []);
+  const instances = useMemo(() => getInstance(currentEtype), [currentEtype]);
 
   const fullElectroPhysiologyDataQueryObj = useMemo(
     () => currentEtype && currentInstance ? electroPhysiologyDataQuery(currentEtype, currentInstance) : null,
@@ -84,7 +90,7 @@ const NeuronElectrophysiology: React.FC = () => {
     [currentEtype]
   );
 
-  const qsEntries: QuickSelectorEntry[] = [
+  const qsEntries: QuickSelectorEntry[] = useMemo(() => [
     {
       title: 'E-type',
       key: 'etype',
@@ -97,7 +103,7 @@ const NeuronElectrophysiology: React.FC = () => {
       values: instances,
       setFn: setInstance,
     },
-  ];
+  ], [etypes, instances, setEtype, setInstance]);
 
   return (
     <>
@@ -168,7 +174,7 @@ const NeuronElectrophysiology: React.FC = () => {
             Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
           </AuthorBox>
           <p className="mt-4">We provide visualization and features for the selected recording.</p>
-          <ESData query={fullElectroPhysiologyDataQueryObj} >
+          <ESData query={fullElectroPhysiologyDataQueryObj}>
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
@@ -224,17 +230,15 @@ const NeuronElectrophysiology: React.FC = () => {
           </ESData>
           <IfCurvePerCellGraph theme={theme} instance={currentInstance} />
           <div className="mb-4">
-
             <HttpData path={`${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-cell/${currentInstance}/features.json`}>
               {(factsheetData) => (
                 <>
                   {factsheetData && (
-
                     <>
                       <NeuronFactsheet id="morphometrics" facts={factsheetData} />
                       <div className="mt-4">
                         <DownloadButton onClick={() => downloadAsJson(factsheetData, `${currentEtype}-factsheet.json`)} theme={theme}>
-                          Factsheet
+                          Instance factsheet
                         </DownloadButton>
                       </div>
                     </>
@@ -243,19 +247,17 @@ const NeuronElectrophysiology: React.FC = () => {
               )}
             </HttpData>
           </div>
-
         </Collapsible>
         <Collapsible
           id="etypeSection"
           className="mt-4"
           title="Population"
+          properties={[currentEtype]}
         >
           <p className="mb-4">We provide features for the entire e-type group selected.</p>
           {currentEtype && (
             <IfCurvePerETypeGraph theme={theme} eType={currentEtype} />
           )}
-
-
           <div className="mb-4">
             <HttpData path={`${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/features.json`}>
               {(factsheetData) => (
@@ -265,7 +267,7 @@ const NeuronElectrophysiology: React.FC = () => {
                       <NeuronFactsheet id="morphometrics" facts={factsheetData} />
                       <div className="mt-4">
                         <DownloadButton onClick={() => downloadAsJson(factsheetData.values, `${currentEtype}-factsheet.json`)} theme={theme}>
-                          Factsheet
+                          Population factsheet
                         </DownloadButton>
                       </div>
                     </>
@@ -274,7 +276,6 @@ const NeuronElectrophysiology: React.FC = () => {
               )}
             </HttpData>
           </div>
-
         </Collapsible>
       </DataContainer>
     </>

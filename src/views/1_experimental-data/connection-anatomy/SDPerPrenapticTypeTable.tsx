@@ -144,7 +144,7 @@ const SDPerPresynapticTypeTable: React.FC<SDPerPresynapticTypeTableProps> = ({ t
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Synapse-Divergence-Per-Presynaptic-Type-Data.json`)}
                 >
-                    Synapse Divergence Per Presynaptic Type Data
+                    Synapse divergence per presynaptic type data
                 </DownloadButton>
             </div>
         </>
