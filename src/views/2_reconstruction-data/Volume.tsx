@@ -92,7 +92,7 @@ const VolumeView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <Collapsible id="volume" title="Volume">
+        <Collapsible id="volume" title="Volume" properties={[volumeSection]}>
           <h2>
             {volumeSection === 'region' ? (
               <span>Region CA1</span>
@@ -143,7 +143,7 @@ const VolumeView: React.FC = () => {
           </p>
         </Collapsible>
 
-        <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4">
+        <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4" properties={[volumeSection]}>
           <p>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</p>
           <div className="graph no-padding flex-col">
             <Spin spinning={!volumeViewerReady}>

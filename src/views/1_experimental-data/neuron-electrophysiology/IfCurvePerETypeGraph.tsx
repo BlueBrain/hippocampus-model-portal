@@ -16,6 +16,7 @@ import { dataPath } from '@/config';
 import { graphTheme } from '@/constants';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
+import { GraphTheme } from '@/types';
 
 ChartJS.register(
     CategoryScale,
@@ -58,7 +59,7 @@ const errorBarPlugin = {
 
         ctx.save();
         ctx.strokeStyle = graphTheme.blue;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
 
         data.datasets[0].data.forEach((datapoint: ChartDataPoint) => {
             const xPos = x.getPixelForValue(datapoint.x);
@@ -130,14 +131,16 @@ const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, them
                 data: sortedData,
                 borderColor: graphTheme.blue,
                 backgroundColor: graphTheme.blue,
-                pointRadius: 5,
-                pointHoverRadius: 7,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 5,
             },
         ],
     };
 
     const options: ChartOptions<'line'> = {
         responsive: true,
+        animation: { duration: 0 },
         scales: {
             x: {
                 type: 'linear',
@@ -176,7 +179,7 @@ const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, them
                     theme={theme}
                     onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}
                 >
-                    Download IF curve per e-type data
+                    IF curve per e-type
                 </DownloadButton>
             </div>
         </div>

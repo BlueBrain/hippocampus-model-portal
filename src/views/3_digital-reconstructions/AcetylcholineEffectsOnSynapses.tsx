@@ -241,10 +241,29 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
         )}
 
         <Collapsible title="Trace" id="traceSection" className="mt-4">
-          {traceData && traceData.individual_trace && traceData.mean_trace && (
-            <div className="graph">
-              <TraceGraph plotData={traceData} />
-            </div>
+          {traceData && traceData.individual_traces && traceData.mean_trace && (
+            <>
+              <div className="graph">
+                <TraceGraph plotData={traceData} />
+              </div>
+              <DownloadButton
+                theme={theme}
+                onClick={() =>
+                  downloadAsJson(
+                    getPlotDataById('nrrp-parameter'),
+                    `x.json`
+                  )
+                }
+              >
+                <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                  ewop
+                </span>
+                <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                trace
+
+              </DownloadButton>
+            </>
           )}
         </Collapsible>
       </DataContainer>

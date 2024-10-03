@@ -97,7 +97,7 @@ const MorphDistributionPlots: React.FC<MorphDistributionPlotsProps> = ({ data, t
                 <Col key={entry.key} xs={12} sm={8} lg={6}>
                   <Histogram
                     title={histogramTitle(entry)}
-                    values={entry.values} // This will handle both old and new formats
+                    values={entry.values}
                     bins={entry.bins}
                     counts={entry.counts}
                     color={neuriteColor[entry.neuriteType]}

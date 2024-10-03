@@ -81,6 +81,7 @@ const CellCompositionView: React.FC = () => {
         <Collapsible
           id="cellCompositionSection"
           title="Cell composition"
+          properties={[volumeSection]}
         >
           <p className="mb-3">
             Here we provide the density and number of cells for each morphological type (m-type).

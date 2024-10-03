@@ -136,7 +136,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `${data.name}.json`)}>
-                    Download {data.name}
+                    {data.name}
                 </DownloadButton>
             </div>
         </div>

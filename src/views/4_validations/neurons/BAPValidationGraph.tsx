@@ -224,7 +224,7 @@ const BAPValidationGraph = ({ theme }: { theme: number }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(bAPValidationData, `bAP-Validation-Data.json`)}>
-                    bAP Validation Data
+                    bAP validation
                 </DownloadButton>
             </div>
         </>

@@ -230,7 +230,7 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `synapses-graph-data.json`)}>
-                    Synapses Graph Data
+                    Synapses
                 </DownloadButton>
             </div>
         </div>

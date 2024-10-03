@@ -176,7 +176,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
           theme={theme}
           onClick={() => downloadAsJson(PSCRiseTimeData, `PSC-Rise-Time-Data.json`)}
         >
-          PSC Rise Time Data
+          PSC rise time
         </DownloadButton>
       </div>
 
@@ -191,7 +191,7 @@ const AMPAKineticsSection: React.FC<AMPAKineticsSectionProps> = ({ theme }) => {
           theme={theme}
           onClick={() => downloadAsJson(PSCTauDecayData, `PSC-Tau-Decay-Data.json`)}
         >
-          PSC Tau Decay Data
+          PSC tau decay
         </DownloadButton>
       </div>
     </>

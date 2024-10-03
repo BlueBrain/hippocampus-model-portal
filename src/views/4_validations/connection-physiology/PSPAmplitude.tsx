@@ -233,7 +233,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `PSP-Amplitude-Data.json`)}>
-                    PSP Amplitude Data
+                    PSP amplitude
                 </DownloadButton>
             </div>
         </div>

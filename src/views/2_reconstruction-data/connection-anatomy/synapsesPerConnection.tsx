@@ -233,7 +233,7 @@ const SynapsesPerConnection: React.FC<SynapsesPerConnectionProps> = ({ theme }) 
                     theme={theme}
                     onClick={() => downloadAsJson(data, 'Synapses-Per-Connection-Data.json')}
                 >
-                    Synapses Per Connection Data
+                    Synapses per connection
                 </DownloadButton>
             </div>
         </div>

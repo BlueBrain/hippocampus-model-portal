@@ -99,7 +99,7 @@ const Minis: React.FC<MinisProps> = ({ theme }) => {
                 columns={MinisColumns}
                 rowKey={({ preMtype, postMtype, type }) => `${preMtype}_${postMtype}_${type}`}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(

@@ -231,7 +231,7 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(pspAttenuationData, `PSP-Attenuation-Data.json`)}>
-                    PSP Attenuation Data
+                    PSP attenuation
                 </DownloadButton>
             </div>
         </div>

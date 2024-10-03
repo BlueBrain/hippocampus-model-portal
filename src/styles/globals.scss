@@ -432,7 +432,7 @@ tfoot.ant-table-summary {
   border: 1px solid rgba(white, 0.1);
   background-color: #52617D;
   border-radius: 99px;
-
+  text-transform: capitalize;
   @apply text-sm;
 
   &.small {

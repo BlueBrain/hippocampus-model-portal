@@ -106,7 +106,7 @@ const RegionView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <Collapsible id='viewerSection' title={'Viewer'}>
+        <Collapsible id='viewerSection' title={'Viewer'} properties={[volumeSection]}>
           <h3>{getVolumeDescription(validVolumeSection)}</h3>
           <div className="text-base mb-2">The image shows soma positions.</div>
 
@@ -146,7 +146,7 @@ const RegionView: React.FC = () => {
                       <div className="mt-4">
                         <DownloadButton
                           theme={theme} onClick={() => downloadAsJson(data, `region-factsheet.json`)} >
-                          Region Factsheet
+                          Factsheet
                         </DownloadButton>
                       </div>
                     </>

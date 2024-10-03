@@ -236,7 +236,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `neuron-graph-data.json`)}>
-                    Neuron Graph Data
+                    Neuron
                 </DownloadButton>
             </div>
         </div>

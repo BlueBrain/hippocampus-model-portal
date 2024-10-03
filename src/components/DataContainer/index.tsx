@@ -34,19 +34,17 @@ const DataContainer: React.FC<DataContainerProps> = ({
       {visible && (
         <div className={styles.data_page}>
           <div id="data" className={styles.dataContainer}>
-            <div className={navItemsLength < 2 && !quickSelectorEntries ? styles.navItemsContainer : styles.sidebar}>
-              {navItemsLength < 2 && !quickSelectorEntries ? (
-                <SectionNav theme={theme} navItems={navItems} />
-              ) : (
-                <div className={styles.sidebar__sticky}>
-                  {quickSelectorEntries && <QuickSelector theme={theme} entries={quickSelectorEntries} />}
-                  {navItems && (
-                    <div className={styles.navItemsContainer}>
-                      <SectionNav theme={theme} navItems={navItems} />
-                    </div>
-                  )}
-                </div>
-              )}
+            <div className={navItemsLength < 0 && !quickSelectorEntries ? styles.navItemsContainer : styles.sidebar}>
+
+              <div className={styles.sidebar__sticky}>
+                {quickSelectorEntries && <QuickSelector theme={theme} entries={quickSelectorEntries} />}
+                {navItems && (
+                  <div className={styles.navItemsContainer}>
+                    <SectionNav theme={theme} navItems={navItems} />
+                  </div>
+                )}
+              </div>
+
             </div>
             <div className={styles.content}>
               <div>{children}</div>

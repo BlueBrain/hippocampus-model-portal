@@ -163,7 +163,7 @@ const SynsPerConnTable: React.FC<SynsPerConnTableProps> = ({ theme }) => {
           theme={theme}
           onClick={() => downloadAsJson(data, `exp-connection-anatomy_-_syns-per-conn-table.json`)}
         >
-          Number of synapses per connection Data
+          Number of synapses per connection
         </DownloadButton>
       </div>
     </>
