@@ -10,14 +10,14 @@ import { QuickSelectorEntry } from "@/types";
 import List from "@/components/List";
 import Collapsible from "@/components/Collapsible";
 
-import { defaultSelection } from "@/constants";
-import withPreselection from "@/hoc/with-preselection";
-import { colorName } from "./config";
-import { dataPath } from "@/config";
-import { downloadAsJson } from "@/utils";
-import DownloadButton from "@/components/DownloadButton";
-import TraceGraph from "../5_predictions/components/Trace";
-import Factsheet from "@/components/Factsheet";
+import { defaultSelection } from '@/constants';
+import withPreselection from '@/hoc/with-preselection';
+import { colorName } from './config';
+import { dataPath } from '@/config';
+import { downloadAsJson } from '@/utils';
+import DownloadButton from '@/components/DownloadButton';
+import TraceGraph from '../5_predictions/components/Trace';
+import Factsheet from '@/components/Factsheet';
 
 import modelsData from "./neuron-model-libraries.json";
 import MechanismTable from "./neuron-model/MechanismTable";
@@ -32,6 +32,14 @@ type ModelData = {
   morphology: string;
 };
 
+const getUniqueValues = (key: keyof ModelData, filters: Partial<ModelData> = {}): string[] => {
+  return Array.from(new Set(modelsData
+    .filter(model =>
+      Object.entries(filters).every(([filterKey, filterValue]) =>
+        !filterValue || model[filterKey as keyof ModelData] === filterValue
+      )
+    )
+    .map(model => model[key] as string))).sort();
 const getUniqueValues = (
   key: keyof ModelData,
   filters: Partial<ModelData> = {}
@@ -64,9 +72,9 @@ const NeuronsModelLibrary: React.FC = () => {
   const theme = 3;
 
   const { query } = router;
-  const [currentMtype, setCurrentMtype] = useState("");
-  const [currentEtype, setCurrentEtype] = useState("");
-  const [currentMorphology, setCurrentMorphology] = useState("");
+  const [currentMtype, setCurrentMtype] = useState('');
+  const [currentEtype, setCurrentEtype] = useState('');
+  const [currentMorphology, setCurrentMorphology] = useState('');
   const [traceData, setTraceData] = useState<any | null>(null);
   const [factsheetData, setFactsheetData] = useState<any | null>(null);
   const [morphologyData, setMorphologyData] = useState<string | null>(null);
@@ -108,6 +116,11 @@ const NeuronsModelLibrary: React.FC = () => {
       newMorphologies.includes(query.morphology)
         ? query.morphology
         : newMorphologies[0] || "";
+
+    const newMorphologies = getUniqueValues('morphology', { mtype: newMtype, etype: newEtype });
+    const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
+      ? query.morphology
+      : newMorphologies[0] || '';
 
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
