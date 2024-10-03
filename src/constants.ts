@@ -148,7 +148,8 @@ export const defaultSelection = {
     },
     NeuronModelLibrary: {
       mtype: 'SO_BP',
-      etype: 'cNAC'
+      etype: 'cNAC',
+      morphology: '980120A_-_Scale_x1.000_y0.900_z1.000'
     },
     synapticPathways: {
       volume_section: 'slice',
