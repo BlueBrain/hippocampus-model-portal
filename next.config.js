@@ -1,6 +1,7 @@
-const { withSentryConfig } = require('@sentry/nextjs');
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const Path = require("node:path");
+const { withSentryConfig } = require("@sentry/nextjs");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 const SentryWebpackPluginOptions = {
@@ -19,28 +20,33 @@ const nextConfig = {
   images: {
     path: `${basePath}/_next/image`,
     minimumCacheTTL: 7 * day,
-    formats: ['image/avif', 'image/webp'],
-    domains: ['hippocampus-portal-auth-proxy', 'localhost', 'hippocampus-portal.kcp.bbp.epfl.ch', 'bbp.epfl.ch'],
+    formats: ["image/avif", "image/webp"],
+    domains: [
+      "hippocampus-portal-auth-proxy",
+      "localhost",
+      "hippocampus-portal.kcp.bbp.epfl.ch",
+      "bbp.epfl.ch",
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
   compress: false,
   productionBrowserSourceMaps: true,
-  output: 'standalone',
+  output: "standalone",
   experimental: {
     esmExternals: true,
   },
   async redirects() {
     return [
       {
-        source: '/experimental-data',
-        destination: '/',
+        source: "/experimental-data",
+        destination: "/",
         permanent: false,
       },
       {
-        source: '/digital-reconstructions',
-        destination: '/digital-reconstructions/neurons',
+        source: "/digital-reconstructions",
+        destination: "/digital-reconstructions/neurons",
         permanent: false,
       },
     ];
@@ -49,11 +55,22 @@ const nextConfig = {
     // Extend Webpack configuration to handle frag and vert files
     config.module.rules.push({
       test: /\.(vert|frag)$/i,
-      type: 'asset/source',
+      type: "asset/source",
     });
-
+    if (!config.resolve) {
+      config.resolve = {};
+    }
+    if (!config.resolve.alias) {
+      config.resolve.alias = {};
+    }
+    config.resolve.alias["@tgd"] = Path.resolve(
+      __dirname,
+      "src/views/MorphoViewer/tgd/"
+    );
     return config;
   },
 };
 
-module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, SentryWebpackPluginOptions));
+module.exports = withBundleAnalyzer(
+  withSentryConfig(nextConfig, SentryWebpackPluginOptions)
+);

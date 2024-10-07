@@ -1,0 +1,16 @@
+.main {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  border-radius: 0.25em;
+  box-shadow: 0 0.25em 0.5em #0006;
+  overflow: hidden;
+}
+
+.main > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
