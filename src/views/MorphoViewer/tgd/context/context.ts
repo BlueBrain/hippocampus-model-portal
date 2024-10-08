@@ -15,6 +15,7 @@ import { TgdPainter } from "../painter/painter";
 import { tgdCanvasCreate } from "../utils";
 import { TgdManagerAnimation } from "./animation/animation-manager";
 import { TgdAnimation } from "../types/animation";
+import { TgdEvent } from "../event";
 
 /**
  * You can pass all the attributes of the [WebGLContextAttributes](https://developer.mozilla.org/en-US/docs/Web/API/WebGLContextAttributes)
@@ -64,6 +65,7 @@ export type TgdContextOptions = WebGLContextAttributes & {
 export class TgdContext implements TgdContextInterface {
   private static incrementalId = 1;
 
+  public readonly eventResize = new TgdEvent<TgdContextInterface>();
   public readonly name: string;
   public readonly gl: WebGL2RenderingContext;
   public readonly inputs: TgdInputs;
@@ -105,6 +107,7 @@ export class TgdContext implements TgdContextInterface {
       gl.viewport(0, 0, width, height);
       this.paint();
       options.onResize?.(this, canvas.clientWidth, canvas.clientHeight);
+      this.eventResize.dispatch(this);
     });
     this.observer.observe(canvas);
     this.inputs = new TgdInputs(canvas);

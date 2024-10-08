@@ -7,6 +7,6 @@ out vec4 FragColor;
 
 
 void main() {
-    if (varColor.a < 1.0) discard;
+    if (varColor.a < 0.01) discard;
     else FragColor = varColor;
 }

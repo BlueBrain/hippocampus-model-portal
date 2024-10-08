@@ -18,7 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@tgd/*": ["src/views/MorphoViewer/tgd/*"]
+      "@tgd/*": ["src/views/MorphoViewer/tgd/*"],
+      "@tgd": ["src/views/MorphoViewer/tgd/index.ts"]
     },
     "plugins": [
       {
