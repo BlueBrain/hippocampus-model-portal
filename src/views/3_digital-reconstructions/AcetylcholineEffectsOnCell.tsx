@@ -19,7 +19,6 @@ import TraceGraph from '../5_predictions/components/Trace';
 import modelsData from './neurons.json';
 import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
 
-
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
   return Array.from(new Set(modelsData
     .filter(model =>
@@ -55,7 +54,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
 
   useEffect(() => {
-    console.log('Query changed:', query);
     if (Object.keys(query).length === 0) return;
 
     const newMtypes = getUniqueValues('mtype');
@@ -73,7 +71,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       ? query.morphology
       : newMorphologies[0] || '';
 
-    console.log('Updating states:', { newMtype, newEtype, newMorphology });
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
@@ -98,7 +95,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
           setPopulationData(populationData);
         } catch (error) {
           console.error('Error fetching data:', error);
-
           setSingleCellData(null);
           setTraceData(null);
           setPopulationData(null);
@@ -107,16 +103,13 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
     };
 
     fetchData();
-  }, [currentMorphology]);
-
-
+  }, [currentMorphology, currentMtype, currentEtype]);
 
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
       ...router.query,
       ...params,
     };
-    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
@@ -169,8 +162,6 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       setFn: setMorphology,
     },
   ];
-
-  console.log('Current states:', { currentMtype, currentEtype, currentMorphology });
 
   return (
     <>

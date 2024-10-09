@@ -23,6 +23,7 @@ import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import Factsheet from '@/components/Factsheet';
+import withPreselection from '@/hoc/with-preselection';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -567,9 +568,10 @@ const SchafferCollateralsView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Decay time constant distribution
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Decay time constant distribution
+
                       </DownloadButton>
                     </div>
                   </div>
@@ -601,9 +603,10 @@ const SchafferCollateralsView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Decay time constant distribution for simulation
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Decay time constant distribution for simulation
+
                       </DownloadButton>
                     </div>
                   </div>
@@ -626,8 +629,8 @@ const SchafferCollateralsView: React.FC = () => {
                   theme={theme}
                   onClick={() => downloadAsJson(getPlotDataById('nmda-ampa-ratio'), `nmda-ampa-ratio-${volume_section}-${prelayer}-${postlayer}.json`)}>
                   <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                  NMDA/AMPA ratio distribution
                   <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+                  NMDA/AMPA ratio distribution
 
                 </DownloadButton>
               </div>
@@ -671,9 +674,9 @@ const SchafferCollateralsView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    U Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    U Parameter
                   </DownloadButton>
                 </div>
               </div>
@@ -703,9 +706,10 @@ const SchafferCollateralsView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    D Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    D Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -735,9 +739,10 @@ const SchafferCollateralsView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    G-SYNX Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    G-SYNX Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -767,9 +772,10 @@ const SchafferCollateralsView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    NRRP Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    NRRP Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -777,9 +783,30 @@ const SchafferCollateralsView: React.FC = () => {
           </div>
         </Collapsible>
 
-        <Collapsible title='Traces' id='TracesSection' properties={["Physiology"]}>
-          {traceData && traceData.individual_trace && traceData.mean_trace && (
-            <TraceGraph plotData={traceData} />
+        <Collapsible title="Trace" id="TracesSection" className="mt-4">
+          {traceData && traceData.individual_traces && traceData.mean_trace && (
+            <>
+              <div className="graph">
+                <TraceGraph plotData={traceData} />
+              </div>
+              <DownloadButton
+                theme={theme}
+                onClick={() =>
+                  downloadAsJson(
+                    getPlotDataById('nrrp-parameter'),
+                    `nrrp-parameter-${volume_section}-${prelayer}-${postlayer}.json`
+                  )
+                }
+              >
+                <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                  {volume_section}
+                </span>
+                <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                trace
+
+              </DownloadButton>
+            </>
           )}
         </Collapsible>
 
@@ -788,4 +815,10 @@ const SchafferCollateralsView: React.FC = () => {
   )
 }
 
-export default SchafferCollateralsView;
+export default withPreselection(
+  SchafferCollateralsView,
+  {
+    key: 'volume_section',
+    defaultQuery: defaultSelection.digitalReconstruction.connectionAnatomy,
+  },
+);

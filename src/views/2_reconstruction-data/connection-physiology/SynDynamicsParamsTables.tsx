@@ -175,12 +175,12 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
           data={preData}
           rowKey={({ from, to }) => `${from}_${to}`}
         />
-        <div className="text-right mt-4">
+        <div className="mt-4">
           <DownloadButton
             theme={theme}
             onClick={() => downloadAsJson(preData, `Presynaptic-Dynamics-Parameters-Data.json`)}
           >
-            Presynaptic dynamics parameters Data
+            Presynaptic dynamics parameters
           </DownloadButton>
         </div>
       </Collapsible>
@@ -195,12 +195,12 @@ const SynDynamicsParamsTables: React.FC<SynDynamicsParamsTablesProps> = ({ theme
           data={postData}
           rowKey={({ from, to }) => `${from}_${to}`}
         />
-        <div className="text-right mt-4">
+        <div className="mt-4">
           <DownloadButton
             theme={theme}
             onClick={() => downloadAsJson(postData, `Postsynaptic-Dynamics-Parameters-Data.json`)}
           >
-            Postsynaptic dynamics parameters Data
+            Postsynaptic dynamics parameters
           </DownloadButton>
         </div>
       </Collapsible>

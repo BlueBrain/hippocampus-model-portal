@@ -21,12 +21,14 @@ import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 import { downloadAsJson } from '@/utils';
+import DistributionPlot from '@/components/DistributionPlot';
 
 const MinisRate = [
     0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002
 ];
 
-const CA_O = [1.0, 1.5, 2.0];
+
+const CA_O = [1, 1.5, 2];
 
 const getMinisRate = (): number[] => MinisRate;
 const getCa0 = (): number[] => CA_O;
@@ -250,7 +252,7 @@ const SpontaneousActivityView: React.FC = () => {
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        <MeanFiringRatePlot plotData={meanFiringRateData} />
+                        <DistributionPlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
                     </div>
                     <DownloadButton
                         theme={theme}

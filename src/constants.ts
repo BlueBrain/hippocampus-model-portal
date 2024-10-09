@@ -122,8 +122,8 @@ export const defaultSelection = {
     },
     connectionAnatomy: {
       volume_section: 'region',
-      prelayer: 'all',
-      postlayer: 'all'
+      prelayer: 'All',
+      postlayer: 'All'
     },
     connectionPhysiology: {
       volume_section: 'region',
@@ -132,8 +132,8 @@ export const defaultSelection = {
     },
     acetylcholineEffectsOnCell: {
       morphology: "450290",
-      mtype: "cAC",
-      etype: "SO_BP"
+      etype: "cNAC",
+      mtype: "SO_BP"
     },
     acetylcholineEffectsOnSynapses: {
       ach_concentration: '0um',
@@ -143,12 +143,13 @@ export const defaultSelection = {
 
     neurons: {
       morphology: "455995",
-      mtype: "cNAC",
-      etype: "SO_BP"
+      etype: "cNAC",
+      mtype: "SO_BP"
     },
     NeuronModelLibrary: {
       mtype: 'SO_BP',
-      etype: 'cNAC'
+      etype: 'cNAC',
+      morphology: '980120A_-_Scale_x1.000_y0.900_z1.000'
     },
     synapticPathways: {
       volume_section: 'slice',

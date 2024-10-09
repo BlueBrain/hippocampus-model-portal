@@ -107,7 +107,7 @@ const Rate: React.FC<RateProps> = ({ theme }) => {
                 columns={RateColumns}
                 rowKey={({ neuronType, recordingCondition, source }) => `${neuronType}_${recordingCondition}_${source}`}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(

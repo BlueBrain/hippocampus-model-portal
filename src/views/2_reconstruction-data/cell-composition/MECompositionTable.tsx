@@ -87,7 +87,7 @@ const MECompositionTable: React.FC<MECompositionTableProps> = ({ theme }) => {
         rowKey={({ mtype }) => mtype}
       />
 
-      <div className="text-right mt-4">
+      <div className="mt-4">
         <DownloadButton
           theme={theme}
           onClick={() => downloadAsJson(

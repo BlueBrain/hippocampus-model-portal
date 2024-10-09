@@ -19,6 +19,7 @@ import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 import { downloadAsJson } from '@/utils';
+import DistributionPlot from '@/components/DistributionPlot';
 
 const ACh = [0, 0.1, 1, 3, 5];
 const Depolarisation = [105, 120, 125]; // Updated to include all unique values
@@ -237,7 +238,7 @@ const ThetaMSInputView: React.FC = () => {
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        <MeanFiringRatePlot plotData={meanFiringRateData} />
+                        <DistributionPlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
                     </div>
                     <DownloadButton
                         theme={theme}

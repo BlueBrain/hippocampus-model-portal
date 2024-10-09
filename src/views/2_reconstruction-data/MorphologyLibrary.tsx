@@ -52,7 +52,7 @@ const getUniqueValues = (
         .map((model) => model[key])
     )
   )
-    .filter((value): value is Layer | string => value != null) // Remove null and undefined
+    .filter((value): value is Layer | string => value != null)
     .sort((a, b) => a.toString().localeCompare(b.toString()));
 };
 
@@ -65,7 +65,7 @@ const getFilteredMorphologies = (layer: Layer | '', mtype: string, etype: string
         (etype === '' || model.etype === etype)
     )
     .map((model) => model.morphology)
-    .filter((value): value is string => value != null) // Remove null and undefined
+    .filter((value): value is string => value != null)
     .filter((value, index, self) => self.indexOf(value) === index)
     .sort();
 };
@@ -93,6 +93,12 @@ const MorphologyLibrary: React.FC = () => {
     () => getFilteredMorphologies(currentLayer, currentMtype, currentEtype),
     [currentLayer, currentMtype, currentEtype]
   );
+
+  useEffect(() => {
+    if (!currentLayer && layers.length > 0) {
+      setLayer(layers[0]);
+    }
+  }, []);
 
   useEffect(() => {
     if (currentLayer) {
@@ -191,7 +197,6 @@ const MorphologyLibrary: React.FC = () => {
       setFn: setMorphology,
     },
   ];
-
 
   return (
     <>
@@ -294,7 +299,6 @@ const MorphologyLibrary: React.FC = () => {
             )}
           </HttpData>
           <div className="mt-4">
-
             <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/section_features/${currentMorphology}/distribution-plots.json`}>
               {(plotsData) => (
                 <>
@@ -340,7 +344,6 @@ const MorphologyLibrary: React.FC = () => {
             </HttpData>
           </div>
           <div className="mt-4">
-            public/data/
             <HttpData path={`${basePath}/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/distribution-plot.json`}>
               {(plotsData) => (
                 <>

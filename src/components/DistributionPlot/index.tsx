@@ -1,30 +1,30 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import {
     Chart as ChartJS,
-    CategoryScale,
     LinearScale,
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ChartOptions,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { graphTheme } from '@/constants';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface PlotDetailsProps {
     plotData: any;
     xAxis?: string;
     yAxis?: string;
-    xAxisTickStep?: number; // New prop for x-axis tick step
+    xAxisTickStep?: number;
 }
 
 const DistributionPlot: React.FC<PlotDetailsProps> = ({
     plotData,
     xAxis = 'Value',
     yAxis = 'Frequency',
-    xAxisTickStep,
+    xAxisTickStep = 1,
 }) => {
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -44,10 +44,24 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
         }
     }, []);
 
-    const { labels, datasets, units, name, description } = useMemo(() => {
+    const formatScientificNotation = (value: number): string => {
+        if (value === 0) return '0';
+        const exponent = Math.floor(Math.log10(Math.abs(value)));
+        const mantissa = value / Math.pow(10, exponent);
+        const roundedMantissa = Math.round(mantissa * 100) / 100;
+        const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+        const superscriptExponent = Math.abs(exponent)
+            .toString()
+            .split('')
+            .map((digit) => superscriptDigits[parseInt(digit)])
+            .join('');
+        return `${roundedMantissa}*10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
+    };
+
+    const { dataPoints, units, name, description } = useMemo(() => {
         if (!plotData) {
             console.error('Plot data is undefined or null');
-            return { labels: [], datasets: [], units: null, name: '', description: '' };
+            return { dataPoints: [], units: null, name: '', description: '' };
         }
 
         const createHistogram = (data: number[]) => {
@@ -56,182 +70,156 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
             const max = Math.max(...data);
             const binWidth = (max - min) / binCount;
 
-            const bins = Array.from({ length: binCount }, (_, i) => min + i * binWidth);
+            const bins = Array.from({ length: binCount + 1 }, (_, i) => min + i * binWidth);
             const counts = new Array(binCount).fill(0);
 
-            data.forEach(value => {
-                const binIndex = Math.min(Math.floor((value - min) / binWidth), binCount - 1);
+            data.forEach((value) => {
+                const binIndex = Math.min(
+                    Math.floor((value - min) / binWidth),
+                    binCount - 1
+                );
                 counts[binIndex]++;
             });
 
-            return { bins, counts };
+            const dataPoints = counts.map((count, i) => ({
+                x: bins[i],
+                y: count,
+            }));
+
+            return { dataPoints };
         };
 
         if (Array.isArray(plotData)) {
-            // Handle raw data array
-            const { bins, counts } = createHistogram(plotData);
+            const { dataPoints } = createHistogram(plotData);
             return {
-                labels: bins.map(bin => bin.toFixed(2)),
-                datasets: [{
-                    label: 'Frequency',
-                    data: counts,
-                    backgroundColor: graphTheme.blue,
-                    borderColor: '#050A30',
-                    borderWidth: 1,
-                }],
+                dataPoints,
                 units: null,
                 name: '',
-                description: ''
+                description: '',
             };
         } else if (typeof plotData === 'object' && plotData !== null) {
             if ('freq' in plotData && 'bins' in plotData) {
-                // Handle new data structure
+                const dataPoints = plotData.bins.map((bin: number, index: number) => ({
+                    x: bin,
+                    y: plotData.freq[index],
+                }));
                 return {
-                    labels: plotData.bins,
-                    datasets: [{
-                        label: plotData.name || 'Frequency',
-                        data: plotData.freq,
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
+                    dataPoints,
                     units: plotData.units,
                     name: plotData.name || '',
-                    description: plotData.description || ''
+                    description: plotData.description || '',
                 };
             } else if ('bins' in plotData && 'counts' in plotData) {
-                // Handle pre-computed histogram data
+                const dataPoints = plotData.bins.map((bin: number, index: number) => ({
+                    x: bin,
+                    y: plotData.counts[index],
+                }));
                 return {
-                    labels: plotData.bins.map((bin: number) => bin.toFixed(2)),
-                    datasets: [{
-                        label: 'Frequency',
-                        data: plotData.counts,
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
+                    dataPoints,
                     units: null,
                     name: '',
-                    description: ''
+                    description: '',
                 };
             } else if ('values' in plotData && Array.isArray(plotData.values)) {
-                // Handle nested 'values' array
                 const flatValues = plotData.values.flat();
-                const { bins, counts } = createHistogram(flatValues);
+                const { dataPoints } = createHistogram(flatValues);
                 return {
-                    labels: bins.map(bin => bin.toFixed(2)),
-                    datasets: [{
-                        label: 'Frequency',
-                        data: counts,
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
+                    dataPoints,
                     units: null,
                     name: '',
-                    description: ''
+                    description: '',
                 };
             } else {
-                // Handle object data directly
-                const entries = Object.entries(plotData);
+                const dataPoints = Object.entries(plotData).map(([key, value]) => ({
+                    x: parseFloat(key),
+                    y: value,
+                }));
                 return {
-                    labels: entries.map(([key, _]) => key),
-                    datasets: [{
-                        label: 'Value',
-                        data: entries.map(([_, value]) => value),
-                        backgroundColor: graphTheme.blue,
-                        borderColor: '#050A30',
-                        borderWidth: 1,
-                    }],
+                    dataPoints,
                     units: null,
                     name: '',
-                    description: ''
+                    description: '',
                 };
             }
         } else {
             console.error('Unexpected data format', plotData);
-            return { labels: [], datasets: [], units: null, name: '', description: '' };
+            return { dataPoints: [], units: null, name: '', description: '' };
         }
     }, [plotData]);
 
-    const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                callbacks: {
-                    title: (tooltipItems: any) => {
-                        const index = tooltipItems[0].dataIndex;
-                        if (Array.isArray(labels)) {
-                            const binStart = labels[index];
-                            const binEnd = labels[index + 1] || (parseFloat(binStart) + (parseFloat(labels[1]) - parseFloat(labels[0]))).toFixed(2);
+    const options: ChartOptions<'bar'> = useMemo(
+        () => ({
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    callbacks: {
+                        title: (tooltipItems: any) => {
+                            const index = tooltipItems[0].dataIndex;
+                            const binStart = tooltipItems[0].parsed.x;
+                            const binEnd = dataPoints[index + 1]
+                                ? dataPoints[index + 1].x
+                                : binStart;
                             return `${binStart} - ${binEnd} ${units || ''}`;
-                        }
-                        return labels[index];
-                    }
-                }
-            }
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: xAxis,
-                },
-                ticks: {
-                    maxRotation: 0,
-                    minRotation: 0,
-                    callback: function (value: string, index: number, ticks: any[]) {
-                        const numericValue = parseFloat(value);
-                        if (!isNaN(numericValue)) {
-                            if (xAxisTickStep) {
-                                const epsilon = 0.0001;
-                                const remainder = numericValue % xAxisTickStep;
-                                if (Math.abs(remainder) < epsilon || Math.abs(remainder - xAxisTickStep) < epsilon) {
-                                    return value;
-                                }
-                            } else {
-                                // Use the default adaptive tick step based on window width
-                                if (index % Math.ceil(ticks.length / (windowWidth < 600 ? 5 : 10)) === 0) {
-                                    return value;
-                                }
-                            }
-                        }
-                        return '';
+                        },
                     },
                 },
             },
-            y: {
-                title: {
-                    display: true,
-                    text: yAxis,
+            scales: {
+                x: {
+                    type: 'linear' as const,
+                    title: {
+                        display: true,
+                        text: xAxis,
+                    },
+                    ticks: {
+                        stepSize: xAxisTickStep,
+                        maxRotation: 0,
+                        minRotation: 0,
+                    },
                 },
-                ticks: {
-                    callback: function (value: number, index: number, ticks: any[]) {
-                        const threshold = 1e6; // Define your threshold here
-                        if (value >= threshold || value <= -threshold) {
-                            return value.toExponential(2); // Adjust the number of decimals as needed
-                        }
-                        return value.toLocaleString(); // Default formatting
+                y: {
+                    title: {
+                        display: true,
+                        text: yAxis,
+                    },
+                    ticks: {
+                        callback: function (value) {
+                            return formatScientificNotation(Number(value));
+                        },
                     },
                 },
             },
-        },
-    };
+        }),
+        [xAxisTickStep, xAxis, yAxis, dataPoints, units]
+    );
 
-    if (labels.length === 0 || datasets.length === 0) {
+    if (dataPoints.length === 0) {
         return <div>No data available for the plot.</div>;
     }
+
+    const data = {
+        datasets: [
+            {
+                label: 'Frequency',
+                data: dataPoints,
+                backgroundColor: graphTheme.blue,
+                borderWidth: 0, // Removed borders
+                barPercentage: 0.9, // Adjusted for spacing
+                categoryPercentage: 0.9, // Adjusted for spacing
+            },
+        ],
+    };
 
     return (
         <div>
             {name && <h2>{name}</h2>}
             {description && <p>{description}</p>}
             <div style={{ width: '100%', height: '400px' }}>
-                <Bar data={{ labels, datasets }} options={options} />
+                <Bar data={data} options={options} />
             </div>
         </div>
     );

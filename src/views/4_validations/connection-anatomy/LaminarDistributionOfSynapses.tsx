@@ -182,7 +182,7 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
             <div ref={chartRef} style={{ width: '100%', height: '500px' }} />
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Laminar-Distribution-Of-Synapses-Data.json`)}>
-                    Laminar Distribution Of Synapse Data
+                    Laminar distribution of synapse
                 </DownloadButton>
             </div>
         </div>

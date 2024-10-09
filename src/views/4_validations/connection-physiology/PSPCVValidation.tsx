@@ -229,7 +229,7 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `PSP-CV-Validation-Data.json`)}>
-                    PSP CV Validation Data
+                    PSP CV validation
                 </DownloadButton>
             </div>
         </div>

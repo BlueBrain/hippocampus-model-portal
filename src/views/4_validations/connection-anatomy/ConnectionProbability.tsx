@@ -221,7 +221,7 @@ const ConnectionProbabilityGraph: React.FC<ConnectionProbabilityProps> = ({ them
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Connection-Probability-Data.json`)}>
-                    Connection Probability Data
+                    Connection probability
                 </DownloadButton>
             </div>
         </div>

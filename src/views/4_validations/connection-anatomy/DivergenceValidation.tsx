@@ -231,7 +231,7 @@ const DivergenceValidationGraph: React.FC<DivergenceValidationProps> = ({ theme 
             {data && (
                 <div className="mt-4">
                     <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Divergence-Validation-Data.json`)}>
-                        Divergence Validation Data
+                        Divergence validation
                     </DownloadButton>
                 </div>
             )}

@@ -9,11 +9,9 @@ const Plot = dynamic(() => import('react-plotly.js').then((mod) => mod.default),
     ssr: false,
 }) as unknown as React.ComponentType<Plotly.Plot>;
 
-
 interface TraceDataProps {
     plotData?: {
-        name: string;
-        individual_trace: number[][];
+        individual_traces: number[][];
         mean_trace: number[];
     };
 }
@@ -25,7 +23,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
     const [hasError, setHasError] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!plotData || !plotData.individual_trace || !plotData.mean_trace) {
+        if (!plotData || !plotData.individual_traces || !plotData.mean_trace) {
             console.log('No plot data available');
             setIsLoading(false);
             setHasError(true);
@@ -37,8 +35,8 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setHasError(false);
 
             // Prepare individual traces data
-            const individualTraces = plotData.individual_trace.map((trace, index) => ({
-                x: Array.from({ length: trace.length }, (_, i) => i),
+            const individualTraces = plotData.individual_traces.map((trace, index) => ({
+                x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
                 y: trace,
                 type: 'scatter',
                 mode: 'lines',
@@ -49,7 +47,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare mean trace data
             const meanTrace = {
-                x: Array.from({ length: plotData.mean_trace.length }, (_, i) => i),
+                x: Array.from({ length: plotData.mean_trace.length }, (_, i) => i * (5000 / (plotData.mean_trace.length - 1))),
                 y: plotData.mean_trace,
                 type: 'scatter',
                 mode: 'lines',
@@ -61,10 +59,13 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Set up the layout
             setLayout({
-                title: '',  // Remove the title
+                title: '',
                 xaxis: {
-                    title: '',
-                    showticklabels: false,  // Hide x-axis tick labels
+                    title: 'Time (ms)',
+                    showticklabels: true,
+                    range: [0, 5000],
+                    tickmode: 'linear',
+                    dtick: 1000,
                 },
                 yaxis: {
                     title: 'Value (mV)',

@@ -59,7 +59,6 @@ const Neurons: React.FC = () => {
   const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
 
   useEffect(() => {
-    console.log('Query changed:', query);
     if (Object.keys(query).length === 0) return;
 
     const newMtypes = getUniqueValues('mtype');
@@ -77,13 +76,14 @@ const Neurons: React.FC = () => {
       ? query.morphology
       : newMorphologies[0] || '';
 
-    console.log('Updating states:', { newMtype, newEtype, newMorphology });
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
-  }, [query]);
+  }, [query, router]);
 
   useEffect(() => {
+
+
     const fetchData = async () => {
       if (currentMorphology) {
         try {
@@ -102,7 +102,6 @@ const Neurons: React.FC = () => {
           setMechanismsData(mechanismsData);
           setExperimentalRecordingData(experimentalRecordingData)
         } catch (error) {
-          console.error('Error fetching data:', error);
           setTraceData(null);
           setFactsheetData(null);
           setMechanismsData(null);
@@ -119,7 +118,6 @@ const Neurons: React.FC = () => {
       ...router.query,
       ...params,
     };
-    console.log('Setting new params:', newQuery);
     router.push({ query: newQuery, pathname: router.pathname }, undefined, { shallow: true });
   };
 
@@ -151,6 +149,8 @@ const Neurons: React.FC = () => {
       morphology,
     });
   };
+
+
 
   const qsEntries: QuickSelectorEntry[] = [
     {
@@ -285,7 +285,7 @@ const Neurons: React.FC = () => {
 export default withPreselection(
   Neurons,
   {
-    key: 'mtype',
+    key: 'Layer',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
   },
 );

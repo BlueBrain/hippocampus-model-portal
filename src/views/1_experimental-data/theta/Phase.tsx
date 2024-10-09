@@ -118,7 +118,7 @@ const Phase: React.FC<PhaseProps> = ({ theme }) => {
                 columns={PhaseColumns}
                 rowKey={({ morphologicalType, specie, reference }) => `${morphologicalType}_${specie}_${reference}`}
             />
-            <div className="text-right mt-4">
+            <div className="mt-4">
                 <DownloadButton
                     theme={theme}
                     onClick={() => downloadAsJson(phaseData, `theta-phase-data.json`)}

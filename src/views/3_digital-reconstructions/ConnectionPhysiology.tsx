@@ -12,6 +12,8 @@ import Collapsible from '@/components/Collapsible';
 import DistibutionPlot from '@/components/DistributionPlot';
 import DownloadButton from '@/components/DownloadButton';
 import List from '@/components/List';
+import TraceGraph from './components/Trace';
+
 
 import VolumeSectionSelector3D from '@/components/VolumeSectionSelector3D';
 
@@ -32,6 +34,7 @@ const SynapsesView: React.FC = () => {
   const [selectedPlot, setSelectedPlot] = useState<string | null>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
   const [laminarPlots, setLaminarPlots] = useState<Record<string, boolean>>({});
+  const [traceData, setTraceData] = useState<any>(null);
 
   const theme = 3;
 
@@ -100,6 +103,16 @@ const SynapsesView: React.FC = () => {
       setFn: setPostLayerQuery,
     },
   ];
+  const fetchTraceData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/connection-physiology/${volume_section}/${prelayer}-${postlayer}/trace.json`);
+      const data = await response.json();
+      setTraceData(data);
+    } catch (error) {
+      console.error('Error fetching trace data:', error);
+    }
+  };
+
 
   useEffect(() => {
     setConnViewerReady(false);
@@ -131,6 +144,7 @@ const SynapsesView: React.FC = () => {
               GSYNX: plots.some(plot => plot.id === 'g-synx'),
             };
 
+            fetchTraceData();
             setAvailablePlots(availablePlots);
             setFactsheetData([...plots]);
           } else {
@@ -217,6 +231,7 @@ const SynapsesView: React.FC = () => {
           { id: 'DecayTimeConstantSection', label: 'Decay Time Constant' },
           { id: 'NMDAAMPARatioSection', label: 'NMAA/AMPA Ratio' },
           { id: 'UDFNRRPSection', label: 'U, D, F, NRRP Parameters and G-SYNX ' },
+          { id: 'TracesSection', label: 'Trace' }
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -230,8 +245,8 @@ const SynapsesView: React.FC = () => {
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-amplitude'), `psp-amplitude-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                PSP Amplitude
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+                PSP Amplitude
               </DownloadButton>
             </div>
           </Collapsible>
@@ -242,13 +257,14 @@ const SynapsesView: React.FC = () => {
             <div className="graph">
               <DistibutionPlot
                 plotData={getPlotDataById('psp-cv')}
-                xAxisTickStep={1} />
+                xAxisTickStep={.2} />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('psp-cv'), `psp-cv-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                PSP CV
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+
+                PSP CV
               </DownloadButton>
             </div>
           </Collapsible>
@@ -286,9 +302,9 @@ const SynapsesView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Synapse latency distribution
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Synapse latency distribution
                       </DownloadButton>
                     </div>
                   </div>
@@ -320,9 +336,9 @@ const SynapsesView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Synapse latency from simulation
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Synapse latency from simulation
                       </DownloadButton>
                     </div>
                   </div>
@@ -341,8 +357,8 @@ const SynapsesView: React.FC = () => {
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('rise-time-constant'), `rise-time-constant-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                Rise Time Constant
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+                Rise Time Constant
               </DownloadButton>
             </div>
           </Collapsible>
@@ -380,9 +396,10 @@ const SynapsesView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Synapse latency distribution
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Synapse latency distribution
+
                       </DownloadButton>
                     </div>
                   </div>
@@ -414,9 +431,10 @@ const SynapsesView: React.FC = () => {
                         <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                           {volume_section}
                         </span>
-                        Synapse latency from simulation
                         <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                         <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                        Synapse latency from simulation
+
                       </DownloadButton>
                     </div>
                   </div>
@@ -429,14 +447,15 @@ const SynapsesView: React.FC = () => {
         {availablePlots.RiseTimeCOnstant && (
           <Collapsible title="NMAA/AMPA Ratio" id="NMDAAMPARatioSection" className="mt-4">
             <div className="graph">
-              <DistibutionPlot xAxisTickStep={1} plotData={getPlotDataById('nmda-ampa-ratio')}
+              <DistibutionPlot xAxisTickStep={.5} plotData={getPlotDataById('nmda-ampa-ratio')}
               />
             </div>
             <div className="mt-4">
               <DownloadButton theme={theme} onClick={() => downloadAsJson(getPlotDataById('nmda-ampa-ratio'), `nmda-ampa-ratio-${volume_section}-${prelayer}-${postlayer}.json`)}>
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
-                NMAA/AMPA Ratio
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
+                NMAA/AMPA Ratio
+
               </DownloadButton>
             </div>
           </Collapsible>
@@ -456,7 +475,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('u-parameter')}
                     xAxis='u_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={.1}
                   />
                 </div>
                 <div className="mt-2">
@@ -472,9 +491,10 @@ const SynapsesView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    U Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    U Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -488,7 +508,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('d-parameter')}
                     xAxis='d_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={500}
                   />
                 </div>
                 <div className="mt-2">
@@ -504,9 +524,10 @@ const SynapsesView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    D Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    D Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -520,7 +541,7 @@ const SynapsesView: React.FC = () => {
                     plotData={getPlotDataById('f-parameter')}
                     xAxis='f_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={500}
                   />
                 </div>
                 <div className="mt-2">
@@ -536,9 +557,10 @@ const SynapsesView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    F Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    F Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -568,9 +590,10 @@ const SynapsesView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    G-SYNX Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    G-SYNX Parameter
+
                   </DownloadButton>
                 </div>
               </div>
@@ -600,15 +623,46 @@ const SynapsesView: React.FC = () => {
                     <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
                       {volume_section}
                     </span>
-                    NRRP Parameter
                     <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
                     <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                    NRRP Parameter
+
                   </DownloadButton>
                 </div>
               </div>
             )}
           </div>
         </Collapsible>
+
+
+        <Collapsible title="Trace" id="TracesSection" className="mt-4">
+
+          {traceData && traceData.individual_traces && traceData.mean_trace && (
+            <>
+              <div className="graph">
+                <TraceGraph plotData={traceData} />
+              </div>
+              <DownloadButton
+                theme={theme}
+                onClick={() =>
+                  downloadAsJson(
+                    getPlotDataById('nrrp-parameter'),
+                    `nrrp-parameter-${volume_section}-${prelayer}-${postlayer}.json`
+                  )
+                }
+              >
+                <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                  {volume_section}
+                </span>
+                <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                trace
+
+              </DownloadButton>
+            </>
+          )}
+        </Collapsible>
+
       </DataContainer >
     </>
   );

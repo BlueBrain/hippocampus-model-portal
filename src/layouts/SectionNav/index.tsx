@@ -54,7 +54,7 @@ const SectionNav: React.FC<SectionNavProps> = ({ navItems, theme = 1 }) => {
   }, [navItems]);
 
   // Only render if there is more than one non-title item in navItems
-  if (navItems.filter(item => !item.isTitle).length <= 1) {
+  if (navItems.filter(item => !item.isTitle).length <= 0) {
     return null;
   }
 

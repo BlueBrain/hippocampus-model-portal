@@ -173,7 +173,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
             <div className="graph" style={{ height: "500px" }} ref={chartRef} />
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Synaptic-Divergence-Percentages-Data.json`)}>
-                    Synaptic Divergence Percentages Data
+                    Synaptic divergence percentages
                 </DownloadButton>
             </div>
         </div>
