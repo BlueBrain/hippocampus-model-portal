@@ -1,6 +1,5 @@
 import { TgdVec3 } from "../tgd";
-import { CellNodeType } from "../types";
-import { CellNode } from "./parser";
+import { CellNodeType, CellNode } from "../types";
 
 export interface Branch {
   node: CellNode;
