@@ -65,26 +65,26 @@ const NeuronsModelLibrary: React.FC = () => {
   const morphologies = useMemo(() => getUniqueValues('morphology', { mtype: currentMtype, etype: currentEtype }), [currentMtype, currentEtype]);
 
   useEffect(() => {
-    if (Object.keys(query).length === 0) return;
+    if (!router.isReady) return;
 
-    const newMtype = query.mtype && typeof query.mtype === 'string' && mtypes.includes(query.mtype)
-      ? query.id
+    const newMtype = typeof query.mtype === 'string' && mtypes.includes(query.mtype)
+      ? query.mtype
       : mtypes[0] || '';
 
     const newEtypes = getUniqueValues('etype', { mtype: newMtype });
-    const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
+    const newEtype = typeof query.etype === 'string' && newEtypes.includes(query.etype)
       ? query.etype
       : newEtypes[0] || '';
 
     const newMorphologies = getUniqueValues('morphology', { mtype: newMtype, etype: newEtype });
-    const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
+    const newMorphology = typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
       ? query.morphology
       : newMorphologies[0] || '';
 
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
-  }, [query, mtypes]);
+  }, [query, mtypes, router.isReady]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -245,7 +245,7 @@ const NeuronsModelLibrary: React.FC = () => {
           title="bPAP & PSP"
         >
           <div className="graph">
-            {morphologyData && <MorphologyViewer swc={morphologyData} />}
+
           </div>
           {morphologyData && (
             <div className="mt-4">

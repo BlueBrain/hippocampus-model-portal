@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { MathJaxContext, MathJax } from 'better-react-mathjax';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -11,7 +11,7 @@ type MechanismToolTipProps = {
 
 const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ equation }) => {
     const parseLatex = useCallback((latex: string): string => {
-        if (!latex) return ''; // Return empty string if latex is undefined or null
+        if (!latex) return '';
         return latex
             .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)')
             .replace(/\^/g, '**')
@@ -21,7 +21,7 @@ const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ equation }) => {
     }, []);
 
     const evaluateEquation = useCallback((x: number, eq: string): number => {
-        if (!eq) return 0; // Return 0 if equation is undefined or null
+        if (!eq) return 0;
         const jsEquation = parseLatex(eq);
         const expression = jsEquation.replace(/x/g, x.toString());
         try {
@@ -33,7 +33,7 @@ const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ equation }) => {
     }, [parseLatex]);
 
     const chartData = useMemo(() => {
-        const xValues = Array.from({ length: 50 }, (_, i) => i / 5); // 0 to 9.8 in 0.2 steps
+        const xValues = Array.from({ length: 50 }, (_, i) => i / 5);
         const yValues = xValues.map(x => evaluateEquation(x, equation || ''));
 
         return {
@@ -49,10 +49,17 @@ const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ equation }) => {
         };
     }, [equation, evaluateEquation]);
 
-    const options = useMemo(() => ({
+    const options = useMemo<ChartOptions<'line'>>(() => ({
         responsive: true,
         maintainAspectRatio: false,
-        animation: false,
+        animation: false, // Disable all animations
+        transitions: {
+            active: {
+                animation: {
+                    duration: 0 // Disable hover animations
+                }
+            }
+        },
         scales: {
             x: {
                 title: {
@@ -64,7 +71,7 @@ const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ equation }) => {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'U_{SE}^{ACh}'
+                    text: 'U_SE^ACh'
                 }
             }
         },
