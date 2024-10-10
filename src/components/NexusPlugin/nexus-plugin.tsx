@@ -1,11 +1,11 @@
-import * as React from 'react';
-import invariant from 'ts-invariant';
-import isFunction from 'lodash/isFunction';
-import { NexusClient, Resource } from '@bbp/nexus-sdk';
+import * as React from "react";
+import invariant from "ts-invariant";
+import isFunction from "lodash/isFunction";
+import { NexusClient, Resource } from "@bbp/nexus-sdk";
 // import { Result } from 'antd';
 
 // import Loading from '../components/Loading';
-import { nexusPluginBaseUrl } from '../../config';
+import { nexusPluginBaseUrl } from "../../config";
 
 const PluginError: React.FC<{ error: Error }> = ({ error }) => {
   return (
@@ -19,9 +19,9 @@ const PluginError: React.FC<{ error: Error }> = ({ error }) => {
 };
 
 const warningMessage =
-  'SystemJS not found. ' +
-  'To load plugins, Nexus Web requires SystemJS to be available globally.' +
-  ' You can find out more here https://github.com/systemjs/systemjs';
+  "SystemJS not found. " +
+  "To load plugins, Nexus Web requires SystemJS to be available globally." +
+  " You can find out more here https://github.com/systemjs/systemjs";
 
 export type NexusPluginProps<T> = {
   name: string;
@@ -52,11 +52,20 @@ export class NexusPlugin extends React.Component<
   async loadExternalPlugin() {
     if (!this.container.current) return;
 
-    const pluginManifest = await fetch(`${nexusPluginBaseUrl}/manifest.json`)
-      .then(res => res.json());
+    const pluginManifest = await fetch(
+      `${nexusPluginBaseUrl}/manifest.json`
+    ).then((res) => res.json());
 
     const { modulePath } = pluginManifest[this.props.name];
     const moduleUrl = `${nexusPluginBaseUrl}/${modulePath}`;
+
+    console.log("🚀 [nexus-plugin] pluginManifest = ", pluginManifest); // @FIXME: Remove this line written on 2024-10-04 at 16:08
+    console.log(
+      "🚀 [nexus-plugin] modulePath, moduleUrl = ",
+      modulePath,
+      moduleUrl
+    ); // @FIXME: Remove this line written on 2024-10-04 at 16:04
+    console.log("🚀 [nexus-plugin] this.props = ", this.props); // @FIXME: Remove this line written on 2024-10-04 at 16:08
 
     // @ts-ignore
     window.System.import(moduleUrl)
@@ -117,13 +126,10 @@ export class NexusPlugin extends React.Component<
   }
 
   render() {
-    const className = this.props.className || '';
+    const className = this.props.className || "";
 
     return (
-      <div
-        className={` ${className}`}
-        ref={this.container}
-      />
+      <div className={` ${className}`} ref={this.container} />
       // <Loading
       //   size="big"
       //   loading={this.state.loading}

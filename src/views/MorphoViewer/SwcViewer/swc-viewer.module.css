@@ -1,0 +1,109 @@
+.main {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  border-radius: 0.25em;
+  box-shadow: 0 0.25em 0.5em #0006;
+  overflow: hidden;
+}
+
+.main > canvas.gizmo {
+  position: absolute;
+  left: auto;
+  bottom: auto;
+  right: 1em;
+  top: 1em;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  box-shadow: 0 0 16px #0000;
+  background: #0000;
+  transition: all 0.3s;
+}
+
+.main > canvas.gizmo:hover {
+  box-shadow: 0 0 16px #0005;
+  background: #0005;
+}
+
+.main > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.main > button {
+  all: unset;
+  position: absolute;
+  left: 1em;
+  right: auto;
+  top: 1em;
+  bottom: auto;
+  display: grid;
+  place-items: center;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  border: 1px solid #0001;
+  box-shadow: 0 0.25em 0.5em #91300daa;
+  cursor: pointer;
+  color: #fff;
+  background-color: #efae97;
+}
+
+.main > button > svg {
+  width: 2em;
+  height: 2em;
+}
+
+.main > .scalebar {
+  position: absolute;
+  left: 0;
+  top: auto;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 24px;
+  background-color: #fff7;
+  backdrop-filter: blur(3px);
+}
+
+.main > .legend {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #000;
+  font-weight: normal;
+}
+
+.main > .legend > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5em;
+  padding: 0.5em;
+  border-radius: 0 0 50% 50%;
+  backdrop-filter: blur(3px);
+}
+
+.main > .legend > div > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.main > .legend > div > div > div:first-child {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+}

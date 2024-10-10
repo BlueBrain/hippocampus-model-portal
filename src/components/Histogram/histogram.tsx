@@ -1,7 +1,13 @@
-import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react';
-import Plotly from 'plotly.js-cartesian-dist';
+import React, {
+  useRef,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
+import Plotly from "plotly.js-cartesian-dist";
 
-import styles from './histogram.module.scss';
+import styles from "./histogram.module.scss";
 
 export type HistogramProps = {
   color: string;
@@ -59,66 +65,85 @@ const useIntersectionObserver = (options?: IntersectionObserverInit) => {
 };
 
 const formatScientificNotation = (value: number): string => {
-  if (value === 0) return '0';
+  if (value === 0) return "0";
   const exponent = Math.floor(Math.log10(Math.abs(value)));
   const mantissa = value / Math.pow(10, exponent);
   const roundedMantissa = Math.round(mantissa * 100) / 100;
-  const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+  const superscriptDigits = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
   const superscriptExponent = Math.abs(exponent)
     .toString()
-    .split('')
+    .split("")
     .map((digit) => superscriptDigits[parseInt(digit)])
-    .join('');
-  return `${roundedMantissa}×10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
+    .join("");
+  return `${roundedMantissa}×10${
+    exponent < 0 ? "⁻" : ""
+  }${superscriptExponent}`;
 };
 
-const getPlotData = (values: number[] | undefined, bins: number[] | undefined, counts: number[] | undefined, color: string): Partial<Plotly.PlotData>[] => {
+const getPlotData = (
+  values: number[] | undefined,
+  bins: number[] | undefined,
+  counts: number[] | undefined,
+  color: string
+): Partial<Plotly.PlotData>[] => {
   if (values) {
-    return [{
-      type: 'histogram',
-      x: values,
-      nbinsx: 10,
-      marker: {
-        color,
-        opacity: 0.8,
+    return [
+      {
+        type: "histogram",
+        x: values,
+        nbinsx: 10,
+        marker: {
+          color,
+          opacity: 0.8,
+        },
       },
-    }];
+    ];
   }
 
   if (bins && counts) {
-    return [{
-      type: 'bar',
-      x: bins,
-      y: counts,
-      marker: {
-        color,
-        opacity: 0.8,
+    return [
+      {
+        type: "bar",
+        x: bins,
+        y: counts,
+        marker: {
+          color,
+          opacity: 0.8,
+        },
       },
-    }];
+    ];
   }
 
   return [];
 };
 
-const Histogram: React.FC<HistogramProps> = ({ title, color, values, bins, counts }) => {
-  const [ref, isIntersecting] = useIntersectionObserver({ rootMargin: '200px 0px' });
+const Histogram: React.FC<HistogramProps> = ({
+  title,
+  color,
+  values,
+  bins,
+  counts,
+}) => {
+  const [ref, isIntersecting] = useIntersectionObserver({
+    rootMargin: "200px 0px",
+  });
 
   const plotlyLayout: PlotlyLayout = useMemo(() => {
     const baseLayout: PlotlyLayout = {
       margin: { l: 24, t: 24, r: 16, b: 16 },
-      font: { size: 10, family: 'Titillium Web' },
-      paper_bgcolor: 'transparent',
-      plot_bgcolor: 'transparent',
+      font: { size: 10, family: "Titillium Web" },
+      paper_bgcolor: "transparent",
+      plot_bgcolor: "transparent",
       bargap: 0,
       title,
       xaxis: {
-        tickformat: '.2e',
-        tickmode: 'auto',
+        tickformat: ".2e",
+        tickmode: "auto",
         nticks: 5,
       },
       yaxis: {
-        tickformat: '.2e',
-        tickmode: 'auto',
+        tickformat: ".2e",
+        tickmode: "auto",
         nticks: 5,
       },
     };
@@ -144,15 +169,19 @@ const Histogram: React.FC<HistogramProps> = ({ title, color, values, bins, count
         const layout = (chartEl as any).layout;
         if (layout?.xaxis?._gridvals && layout?.yaxis?._gridvals) {
           const update = {
-            'xaxis.ticktext': layout.xaxis._gridvals.map(formatScientificNotation),
-            'yaxis.ticktext': layout.yaxis._gridvals.map(formatScientificNotation),
+            "xaxis.ticktext": layout.xaxis._gridvals.map(
+              formatScientificNotation
+            ),
+            "yaxis.ticktext": layout.yaxis._gridvals.map(
+              formatScientificNotation
+            ),
           };
           Plotly.relayout(chartEl, update);
         }
       });
     };
 
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       window.requestIdleCallback(drawPlot);
     } else {
       setTimeout(drawPlot, 0);
@@ -163,12 +192,7 @@ const Histogram: React.FC<HistogramProps> = ({ title, color, values, bins, count
     };
   }, [plotlyLayout, values, bins, counts, color, isIntersecting]);
 
-  return (
-    <div
-      className={styles.container}
-      ref={ref}
-    />
-  );
+  return <div className={styles.container} ref={ref} />;
 };
 
 export default Histogram;
