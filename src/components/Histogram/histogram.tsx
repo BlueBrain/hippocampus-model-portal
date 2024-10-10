@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import Plotly from 'plotly.js-cartesian-dist';
 
-import styles from './Histogram.module.scss';
+import styles from './histogram.module.scss';
 
 export type HistogramProps = {
   color: string;
