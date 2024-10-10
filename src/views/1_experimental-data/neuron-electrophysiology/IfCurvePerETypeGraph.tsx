@@ -114,9 +114,12 @@ const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, them
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    if (!data || !data[eType]) return <div>No data available for this e-type.</div>;
+    if (!data) return <div>No data available.</div>;
+    if (!data[eType]) return <div>No data available for e-type: {eType}</div>;
 
     const eTypeData = data[eType];
+    if (Object.keys(eTypeData).length === 0) return <div>No data points available for e-type: {eType}</div>;
+
     const sortedData: ChartDataPoint[] = Object.entries(eTypeData)
         .map(([amplitude, values]) => ({
             x: parseFloat(amplitude),
@@ -156,10 +159,13 @@ const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, them
                 callbacks: {
                     label: (context) => {
                         const point = context.raw as ChartDataPoint;
-                        return [
-                            `Mean: ${point.y.toFixed(2)} Hz`,
-                            `Std Dev: ${Math.sqrt(point.variance).toFixed(2)}`,
-                        ];
+                        if (point && typeof point.y === 'number' && typeof point.variance === 'number') {
+                            return [
+                                `Mean: ${point.y.toFixed(2)} Hz`,
+                                `Std Dev: ${Math.sqrt(point.variance).toFixed(2)}`,
+                            ];
+                        }
+                        return 'No data available';
                     },
                 },
             },
