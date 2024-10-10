@@ -134,8 +134,8 @@ const Factsheet: React.FC<FactsheetProps> = ({
 }) => {
   return (
     <div className={`${classPrefix}basis ${className}`}>
-      {facts.map(fact => (
-        <FactsheetEntry key={fact.name} fact={fact} />
+      {facts.map((fact, index) => (
+        <FactsheetEntry key={`${fact.name}-${index}`} fact={fact} />
       ))}
     </div>
   );
