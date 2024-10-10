@@ -173,7 +173,6 @@ const Neurons: React.FC = () => {
     },
   ];
 
-  console.log('Current states:', { currentMtype, currentEtype, currentMorphology });
 
   return (
     <>

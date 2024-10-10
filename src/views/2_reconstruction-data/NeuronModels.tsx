@@ -222,8 +222,6 @@ const Neurons: React.FC = () => {
     },
   ];
 
-  console.log('Current states:', { currentLayer, currentMtype, currentEtype, currentInstance });
-
   return (
     <>
       <Filters theme={theme}>

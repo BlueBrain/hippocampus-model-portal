@@ -60,7 +60,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
 
     const { dataPoints, units, name, description } = useMemo(() => {
         if (!plotData) {
-            console.error('Plot data is undefined or null');
+            //console.error('Plot data is undefined or null');
             return { dataPoints: [], units: null, name: '', description: '' };
         }
 
