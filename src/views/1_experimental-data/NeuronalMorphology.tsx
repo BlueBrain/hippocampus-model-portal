@@ -65,19 +65,19 @@ const NeuronalMorphologyView: React.FC = () => {
   const getMtypes = (layer: Layer | null) => {
     return layer
       ? Array.from(
-          new Set(
-            morphologies.filter((m) => m.region === layer).map((m) => m.mtype)
-          )
-        ).sort()
+        new Set(
+          morphologies.filter((m) => m.region === layer).map((m) => m.mtype)
+        )
+      ).sort()
       : [];
   };
 
   const getInstances = (mtype: string) => {
     return mtype
       ? morphologies
-          .filter((m) => m.mtype === mtype)
-          .map((m) => m.name)
-          .sort()
+        .filter((m) => m.mtype === mtype)
+        .map((m) => m.name)
+        .sort()
       : [];
   };
 
@@ -233,14 +233,20 @@ const NeuronalMorphologyView: React.FC = () => {
             We provide visualization and morphometrics for the selected
             morphology.
           </p>
+          {/* 
           <InstanceViewer
             theme={theme}
             currentMtype={quickSelection.mtype}
             currentInstance={quickSelection.instance}
           />
-          <SwcViewer
-            href={`data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
-          />
+          */}
+
+          <div className="graph no-padding">
+            <SwcViewer
+              href={`data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
+            />
+          </div>
+
           <div className="mb-4">
             <HttpData
               path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}

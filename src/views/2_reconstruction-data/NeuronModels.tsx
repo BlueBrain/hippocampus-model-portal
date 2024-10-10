@@ -116,16 +116,16 @@ const Neurons: React.FC = () => {
 
     const newLayer =
       query.layer &&
-      typeof query.layer === "string" &&
-      layers.includes(query.layer as Layer)
+        typeof query.layer === "string" &&
+        layers.includes(query.layer as Layer)
         ? (query.layer as Layer)
         : layers[0] || "";
 
     const newMtypes = getUniqueValues("mtype", "layer", newLayer) as string[];
     const newMtype =
       query.mtype &&
-      typeof query.mtype === "string" &&
-      newMtypes.includes(query.mtype)
+        typeof query.mtype === "string" &&
+        newMtypes.includes(query.mtype)
         ? query.mtype
         : newMtypes[0] || "";
 
@@ -138,16 +138,16 @@ const Neurons: React.FC = () => {
     ) as string[];
     const newEtype =
       query.etype &&
-      typeof query.etype === "string" &&
-      newEtypes.includes(query.etype)
+        typeof query.etype === "string" &&
+        newEtypes.includes(query.etype)
         ? query.etype
         : newEtypes[0] || "";
 
     const newInstances = getFilteredInstances(newLayer, newMtype, newEtype);
     const newInstance =
       query.instance &&
-      typeof query.instance === "string" &&
-      newInstances.includes(query.instance)
+        typeof query.instance === "string" &&
+        newInstances.includes(query.instance)
         ? query.instance
         : newInstances[0] || "";
 
@@ -372,9 +372,8 @@ const Neurons: React.FC = () => {
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${
-                      mtypes.length ? `(${mtypes.length})` : ""
-                    }`}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -383,9 +382,8 @@ const Neurons: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${
-                      etypes.length ? `(${etypes.length})` : ""
-                    }`}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -394,9 +392,8 @@ const Neurons: React.FC = () => {
                     block
                     list={instances}
                     value={currentInstance}
-                    title={`Instance ${
-                      instances.length ? `(${instances.length})` : ""
-                    }`}
+                    title={`Instance ${instances.length ? `(${instances.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
@@ -412,6 +409,7 @@ const Neurons: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: "morphologySection", label: "Morphology" },
           { id: "traceSection", label: "Trace" },
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "factsheetSection", label: "Factsheet" },
@@ -424,9 +422,27 @@ const Neurons: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <SwcViewer
-          href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
-        />
+
+
+        <Collapsible id="morphologySection" className="mt-4" title="Morphology">
+          <div className="graph no-padding">
+            <SwcViewer
+              href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
+            />
+          </div>
+          <DownloadButton
+            onClick={() =>
+              downloadAsJson(
+                traceData,
+                `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
+              )
+            }
+            theme={theme}
+          >
+            SWC
+          </DownloadButton>
+        </Collapsible>
+
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
             {traceData && <TraceGraph plotData={traceData} />}

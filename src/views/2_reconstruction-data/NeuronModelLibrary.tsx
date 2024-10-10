@@ -40,23 +40,6 @@ const getUniqueValues = (key: keyof ModelData, filters: Partial<ModelData> = {})
       )
     )
     .map(model => model[key] as string))).sort();
-const getUniqueValues = (
-  key: keyof ModelData,
-  filters: Partial<ModelData> = {}
-): string[] => {
-  return Array.from(
-    new Set(
-      modelsData
-        .filter((model) =>
-          Object.entries(filters).every(
-            ([filterKey, filterValue]) =>
-              !filterValue ||
-              model[filterKey as keyof ModelData] === filterValue
-          )
-        )
-        .map((model) => model[key] as string)
-    )
-  ).sort();
 };
 
 const getFilteredData = (filters: Partial<ModelData>): ModelData[] => {
@@ -113,14 +96,9 @@ const NeuronsModelLibrary: React.FC = () => {
     });
     const newMorphology =
       typeof query.morphology === "string" &&
-      newMorphologies.includes(query.morphology)
+        newMorphologies.includes(query.morphology)
         ? query.morphology
         : newMorphologies[0] || "";
-
-    const newMorphologies = getUniqueValues('morphology', { mtype: newMtype, etype: newEtype });
-    const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
-      ? query.morphology
-      : newMorphologies[0] || '';
 
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
@@ -292,9 +270,8 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${
-                      mtypes.length ? `(${mtypes.length})` : ""
-                    }`}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -303,9 +280,8 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${
-                      etypes.length ? `(${etypes.length})` : ""
-                    }`}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -314,9 +290,8 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={morphologies}
                     value={currentMorphology}
-                    title={`Morphology ${
-                      morphologies.length ? `(${morphologies.length})` : ""
-                    }`}
+                    title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setMorphology}
                     anchor="data"
@@ -332,16 +307,30 @@ const NeuronsModelLibrary: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: "morphologySection", label: "Morphology" },
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "traceSection", label: "Trace" },
           { id: "factsheetSection", label: "Factsheet" },
         ]}
         quickSelectorEntries={qsEntries}
       >
-        {/* <SwcViewer
-          href={`data/2_reconstruction-data/neuron-models/${currentMtype}/${currentEtype}/${name}/morphology/${name}.swc`}
-        /> */}
+        <Collapsible id="morphologySection" className="mt-4" title="Morphology">
+          <div className="graph no-padding">
+            <SwcViewer
+              href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
+            />
+          </div>
+          <DownloadButton
+            onClick={() =>
+              window.open(`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`, '_blank')
+            }
+            theme={theme}
+          >
+            SWC
+          </DownloadButton>
+        </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+
           <div className="graph"></div>
           {morphologyData && (
             <div className="mt-4">

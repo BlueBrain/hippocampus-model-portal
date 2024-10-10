@@ -71,7 +71,7 @@ export function SwcViewer({ className, href }: SwcViewerProps) {
       const nodes = parseSwc(text);
       const data = nodesToSegmentsData(nodes);
       context.camera.target = nodes.center;
-      context.camera.spaceHeightAtTarget = nodes.bbox[1];
+      context.camera.spaceHeightAtTarget = nodes.bbox[1] * 2.5;
       console.log("🚀 [SwcViewer] data = ", data); // @FIXME: Remove this line written on 2024-10-08 at 10:09
       const painter = new TgdPainterSegments(context, data, {
         minRadius: 0.25,
@@ -85,7 +85,7 @@ export function SwcViewer({ className, href }: SwcViewerProps) {
       painterOutline.shiftZ = 2;
       context.add(
         new TgdPainterClear(context, {
-          color: [1, 1, 1, 1],
+          color: [239 / 255, 241 / 255, 248 / 255, 1],
           depth: 1,
         }),
         new TgdPainterDepth(context, {
