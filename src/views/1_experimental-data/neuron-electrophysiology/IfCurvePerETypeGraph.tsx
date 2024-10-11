@@ -183,7 +183,7 @@ const IfCurvePerETypeGraph: React.FC<IfCurvePerETypeGraphProps> = ({ eType, them
             <div className="mt-4">
                 <DownloadButton
                     theme={theme}
-                    onClick={() => downloadAsJson(data, `If-Curve-${eType}-Data.json`)}
+                    onClick={() => downloadAsJson(data, `If-Curve-Data.json`)}
                 >
                     IF curve per e-type
                 </DownloadButton>

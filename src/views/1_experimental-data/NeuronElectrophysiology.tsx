@@ -28,7 +28,7 @@ import { QuickSelectorEntry } from '@/types';
 import HttpData from '@/components/HttpData';
 import NeuronFactsheet from './neuron-electrophysiology/NeuronFactsheet';
 import DownloadButton from '@/components/DownloadButton';
-import { downloadAsJson } from '@/utils';
+import { downloadAsJson, downloadFile } from '@/utils';
 
 type Distribution = {
   name: string;
@@ -179,47 +179,23 @@ const NeuronElectrophysiology: React.FC = () => {
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    <Metadata nexusDocument={esDocuments[0]._source} />
-                    <h3 className="mt-3">Patch clamp recording</h3>
-                    <div className="row start-xs end-sm mt-2 mb-2">
-                      <div className="col-xs">
-                        <Button
-                          className="mr-1"
-                          type="dashed"
-                          icon={<QuestionCircleOutlined />}
-                          href={`${basePath}/tutorials/nwb/`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="small"
-                        >
-                          How to read NWB files
-                        </Button>
-                        <NexusFileDownloadButton
-                          filename={getEphysDistribution(esDocuments[0]._source).name}
-                          url={getEphysDistribution(esDocuments[0]._source).contentUrl}
-                          org={hippocampus.org}
-                          project={hippocampus.project}
-                          id="ephysDownloadBtn"
-                        >
-                          trace
-                        </NexusFileDownloadButton>
-                      </div>
-                    </div>
+                    <h3 className="mt-3  mb-2">Patch clamp recording</h3>
+
                     <NexusPlugin
                       name="neuron-electrophysiology"
                       resource={esDocuments[0]._source}
                       nexusClient={nexus}
                     />
-                    <div className="text-right">
-                      <Button
-                        className="mr-1"
-                        type="primary"
-                        size="small"
-                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}
-                      >
+
+                    <div className="flex flex-row gap-4">
+                      <DownloadButton onClick={() => downloadFile(`${dataPath}/1_experimental-data/neuronal-electophysiology/nwb/${currentInstance}.nwb`, `${currentInstance}.nw`)} theme={theme}>
+                        Trace
+                      </DownloadButton>
+                      <DownloadButton theme={theme} buildIcon={true} href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}>
                         Send to the Build section
-                      </Button>
+                      </DownloadButton>
                     </div>
+
                     <div className="mt-3">
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
                     </div>

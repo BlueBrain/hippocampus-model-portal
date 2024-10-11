@@ -73,11 +73,13 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                     },
                     name: 'mtype',
                     nameLocation: 'middle',
-                    nameGap: 40
+                    nameGap: 50
                 },
                 yAxis: {
                     type: 'value',
                     name: 'Divergence (%)',
+                    nameLocation: 'middle',
+                    nameGap: 40,
                     min: 0,
                     max: 100
                 },

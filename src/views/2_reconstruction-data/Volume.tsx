@@ -25,6 +25,7 @@ import withPreselection from '@/hoc/with-preselection';
 import selectorStyle from '@/styles/selector.module.scss';
 import { VolumeSection, QuickSelectorEntry } from '@/types';
 import { colorName } from './config';
+import DownloadButton from '@/components/DownloadButton';
 
 const VolumeView: React.FC = () => {
   const router = useRouter();
@@ -97,9 +98,9 @@ const VolumeView: React.FC = () => {
             {volumeSection === 'region' ? (
               <span>Region CA1</span>
             ) : volumeSection === 'cylinder' ? (
-              <span>Coronal slice of 400 um from the dorsal CA1.</span>
-            ) : volumeSection === 'slice' ? (
               <span>Cylindrical subvolume of radius 300 um from the dorsal CA1.</span>
+            ) : volumeSection === 'slice' ? (
+              <span>Coronal slice of 400 um from the dorsal CA1.</span>
             ) : null}
           </h2>
 
@@ -108,35 +109,11 @@ const VolumeView: React.FC = () => {
             <div className="graph no-padding">
               <VolumeViewer meshPath={`${basePath}/data/3d/2_reconstruction-data/volume/volume.obj`} volumeSection={volumeSection} onReady={() => setVolumeViewerReady(true)} />
             </div>
-            <div className="text-right mt-2">
-              <Button className="mr-2" href="https://bbp.epfl.ch/atlas#camPosition=36984.948,3938.164,5712.791&camLookat=6612.504,3938.164,5712.791&camUp=0,-1,0&srs=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fallen_ccfv3_spatial_reference_system&atlas=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Fe2e500ec-fe7e-4888-88b9-b72425315dda&resources=bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F20f22cc6-7ded-45bc-a2d5-9f14f3b2f6a0,bbp:atlas:https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2F64ab81de-dbcc-4461-b077-f1e009a10a22" target="_blank" rel="noopener noreferrer" icon={<EyeOutlined />} size="small" type="primary">
-                CA1 in Blue Brain Atlas
-              </Button>
-              <HttpDownloadButton href={volumeRasterDataPath(volumeSection)} download={`rec-data-volume-raster-data_-_${volumeSection}.xz`}>
-                NRRD file(s)
-              </HttpDownloadButton>
+            <div className="mt-4">
+              <DownloadButton onClick={() => downloadAsJson(`${basePath}/data/2_reconstruction-data/volume/volume_analysis.json`, 'volume_analysis.json')} theme={theme}> Volume analysis </DownloadButton>
             </div>
           </Spin>
 
-          <HttpData path={volumeAnalysisPath}>
-            {(data, loading) => (
-              <Spin spinning={loading}>
-                <div className="mt-3">
-                  <h3>Volume analysis</h3>
-                  {data && (
-                    <>
-                      <Factsheet facts={getVolumeSectionFacts(data.values)} />
-                      <div className="text-right mt-2">
-                        <HttpDownloadButton onClick={() => downloadAsJson(getVolumeSectionFacts(data.values), `rec-data-volume-analysis_-_${volumeSection}.json`)}>
-                          factsheet
-                        </HttpDownloadButton>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Spin>
-            )}
-          </HttpData>
 
           <p className="mt-3">
             Related: <Link href="/experimental-data/layer-anatomy/">Experimental data - Layer anatomy</Link>

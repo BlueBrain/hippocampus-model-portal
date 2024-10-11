@@ -60,7 +60,7 @@ const SchafferCollateralsView: React.FC = () => {
 
   const fetchFactsheetData = async () => {
     try {
-      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`);
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/All-${postlayer}/distribution-plots.json`);
       const data = await response.json();
       if (data && Array.isArray(data.values)) {
         setFactsheetData(data.values);
@@ -91,7 +91,7 @@ const SchafferCollateralsView: React.FC = () => {
 
   const fetchTraceData = async () => {
     try {
-      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/trace.json`);
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/All-${postlayer}/trace.json`);
       const data = await response.json();
       setTraceData(data);
     } catch (error) {
@@ -101,7 +101,7 @@ const SchafferCollateralsView: React.FC = () => {
 
   const fetchLaminarData = async () => {
     try {
-      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/${prelayer}-${postlayer}/schaffer-collaterals.json`);
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/All-${postlayer}/schaffer-collaterals.json`);
       const data = await response.json();
       const laminarData = data.values.find(plot => plot.id === 'laminar-distribution');
       setLaminarPlots(laminarData);
@@ -149,7 +149,7 @@ const SchafferCollateralsView: React.FC = () => {
     {
       title: 'Pre-synaptic cell group',
       key: 'prelayer',
-      values: ["All"],
+      values: ["SC"],
       setFn: setPreLayerQuery,
     },
     {
@@ -205,7 +205,7 @@ const SchafferCollateralsView: React.FC = () => {
                 <div className="selector__body">
                   <List
                     block
-                    list={["All"]}
+                    list={["SC"]}
                     value={prelayer}
                     title="m-type"
                     onSelect={setPreLayerQuery}
@@ -819,6 +819,6 @@ export default withPreselection(
   SchafferCollateralsView,
   {
     key: 'volume_section',
-    defaultQuery: defaultSelection.digitalReconstruction.connectionAnatomy,
+    defaultQuery: defaultSelection.digitalReconstruction.schafferCollateral,
   },
 );

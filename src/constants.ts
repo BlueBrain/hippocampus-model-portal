@@ -117,7 +117,7 @@ export const defaultSelection = {
     },
     schafferCollateral: {
       volume_section: 'region',
-      prelayer: 'all',
+      prelayer: 'SC',
       postlayer: 'all'
     },
     connectionAnatomy: {

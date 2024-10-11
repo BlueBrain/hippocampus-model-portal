@@ -103,6 +103,21 @@ export function downloadAsJson(data, name) {
 };
 
 
+export function downloadFile(url: string, fileName: string) {
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch(error => console.error('Error downloading file:', error));
+};
+
+
 export function entryToArray(entry) {
   if (Array.isArray(entry)) return entry;
 

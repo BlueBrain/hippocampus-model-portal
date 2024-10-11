@@ -81,14 +81,26 @@ const columns = [
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof BoutonDensity,
-    render: (ref: string, record: BoutonDensity) =>
-      record.ref_link ? (
-        <a href={record.ref_link} target="_blank" rel="noopener noreferrer">
-          {ref}
-        </a>
-      ) : (
-        ref
-      ),
+    render: (ref: string | string[], record: BoutonDensity) => {
+      if (Array.isArray(ref) && Array.isArray(record.ref_link)) {
+        return ref.map((r, index) => (
+          <React.Fragment key={index}>
+            <a href={record.ref_link?.[index] ?? '#'} target="_blank" rel="noopener noreferrer">
+              {r}
+            </a>
+            {index < ref.length - 1 && ', '}
+          </React.Fragment>
+        ));
+      } else if (typeof ref === 'string' && typeof record.ref_link === 'string') {
+        return (
+          <a href={record.ref_link} target="_blank" rel="noopener noreferrer">
+            {ref}
+          </a>
+        );
+      } else {
+        return ref;
+      }
+    },
   },
 ];
 

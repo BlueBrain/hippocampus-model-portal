@@ -62,7 +62,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                     range: [0, 5000],
                 },
                 yaxis: {
-                    title: { text: plotData.units || 'Voltage (mV)', standoff: 40 },
+                    title: { text: 'Voltage (mV)', standoff: 40 },
                     showticklabels: true,
                 },
                 autosize: true,

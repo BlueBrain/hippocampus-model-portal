@@ -135,7 +135,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Experiment (Mean)',
+                                    text: 'Experiment',
                                 },
                                 type: 'linear',
                                 position: 'bottom',
@@ -148,7 +148,7 @@ const NbOfSynapsesPConnectionGraph: React.FC<NbOfSynapsesPConnectionProps> = ({ 
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: 'Model (Mean)',
+                                    text: 'Model',
                                 },
                                 min: 0,
                                 max: 18,
