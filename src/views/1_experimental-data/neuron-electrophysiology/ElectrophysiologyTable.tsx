@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { basePath } from '@/config';
 import { graphTheme } from '@/constants';
+import { useRouter } from 'next/router';
 
 type ElectrophysiologyTableData = {
     etype: string;
@@ -17,6 +18,7 @@ type ElectrophysiologyTableTableProps = {
 const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ data }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const entriesPerPage = 5;
+    const router = useRouter();
 
     const tableRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +29,10 @@ const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ da
             key: 'ephys_id',
             width: 150,
             render: (ephys_id: string) => (
-                <Link href={`/experimental-data/neuronal-electrophysiology/?etype=${data.etype}&etype_instance=${ephys_id}`}>
+                <Link
+                    href={`/experimental-data/neuronal-electrophysiology/?etype=${data.etype}&etype_instance=${ephys_id}`}
+                    onClick={(e) => handleClick(e, data.etype, ephys_id)}
+                >
                     {ephys_id}
                 </Link>
             ),
@@ -85,6 +90,19 @@ const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ da
         if (tableRef.current) {
             tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+    };
+
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, etype: string, ephys_id: string) => {
+        e.preventDefault();
+        router.push(`/experimental-data/neuronal-electrophysiology/?etype=${etype}&etype_instance=${ephys_id}`, undefined, { shallow: true });
+
+        // Scroll to DataContainer after a short delay to ensure the component has updated
+        setTimeout(() => {
+            const dataContainer = document.querySelector('.data-container');
+            if (dataContainer) {
+                dataContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
     };
 
     return (

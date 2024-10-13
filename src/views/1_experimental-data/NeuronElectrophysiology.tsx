@@ -188,6 +188,7 @@ const NeuronElectrophysiology: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
+        <div className="data-container" />
         <Collapsible
           id="instanceSection"
           properties={[currentEtype, currentInstance]}
@@ -196,7 +197,7 @@ const NeuronElectrophysiology: React.FC = () => {
           <AuthorBox>
             Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
           </AuthorBox>
-          <p className="mt-4">We provide visualization and features for the selected recording.</p>
+          <p className="mt-4 ">We provide visualization and features for the selected recording.</p>
           <ESData query={fullElectroPhysiologyDataQueryObj}>
             {esDocuments => (
               <>
