@@ -1,12 +1,9 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
-import { Button } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import ESData from '@/components/ESData';
 import DataContainer from '@/components/DataContainer';
 import NexusPlugin from '@/components/NexusPlugin';
-import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
@@ -23,12 +20,13 @@ import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
-import Metadata from '@/components/Metadata';
 import { QuickSelectorEntry } from '@/types';
 import HttpData from '@/components/HttpData';
 import NeuronFactsheet from './neuron-electrophysiology/NeuronFactsheet';
 import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson, downloadFile } from '@/utils';
+import ExperimentalRecordingsTable from '../2_reconstruction-data/neuron-model/ExperimentalRecordingsTable';
+import ElectrophysiologyTable from './neuron-electrophysiology/ElectrophysiologyTable';
 
 type Distribution = {
   name: string;
@@ -51,6 +49,7 @@ const getInstance = (etype: string | undefined): string[] =>
   etype && traces[etype] ? traces[etype].sort() : [];
 
 const NeuronElectrophysiology: React.FC = () => {
+  const [electrophysiologyTableData, setelectrophysiologyTableData] = useState<any>(null);
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
@@ -104,6 +103,30 @@ const NeuronElectrophysiology: React.FC = () => {
       setFn: setInstance,
     },
   ], [etypes, instances, setEtype, setInstance]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!currentInstance) return;
+
+      try {
+        const response = await fetch(
+          `${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/electropysiology-table.json`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const experimentalRecordingData = await response.json();
+        setelectrophysiologyTableData(experimentalRecordingData);
+      } catch (error) {
+        console.error('Error fetching experimental recording data:', error);
+        setelectrophysiologyTableData(null);
+      }
+    };
+
+    fetchData();
+  }, [currentEtype]);
 
   return (
     <>
@@ -252,6 +275,9 @@ const NeuronElectrophysiology: React.FC = () => {
               )}
             </HttpData>
           </div>
+
+          {<ElectrophysiologyTable data={electrophysiologyTableData} />}
+
         </Collapsible>
       </DataContainer>
     </>
