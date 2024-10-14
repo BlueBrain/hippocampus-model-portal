@@ -48,7 +48,7 @@ const ConnectionAnatomyView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We validated the <Link className={`link theme-${theme}`} href={'#'}>connectome</Link>with a series of <Link className={`link theme-${theme}`} href={'#'}>experimental data</Link> not used to constrain it. These data include bouton density, number of synapses per connection, connection probability, convergence, and divergence.
+                                        We validated the <Link className={`link theme-${theme}`} href={'#'}>connectome</Link> with a series of <Link className={`link theme-${theme}`} href={'#'}>experimental data</Link> not used to constrain it. These data include bouton density, number of synapses per connection, connection probability, convergence, and divergence.
                                     </p>
                                 </InfoBox>
                             </div>
@@ -63,7 +63,7 @@ const ConnectionAnatomyView: React.FC = () => {
                     { id: 'ConvergenceValidationSection', label: 'Convergence validation' },
                     { id: 'DivergenceValidationSection', label: 'Divergence validation' },
                     { id: 'NbOfSynapsesPConnectionSection', label: 'Nb. of synapse p.connection validation' },
-                    { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percetages' },
+                    { id: 'SynapticDivergencePercentagesSection', label: 'Synaptic divergence percentages' },
                     { id: 'ModelLaminarDistributionOfDynapsesSection', label: 'Model laminar distribution of synapses' },
                 ]}>
 
@@ -93,7 +93,7 @@ const ConnectionAnatomyView: React.FC = () => {
                     <NbOfSynapsesPConnection theme={theme} />
                 </Collapsible>
 
-                <Collapsible id="SynapticDivergencePercentagesSection" title={`Synaptic divergence percetages`}>
+                <Collapsible id="SynapticDivergencePercentagesSection" title={`Synaptic divergence percentages`}>
                     <SynapticDivergencePercentages theme={theme} />
                 </Collapsible>
 

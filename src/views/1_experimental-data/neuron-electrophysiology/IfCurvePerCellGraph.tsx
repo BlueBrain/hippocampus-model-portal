@@ -128,7 +128,9 @@ const IfCurvePerCellGraph: React.FC<IfCurvePerCellGraphProps> = ({ instance, the
             </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `If-Curve-data-${instance}.json`)}>
-                    IF curve data for {instance}
+                    IF curve data for
+                    <span className='collapsible-property small'>{instance}</span>
+
                 </DownloadButton>
             </div>
         </>

@@ -1,12 +1,9 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useNexusContext } from '@bbp/react-nexus';
-import { Button } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import ESData from '@/components/ESData';
 import DataContainer from '@/components/DataContainer';
 import NexusPlugin from '@/components/NexusPlugin';
-import NexusFileDownloadButton from '@/components/NexusFileDownloadButton';
 import Filters from '@/layouts/Filters';
 import Title from '@/components/Title';
 import InfoBox from '@/components/InfoBox';
@@ -23,12 +20,13 @@ import { colorName } from './config';
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import traces from '@/traces.json';
-import Metadata from '@/components/Metadata';
 import { QuickSelectorEntry } from '@/types';
 import HttpData from '@/components/HttpData';
 import NeuronFactsheet from './neuron-electrophysiology/NeuronFactsheet';
 import DownloadButton from '@/components/DownloadButton';
-import { downloadAsJson } from '@/utils';
+import { downloadAsJson, downloadFile } from '@/utils';
+import ExperimentalRecordingsTable from '../2_reconstruction-data/neuron-model/ExperimentalRecordingsTable';
+import ElectrophysiologyTable from './neuron-electrophysiology/ElectrophysiologyTable';
 
 type Distribution = {
   name: string;
@@ -51,6 +49,7 @@ const getInstance = (etype: string | undefined): string[] =>
   etype && traces[etype] ? traces[etype].sort() : [];
 
 const NeuronElectrophysiology: React.FC = () => {
+  const [electrophysiologyTableData, setelectrophysiologyTableData] = useState<any>(null);
   const router = useRouter();
   const nexus = useNexusContext();
   const theme = 1;
@@ -104,6 +103,30 @@ const NeuronElectrophysiology: React.FC = () => {
       setFn: setInstance,
     },
   ], [etypes, instances, setEtype, setInstance]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!currentInstance) return;
+
+      try {
+        const response = await fetch(
+          `${dataPath}/1_experimental-data/neuronal-electophysiology/efeatures-per-etype/${currentEtype}/electropysiology-table.json`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const experimentalRecordingData = await response.json();
+        setelectrophysiologyTableData(experimentalRecordingData);
+      } catch (error) {
+        console.error('Error fetching experimental recording data:', error);
+        setelectrophysiologyTableData(null);
+      }
+    };
+
+    fetchData();
+  }, [currentEtype]);
 
   return (
     <>
@@ -165,6 +188,7 @@ const NeuronElectrophysiology: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
+        <div className="data-container" />
         <Collapsible
           id="instanceSection"
           properties={[currentEtype, currentInstance]}
@@ -173,53 +197,29 @@ const NeuronElectrophysiology: React.FC = () => {
           <AuthorBox>
             Alex Thomson: supervision, Audrey Mercer: supervision, University College London.
           </AuthorBox>
-          <p className="mt-4">We provide visualization and features for the selected recording.</p>
+          <p className="mt-4 ">We provide visualization and features for the selected recording.</p>
           <ESData query={fullElectroPhysiologyDataQueryObj}>
             {esDocuments => (
               <>
                 {!!esDocuments && !!esDocuments.length && (
                   <>
-                    <Metadata nexusDocument={esDocuments[0]._source} />
-                    <h3 className="mt-3">Patch clamp recording</h3>
-                    <div className="row start-xs end-sm mt-2 mb-2">
-                      <div className="col-xs">
-                        <Button
-                          className="mr-1"
-                          type="dashed"
-                          icon={<QuestionCircleOutlined />}
-                          href={`${basePath}/tutorials/nwb/`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="small"
-                        >
-                          How to read NWB files
-                        </Button>
-                        <NexusFileDownloadButton
-                          filename={getEphysDistribution(esDocuments[0]._source).name}
-                          url={getEphysDistribution(esDocuments[0]._source).contentUrl}
-                          org={hippocampus.org}
-                          project={hippocampus.project}
-                          id="ephysDownloadBtn"
-                        >
-                          trace
-                        </NexusFileDownloadButton>
-                      </div>
-                    </div>
+                    <h3 className="mt-3  mb-2">Patch clamp recording</h3>
+
                     <NexusPlugin
                       name="neuron-electrophysiology"
                       resource={esDocuments[0]._source}
                       nexusClient={nexus}
                     />
-                    <div className="text-right">
-                      <Button
-                        className="mr-1"
-                        type="primary"
-                        size="small"
-                        href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}
-                      >
+
+                    <div className="flex flex-row gap-4">
+                      <DownloadButton onClick={() => downloadFile(`${dataPath}/1_experimental-data/neuronal-electophysiology/nwb/${currentInstance}.nwb`, `${currentInstance}.nw`)} theme={theme}>
+                        Trace
+                      </DownloadButton>
+                      <DownloadButton theme={theme} buildIcon={true} href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}>
                         Send to the Build section
-                      </Button>
+                      </DownloadButton>
                     </div>
+
                     <div className="mt-3">
                       <TraceRelatedMorphologies trace={esDocuments[0]._source} />
                     </div>
@@ -276,6 +276,9 @@ const NeuronElectrophysiology: React.FC = () => {
               )}
             </HttpData>
           </div>
+
+          {<ElectrophysiologyTable data={electrophysiologyTableData} />}
+
         </Collapsible>
       </DataContainer>
     </>

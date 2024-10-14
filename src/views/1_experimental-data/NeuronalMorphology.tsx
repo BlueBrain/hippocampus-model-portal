@@ -18,7 +18,8 @@ import { Layer } from "@/types";
 import morphologies from "@/exp-morphology-list.json";
 import MorphDistributionPlots from "@/components/MorphDistributionsPlots";
 import DownloadButton from "@/components/DownloadButton";
-import { downloadAsJson } from "@/utils";
+import { downloadAsJson, downloadFile } from "@/utils";
+
 import NeuronTable from "./neuronal-morphology/NeuronTable";
 import withPreselection from "@/hoc/with-preselection";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
@@ -117,6 +118,8 @@ const NeuronalMorphologyView: React.FC = () => {
       return updatedSelection;
     });
   };
+
+
 
   const mtypes = getMtypes(quickSelection.layer);
   const instances = getInstances(quickSelection.mtype);
@@ -245,7 +248,21 @@ const NeuronalMorphologyView: React.FC = () => {
             <SwcViewer
               href={`data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
             />
+
+
           </div>
+
+          <DownloadButton
+            onClick={() =>
+              downloadFile(
+                `data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`,
+                `${quickSelection.instance}-morphology.swc`
+              )
+            }
+            theme={theme}
+          >
+            Download SWC
+          </DownloadButton>
 
           <div className="mb-4">
             <HttpData

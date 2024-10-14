@@ -18,7 +18,6 @@ export type HistogramProps = {
 };
 
 type AxisLayout = {
-  tickformat: string;
   tickmode: string;
   nticks: number;
   range?: [number, number];
@@ -62,22 +61,6 @@ const useIntersectionObserver = (options?: IntersectionObserverInit) => {
   }, [callback, options]);
 
   return [elementRef, isIntersecting] as const;
-};
-
-const formatScientificNotation = (value: number): string => {
-  if (value === 0) return "0";
-  const exponent = Math.floor(Math.log10(Math.abs(value)));
-  const mantissa = value / Math.pow(10, exponent);
-  const roundedMantissa = Math.round(mantissa * 100) / 100;
-  const superscriptDigits = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
-  const superscriptExponent = Math.abs(exponent)
-    .toString()
-    .split("")
-    .map((digit) => superscriptDigits[parseInt(digit)])
-    .join("");
-  return `${roundedMantissa}×10${
-    exponent < 0 ? "⁻" : ""
-  }${superscriptExponent}`;
 };
 
 const getPlotData = (
@@ -137,12 +120,10 @@ const Histogram: React.FC<HistogramProps> = ({
       bargap: 0,
       title,
       xaxis: {
-        tickformat: ".2e",
         tickmode: "auto",
         nticks: 5,
       },
       yaxis: {
-        tickformat: ".2e",
         tickmode: "auto",
         nticks: 5,
       },
@@ -165,20 +146,7 @@ const Histogram: React.FC<HistogramProps> = ({
     const data = getPlotData(values, bins, counts, color);
 
     const drawPlot = () => {
-      Plotly.newPlot(chartEl, data, plotlyLayout, plotlyConfig).then(() => {
-        const layout = (chartEl as any).layout;
-        if (layout?.xaxis?._gridvals && layout?.yaxis?._gridvals) {
-          const update = {
-            "xaxis.ticktext": layout.xaxis._gridvals.map(
-              formatScientificNotation
-            ),
-            "yaxis.ticktext": layout.yaxis._gridvals.map(
-              formatScientificNotation
-            ),
-          };
-          Plotly.relayout(chartEl, update);
-        }
-      });
+      Plotly.newPlot(chartEl, data, plotlyLayout, plotlyConfig);
     };
 
     if ("requestIdleCallback" in window) {

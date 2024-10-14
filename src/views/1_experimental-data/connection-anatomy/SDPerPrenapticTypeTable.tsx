@@ -85,18 +85,32 @@ const columns = [
     {
         title: 'Reference',
         dataIndex: 'Reference' as keyof DataEntry,
-        render: (reference: string, record: DataEntry) =>
-            record.Reference_link ? (
-                record.Reference_link.trim() !== "" ? (
+        render: (reference: string | string[], record: DataEntry) => {
+            if (Array.isArray(reference) && Array.isArray(record.Reference_link)) {
+                return reference.map((ref, index) => (
+                    <React.Fragment key={index}>
+                        {record.Reference_link?.[index] ? (
+                            <a href={record.Reference_link[index] ?? '#'} target="_blank" rel="noopener noreferrer">
+                                {ref}
+                            </a>
+                        ) : (
+                            ref
+                        )}
+                        {index < reference.length - 1 && ', '}
+                    </React.Fragment>
+                ));
+            } else if (typeof reference === 'string' && typeof record.Reference_link === 'string') {
+                return record.Reference_link.trim() !== "" ? (
                     <a href={record.Reference_link} target="_blank" rel="noopener noreferrer">
                         {reference}
                     </a>
                 ) : (
                     reference
-                )
-            ) : (
-                reference
-            ),
+                );
+            } else {
+                return reference;
+            }
+        },
     }
 ];
 

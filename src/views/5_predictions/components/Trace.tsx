@@ -11,7 +11,7 @@ interface TraceDataProps {
         name: string;
         description: string;
         units: string | null;
-        value_map: number[][];
+        value_map: { [key: string]: number[] } | number[][];
     };
 }
 
@@ -24,7 +24,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
     const [allTracesVisible, setAllTracesVisible] = useState<boolean>(true);
 
     useEffect(() => {
-        if (!plotData || !plotData.value_map || !Array.isArray(plotData.value_map) || plotData.value_map.length === 0) {
+        if (!plotData || !plotData.value_map || (Array.isArray(plotData.value_map) && plotData.value_map.length === 0) || Object.keys(plotData.value_map).length === 0) {
             console.log('No plot data available');
             setIsLoading(false);
             setHasError(true);
@@ -36,18 +36,34 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setHasError(false);
 
             // Prepare data for Plotly
-            const traces = plotData.value_map.map((trace, index) => ({
-                x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
-                y: trace,
-                type: 'scatter' as const,
-                mode: 'lines' as const,
-                name: `Trace ${index + 1}`,
-                line: {
-                    color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
-                    width: 1,
-                },
-                visible: allTracesVisible ? true : 'legendonly',
-            }));
+            let traces;
+            if (Array.isArray(plotData.value_map)) {
+                traces = plotData.value_map.map((trace, index) => ({
+                    x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
+                    y: trace,
+                    type: 'scatter' as const,
+                    mode: 'lines' as const,
+                    name: `Trace ${index + 1}`,
+                    line: {
+                        color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
+                        width: 1,
+                    },
+                    visible: allTracesVisible ? true : 'legendonly',
+                }));
+            } else {
+                traces = Object.entries(plotData.value_map).map(([key, trace], index) => ({
+                    x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
+                    y: trace,
+                    type: 'scatter' as const,
+                    mode: 'lines' as const,
+                    name: key,
+                    line: {
+                        color: `hsl(${index * 137.5 % 360}, 70%, 50%)`,
+                        width: 1,
+                    },
+                    visible: allTracesVisible ? true : 'legendonly',
+                }));
+            }
 
             setData(traces);
 
@@ -62,7 +78,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                     range: [0, 5000],
                 },
                 yaxis: {
-                    title: { text: plotData.units || 'Voltage (mV)', standoff: 40 },
+                    title: { text: 'Voltage (mV)', standoff: 40 },
                     showticklabels: true,
                 },
                 autosize: true,

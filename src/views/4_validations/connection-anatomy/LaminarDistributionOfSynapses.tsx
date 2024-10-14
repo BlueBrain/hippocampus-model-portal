@@ -44,15 +44,22 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
                     rotate: 45,
                     align: 'right',
                     margin: 10
-                }
+                },
+                name: 'mtype',
+                nameLocation: 'middle',
+                nameGap: 50
             },
             yAxis: {
                 type: 'value',
                 name: 'Synapses (%)',
-                max: 100
+                max: 100,
+                nameLocation: 'middle',
+                nameGap: 50,
+                nameRotate: 90
             },
             grid: {
-                bottom: '15%'
+                bottom: '15%',
+                left: '10%'
             },
             series: [
                 {
@@ -179,7 +186,9 @@ const LaminarDistributionOfSynapsesGraph = ({ theme }) => {
 
     return (
         <div>
-            <div ref={chartRef} style={{ width: '100%', height: '500px' }} />
+            <div className="graph">
+                <div ref={chartRef} style={{ width: '100%', height: '500px' }} />
+            </div>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => downloadAsJson(data, `Laminar-Distribution-Of-Synapses-Data.json`)}>
                     Laminar distribution of synapse

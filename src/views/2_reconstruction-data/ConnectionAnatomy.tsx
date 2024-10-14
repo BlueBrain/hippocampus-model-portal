@@ -54,7 +54,7 @@ const ConnectionsView: React.FC = () => {
 
         <Collapsible id="boutonDensitySection" title="Bouton density">
           <p>For <u>characterized pathways</u> we can use data from literature (see <Link href={"/experimental-data/connection-anatomy/"}>connection anatomy</Link>)</p>
-          <p>For <u>uncharacterized pathways</u> we can use the average of the values from the characterized pathways (0.2260 μm-1).</p>
+          <p>For <u>uncharacterized pathways</u> we can use the average of the values from the characterized pathways (0.2260 &#181;m<sup>-1</sup>).</p>
         </Collapsible>
 
       </DataContainer >

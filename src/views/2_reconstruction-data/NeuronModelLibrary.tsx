@@ -14,7 +14,7 @@ import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
 import { colorName } from './config';
 import { dataPath } from '@/config';
-import { downloadAsJson } from '@/utils';
+import { downloadAsJson, downloadFile } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
 import Factsheet from '@/components/Factsheet';
@@ -322,11 +322,14 @@ const NeuronsModelLibrary: React.FC = () => {
           </div>
           <DownloadButton
             onClick={() =>
-              window.open(`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`, '_blank')
+              downloadFile(
+                `data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`,
+                `${currentMorphology}-morphology.swc`
+              )
             }
             theme={theme}
           >
-            SWC
+            Download SWC
           </DownloadButton>
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">

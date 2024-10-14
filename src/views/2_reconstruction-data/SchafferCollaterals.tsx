@@ -60,7 +60,7 @@ const ConnectionPhysiologyView: React.FC = () => {
                     className="mt-4"
                     title="Anatomy"
                 >
-                    <p className='text-base mb-4'>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> (TBC) and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</p>
+                    <p className='text-base mb-4'>We combined the reported number of CA3 PCs from <Link href="https://pubmed.ncbi.nlm.nih.gov/23674373/"> Bezaire and Soltesz (2013)</Link> and <Link href={"/reconstruction-data/cell-composition/"}>cell composition</Link>, to estimate 267,238 SC fibers. By considering also the convergence of SC onto PC and INT, this was sufficient to define the anatomy of SC.</p>
                     <AnatomyTable theme={theme} />
                 </Collapsible>
 

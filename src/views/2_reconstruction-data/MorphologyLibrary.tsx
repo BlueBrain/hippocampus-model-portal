@@ -14,7 +14,7 @@ import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
 import HttpData from "@/components/HttpData";
-import { downloadAsJson } from "@/utils";
+import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import NeuronFactsheet from "../1_experimental-data/neuronal-morphology/NeuronFactsheet";
 
@@ -282,9 +282,8 @@ const MorphologyLibrary: React.FC = () => {
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${
-                      mtypes.length ? `(${mtypes.length})` : ""
-                    }`}
+                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -293,9 +292,8 @@ const MorphologyLibrary: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${
-                      etypes.length ? `(${etypes.length})` : ""
-                    }`}
+                    title={`E-type ${etypes.length ? `(${etypes.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -304,9 +302,8 @@ const MorphologyLibrary: React.FC = () => {
                     block
                     list={morphologies}
                     value={currentMorphology}
-                    title={`Morphology ${
-                      morphologies.length ? `(${morphologies.length})` : ""
-                    }`}
+                    title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ""
+                      }`}
                     color={colorName}
                     onSelect={setMorphology}
                     anchor="data"
@@ -342,9 +339,22 @@ const MorphologyLibrary: React.FC = () => {
             We provide visualization and morphometrics for the selected
             morphology.
           </p>
-          <SwcViewer
-            href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
-          />
+          <div className="graph no-padding">
+            <SwcViewer
+              href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
+            />
+          </div>
+          <DownloadButton
+            onClick={() =>
+              downloadFile(
+                `data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`,
+                `${currentMorphology}-morphology.swc`
+              )
+            }
+            theme={theme}
+          >
+            Download SWC
+          </DownloadButton>
           <HttpData
             path={`${basePath}/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}
           >

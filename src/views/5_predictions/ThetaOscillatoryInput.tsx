@@ -30,7 +30,7 @@ const voltageSectionStructure = {
         signal_frequency: [4, 6, 8]
     },
     slice: {
-        cell_frequency: [0.1, 0.2, 0.3, 0.4, 1, 2],
+        cell_frequency: [0.1, 0.2, 0.3, 0.4],
         signal_frequency: [4, 6, 8]
     }
 };

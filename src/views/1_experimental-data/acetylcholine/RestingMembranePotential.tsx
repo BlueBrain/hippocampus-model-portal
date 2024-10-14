@@ -14,13 +14,15 @@ type DataEntry = {
     "Layer": string;
     "Species": string;
     "Age": string;
-    "Weight": string | null;
-    "Vm_control (mV)": { mean: number; std: number | null };
-    "Vm_ACh (mV)": { mean: number; std: number | null };
-    "∆FR (Hz)": number;
+    "Weight": string;
+    "Vm_control (mV) mean": number;
+    "Vm_control (mV) std": number | string;
+    "Vm_ACh (mV) mean": number;
+    "Vm_ACh (mV) std": number;
+    "∆Vm (mV)": number;
     "Current (nA)": number;
-    "n. cells": number;
-    "Reference": string;
+    "n. cells": string;
+    "ref_link": string;
 };
 
 // Define custom types to match ResponsiveTable's expectations
@@ -52,26 +54,28 @@ function getMtypeDescription(fullMtype: string) {
 
 // Define columns using the custom types
 const columns: (ColumnType<DataEntry> | GroupColumnType<DataEntry>)[] = [
-    { title: 'Neuron Type', dataIndex: 'Neuron Type' },
-    { title: 'Dose (µM)', dataIndex: 'Dose (µM)' },
-    { title: 'Drug', dataIndex: 'Drug' },
-    { title: 'Region', dataIndex: 'Region' },
-    { title: 'Layer', dataIndex: 'Layer' },
-    { title: 'Species', dataIndex: 'Species' },
-    { title: 'Age', dataIndex: 'Age' },
-    { title: 'Weight', dataIndex: 'Weight' },
+    { title: 'Neuron Type', dataIndex: 'Neuron Type', key: 'neuronType' },
+    { title: 'Dose (µM)', dataIndex: 'Dose (µM)', key: 'dose' },
+    { title: 'Drug', dataIndex: 'Drug', key: 'drug' },
+    { title: 'Region', dataIndex: 'Region', key: 'region' },
+    { title: 'Layer', dataIndex: 'Layer', key: 'layer' },
+    { title: 'Species', dataIndex: 'Species', key: 'species' },
+    { title: 'Age', dataIndex: 'Age', key: 'age' },
+    { title: 'Weight', dataIndex: 'Weight', key: 'weight' },
     {
         title: 'Vm_control (mV)',
         children: [
             {
                 title: 'Mean',
-                dataIndex: ['Vm_control (mV)', 'mean'],
-                render: (mean: number) => <>{mean}</>
+                dataIndex: 'Vm_control (mV) mean',
+                key: 'vmControlMean',
+                render: (value: number) => value.toFixed(1)
             },
             {
                 title: 'std',
-                dataIndex: ['Vm_control (mV)', 'std'],
-                render: (std: number | null) => <>{std !== null ? std : '-'}</>
+                dataIndex: 'Vm_control (mV) std',
+                key: 'vmControlStd',
+                render: (value: number | string) => value === '-' ? value : Number(value).toFixed(1)
             },
         ],
     },
@@ -80,24 +84,30 @@ const columns: (ColumnType<DataEntry> | GroupColumnType<DataEntry>)[] = [
         children: [
             {
                 title: 'Mean',
-                dataIndex: ['Vm_ACh (mV)', 'mean'],
-                render: (mean: number) => <>{mean}</>
+                dataIndex: 'Vm_ACh (mV) mean',
+                key: 'vmAChMean',
+                render: (value: number) => value.toFixed(1)
             },
             {
                 title: 'std',
-                dataIndex: ['Vm_ACh (mV)', 'std'],
-                render: (std: number | null) => <>{std !== null ? std : '-'}</>
+                dataIndex: 'Vm_ACh (mV) std',
+                key: 'vmAChStd',
+                render: (value: number) => value.toFixed(1)
             },
         ],
     },
-    { title: '∆FR (Hz)', dataIndex: '∆FR (Hz)' },
-    { title: 'Current (nA)', dataIndex: 'Current (nA)' },
-    { title: 'n. cells', dataIndex: 'n. cells' },
+    {
+        title: '∆Vm (mV)',
+        dataIndex: '∆Vm (mV)',
+        key: 'deltaVm',
+        render: (value: number) => value.toFixed(2)
+    },
+    { title: 'Current (nA)', dataIndex: 'Current (nA)', key: 'current' },
     {
         title: 'Reference',
-        dataIndex: 'Reference',
-        render: (reference: string) => (
-            <a href="#" target="_blank" rel="noopener noreferrer">{reference}</a>
+        dataIndex: 'n. cells',
+        render: (reference: string, record: DataEntry) => (
+            <a href={record.ref_link} target="_blank" rel="noopener noreferrer">{reference}</a>
         )
     },
 ];
@@ -126,7 +136,7 @@ const RestingMembranePotential: React.FC<RestingMembranePotentialProps> = ({ the
                 className="mb-2"
                 columns={columns}
                 data={data}
-                rowKey={({ 'Neuron Type': neuronType }) => neuronType}
+                rowKey={({ 'Neuron Type': neuronType, 'Dose (µM)': dose }) => `${neuronType}-${dose}`}
             />
             <div className="mt-4">
                 <DownloadButton
