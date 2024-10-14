@@ -7,6 +7,7 @@ import {
     LogarithmicScale,
     BarElement,
     Title,
+    registerScale,
 } from 'chart.js';
 
 import { graphTheme } from '@/constants';
@@ -22,6 +23,37 @@ Chart.register(
     BarElement,
     Title
 );
+
+// Define the custom scale outside of the component
+class CustomLogarithmicScale extends LogarithmicScale {
+    static id = 'customLogarithmic';
+
+    buildTicks() {
+        const ticks = [];
+        let power = Math.floor(Math.log10(this.min));
+        const maxPower = Math.ceil(Math.log10(this.max));
+
+        while (power <= maxPower) {
+            ticks.push(Math.pow(10, power));
+            power += 1;
+        }
+
+        return ticks.map(tick => ({ value: tick }));
+    }
+}
+
+// Register the custom scale
+Chart.register(CustomLogarithmicScale);
+
+const formatScientificNotation = (value: number): string => {
+    if (value === 0) return '0';
+    const exponent = Math.floor(Math.log10(Math.abs(value)));
+    const mantissa = value / Math.pow(10, exponent);
+    const roundedMantissa = Math.round(mantissa * 100) / 100;
+    const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+    const superscriptExponent = Math.abs(exponent).toString().split('').map(digit => superscriptDigits[parseInt(digit)]).join('');
+    return `${roundedMantissa}×10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
+};
 
 export type SCDistibutionGraphProps = {
     data: any; // The JSON data to be visualized
@@ -50,6 +82,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                 if (chartInstance.current) {
                     chartInstance.current.destroy(); // Destroy previous chart instance before re-rendering
                 }
+
                 chartInstance.current = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -86,12 +119,20 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                                 },
                             },
                             y: {
-                                type: isLogarithmic ? 'logarithmic' : 'linear', // Conditionally set to logarithmic
+                                type: isLogarithmic ? 'customLogarithmic' : 'linear', // Conditionally set to logarithmic
                                 title: {
                                     display: !!yAxisTitle,
                                     text: yAxisTitle || '',
                                 },
                                 min: 0,
+                                ticks: {
+                                    callback: function (value, index, values) {
+                                        if (isLogarithmic) {
+                                            return formatScientificNotation(value);
+                                        }
+                                        return value;
+                                    }
+                                }
                             },
                         },
                         plugins: {
