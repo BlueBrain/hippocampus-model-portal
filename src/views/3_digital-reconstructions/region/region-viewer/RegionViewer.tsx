@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { FullscreenOutlined, FullscreenExitOutlined, SettingOutlined, CameraOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Drawer, Tooltip } from 'antd';
+import { Button, Checkbox, Drawer, Tooltip, Spin } from 'antd';
 
 import { Layer, VolumeSection } from '@/types';
-import { layers } from '@/constants';
+import { graphTheme, layers } from '@/constants';
 
 import RegionViewer from './region-viewer';
 
@@ -32,6 +32,8 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
 
   const [layerVisibilityState, setLayerVisibilityState] = useState(defaultLayerVisibilityState);
   const [regionMaskVisible, setRegionMaskVisible] = useState(true);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [isViewerReady, setIsViewerReady] = useState(false);
 
   const updateLayerVisibility = (newState: Partial<Record<Layer, boolean>>) => {
     const updatedState = { ...layerVisibilityState, ...newState };
@@ -66,9 +68,20 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
     const viewer = new RegionViewer(containerNode);
     setRegionViewer(viewer);
 
-    viewer.init(meshPath, volumeSection).then(() => {
-      onReady?.();
-    });
+    viewer.init(meshPath, volumeSection)
+      .then(() => {
+        setRegionViewer(viewer);
+        setIsInitializing(false);
+        // Add a small delay before setting the viewer as ready
+        setTimeout(() => {
+          setIsViewerReady(true);
+          onReady?.();
+        }, 100);
+      })
+      .catch(error => {
+        console.error('Error initializing RegionViewer:', error);
+        setIsInitializing(false);
+      });
 
     return () => {
       viewer.destroy();
@@ -86,6 +99,11 @@ const RegionViewerComponent: React.FC<RegionViewerProps> = ({ meshPath, volumeSe
         handle={fullscreenHandle}
       >
         <div className={styles.container} ref={containerRef}>
+          {(isInitializing || !isViewerReady) && (
+            <div className={styles.loadingOverlay}>
+              <Spin tip="Loading..." size="large" style={{ color: graphTheme.blue }} />
+            </div>
+          )}
           <Tooltip title="Viewer settings">
             <Button
               className={styles.settingBtn}
