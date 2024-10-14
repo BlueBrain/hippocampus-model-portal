@@ -42,25 +42,28 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                 legend: {
                     data: [
                         {
-                            name: 'Model I-E',
+                            name: 'E-E',
+                            itemStyle: { color: graphTheme.red }
+                        },
+                        {
+                            name: 'E-I',
+                            itemStyle: { color: graphTheme.green }
+                        },
+                        {
+                            name: 'I-E',
                             itemStyle: { color: graphTheme.blue }
                         },
                         {
-                            name: 'Model I-I',
+                            name: 'I-I',
                             itemStyle: { color: graphTheme.purple }
                         },
-                        {
-                            name: 'Exp E-E',
-                            itemStyle: { color: graphTheme.blue }
-                        },
-                        {
-                            name: 'Exp E-I',
-                            itemStyle: { color: graphTheme.purple }
-                        }
+
+
                     ],
                     right: 10,
                     top: 'center',
                     orient: 'vertical',
+                    selectedMode: false,
                 },
                 xAxis: {
                     type: 'category',
@@ -89,7 +92,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                 },
                 series: [
                     {
-                        name: 'Model I-E',
+                        name: 'I-E',
                         type: 'bar',
                         stack: 'Model',
                         emphasis: { focus: 'series' },
@@ -101,7 +104,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                         }))
                     },
                     {
-                        name: 'Model I-I',
+                        name: 'I-I',
                         type: 'bar',
                         stack: 'Model',
                         emphasis: { focus: 'series' },
@@ -113,7 +116,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                         }))
                     },
                     {
-                        name: 'Exp E-E',
+                        name: 'E-E',
                         type: 'bar',
                         stack: 'Exp',
                         emphasis: { focus: 'series' },
@@ -133,7 +136,7 @@ const SynapticDivergencePercentagesGraph: React.FC<SynapticDivergencePercentages
                         }))
                     },
                     {
-                        name: 'Exp E-I',
+                        name: 'E-I',
                         type: 'bar',
                         stack: 'Exp',
                         emphasis: { focus: 'series' },
