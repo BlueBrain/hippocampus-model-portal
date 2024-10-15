@@ -33,18 +33,16 @@ const MeanFiringRatePlot = ({ plotData }) => {
                 text: plotData?.name || 'Mean Firing Rate Distribution',
             },
             tooltip: {
-                enabled: false,
                 callbacks: {
                     label: (context) => {
-                        const label = context.dataset.label || '';
-                        const value = context.parsed.y;
-                        return `${label} Frequency: ${value}`;
+                        const frequency = context.parsed.y;
+                        return `Frequency: ${frequency}`;
                     },
                     title: (tooltipItems) => {
                         const item = tooltipItems[0];
                         const binStart = parseFloat(item.label);
                         const binEnd = binStart + binWidth;
-                        return `${binStart.toFixed(1)} - ${binEnd.toFixed(1)} Hz`;
+                        return `${binStart.toFixed(4)} - ${binEnd.toFixed(4)} ${plotData?.units || 'Hz'}`;
                     }
                 }
             },
@@ -53,15 +51,13 @@ const MeanFiringRatePlot = ({ plotData }) => {
             x: {
                 title: {
                     display: true,
-                    text: 'Firing Rate (Hz)',
+                    text: `Firing Rate (${plotData?.units || 'Hz'})`,
                 },
                 ticks: {
                     maxRotation: 0,
                     autoSkip: true,
                     maxTicksLimit: 10,
-                    callback: (value, index, values) => {
-                        return parseFloat(value).toFixed(1);
-                    }
+                    callback: (value) => parseFloat(value).toFixed(4)
                 },
             },
             y: {
@@ -72,7 +68,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
                 beginAtZero: true,
             },
         },
-    }), [plotData?.name]);
+    }), [plotData]);
 
     const { chartData, binWidth } = useMemo(() => {
         if (!plotData || !Array.isArray(plotData.values)) {
@@ -80,7 +76,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
         }
 
         const values = plotData.values.filter(v => v !== 0);
-        const binCount = 10; // Reduced number of bins for clarity
+        const binCount = 20; // Increased number of bins for more detail
         const minVal = Math.min(...values);
         const maxVal = Math.max(...values);
         const binWidth = (maxVal - minVal) / binCount;
@@ -95,7 +91,7 @@ const MeanFiringRatePlot = ({ plotData }) => {
 
         return {
             chartData: {
-                labels: bins.map(b => b.toFixed(1)),
+                labels: bins.map(b => b.toFixed(4)),
                 datasets: [{
                     data: freq,
                     backgroundColor: graphTheme.blue,
