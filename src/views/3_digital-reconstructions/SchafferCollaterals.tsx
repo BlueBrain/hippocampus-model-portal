@@ -43,10 +43,10 @@ const SchafferCollateralsView: React.FC = () => {
     if (!router.query.prelayer && !router.query.volume_section && !router.query.postlayer) {
       const query = defaultSelection.digitalReconstruction.schafferCollateral;
       const { volume_section, prelayer, postlayer } = query;
-      setQuickSelection({ volume_section, prelayer, postlayer });
-      router.replace({ query }, undefined, { shallow: true });
+      setQuickSelection({ volume_section, prelayer: prelayer || 'SC', postlayer });
+      router.replace({ query: { ...query, prelayer: prelayer || 'SC' } }, undefined, { shallow: true });
     } else {
-      setQuickSelection({ volume_section, prelayer, postlayer });
+      setQuickSelection({ volume_section, prelayer: prelayer || 'All', postlayer });
     }
   }, [router.query]);
 
@@ -205,8 +205,8 @@ const SchafferCollateralsView: React.FC = () => {
                 <div className="selector__body">
                   <List
                     block
-                    list={["SC"]}
-                    value={prelayer}
+                    list={['SC']}
+                    value={prelayer || 'All'}
                     title="m-type"
                     onSelect={setPreLayerQuery}
                     theme={theme}

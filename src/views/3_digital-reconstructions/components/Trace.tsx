@@ -34,42 +34,55 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setIsLoading(true);
             setHasError(false);
 
-            // Prepare individual traces data
+            // Helper function to format time
+            const formatTime = (ms: number) => {
+                return ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`;
+            };
+
+            // Update x-axis values and formatting
+            const xValues = Array.from({ length: plotData.mean_trace.length }, (_, i) => i * (5000 / (plotData.mean_trace.length - 1)));
+
+            // Update individual traces data
             const individualTraces = plotData.individual_traces.map((trace, index) => ({
-                x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
+                x: xValues,
                 y: trace,
                 type: 'scatter',
                 mode: 'lines',
                 name: `Individual Trace ${index + 1}`,
                 line: { color: `#9EA0B2`, width: 1 },
                 showlegend: false,
+                hovertemplate: 'Time: %{x}<br>Value: %{y:.2f} mV<extra></extra>',
             }));
 
-            // Prepare mean trace data
+            // Update mean trace data
             const meanTrace = {
-                x: Array.from({ length: plotData.mean_trace.length }, (_, i) => i * (5000 / (plotData.mean_trace.length - 1))),
+                x: xValues,
                 y: plotData.mean_trace,
                 type: 'scatter',
                 mode: 'lines',
                 name: 'Mean Trace',
                 line: { color: graphTheme.red, width: 3 },
+                hovertemplate: 'Time: %{x}<br>Value: %{y:.2f} mV<extra></extra>',
             };
 
             setData([...individualTraces, meanTrace]);
 
-            // Set up the layout
+            // Update layout
             setLayout({
                 title: '',
                 xaxis: {
-                    title: 'Time (ms)',
+                    title: 'Time',
                     showticklabels: true,
                     range: [0, 5000],
-                    tickmode: 'linear',
-                    dtick: 1000,
+                    tickmode: 'array',
+                    tickvals: [0, 1000, 2000, 3000, 4000, 5000],
+                    ticktext: ['0ms', '1s', '2s', '3s', '4s', '5s'],
+                    hoverformat: '.2f',
                 },
                 yaxis: {
                     title: 'Value (mV)',
                     showticklabels: true,
+                    hoverformat: '.2f',
                 },
                 autosize: true,
                 margin: { l: 60, r: 50, b: 50, t: 50, pad: 4 },

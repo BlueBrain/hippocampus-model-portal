@@ -13,7 +13,7 @@ import {
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import { dataPath } from '@/config';
-import { graphTheme } from '@/constants';
+import { graphTheme } from '@/constants'; import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 Chart.register(
     ScatterController,
@@ -224,17 +224,28 @@ const PSPAttenuationGraph: React.FC<PSPAttenuationGraphProps> = ({ theme }) => {
         return <div>Loading PSP attenuation data...</div>;
     }
 
+    // Add these constants for the equations
+    const modelFitEquation = "y = e^{x/155.6} - 0.30459466049423767";
+    const expFitEquation = "y = e^{x/240.9} - 0.1605029837238689";
+
     return (
-        <div>
-            <div className="graph" style={{ height: '600px', width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
-                <canvas ref={chartRef} />
+        <MathJaxContext>
+            <div>
+                <div className="mb-4">
+                    <p>Model fit: <MathJax inline>{`\\(${modelFitEquation}\\)`}</MathJax></p>
+                    <p style={{ color: graphTheme.red }}>Experiment fit: <MathJax inline>{`\\(${expFitEquation}\\)`}</MathJax></p>
+                </div>
+                <div className="graph" style={{ height: '600px', width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
+                    <canvas ref={chartRef} />
+                </div>
+                <div className="mt-4">
+                    <DownloadButton theme={theme} onClick={() => downloadAsJson(pspAttenuationData, `PSP-Attenuation-Data.json`)}>
+                        PSP attenuation
+                    </DownloadButton>
+                </div>
+
             </div>
-            <div className="mt-4">
-                <DownloadButton theme={theme} onClick={() => downloadAsJson(pspAttenuationData, `PSP-Attenuation-Data.json`)}>
-                    PSP attenuation
-                </DownloadButton>
-            </div>
-        </div>
+        </MathJaxContext>
     );
 };
 

@@ -112,7 +112,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                 showgrid: false,
                 tickmode: 'array',
                 tickvals: xTicks,
-                ticktext: xTicks.map(formatScientificNotation),
+                ticktext: xTicks.map(value => Math.round(value).toString()),
             },
             yaxis: {
                 title: {
