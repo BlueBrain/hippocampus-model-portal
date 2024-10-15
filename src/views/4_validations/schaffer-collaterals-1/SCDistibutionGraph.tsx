@@ -7,7 +7,7 @@ import {
     LogarithmicScale,
     BarElement,
     Title,
-    registerScale,
+
 } from 'chart.js';
 
 import { graphTheme } from '@/constants';
@@ -29,7 +29,7 @@ class CustomLogarithmicScale extends LogarithmicScale {
     static id = 'customLogarithmic';
 
     buildTicks() {
-        const ticks = [];
+        const ticks: number[] = [];
         let power = Math.floor(Math.log10(this.min));
         const maxPower = Math.ceil(Math.log10(this.max));
 
@@ -53,6 +53,13 @@ const formatScientificNotation = (value: number): string => {
     const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
     const superscriptExponent = Math.abs(exponent).toString().split('').map(digit => superscriptDigits[parseInt(digit)]).join('');
     return `${roundedMantissa}×10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
+};
+
+// Add this type declaration before the component
+type CustomChartType = Chart & {
+    scales: {
+        y: CustomLogarithmicScale;
+    };
 };
 
 export type SCDistibutionGraphProps = {
@@ -119,7 +126,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                                 },
                             },
                             y: {
-                                type: isLogarithmic ? 'customLogarithmic' : 'linear', // Conditionally set to logarithmic
+                                type: isLogarithmic ? 'customLogarithmic' : 'linear',
                                 title: {
                                     display: !!yAxisTitle,
                                     text: yAxisTitle || '',
@@ -128,12 +135,12 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                                 ticks: {
                                     callback: function (value, index, values) {
                                         if (isLogarithmic) {
-                                            return formatScientificNotation(value);
+                                            return formatScientificNotation(Number(value));
                                         }
                                         return value;
                                     }
                                 }
-                            },
+                            } as any, // Add type assertion here
                         },
                         plugins: {
                             title: {
@@ -145,7 +152,7 @@ const SCDistibutionGraph: React.FC<SCDistibutionGraphProps> = ({
                             },
                         },
                     },
-                });
+                }) as CustomChartType; // Add type assertion here
             }
         }
     };
