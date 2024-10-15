@@ -241,8 +241,10 @@ const AcetylcholineEffectOnSynapsesView: React.FC = () => {
         )}
 
         <Collapsible title="Trace" id="traceSection" className="mt-4">
+
           {traceData && traceData.individual_traces && traceData.mean_trace && (
             <>
+
               <div className="graph">
                 <TraceGraph plotData={traceData} />
               </div>

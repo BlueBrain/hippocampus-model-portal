@@ -154,6 +154,7 @@ const MergedConnectionsView: React.FC = () => {
 
   const getPlotDataById = (id: string) => factsheetData?.find((plot: any) => plot.id === id);
 
+
   const renderPlot = (id: string, title: string, xAxis: string, yAxis: string, xAxisTickStep: number) => {
     if (!availablePlots[id]) return null;
 
@@ -263,8 +264,8 @@ const MergedConnectionsView: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
         {renderPlot('bouton-density', 'Bouton density of the presynaptic cells', 'Bouton density (µm⁻¹)', 'Count', .1)}
-        {renderPlot('sample-convergence-by-connection', 'Number of synapses per connection', 'Synapse/connection', 'Count', 100)}
-        {renderPlot('sample-convergence-by-synapse', 'Convergence (synapses)', 'Synapses', 'Count', 1000)}
+        {renderPlot('sample-convergence-by-connection', 'Sample convergence by connection', 'Synapse/connection', 'Count', 100)}
+        {renderPlot('sample-convergence-by-synapse', 'Sample convergence by synapse', 'Synapses', 'Count', 1000)}
         <Collapsible title="Laminar distribution of synapses" id="laminar-distribution-synapses">
           <LaminarGraph data={laminarData} title="Laminar Distribution of Synapses" yAxisLabel="Percentage of synapses" />
         </Collapsible>
