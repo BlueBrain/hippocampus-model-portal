@@ -37,9 +37,10 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare data for Plotly
             let traces;
+            const maxTime = 5000; // Maximum time in milliseconds
             if (Array.isArray(plotData.value_map)) {
                 traces = plotData.value_map.map((trace, index) => ({
-                    x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
+                    x: Array.from({ length: trace.length }, (_, i) => i * (maxTime / (trace.length - 1))),
                     y: trace,
                     type: 'scatter' as const,
                     mode: 'lines' as const,
@@ -52,7 +53,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
                 }));
             } else {
                 traces = Object.entries(plotData.value_map).map(([key, trace], index) => ({
-                    x: Array.from({ length: trace.length }, (_, i) => i * (5000 / (trace.length - 1))),
+                    x: Array.from({ length: trace.length }, (_, i) => i * (maxTime / (trace.length - 1))),
                     y: trace,
                     type: 'scatter' as const,
                     mode: 'lines' as const,
@@ -70,15 +71,15 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             // Set up the layout
             setLayout({
                 xaxis: {
-                    title: { text: 'Time (ms)', standoff: 20 },
+                    title: { text: 'Time', standoff: 20 },
                     showticklabels: true,
-                    tickmode: 'linear',
-                    tick0: 0,
-                    dtick: 500,  // Changed from 1000 to 500
-                    range: [0, 5000],
+                    tickmode: 'array',
+                    tickvals: [0, 1000, 2000, 3000, 4000, 5000],
+                    ticktext: ['0 ms', '1 s', '2 s', '3 s', '4 s', '5 s'],
+                    range: [0, maxTime],
                 },
                 yaxis: {
-                    title: { text: 'Voltage (mV)', standoff: 40 },
+                    title: { text: plotData.units ? `Voltage (${plotData.units})` : 'Voltage', standoff: 40 },
                     showticklabels: true,
                 },
                 autosize: true,

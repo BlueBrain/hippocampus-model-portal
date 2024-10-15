@@ -22,6 +22,7 @@ type AxisLayout = {
   nticks: number;
   range?: [number, number];
   fixedrange?: boolean;
+  tickformat?: (d: number) => string; // Add this line
 };
 
 type PlotlyLayout = {
@@ -100,6 +101,20 @@ const getPlotData = (
   return [];
 };
 
+const formatScientificNotation = (value: number): string => {
+  if (value === 0) return '0';
+  const exponent = Math.floor(Math.log10(Math.abs(value)));
+  const mantissa = value / Math.pow(10, exponent);
+  const roundedMantissa = Math.round(mantissa * 100) / 100;
+  const superscriptDigits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+  const superscriptExponent = Math.abs(exponent)
+    .toString()
+    .split('')
+    .map((digit) => superscriptDigits[parseInt(digit)])
+    .join('');
+  return `${roundedMantissa}×10${exponent < 0 ? '⁻' : ''}${superscriptExponent}`;
+};
+
 const Histogram: React.FC<HistogramProps> = ({
   title,
   color,
@@ -122,10 +137,12 @@ const Histogram: React.FC<HistogramProps> = ({
       xaxis: {
         tickmode: "auto",
         nticks: 5,
+        tickformat: formatScientificNotation,
       },
       yaxis: {
         tickmode: "auto",
         nticks: 5,
+        tickformat: formatScientificNotation,
       },
     };
 
