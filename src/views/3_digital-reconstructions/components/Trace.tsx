@@ -23,6 +23,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
     const [hasError, setHasError] = useState<boolean>(false);
 
     useEffect(() => {
+        console.log('TraceGraph received plotData:', plotData);
         if (!plotData || !plotData.individual_traces || !plotData.mean_trace) {
             console.log('No plot data available');
             setIsLoading(false);

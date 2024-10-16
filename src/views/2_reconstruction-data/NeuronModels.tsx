@@ -111,56 +111,32 @@ const Neurons: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log("Query changed:", query);
     if (Object.keys(query).length === 0) return;
 
-    const newLayer =
-      query.layer &&
-        typeof query.layer === "string" &&
-        layers.includes(query.layer as Layer)
-        ? (query.layer as Layer)
-        : layers[0] || "";
+    const newLayer = query.layer && typeof query.layer === "string" && layers.includes(query.layer as Layer)
+      ? (query.layer as Layer)
+      : layers[0] || "";
 
     const newMtypes = getUniqueValues("mtype", "layer", newLayer) as string[];
-    const newMtype =
-      query.mtype &&
-        typeof query.mtype === "string" &&
-        newMtypes.includes(query.mtype)
-        ? query.mtype
-        : newMtypes[0] || "";
+    const newMtype = query.mtype && typeof query.mtype === "string" && newMtypes.includes(query.mtype)
+      ? query.mtype
+      : newMtypes[0] || "";
 
-    const newEtypes = getUniqueValues(
-      "etype",
-      "layer",
-      newLayer,
-      "mtype",
-      newMtype
-    ) as string[];
-    const newEtype =
-      query.etype &&
-        typeof query.etype === "string" &&
-        newEtypes.includes(query.etype)
-        ? query.etype
-        : newEtypes[0] || "";
+    const newEtypes = getUniqueValues("etype", "layer", newLayer, "mtype", newMtype) as string[];
+    const newEtype = query.etype && typeof query.etype === "string" && newEtypes.includes(query.etype)
+      ? query.etype
+      : newEtypes[0] || "";
 
     const newInstances = getFilteredInstances(newLayer, newMtype, newEtype);
-    const newInstance =
-      query.instance &&
-        typeof query.instance === "string" &&
-        newInstances.includes(query.instance)
-        ? query.instance
-        : newInstances[0] || "";
+    const newInstance = query.instance && typeof query.instance === "string" && newInstances.includes(query.instance)
+      ? query.instance
+      : newInstances[0] || "";
 
-    console.log("Updating states:", {
-      newLayer,
-      newMtype,
-      newEtype,
-      newInstance,
-    });
     setCurrentLayer(newLayer);
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentInstance(newInstance);
+
   }, [query, layers]);
 
   useEffect(() => {

@@ -137,8 +137,8 @@ export const defaultSelection = {
     },
     acetylcholineEffectsOnSynapses: {
       ach_concentration: '0um',
-      prelayer: 'all',
-      postlayer: 'all'
+      prelayer: 'Excitatory',
+      postlayer: 'Excitatory'
     },
 
     neurons: {
