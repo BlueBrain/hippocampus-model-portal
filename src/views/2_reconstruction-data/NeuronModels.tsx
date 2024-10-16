@@ -419,6 +419,7 @@ const Neurons: React.FC = () => {
             id: "experimentalRecordingsSection",
             label: "Experimental recordings used for this model",
           },
+          { id: "downloadModelSection", label: "Download model" },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -528,7 +529,76 @@ const Neurons: React.FC = () => {
             <ExperimentalRecordingsTable data={experimentalRecordingData} />
           )}
         </Collapsible>
+
+        <Collapsible
+          id="downloadModelSection"
+          className="mt-4"
+          title="Download model"
+          properties={[currentLayer, currentMtype, currentEtype, currentInstance]}
+        >
+          <h2 className="mb-2 text-lg">
+            Individual files:
+          </h2>
+
+          <div className="flex flex-row gap-4">
+            <DownloadButton
+              onClick={() =>
+                downloadAsJson(
+                  traceData,
+                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
+                )
+              }
+              theme={theme}
+            >
+              Trace
+            </DownloadButton>
+            <DownloadButton
+              onClick={() =>
+                downloadAsJson(
+                  traceData,
+                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
+                )
+              }
+              theme={theme}
+            >
+              Morphology
+            </DownloadButton>
+            <DownloadButton
+              onClick={() =>
+                downloadAsJson(
+                  traceData,
+                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
+                )
+              }
+              theme={theme}
+            >
+              Factsheet
+            </DownloadButton>
+          </div>
+
+          <h2 className=" mt-8 mb-2 text-lg">
+            Download all files as a zip archive:
+          </h2>
+
+          <div className="flex flex-row gap-4">
+            <DownloadButton
+              onClick={() =>
+                downloadAsJson(
+                  traceData,
+                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
+                )
+              }
+              theme={theme}
+            >
+              Download Model
+            </DownloadButton>
+          </div>
+        </Collapsible>
+
+
       </DataContainer>
+
+
     </>
   );
 };

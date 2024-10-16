@@ -76,7 +76,6 @@ const SchafferCollateralsView: React.FC = () => {
           SynapseLatencyFromSimulation: data.values.some(plot => plot.id === 'synapse-latency-for-simulation'),
           RiseTimeFromSimulation: data.values.some(plot => plot.id === 'rise-time-constant-for-simulation'),
           DecayTimeConstant: data.values.some(plot => plot.id === 'decay-time-constant'),
-          DecayTimeConstantFromSimulation: data.values.some(plot => plot.id === 'decay-time-constant-for-simulation'),
           NMDAAMPARatio: data.values.some(plot => plot.id === 'nmda-ampa-ratio'),
           UParameter: data.values.some(plot => plot.id === 'u-parameter'),
           DParameter: data.values.some(plot => plot.id === 'd-parameter'),
@@ -535,85 +534,41 @@ const SchafferCollateralsView: React.FC = () => {
           )
         }
 
-        {(availablePlots.DecayTimeConstant || availablePlots.DecayTimeConstantFromSimulation) && (
+        {availablePlots.DecayTimeConstant && (
           <Collapsible
             title="Decay time constant distribution + mean and std"
             id="DecayTimeConstantSection"
             properties={["Physiology"]}
           >
-            <div className="flex flex-col gap-12">
-
-              {availablePlots.DecayTimeConstant && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Decay time constant distribution</div>
-                    <div className="graph">
-                      <DistrbutionPlot
-                        plotData={getPlotDataById('decay-time-constant')}
-                        xAxis='Decay Time'
-                        yAxis='Frequency'
-                        xAxisTickStep={1}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('decay-time-constant'),
-                            `decay-time-constant-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                        Decay time constant distribution
-
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {availablePlots.DecayTimeConstantFromSimulation && (
-                <>
-                  <div className='flex flex-col gap-2'>
-                    <div className="text-lg mb-2">Decay time constant distribution for simulation</div>
-                    <div className="graph">
-                      <DistrbutionPlot
-                        plotData={getPlotDataById('decay-time-constant-for-simulation')}
-                        xAxis='Decay Time'
-                        yAxis='Frequency'
-                        xAxisTickStep={1}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <DownloadButton
-                        theme={theme}
-                        onClick={() =>
-                          downloadAsJson(
-                            getPlotDataById('decay-time-constant-for-simulation'),
-                            `decay-time-constant-for-simulation-${volume_section}-${prelayer}-${postlayer}.json`
-                          )
-                        }
-                      >
-                        <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
-                          {volume_section}
-                        </span>
-                        <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
-                        <span className="!ml-0 collapsible-property small">{postlayer}</span>
-                        Decay time constant distribution for simulation
-
-                      </DownloadButton>
-                    </div>
-                  </div>
-                </>
-              )}
+            <div className='flex flex-col gap-2'>
+              <div className="graph">
+                <DistrbutionPlot
+                  plotData={getPlotDataById('decay-time-constant')}
+                  xAxis='Decay Time'
+                  yAxis='Frequency'
+                  xAxisTickStep={1}
+                />
+              </div>
+              <div className="mt-2">
+                <DownloadButton
+                  theme={theme}
+                  onClick={() =>
+                    downloadAsJson(
+                      getPlotDataById('decay-time-constant'),
+                      `decay-time-constant-${volume_section}-${prelayer}-${postlayer}.json`
+                    )
+                  }
+                >
+                  <span style={{ textTransform: "capitalize" }} className="collapsible-property small">
+                    {volume_section}
+                  </span>
+                  <span className="!mr-0 collapsible-property small">{prelayer}</span> -{" "}
+                  <span className="!ml-0 collapsible-property small">{postlayer}</span>
+                  Decay time constant distribution
+                </DownloadButton>
+              </div>
             </div>
-          </Collapsible >
+          </Collapsible>
         )}
 
         {
