@@ -34,6 +34,8 @@ const SchafferCollateralsView: React.FC = () => {
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [laminarPlots, setLaminarPlots] = useState<any>(null);
   const [availablePlots, setAvailablePlots] = useState<Record<string, boolean>>({});
+  const [availableMeanSTD, setAvailableMeanSTD] = useState<Record<string, boolean>>({});
+  const [meanStdData, setMeanStdData] = useState<any>(null);
 
   const theme = 3;
 
@@ -55,6 +57,7 @@ const SchafferCollateralsView: React.FC = () => {
       fetchFactsheetData();
       fetchTraceData();
       fetchLaminarData();
+      fetchMeanSTDData();
     }
   }, [volume_section, prelayer, postlayer]);
 
@@ -106,6 +109,35 @@ const SchafferCollateralsView: React.FC = () => {
       setLaminarPlots(laminarData);
     } catch (error) {
       console.error('Error fetching laminar data:', error);
+    }
+  };
+
+  const fetchMeanSTDData = async () => {
+    try {
+      const response = await fetch(`${dataPath}/3_digital-reconstruction/schaffer-collaterals/${volume_section}/All-${postlayer}/schaffer-collaterals.json`);
+      const data = await response.json();
+      setMeanStdData(data.values);
+
+      setAvailableMeanSTD({
+        SynapsesPerConnection: data.values.some(item => item.id === 'synapses-per-connection' && item.values?.length === 2),
+        SampleDivergenceByConnection: data.values.some(item => item.id === 'sample-divergence-by-connection' && item.values?.length === 2),
+        SampleDivergenceBySynapse: data.values.some(item => item.id === 'sample-divergence-by-synapse' && item.values?.length === 2),
+        SampleConvergenceByConnection: data.values.some(item => item.id === 'sample-convergence-by-connection' && item.values?.length === 2),
+        SampleConvergenceBySynapse: data.values.some(item => item.id === 'sample-convergence-by-synapse' && item.values?.length === 2),
+        PSPAmplitude: data.values.some(item => item.id === 'psp-amplitude' && item.values?.length === 2),
+        PSPCV: data.values.some(item => item.id === 'psp-cv' && item.values?.length === 2),
+        SynapseLatency: data.values.some(item => item.id === 'synapse-latency' && item.values?.length === 2),
+        SynapseLatencyFromSimulation: data.values.some(item => item.id === 'synapse-latency-for-simulation' && item.values?.length === 2),
+        RiseTimeFromSimulation: data.values.some(item => item.id === 'rise-time-constant-for-simulation' && item.values?.length === 2),
+        DecayTimeConstant: data.values.some(item => item.id === 'decay-time-constant' && item.values?.length === 2),
+        NMDAAMPARatio: data.values.some(item => item.id === 'nmda-ampa-ratio' && item.values?.length === 2),
+        UParameter: data.values.some(item => item.id === 'u-parameter' && item.values?.length === 2),
+        DParameter: data.values.some(item => item.id === 'd-parameter' && item.values?.length === 2),
+        GSYNX: data.values.some(item => item.id === 'g-synx' && item.values?.length === 2),
+        NRRPParameter: data.values.some(item => item.id === 'nrrp-parameter' && item.values?.length === 2),
+      });
+    } catch (error) {
+      console.error('Error fetching mean/std data:', error);
     }
   };
 
@@ -161,6 +193,11 @@ const SchafferCollateralsView: React.FC = () => {
 
   const getPlotDataById = (id: string) => {
     return factsheetData?.find((plot: any) => plot.id === id);
+  };
+
+  const getMeanStdDataById = (id: string) => {
+    const data = meanStdData?.find((item: any) => item.id === id);
+    return data ? { mean: data.values[0], std: data.values[1] } : null;
   };
 
   return (
@@ -261,8 +298,15 @@ const SchafferCollateralsView: React.FC = () => {
                 xAxis='N_syn'
                 yAxis='Frequency'
                 xAxisTickStep={1}
+                MeanStd={{
+                  mean: getMeanStdDataById('synapses-per-connection')?.mean,
+                  std: getMeanStdDataById('synapses-per-connection')?.std
+                }}
               />
             </div>
+
+
+
             <div className="mt-4">
               <DownloadButton
                 theme={theme}
@@ -283,7 +327,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-divergence-by-connection')}
                 xAxis='Divergence'
                 yAxis='Frequency'
-                xAxisTickStep={1}
+                xAxisTickStep={50}
               />
             </div>
             <div className="mt-4">
@@ -306,7 +350,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-divergence-by-synapse')}
                 xAxis='Divergence'
                 yAxis='Frequency'
-                xAxisTickStep={1}
+                xAxisTickStep={50}
               />
             </div>
             <div className="mt-4">
@@ -335,7 +379,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-convergence-by-connection')}
                 xAxis='Convergence'
                 yAxis='Frequency'
-                xAxisTickStep={1}
+                xAxisTickStep={5000}
               />
             </div>
             <div className="mt-4">
@@ -358,7 +402,7 @@ const SchafferCollateralsView: React.FC = () => {
                 plotData={getPlotDataById('sample-convergence-by-synapse')}
                 xAxis='Convergence'
                 yAxis='Frequency'
-                xAxisTickStep={1}
+                xAxisTickStep={4000}
               />
             </div>
             <div className="mt-4">
@@ -386,15 +430,14 @@ const SchafferCollateralsView: React.FC = () => {
         {availablePlots.PSPAmplitude && (
           <Collapsible title="PSP Amplitude" id="PSPAmplitudeSection" properties={["Physiology"]}>
             <div className="graph">
-
               <DistrbutionPlot
                 plotData={getPlotDataById('psp-amplitude')}
                 xAxis='PSP Amplitude'
                 yAxis='Frequency'
                 xAxisTickStep={1}
               />
-
             </div>
+
             <div className="mt-4">
               <DownloadButton
                 theme={theme}
@@ -402,7 +445,6 @@ const SchafferCollateralsView: React.FC = () => {
                 <span style={{ textTransform: "capitalize" }} className='collapsible-property small'>{volume_section}</span>
                 PSP Amplitude
                 <span className='!mr-0 collapsible-property small '>{prelayer}</span> - <span className='!ml-0 collapsible-property small '>{postlayer}</span>
-
               </DownloadButton>
             </div>
           </Collapsible>
@@ -645,7 +687,7 @@ const SchafferCollateralsView: React.FC = () => {
                     plotData={getPlotDataById('d-parameter')}
                     xAxis='d_syn'
                     yAxis='Frequency'
-                    xAxisTickStep={1}
+                    xAxisTickStep={100}
                   />
                 </div>
                 <div className="mt-2">

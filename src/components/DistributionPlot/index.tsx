@@ -18,6 +18,7 @@ interface PlotDetailsProps {
     xAxis?: string;
     yAxis?: string;
     xAxisTickStep?: number;
+    MeanStd?: { mean: number, std: number };
 }
 
 const DistributionPlot: React.FC<PlotDetailsProps> = ({
@@ -25,6 +26,7 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
     xAxis = 'Value',
     yAxis = 'Frequency',
     xAxisTickStep = 1,
+    MeanStd
 }) => {
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -45,6 +47,9 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
     }, []);
 
     const formatScientificNotation = (value: number): string => {
+        if (Math.abs(value) < 1000) {
+            return value.toString();
+        }
         if (value === 0) return '0';
         const exponent = Math.floor(Math.log10(Math.abs(value)));
         const mantissa = value / Math.pow(10, exponent);
@@ -179,6 +184,9 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
                         stepSize: xAxisTickStep,
                         maxRotation: 0,
                         minRotation: 0,
+                        callback: function (value) {
+                            return value.toString();
+                        },
                     },
                 },
                 y: {
@@ -216,6 +224,12 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
 
     return (
         <div>
+            {MeanStd && (
+                <div className="mt-4">
+                    <p>Mean: {MeanStd.mean.toFixed(4)}</p>
+                    <p>Standard Deviation: {MeanStd.std.toFixed(4)}</p>
+                </div>
+            )}
             {name && <h2>{name}</h2>}
             {description && <p>{description}</p>}
             <div style={{ width: '100%', height: '400px' }}>

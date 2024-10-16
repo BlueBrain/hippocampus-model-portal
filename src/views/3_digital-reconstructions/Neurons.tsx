@@ -12,16 +12,13 @@ import Collapsible from '@/components/Collapsible';
 
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
-import { colorName } from './config';
-import HttpData from '@/components/HttpData';
 import { dataPath } from '@/config';
 import { downloadAsJson } from '@/utils';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from '../5_predictions/components/Trace';
-import Factsheet from '@/components/Factsheet';
-
 import modelsData from './neurons.json';
-
+import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
+import Factsheet from '@/components/Factsheet';
 
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
   return Array.from(new Set(modelsData
@@ -41,11 +38,10 @@ const getFilteredMorphologies = (mtype: string, etype: string): string[] => {
     .map(model => model.morphology);
 };
 
-const Neurons: React.FC = () => {
+const NeuronsView: React.FC = () => {
   const router = useRouter();
-  const theme = 3;
-
   const { query } = router;
+  const theme = 3
   const [currentMtype, setCurrentMtype] = useState<string>('');
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentMorphology, setCurrentMorphology] = useState<string>('');
@@ -57,6 +53,7 @@ const Neurons: React.FC = () => {
   const mtypes = useMemo(() => getUniqueValues('mtype'), []);
   const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
   const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
+
 
   useEffect(() => {
     if (Object.keys(query).length === 0) return;
@@ -79,7 +76,7 @@ const Neurons: React.FC = () => {
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
-  }, [query, router]);
+  }, [query]);
 
   useEffect(() => {
 
@@ -150,8 +147,6 @@ const Neurons: React.FC = () => {
     });
   };
 
-
-
   const qsEntries: QuickSelectorEntry[] = [
     {
       title: 'M-Type',
@@ -173,7 +168,6 @@ const Neurons: React.FC = () => {
     },
   ];
 
-
   return (
     <>
       <Filters theme={theme}>
@@ -190,9 +184,9 @@ const Neurons: React.FC = () => {
                   We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
                 </p>
               </InfoBox>
+
             </div>
           </div>
-
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
@@ -203,7 +197,6 @@ const Neurons: React.FC = () => {
                     list={mtypes}
                     value={currentMtype}
                     title={`M-type ${mtypes.length ? `(${mtypes.length})` : ''}`}
-                    color={colorName}
                     onSelect={setMtype}
                     theme={theme}
                   />
@@ -212,7 +205,6 @@ const Neurons: React.FC = () => {
                     list={etypes}
                     value={currentEtype}
                     title={`E-type ${etypes.length ? `(${etypes.length})` : ''}`}
-                    color={colorName}
                     onSelect={setEtype}
                     theme={theme}
                   />
@@ -221,7 +213,6 @@ const Neurons: React.FC = () => {
                     list={morphologies}
                     value={currentMorphology}
                     title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ''}`}
-                    color={colorName}
                     onSelect={setMorphology}
                     anchor="data"
                     theme={theme}
@@ -231,7 +222,8 @@ const Neurons: React.FC = () => {
             </div>
           </div>
         </div>
-      </Filters>
+      </Filters >
+
 
       <DataContainer
         theme={theme}
@@ -277,14 +269,15 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
       </DataContainer>
+
     </>
   );
 };
 
 export default withPreselection(
-  Neurons,
+  NeuronsView,
   {
-    key: 'Layer',
+    key: 'mtype',
     defaultQuery: defaultSelection.digitalReconstruction.neurons,
   },
 );
