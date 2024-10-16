@@ -55,13 +55,28 @@ const FactsheetSingleMeanStdEntry: React.FC<{
     const mean = fact.value_map?.mean ?? (fact.values?.[0] ?? '-');
     const std = fact.value_map?.std ?? (fact.values?.[1] ?? '-');
 
+    const formatValue = (value: string | number) => {
+      if (typeof value === 'number') {
+        return value.toFixed(3);
+      }
+      return value;
+    };
+
+    const formatNumberWithoutCommas = (value: string | number) => {
+      if (typeof value === 'number') {
+        return value.toString().replace(/,/g, '');
+      }
+      return value;
+    };
+
     return (
       <div className="row mt-1">
         <div className="col-xs-4 name">
           <Term term={fact.name} description={fact.description} />
         </div>
         <div className="col-xs-4 value">
-          <NumberFormat value={mean} />{std !== '-' ? <> ± <NumberFormat value={std} /></> : ''} <Unit value={fact.unit} />
+          {formatNumberWithoutCommas(formatValue(mean))}
+          {std !== '-' ? <> ± {formatNumberWithoutCommas(formatValue(std))}</> : ''} <Unit value={fact.unit} />
         </div>
       </div>
     );
