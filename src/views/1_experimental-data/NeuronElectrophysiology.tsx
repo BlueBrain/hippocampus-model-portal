@@ -212,7 +212,7 @@ const NeuronElectrophysiology: React.FC = () => {
                     />
 
                     <div className="flex flex-row gap-4">
-                      <DownloadButton onClick={() => downloadFile(`${dataPath}/1_experimental-data/neuronal-electophysiology/nwb/${currentInstance}.nwb`, `${currentInstance}.nw`)} theme={theme}>
+                      <DownloadButton onClick={() => downloadFile(`${dataPath}/1_experimental-data/neuronal-electophysiology/nwb/${currentInstance}.nwb`, `${currentInstance}.nwb`)} theme={theme}>
                         Trace
                       </DownloadButton>
                       <DownloadButton theme={theme} buildIcon={true} href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}>

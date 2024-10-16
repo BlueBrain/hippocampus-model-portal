@@ -228,6 +228,17 @@ const SynapsesGraph: React.FC<SynapsesGraphProps> = ({ theme }) => {
             <div className="graph mb-4" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
+            <ul className="pl-4 list-disc list-inside">
+                <li>
+                    Dots: experimental data
+                </li>
+                <li>
+                    Solid line: fit
+                </li>
+                <li>
+                    Dotted line: extrapolation
+                </li>
+            </ul>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `synapses-graph-data.json`)}>
                     Synapses
