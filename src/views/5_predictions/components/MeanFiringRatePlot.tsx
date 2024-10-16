@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -20,7 +20,14 @@ ChartJS.register(
     Legend
 );
 
-const MeanFiringRatePlot = ({ plotData }) => {
+interface MeanFiringRatePlotProps {
+    plotData: any;
+    xAxis?: string;
+    yAxis?: string;
+    xAxisTickStep?: number;
+}
+
+const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis, yAxis, xAxisTickStep }) => {
     const options = useMemo(() => ({
         responsive: true,
         maintainAspectRatio: false,
@@ -34,15 +41,10 @@ const MeanFiringRatePlot = ({ plotData }) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (context) => {
-                        const frequency = context.parsed.y;
-                        return `Frequency: ${frequency}`;
-                    },
+                    label: (context) => `Count: ${context.parsed.y}`,
                     title: (tooltipItems) => {
-                        const item = tooltipItems[0];
-                        const binStart = parseFloat(item.label);
-                        const binEnd = binStart + binWidth;
-                        return `${binStart.toFixed(4)} - ${binEnd.toFixed(4)} ${plotData?.units || 'Hz'}`;
+                        const value = parseFloat(tooltipItems[0].label);
+                        return `${value.toFixed(6)} ${plotData?.units || 'Hz'}`;
                     }
                 }
             },
@@ -51,68 +53,62 @@ const MeanFiringRatePlot = ({ plotData }) => {
             x: {
                 title: {
                     display: true,
-                    text: `Firing Rate (${plotData?.units || 'Hz'})`,
+                    text: xAxis || `Firing Rate (${plotData?.units || 'Hz'})`,
                 },
                 ticks: {
                     maxRotation: 0,
                     autoSkip: true,
                     maxTicksLimit: 10,
-                    callback: (value) => parseFloat(value).toFixed(4)
+                    callback: (value) => parseFloat(value).toFixed(3),
+                    stepSize: xAxisTickStep,
                 },
             },
             y: {
                 title: {
                     display: true,
-                    text: 'Frequency',
+                    text: yAxis || 'Count',
                 },
                 beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                    precision: 0
+                }
             },
         },
-    }), [plotData]);
+    }), [plotData, xAxis, yAxis, xAxisTickStep]);
 
-    const { chartData, binWidth } = useMemo(() => {
+    const chartData = useMemo(() => {
         if (!plotData || !Array.isArray(plotData.values)) {
-            return { chartData: null, binWidth: 0 };
+            return null;
         }
 
-        const values = plotData.values.filter(v => v !== 0);
-        const binCount = 20; // Increased number of bins for more detail
-        const minVal = Math.min(...values);
-        const maxVal = Math.max(...values);
-        const binWidth = (maxVal - minVal) / binCount;
-
-        const bins = Array.from({ length: binCount }, (_, i) => minVal + i * binWidth);
-        const freq = Array(binCount).fill(0);
-
-        values.forEach(v => {
-            const index = Math.min(Math.floor((v - minVal) / binWidth), binCount - 1);
-            freq[index]++;
+        const binWidth = 0.001; // Adjust this value to change the histogram resolution
+        const bins = {};
+        plotData.values.forEach(value => {
+            const binIndex = Math.floor(value / binWidth);
+            bins[binIndex] = (bins[binIndex] || 0) + 1;
         });
 
+        const sortedBins = Object.entries(bins).sort(([a], [b]) => parseFloat(a) - parseFloat(b));
+
         return {
-            chartData: {
-                labels: bins.map(b => b.toFixed(4)),
-                datasets: [{
-                    data: freq,
-                    backgroundColor: graphTheme.blue,
-                    borderColor: graphTheme.blue,
-                    borderWidth: 1,
-                }],
-            },
-            binWidth: binWidth
+            labels: sortedBins.map(([bin]) => (parseFloat(bin) * binWidth).toFixed(3)),
+            datasets: [{
+                data: sortedBins.map(([, count]) => count),
+                backgroundColor: graphTheme.blue,
+                borderColor: graphTheme.blue,
+                borderWidth: 1,
+            }],
         };
     }, [plotData]);
 
-    const renderChart = useCallback(() => {
-        if (!chartData) {
-            return <p className="text-center text-gray-500">No data available.</p>;
-        }
-        return <Bar options={options} data={chartData} />;
-    }, [chartData, options]);
+    if (!chartData) {
+        return <p className="text-center text-gray-500">No data available.</p>;
+    }
 
     return (
         <div style={{ width: '100%', height: '400px' }}>
-            {renderChart()}
+            <Bar options={options} data={chartData} />
         </div>
     );
 };
