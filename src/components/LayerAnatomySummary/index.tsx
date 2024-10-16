@@ -99,8 +99,8 @@ const LayerAnatomySummary: React.FC<LayerAnatomySummaryProps> = ({ data = [], hi
           <ResponsiveTable<SummaryData> columns={columns} data={summary} rowKey={({ layer }) => layer} />
 
           <div className="mt-4">
-            <DownloadButton onClick={() => downloadAsJson(SummaryData, 'layer-anatommy-summary.json')} theme={theme}>
-              Download Layer Anatony Summary
+            <DownloadButton onClick={() => downloadAsJson(SummaryData, 'layer-anatomy-summary.json')} theme={theme}>
+              Layer anatomy summary
             </DownloadButton>
 
           </div>

@@ -106,7 +106,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     data: {
                         datasets: [
                             {
-                                label: 'Neurons Data',
+                                label: 'Experimental data',
                                 data: data.dataPoints,
                                 backgroundColor: '#3B4165',
                                 pointRadius: 3
@@ -122,7 +122,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                 tension: 0
                             },
                             {
-                                label: 'Experimental data',
+                                label: 'Extrapolated',
                                 data: dottedData,
                                 borderColor: '#3B4165',
                                 type: 'line',
@@ -190,6 +190,13 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                             }
                         },
                         plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    color: '#050A30'
+                                }
+                            },
                             title: {
                                 display: false,
                                 text: '',
@@ -234,6 +241,17 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
             <div className="graph" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
+            <ul className="pl-4 list-disc list-inside">
+                <li>
+                    Dots: experimental data
+                </li>
+                <li>
+                    Solid line: fit
+                </li>
+                <li>
+                    Dotted line: extrapolation
+                </li>
+            </ul>
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `neuron-graph-data.json`)}>
                     Neuron
