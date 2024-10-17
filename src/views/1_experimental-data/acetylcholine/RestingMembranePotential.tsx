@@ -97,12 +97,12 @@ const columns: (ColumnType<DataEntry> | GroupColumnType<DataEntry>)[] = [
         ],
     },
     {
-        title: '∆Vm (mV)',
+        title: 'Current (nA)',
         dataIndex: '∆Vm (mV)',
         key: 'deltaVm',
         render: (value: number) => value.toFixed(2)
     },
-    { title: 'Current (nA)', dataIndex: 'Current (nA)', key: 'current' },
+    { title: 'N.Cell', dataIndex: 'Current (nA)', key: 'current' },
     {
         title: 'Reference',
         dataIndex: 'n. cells',

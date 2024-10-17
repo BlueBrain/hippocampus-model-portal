@@ -222,26 +222,11 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
-          { id: 'singleCellSection', label: 'Single Cell' },
           { id: 'traceSection', label: 'Trace' },
           { id: 'populationSection', label: 'Population' },
         ]}
         quickSelectorEntries={qsEntries}
       >
-
-        <Collapsible id="singleCellSection" className="mt-4" title="Single Cell">
-          {singleCellData && (
-            <>
-
-              <PopulationFactsheet data={singleCellData} />
-              <div className="mt-4">
-                <DownloadButton onClick={() => downloadAsJson(singleCellData, `Single-Cell-factsheet.json`)} theme={theme}>
-                  Population Factsheet
-                </DownloadButton>
-              </div>
-            </>
-          )}
-        </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
