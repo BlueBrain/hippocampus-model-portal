@@ -19,21 +19,25 @@ import TraceGraph from '../5_predictions/components/Trace';
 import modelsData from './neurons.json';
 import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
 import Factsheet from '@/components/Factsheet';
+import LayerSelector3D from '@/components/LayerSelector3D';
+import { Layer } from '@/types'; // Ensure Layer is imported from the correct path
 
-const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string, filterKey3?: string, filterValue3?: string): string[] => {
   return Array.from(new Set(modelsData
     .filter(model =>
       (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
-      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2) &&
+      (!filterKey3 || !filterValue3 || model[filterKey3] === filterValue3)
     )
     .map(model => model[key]))).sort();
 };
 
-const getFilteredMorphologies = (mtype: string, etype: string): string[] => {
+const getFilteredMorphologies = (mtype: string, etype: string, layer?: Layer): string[] => {
   return modelsData
     .filter(model =>
       (!mtype || model.mtype === mtype) &&
-      (!etype || model.etype === etype)
+      (!etype || model.etype === etype) &&
+      (!layer || model.layer === layer)
     )
     .map(model => model.morphology);
 };
@@ -41,7 +45,7 @@ const getFilteredMorphologies = (mtype: string, etype: string): string[] => {
 const NeuronsView: React.FC = () => {
   const router = useRouter();
   const { query } = router;
-  const theme = 3
+  const theme = 3;
   const [currentMtype, setCurrentMtype] = useState<string>('');
   const [currentEtype, setCurrentEtype] = useState<string>('');
   const [currentMorphology, setCurrentMorphology] = useState<string>('');
@@ -49,26 +53,27 @@ const NeuronsView: React.FC = () => {
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [experimentalRecordingData, setExperimentalRecordingData] = useState<any>(null);
   const [mechanismsData, setMechanismsData] = useState<any>(null);
+  const [currentLayer, setCurrentLayer] = useState<Layer | undefined>(modelsData[0]?.layer as Layer | undefined); // Set default layer
 
-  const mtypes = useMemo(() => getUniqueValues('mtype'), []);
-  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
-  const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer?.toString()), [currentLayer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype, 'layer', currentLayer?.toString()), [currentMtype, currentLayer]);
+  const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype, currentLayer), [currentMtype, currentEtype, currentLayer]);
 
 
   useEffect(() => {
     if (Object.keys(query).length === 0) return;
 
-    const newMtypes = getUniqueValues('mtype');
+    const newMtypes = getUniqueValues('mtype', 'layer', currentLayer?.toString());
     const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
       ? query.mtype
       : newMtypes[0] || '';
 
-    const newEtypes = getUniqueValues('etype', 'mtype', newMtype);
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype, 'layer', currentLayer?.toString());
     const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
       ? query.etype
       : newEtypes[0] || '';
 
-    const newMorphologies = getFilteredMorphologies(newMtype, newEtype);
+    const newMorphologies = getFilteredMorphologies(newMtype, newEtype, currentLayer);
     const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
       ? query.morphology
       : newMorphologies[0] || '';
@@ -76,7 +81,7 @@ const NeuronsView: React.FC = () => {
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
-  }, [query]);
+  }, [query, currentLayer]);
 
   useEffect(() => {
 
@@ -147,7 +152,30 @@ const NeuronsView: React.FC = () => {
     });
   };
 
+  const setLayer = (layer: Layer) => {
+    setCurrentLayer(layer);
+    const newMtypes = getUniqueValues('mtype', 'layer', layer.toString());
+    const newMtype = newMtypes[0] || '';
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype, 'layer', layer.toString());
+    const newEtype = newEtypes[0] || '';
+    const newMorphologies = getFilteredMorphologies(newMtype, newEtype, layer);
+    const newMorphology = newMorphologies[0] || '';
+
+    setParams({
+      layer: layer.toString(),
+      mtype: newMtype,
+      etype: newEtype,
+      morphology: newMorphology,
+    });
+  };
+
   const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Layer',
+      key: 'layer',
+      values: Array.from(new Set(modelsData.map(model => model.layer))),
+      setFn: setLayer,
+    },
     {
       title: 'M-Type',
       key: 'mtype',
@@ -178,19 +206,31 @@ const NeuronsView: React.FC = () => {
               subtitle="Digital Reconstructions"
               theme={theme}
             />
-            <div className='w-full' role="information">
-              <InfoBox>
-                <p>
-                  We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
-                </p>
-              </InfoBox>
-
-            </div>
+            <InfoBox>
+              <p>
+                We used the <Link className={`link theme-${theme}`} href={'/reconstruction-data/neuron-model-library/'}>single neuron library</Link> to populate the network model. The neuron models that find their way into the circuit represent a subset of the entire initial library.
+              </p>
+            </InfoBox>
           </div>
+
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
-                <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
+                <div className={`selector__head theme-${theme}`}>
+                  Choose a layer
+                </div>
+                <div className="selector__selector-container">
+                  <LayerSelector3D
+                    value={currentLayer || undefined}
+                    onSelect={setLayer}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>
+                  Select reconstruction
+                </div>
                 <div className="selector__body">
                   <List
                     block
@@ -222,7 +262,7 @@ const NeuronsView: React.FC = () => {
             </div>
           </div>
         </div>
-      </Filters >
+      </Filters>
 
 
       <DataContainer

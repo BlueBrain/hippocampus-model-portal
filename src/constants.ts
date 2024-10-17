@@ -142,9 +142,10 @@ export const defaultSelection = {
     },
 
     neurons: {
-      morphology: "455995",
-      etype: "cNAC",
-      mtype: "SO_BP"
+      layer: 'SLM',
+      etype: 'bAC',
+      mtype: 'SLM_PPA',
+      instance: '011127HP1',
     },
     NeuronModelLibrary: {
       mtype: 'SO_BP',

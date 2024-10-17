@@ -9,6 +9,8 @@ import DataContainer from '@/components/DataContainer';
 import { QuickSelectorEntry } from '@/types';
 import List from '@/components/List';
 import Collapsible from '@/components/Collapsible';
+import LayerSelector3D from '@/components/LayerSelector3D';
+import { Layer } from '@/types'; // Ensure Layer is imported from the correct path
 
 import { defaultSelection } from '@/constants';
 import withPreselection from '@/hoc/with-preselection';
@@ -19,20 +21,22 @@ import TraceGraph from '../5_predictions/components/Trace';
 import modelsData from './neurons.json';
 import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
 
-const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string): string[] => {
+const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string, filterKey3?: string, filterValue3?: string): string[] => {
   return Array.from(new Set(modelsData
     .filter(model =>
       (!filterKey1 || !filterValue1 || model[filterKey1] === filterValue1) &&
-      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2)
+      (!filterKey2 || !filterValue2 || model[filterKey2] === filterValue2) &&
+      (!filterKey3 || !filterValue3 || model[filterKey3] === filterValue3)
     )
     .map(model => model[key]))).sort();
 };
 
-const getFilteredMorphologies = (mtype: string, etype: string): string[] => {
+const getFilteredMorphologies = (mtype: string, etype: string, layer?: Layer): string[] => {
   return modelsData
     .filter(model =>
       (!mtype || model.mtype === mtype) &&
-      (!etype || model.etype === etype)
+      (!etype || model.etype === etype) &&
+      (!layer || model.layer === layer)
     )
     .map(model => model.morphology);
 };
@@ -48,25 +52,26 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   const [singleCellData, setSingleCellData] = useState<any>(null);
   const [traceData, setTraceData] = useState<any>(null);
   const [populationData, setPopulationData] = useState<any>(null);
+  const [currentLayer, setCurrentLayer] = useState<Layer | undefined>(modelsData[0]?.layer as Layer | undefined); // Set default layer
 
-  const mtypes = useMemo(() => getUniqueValues('mtype'), []);
-  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype), [currentMtype]);
-  const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype), [currentMtype, currentEtype]);
+  const mtypes = useMemo(() => getUniqueValues('mtype', 'layer', currentLayer?.toString()), [currentLayer]);
+  const etypes = useMemo(() => getUniqueValues('etype', 'mtype', currentMtype, 'layer', currentLayer?.toString()), [currentMtype, currentLayer]);
+  const morphologies = useMemo(() => getFilteredMorphologies(currentMtype, currentEtype, currentLayer), [currentMtype, currentEtype, currentLayer]);
 
   useEffect(() => {
     if (Object.keys(query).length === 0) return;
 
-    const newMtypes = getUniqueValues('mtype');
+    const newMtypes = getUniqueValues('mtype', 'layer', currentLayer?.toString());
     const newMtype = query.mtype && typeof query.mtype === 'string' && newMtypes.includes(query.mtype)
       ? query.mtype
       : newMtypes[0] || '';
 
-    const newEtypes = getUniqueValues('etype', 'mtype', newMtype);
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype, 'layer', currentLayer?.toString());
     const newEtype = query.etype && typeof query.etype === 'string' && newEtypes.includes(query.etype)
       ? query.etype
       : newEtypes[0] || '';
 
-    const newMorphologies = getFilteredMorphologies(newMtype, newEtype);
+    const newMorphologies = getFilteredMorphologies(newMtype, newEtype, currentLayer);
     const newMorphology = query.morphology && typeof query.morphology === 'string' && newMorphologies.includes(query.morphology)
       ? query.morphology
       : newMorphologies[0] || '';
@@ -74,7 +79,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentMorphology(newMorphology);
-  }, [query]);
+  }, [query, currentLayer]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,9 +119,9 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   };
 
   const setMtype = (mtype: string) => {
-    const newEtypes = getUniqueValues('etype', 'mtype', mtype);
+    const newEtypes = getUniqueValues('etype', 'mtype', mtype, 'layer', currentLayer?.toString());
     const newEtype = newEtypes[0] || '';
-    const newMorphologies = getFilteredMorphologies(mtype, newEtype);
+    const newMorphologies = getFilteredMorphologies(mtype, newEtype, currentLayer);
     const newMorphology = newMorphologies[0] || '';
 
     setParams({
@@ -127,7 +132,7 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
   };
 
   const setEtype = (etype: string) => {
-    const newMorphologies = getFilteredMorphologies(currentMtype, etype);
+    const newMorphologies = getFilteredMorphologies(currentMtype, etype, currentLayer);
     const newMorphology = newMorphologies[0] || '';
 
     setParams({
@@ -142,7 +147,30 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
     });
   };
 
+  const setLayer = (layer: Layer) => {
+    setCurrentLayer(layer);
+    const newMtypes = getUniqueValues('mtype', 'layer', layer.toString());
+    const newMtype = newMtypes[0] || '';
+    const newEtypes = getUniqueValues('etype', 'mtype', newMtype, 'layer', layer.toString());
+    const newEtype = newEtypes[0] || '';
+    const newMorphologies = getFilteredMorphologies(newMtype, newEtype, layer);
+    const newMorphology = newMorphologies[0] || '';
+
+    setParams({
+      layer: layer.toString(),
+      mtype: newMtype,
+      etype: newEtype,
+      morphology: newMorphology,
+    });
+  };
+
   const qsEntries: QuickSelectorEntry[] = [
+    {
+      title: 'Layer',
+      key: 'layer',
+      values: Array.from(new Set(modelsData.map(model => model.layer))),
+      setFn: setLayer,
+    },
     {
       title: 'M-Type',
       key: 'mtype',
@@ -184,6 +212,18 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
           <div className="col-xs-12 col-lg-6">
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>
+                  Choose a layer
+                </div>
+                <div className="selector__selector-container">
+                  <LayerSelector3D
+                    value={currentLayer || undefined}
+                    onSelect={setLayer}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+              <div className={`selector__column theme-${theme}`}>
                 <div className={`selector__head theme-${theme}`}>Select reconstruction</div>
                 <div className="selector__body">
                   <List
@@ -222,11 +262,27 @@ const AcetylcholineEffectsOnCellView: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: 'singleCellSection', label: 'Single Cell' },
           { id: 'traceSection', label: 'Trace' },
           { id: 'populationSection', label: 'Population' },
         ]}
         quickSelectorEntries={qsEntries}
       >
+
+        <Collapsible id="singleCellSection" className="mt-4" title="Single Cell">
+          {singleCellData && (
+            <>
+
+              <PopulationFactsheet data={singleCellData} />
+              <div className="mt-4">
+                <DownloadButton onClick={() => downloadAsJson(singleCellData, `Single-Cell-factsheet.json`)} theme={theme}>
+                  Population Factsheet
+                </DownloadButton>
+              </div>
+            </>
+          )}
+        </Collapsible>
+
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
