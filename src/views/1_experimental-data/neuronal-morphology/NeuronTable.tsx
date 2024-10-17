@@ -67,13 +67,20 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
         return `/experimental-data/neuronal-morphology/?${params.toString()}#data`;
     };
 
-    const downloadHref = (fileUrl) => {
-        const link = document.createElement('a');
-        link.href = fileUrl;
-        link.download = 'downloadedFile.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const downloadHref = (fileUrl: string, fileName: string) => {
+        fetch(fileUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading the image:', error));
     };
 
     const NeuronTableColumns = [
@@ -84,8 +91,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             render: (name: string) => (
                 <div className="image-container">
                     <img
-
-                        src={`${basePath}/data/images/1_experimental-data/neuronal-morphology/${name}.png`}
+                        src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${name}.jpeg`}
                         alt={`neuron image ${name}`}
                         width={300}
                         height={187}
@@ -130,8 +136,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
                 <div>
                     <DownloadButton
                         theme={theme}
-
-                        href={`${basePath}/data/images/1_experimental-data/neuronal-morphology/${name}.png`}
+                        onClick={() => downloadHref(`${basePath}/data/images/1_experimental-data/slices/${name}.jpeg`, `${name}.jpeg`)}
                     >
                         Download image
                     </DownloadButton>
