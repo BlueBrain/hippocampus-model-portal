@@ -241,17 +241,7 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
             <div className="graph" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
-            <ul className="pl-4 list-disc list-inside">
-                <li>
-                    Dots: experimental data
-                </li>
-                <li>
-                    Solid line: fit
-                </li>
-                <li>
-                    Dotted line: extrapolation
-                </li>
-            </ul>
+
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `neuron-graph-data.json`)}>
                     Neuron
