@@ -71,11 +71,11 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             // Set up the layout
             setLayout({
                 xaxis: {
-                    title: { text: 'Time', standoff: 20 },
+                    title: { text: 'Time(s)', standoff: 20 },
                     showticklabels: true,
                     tickmode: 'array',
                     tickvals: [0, 1000, 2000, 3000, 4000, 5000],
-                    ticktext: ['0 ms', '1 s', '2 s', '3 s', '4 s', '5 s'],
+                    ticktext: ['0 ms', '1', '2', '3', '4', '5'],
                     range: [0, maxTime],
                 },
                 yaxis: {

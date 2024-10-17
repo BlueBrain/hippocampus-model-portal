@@ -12,7 +12,7 @@ const classPrefix = 'factsheet__';
 export type FactsheetEntryType = {
   name: string;
   description: string;
-  unit?: string;
+  units?: string;
   value?: number | string;
   values?: number[];
   value_map?: {
@@ -39,7 +39,7 @@ const FactsheetSingleValueEntry: React.FC<{
           {isNil(fact.value)
             ? (<span>-</span>)
             : (<span>
-              <NumberFormat value={fact.value} /> <Unit value={fact.unit} />
+              <NumberFormat value={fact.value} /> <Unit value={fact.units} />
             </span>)
           }
         </div>
@@ -76,7 +76,8 @@ const FactsheetSingleMeanStdEntry: React.FC<{
         </div>
         <div className="col-xs-4 value">
           {formatNumberWithoutCommas(formatValue(mean))}
-          {std !== '-' ? <> ± {formatNumberWithoutCommas(formatValue(std))}</> : ''} <Unit value={fact.unit} />
+          {std !== '-' ? <> ± {formatNumberWithoutCommas(formatValue(std))}</> : ''}
+          {fact.units && <> {fact.units}</>}
         </div>
       </div>
     );
@@ -89,7 +90,7 @@ const FactsheetMapValueEntry: React.FC<{
 }) => {
     // @ts-ignore
     const maxVal = Math.max.apply(null, Object.values(fact.value_map).map(s => parseFloat(s as string)));
-    const unitCode = fact.unit;
+    const unitCode = fact.units;
 
     // @ts-ignore
     const valueColumn = Object.entries(fact.value_map).map(([label, value]) => {

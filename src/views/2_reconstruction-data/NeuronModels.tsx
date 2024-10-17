@@ -15,7 +15,7 @@ import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
 import HttpData from "@/components/HttpData";
 import { dataPath } from "@/config";
-import { downloadAsJson } from "@/utils";
+import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import Factsheet from "@/components/Factsheet";
@@ -329,6 +329,33 @@ const Neurons: React.FC = () => {
     saveAs(content, 'neuron-model.zip');
   };
 
+
+  // Helper functions to fetch file content and folder structure
+  const fetchFileContent = async (path: string): Promise<string> => {
+    const response = await fetch(path);
+    return await response.text();
+  };
+
+  const fetchFilesFromFolder = async (url: string): Promise<{ name: string; path: string }[]> => {
+    try {
+      console.log("Fetching files from URL:", url);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const files = await response.json();
+      console.log("Files received:", files);
+      return files.map((file: string) => ({
+        name: file,
+        path: `${url}/${file}`
+      }));
+    } catch (error) {
+      console.error("Error fetching files from URL:", error);
+      return [];
+    }
+  };
+
+
   return (
     <>
       <Filters theme={theme}>
@@ -428,10 +455,7 @@ const Neurons: React.FC = () => {
           { id: "factsheetSection", label: "Factsheet" },
           { id: "efeaturesSection", label: "E-features" },
           { id: "mechansimsSection", label: "Mechanisms" },
-          {
-            id: "experimentalRecordingsSection",
-            label: "Experimental recordings used for this model",
-          },
+          { id: "experimentalRecordingsSection", label: "Experimental recordings used for this model" },
           { id: "downloadModelSection", label: "Download model" },
         ]}
         quickSelectorEntries={qsEntries}
@@ -446,10 +470,7 @@ const Neurons: React.FC = () => {
           </div>
           <DownloadButton
             onClick={() =>
-              downloadAsJson(
-                traceData,
-                `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-              )
+              downloadFile(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`, 'morphology.swc')
             }
             theme={theme}
           >
@@ -571,31 +592,6 @@ const Neurons: React.FC = () => {
 
     </>
   );
-};
-
-// Helper functions to fetch file content and folder structure
-const fetchFileContent = async (path: string): Promise<string> => {
-  const response = await fetch(path);
-  return await response.text();
-};
-
-const fetchFilesFromFolder = async (url: string): Promise<{ name: string; path: string }[]> => {
-  try {
-    console.log("Fetching files from URL:", url);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const files = await response.json();
-    console.log("Files received:", files);
-    return files.map((file: string) => ({
-      name: file,
-      path: `${url}/${file}`
-    }));
-  } catch (error) {
-    console.error("Error fetching files from URL:", error);
-    return [];
-  }
 };
 
 export default withPreselection(Neurons, {
