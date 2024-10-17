@@ -175,13 +175,7 @@ const MergedConnectionsView: React.FC = () => {
   const getPlotDataById = (id: string) =>
     factsheetData?.find((plot: any) => plot.id === id);
 
-  const renderPlot = (
-    id: string,
-    title: string,
-    xAxis: string,
-    yAxis: string,
-    xAxisTickStep: number
-  ) => {
+  const renderPlot = (id: string, title: string, xAxis: string, yAxis: string, xAxisTickStep: number) => {
     if (!availablePlots[id]) return null;
 
     const plotData = getPlotDataById(id);
