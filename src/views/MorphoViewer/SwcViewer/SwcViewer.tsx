@@ -9,6 +9,7 @@ import {
   TgdPainterClear,
   TgdPainterDepth,
   TgdPainterSegments,
+  TgdVec3,
 } from "@tgd";
 
 import styles from "./swc-viewer.module.css";
@@ -18,10 +19,17 @@ import { GizmoCanvas } from "../gizmo";
 import { interpolateCamera } from "../tools/interpolate-camera";
 import { Scalebar } from "../Scalebar";
 import { PixelScaleWatcher } from "../Scalebar/pixel-scale-watcher";
+import { CellNodes } from "../tools/nodes";
 
 export interface SwcViewerProps {
   className?: string;
   href: string;
+  loader?(href: string): Promise<
+    Array<{
+      nodes: CellNodes;
+      colors: string[];
+    }>
+  >;
 }
 
 /**
@@ -29,80 +37,116 @@ export interface SwcViewerProps {
  */
 const COLORS = ["#333", "#00f", "#f00", "#f0f", "#8a8"];
 
-export function SwcViewer({ className, href }: SwcViewerProps) {
+const defaultTextLoader = async (
+  href: string
+): Promise<
+  Array<{
+    nodes: CellNodes;
+    colors: string[];
+  }>
+> => {
+  const resp = await fetch(`${basePath}/${href}`);
+  const text = await resp.text();
+  return [{ nodes: parseSwc(text), colors: COLORS }];
+};
+
+export function SwcViewer({
+  className,
+  href,
+  loader = defaultTextLoader,
+}: SwcViewerProps) {
+  const [busy, setBusy] = React.useState(false);
+  const [error, setError] = React.useState("");
   const refWatcher = React.useRef(new PixelScaleWatcher());
   const refContainer = React.useRef<HTMLDivElement | null>(null);
   const refCanvas = React.useRef<HTMLCanvasElement | null>(null);
   const refGizmo = React.useRef(new GizmoCanvas());
   const refContext = React.useRef<TgdContext | null>(null);
-  const [swcContent, setSwcContent] = React.useState<string | null>(null);
   React.useEffect(() => {
     const action = async () => {
-      const resp = await fetch(`${basePath}/${href}`);
-      const text = await resp.text();
-      setSwcContent(text);
-      const canvas = refCanvas.current;
-      if (!canvas) return;
+      setBusy(true);
+      setError("");
+      try {
+        const canvas = refCanvas.current;
+        if (!canvas) return;
 
-      let context = refContext.current;
-      if (context) {
-        context.removeAll();
-      } else {
-        const camera = new TgdCameraOrthographic({
-          near: 1e-3,
-          far: 1e6,
-        });
-        context = new TgdContext(canvas, { camera });
-        refWatcher.current.context = context;
-        const orbiter = new TgdControllerCameraOrbit(context, {
-          minZoom: 0.1,
-          maxZoom: 100,
-          inertiaOrbit: 500,
-          fixedTarget: true,
-        });
-        orbiter.enabled = true;
-        const gizmo = refGizmo.current;
-        gizmo.attachCamera(camera);
-        gizmo.eventTipClick.addListener((journey) =>
-          interpolateCamera(context as TgdContext, journey)
+        const morphologies = await loader(href);
+        if (!morphologies) return;
+
+        let context = refContext.current;
+        if (context) {
+          context.removeAll();
+        } else {
+          const camera = new TgdCameraOrthographic({
+            near: 1e-3,
+            far: 1e6,
+          });
+          context = new TgdContext(canvas, { camera });
+          refWatcher.current.context = context;
+          const orbiter = new TgdControllerCameraOrbit(context, {
+            minZoom: 0.1,
+            maxZoom: 100,
+            inertiaOrbit: 500,
+            fixedTarget: true,
+          });
+          orbiter.enabled = true;
+          const gizmo = refGizmo.current;
+          gizmo.attachCamera(camera);
+          gizmo.eventTipClick.addListener((journey) =>
+            interpolateCamera(context as TgdContext, journey)
+          );
+          gizmo.eventOrbit.addListener(context.paint);
+        }
+        context.add(
+          new TgdPainterClear(context, {
+            color: [239 / 255, 241 / 255, 248 / 255, 1],
+            depth: 1,
+          }),
+          new TgdPainterDepth(context, {
+            enabled: true,
+            func: "LESS",
+            mask: true,
+            rangeMin: 0,
+            rangeMax: 1,
+          })
         );
-        gizmo.eventOrbit.addListener(context.paint);
+        const center = new TgdVec3();
+        let minY = Number.MAX_VALUE;
+        let maxY = -Number.MAX_VALUE;
+        for (const { nodes, colors } of morphologies) {
+          center.add(nodes.center);
+          const halfHeight = nodes.bbox[1] * 0.5;
+          minY = Math.min(minY, nodes.center.y - halfHeight);
+          maxY = Math.max(maxY, nodes.center.y + halfHeight);
+          const data = nodesToSegmentsData(nodes);
+          const painter = new TgdPainterSegments(context, data, {
+            minRadius: 0.25,
+          });
+          painter.colorTexture.makePalette(colors);
+          const painterOutline = new TgdPainterSegments(context, data, {
+            minRadius: 0.25,
+          });
+          painterOutline.radiusMultiplier = 1.2;
+          painterOutline.light = 0;
+          painterOutline.shiftZ = 2;
+          context.add(painter, painterOutline);
+        }
+        context.camera.spaceHeightAtTarget = Math.abs(maxY - minY);
+        center.scale(1 / morphologies.length);
+        context.camera.target = center;
+        context.paint();
+        refContext.current = context;
+      } catch (ex) {
+        console.error("Unable to load data for SwcViewer!");
+        console.error(ex);
+        const msg = ex instanceof Error ? ex.message : JSON.stringify(ex);
+        setError(msg);
+      } finally {
+        setBusy(false);
       }
-      const nodes = parseSwc(text);
-      const data = nodesToSegmentsData(nodes);
-      context.camera.target = nodes.center;
-      context.camera.spaceHeightAtTarget = nodes.bbox[1] * 2.5;
-      console.log("🚀 [SwcViewer] data = ", data); // @FIXME: Remove this line written on 2024-10-08 at 10:09
-      const painter = new TgdPainterSegments(context, data, {
-        minRadius: 0.25,
-      });
-      painter.colorTexture.makePalette(COLORS);
-      const painterOutline = new TgdPainterSegments(context, data, {
-        minRadius: 0.25,
-      });
-      painterOutline.radiusMultiplier = 1.2;
-      painterOutline.light = 0;
-      painterOutline.shiftZ = 2;
-      context.add(
-        new TgdPainterClear(context, {
-          color: [239 / 255, 241 / 255, 248 / 255, 1],
-          depth: 1,
-        }),
-        new TgdPainterDepth(context, {
-          enabled: true,
-          func: "LESS",
-          mask: true,
-          rangeMin: 0,
-          rangeMax: 1,
-        }),
-        painter,
-        painterOutline
-      );
-      context.paint();
-      refContext.current = context;
     };
     void action();
-  }, [href]);
+  }, [href, loader]);
   const handleFullscreen = () => tgdFullscreenToggle(refContainer.current);
 
   return (
@@ -147,6 +191,19 @@ export function SwcViewer({ className, href }: SwcViewerProps) {
           </div>
         </div>
       </div>
+      {busy && (
+        <div className={styles.busy}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>loading</title>
+            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+          </svg>
+        </div>
+      )}
+      {error && (
+        <div className={styles.error}>
+          <div>{error}</div>
+        </div>
+      )}
     </div>
   );
 }

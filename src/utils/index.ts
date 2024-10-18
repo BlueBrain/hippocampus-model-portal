@@ -1,6 +1,6 @@
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 
-import { nexus, hippocampus } from '../config';
+import { nexus, hippocampus } from "../config";
 
 interface ParsedNexusUrl {
   deployment: string;
@@ -12,31 +12,31 @@ interface ParsedNexusUrl {
 }
 
 const nexusEntities = [
-  'orgs',
-  'projects',
-  'acls',
-  'views',
-  'resources',
-  'files',
+  "orgs",
+  "projects",
+  "acls",
+  "views",
+  "resources",
+  "files",
 ];
 
 const nexusUrlR = new RegExp(
   [
-    '^',
-    '(https?://.+)', // nexus deployment
-    '/',
-    `(${nexusEntities.join('|')})`, // entity type
-    '/',
-    '([^/]+)', // org
-    '/',
-    '([^/]+)', // proj
-    '/?',
-    '([^/]+)?', // schema [optional]
-    '/?',
-    '([^/]+)?', // id [optional]
-    '/?',
-    '$',
-  ].join(''),
+    "^",
+    "(https?://.+)", // nexus deployment
+    "/",
+    `(${nexusEntities.join("|")})`, // entity type
+    "/",
+    "([^/]+)", // org
+    "/",
+    "([^/]+)", // proj
+    "/?",
+    "([^/]+)?", // schema [optional]
+    "/?",
+    "([^/]+)?", // id [optional]
+    "/?",
+    "$",
+  ].join("")
 );
 
 /**
@@ -51,19 +51,19 @@ const nexusUrlR = new RegExp(
  * @param nexusUrl
  */
 export const parseUrl = (nexusUrl: string): ParsedNexusUrl => {
-  if (!nexusUrl) throw new Error('selfUrl should be defined');
+  if (!nexusUrl) throw new Error("selfUrl should be defined");
 
-  const mulEntityTypeR = new RegExp(`(${nexusEntities.join('|')})`, 'g');
+  const mulEntityTypeR = new RegExp(`(${nexusEntities.join("|")})`, "g");
   const mulEntityTypeMatch = nexusUrl.match(mulEntityTypeR);
   if (mulEntityTypeMatch && mulEntityTypeMatch.length > 1) {
     throw new Error(
-      'Url contains multiple entity types which is not supported',
+      "Url contains multiple entity types which is not supported"
     );
   }
 
   const matches = nexusUrl.match(nexusUrlR);
   if (!matches || matches.length <= 5) {
-    throw new Error('Error while parsing selfUrl');
+    throw new Error("Error while parsing selfUrl");
   }
 
   return {
@@ -78,45 +78,42 @@ export const parseUrl = (nexusUrl: string): ParsedNexusUrl => {
 
 type composeNexusUrlArg = {
   id: string;
-  type: 'resource' | 'file';
+  type: "resource" | "file";
   org?: string;
   project?: string;
-}
+};
 
 export const composeNexusUrl: (composeNexusUrlArg) => string = ({
   id,
-  type = 'file',
+  type = "file",
   org = hippocampus.org,
   project = hippocampus.project,
 }) => {
   if (!id) {
-    throw new Error('id should be defined');
+    throw new Error("id should be defined");
   }
 
   return `${nexus.url}/${type}s/${org}/${project}/${encodeURIComponent(id)}`;
 };
 
-
 export function downloadAsJson(data, name) {
   const dataBlob = new Blob([JSON.stringify(data)]);
   saveAs(dataBlob, name);
-};
-
+}
 
 export function downloadFile(url: string, fileName: string) {
   fetch(url)
-    .then(response => response.blob())
-    .then(blob => {
-      const link = document.createElement('a');
+    .then((response) => response.blob())
+    .then((blob) => {
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     })
-    .catch(error => console.error('Error downloading file:', error));
-};
-
+    .catch((error) => console.error("Error downloading file:", error));
+}
 
 export function entryToArray(entry) {
   if (Array.isArray(entry)) return entry;
@@ -125,5 +122,9 @@ export function entryToArray(entry) {
 }
 
 export function getCompareByFn(compareProp) {
-  return (obj1, obj2) => obj1[compareProp] > obj2[compareProp] ? 1 : -1;
+  return (obj1, obj2) => (obj1[compareProp] > obj2[compareProp] ? 1 : -1);
+}
+
+export function classNames(...classes: unknown[]): string {
+  return classes.filter((name) => typeof name === "string").join(" ");
 }
