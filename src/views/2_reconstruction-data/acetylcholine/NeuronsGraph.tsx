@@ -238,20 +238,16 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                     {data ? `\\[${data.equation}\\]` : ''}
                 </MathJax>
             </MathJaxContext>
+
             <div className="graph" style={{ height: '400px' }}>
                 <canvas ref={chartRef} />
             </div>
-            <ul className="pl-4 list-disc list-inside">
-                <li>
-                    Dots: experimental data
-                </li>
-                <li>
-                    Solid line: fit
-                </li>
-                <li>
-                    Dotted line: extrapolation
-                </li>
+            <ul className='graph flex flex-row gap-4 !py-2'>
+                <li>• Experimental data</li>
+                <li>― Fit</li>
+                <li>- - Extrapolated</li>
             </ul>
+
             <div className="mt-4">
                 <DownloadButton theme={theme} onClick={() => data && downloadAsJson(data, `neuron-graph-data.json`)}>
                     Neuron

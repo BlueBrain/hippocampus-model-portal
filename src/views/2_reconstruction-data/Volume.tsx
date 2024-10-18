@@ -26,6 +26,7 @@ import selectorStyle from '@/styles/selector.module.scss';
 import { VolumeSection, QuickSelectorEntry } from '@/types';
 import { colorName } from './config';
 import DownloadButton from '@/components/DownloadButton';
+import NeuronFactsheet from '../1_experimental-data/neuronal-morphology/NeuronFactsheet';
 
 const VolumeView: React.FC = () => {
   const router = useRouter();
@@ -109,16 +110,38 @@ const VolumeView: React.FC = () => {
             <div className="graph no-padding">
               <VolumeViewer meshPath={`${basePath}/data/3d/2_reconstruction-data/volume/volume.obj`} volumeSection={volumeSection} onReady={() => setVolumeViewerReady(true)} />
             </div>
-            <div className="mt-4">
-              <DownloadButton onClick={() => downloadAsJson(`${basePath}/data/2_reconstruction-data/volume/volume_analysis.json`, 'volume_analysis.json')} theme={theme}> Volume analysis </DownloadButton>
-            </div>
+
           </Spin>
 
 
-          <p className="mt-3">
+          <p className="mt-4">
             Related: <Link href="/experimental-data/layer-anatomy/">Experimental data - Layer anatomy</Link>
           </p>
-        </Collapsible>
+
+          <div className="mt-12">
+            <h2 className='text-lg'>Volume analysis</h2>
+            <HttpData
+              path={`${basePath}/data/2_reconstruction-data/volume/volume_analysis.json`}
+            >
+              {(factsheetData) => (
+                <>
+                  {factsheetData && (
+                    <>
+                      <Factsheet facts={factsheetData.values} />
+                    </>
+                  )}
+                  <div className="mt-4">
+                    <DownloadButton onClick={() => downloadAsJson(factsheetData.values, 'volume_analysis.json')} theme={theme}> Volume analysis </DownloadButton>
+                  </div>
+                </>
+              )}
+
+
+            </HttpData>
+
+          </div>
+
+        </Collapsible >
 
         <Collapsible id="coordinatesSection" title="Coordinates" className="mt-4" properties={[volumeSection]}>
           <p>Due to its curvature and irregularities, the volume of CA1 is difficult to manipulate. For this reason, we define a coordinate system that follows the hippocampal axes (longitudinal, transverse, radial).</p>
@@ -129,7 +152,7 @@ const VolumeView: React.FC = () => {
           </div>
 
         </Collapsible>
-      </DataContainer>
+      </DataContainer >
     </>
   );
 };

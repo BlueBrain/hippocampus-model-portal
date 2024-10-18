@@ -15,7 +15,7 @@ import TraceGraph from './components/Trace';
 
 import Filters from '@/layouts/Filters';
 
-import { cellGroup, defaultSelection, volumeSections } from '@/constants';
+import { cellGroup, defaultSelection, graphTheme, themeColors, volumeSections } from '@/constants';
 
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 
@@ -24,6 +24,7 @@ import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import Factsheet from '@/components/Factsheet';
 import withPreselection from '@/hoc/with-preselection';
+import AuthorBox from '@/components/AuthorBox/AuthorBox';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -275,14 +276,12 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'LaminarDistributionSynapsesSection', label: 'Laminar dist. of synapses' },
           { id: 'SampleConvergenceByConnectionSection', label: 'Convergence connections dist.' },
           { id: 'SampleConvergenceBySynapsesSection', label: 'Convergence synapses dist.' },
-          /* { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability'  }, */
           { label: 'Physiology', isTitle: true },
           { id: 'PSPAmplitudeSection', label: 'PSP Amplitude dist.' },
           { id: 'PSPCVSection', label: 'PSP CV dist.' },
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
           { id: 'RiseTimeSection', label: 'Rise time constant dist.' },
           { id: 'DecayTimeConstantSection', label: 'Decay time constant dist.' },
-          /* { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' }, */
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
@@ -290,8 +289,14 @@ const SchafferCollateralsView: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
 
+        <div className='pb-4'>
+          <AuthorBox hasIcon={false}>
+            <span className='text-base'>Mean connection probability: <span className='font-semibold'>0.0715758</span></span>
+          </AuthorBox>
+        </div>
+
         {availablePlots.SynapsesPerConnection && (
-          <Collapsible title="Number of synapses per connection distribution + mean and std" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>
+          <Collapsible title="Number of synapses per connection distribution" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>
             <div className="graph">
               <DistrbutionPlot
                 plotData={getPlotDataById('synapses-per-connection')}
@@ -321,7 +326,7 @@ const SchafferCollateralsView: React.FC = () => {
         )}
 
         {availablePlots.SampleDivergenceByConnection && (
-          <Collapsible title="Divergence (connections) distribution + mean and std" id="DivergenceConnectionSection" properties={["Anatomy"]}>
+          <Collapsible title="Divergence (connections) distribution" id="DivergenceConnectionSection" properties={["Anatomy"]}>
             <div className="graph">
               <DistrbutionPlot
                 plotData={getPlotDataById('sample-divergence-by-connection')}
@@ -344,7 +349,7 @@ const SchafferCollateralsView: React.FC = () => {
         )}
 
         {availablePlots.SampleDivergenceBySynapse && (
-          <Collapsible title="Divergence (synapses) distribution + mean and std" id="DivergenceSynapsesSection" properties={["Anatomy"]}>
+          <Collapsible title="Divergence (synapses) distribution" id="DivergenceSynapsesSection" properties={["Anatomy"]}>
             <div className="graph">
               <DistrbutionPlot
                 plotData={getPlotDataById('sample-divergence-by-synapse')}
@@ -373,7 +378,7 @@ const SchafferCollateralsView: React.FC = () => {
         </Collapsible>
 
         {availablePlots.SampleConvergenceByConnection && (
-          <Collapsible title="Convergence (connections) distribution + mean and std" id="SampleConvergenceByConnectionSection" properties={["Anatomy"]}>
+          <Collapsible title="Convergence (connections) distribution" id="SampleConvergenceByConnectionSection" properties={["Anatomy"]}>
             <div className="graph">
               <DistrbutionPlot
                 plotData={getPlotDataById('sample-convergence-by-connection')}
@@ -396,7 +401,7 @@ const SchafferCollateralsView: React.FC = () => {
         )}
 
         {availablePlots.SampleConvergenceBySynapse && (
-          <Collapsible title="Convergence (synapses) distribution + mean and std" id="SampleConvergenceBySynapsesSection" properties={["Anatomy"]}>
+          <Collapsible title="Convergence (synapses) distribution" id="SampleConvergenceBySynapsesSection" properties={["Anatomy"]}>
             <div className="graph">
               <DistrbutionPlot
                 plotData={getPlotDataById('sample-convergence-by-synapse')}
@@ -417,15 +422,6 @@ const SchafferCollateralsView: React.FC = () => {
             </div>
           </Collapsible>
         )}
-
-        <Collapsible title='Mean connection probability + std' id='MeanConnectionProbabilitySection' properties={["Anatomy"]}>
-          <Factsheet facts={[{
-            name: 'Value',
-            description: "",
-            value: 0.07157589478256018,
-
-          }]} />
-        </Collapsible>
 
         {availablePlots.PSPAmplitude && (
           <Collapsible title="PSP Amplitude" id="PSPAmplitudeSection" properties={["Physiology"]}>
@@ -475,7 +471,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         {(availablePlots.SynapseLatency || availablePlots.SynapseLatencyFromSimulation) && (
           <Collapsible
-            title="Synapse latency distribution + mean and std"
+            title="Synapse latency distribution"
             id="SynapseLatencySection"
             properties={["Physiology"]}
           >
@@ -553,7 +549,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         {
           availablePlots.RiseTimeFromSimulation && (
-            <Collapsible title="Rise time constant distribution + mean and std" id="RiseTimeSection" properties={["Physiology"]}>
+            <Collapsible title="Rise time constant distribution" id="RiseTimeSection" properties={["Physiology"]}>
               <div className="graph">
                 <DistrbutionPlot
                   plotData={getPlotDataById('rise-time-constant-for-simulation')}
@@ -578,7 +574,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         {availablePlots.DecayTimeConstant && (
           <Collapsible
-            title="Decay time constant distribution + mean and std"
+            title="Decay time constant distribution"
             id="DecayTimeConstantSection"
             properties={["Physiology"]}
           >
@@ -615,7 +611,7 @@ const SchafferCollateralsView: React.FC = () => {
 
         {
           availablePlots.NMDAAMPARatio && (
-            <Collapsible title="NMDA/AMPA ratio distribution + mean and std" id="NMDAAMPARatioSection" properties={["Physiology"]}>
+            <Collapsible title="NMDA/AMPA ratio distribution" id="NMDAAMPARatioSection" properties={["Physiology"]}>
               <div className="graph">
                 <DistrbutionPlot
                   xAxisTickStep={1}
@@ -642,7 +638,7 @@ const SchafferCollateralsView: React.FC = () => {
         */ }
 
         <Collapsible
-          title="Distribution + mean and std of U, D, F, NRRP"
+          title="Distribution of U, D, F, NRRP"
           id="UParameterSection"
           properties={["Physiology"]}
         >

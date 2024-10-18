@@ -15,7 +15,7 @@ import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
 import HttpData from "@/components/HttpData";
 import { dataPath } from "@/config";
-import { downloadAsJson } from "@/utils";
+import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import Factsheet from "@/components/Factsheet";
@@ -28,6 +28,8 @@ import EFeature from "./neuron-model/EFeature";
 
 import { Layer } from "@/types";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 type ModelData = {
   layer: Layer;
@@ -292,6 +294,68 @@ const Neurons: React.FC = () => {
     },
   ];
 
+  const handleDownload = async () => {
+    const zip = new JSZip();
+
+    // Add electrophysiology folder
+    const electroPhysiologyFolder = zip.folder('electrophysiology');
+    const electroPhysiologyFiles = await fetchFilesFromFolder(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology`);
+    for (const file of electroPhysiologyFiles) {
+      const content = await fetchFileContent(file.path);
+      electroPhysiologyFolder?.file(file.name, content);
+    }
+
+    // Add morphology file
+    const morphologyContent = await fetchFileContent(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`);
+    zip.file('morphology/morphology.swc', morphologyContent);
+
+    // Add mechanisms folder
+    const mechanismsFolder = zip.folder('mechanisms');
+    const mechanismFiles = await fetchFilesFromFolder(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms`);
+    for (const file of mechanismFiles) {
+      const content = await fetchFileContent(file.path);
+      mechanismsFolder?.file(file.name, content);
+    }
+
+    // Add readme and script files
+    const readmeContent = await fetchFileContent(`${dataPath}/2_reconstruction-data/neuron-models/readme.md`);
+    zip.file('readme.md', readmeContent);
+
+    const scriptContent = await fetchFileContent(`${dataPath}/2_reconstruction-data/neuron-models/script.py`);
+    zip.file('script.py', scriptContent);
+
+    // Generate and download the zip file
+    const content = await zip.generateAsync({ type: 'blob' });
+    saveAs(content, 'neuron-model.zip');
+  };
+
+
+  // Helper functions to fetch file content and folder structure
+  const fetchFileContent = async (path: string): Promise<string> => {
+    const response = await fetch(path);
+    return await response.text();
+  };
+
+  const fetchFilesFromFolder = async (url: string): Promise<{ name: string; path: string }[]> => {
+    try {
+      console.log("Fetching files from URL:", url);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const files = await response.json();
+      console.log("Files received:", files);
+      return files.map((file: string) => ({
+        name: file,
+        path: `${url}/${file}`
+      }));
+    } catch (error) {
+      console.error("Error fetching files from URL:", error);
+      return [];
+    }
+  };
+
+
   return (
     <>
       <Filters theme={theme}>
@@ -391,10 +455,7 @@ const Neurons: React.FC = () => {
           { id: "factsheetSection", label: "Factsheet" },
           { id: "efeaturesSection", label: "E-features" },
           { id: "mechansimsSection", label: "Mechanisms" },
-          {
-            id: "experimentalRecordingsSection",
-            label: "Experimental recordings used for this model",
-          },
+          { id: "experimentalRecordingsSection", label: "Experimental recordings used for this model" },
           { id: "downloadModelSection", label: "Download model" },
         ]}
         quickSelectorEntries={qsEntries}
@@ -409,10 +470,7 @@ const Neurons: React.FC = () => {
           </div>
           <DownloadButton
             onClick={() =>
-              downloadAsJson(
-                traceData,
-                `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-              )
+              downloadFile(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`, 'morphology.swc')
             }
             theme={theme}
           >
@@ -512,45 +570,7 @@ const Neurons: React.FC = () => {
           title="Download model"
           properties={[currentLayer, currentMtype, currentEtype, currentInstance]}
         >
-          <h2 className="mb-2 text-lg">
-            Individual files:
-          </h2>
 
-          <div className="flex flex-row gap-4">
-            <DownloadButton
-              onClick={() =>
-                downloadAsJson(
-                  traceData,
-                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-                )
-              }
-              theme={theme}
-            >
-              Trace
-            </DownloadButton>
-            <DownloadButton
-              onClick={() =>
-                downloadAsJson(
-                  traceData,
-                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-                )
-              }
-              theme={theme}
-            >
-              Morphology
-            </DownloadButton>
-            <DownloadButton
-              onClick={() =>
-                downloadAsJson(
-                  traceData,
-                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-                )
-              }
-              theme={theme}
-            >
-              Factsheet
-            </DownloadButton>
-          </div>
 
           <h2 className=" mt-8 mb-2 text-lg">
             Download all files as a zip archive:
@@ -558,12 +578,7 @@ const Neurons: React.FC = () => {
 
           <div className="flex flex-row gap-4">
             <DownloadButton
-              onClick={() =>
-                downloadAsJson(
-                  traceData,
-                  `${currentLayer}-${currentMtype}-${currentEtype}-${currentInstance}-trace.json`
-                )
-              }
+              onClick={handleDownload}
               theme={theme}
             >
               Download Model

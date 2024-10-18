@@ -13,9 +13,6 @@ import Collapsible from '@/components/Collapsible';
 import SCAnatomySection from './schaffer-collaterals/SCAnatomySection';
 import SCSynapsePhysiologySection from './schaffer-collaterals/SCSynapsePhysiologySection';
 
-// Config Import
-import { colorName } from './config';
-
 const SchafferCollateralsView: React.FC = () => {
   const theme = 1;
 

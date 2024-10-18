@@ -2,316 +2,379 @@
     {
         "morphology": "455995",
         "etype": "cNAC",
-        "mtype": "SO_BP"
+        "mtype": "SO_BP",
+        "layer": "SO"
     },
     {
         "morphology": "455996",
         "etype": "cNAC",
-        "mtype": "SO_BP"
+        "mtype": "SO_BP",
+        "layer": "SO"
     },
     {
         "morphology": "455997",
         "etype": "cNAC",
-        "mtype": "SO_BP"
+        "mtype": "SO_BP",
+        "layer": "SO"
     },
     {
         "morphology": "455998",
         "etype": "cNAC",
-        "mtype": "SO_BP"
+        "mtype": "SO_BP",
+        "layer": "SO"
     },
     {
         "morphology": "455999",
         "etype": "cNAC",
-        "mtype": "SO_BP"
+        "mtype": "SO_BP",
+        "layer": "SO"
     },
     {
         "morphology": "450290",
         "etype": "cAC",
-        "mtype": "SO_OLM"
+        "mtype": "SO_OLM",
+        "layer": "SO"
     },
     {
         "morphology": "450291",
         "etype": "cAC",
-        "mtype": "SO_OLM"
+        "mtype": "SO_OLM",
+        "layer": "SO"
     },
     {
         "morphology": "450292",
         "etype": "cAC",
-        "mtype": "SO_OLM"
+        "mtype": "SO_OLM",
+        "layer": "SO"
     },
     {
         "morphology": "450294",
         "etype": "cAC",
-        "mtype": "SO_OLM"
+        "mtype": "SO_OLM",
+        "layer": "SO"
     },
     {
         "morphology": "454569",
         "etype": "cAC",
-        "mtype": "SO_Tri"
+        "mtype": "SO_Tri",
+        "layer": "SO"
     },
     {
         "morphology": "454570",
         "etype": "cAC",
-        "mtype": "SO_Tri"
+        "mtype": "SO_Tri",
+        "layer": "SO"
     },
     {
         "morphology": "454571",
         "etype": "cAC",
-        "mtype": "SO_Tri"
+        "mtype": "SO_Tri",
+        "layer": "SO"
     },
     {
         "morphology": "454572",
         "etype": "cAC",
-        "mtype": "SO_Tri"
+        "mtype": "SO_Tri",
+        "layer": "SO"
     },
     {
         "morphology": "454573",
         "etype": "cAC",
-        "mtype": "SO_Tri"
+        "mtype": "SO_Tri",
+        "layer": "SO"
     },
     {
         "morphology": "430019",
         "etype": "bAC",
-        "mtype": "SP_AA"
+        "mtype": "SP_AA",
+        "layer": "SP"
     },
     {
         "morphology": "430020",
         "etype": "bAC",
-        "mtype": "SP_AA"
+        "mtype": "SP_AA",
+        "layer": "SP"
     },
     {
         "morphology": "430021",
         "etype": "bAC",
-        "mtype": "SP_AA"
+        "mtype": "SP_AA",
+        "layer": "SP"
     },
     {
         "morphology": "430022",
         "etype": "bAC",
-        "mtype": "SP_AA"
+        "mtype": "SP_AA",
+        "layer": "SP"
     },
     {
         "morphology": "426580",
         "etype": "bAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426587",
         "etype": "bAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426595",
         "etype": "bAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426598",
         "etype": "bAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426603",
         "etype": "bAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426576",
         "etype": "cNAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426577",
         "etype": "cNAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426578",
         "etype": "cNAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426579",
         "etype": "cNAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "426581",
         "etype": "cNAC",
-        "mtype": "SP_BS"
+        "mtype": "SP_BS",
+        "layer": "SP"
     },
     {
         "morphology": "419490",
         "etype": "cAC",
-        "mtype": "SP_CCKBC"
+        "mtype": "SP_CCKBC",
+        "layer": "SP"
     },
     {
         "morphology": "419491",
         "etype": "cAC",
-        "mtype": "SP_CCKBC"
+        "mtype": "SP_CCKBC",
+        "layer": "SP"
     },
     {
         "morphology": "419492",
         "etype": "cAC",
-        "mtype": "SP_CCKBC"
+        "mtype": "SP_CCKBC",
+        "layer": "SP"
     },
     {
         "morphology": "419493",
         "etype": "cAC",
-        "mtype": "SP_CCKBC"
+        "mtype": "SP_CCKBC",
+        "layer": "SP"
     },
     {
         "morphology": "419494",
         "etype": "cAC",
-        "mtype": "SP_CCKBC"
+        "mtype": "SP_CCKBC",
+        "layer": "SP"
     },
     {
         "morphology": "432267",
         "etype": "bAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432268",
         "etype": "bAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432272",
         "etype": "bAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432273",
         "etype": "bAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432275",
         "etype": "bAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432269",
         "etype": "cNAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432270",
         "etype": "cNAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432271",
         "etype": "cNAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432274",
         "etype": "cNAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "432280",
         "etype": "cNAC",
-        "mtype": "SP_Ivy"
+        "mtype": "SP_Ivy",
+        "layer": "SP"
     },
     {
         "morphology": "1672",
         "etype": "cACpyr",
-        "mtype": "SP_PC"
+        "mtype": "SP_PC",
+        "layer": "SP"
     },
     {
         "morphology": "1673",
         "etype": "cACpyr",
-        "mtype": "SP_PC"
+        "mtype": "SP_PC",
+        "layer": "SP"
     },
     {
         "morphology": "1674",
         "etype": "cACpyr",
-        "mtype": "SP_PC"
+        "mtype": "SP_PC",
+        "layer": "SP"
     },
     {
         "morphology": "1675",
         "etype": "cACpyr",
-        "mtype": "SP_PC"
+        "mtype": "SP_PC",
+        "layer": "SP"
     },
     {
         "morphology": "1676",
         "etype": "cACpyr",
-        "mtype": "SP_PC"
+        "mtype": "SP_PC",
+        "layer": "SP"
     },
     {
         "morphology": "408342",
         "etype": "bAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408353",
         "etype": "bAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408359",
         "etype": "bAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408361",
         "etype": "bAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408370",
         "etype": "bAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408338",
         "etype": "cNAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408339",
         "etype": "cNAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408340",
         "etype": "cNAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408341",
         "etype": "cNAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "408343",
         "etype": "cNAC",
-        "mtype": "SP_PVBC"
+        "mtype": "SP_PVBC",
+        "layer": "SP"
     },
     {
         "morphology": "864",
         "etype": "cAC",
-        "mtype": "SR_SCA"
+        "mtype": "SR_SCA",
+        "layer": "SR"
     },
     {
         "morphology": "865",
         "etype": "cAC",
-        "mtype": "SR_SCA"
+        "mtype": "SR_SCA",
+        "layer": "SR"
     },
     {
         "morphology": "866",
         "etype": "cAC",
-        "mtype": "SR_SCA"
+        "mtype": "SR_SCA",
+        "layer": "SR"
     },
     {
         "morphology": "867",
         "etype": "cAC",
-        "mtype": "SR_SCA"
+        "mtype": "SR_SCA",
+        "layer": "SR"
     },
     {
         "morphology": "868",
         "etype": "cAC",
-        "mtype": "SR_SCA"
+        "mtype": "SR_SCA",
+        "layer": "SR"
     }
 ]

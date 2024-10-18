@@ -102,6 +102,9 @@ const getPlotData = (
 };
 
 const formatScientificNotation = (value: number): string => {
+  if (Math.abs(value) < 1000 && Number.isInteger(value)) {
+    return value.toString();
+  }
   if (value === 0) return '0';
   const exponent = Math.floor(Math.log10(Math.abs(value)));
   const mantissa = value / Math.pow(10, exponent);

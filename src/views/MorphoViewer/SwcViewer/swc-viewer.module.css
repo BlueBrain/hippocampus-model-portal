@@ -6,7 +6,7 @@
   overflow: hidden;
 }
 
-.main>canvas.gizmo {
+.main > canvas.gizmo {
   position: absolute;
   left: auto;
   bottom: auto;
@@ -20,12 +20,12 @@
   transition: all 0.3s;
 }
 
-.main>canvas.gizmo:hover {
+.main > canvas.gizmo:hover {
   box-shadow: 0 0 16px #0005;
   background: #0005;
 }
 
-.main>canvas {
+.main > canvas {
   position: absolute;
   left: 0;
   top: 0;
@@ -33,7 +33,7 @@
   height: 100%;
 }
 
-.main>button {
+.main > button {
   all: unset;
   position: absolute;
   left: 1em;
@@ -52,12 +52,12 @@
   color: darkgray;
 }
 
-.main>button>svg {
+.main > button > svg {
   width: 2em;
   height: 2em;
 }
 
-.main>.scalebar {
+.main > .scalebar {
   position: absolute;
   left: 0;
   top: auto;
@@ -65,11 +65,11 @@
   right: 0;
   width: 100%;
   height: 24px;
-  background-color: rgba(#F0F1F9, .5);
+  background-color: rgba(#f0f1f9, 0.5);
   backdrop-filter: blur(3px);
 }
 
-.main>.legend {
+.main > .legend {
   position: absolute;
   left: 0;
   top: 0;
@@ -84,7 +84,7 @@
   font-weight: normal;
 }
 
-.main>.legend>div {
+.main > .legend > div {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -94,15 +94,62 @@
   backdrop-filter: blur(3px);
 }
 
-.main>.legend>div>div {
+.main > .legend > div > div {
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 0.5em;
 }
 
-.main>.legend>div>div>div:first-child {
+.main > .legend > div > div > div:first-child {
   width: 1em;
   height: 1em;
   border-radius: 50%;
+}
+
+.busy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+  color: #000;
+}
+
+.busy > svg {
+  width: 5em;
+  height: 5em;
+  animation: anim-rotate 0.7s linear infinite;
+}
+
+@keyframes anim-rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+}
+
+.error > div {
+  max-width: 50%;
+  padding: 1em;
+  box-shadow: 0 0.5em 1em #000;
+  background: #f30;
+  color: #fffe;
+  white-space: pre-wrap;
 }
