@@ -39,6 +39,7 @@ const MergedConnectionsView: React.FC = () => {
     {}
   );
   const [laminarData, setLaminarData] = useState<any>(null);
+  const [laminarDataError, setLaminarDataError] = useState<string | null>(null);
 
   const theme = 3;
 
@@ -142,15 +143,32 @@ const MergedConnectionsView: React.FC = () => {
     try {
       const { volume_section, prelayer, postlayer } = quickSelection;
       const filePath = `${basePath}/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      console.log("Fetching laminar data from:", filePath);
+
       const response = await fetch(filePath);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log("Fetched laminar data:", data);
 
       const laminarDistribution = data.values.find(
         (plot: any) => plot.id === "laminar-distribution"
       );
-      setLaminarData(laminarDistribution);
+
+      if (!laminarDistribution) {
+        console.warn("No laminar distribution data found in the response");
+        setLaminarDataError("No laminar distribution data available for this selection.");
+        setLaminarData(null);
+      } else {
+        setLaminarData(laminarDistribution);
+        setLaminarDataError(null);
+      }
     } catch (error) {
       console.error("Error fetching laminar data:", error);
+      setLaminarDataError("Error loading laminar distribution data. Please try again later.");
+      setLaminarData(null);
     }
   };
 
@@ -215,6 +233,47 @@ const MergedConnectionsView: React.FC = () => {
             </span>
           </DownloadButton>
         </div>
+      </Collapsible>
+    );
+  };
+
+  const renderLaminarDistribution = () => {
+    if (laminarDataError) {
+      return (
+        <Collapsible
+          title="Laminar distribution of synapses"
+          id="laminar-distribution-synapses"
+        >
+          <div className="text-center p-4">
+            <p className="text-red-500">{laminarDataError}</p>
+          </div>
+        </Collapsible>
+      );
+    }
+
+    if (!laminarData) {
+      return (
+        <Collapsible
+          title="Laminar distribution of synapses"
+          id="laminar-distribution-synapses"
+        >
+          <div className="text-center p-4">
+            <p>Loading laminar distribution data...</p>
+          </div>
+        </Collapsible>
+      );
+    }
+
+    return (
+      <Collapsible
+        title="Laminar distribution of synapses"
+        id="laminar-distribution-synapses"
+      >
+        <LaminarGraph
+          data={laminarData}
+          title="Laminar Distribution of Synapses"
+          yAxisLabel="Percentage of synapses"
+        />
       </Collapsible>
     );
   };
@@ -383,16 +442,7 @@ const MergedConnectionsView: React.FC = () => {
           "Count",
           1000
         )}
-        <Collapsible
-          title="Laminar distribution of synapses"
-          id="laminar-distribution-synapses"
-        >
-          <LaminarGraph
-            data={laminarData}
-            title="Laminar Distribution of Synapses"
-            yAxisLabel="Percentage of synapses"
-          />
-        </Collapsible>
+        {renderLaminarDistribution()}
         {renderPlot(
           "sample-divergence-by-connection",
           "Divergence (connections)",

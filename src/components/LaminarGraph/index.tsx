@@ -5,7 +5,7 @@ import DownloadButton from '../DownloadButton';
 
 Chart.register(...registerables);
 
-const LaminarGraph = ({ data, height = 500, title, yAxisLabel }) => {
+const LaminarGraph = ({ data, height = 500, title, yAxisLabel, theme = 3 }) => {
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstance = useRef<Chart | null>(null);
 
@@ -139,7 +139,7 @@ const LaminarGraph = ({ data, height = 500, title, yAxisLabel }) => {
                 <canvas ref={chartRef} aria-label="Laminar Distribution Graph" role="img" />
             </div>
             <div className="mt-4">
-                <DownloadButton onClick={downloadData}>
+                <DownloadButton theme={theme} onClick={downloadData}>
                     Download Data
                 </DownloadButton>
             </div>
