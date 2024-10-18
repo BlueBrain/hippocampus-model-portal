@@ -112,7 +112,7 @@ const RegionView: React.FC = () => {
 
           <div className="graph no-padding">
             <RegionViewer
-              meshPath={`${basePath}/data/3d/3_digital-reconstruction/region/region2.obj`}
+              meshPath={`${basePath}/data/3d/3_digital-reconstruction/region/region.obj`}
               volumeSection={validVolumeSection}
               onReady={() => setIsViewerReady(true)} />
           </div>
