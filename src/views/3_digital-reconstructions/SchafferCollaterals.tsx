@@ -15,7 +15,7 @@ import TraceGraph from './components/Trace';
 
 import Filters from '@/layouts/Filters';
 
-import { cellGroup, defaultSelection, volumeSections } from '@/constants';
+import { cellGroup, defaultSelection, graphTheme, themeColors, volumeSections } from '@/constants';
 
 import { Layer, QuickSelectorEntry, VolumeSection } from '@/types';
 
@@ -24,6 +24,7 @@ import DownloadButton from '@/components/DownloadButton';
 import { downloadAsJson } from '@/utils';
 import Factsheet from '@/components/Factsheet';
 import withPreselection from '@/hoc/with-preselection';
+import AuthorBox from '@/components/AuthorBox/AuthorBox';
 
 const SchafferCollateralsView: React.FC = () => {
   const router = useRouter();
@@ -275,20 +276,24 @@ const SchafferCollateralsView: React.FC = () => {
           { id: 'LaminarDistributionSynapsesSection', label: 'Laminar dist. of synapses' },
           { id: 'SampleConvergenceByConnectionSection', label: 'Convergence connections dist.' },
           { id: 'SampleConvergenceBySynapsesSection', label: 'Convergence synapses dist.' },
-          /* { id: 'MeanConnectionProbabilitySection', label: 'Mean connection probability'  }, */
           { label: 'Physiology', isTitle: true },
           { id: 'PSPAmplitudeSection', label: 'PSP Amplitude dist.' },
           { id: 'PSPCVSection', label: 'PSP CV dist.' },
           { id: 'SynapseLatencySection', label: 'Synapse latency dist.' },
           { id: 'RiseTimeSection', label: 'Rise time constant dist.' },
           { id: 'DecayTimeConstantSection', label: 'Decay time constant dist.' },
-          /* { id: 'ShortTermPlasticitySection', label: 'Short-term plasticity: average traces' }, */
           { id: 'NMDAAMPARatioSection', label: 'NMDA/AMPA ratio dist.' },
           { id: 'UParameterSection', label: 'U, D, F, NRRP dist.' },
           { id: 'TracesSection', label: 'Traces' },
         ]}
         quickSelectorEntries={qsEntries}
       >
+
+        <div className='pb-4'>
+          <AuthorBox hasIcon={false}>
+            <span className='text-base'>Mean connection probability: <span className='font-semibold'>0.0715758</span></span>
+          </AuthorBox>
+        </div>
 
         {availablePlots.SynapsesPerConnection && (
           <Collapsible title="Number of synapses per connection distribution" id="NbSynapsesPerConnectionSection" properties={["Anatomy"]}>
@@ -417,15 +422,6 @@ const SchafferCollateralsView: React.FC = () => {
             </div>
           </Collapsible>
         )}
-
-        <Collapsible title='Mean connection probability + std' id='MeanConnectionProbabilitySection' properties={["Anatomy"]}>
-          <Factsheet facts={[{
-            name: 'Value',
-            description: "",
-            value: 0.07157589478256018,
-
-          }]} />
-        </Collapsible>
 
         {availablePlots.PSPAmplitude && (
           <Collapsible title="PSP Amplitude" id="PSPAmplitudeSection" properties={["Physiology"]}>
