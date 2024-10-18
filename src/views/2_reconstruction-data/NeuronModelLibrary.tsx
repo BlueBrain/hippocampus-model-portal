@@ -25,6 +25,7 @@ import MorphologyViewer from "@/components/MorphologyViewer";
 
 import { MorphologyCanvas } from "@bbp/morphoviewer";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
+import DownloadModel from "@/components/DownloadModel";
 
 type ModelData = {
   mtype: string;
@@ -320,17 +321,17 @@ const NeuronsModelLibrary: React.FC = () => {
               href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
             />
           </div>
-          <DownloadButton
-            onClick={() =>
-              downloadFile(
-                `data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`,
-                `${currentMorphology}-morphology.swc`
-              )
-            }
-            theme={theme}
-          >
-            Download SWC
-          </DownloadButton>
+          <div className="mt-4">
+            <DownloadModel
+              theme={theme}
+              resources={[
+                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`,
+                `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
+                `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
+                `${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/electrophysiology.zip`
+              ]}
+            />
+          </div>
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
 
