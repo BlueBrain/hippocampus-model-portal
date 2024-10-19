@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import SpontaneousActivityView from '@/views/5_predictions/SpontaneounsActivity';
+import RandomInputView from '@/views/5_predictions/RandomInput';
 
-export default function SpontaneousActivityPage() {
+export default function RandomInputPage() {
     const metadata = {
         title: 'Random Input - Predictions | The Hippocampus Hub',
         description:
@@ -30,7 +30,7 @@ export default function SpontaneousActivityPage() {
                 <meta name="publisher" content={metadata.publisher} />
             </Head>
 
-            <SpontaneousActivityView />
+            <RandomInputView />
         </>
     );
 }

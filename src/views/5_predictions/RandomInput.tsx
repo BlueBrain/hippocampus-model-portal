@@ -20,8 +20,8 @@ import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 import { downloadAsJson } from '@/utils';
 
-const SCInputFreq = [];
-const CAO = [];
+const SCInputFreq = [0.1, 0.2, 0.4, 0.005, 0.6, 1];
+const CAO = [1, 1.5, 2, 2.5];
 
 const getSCInputFreq = (): number[] => SCInputFreq;
 const getCAO = (): number[] => CAO;
@@ -116,9 +116,9 @@ const RandomInputView: React.FC = () => {
         setParams({ etype });
     };
 
-    const handleScatterPlotSelect = (ach: number, depolarisation: number) => {
-        setQuickSelection(prev => ({ ...prev, ach, depolarisation }));
-        setParams({ ach, depolarisation });
+    const handleScatterPlotSelect = (scInputFreq: number, cao: number) => {
+        setQuickSelection(prev => ({ ...prev, scInputFreq, cao }));
+        setParams({ scInputFreq, cao });
     };
 
     const mtypes = getMtypes();
@@ -158,7 +158,7 @@ const RandomInputView: React.FC = () => {
                     <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
-                                title="Theta - MS input"
+                                title="Random Input"
                                 subtitle="Predictions"
                                 theme={theme}
                             />
@@ -196,7 +196,7 @@ const RandomInputView: React.FC = () => {
                             <div className={`selector__head theme-${theme}`}>Configure</div>
                             <div className="selector__body">
                                 <ScatterPlotSelector
-                                    path="5_prediction/theta-ms-input/"
+                                    path="5_prediction/random-input/"
                                     xRange={SCInputFreq}
                                     yRange={CAO}
                                     xAxisLabel='SC Input Frequency'
