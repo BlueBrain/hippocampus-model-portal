@@ -43,6 +43,7 @@ const VoltageView: React.FC = () => {
     const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
     const [meanFiringRateData, setMeanFiringRateData] = useState<any>(null);
     const [traceData, setTraceData] = useState<any>(null);
+    const [spikeTimePlotSvg, setSpikeTimePlotSvg] = useState<string | null>(null);
 
     const getVolumeSection = (): VolumeSection => (quickSelection.volume_section as VolumeSection) || 'region';
     const getMtypes = (): string[] => [...new Set(models.map(model => model.mtype))].sort();
@@ -80,23 +81,55 @@ const VoltageView: React.FC = () => {
         const fetchData = async () => {
             const { volume_section, ca_o, k_inj, mtype, etype } = quickSelection;
             if (ca_o === undefined || k_inj === undefined || !mtype || !etype || !volume_section) return;
+
             const baseUrl = `${dataPath}/5_prediction/voltage/${volume_section}/${ca_o}-${k_inj}/${mtype}-${etype}`;
+
             const dataTypes = [
                 { name: 'spike-time', setter: setSpikeTimeData },
                 { name: 'mean-firing-rate', setter: setMeanFiringRateData },
                 { name: 'trace', setter: setTraceData }
             ];
+
             for (const { name, setter } of dataTypes) {
                 try {
                     const response = await fetch(`${baseUrl}/${name}.json`);
-                    const data = await response.json();
-                    setter(data);
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            console.warn(`${name} data not found`);
+                            setter(null);
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    } else {
+                        const data = await response.json();
+                        setter(data);
+                    }
                 } catch (error) {
                     console.error(`Error fetching ${name} data:`, error);
                     setter(null);
                 }
             }
+
+            // Fetch the spike-time-plot.svg
+            try {
+                const svgResponse = await fetch(`${baseUrl}/spike-time-plot.svg`);
+                if (!svgResponse.ok) {
+                    if (svgResponse.status === 404) {
+                        console.warn('Spike time plot SVG not found');
+                        setSpikeTimePlotSvg(null);
+                    } else {
+                        throw new Error(`HTTP error! status: ${svgResponse.status}`);
+                    }
+                } else {
+                    const svgText = await svgResponse.text();
+                    setSpikeTimePlotSvg(svgText);
+                }
+            } catch (error) {
+                console.error('Error fetching spike-time-plot.svg:', error);
+                setSpikeTimePlotSvg(null);
+            }
         };
+
         fetchData();
     }, [quickSelection]);
 
@@ -235,11 +268,18 @@ const VoltageView: React.FC = () => {
 
                 <Collapsible id='spikeTimeSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Spike Time">
                     <div className="graph">
-                        <TimeSpikePlot plotData={spikeTimeData} />
+                        {spikeTimePlotSvg ? (
+                            <div className="svg-container" style={{ width: '100%', height: '550px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div dangerouslySetInnerHTML={{ __html: spikeTimePlotSvg }} className="svg-content" />
+                            </div>
+                        ) : (
+                            <p>Spike time plot not available</p>
+                        )}
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}>
+                        onClick={() => spikeTimeData && downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}
+                    >
                         Spike time{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
@@ -249,11 +289,16 @@ const VoltageView: React.FC = () => {
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
                     <div className="graph">
-                        <MeanFiringRatePlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
+                        {meanFiringRateData ? (
+                            <MeanFiringRatePlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
+                        ) : (
+                            <p>Mean firing rate data not available</p>
+                        )}
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}>
+                        onClick={() => meanFiringRateData && downloadAsJson(meanFiringRateData, `mean-firing-rate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}
+                    >
                         Mean Firing Rate{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
@@ -263,11 +308,16 @@ const VoltageView: React.FC = () => {
 
                 <Collapsible id='traceSection' title="Traces">
                     <div className="graph">
-                        <TraceGraph plotData={traceData} />
+                        {traceData ? (
+                            <TraceGraph plotData={traceData} />
+                        ) : (
+                            <p>Trace data not available</p>
+                        )}
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}>
+                        onClick={() => traceData && downloadAsJson(traceData, `trace-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}
+                    >
                         Trace{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.volume_section}</span>
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>

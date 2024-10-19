@@ -47,6 +47,7 @@
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.26.0",
     "react-syntax-highlighter": "^15.4.5",
+    "recharts": "^2.13.0",
     "sharp": "^0.31.1",
     "smoothscroll-polyfill": "^0.4.4",
     "swcmorphologyparser": "^0.1.11",

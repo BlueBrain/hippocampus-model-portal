@@ -21,6 +21,7 @@ import PopulationFactsheet from './acetylcholine/PopulationFactsheet';
 import Factsheet from '@/components/Factsheet';
 import LayerSelector3D from '@/components/LayerSelector3D';
 import { Layer } from '@/types'; // Ensure Layer is imported from the correct path
+import ExperimentalMorphologyTable from '@/components/ExperiementalMorphologyUsed';
 
 const getUniqueValues = (key: string, filterKey1?: string, filterValue1?: string, filterKey2?: string, filterValue2?: string, filterKey3?: string, filterValue3?: string): string[] => {
   return Array.from(new Set(modelsData
@@ -271,6 +272,7 @@ const NeuronsView: React.FC = () => {
           { id: 'traceSection', label: 'Trace' },
           { id: 'bPAPPSPSection', label: 'bPAP & PSP' },
           { id: 'factsheetSection', label: 'Factsheet' },
+          { id: 'ExperimentalMorphologySection', label: 'Experimental morphology used for this model' },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -307,6 +309,9 @@ const NeuronsView: React.FC = () => {
               </div>
             </>
           )}
+        </Collapsible>
+        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
+          <ExperimentalMorphologyTable MorphologyData={modelsData} currentInstance={currentMorphology} isMorphologyLibrary={true} />
         </Collapsible>
       </DataContainer>
 

@@ -36,7 +36,7 @@ const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis
                 display: false,
             },
             title: {
-                display: true,
+                display: false,
                 text: plotData?.name || 'Mean Firing Rate Distribution',
             },
             tooltip: {
@@ -53,13 +53,13 @@ const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis
             x: {
                 title: {
                     display: true,
-                    text: xAxis || `Firing Rate (${plotData?.units || 'Hz'})`,
+                    text: xAxis || 'Firing Rate (Hz)',
                 },
                 ticks: {
                     maxRotation: 0,
                     autoSkip: true,
                     maxTicksLimit: 10,
-                    callback: (value) => parseFloat(value).toFixed(3),
+                    callback: (value) => value,
                     stepSize: xAxisTickStep,
                 },
             },
@@ -70,7 +70,7 @@ const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis
                 },
                 beginAtZero: true,
                 ticks: {
-                    stepSize: 1,
+                    maxTicksLimit: 10, // Limit the number of ticks to 5
                     precision: 0
                 }
             },
@@ -82,19 +82,22 @@ const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis
             return null;
         }
 
-        const binWidth = 0.001; // Adjust this value to change the histogram resolution
-        const bins = {};
-        plotData.values.forEach(value => {
-            const binIndex = Math.floor(value / binWidth);
-            bins[binIndex] = (bins[binIndex] || 0) + 1;
+        const values = plotData.values;
+        const binCount = 10; // You can adjust this for more or fewer bins
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const binWidth = (max - min) / binCount;
+
+        const bins = Array(binCount).fill(0);
+        values.forEach(value => {
+            const binIndex = Math.min(Math.floor((value - min) / binWidth), binCount - 1);
+            bins[binIndex]++;
         });
 
-        const sortedBins = Object.entries(bins).sort(([a], [b]) => parseFloat(a) - parseFloat(b));
-
         return {
-            labels: sortedBins.map(([bin]) => (parseFloat(bin) * binWidth).toFixed(3)),
+            labels: bins.map((_, index) => ((min + (index + 0.5) * binWidth).toFixed(2))),
             datasets: [{
-                data: sortedBins.map(([, count]) => count),
+                data: bins,
                 backgroundColor: graphTheme.blue,
                 borderColor: graphTheme.blue,
                 borderWidth: 1,

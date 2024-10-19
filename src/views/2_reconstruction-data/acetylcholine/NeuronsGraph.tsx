@@ -159,8 +159,8 @@ const NeuronsGraph: React.FC<NeuronsGraphProps> = ({ theme }) => {
                                         switch (logValue) {
                                             case -2: return '10⁻²';
                                             case -1: return '10⁻¹';
-                                            case 0: return '10';
-                                            case 1: return '10¹';
+                                            case 0: return '1';
+                                            case 1: return '10';
                                             case 2: return '10²';
                                             case 3: return '10³';
                                             default: return '';

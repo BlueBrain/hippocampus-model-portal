@@ -19,22 +19,18 @@ import { dataPath } from '@/config';
 import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 import { downloadAsJson } from '@/utils';
-import DistributionPlot from '@/components/DistributionPlot';
 
-const MinisRate = [
-    0.00025, 0.0005, 0.00075, 0.001, 0.00125, 0.0015, 0.00175, 0.002
-];
+import SpikeTimeTest from './spike-time-plot_test.svg'
 
+const SCInputFreq = [0.1, 0.2, 0.4, 0.005, 0.6, 1];
+const CAO = [1, 1.5, 2, 2.5];
 
-const CA_O = [1, 1.5, 2];
-
-const getMinisRate = (): number[] => MinisRate;
-const getCa0 = (): number[] => CA_O;
+const getSCInputFreq = (): number[] => SCInputFreq;
+const getCAO = (): number[] => CAO;
 const getMtypes = (): string[] => [...new Set(models.map(model => model.mtype))].sort();
 const getEtypes = (mtype: string): string[] => [...new Set(models.filter(model => model.mtype === mtype).map(model => model.etype))].sort();
 
-
-const SpontaneousActivityView: React.FC = () => {
+const RandomInputView: React.FC = () => {
     const router = useRouter();
     const theme = 5;
 
@@ -47,12 +43,12 @@ const SpontaneousActivityView: React.FC = () => {
     useEffect(() => {
         if (!router.isReady) return;
 
-        const { mtype, etype, ca_o, minis_rate } = router.query;
+        const { mtype, etype, scInputFreq, cao } = router.query;
         const newQuickSelection: Record<string, string | number> = {};
 
         if (typeof mtype === 'string') newQuickSelection.mtype = mtype;
-        if (typeof ca_o === 'string') newQuickSelection.ca_o = parseFloat(ca_o);
-        if (typeof minis_rate === 'string') newQuickSelection.minis_rate = parseFloat(minis_rate);
+        if (typeof scInputFreq === 'string') newQuickSelection.scInputFreq = parseFloat(scInputFreq);
+        if (typeof cao === 'string') newQuickSelection.cao = parseFloat(cao);
 
         if (typeof mtype === 'string') {
             const availableEtypes = getEtypes(mtype);
@@ -70,8 +66,8 @@ const SpontaneousActivityView: React.FC = () => {
             const defaultSelection = {
                 mtype: defaultMtype,
                 etype: getEtypes(defaultMtype)[0] || '',
-                ca_o: CA_O[0],
-                minis_rate: MinisRate[0]
+                scInputFreq: SCInputFreq[0],
+                cao: CAO[0]
             };
             setQuickSelection(defaultSelection);
             router.replace({ query: defaultSelection }, undefined, { shallow: true });
@@ -80,10 +76,10 @@ const SpontaneousActivityView: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { ca_o, minis_rate, mtype, etype } = quickSelection;
-            if (ca_o === undefined || minis_rate === undefined || !mtype || !etype) return;
+            const { scInputFreq, cao, mtype, etype } = quickSelection;
+            if (scInputFreq === undefined || cao === undefined || !mtype || !etype) return;
 
-            const baseUrl = `${dataPath}/5_prediction/spontaneous-activity/${ca_o}-${minis_rate}/${mtype}-${etype}`;
+            const baseUrl = `${dataPath}/5_prediction/random-input/${scInputFreq}-${cao}/${mtype}-${etype}`;
 
             const dataTypes = [
                 { name: 'spike-time', setter: setSpikeTimeData },
@@ -151,9 +147,9 @@ const SpontaneousActivityView: React.FC = () => {
         setParams({ etype });
     };
 
-    const handleScatterPlotSelect = (ca_o: number, minis_rate: number) => {
-        setQuickSelection(prev => ({ ...prev, ca_o, minis_rate }));
-        setParams({ ca_o, minis_rate });
+    const handleScatterPlotSelect = (scInputFreq: number, cao: number) => {
+        setQuickSelection(prev => ({ ...prev, scInputFreq, cao }));
+        setParams({ scInputFreq, cao });
     };
 
     const mtypes = getMtypes();
@@ -161,16 +157,16 @@ const SpontaneousActivityView: React.FC = () => {
 
     const qsEntries: QuickSelectorEntry[] = [
         {
-            title: 'CA_0',
-            key: 'ca_o',
-            getValuesFn: getCa0,
-            sliderRange: CA_O
+            title: 'SC Input Frequency',
+            key: 'scInputFreq',
+            getValuesFn: getSCInputFreq,
+            sliderRange: SCInputFreq
         },
         {
-            title: 'Minis Rate',
-            key: 'minis_rate',
-            getValuesFn: getMinisRate,
-            sliderRange: MinisRate
+            title: 'CaO',
+            key: 'cao',
+            getValuesFn: getCAO,
+            sliderRange: CAO
         },
         {
             title: 'M-type',
@@ -186,28 +182,21 @@ const SpontaneousActivityView: React.FC = () => {
         },
     ];
 
-
-
-    function getPlotDataById(arg0: string): any {
-        throw new Error('Function not implemented.');
-    }
-
     return (
         <>
-
             <Filters theme={theme}>
                 <div className="flex flex-col lg:flex-row w-full lg:items-center mt-40 lg:mt-0">
                     <div className="w-full lg:w-1/3 md:w-full md:flex-none mb-8 md:mb-8 lg:pr-0">
                         <StickyContainer>
                             <Title
-                                title="Spontaneous Activity"
+                                title="Random Input"
                                 subtitle="Predictions"
                                 theme={theme}
                             />
-                            <div className='w-full' role="information">
+                            <div role="information">
                                 <InfoBox>
                                     <p>
-                                        We simulated the network using different levels of spontaneous synaptic release (0.00025 - 0.002 Hz) and different extracellular calcium concentration (1 - 2 mM). These simulations can give a prediction on how the CA1 could behave without any external inputs at in vivo or in vitro extracellular calcium concentrations (respectively 1 and 2 mM). In these conditions, the activity is very sparse and irregular.
+                                        Schaffer collaterals (SC) represent the major input to the CA1. We stimulated the SC at different frequencies (0.05 - 1.0 Hz) and under different extracellular calcium concentration (1 - 2.5 mM). In general, the resulting CA1 activity is irregular. A noisy oscillation at beta band may appear in some conditions.
                                     </p>
                                 </InfoBox>
                             </div>
@@ -239,15 +228,15 @@ const SpontaneousActivityView: React.FC = () => {
                             <div className={`selector__head theme-${theme}`}>Configure</div>
                             <div className="selector__body">
                                 <ScatterPlotSelector
-                                    path="5_prediction/spontaneous-activity/"
-                                    xRange={CA_O}
-                                    yRange={MinisRate}
-                                    xAxisLabel='Ca2+ (mM)'
-                                    yAxisLabel='Spontaneous synaptic release (Hz)'
+                                    path="5_prediction/random-input/"
+                                    xRange={SCInputFreq}
+                                    yRange={CAO}
+                                    xAxisLabel='SC Input Frequency'
+                                    yAxisLabel='CaO'
                                     theme={theme}
                                     onSelect={handleScatterPlotSelect}
-                                    selectedX={quickSelection.ca_o as number}
-                                    selectedY={quickSelection.minis_rate as number}
+                                    selectedX={quickSelection.scInputFreq as number}
+                                    selectedY={quickSelection.cao as number}
                                 />
                             </div>
                         </div>
@@ -276,11 +265,11 @@ const SpontaneousActivityView: React.FC = () => {
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => spikeTimeData && downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.minis_rate}-${quickSelection.ca_o}`)}
+                        onClick={() => spikeTimeData && downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.scInputFreq}-${quickSelection.cao}`)}
                     >
                         Spike time{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
-                        <span className="!ml-0 collapsible-property small">{quickSelection.minis_rate}-{quickSelection.ca_o}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.scInputFreq}-{quickSelection.cao}</span>
                     </DownloadButton>
                 </Collapsible>
 
@@ -290,10 +279,10 @@ const SpontaneousActivityView: React.FC = () => {
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.minis_rate}-${quickSelection.ca_o}`)}>
+                        onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
                         Mean Firing Rate{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
-                        <span className="!ml-0 collapsible-property small">{quickSelection.minis_rate}-{quickSelection.ca_o}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.scInputFreq}-{quickSelection.cao}</span>
                     </DownloadButton>
                 </Collapsible>
 
@@ -303,10 +292,10 @@ const SpontaneousActivityView: React.FC = () => {
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.minis_rate}-${quickSelection.ca_o}`)}>
+                        onClick={() => downloadAsJson(traceData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
                         Trace{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
-                        <span className="!ml-0 collapsible-property small">{quickSelection.minis_rate}-{quickSelection.ca_o}</span>
+                        <span className="!ml-0 collapsible-property small">{quickSelection.scInputFreq}-{quickSelection.cao}</span>
                     </DownloadButton>
                 </Collapsible>
             </DataContainer>
@@ -314,4 +303,4 @@ const SpontaneousActivityView: React.FC = () => {
     );
 };
 
-export default SpontaneousActivityView;
+export default RandomInputView;

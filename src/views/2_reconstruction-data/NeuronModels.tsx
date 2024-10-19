@@ -13,18 +13,19 @@ import Collapsible from "@/components/Collapsible";
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
-import HttpData from "@/components/HttpData";
 import { dataPath } from "@/config";
 import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import Factsheet from "@/components/Factsheet";
-
+import MorphologyData from '@/models.json';
 import modelsData from "./neuron-model.json";
 import LayerSelector3D from "@/components/LayerSelector3D";
 import MechanismTable from "./neuron-model/MechanismTable";
+import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 import ExperimentalRecordingsTable from "./neuron-model/ExperimentalRecordingsTable";
 import EFeature from "./neuron-model/EFeature";
+import DownloadModel from "@/components/DownloadModel";
 
 import { Layer } from "@/types";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
@@ -445,7 +446,6 @@ const Neurons: React.FC = () => {
           </div>
         </div>
       </Filters>
-
       <DataContainer
         theme={theme}
         navItems={[
@@ -455,8 +455,8 @@ const Neurons: React.FC = () => {
           { id: "factsheetSection", label: "Factsheet" },
           { id: "efeaturesSection", label: "E-features" },
           { id: "mechansimsSection", label: "Mechanisms" },
+          { id: "ExperimentalMorphologySection", label: "Experimental morphology used for this model" },
           { id: "experimentalRecordingsSection", label: "Experimental recordings used for this model" },
-          { id: "downloadModelSection", label: "Download model" },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -468,14 +468,20 @@ const Neurons: React.FC = () => {
               href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
             />
           </div>
-          <DownloadButton
-            onClick={() =>
-              downloadFile(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`, 'morphology.swc')
-            }
-            theme={theme}
-          >
-            SWC
-          </DownloadButton>
+
+          <div className="mt-4">
+            <DownloadModel
+              theme={theme}
+              resources={[
+                `${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`,
+                `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
+                `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
+                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.zip`,
+                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology.zip`
+              ]}
+            />
+          </div>
+
         </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
@@ -499,14 +505,6 @@ const Neurons: React.FC = () => {
             </div>
           )}
         </Collapsible>
-
-        {/*
-        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
-          <div className="graph">
-            Add bPAP & PSP graph component here
-          </div>
-        </Collapsible>
-         */}
 
         <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
           {factsheetData && (
@@ -551,7 +549,11 @@ const Neurons: React.FC = () => {
         </Collapsible>
 
         <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
-          {mechanismsData && JSON.stringify(mechanismsData)}
+          <MechanismTable data={mechanismsData} instance={currentInstance} />
+        </Collapsible>
+
+        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
+          <ExperimentalMorphologyTable MorphologyData={MorphologyData} currentInstance={currentInstance} />
         </Collapsible>
 
         <Collapsible
@@ -563,30 +565,6 @@ const Neurons: React.FC = () => {
             <ExperimentalRecordingsTable data={experimentalRecordingData} />
           )}
         </Collapsible>
-
-        <Collapsible
-          id="downloadModelSection"
-          className="mt-4"
-          title="Download model"
-          properties={[currentLayer, currentMtype, currentEtype, currentInstance]}
-        >
-
-
-          <h2 className=" mt-8 mb-2 text-lg">
-            Download all files as a zip archive:
-          </h2>
-
-          <div className="flex flex-row gap-4">
-            <DownloadButton
-              onClick={handleDownload}
-              theme={theme}
-            >
-              Download Model
-            </DownloadButton>
-          </div>
-        </Collapsible>
-
-
       </DataContainer>
 
 
