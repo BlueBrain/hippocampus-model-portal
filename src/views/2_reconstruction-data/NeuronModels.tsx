@@ -549,7 +549,7 @@ const Neurons: React.FC = () => {
         </Collapsible>
 
         <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
-          {mechanismsData && JSON.stringify(mechanismsData)}
+          <MechanismTable data={mechanismsData} instance={currentInstance} />
         </Collapsible>
 
         <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
