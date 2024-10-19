@@ -53,6 +53,7 @@ const MorphologyTable: React.FC<MorphologyTableProps> = ({ data }) => {
             width: 220,
             render: (morphology_id: string) => (
                 <Image
+
                     src={`${basePath}/images/1_experimental-data/neuronal-morphology/${morphology_id}.png`}
                     alt={`morphology preview ${morphology_id}`}
                     width={200}
