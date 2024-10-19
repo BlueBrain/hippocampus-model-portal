@@ -22,6 +22,7 @@ import Factsheet from "@/components/Factsheet";
 import modelsData from "./neuron-model.json";
 import LayerSelector3D from "@/components/LayerSelector3D";
 import MechanismTable from "./neuron-model/MechanismTable";
+import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 import ExperimentalRecordingsTable from "./neuron-model/ExperimentalRecordingsTable";
 import EFeature from "./neuron-model/EFeature";
 import DownloadModel from "@/components/DownloadModel";
@@ -454,8 +455,8 @@ const Neurons: React.FC = () => {
           { id: "factsheetSection", label: "Factsheet" },
           { id: "efeaturesSection", label: "E-features" },
           { id: "mechansimsSection", label: "Mechanisms" },
+          { id: "ExperimentalMorphologySection", label: "Experimental morphology used for this model" },
           { id: "experimentalRecordingsSection", label: "Experimental recordings used for this model" },
-          { id: "downloadModelSection", label: "Download model" },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -549,6 +550,10 @@ const Neurons: React.FC = () => {
 
         <Collapsible id="mechansimsSection" className="mt-4" title="Mechanisms">
           {mechanismsData && JSON.stringify(mechanismsData)}
+        </Collapsible>
+
+        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
+          <ExperimentalMorphologyTable currentInstance={currentInstance} />
         </Collapsible>
 
         <Collapsible
