@@ -20,6 +20,8 @@ import DownloadButton from '@/components/DownloadButton';
 import TraceGraph from './components/Trace';
 import { downloadAsJson } from '@/utils';
 
+import SpikeTimeTest from './spike-time-plot_test.svg'
+
 const SCInputFreq = [0.1, 0.2, 0.4, 0.005, 0.6, 1];
 const CAO = [1, 1.5, 2, 2.5];
 
@@ -36,6 +38,7 @@ const RandomInputView: React.FC = () => {
     const [spikeTimeData, setSpikeTimeData] = useState<any>(null);
     const [meanFiringRateData, setMeanFiringRateData] = useState<any>(null);
     const [traceData, setTraceData] = useState<any>(null);
+    const [spikeTimePlotSvg, setSpikeTimePlotSvg] = useState<string | null>(null);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -87,12 +90,40 @@ const RandomInputView: React.FC = () => {
             for (const { name, setter } of dataTypes) {
                 try {
                     const response = await fetch(`${baseUrl}/${name}.json`);
-                    const data = await response.json();
-                    setter(data);
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            console.warn(`${name} data not found`);
+                            setter(null);
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    } else {
+                        const data = await response.json();
+                        setter(data);
+                    }
                 } catch (error) {
                     console.error(`Error fetching ${name} data:`, error);
                     setter(null);
                 }
+            }
+
+            // Fetch the spike-time-plot.svg
+            try {
+                const svgResponse = await fetch(`${baseUrl}/spike-time-plot.svg`);
+                if (!svgResponse.ok) {
+                    if (svgResponse.status === 404) {
+                        console.warn('Spike time plot SVG not found');
+                        setSpikeTimePlotSvg(null);
+                    } else {
+                        throw new Error(`HTTP error! status: ${svgResponse.status}`);
+                    }
+                } else {
+                    const svgText = await svgResponse.text();
+                    setSpikeTimePlotSvg(svgText);
+                }
+            } catch (error) {
+                console.error('Error fetching spike-time-plot.svg:', error);
+                setSpikeTimePlotSvg(null);
             }
         };
 
@@ -224,11 +255,18 @@ const RandomInputView: React.FC = () => {
             >
                 <Collapsible id='spikeTimeSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Spike Time">
                     <div className="graph">
-                        <TimeSpikePlot plotData={spikeTimeData} />
+                        {spikeTimePlotSvg ? (
+                            <div className="svg-container" style={{ width: '100%', height: '550px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div dangerouslySetInnerHTML={{ __html: spikeTimePlotSvg }} className="svg-content" />
+                            </div>
+                        ) : (
+                            <p>Spike time plot not available</p>
+                        )}
                     </div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.scInputFreq}-${quickSelection.cao}`)}>
+                        onClick={() => spikeTimeData && downloadAsJson(spikeTimeData, `spike-time-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.scInputFreq}-${quickSelection.cao}`)}
+                    >
                         Spike time{"  "}
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
                         <span className="!ml-0 collapsible-property small">{quickSelection.scInputFreq}-{quickSelection.cao}</span>

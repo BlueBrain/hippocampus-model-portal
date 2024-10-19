@@ -36,7 +36,7 @@ const MeanFiringRatePlot: React.FC<MeanFiringRatePlotProps> = ({ plotData, xAxis
                 display: false,
             },
             title: {
-                display: true,
+                display: false,
                 text: plotData?.name || 'Mean Firing Rate Distribution',
             },
             tooltip: {
