@@ -238,6 +238,10 @@ const Home: React.FC = () => (
                 href: '/predictions/voltage',
               },
               {
+                label: 'Random Input',
+                href: '/predictions/random-input',
+              },
+              {
                 label: 'Theta - Oscillatory input',
                 href: '/predictions/theta-oscillatory-input',
               },
