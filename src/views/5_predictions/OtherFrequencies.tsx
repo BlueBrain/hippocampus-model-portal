@@ -160,6 +160,7 @@ const OtherFrequenciesView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
+                                        We stimulated the Schaffer collaterals (SC) at different mean frequencies (0.1-0.8 Hz) (cell_frequency). The signal is further modulated with a sinusoidal function of different frequencies (0.5-200 Hz) (signal_frequency). In general, CA1 activity reliably follows the same signal rhythm favoring intermediated frequencies (1 - 30 Hz).
                                     </p>
                                 </InfoBox>
                             </div>

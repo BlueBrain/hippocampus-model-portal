@@ -165,6 +165,7 @@ const RandomInputView: React.FC = () => {
                             <div role="information">
                                 <InfoBox>
                                     <p>
+                                        Schaffer collaterals (SC) represent the major input to the CA1. We stimulated the SC at different frequencies (0.05 - 1.0 Hz) and under different extracellular calcium concentration (1 - 2.5 mM). In general, the resulting CA1 activity is irregular. A noisy oscillation at beta band may appear in some conditions.
                                     </p>
                                 </InfoBox>
                             </div>
