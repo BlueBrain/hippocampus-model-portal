@@ -57,7 +57,7 @@ const MechanismTable: React.FC<MechanismTableProps> = ({ theme, data, instance }
                                         placement="top"
                                         overlayInnerStyle={{
                                             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-                                            width: '300px'
+                                            width: '350px'
                                         }}
                                     >
                                         <span

@@ -95,7 +95,7 @@ const MechanismToolTip: React.FC<MechanismToolTipProps> = ({ mechanism }) => {
             </div>
             <div className="p-2">
                 <MathJaxContext>
-                    <MathJax className="text-xs">
+                    <MathJax >
                         {`\\[f(x) = ${formatFunction(mechanism.function)}\\]`}
                     </MathJax>
                 </MathJaxContext>
