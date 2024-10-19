@@ -18,7 +18,7 @@ import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import Factsheet from "@/components/Factsheet";
-
+import MorphologyData from '@/models.json';
 import modelsData from "./neuron-model.json";
 import LayerSelector3D from "@/components/LayerSelector3D";
 import MechanismTable from "./neuron-model/MechanismTable";
@@ -553,7 +553,7 @@ const Neurons: React.FC = () => {
         </Collapsible>
 
         <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
-          <ExperimentalMorphologyTable currentInstance={currentInstance} />
+          <ExperimentalMorphologyTable MorphologyData={MorphologyData} currentInstance={currentInstance} />
         </Collapsible>
 
         <Collapsible

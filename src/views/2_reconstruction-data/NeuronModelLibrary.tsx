@@ -26,6 +26,7 @@ import MorphologyViewer from "@/components/MorphologyViewer";
 import { MorphologyCanvas } from "@bbp/morphoviewer";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
 import DownloadModel from "@/components/DownloadModel";
+import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 
 type ModelData = {
   mtype: string;
@@ -312,6 +313,7 @@ const NeuronsModelLibrary: React.FC = () => {
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "traceSection", label: "Trace" },
           { id: "factsheetSection", label: "Factsheet" },
+          { id: "ExperimentalMorphologySection", label: "Experimental morphology used for this model" },
         ]}
         quickSelectorEntries={qsEntries}
       >
@@ -394,6 +396,9 @@ const NeuronsModelLibrary: React.FC = () => {
               </div>
             </>
           )}
+        </Collapsible>
+        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
+          <ExperimentalMorphologyTable MorphologyData={modelsData} currentInstance={currentMorphology} isMorphologyLibrary={true} />
         </Collapsible>
       </DataContainer>
     </>

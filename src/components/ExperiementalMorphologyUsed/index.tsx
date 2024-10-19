@@ -3,72 +3,90 @@ import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { basePath } from '@/config';
-import MorphologyData from '@/models.json';
+
 
 type MorphologyTableProps = {
     currentInstance: string;
+    MorphologyData: any;
+    isMorphologyLibrary?: boolean;
 };
 
-const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentInstance }) => {
-    const columns = [
-        {
-            title: 'Layer',
-            dataIndex: 'layer',
-            key: 'layer',
-            width: 100,
-        },
-        {
-            title: 'M-type',
-            dataIndex: 'mtype',
-            key: 'mtype',
-            width: 150,
-        },
-        {
-            title: 'Morphology',
-            dataIndex: 'morphology',
-            key: 'morphology',
-            width: 150,
-            render: (morphology: string) => (
-                <Link href={`/morphology-details/${morphology}`}>
-                    {morphology}
-                </Link>
-            ),
-        },
-        {
-            title: 'Preview',
-            dataIndex: 'morphology',
-            key: 'preview',
-            width: 220,
-            render: (morphology: string) => (
-                <Image
-                    src={`${basePath}/data/images/1_experimental-data/neuronal-morphology/${morphology}.png`}
-                    alt={`morphology preview ${morphology}`}
-                    width={200}
-                    height={100}
-                    style={{ height: 'auto' }}
-                />
-            ),
-        },
-    ];
+const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentInstance, MorphologyData, isMorphologyLibrary }) => {
+    const columns = useMemo(() => {
+        const baseColumns = [
+            {
+                title: 'Morphology',
+                dataIndex: 'morphology',
+                key: 'morphology',
+                width: 150,
+                render: (morphology: string, record: any) => (
+                    isMorphologyLibrary ? (
+                        <Link href={`/reconstruction-data/morphology-library/?layer=${record.layer}&etype=${record.etype}&mtype=${record.mtype}&morphology=${morphology}`}>
+                            {morphology}
+                        </Link>
+                    ) : (
+                        <Link href={`/experimental-data/neuronal-morphology/?layer=${record.layer}&mtype=${record.mtype}&instance=${record.morphology}`}>
+                            {morphology}
+                        </Link>
+                    )
+                ),
+            },
+            {
+                title: 'M-type',
+                dataIndex: 'mtype',
+                key: 'mtype',
+                width: 150,
+            },
+
+        ];
+
+        if (!isMorphologyLibrary) {
+            baseColumns.push({
+                title: 'Preview',
+                dataIndex: 'morphology',
+                key: 'preview',
+                width: 220,
+                render: (morphology: string) => (
+                    <Image
+                        src={`${basePath}/data/images/1_experimental-data/neuronal-morphology/${morphology}.png`}
+                        alt={`morphology preview ${morphology}`}
+                        width={200}
+                        height={100}
+                        style={{ height: 'auto' }}
+                    />
+                ),
+            });
+        }
+
+        return baseColumns;
+    }, [isMorphologyLibrary]);
 
     const tableData = useMemo(() => {
         if (!Array.isArray(MorphologyData)) {
             console.error('MorphologyData is not an array:', MorphologyData);
             return [];
         }
-        const currentModel = MorphologyData.find(item => item.name === currentInstance);
+
+        let currentModel;
+        if (isMorphologyLibrary) {
+            currentModel = MorphologyData.find(item => item.morphology === currentInstance);
+        } else {
+            currentModel = MorphologyData.find(item => item.name === currentInstance);
+        }
+
         if (!currentModel) {
             console.error('No matching model found for:', currentInstance);
-            console.log('Available models:', MorphologyData.map(item => item.name));
+            console.log('Available models:', MorphologyData.map(item => isMorphologyLibrary ? item.morphology : item.name));
             return [];
         }
+
         return [{
-            key: currentModel.name,
+            key: currentModel.name || currentModel.morphology,
             layer: currentModel.layer,
             mtype: currentModel.mtype,
             morphology: currentModel.morphology,
         }];
-    }, [currentInstance]);
+    }, [currentInstance, isMorphologyLibrary, MorphologyData]);
 
     console.log('Current instance:', currentInstance);
     console.log('Table data:', tableData);
