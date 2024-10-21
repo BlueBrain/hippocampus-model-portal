@@ -3,16 +3,17 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { MdOutlineBuild } from "react-icons/md";
 import styles from './styles.module.scss';
 
-type DownloadButtonProps = {
+interface DownloadButtonProps {
+    onClick: () => void;
+    theme: any; // Replace 'any' with the actual theme type
+    isLoading?: boolean; // Add this line
     children: ReactChild | ReactFragment;
     download?: string | boolean;
-    theme?: number;
-    onClick?: () => void;
     href?: string;
     buildIcon?: boolean;
-};
+}
 
-const DownloadButton: React.FC<DownloadButtonProps> = ({ children, download, theme, onClick, href, buildIcon = false }) => {
+const DownloadButton: React.FC<DownloadButtonProps> = ({ children, download, theme, onClick, href, buildIcon = false, isLoading }) => {
 
     const IconComponent = buildIcon ? MdOutlineBuild : MdOutlineFileDownload;
 

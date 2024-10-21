@@ -334,6 +334,10 @@ const NeuronalMorphologyView: React.FC = () => {
                 <>
                   {tableData && (
                     <NeuronTable
+                      imagePath={`${basePath}/data/images/1_experimental-data/slices`}
+                      thumbnailPath={`${basePath}/data/images/1_experimental-data/slices/thumbnails`}
+                      imageExt="jpeg"
+
                       theme={theme}
                       data={tableData}
                       layer={quickSelection.layer || undefined}
@@ -421,6 +425,9 @@ const NeuronalMorphologyView: React.FC = () => {
                 <>
                   {tableData && (
                     <NeuronTable
+                      imagePath={`${basePath}/data/images/1_experimental-data/neuronal-morphology`}
+                      thumbnailPath={`${basePath}/data/images/1_experimental-data/neuronal-morphology`}
+                      imageExt="png"
                       theme={theme}
                       data={tableData}
                       layer={quickSelection.layer || undefined}

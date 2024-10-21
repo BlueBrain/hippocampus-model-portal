@@ -128,6 +128,12 @@ const NeuronElectrophysiology: React.FC = () => {
     fetchData();
   }, [currentEtype]);
 
+  const handleSendToBuild = useCallback(() => {
+    if (currentInstance) {
+      router.push(`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance)}`);
+    }
+  }, [currentInstance, router]);
+
   return (
     <>
       <Filters theme={theme} hasData={!!currentInstance}>
@@ -215,7 +221,11 @@ const NeuronElectrophysiology: React.FC = () => {
                       <DownloadButton onClick={() => downloadFile(`${dataPath}/1_experimental-data/neuronal-electophysiology/nwb/${currentInstance}.nwb`, `${currentInstance}.nwb`)} theme={theme}>
                         Trace
                       </DownloadButton>
-                      <DownloadButton theme={theme} buildIcon={true} href={`${deploymentUrl}/build/data/electrophysiology?query=${encodeURIComponent(currentInstance || '')}`}>
+                      <DownloadButton
+                        theme={theme}
+                        buildIcon={true}
+                        onClick={handleSendToBuild}
+                      >
                         Send to the Build section
                       </DownloadButton>
                     </div>

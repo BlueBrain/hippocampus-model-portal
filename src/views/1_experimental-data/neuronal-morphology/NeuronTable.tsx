@@ -18,9 +18,12 @@ type NeuronTableProps = {
     mtype?: string | string[];
     nameLink?: boolean,
     theme?: number
+    imagePath: string;
+    thumbnailPath: string;
+    imageExt: string;
 };
 
-const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink, theme }) => {
+const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink, theme, imagePath, thumbnailPath, imageExt }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const entriesPerPage = 10;
 
@@ -91,7 +94,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
             render: (name: string) => (
                 <div className="image-container">
                     <img
-                        src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${name}.jpeg`}
+                        src={`${thumbnailPath}/${name}.${imageExt}`}
                         alt={`neuron image ${name}`}
                         width={300}
                         height={187}
@@ -136,7 +139,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({ data, layer, mtype, nameLink,
                 <div>
                     <DownloadButton
                         theme={theme}
-                        onClick={() => downloadHref(`${basePath}/data/images/1_experimental-data/slices/${name}.jpeg`, `${name}.jpeg`)}
+                        onClick={() => downloadHref(`${imagePath}}/${name}.${imageExt}`, `${name}.${imageExt}`)}
                     >
                         Download image
                     </DownloadButton>
