@@ -10,20 +10,17 @@ import { QuickSelectorEntry } from "@/types";
 import List from "@/components/List";
 import Collapsible from "@/components/Collapsible";
 
-import { defaultSelection } from '@/constants';
-import withPreselection from '@/hoc/with-preselection';
-import { colorName } from './config';
-import { dataPath } from '@/config';
-import { downloadAsJson, downloadFile } from '@/utils';
-import DownloadButton from '@/components/DownloadButton';
-import TraceGraph from '../5_predictions/components/Trace';
-import Factsheet from '@/components/Factsheet';
+import { defaultSelection } from "@/constants";
+import withPreselection from "@/hoc/with-preselection";
+import { colorName } from "./config";
+import { dataPath } from "@/config";
+import { downloadAsJson, downloadFile } from "@/utils";
+import DownloadButton from "@/components/DownloadButton";
+import TraceGraph from "../5_predictions/components/Trace";
+import Factsheet from "@/components/Factsheet";
 
 import modelsData from "./neuron-model-libraries.json";
-import MechanismTable from "./neuron-model/MechanismTable";
-import MorphologyViewer from "@/components/MorphologyViewer";
 
-import { MorphologyCanvas } from "@bbp/morphoviewer";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
 import DownloadModel from "@/components/DownloadModel";
 import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
@@ -34,14 +31,23 @@ type ModelData = {
   morphology: string;
 };
 
-const getUniqueValues = (key: keyof ModelData, filters: Partial<ModelData> = {}): string[] => {
-  return Array.from(new Set(modelsData
-    .filter(model =>
-      Object.entries(filters).every(([filterKey, filterValue]) =>
-        !filterValue || model[filterKey as keyof ModelData] === filterValue
-      )
+const getUniqueValues = (
+  key: keyof ModelData,
+  filters: Partial<ModelData> = {}
+): string[] => {
+  return Array.from(
+    new Set(
+      modelsData
+        .filter((model) =>
+          Object.entries(filters).every(
+            ([filterKey, filterValue]) =>
+              !filterValue ||
+              model[filterKey as keyof ModelData] === filterValue
+          )
+        )
+        .map((model) => model[key] as string)
     )
-    .map(model => model[key] as string))).sort();
+  ).sort();
 };
 
 const getFilteredData = (filters: Partial<ModelData>): ModelData[] => {
@@ -57,9 +63,9 @@ const NeuronsModelLibrary: React.FC = () => {
   const theme = 3;
 
   const { query } = router;
-  const [currentMtype, setCurrentMtype] = useState('');
-  const [currentEtype, setCurrentEtype] = useState('');
-  const [currentMorphology, setCurrentMorphology] = useState('');
+  const [currentMtype, setCurrentMtype] = useState("");
+  const [currentEtype, setCurrentEtype] = useState("");
+  const [currentMorphology, setCurrentMorphology] = useState("");
   const [traceData, setTraceData] = useState<any | null>(null);
   const [factsheetData, setFactsheetData] = useState<any | null>(null);
   const [morphologyData, setMorphologyData] = useState<string | null>(null);
@@ -98,7 +104,7 @@ const NeuronsModelLibrary: React.FC = () => {
     });
     const newMorphology =
       typeof query.morphology === "string" &&
-        newMorphologies.includes(query.morphology)
+      newMorphologies.includes(query.morphology)
         ? query.morphology
         : newMorphologies[0] || "";
 
@@ -213,23 +219,6 @@ const NeuronsModelLibrary: React.FC = () => {
     },
   ];
 
-  const MorphologyViewer: React.FC<{ swc: string }> = ({ swc }) => {
-    const refViewer = useRef<MorphologyCanvas | null>(null);
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-    useEffect(() => {
-      if (canvasRef.current && !refViewer.current) {
-        refViewer.current = new MorphologyCanvas();
-        refViewer.current.canvas = canvasRef.current;
-        refViewer.current.swc = swc;
-      }
-    }, [swc]);
-
-    return (
-      <canvas ref={canvasRef} style={{ width: "100%", height: "400px" }} />
-    );
-  };
-
   return (
     <>
       <Filters theme={theme}>
@@ -272,8 +261,9 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ""
-                      }`}
+                    title={`M-type ${
+                      mtypes.length ? `(${mtypes.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -282,8 +272,9 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${etypes.length ? `(${etypes.length})` : ""
-                      }`}
+                    title={`E-type ${
+                      etypes.length ? `(${etypes.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -292,8 +283,9 @@ const NeuronsModelLibrary: React.FC = () => {
                     block
                     list={morphologies}
                     value={currentMorphology}
-                    title={`Morphology ${morphologies.length ? `(${morphologies.length})` : ""
-                      }`}
+                    title={`Morphology ${
+                      morphologies.length ? `(${morphologies.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setMorphology}
                     anchor="data"
@@ -336,7 +328,6 @@ const NeuronsModelLibrary: React.FC = () => {
           </div>
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
-
           <div className="graph"></div>
           {morphologyData && (
             <div className="mt-4">
