@@ -211,6 +211,7 @@ function useViewerinit(
             roundness,
             radiusMultiplier: 1.2,
             light: 0,
+            shiftZ: 2,
           });
           context.add(painter, painterOutline);
         }

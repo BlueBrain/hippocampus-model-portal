@@ -54,7 +54,7 @@ const loadMsgPack: SwcViewerLoader = async (url: string) => {
       {
         colors: ["#ff0"],
         nodes: convertSynapsesIntoCellNodes(data.synapses, radius),
-        minRadius: 10,
+        minRadius: 8,
         roundness: 24,
       },
     ];
