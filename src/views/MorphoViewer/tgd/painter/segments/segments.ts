@@ -33,6 +33,20 @@ export type TgdPainterSegmentsOptions = {
    * Color texture
    */
   colorTexture?: TgdTexture2D;
+  /**
+   * By how much do you want to multiply the actual radius?
+   * Default to 1.
+   */
+  radiusMultiplier?: number;
+  /**
+   * Multiply the color by this value.
+   * Default to 1.
+   */
+  light?: number;
+  /**
+   * Add an offset to the Z coordinate (along camera axis).
+   */
+  shiftZ?: number;
 };
 
 /**
@@ -80,8 +94,18 @@ export class TgdPainterSegments extends TgdPainter {
     options: Partial<TgdPainterSegmentsOptions> = {}
   ) {
     super();
-    const { roundness = 3, minRadius = 0, colorTexture } = options;
+    const {
+      roundness = 3,
+      minRadius = 0,
+      colorTexture,
+      radiusMultiplier = 1,
+      light = 1,
+      shiftZ = 0,
+    } = options;
     this.minRadius = minRadius;
+    this.radiusMultiplier = radiusMultiplier;
+    this.light = light;
+    this.shiftZ = shiftZ;
     if (roundness > 125) {
       throw Error("[TgdPainterSegments] Max roundness is 125!");
     }

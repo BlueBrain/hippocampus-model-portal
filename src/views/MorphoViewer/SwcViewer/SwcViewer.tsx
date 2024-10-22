@@ -23,15 +23,19 @@ import { CellNodes } from "../tools/nodes";
 import { classNames } from "@/utils";
 import { Legend } from "./Legend/Legend";
 
+export type SwcViewerLoader = (href: string) => Promise<
+  Array<{
+    nodes: CellNodes;
+    colors: string[];
+    minRadius?: number;
+    roundness?: number;
+  }>
+>;
+
 export interface SwcViewerProps {
   className?: string;
   href: string;
-  loader?(href: string): Promise<
-    Array<{
-      nodes: CellNodes;
-      colors: string[];
-    }>
-  >;
+  loader?: SwcViewerLoader;
   /**
    * If mising, a default legend with soma, axon and dendrite will be shown.
    */
@@ -134,12 +138,7 @@ function useViewerinit(
   setBusy: React.Dispatch<React.SetStateAction<boolean>>,
   setError: React.Dispatch<React.SetStateAction<string>>,
   refCanvas: React.MutableRefObject<HTMLCanvasElement | null>,
-  loader: (href: string) => Promise<
-    Array<{
-      nodes: CellNodes;
-      colors: string[];
-    }>
-  >,
+  loader: SwcViewerLoader,
   href: string,
   refContext: React.MutableRefObject<TgdContext | null>,
   refWatcher: React.MutableRefObject<PixelScaleWatcher>,
@@ -196,22 +195,23 @@ function useViewerinit(
         const center = new TgdVec3();
         let minY = Number.MAX_VALUE;
         let maxY = -Number.MAX_VALUE;
-        for (const { nodes, colors } of morphologies) {
+        for (const { nodes, colors, minRadius, roundness } of morphologies) {
           center.add(nodes.center);
           const halfHeight = nodes.bbox[1] * 0.5;
           minY = Math.min(minY, nodes.center.y - halfHeight);
           maxY = Math.max(maxY, nodes.center.y + halfHeight);
           const data = nodesToSegmentsData(nodes);
           const painter = new TgdPainterSegments(context, data, {
-            minRadius: 0.25,
+            minRadius: minRadius ?? 0.25,
+            roundness,
           });
           painter.colorTexture.makePalette(colors);
           const painterOutline = new TgdPainterSegments(context, data, {
-            minRadius: 0.25,
+            minRadius: minRadius ?? 0.25,
+            roundness,
+            radiusMultiplier: 1.2,
+            light: 0,
           });
-          painterOutline.radiusMultiplier = 1.2;
-          painterOutline.light = 0;
-          painterOutline.shiftZ = 2;
           context.add(painter, painterOutline);
         }
         context.camera.spaceHeightAtTarget = Math.abs(maxY - minY);
@@ -229,5 +229,14 @@ function useViewerinit(
       }
     };
     void action();
-  }, [href, loader]);
+  }, [
+    href,
+    loader,
+    refCanvas,
+    refContext,
+    refGizmo,
+    refWatcher,
+    setBusy,
+    setError,
+  ]);
 }
