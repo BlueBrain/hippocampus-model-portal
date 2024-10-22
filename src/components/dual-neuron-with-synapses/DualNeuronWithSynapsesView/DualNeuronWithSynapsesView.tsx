@@ -2,7 +2,7 @@ import React from "react";
 
 import { classNames } from "@/utils";
 import { fetchDualNeuron } from "../data";
-import { DualNeuronData, NeuronData, SynapseData } from "../types";
+import { NeuronData, SynapseData } from "../types";
 
 import styles from "./dual-neuron-with-synapses-view.module.css";
 import { basePath } from "@/config";
@@ -26,6 +26,11 @@ export function DualNeuronWithSynapsesView({
       className={classNames(styles.main, className)}
       href={`connection-viewer/${pre}-${post}.msgpack`}
       loader={loadMsgPack}
+      legend={[
+        { label: "Pre", color: "#07f" },
+        { label: "Post", color: "#f70" },
+        { label: "Synapse", color: "#ff0" },
+      ]}
     />
   );
 }

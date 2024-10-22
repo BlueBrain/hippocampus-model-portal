@@ -20,6 +20,8 @@ import { interpolateCamera } from "../tools/interpolate-camera";
 import { Scalebar } from "../Scalebar";
 import { PixelScaleWatcher } from "../Scalebar/pixel-scale-watcher";
 import { CellNodes } from "../tools/nodes";
+import { classNames } from "@/utils";
+import { Legend } from "./Legend/Legend";
 
 export interface SwcViewerProps {
   className?: string;
@@ -30,12 +32,22 @@ export interface SwcViewerProps {
       colors: string[];
     }>
   >;
+  /**
+   * If mising, a default legend with soma, axon and dendrite will be shown.
+   */
+  legend?: Array<{ label: string; color: string }>;
 }
 
 /**
  * Colors per section (soma, axon, dendrite, ...).
  */
 const COLORS = ["#333", "#00f", "#f00", "#f0f", "#8a8"];
+
+const DEFAULT_LEGEND = [
+  { label: "Soma", color: COLORS[0] },
+  { label: "Axon", color: COLORS[1] },
+  { label: "Dendrites", color: COLORS[2] },
+];
 
 const defaultTextLoader = async (
   href: string
@@ -54,6 +66,7 @@ export function SwcViewer({
   className,
   href,
   loader = defaultTextLoader,
+  legend,
 }: SwcViewerProps) {
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -62,6 +75,76 @@ export function SwcViewer({
   const refCanvas = React.useRef<HTMLCanvasElement | null>(null);
   const refGizmo = React.useRef(new GizmoCanvas());
   const refContext = React.useRef<TgdContext | null>(null);
+  useViewerinit(
+    setBusy,
+    setError,
+    refCanvas,
+    loader,
+    href,
+    refContext,
+    refWatcher,
+    refGizmo
+  );
+  const handleFullscreen = () => tgdFullscreenToggle(refContainer.current);
+
+  return (
+    <div
+      className={classNames(styles.main, className)}
+      ref={refContainer}
+      onDoubleClick={handleFullscreen}
+    >
+      <canvas ref={refCanvas}></canvas>
+      <canvas
+        className={styles.gizmo}
+        ref={(canvas) => {
+          refGizmo.current.canvas = canvas;
+        }}
+      ></canvas>
+      <button onClick={handleFullscreen}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <title>Toggle fullscreen</title>
+          <path
+            fill="currentColor"
+            d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z"
+          />
+        </svg>
+      </button>
+      <Scalebar
+        className={styles.scalebar}
+        pixelScaleWatcher={refWatcher.current}
+      />
+      <Legend values={legend ?? DEFAULT_LEGEND} />
+      {busy && (
+        <div className={styles.busy}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>loading</title>
+            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+          </svg>
+        </div>
+      )}
+      {error && (
+        <div className={styles.error}>
+          <div>{error}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+function useViewerinit(
+  setBusy: React.Dispatch<React.SetStateAction<boolean>>,
+  setError: React.Dispatch<React.SetStateAction<string>>,
+  refCanvas: React.MutableRefObject<HTMLCanvasElement | null>,
+  loader: (href: string) => Promise<
+    Array<{
+      nodes: CellNodes;
+      colors: string[];
+    }>
+  >,
+  href: string,
+  refContext: React.MutableRefObject<TgdContext | null>,
+  refWatcher: React.MutableRefObject<PixelScaleWatcher>,
+  refGizmo: React.MutableRefObject<GizmoCanvas>
+) {
   React.useEffect(() => {
     const action = async () => {
       setBusy(true);
@@ -147,63 +230,4 @@ export function SwcViewer({
     };
     void action();
   }, [href, loader]);
-  const handleFullscreen = () => tgdFullscreenToggle(refContainer.current);
-
-  return (
-    <div
-      className={styles.main}
-      ref={refContainer}
-      onDoubleClick={handleFullscreen}
-    >
-      <canvas ref={refCanvas}></canvas>
-      <canvas
-        className={styles.gizmo}
-        ref={(canvas) => {
-          refGizmo.current.canvas = canvas;
-        }}
-      ></canvas>
-      <button onClick={handleFullscreen}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <title>Toggle fullscreen</title>
-          <path
-            fill="currentColor"
-            d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z"
-          />
-        </svg>
-      </button>
-      <Scalebar
-        className={styles.scalebar}
-        pixelScaleWatcher={refWatcher.current}
-      />
-      <div className={styles.legend}>
-        <div>
-          <div>
-            <div style={{ background: COLORS[0] }} />
-            <div>Soma</div>
-          </div>
-          <div>
-            <div style={{ background: COLORS[1] }} />
-            <div>Axon</div>
-          </div>
-          <div>
-            <div style={{ background: COLORS[2] }} />
-            <div>Dendrites</div>
-          </div>
-        </div>
-      </div>
-      {busy && (
-        <div className={styles.busy}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <title>loading</title>
-            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
-          </svg>
-        </div>
-      )}
-      {error && (
-        <div className={styles.error}>
-          <div>{error}</div>
-        </div>
-      )}
-    </div>
-  );
 }
