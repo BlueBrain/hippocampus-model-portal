@@ -1,0 +1,38 @@
+.legend {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #000;
+  font-weight: normal;
+}
+
+.legend > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5em;
+  padding: 0.5em;
+  border-radius: 0 0 50% 50%;
+  backdrop-filter: blur(3px);
+}
+
+.legend > div > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.legend > div > div > div:first-child {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px #000;
+}

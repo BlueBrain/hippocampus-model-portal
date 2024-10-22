@@ -2,11 +2,11 @@ import React from "react";
 
 import { classNames } from "@/utils";
 import { fetchDualNeuron } from "../data";
-import { DualNeuronData, NeuronData, SynapseData } from "../types";
+import { NeuronData, SynapseData } from "../types";
 
 import styles from "./dual-neuron-with-synapses-view.module.css";
 import { basePath } from "@/config";
-import { SwcViewer } from "@/views/MorphoViewer/SwcViewer";
+import { SwcViewer, SwcViewerLoader } from "@/views/MorphoViewer/SwcViewer";
 import { CellNodes } from "@/views/MorphoViewer/tools/nodes";
 import { CellNode, CellNodeType } from "@/views/MorphoViewer/types";
 
@@ -26,13 +26,16 @@ export function DualNeuronWithSynapsesView({
       className={classNames(styles.main, className)}
       href={`connection-viewer/${pre}-${post}.msgpack`}
       loader={loadMsgPack}
+      legend={[
+        { label: "Pre", color: "#07f" },
+        { label: "Post", color: "#f70" },
+        { label: "Synapse", color: "#ff0" },
+      ]}
     />
   );
 }
 
-async function loadMsgPack(
-  url: string
-): Promise<{ nodes: CellNodes; colors: string[] }[]> {
+const loadMsgPack: SwcViewerLoader = async (url: string) => {
   try {
     const data = await fetchDualNeuron(`${basePath}/${url}`);
     const nodesPre = convertDualNeuronIntoCellNodes(data.pre);
@@ -51,12 +54,14 @@ async function loadMsgPack(
       {
         colors: ["#ff0"],
         nodes: convertSynapsesIntoCellNodes(data.synapses, radius),
+        minRadius: 8,
+        roundness: 24,
       },
     ];
   } catch (ex) {
     throw ex;
   }
-}
+};
 
 function convertDualNeuronIntoCellNodes(data: NeuronData): CellNodes {
   const nodes: CellNode[] = [];

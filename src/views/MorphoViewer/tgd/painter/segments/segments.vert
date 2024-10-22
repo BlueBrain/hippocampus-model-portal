@@ -86,13 +86,13 @@ float getRadius(float tip) {
         originalRadius,
         uniRadiusConstant,
         uniRadiusSwitch
-    ) * uniRadiusMultiplier;
+    );
     float radius = mix(
         originalRadius,
         modifiedRadius,
         influence
     );
-    return max(uniMinRadius, radius);
+    return max(uniMinRadius, radius) * uniRadiusMultiplier;
 }
 
 vec3 worldToCamera(vec3 v) {
