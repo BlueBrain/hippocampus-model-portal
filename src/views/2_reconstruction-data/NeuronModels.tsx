@@ -18,7 +18,7 @@ import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import Factsheet from "@/components/Factsheet";
-import MorphologyData from '@/models.json';
+import MorphologyData from "@/models.json";
 import modelsData from "./neuron-model.json";
 import LayerSelector3D from "@/components/LayerSelector3D";
 import MechanismTable from "./neuron-model/MechanismTable";
@@ -29,8 +29,9 @@ import DownloadModel from "@/components/DownloadModel";
 
 import { Layer } from "@/types";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { PranavViewer } from "@/components/PranavViewer";
 
 type ModelData = {
   layer: Layer;
@@ -116,30 +117,47 @@ const Neurons: React.FC = () => {
   useEffect(() => {
     if (Object.keys(query).length === 0) return;
 
-    const newLayer = query.layer && typeof query.layer === "string" && layers.includes(query.layer as Layer)
-      ? (query.layer as Layer)
-      : layers[0] || "";
+    const newLayer =
+      query.layer &&
+      typeof query.layer === "string" &&
+      layers.includes(query.layer as Layer)
+        ? (query.layer as Layer)
+        : layers[0] || "";
 
     const newMtypes = getUniqueValues("mtype", "layer", newLayer) as string[];
-    const newMtype = query.mtype && typeof query.mtype === "string" && newMtypes.includes(query.mtype)
-      ? query.mtype
-      : newMtypes[0] || "";
+    const newMtype =
+      query.mtype &&
+      typeof query.mtype === "string" &&
+      newMtypes.includes(query.mtype)
+        ? query.mtype
+        : newMtypes[0] || "";
 
-    const newEtypes = getUniqueValues("etype", "layer", newLayer, "mtype", newMtype) as string[];
-    const newEtype = query.etype && typeof query.etype === "string" && newEtypes.includes(query.etype)
-      ? query.etype
-      : newEtypes[0] || "";
+    const newEtypes = getUniqueValues(
+      "etype",
+      "layer",
+      newLayer,
+      "mtype",
+      newMtype
+    ) as string[];
+    const newEtype =
+      query.etype &&
+      typeof query.etype === "string" &&
+      newEtypes.includes(query.etype)
+        ? query.etype
+        : newEtypes[0] || "";
 
     const newInstances = getFilteredInstances(newLayer, newMtype, newEtype);
-    const newInstance = query.instance && typeof query.instance === "string" && newInstances.includes(query.instance)
-      ? query.instance
-      : newInstances[0] || "";
+    const newInstance =
+      query.instance &&
+      typeof query.instance === "string" &&
+      newInstances.includes(query.instance)
+        ? query.instance
+        : newInstances[0] || "";
 
     setCurrentLayer(newLayer);
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentInstance(newInstance);
-
   }, [query, layers]);
 
   useEffect(() => {
@@ -299,37 +317,46 @@ const Neurons: React.FC = () => {
     const zip = new JSZip();
 
     // Add electrophysiology folder
-    const electroPhysiologyFolder = zip.folder('electrophysiology');
-    const electroPhysiologyFiles = await fetchFilesFromFolder(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology`);
+    const electroPhysiologyFolder = zip.folder("electrophysiology");
+    const electroPhysiologyFiles = await fetchFilesFromFolder(
+      `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology`
+    );
     for (const file of electroPhysiologyFiles) {
       const content = await fetchFileContent(file.path);
       electroPhysiologyFolder?.file(file.name, content);
     }
 
     // Add morphology file
-    const morphologyContent = await fetchFileContent(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`);
-    zip.file('morphology/morphology.swc', morphologyContent);
+    const morphologyContent = await fetchFileContent(
+      `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`
+    );
+    zip.file("morphology/morphology.swc", morphologyContent);
 
     // Add mechanisms folder
-    const mechanismsFolder = zip.folder('mechanisms');
-    const mechanismFiles = await fetchFilesFromFolder(`${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms`);
+    const mechanismsFolder = zip.folder("mechanisms");
+    const mechanismFiles = await fetchFilesFromFolder(
+      `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms`
+    );
     for (const file of mechanismFiles) {
       const content = await fetchFileContent(file.path);
       mechanismsFolder?.file(file.name, content);
     }
 
     // Add readme and script files
-    const readmeContent = await fetchFileContent(`${dataPath}/2_reconstruction-data/neuron-models/readme.md`);
-    zip.file('readme.md', readmeContent);
+    const readmeContent = await fetchFileContent(
+      `${dataPath}/2_reconstruction-data/neuron-models/readme.md`
+    );
+    zip.file("readme.md", readmeContent);
 
-    const scriptContent = await fetchFileContent(`${dataPath}/2_reconstruction-data/neuron-models/script.py`);
-    zip.file('script.py', scriptContent);
+    const scriptContent = await fetchFileContent(
+      `${dataPath}/2_reconstruction-data/neuron-models/script.py`
+    );
+    zip.file("script.py", scriptContent);
 
     // Generate and download the zip file
-    const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, 'neuron-model.zip');
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs(content, "neuron-model.zip");
   };
-
 
   // Helper functions to fetch file content and folder structure
   const fetchFileContent = async (path: string): Promise<string> => {
@@ -337,7 +364,9 @@ const Neurons: React.FC = () => {
     return await response.text();
   };
 
-  const fetchFilesFromFolder = async (url: string): Promise<{ name: string; path: string }[]> => {
+  const fetchFilesFromFolder = async (
+    url: string
+  ): Promise<{ name: string; path: string }[]> => {
     try {
       console.log("Fetching files from URL:", url);
       const response = await fetch(url);
@@ -348,14 +377,13 @@ const Neurons: React.FC = () => {
       console.log("Files received:", files);
       return files.map((file: string) => ({
         name: file,
-        path: `${url}/${file}`
+        path: `${url}/${file}`,
       }));
     } catch (error) {
       console.error("Error fetching files from URL:", error);
       return [];
     }
   };
-
 
   return (
     <>
@@ -413,8 +441,9 @@ const Neurons: React.FC = () => {
                     block
                     list={mtypes}
                     value={currentMtype}
-                    title={`M-type ${mtypes.length ? `(${mtypes.length})` : ""
-                      }`}
+                    title={`M-type ${
+                      mtypes.length ? `(${mtypes.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setMtype}
                     theme={theme}
@@ -423,8 +452,9 @@ const Neurons: React.FC = () => {
                     block
                     list={etypes}
                     value={currentEtype}
-                    title={`E-type ${etypes.length ? `(${etypes.length})` : ""
-                      }`}
+                    title={`E-type ${
+                      etypes.length ? `(${etypes.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setEtype}
                     theme={theme}
@@ -433,8 +463,9 @@ const Neurons: React.FC = () => {
                     block
                     list={instances}
                     value={currentInstance}
-                    title={`Instance ${instances.length ? `(${instances.length})` : ""
-                      }`}
+                    title={`Instance ${
+                      instances.length ? `(${instances.length})` : ""
+                    }`}
                     color={colorName}
                     onSelect={setInstance}
                     anchor="data"
@@ -455,18 +486,32 @@ const Neurons: React.FC = () => {
           { id: "factsheetSection", label: "Factsheet" },
           { id: "efeaturesSection", label: "E-features" },
           { id: "mechansimsSection", label: "Mechanisms" },
-          { id: "ExperimentalMorphologySection", label: "Experimental morphology used for this model" },
-          { id: "experimentalRecordingsSection", label: "Experimental recordings used for this model" },
+          {
+            id: "ExperimentalMorphologySection",
+            label: "Experimental morphology used for this model",
+          },
+          {
+            id: "experimentalRecordingsSection",
+            label: "Experimental recordings used for this model",
+          },
         ]}
         quickSelectorEntries={qsEntries}
       >
-
-
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
           <div className="graph no-padding">
-            <SwcViewer
-              href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
-            />
+            <pre style={{ background: "#333", color: "#7f7" }}>
+              {JSON.stringify(
+                {
+                  currentInstance,
+                  currentEtype,
+                  currentMtype,
+                  currentLayer,
+                },
+                null,
+                "  "
+              )}
+            </pre>
+            <PranavViewer url="epsp-bpap/digitial_recon/SO_BP/cNAC/455995" />
           </div>
 
           <div className="mt-4">
@@ -477,11 +522,10 @@ const Neurons: React.FC = () => {
                 `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
                 `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
                 `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.zip`,
-                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology.zip`
+                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology.zip`,
               ]}
             />
           </div>
-
         </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
@@ -552,8 +596,15 @@ const Neurons: React.FC = () => {
           <MechanismTable data={mechanismsData} instance={currentInstance} />
         </Collapsible>
 
-        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
-          <ExperimentalMorphologyTable MorphologyData={MorphologyData} currentInstance={currentInstance} />
+        <Collapsible
+          id="ExperimentalMorphologySection"
+          className="mt-4"
+          title="Experimental morphology used for this model"
+        >
+          <ExperimentalMorphologyTable
+            MorphologyData={MorphologyData}
+            currentInstance={currentInstance}
+          />
         </Collapsible>
 
         <Collapsible
@@ -566,8 +617,6 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
       </DataContainer>
-
-
     </>
   );
 };

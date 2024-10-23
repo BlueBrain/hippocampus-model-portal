@@ -61,9 +61,16 @@ const defaultTextLoader = async (
     colors: string[];
   }>
 > => {
-  const resp = await fetch(`${basePath}/${href}`);
-  const text = await resp.text();
-  return [{ nodes: parseSwc(text), colors: COLORS }];
+  const url = `${basePath}/${href}`;
+  try {
+    const resp = await fetch(url);
+    const text = await resp.text();
+    return [{ nodes: parseSwc(text), colors: COLORS }];
+  } catch (ex) {
+    console.error("Unable to fetch this URL:", url);
+    console.error(ex);
+    throw Error(`Unable to fetch ${url}!`);
+  }
 };
 
 export function SwcViewer({

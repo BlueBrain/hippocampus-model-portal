@@ -17,8 +17,6 @@ const InstanceViewer: React.FC<InstanceViewerProps> = ({
 }) => {
   const nexus = useNexusContext();
 
-  console.log("🚀 [InstanceViewer] nexus = ", nexus); // @FIXME: Remove this line written on 2024-10-04 at 15:57
-
   // Function to ensure we have a string value
   const ensureString = (value: string | string[] | undefined): string => {
     if (typeof value === "string") {

@@ -88,10 +88,6 @@ function convertDualNeuronIntoCellNodes(data: NeuronData): CellNodes {
       parent = index;
     }
   }
-  console.log(
-    "🚀 [DualNeuronWithSynapsesView] Array.from(setUV) = ",
-    Array.from(setUV)
-  ); // @FIXME: Remove this line written on 2024-10-17 at 17:06
   return new CellNodes(nodes);
 }
 
