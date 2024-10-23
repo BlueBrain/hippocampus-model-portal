@@ -45,5 +45,8 @@ yarn-error.log*
 venv
 
 # data 
-public/resources/data
-public/
+public/data
+public/connection-viewer
+
+# Keep EPSP-BPAP data
+!public/epsp-bpap

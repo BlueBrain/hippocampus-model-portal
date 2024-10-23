@@ -66,19 +66,19 @@ const NeuronalMorphologyView: React.FC = () => {
   const getMtypes = (layer: Layer | null) => {
     return layer
       ? Array.from(
-        new Set(
-          morphologies.filter((m) => m.region === layer).map((m) => m.mtype)
-        )
-      ).sort()
+          new Set(
+            morphologies.filter((m) => m.region === layer).map((m) => m.mtype)
+          )
+        ).sort()
       : [];
   };
 
   const getInstances = (mtype: string) => {
     return mtype
       ? morphologies
-        .filter((m) => m.mtype === mtype)
-        .map((m) => m.name)
-        .sort()
+          .filter((m) => m.mtype === mtype)
+          .map((m) => m.name)
+          .sort()
       : [];
   };
 
@@ -118,8 +118,6 @@ const NeuronalMorphologyView: React.FC = () => {
       return updatedSelection;
     });
   };
-
-
 
   const mtypes = getMtypes(quickSelection.layer);
   const instances = getInstances(quickSelection.mtype);
@@ -248,8 +246,6 @@ const NeuronalMorphologyView: React.FC = () => {
             <SwcViewer
               href={`data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
             />
-
-
           </div>
 
           <DownloadButton
@@ -337,7 +333,6 @@ const NeuronalMorphologyView: React.FC = () => {
                       imagePath={`${basePath}/data/images/1_experimental-data/slices`}
                       thumbnailPath={`${basePath}/data/images/1_experimental-data/slices/thumbnails`}
                       imageExt="jpeg"
-
                       theme={theme}
                       data={tableData}
                       layer={quickSelection.layer || undefined}
