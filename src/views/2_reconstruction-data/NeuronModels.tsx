@@ -31,6 +31,7 @@ import { Layer } from "@/types";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import { PranavViewer } from "@/components/PranavViewer";
 
 type ModelData = {
   layer: Layer;
@@ -510,9 +511,7 @@ const Neurons: React.FC = () => {
                 "  "
               )}
             </pre>
-            <SwcViewer
-              href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
-            />
+            <PranavViewer url="epsp-bpap/digitial_recon/SO_BP/cNAC/455995" />
           </div>
 
           <div className="mt-4">
