@@ -498,21 +498,7 @@ const Neurons: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
-          <div className="graph no-padding">
-            <pre style={{ background: "#333", color: "#7f7" }}>
-              {JSON.stringify(
-                {
-                  currentInstance,
-                  currentEtype,
-                  currentMtype,
-                  currentLayer,
-                },
-                null,
-                "  "
-              )}
-            </pre>
-            <PranavViewer url="epsp-bpap/digitial_recon/SO_BP/cNAC/455995" />
-          </div>
+          <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
 
           <div className="mt-4">
             <DownloadModel

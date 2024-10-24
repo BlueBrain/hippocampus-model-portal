@@ -62,6 +62,5 @@ export class PixelScaleWatcher {
     this.previousCameraZoom = cameraZoom;
     this.previousViewportHeight = screenHeight;
     this.eventPixelScaleChange.dispatch(this.pixelScale);
-    console.log("🚀 [pixel-scale-watcher] this.pixelScale = ", this.pixelScale); // @FIXME: Remove this line written on 2024-10-08 at 13:38
   };
 }

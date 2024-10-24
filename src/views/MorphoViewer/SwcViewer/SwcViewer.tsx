@@ -9,6 +9,8 @@ import {
   TgdPainterClear,
   TgdPainterDepth,
   TgdPainterSegments,
+  TgdTexture2D,
+  TgdTexture2DOptions,
   TgdVec3,
 } from "@tgd";
 
@@ -23,23 +25,43 @@ import { CellNodes } from "../tools/nodes";
 import { classNames } from "@/utils";
 import { Legend } from "./Legend/Legend";
 
-export type SwcViewerLoader = (href: string) => Promise<
-  Array<{
+export type SwcViewerLoader = (href: string) => Promise<{
+  /**
+   * You can define a custom legend based on the loaded data.
+   */
+  legend?: SwcViewerLegend;
+  morphologies: Array<{
     nodes: CellNodes;
     colors: string[];
+    texture?: Partial<TgdTexture2DOptions>;
     minRadius?: number;
     roundness?: number;
-  }>
->;
+    center?: TgdVec3;
+  }>;
+}>;
+
+/**
+ * Pass an array to get one color per section.
+ * Pass an object to get a linear gradient.
+ */
+export type SwcViewerLegend =
+  | Array<{ label: string; color: string }>
+  | {
+      labelMin: string;
+      labelMax: string;
+      colorRamp: string[];
+    };
 
 export interface SwcViewerProps {
   className?: string;
   href: string;
   loader?: SwcViewerLoader;
   /**
-   * If mising, a default legend with soma, axon and dendrite will be shown.
+   * If missing, a default legend with soma, axon and dendrite will be shown.
+   * Pass an array to get one color per section.
+   * Pass an object to get a linear gradient.
    */
-  legend?: Array<{ label: string; color: string }>;
+  legend?: SwcViewerLegend;
 }
 
 /**
@@ -53,19 +75,12 @@ const DEFAULT_LEGEND = [
   { label: "Dendrites", color: COLORS[2] },
 ];
 
-const defaultTextLoader = async (
-  href: string
-): Promise<
-  Array<{
-    nodes: CellNodes;
-    colors: string[];
-  }>
-> => {
+const defaultTextLoader: SwcViewerLoader = async (href: string) => {
   const url = `${basePath}/${href}`;
   try {
     const resp = await fetch(url);
     const text = await resp.text();
-    return [{ nodes: parseSwc(text), colors: COLORS }];
+    return { morphologies: [{ nodes: parseSwc(text), colors: COLORS }] };
   } catch (ex) {
     console.error("Unable to fetch this URL:", url);
     console.error(ex);
@@ -77,8 +92,11 @@ export function SwcViewer({
   className,
   href,
   loader = defaultTextLoader,
-  legend,
+  legend: initialLegend,
 }: SwcViewerProps) {
+  const [legend, setLegend] = React.useState<SwcViewerLegend | undefined>(
+    initialLegend
+  );
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
   const refWatcher = React.useRef(new PixelScaleWatcher());
@@ -86,7 +104,7 @@ export function SwcViewer({
   const refCanvas = React.useRef<HTMLCanvasElement | null>(null);
   const refGizmo = React.useRef(new GizmoCanvas());
   const refContext = React.useRef<TgdContext | null>(null);
-  useViewerinit(
+  useViewerInit(
     setBusy,
     setError,
     refCanvas,
@@ -94,7 +112,8 @@ export function SwcViewer({
     href,
     refContext,
     refWatcher,
-    refGizmo
+    refGizmo,
+    setLegend
   );
   const handleFullscreen = () => tgdFullscreenToggle(refContainer.current);
 
@@ -141,7 +160,7 @@ export function SwcViewer({
     </div>
   );
 }
-function useViewerinit(
+function useViewerInit(
   setBusy: React.Dispatch<React.SetStateAction<boolean>>,
   setError: React.Dispatch<React.SetStateAction<string>>,
   refCanvas: React.MutableRefObject<HTMLCanvasElement | null>,
@@ -149,19 +168,28 @@ function useViewerinit(
   href: string,
   refContext: React.MutableRefObject<TgdContext | null>,
   refWatcher: React.MutableRefObject<PixelScaleWatcher>,
-  refGizmo: React.MutableRefObject<GizmoCanvas>
+  refGizmo: React.MutableRefObject<GizmoCanvas>,
+  setLegend: (legend?: SwcViewerLegend) => void
 ) {
+  /**
+   * We use this query counter to be sure that an old query is not
+   * reporting an error if a new one is ongoing.
+   */
+  const refQueryCounter = React.useRef(0);
   React.useEffect(() => {
     const action = async () => {
       setBusy(true);
       setError("");
+      refQueryCounter.current++;
+      const queryId = refQueryCounter.current;
       try {
         const canvas = refCanvas.current;
         if (!canvas) return;
 
-        const morphologies = await loader(href);
-        if (!morphologies) return;
+        const viewOptions = await loader(href);
+        if (!viewOptions) return;
 
+        if (viewOptions.legend) setLegend(viewOptions.legend);
         let context = refContext.current;
         if (context) {
           context.removeAll();
@@ -199,11 +227,18 @@ function useViewerinit(
             rangeMax: 1,
           })
         );
-        const center = new TgdVec3();
+        const target = new TgdVec3();
         let minY = Number.MAX_VALUE;
         let maxY = -Number.MAX_VALUE;
-        for (const { nodes, colors, minRadius, roundness } of morphologies) {
-          center.add(nodes.center);
+        for (const {
+          nodes,
+          colors,
+          texture,
+          minRadius,
+          roundness,
+          center,
+        } of viewOptions.morphologies) {
+          target.add(center ?? nodes.center);
           const halfHeight = nodes.bbox[1] * 0.5;
           minY = Math.min(minY, nodes.center.y - halfHeight);
           maxY = Math.max(maxY, nodes.center.y + halfHeight);
@@ -211,6 +246,14 @@ function useViewerinit(
           const painter = new TgdPainterSegments(context, data, {
             minRadius: minRadius ?? 0.25,
             roundness,
+            colorTexture: context.textures2D.create({
+              magFilter: "NEAREST",
+              minFilter: "NEAREST",
+              wrapR: "CLAMP_TO_EDGE",
+              wrapS: "CLAMP_TO_EDGE",
+              wrapT: "CLAMP_TO_EDGE",
+              ...texture,
+            }),
           });
           painter.colorTexture.makePalette(colors);
           const painterOutline = new TgdPainterSegments(context, data, {
@@ -223,15 +266,17 @@ function useViewerinit(
           context.add(painter, painterOutline);
         }
         context.camera.spaceHeightAtTarget = Math.abs(maxY - minY);
-        center.scale(1 / morphologies.length);
-        context.camera.target = center;
+        target.scale(1 / viewOptions.morphologies.length);
+        context.camera.target = target;
         context.paint();
         refContext.current = context;
       } catch (ex) {
-        console.error("Unable to load data for SwcViewer!");
+        console.error("Unable to load data for SwcViewer!", href);
         console.error(ex);
+        if (queryId < refQueryCounter.current) return;
+
         const msg = ex instanceof Error ? ex.message : JSON.stringify(ex);
-        setError(msg);
+        setError(`Unable to load from "${href}"!\n${msg}`);
       } finally {
         setBusy(false);
       }
@@ -246,5 +291,6 @@ function useViewerinit(
     refWatcher,
     setBusy,
     setError,
+    setLegend,
   ]);
 }

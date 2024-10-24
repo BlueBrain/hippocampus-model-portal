@@ -24,6 +24,7 @@ import modelsData from "./neuron-model-libraries.json";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
 import DownloadModel from "@/components/DownloadModel";
 import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
+import { PranavViewer } from "@/components/PranavViewer";
 
 type ModelData = {
   mtype: string;
@@ -305,16 +306,17 @@ const NeuronsModelLibrary: React.FC = () => {
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "traceSection", label: "Trace" },
           { id: "factsheetSection", label: "Factsheet" },
-          { id: "ExperimentalMorphologySection", label: "Experimental morphology used for this model" },
+          {
+            id: "ExperimentalMorphologySection",
+            label: "Experimental morphology used for this model",
+          },
         ]}
         quickSelectorEntries={qsEntries}
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
-          <div className="graph no-padding">
-            <SwcViewer
-              href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
-            />
-          </div>
+          <PranavViewer
+            url={`epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentMorphology}`}
+          />
           <div className="mt-4">
             <DownloadModel
               theme={theme}
@@ -322,7 +324,7 @@ const NeuronsModelLibrary: React.FC = () => {
                 `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`,
                 `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
                 `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
-                `${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/electrophysiology.zip`
+                `${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/electrophysiology.zip`,
               ]}
             />
           </div>
@@ -388,8 +390,16 @@ const NeuronsModelLibrary: React.FC = () => {
             </>
           )}
         </Collapsible>
-        <Collapsible id="ExperimentalMorphologySection" className="mt-4" title="Experimental morphology used for this model">
-          <ExperimentalMorphologyTable MorphologyData={modelsData} currentInstance={currentMorphology} isMorphologyLibrary={true} />
+        <Collapsible
+          id="ExperimentalMorphologySection"
+          className="mt-4"
+          title="Experimental morphology used for this model"
+        >
+          <ExperimentalMorphologyTable
+            MorphologyData={modelsData}
+            currentInstance={currentMorphology}
+            isMorphologyLibrary={true}
+          />
         </Collapsible>
       </DataContainer>
     </>
