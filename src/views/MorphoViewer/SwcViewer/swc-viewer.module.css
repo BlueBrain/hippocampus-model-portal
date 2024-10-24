@@ -4,6 +4,8 @@
   height: 50vh;
   border-radius: 0.25em;
   overflow: hidden;
+  margin: 0.25em;
+  box-shadow: 0 0.125em 0.25em #000;
 }
 
 .main > canvas.gizmo {

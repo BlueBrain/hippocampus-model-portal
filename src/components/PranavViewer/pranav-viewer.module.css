@@ -1,2 +1,5 @@
-.main {
+.main h1 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 1em 0 0.25em 0;
 }

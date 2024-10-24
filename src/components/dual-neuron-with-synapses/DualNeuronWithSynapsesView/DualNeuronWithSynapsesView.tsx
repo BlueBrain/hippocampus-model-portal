@@ -42,22 +42,24 @@ const loadMsgPack: SwcViewerLoader = async (url: string) => {
     const nodesPost = convertDualNeuronIntoCellNodes(data.post);
     const radius =
       Math.max(nodesPre.averageRadius, nodesPost.averageRadius) * 10;
-    return [
-      {
-        colors: ["#333", "#04a", "#07f"],
-        nodes: nodesPre,
-      },
-      {
-        colors: ["#333", "#a40", "#f70"],
-        nodes: nodesPost,
-      },
-      {
-        colors: ["#ff0"],
-        nodes: convertSynapsesIntoCellNodes(data.synapses, radius),
-        minRadius: 8,
-        roundness: 24,
-      },
-    ];
+    return {
+      morphologies: [
+        {
+          colors: ["#333", "#04a", "#07f"],
+          nodes: nodesPre,
+        },
+        {
+          colors: ["#333", "#a40", "#f70"],
+          nodes: nodesPost,
+        },
+        {
+          colors: ["#ff0"],
+          nodes: convertSynapsesIntoCellNodes(data.synapses, radius),
+          minRadius: 8,
+          roundness: 24,
+        },
+      ],
+    };
   } catch (ex) {
     throw ex;
   }
