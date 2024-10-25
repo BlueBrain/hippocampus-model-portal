@@ -498,8 +498,9 @@ const Neurons: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
-          <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
-
+          <SwcViewer
+            href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
+          />
           <div className="mt-4">
             <DownloadModel
               theme={theme}
@@ -556,6 +557,8 @@ const Neurons: React.FC = () => {
             </>
           )}
         </Collapsible>
+
+        <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
 
         <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
           {efeatureData && (
