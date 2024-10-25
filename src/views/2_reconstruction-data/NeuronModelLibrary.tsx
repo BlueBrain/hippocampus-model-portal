@@ -24,6 +24,7 @@ import modelsData from "./neuron-model-libraries.json";
 import DownloadModel from "@/components/DownloadModel";
 import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 import { PranavViewer } from "@/components/PranavViewer";
+import { SwcViewer } from "../MorphoViewer/SwcViewer";
 
 type ModelData = {
   mtype: string;
@@ -313,12 +314,8 @@ const NeuronsModelLibrary: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
-          <PranavViewer
-            url={`epsp-bpap/neuron_model_lib/${mapPranavFile(
-              currentMtype,
-              currentEtype,
-              currentMorphology
-            )}`}
+          <SwcViewer
+            href={`data/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`}
           />
           <div className="mt-4">
             <DownloadModel
@@ -333,6 +330,13 @@ const NeuronsModelLibrary: React.FC = () => {
           </div>
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <PranavViewer
+            url={`epsp-bpap/neuron_model_lib/${mapPranavFile(
+              currentMtype,
+              currentEtype,
+              currentMorphology
+            )}`}
+          />
           <div className="graph"></div>
           {morphologyData && (
             <div className="mt-4">

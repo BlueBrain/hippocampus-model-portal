@@ -23,6 +23,7 @@ import LayerSelector3D from "@/components/LayerSelector3D";
 import { Layer } from "@/types"; // Ensure Layer is imported from the correct path
 import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 import { PranavViewer } from "@/components/PranavViewer";
+import { SwcViewer } from "../MorphoViewer/SwcViewer";
 
 const getUniqueValues = (
   key: string,
@@ -365,8 +366,8 @@ const NeuronsView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <PranavViewer
-          url={`epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentMorphology}`}
+        <SwcViewer
+          href={`data/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/morphology.swc`}
         />
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
@@ -390,14 +391,6 @@ const NeuronsView: React.FC = () => {
           )}
         </Collapsible>
 
-        {/*
-        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
-          <div className="graph">
-             Add bPAP & PSP graph component here 
-          </div>
-        </Collapsible>
-        */}
-
         <Collapsible id="factsheetSection" className="mt-4" title="Factsheet">
           {factsheetData && (
             <>
@@ -418,6 +411,13 @@ const NeuronsView: React.FC = () => {
             </>
           )}
         </Collapsible>
+
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <PranavViewer
+            url={`epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentMorphology}`}
+          />
+        </Collapsible>
+
         <Collapsible
           id="ExperimentalMorphologySection"
           className="mt-4"
