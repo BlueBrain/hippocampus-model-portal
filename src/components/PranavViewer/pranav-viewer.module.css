@@ -3,3 +3,18 @@
   font-weight: bold;
   margin: 1em 0 0.25em 0;
 }
+
+.main > header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1em;
+}
+
+.main > header > div > label:first-child {
+  border-radius: 0.5em 0 0 0.5em;
+}
+
+.main > header > div > label:last-child {
+  border-radius: 0 0.5em 0.5em 0;
+}

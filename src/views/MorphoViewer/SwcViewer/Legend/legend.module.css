@@ -45,6 +45,11 @@
   gap: 1em;
 }
 
+.continue > div {
+  white-space: noWrap;
+  font-size: 80%;
+}
+
 .continue > div.colorramp {
   border: 1px solid #000;
   height: 1em;
