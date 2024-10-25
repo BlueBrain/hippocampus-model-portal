@@ -1,12 +1,14 @@
 import React from "react";
-import { classNames } from "@/utils";
+import { Radio, RadioChangeEvent } from "antd";
 
-import styles from "./pranav-viewer.module.css";
+import { classNames } from "@/utils";
 import { SwcViewer, SwcViewerLoader } from "@/views/MorphoViewer/SwcViewer";
 import { CellNodes } from "@/views/MorphoViewer/tools/nodes";
 import { basePath } from "@/config";
 import { CellNode, CellNodeType } from "@/views/MorphoViewer/types";
-import { TgdTexture2DOptions, TgdVec3 } from "@/views/MorphoViewer/tgd";
+import { TgdVec3 } from "@/views/MorphoViewer/tgd";
+
+import styles from "./pranav-viewer.module.css";
 
 const COLORS = [
   "#004282",
@@ -25,24 +27,57 @@ export interface PranavViewerProps {
   url: string;
 }
 
+function Options(props: {
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  [
+    { label: "Apple", value: "Apple" },
+    { label: "Pear", value: "Pear" },
+    { label: "Orange", value: "Orange", disabled: true },
+  ];
+  return (
+    <Radio.Group
+      options={props.options.map((id) => ({ label: id, value: id }))}
+      onChange={({ target: { value } }: RadioChangeEvent) =>
+        props.onChange(value)
+      }
+      value={props.value}
+      optionType="button"
+      buttonStyle="solid"
+    />
+  );
+}
+
 export function PranavViewer({ className, url }: PranavViewerProps) {
+  const [type, setType] = React.useState("BPAP");
+  const [field, setField] = React.useState("Amplitude");
   return (
     <div className={classNames(styles.main, className)}>
-      <h1>BPAP</h1>
+      <header>
+        <Options options={["BPAP", "EPSP"]} value={type} onChange={setType} />
+        <Options
+          options={["Amplitude", "Delay"]}
+          value={field}
+          onChange={setField}
+        />
+      </header>
       <SwcViewer
-        href={`${basePath}/${url}/bpap_result.csv`}
-        loader={pranavLoader}
-      />
-      <h1>EPSP</h1>
-      <SwcViewer
-        href={`${basePath}/${url}/epsp_result.csv`}
-        loader={pranavLoader}
+        href={`${basePath}/${url}/${type.toLowerCase()}_result.csv`}
+        loader={
+          field === "Amplitude" ? pranavLoaderAmplitude : pranavLoaderDelay
+        }
       />
     </div>
   );
 }
 
-const pranavLoader: SwcViewerLoader = async (url: string) => {
+async function pranavLoad(
+  url: string,
+  fields: string[],
+  unit: string
+): Promise<ReturnType<SwcViewerLoader>> {
   const resp = await fetch(url);
   if (!resp.ok) throw Error(`Error #${resp.status}: ${resp.statusText}`);
 
@@ -50,9 +85,7 @@ const pranavLoader: SwcViewerLoader = async (url: string) => {
   const [header, ...lines] = text
     .split("\n")
     .filter((line) => line.trim().length > 0);
-  console.log("🚀 [PranavViewer] header = ", header); // @FIXME: Remove this line written on 2024-10-23 at 16:51
-  console.log("🚀 [PranavViewer] lines = ", lines); // @FIXME: Remove this line written on 2024-10-23 at 16:51
-  const get = makeGetter(header);
+  const get = makeGetter(header, fields);
   let centerCount = 0;
   let centerX = 0;
   let centerY = 0;
@@ -107,8 +140,8 @@ const pranavLoader: SwcViewerLoader = async (url: string) => {
   return {
     legend: {
       colorRamp: COLORS,
-      labelMin: `${minU.toFixed(3)}`,
-      labelMax: `${maxU.toFixed(3)}`,
+      labelMin: `${minU.toFixed(3)} ${unit}`,
+      labelMax: `${maxU.toFixed(3)} ${unit}`,
     },
     morphologies: [
       {
@@ -122,15 +155,23 @@ const pranavLoader: SwcViewerLoader = async (url: string) => {
       },
     ],
   };
+}
+
+const pranavLoaderAmplitude: SwcViewerLoader = async (url: string) => {
+  return pranavLoad(url, ["voltage_attenuation", "psp_amplitude_ratio"], "mV");
 };
 
-function makeGetter(header: string) {
+const pranavLoaderDelay: SwcViewerLoader = async (url: string) => {
+  return pranavLoad(url, ["delay", "peak_delays"], "ms");
+};
+
+function makeGetter(header: string, voltages: string[]) {
   const fields = header.split(",").map((item) => item.trim().toLowerCase());
-  const voltage =
-    fields.indexOf("voltage_attenuation") > -1
-      ? "voltage_attenuation"
-      : "psp_amplitude_ratio";
-  console.log("🚀 [PranavViewer] voltage, header = ", voltage, header); // @FIXME: Remove this line written on 2024-10-24 at 08:26
+  const voltage = voltages.find((v) => fields.indexOf(v) > -1) ?? "";
+  fields.indexOf("voltage_attenuation") > -1;
+  if (voltages.includes("delay")) {
+    console.log("🚀 [PranavViewer] voltage, header = ", voltage, header); // @FIXME: Remove this line written on 2024-10-24 at 08:26
+  }
   return {
     id: makeFieldGetter(fields.indexOf("unique_int_id")),
     parent: makeFieldGetter(fields.indexOf("parent_unique_int_id")),
