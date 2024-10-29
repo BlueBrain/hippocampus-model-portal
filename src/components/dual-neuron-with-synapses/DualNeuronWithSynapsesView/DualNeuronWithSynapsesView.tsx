@@ -24,7 +24,7 @@ export function DualNeuronWithSynapsesView({
   return (
     <SwcViewer
       className={classNames(styles.main, className)}
-      href={`connection-viewer/${pre}-${post}.msgpack`}
+      href={`data/3d/3_digital-reconstruction/connection-viewer/${pre}-${post}.msgpack`}
       loader={loadMsgPack}
       legend={[
         { label: "Pre", color: "#07f" },
