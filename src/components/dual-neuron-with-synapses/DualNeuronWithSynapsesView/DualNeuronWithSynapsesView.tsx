@@ -24,8 +24,10 @@ export function DualNeuronWithSynapsesView({
   const combination = checkCombination(pre, post);
   if (!combination) {
     return (
-      <div>
-        No combination found for pre <b>{pre}</b> and post <b>{post}</b>!
+      <div className="text-center p-4">
+        <p className="text-red-500">
+          No synapse view available for this selection.
+        </p>
       </div>
     );
   }
