@@ -1,0 +1,31 @@
+.main {
+  display: grid;
+  place-items: center;
+  margin: 1em 0;
+}
+
+.main > div {
+  max-width: 640px;
+  padding: 1em;
+  background: linear-gradient(
+    to top,
+    rgba(165, 85, 0, 0.9),
+    rgba(165, 85, 0, 0.6)
+  );
+  border-radius: 0.25em;
+  border: 1px solid #fff3;
+}
+
+.main > div > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5em;
+  font-weight: bolder;
+}
+
+.main > div > header > button {
+  width: 2em;
+  height: 2em;
+  color: #fff;
+}
