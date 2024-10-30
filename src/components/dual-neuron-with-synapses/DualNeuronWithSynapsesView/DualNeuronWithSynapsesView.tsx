@@ -21,11 +21,22 @@ export function DualNeuronWithSynapsesView({
   pre,
   post,
 }: DualNeuronWithSynapsesViewProps) {
+  const combination = checkCombination(pre, post);
+  if (!combination) {
+    return (
+      <div className="text-center p-4">
+        <p className="text-red-500">
+          No synapse view available for this selection.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <SwcViewer
       className={classNames(styles.main, className)}
-      href={`data/3d/3_digital-reconstruction/connection-viewer/${pre}-${post}.msgpack`}
-      loader={loadMsgPack}
+      href={combination.href}
+      loader={combination.reverse ? loadMsgPackReversed : loadMsgPack}
       legend={[
         { label: "Pre", color: "#07f" },
         { label: "Post", color: "#f70" },
@@ -34,6 +45,13 @@ export function DualNeuronWithSynapsesView({
     />
   );
 }
+
+const loadMsgPackReversed: SwcViewerLoader = async (url: string) => {
+  const data = await loadMsgPack(url);
+  data.morphologies[0].colors = ["#333", "#a40", "#f70"];
+  data.morphologies[1].colors = ["#333", "#04a", "#07f"];
+  return data;
+};
 
 const loadMsgPack: SwcViewerLoader = async (url: string) => {
   try {
@@ -138,3 +156,98 @@ function convertSynapsesIntoCellNodes(
   }
   return new CellNodes(nodes);
 }
+
+const MAP = {
+  Excitatory: "SP_PC",
+  Inhibitory: "SP_PVBC",
+  All: "SLM_PPA",
+};
+
+/**
+ * We don't have files for all the combinations of pre/post.
+ * So we need to take something else.
+ * @returns `null` if no file matches the combination pre/post.
+ */
+function checkCombination(
+  pre: string,
+  post: string
+): { href: string; reverse: boolean } | null {
+  pre = MAP[pre] ?? pre;
+  post = MAP[post] ?? post;
+  let reverse = false;
+  const id = `${pre}/${post}`;
+  if (!existingCombinations.has(id)) {
+    const reversedId = `${post}/${pre}`;
+    if (!existingCombinations.has(reversedId)) return null;
+
+    const tmp = pre;
+    pre = post;
+    post = tmp;
+    reverse = true;
+  }
+
+  return {
+    reverse,
+    href: `data/3d/3_digital-reconstruction/connection-viewer/${pre}-${post}.msgpack`,
+  };
+}
+
+const existingCombinations = new Set<string>([
+  "SLM_PPA/SO_OLM",
+  "SLM_PPA/SO_Tri",
+  "SLM_PPA/SP_CCKBC",
+  "SLM_PPA/SR_SCA",
+  "SO_BP/SLM_PPA",
+  "SO_BP/SO_OLM",
+  "SO_BP/SO_Tri",
+  "SO_BP/SP_CCKBC",
+  "SO_BP/SR_SCA",
+  "SO_BS/SLM_PPA",
+  "SO_BS/SO_BP",
+  "SO_BS/SO_OLM",
+  "SO_BS/SO_Tri",
+  "SO_BS/SP_AA",
+  "SO_BS/SP_BS",
+  "SO_BS/SP_CCKBC",
+  "SO_BS/SP_Ivy",
+  "SO_BS/SP_PC",
+  "SO_BS/SP_PVBC",
+  "SO_BS/SR_SCA",
+  "SO_OLM/SR_SCA",
+  "SO_Tri/SO_OLM",
+  "SO_Tri/SP_CCKBC",
+  "SO_Tri/SR_SCA",
+  "SP_AA/SP_PC",
+  "SP_BS/SLM_PPA",
+  "SP_BS/SO_BP",
+  "SP_BS/SO_OLM",
+  "SP_BS/SO_Tri",
+  "SP_BS/SP_CCKBC",
+  "SP_BS/SP_Ivy",
+  "SP_BS/SR_SCA",
+  "SP_CCKBC/SO_OLM",
+  "SP_CCKBC/SR_SCA",
+  "SP_Ivy/SLM_PPA",
+  "SP_Ivy/SO_BP",
+  "SP_Ivy/SO_OLM",
+  "SP_Ivy/SO_Tri",
+  "SP_Ivy/SP_CCKBC",
+  "SP_Ivy/SR_SCA",
+  "SP_PC/SLM_PPA",
+  "SP_PC/SO_BP",
+  "SP_PC/SO_OLM",
+  "SP_PC/SO_Tri",
+  "SP_PC/SP_BS",
+  "SP_PC/SP_CCKBC",
+  "SP_PC/SP_Ivy",
+  "SP_PC/SP_PVBC",
+  "SP_PC/SR_SCA",
+  "SP_PVBC/SLM_PPA",
+  "SP_PVBC/SO_BP",
+  "SP_PVBC/SO_OLM",
+  "SP_PVBC/SO_Tri",
+  "SP_PVBC/SP_BS",
+  "SP_PVBC/SP_CCKBC",
+  "SP_PVBC/SP_Ivy",
+  "SP_PVBC/SR_SCA",
+]);
