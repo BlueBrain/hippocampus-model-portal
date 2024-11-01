@@ -56,7 +56,7 @@ const NeuronalMorphologyView: React.FC = () => {
         instance: (query.instance as string) || "",
       });
     }
-  }, [router.isReady, query]);
+  }, [router.isReady, query, router]);
 
   const setParams = (params: Partial<QuickSelection>): void => {
     const newQuery = { ...router.query, ...params };
