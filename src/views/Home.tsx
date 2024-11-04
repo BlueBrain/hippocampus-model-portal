@@ -17,21 +17,19 @@ const Home: React.FC = () => (
         </h3>
         <Disclaimer />
         <p className="text-white text-base text-center md:w-2/3 md:mx-auto leading-loose">
-          In this section, you can explore morphological reconstructions,
-          electrophysiological recordings and models of single neurons. The
-          models you find in this section are a continuation of the{" "}
-          <a
-            href="https://www.humanbrainproject.eu/en/brain-simulation/hippocampus/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            hippocampal research
-          </a>{" "}
-          carried out in the Human Brain Project during 2014-2020. Currently we
-          are finalising a full-scale model of the rat hippocampus CA1, which
-          will be available and freely accessible in due course, when the
-          publication is released.
+          In this section, you can explore the different stages of our model
+          build and simulation. We began by transforming sparse experimental
+          datasets into the dense datasets necessary for building the model.
+          Subsequently, each component of the model and the compound network
+          model were subjected to rigorous validation, after which the model was
+          used to make predictions. The models presented in this section are a
+          continuation of the pioneering hippocampal research conducted during
+          the 2014-2020 period as part of the Human Brain Project, which was
+          published in{" "}
+          <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3002861">
+            Romani et al. (2024)
+          </a>
+          .
         </p>
       </div>
       <div className="mw-full max-w-screen-xl mx-auto xl:px-0 xs:px-8 my-12 flex flex-wrap justify-center">
