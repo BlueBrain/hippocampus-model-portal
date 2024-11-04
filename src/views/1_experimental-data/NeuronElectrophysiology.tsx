@@ -228,11 +228,6 @@ const NeuronElectrophysiology: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <div className="graph no-padding">
-          <SwcViewer
-            href={`data/1_experimental-data/neuronal-morphology/morphology/${currentInstance}/morphology.swc`}
-          />
-        </div>
         <div className="data-container" />
         <Collapsible
           id="instanceSection"
