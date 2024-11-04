@@ -158,7 +158,7 @@ async function pranavLoad(
 }
 
 const pranavLoaderAmplitude: SwcViewerLoader = async (url: string) => {
-  return pranavLoad(url, ["voltage_attenuation", "psp_amplitude_ratio"], "mV");
+  return pranavLoad(url, ["voltage_attenuation", "psp_amplitude_ratio"], "");
 };
 
 const pranavLoaderDelay: SwcViewerLoader = async (url: string) => {
@@ -169,9 +169,6 @@ function makeGetter(header: string, voltages: string[]) {
   const fields = header.split(",").map((item) => item.trim().toLowerCase());
   const voltage = voltages.find((v) => fields.indexOf(v) > -1) ?? "";
   fields.indexOf("voltage_attenuation") > -1;
-  if (voltages.includes("delay")) {
-    console.log("🚀 [PranavViewer] voltage, header = ", voltage, header); // @FIXME: Remove this line written on 2024-10-24 at 08:26
-  }
   return {
     id: makeFieldGetter(fields.indexOf("unique_int_id")),
     parent: makeFieldGetter(fields.indexOf("parent_unique_int_id")),
