@@ -20,7 +20,7 @@ const Resources: React.FC = () => {
 
         <h2>Code</h2>
         <p>
-          Github repository with the code for the figures of the manuscript
+          Github repository with the code for the figures of the manuscript{" "}
           <Link href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3002861">
             Romani et al. (2024)
           </Link>
@@ -58,32 +58,32 @@ const Resources: React.FC = () => {
             eCollection 2023.
           </li>
           <li>
-            Romani, A., Schürmann, F., Markram, H., and Migliore, M. (2022).
+            Romani A., Schürmann F., Markram H., and Migliore M. (2022).
             Reconstruction of the Hippocampus. Adv. Exp. Med. Biol. 1359,
             261–283. 10.1007/978-3-030-89439-9_11.
           </li>
           <li>
-            Sáray, S., Rössert, C.A., Appukuttan, S., Migliore, R., Vitale, P.,
-            Lupascu, C.A., Bologna, L.L., Van Geit, W., Romani, A., Davison,
-            A.P., et al. (2021). HippoUnit: A software tool for the automated
-            testing and systematic comparison of detailed models of hippocampal
-            neurons based on electrophysiological data. PLoS Comput. Biol. 17,
-            e1008114. 10.1371/journal.pcbi.1008114.
+            Sáray S., Rössert C.A., Appukuttan S., Migliore R., Vitale P.,
+            Lupascu C.A., Bologna L.L., Van Geit W., Romani A., Davison A.P., et
+            al. (2021). HippoUnit: A software tool for the automated testing and
+            systematic comparison of detailed models of hippocampal neurons
+            based on electrophysiological data. PLoS Comput. Biol. 17, e1008114.
+            10.1371/journal.pcbi.1008114.
           </li>
           <li>
-            Ecker, A., Romani, A., Sáray, S., Káli, S., Migliore, M., Falck, J.,
-            Lange, S., Mercer, A., Thomson, A.M., Muller, E., Reimann, M.W.,
-            Ramaswamy, S. (2020). Data-driven integration of hippocampal CA1
-            synaptic physiology in silico. Hippocampus. 2020
-            Nov;30(11):1129-1145. doi: 10.1002/hipo.23220. Epub 2020 Jun 10.{" "}
+            Ecker A., Romani A., Sáray S., Káli S., Migliore M., Falck J., Lange
+            S., Mercer A., Thomson A.M., Muller E., Reimann M.W., Ramaswamy, S.
+            (2020). Data-driven integration of hippocampal CA1 synaptic
+            physiology in silico. Hippocampus. 2020 Nov;30(11):1129-1145. doi:
+            10.1002/hipo.23220. Epub 2020 Jun 10.{" "}
           </li>
           <li>
-            Migliore, R., Lupascu, C.A., Bologna, L.L., Romani, A., Courcol,
-            J.-D., Antonel, S., Van Geit, W.A.H., Thomson, A.M., Mercer, A.,
-            Lange, S., et al. (2018). The physiological variability of channel
-            density in hippocampal CA1 pyramidal cells and interneurons explored
-            using a unified data-driven modeling workflow. PLoS Comput. Biol.
-            14, e1006423. 10.1371/journal.pcbi.1006423.{" "}
+            Migliore R., Lupascu C.A., Bologna L.L., Romani A., Courcol J.-D.,
+            Antonel S., Van Geit W.A.H., Thomson A.M., Mercer A., Lange S., et
+            al. (2018). The physiological variability of channel density in
+            hippocampal CA1 pyramidal cells and interneurons explored using a
+            unified data-driven modeling workflow. PLoS Comput. Biol. 14,
+            e1006423. 10.1371/journal.pcbi.1006423.{" "}
           </li>
         </ul>
       </div>
