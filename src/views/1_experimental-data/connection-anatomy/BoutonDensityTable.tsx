@@ -10,7 +10,7 @@ import { dataPath } from '@/config';
 type BoutonDensity = {
   mtype: string;
   region: string;
-  specie: string;
+  species: string;
   weight: string;
   mean: number;
   std: number;
@@ -48,8 +48,8 @@ const columns = [
     dataIndex: 'region' as keyof BoutonDensity,
   },
   {
-    title: 'Specie',
-    dataIndex: 'specie' as keyof BoutonDensity,
+    title: <>Species<sup>1</sup></>,
+    dataIndex: 'species' as keyof BoutonDensity,
   },
   {
     title: 'Weight',
@@ -63,7 +63,7 @@ const columns = [
         dataIndex: 'mean' as keyof BoutonDensity,
         render: (mean: number, record: BoutonDensity) => (
           <>
-            <NumberFormat value={mean} /> ± <NumberFormat value={record.std} />
+            <NumberFormat value={mean} /> ± {renderWithSuperscript(record.std)}
           </>
         ),
       },
@@ -74,39 +74,96 @@ const columns = [
       },
       {
         title: 'N. cells',
-        dataIndex: 'n' as keyof BoutonDensity,
+        dataIndex: 'nCells' as keyof BoutonDensity,
+        render: (nCells) => renderWithSuperscript(nCells),
       },
     ],
   },
   {
     title: 'Reference',
     dataIndex: 'ref' as keyof BoutonDensity,
-    render: (ref: string | string[], record: BoutonDensity) => {
+    render: (ref: string | string[] | { entry: string; footnote?: number } | ({ entry: string; footnote?: number } | string)[], record: BoutonDensity) => {
       if (Array.isArray(ref) && Array.isArray(record.ref_link)) {
-        return ref.map((r, index) => (
-          <React.Fragment key={index}>
-            <a href={record.ref_link?.[index] ?? '#'} target="_blank" rel="noopener noreferrer">
-              {r}
-            </a>
-            {index < ref.length - 1 && ', '}
-          </React.Fragment>
-        ));
+        return ref.map((r, index) => {
+          if (typeof r === 'string') {
+            return (
+              <React.Fragment key={index}>
+                <a href={record.ref_link?.[index] ?? '#'} target="_blank" rel="noopener noreferrer">
+                  {r}
+                </a>
+                {index < ref.length - 1 && ', '}
+              </React.Fragment>
+            );
+          } else if (typeof r === 'object' && r.entry) {
+            return (
+              <React.Fragment key={index}>
+                <a href={record.ref_link?.[index] ?? '#'} target="_blank" rel="noopener noreferrer">
+                  {r.entry}
+                  {r.footnote && <sup>{r.footnote}</sup>}
+                </a>
+                {index < ref.length - 1 && ', '}
+              </React.Fragment>
+            );
+          }
+          return null;
+        });
+      } else if (typeof ref === 'object' && ref.entry) {
+        return (
+          <a href={record.ref_link as string} target="_blank" rel="noopener noreferrer">
+            {ref.entry}
+            {ref.footnote && <sup>{ref.footnote}</sup>}
+          </a>
+        );
       } else if (typeof ref === 'string' && typeof record.ref_link === 'string') {
         return (
           <a href={record.ref_link} target="_blank" rel="noopener noreferrer">
             {ref}
           </a>
         );
-      } else {
-        return ref;
       }
+      return ref;
     },
   },
 ];
 
+// Helper function to handle rendering fields with superscript
+function renderWithSuperscript(value: any) {
+  if (typeof value === 'object' && value.entry) {
+    return (
+      <>
+        {value.entry}
+        {value.footnote && <sup>{value.footnote}</sup>}
+      </>
+    );
+  }
+  return <>{value}</>;
+}
+
 type BoutonDensityTableProps = {
   theme?: number;
 };
+
+      // Function to recursively process the data
+function processData(data: any): any {
+  if (Array.isArray(data)) {
+    return data.map(item => processData(item));
+  } else if (typeof data === 'object' && data !== null) {
+    // If the object has "entry" key, replace it with the value of "entry"
+    if ('entry' in data) {
+      return data.entry;
+    }
+    // Otherwise, process each key-value pair recursively
+    const newObj: any = {};
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        newObj[key] = processData(data[key]);
+      }
+    }
+    return newObj;
+  }
+  return data; // Return the data as is if it's neither an array nor an object
+}
+
 
 const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
   const [data, setData] = useState<BoutonDensity[] | null>(null);
@@ -141,7 +198,7 @@ const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
       </small>{' '}
       <br />
       <small>
-        <sup>[3]</sup> The authors do not mention specie and age in the paper. Anyway,
+        <sup>[3]</sup> The authors do not mention species and age in the paper. Anyway,
         a later paper (Sik et al., 1995) mentions the result so we assume they use the same method.
       </small>{' '}
       <br />
@@ -149,10 +206,16 @@ const BoutonDensityTable: React.FC<BoutonDensityTableProps> = ({ theme }) => {
         <sup>[4]</sup> Calculated (see below).
       </small>
 
+
+
+
       <div className="mt-2">
         <DownloadButton
           theme={theme}
-          onClick={() => downloadAsJson(data, `Bouton-Density-Data.json`)}
+          onClick={() => {
+            const processedData = processData(data);
+            downloadAsJson(processedData, `Bouton-Density-Data.json`);
+          }}
         >
           Bouton density
         </DownloadButton>
