@@ -10,7 +10,7 @@ import { dataPath } from '@/config';
 type DataEntry = {
     mtype: string;
     Region: string;
-    Specie: string | null;
+    Species: string | null;
     Age: string | null;
     Weight: string | null;
     mean: number;
@@ -48,9 +48,9 @@ const columns = [
         dataIndex: 'Region' as keyof DataEntry,
     },
     {
-        title: 'Specie',
-        dataIndex: 'Specie' as keyof DataEntry,
-        render: (specie: string | null) => specie || 'N/A',
+        title: 'Species',
+        dataIndex: 'Species' as keyof DataEntry,
+        render: (species: string | null) => species || 'N/A',
     },
     {
         title: 'Age',

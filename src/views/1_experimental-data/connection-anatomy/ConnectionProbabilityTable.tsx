@@ -10,7 +10,7 @@ import { dataPath } from '@/config';
 type DataEntry = {
     Pre: string;
     Post: string;
-    Specie: string;
+    Species: string;
     Age: string;
     Weight: string;
     "Slice thickness": string;
@@ -52,8 +52,8 @@ const columns = [
         ),
     },
     {
-        title: 'Specie',
-        dataIndex: 'Specie' as keyof DataEntry,
+        title: 'Species',
+        dataIndex: 'Species' as keyof DataEntry,
     },
     {
         title: 'Age',
@@ -138,7 +138,7 @@ const ConnectionProbabilityTable: React.FC<ConnectionProbabilityTableProps> = ({
                 className="mb-2"
                 columns={columns}
                 data={data}
-                rowKey={(record) => `${record.Pre}-${record.Post}-${record.Specie}-${record.Reference}`} // Ensure uniqueness
+                rowKey={(record) => `${record.Pre}-${record.Post}-${record.Species}-${record.Reference}`} // Ensure uniqueness
             />
 
             <div className="mt-4">
