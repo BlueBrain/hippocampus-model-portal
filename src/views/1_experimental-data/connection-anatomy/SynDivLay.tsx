@@ -9,7 +9,7 @@ import { dataPath } from '@/config';
 
 type DataEntry = {
     "m-type": string;
-    Specie: string;
+    Species: string;
     Weight: string;
     SO: number;
     SP: number;
@@ -50,9 +50,9 @@ const columns = [
         render: (region: string) => region || 'N/A',
     },
     {
-        title: 'Specie',
-        dataIndex: 'Specie' as keyof DataEntry,
-        render: (specie: string) => specie || 'N/A',
+        title: 'Species',
+        dataIndex: 'Species' as keyof DataEntry,
+        render: (species: string) => species || 'N/A',
     },
     {
         title: 'Weight',
@@ -152,7 +152,7 @@ const SynDivLay: React.FC<SynDivLayProps> = ({ theme }) => {
                     theme={theme}
                     onClick={() => downloadAsJson(data, `Percentage-of-synapse-divergence-per-layer-Data.json`)}
                 >
-                    Percentage ff synapse divergence per layer
+                    Percentage of synapse divergence per layer
                 </DownloadButton>
             </div>
         </>

@@ -11,7 +11,7 @@ type DataEntry = {
   from: string;
   to: string;
   region: string;
-  specie: string;
+  species: string;
   age?: string;
   weight?: string;
   mean: number | string;
@@ -57,9 +57,9 @@ const columns = [
     render: (region: string) => region || 'N/A',
   },
   {
-    title: 'Specie',
-    dataIndex: 'specie' as keyof DataEntry,
-    render: (specie: string) => specie || 'N/A',
+    title: 'Species',
+    dataIndex: 'species' as keyof DataEntry,
+    render: (species: string) => species || 'N/A',
   },
   {
     title: 'Age',
