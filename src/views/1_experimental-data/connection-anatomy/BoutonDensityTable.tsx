@@ -56,7 +56,7 @@ const columns = [
     dataIndex: 'weight' as keyof BoutonDensity,
   },
   {
-    title: 'Bouton Density, boutons/µm',
+    title: <>Bouton Density, μm<sup>-1</sup></> ,
     children: [
       {
         title: <> Mean ± std</>,
@@ -91,7 +91,7 @@ const columns = [
                 <a href={record.ref_link?.[index] ?? '#'} target="_blank" rel="noopener noreferrer">
                   {r}
                 </a>
-                {index < ref.length - 1 && ', '}
+                {index < ref.length - 1 && '; '}
               </React.Fragment>
             );
           } else if (typeof r === 'object' && r.entry) {
@@ -101,7 +101,7 @@ const columns = [
                   {r.entry}
                   {r.footnote && <sup>{r.footnote}</sup>}
                 </a>
-                {index < ref.length - 1 && ', '}
+                {index < ref.length - 1 && '; '}
               </React.Fragment>
             );
           }

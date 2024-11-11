@@ -96,7 +96,7 @@ const columns = [
                         ) : (
                             ref
                         )}
-                        {index < reference.length - 1 && ', '}
+                        {index < reference.length - 1 && '; '}
                     </React.Fragment>
                 ));
             } else if (typeof reference === 'string' && typeof record.Reference_link === 'string') {
