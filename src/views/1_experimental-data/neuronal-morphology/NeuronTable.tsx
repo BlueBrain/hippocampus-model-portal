@@ -98,7 +98,7 @@ const NeuronTable: React.FC<NeuronTableProps> = ({
 
   const NeuronTableColumns = [
     {
-      title: "Slice Image",
+      title: "Preview",
       dataIndex: "name",
       className: "preview-column",
       render: (name: string) => (
