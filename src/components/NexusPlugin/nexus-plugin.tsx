@@ -1,27 +1,17 @@
-import * as React from "react";
-import invariant from "ts-invariant";
-import isFunction from "lodash/isFunction";
-import { NexusClient, Resource } from "@bbp/nexus-sdk";
-import { basePath } from "@/config";
-// import { Result } from 'antd';
+import React from 'react';
+import { NexusClient, Resource } from '@bbp/nexus-sdk';
+import { Result } from 'antd';
 
-// import Loading from '../components/Loading';
+import { basePath } from '../../config';
 
-const PluginError: React.FC<{ error: Error }> = ({ error }) => {
-  return (
-    <p>Plugin failed to render</p>
-    // <Result
-    //   status="warning"
-    //   title="Plugin failed to render"
-    //   subTitle={error.message}
-    // />
-  );
-};
 
-const warningMessage =
-  "SystemJS not found. " +
-  "To load plugins, Nexus Web requires SystemJS to be available globally." +
-  " You can find out more here https://github.com/systemjs/systemjs";
+const PluginError: React.FC = () => (
+  <Result
+    status="warning"
+    title="Plugin failed to render"
+    subTitle="This issue has been reported to devolopers"
+  />
+);
 
 export type NexusPluginProps<T> = {
   name: string;
@@ -45,16 +35,13 @@ export class NexusPlugin extends React.Component<
     this.state = { error: null, loading: true };
     this.container = React.createRef();
     this.destroyPlugin = null;
-    // @ts-ignore
-    invariant(window.System, warningMessage);
   }
 
   async loadExternalPlugin() {
     if (!this.container.current) return;
 
-    const pluginManifest = await fetch(
-      `${basePath}/plugins/manifest.json`
-    ).then((res) => res.json());
+    const pluginManifest = await fetch(`${basePath}/plugins/manifest.json`)
+      .then(res => res.json());
 
     const { modulePath } = pluginManifest[this.props.name];
     const moduleUrl = `${basePath}/plugins/${modulePath}`;
@@ -68,7 +55,7 @@ export class NexusPlugin extends React.Component<
             nexusClient,
             resource,
           }: {
-            ref: HTMLDivElement | null;
+            ref: HTMLDivElement;
             nexusClient?: NexusClient;
             resource: Resource;
           }) => () => void;
@@ -78,14 +65,13 @@ export class NexusPlugin extends React.Component<
             loading: false,
           });
           this.destroyPlugin = pluginModule.default({
-            ref: this.container.current,
+            ref: this.container.current!,
             nexusClient: this.props.nexusClient,
             resource: this.props.resource,
           });
-        }
+        },
       )
       .catch((error: Error) => {
-        console.log(error);
         this.setState({ error, loading: false });
       });
   }
@@ -94,15 +80,17 @@ export class NexusPlugin extends React.Component<
     this.setState({ error, loading: false });
   }
 
-  // eslint-disable-next-line react/no-deprecated
-  componentWillUpdate(prevProps: NexusPluginClassProps) {
-    // Reload the plugin(and pass in new props to it) when props change
-    // NOTE: will not reload the plugin if nexusClient or goToResource changes
-    // otherwise it will cause too many reloads
+  componentDidUpdate(prevProps: NexusPluginClassProps) {
     if (
-      prevProps.resource !== this.props.resource ||
-      prevProps.name !== this.props.name
+      prevProps.resource !== this.props.resource
+      || prevProps.name !== this.props.name
     ) {
+      if (this.destroyPlugin) {
+        this.destroyPlugin();
+        this.destroyPlugin = null;
+      }
+
+      this.setState({ error: null, loading: true });
       this.loadExternalPlugin();
     }
   }
@@ -112,27 +100,24 @@ export class NexusPlugin extends React.Component<
   }
 
   componentWillUnmount() {
-    if (this.destroyPlugin && isFunction(this.destroyPlugin)) {
+    if (this.destroyPlugin && typeof this.destroyPlugin === 'function') {
       this.destroyPlugin();
     }
   }
 
   render() {
-    const className = this.props.className || "";
+    const className = this.props.className || '';
 
     return (
-      <div className={` ${className}`} ref={this.container} />
-      // <Loading
-      //   size="big"
-      //   loading={this.state.loading}
-      //   loadingMessage={<h3>Loading {this.props.pluginName || 'Plugin'}</h3>}
-      // >
-      //   {this.state.error ? (
-      //     <PluginError error={this.state.error} />
-      //   ) : (
-      //     <div className="remote-component" ref={this.container}></div>
-      //   )}
-      // </Loading>
+      <div>
+        <div
+          className={`remote-component ${className}`}
+          ref={this.container}
+        />
+        {this.state.error && (
+          <PluginError />
+        )}
+      </div>
     );
   }
 }
