@@ -30,8 +30,6 @@ export const nexus = {
   token: process.env.NEXT_PUBLIC_NEXUS_TOKEN,
 };
 
-export const nexusPluginBaseUrl = process.env.NEXT_PUBLIC_NEXUS_PLUGIN_BASE_URL;
-
 export const feedbackUrl = process.env.NEXT_PUBLIC_FEEDBACK_URL;
 
 export const gtm = {

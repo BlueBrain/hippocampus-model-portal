@@ -2,10 +2,10 @@ import * as React from "react";
 import invariant from "ts-invariant";
 import isFunction from "lodash/isFunction";
 import { NexusClient, Resource } from "@bbp/nexus-sdk";
+import { basePath } from "@/config";
 // import { Result } from 'antd';
 
 // import Loading from '../components/Loading';
-import { nexusPluginBaseUrl } from "../../config";
 
 const PluginError: React.FC<{ error: Error }> = ({ error }) => {
   return (
@@ -53,19 +53,11 @@ export class NexusPlugin extends React.Component<
     if (!this.container.current) return;
 
     const pluginManifest = await fetch(
-      `${nexusPluginBaseUrl}/manifest.json`
+      `${basePath}/plugins/manifest.json`
     ).then((res) => res.json());
 
     const { modulePath } = pluginManifest[this.props.name];
-    const moduleUrl = `${nexusPluginBaseUrl}/${modulePath}`;
-
-    console.log("🚀 [nexus-plugin] pluginManifest = ", pluginManifest); // @FIXME: Remove this line written on 2024-10-04 at 16:08
-    console.log(
-      "🚀 [nexus-plugin] modulePath, moduleUrl = ",
-      modulePath,
-      moduleUrl
-    ); // @FIXME: Remove this line written on 2024-10-04 at 16:04
-    console.log("🚀 [nexus-plugin] this.props = ", this.props); // @FIXME: Remove this line written on 2024-10-04 at 16:08
+    const moduleUrl = `${basePath}/plugins/${modulePath}`;
 
     // @ts-ignore
     window.System.import(moduleUrl)
