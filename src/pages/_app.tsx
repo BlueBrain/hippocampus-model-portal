@@ -8,11 +8,13 @@ import { nexus } from '../config';
 import MainLayout from '../layouts/MainLayout';
 
 import '../styles/globals.scss';
+import { registerNexusFetchInterceptor } from '@/services/nexus';
 
 
 if (typeof window === 'undefined') {
   require('abort-controller/polyfill');
 } else {
+  registerNexusFetchInterceptor();
   smoothscroll.polyfill();
   require('systemjs/dist/s');
   require('systemjs/dist/extras/amd');
