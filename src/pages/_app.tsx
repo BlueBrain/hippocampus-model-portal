@@ -6,13 +6,9 @@ import smoothscroll from 'smoothscroll-polyfill';
 
 import { nexus } from '../config';
 import MainLayout from '../layouts/MainLayout';
-import GoogleAnalytics from '../components/GoogleAnalytics';
-import Feedback from '../components/Feedback';
 
 import '../styles/globals.scss';
 
-import { register } from 'instrumentation'; // Use in layout.jsx if using app routing
-register();
 
 if (typeof window === 'undefined') {
   require('abort-controller/polyfill');
@@ -22,8 +18,8 @@ if (typeof window === 'undefined') {
   require('systemjs/dist/extras/amd');
 }
 
-const nexusUrl = nexus.url || 'default-url'; // Replace 'default-url' with an actual default value or handle the error
-const nexusToken = nexus.token || 'default-token'; // Replace 'default-token' with an actual default value or handle the error
+const nexusUrl = nexus.url;
+const nexusToken = nexus.token;
 
 const nexusClient = createNexusClient({
   uri: nexusUrl,
@@ -36,9 +32,6 @@ function App({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-
-      <GoogleAnalytics />
-      { /* <Feedback /> */}
 
       <MainLayout>
         <Component {...pageProps} />

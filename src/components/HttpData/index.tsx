@@ -1,5 +1,4 @@
 import React from 'react';
-import { captureException } from '@sentry/nextjs';
 import { decodeAsync } from "@msgpack/msgpack";
 
 type HttpDataProps = {
@@ -38,7 +37,6 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
               return decodeAsync(res.body);
             }
             const err = new Error(`Response body is null for ${path}`);
-            captureException(err);
             return Promise.reject(err);
           }
 
@@ -47,7 +45,6 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
         }
 
         const err = new Error(`Can't fetch ${path}`);
-        captureException(err);
 
         return Promise.reject(err);
       })
