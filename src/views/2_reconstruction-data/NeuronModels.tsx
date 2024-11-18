@@ -480,6 +480,7 @@ const Neurons: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: "downloadModelSection", label: "Download Model" },
           { id: "morphologySection", label: "Morphology" },
           { id: "traceSection", label: "Trace" },
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
@@ -497,21 +498,32 @@ const Neurons: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
+        <Collapsible id="downloadModelSection" className="mt-4" title="Download NEURON model">
+          <p>
+            Download the complete NEURON model package, including morphology, mechanisms, 
+            and electrophysiology data for the selected model instance.
+          </p>
+          <div className="mt-4">
+            <DownloadButton
+              onClick={() => downloadFile(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/model_files.zip`, `${currentInstance}_model_files.zip`)}
+              theme={theme}
+            >
+              Download model package
+            </DownloadButton>
+          </div>
+        </Collapsible>
+
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
           <SwcViewer
             href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
           />
           <div className="mt-4">
-            <DownloadModel
+            <DownloadButton
+              onClick={() => downloadFile(`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`, `${currentInstance}_morphology.swc`)}
               theme={theme}
-              resources={[
-                `${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`,
-                `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
-                `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
-                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/mechanisms.zip`,
-                `${dataPath}2_reconstruction-data/neuron-models/${currentInstance}/electrophysiology.zip`,
-              ]}
-            />
+            >
+              Download morphology
+            </DownloadButton>
           </div>
         </Collapsible>
 

@@ -339,7 +339,7 @@ const NeuronsView: React.FC = () => {
                     block
                     list={morphologies}
                     value={currentMorphology}
-                    title={`Morphology ${
+                    title={`Cell Instance ${
                       morphologies.length ? `(${morphologies.length})` : ""
                     }`}
                     onSelect={setMorphology}
