@@ -4,6 +4,10 @@ import { VolumeSection } from '@/types';
 
 // Experimental Data
 
+export const expDataAgentsPath = () => {
+  return `${dataPath}/nexus/views/experimental-data/common/agents.json`;
+}
+
 export const expMorphFactesheetPath = (morphName: string) => {
   return `${dataPath}/1_experimental-data/neuronal-morphology/morphology/${morphName}/factsheet.json`;
 };
@@ -19,6 +23,10 @@ export const expMorphPopulationDistributionPlotsPath = (mtype: string) => {
 export const expMorphDistributionPlotsPath = (morph: string) => {
   return `${dataPath}/1_experimental-data/neuronal-morphology/morphology/${morph}/distribution-plots.json`;
 };
+
+export const fullElectroPhysiologyDataPath = (instance: string) => {
+  return `${dataPath}/nexus/views/experimental-data/neuron-electrophysiology/by-name/${instance}.json`;
+}
 
 export const subregionCircuitFactsheetPath = (subregion: string): string => {
   return `${basePath}/data/model-data/factsheets/REGION/${subregion}/Circuit/factsheet.json`;

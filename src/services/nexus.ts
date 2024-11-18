@@ -36,8 +36,7 @@ export function registerNexusFetchInterceptor() {
         ? 'file-meta'
         : 'files';
 
-      const fileUrl = `/nexus/${subDir}/${fileUUID[0]}/${fileUUID[1]}/${fileUUID}`;
-      // const fileUrl = `${dataPath}/nexus/${subDir}/${fileUUID[0]}/${fileUUID[1]}/${fileUUID}`;
+      const fileUrl = `${dataPath}/nexus/${subDir}/${fileUUID[0]}/${fileUUID[1]}/${fileUUID}`;
 
       return originalFetch(fileUrl);
     }
@@ -52,8 +51,7 @@ export function registerNexusFetchInterceptor() {
 
       const subDir = isIncomingResource ? 'incoming' : 'resources';
 
-      const resourceUrl = `/nexus/${subDir}/${resourceUUID[0]}/${resourceUUID[1]}/${resourceUUID}`;
-      // const resourceUrl = `${dataPath}/nexus/${subDir}/${resourceUUID[0]}/${resourceUUID[1]}/${resourceUUID}`;
+      const resourceUrl = `${dataPath}/nexus/${subDir}/${resourceUUID[0]}/${resourceUUID[1]}/${resourceUUID}`;
 
       return originalFetch(resourceUrl, options);
     }
