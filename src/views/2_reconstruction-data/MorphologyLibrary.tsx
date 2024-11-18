@@ -20,7 +20,7 @@ import NeuronFactsheet from "../1_experimental-data/neuronal-morphology/NeuronFa
 
 import LayerSelector3D from "@/components/LayerSelector3D";
 import { Layer } from "@/types";
-import { basePath } from "@/config";
+import { basePath, dataPath } from "@/config";
 
 import modelsDataImport from "./morphology-library.json";
 import MorphDistributionPlots from "@/components/MorphDistributionsPlots";
@@ -341,13 +341,13 @@ const MorphologyLibrary: React.FC = () => {
           </p>
           <div className="graph no-padding">
             <SwcViewer
-              href={`data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
+              href={`${dataPath}/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`}
             />
           </div>
           <DownloadButton
             onClick={() =>
               downloadFile(
-                `data/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`,
+                `${dataPath}/2_reconstruction-data/morphology-library/all/${currentMorphology}/morphology.swc`,
                 `${currentMorphology}-morphology.swc`
               )
             }
@@ -356,7 +356,7 @@ const MorphologyLibrary: React.FC = () => {
             Download SWC
           </DownloadButton>
           <HttpData
-            path={`${basePath}/data/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}
+            path={`${dataPath}/2_reconstruction-data/morphology-library/all/${currentMorphology}/factsheet.json`}
           >
             {(factsheetData: any) => (
               <>
@@ -386,7 +386,7 @@ const MorphologyLibrary: React.FC = () => {
           </HttpData>
           <div className="mt-4">
             <HttpData
-              path={`${basePath}/data/2_reconstruction-data/morphology-library/section_features/${currentMorphology}/distribution-plots.json`}
+              path={`${dataPath}/2_reconstruction-data/morphology-library/section_features/${currentMorphology}/distribution-plots.json`}
             >
               {(plotsData) => (
                 <>
@@ -426,7 +426,7 @@ const MorphologyLibrary: React.FC = () => {
           </p>
           <div className="mb-4">
             <HttpData
-              path={`${basePath}/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}
+              path={`${dataPath}/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/factsheet.json`}
             >
               {(factsheetData: any) => (
                 <>
@@ -458,7 +458,7 @@ const MorphologyLibrary: React.FC = () => {
           <div className="mt-4">
             public/data/
             <HttpData
-              path={`${basePath}/data/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/distribution-plot.json`}
+              path={`${dataPath}/2_reconstruction-data/morphology-library/per_mtype/${currentMtype}/distribution-plot.json`}
             >
               {(plotsData) => (
                 <>

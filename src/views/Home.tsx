@@ -1,6 +1,6 @@
 import React from "react";
 import SectionCard from "../components/SectionCard";
-import { basePath } from "../config";
+import { dataPath } from "../config";
 import { Disclaimer } from "@/components/Disclaimer";
 
 const Home: React.FC = () => (
@@ -8,7 +8,7 @@ const Home: React.FC = () => (
     <section
       id="home-section"
       className="bg-cover bg-center"
-      style={{ backgroundImage: `url(${basePath}/data/ui/backgrounds/bg.png)` }}
+      style={{ backgroundImage: `url(${dataPath}/ui/backgrounds/bg.png)` }}
     >
       <div className="p-8 mt-24 mw-full max-w-screen-xl mx-auto xl:px-0 xs:px-8">
         <h2 className="text-white text-2xl mb-2 text-center">EXPLORE</h2>

@@ -48,7 +48,7 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
         render: (link: string, record: TableEntry, index: number) => {
             return (
                 <img
-                    src={`${basePath}/data/images/1_experimental-data/slices/thumbnails/${link}.jpeg`
+                    src={`${imagesPath}/1_experimental-data/slices/thumbnails/${link}.jpeg`
                     }
                     alt={`slice image ${link}`
                     }
@@ -56,7 +56,7 @@ const ThicknessColumns = (data, setLightboxOpen, setLightboxSlides, setLightboxI
                     height={125}
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        setLightboxSlides(data.map(entry => ({ src: `${basePath}/data/images/1_experimental-data/slices/${entry.cell_id}.jpeg` })));
+                        setLightboxSlides(data.map(entry => ({ src: `${imagesPath}/1_experimental-data/slices/${entry.cell_id}.jpeg` })));
                         setLightboxIndex(index);
                         setLightboxOpen(true);
                     }}

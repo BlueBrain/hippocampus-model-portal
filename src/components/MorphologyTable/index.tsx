@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { basePath } from '@/config';
+import { basePath, imagesPath } from '@/config';
 import { graphTheme } from '@/constants';
 
 type MorphologyData = {
@@ -53,8 +53,7 @@ const MorphologyTable: React.FC<MorphologyTableProps> = ({ data }) => {
             width: 220,
             render: (morphology_id: string) => (
                 <Image
-
-                    src={`${basePath}/images/1_experimental-data/neuronal-morphology/${morphology_id}.png`}
+                    src={`${imagesPath}/1_experimental-data/neuronal-morphology/${morphology_id}.png`}
                     alt={`morphology preview ${morphology_id}`}
                     width={200}
                     height={100}

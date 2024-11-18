@@ -64,7 +64,7 @@ export function PranavViewer({ className, url }: PranavViewerProps) {
         />
       </header>
       <SwcViewer
-        href={`${basePath}/${url}/${type.toLowerCase()}_result.csv`}
+        href={`${url}/${type.toLowerCase()}_result.csv`}
         loader={
           field === "Amplitude" ? pranavLoaderAmplitude : pranavLoaderDelay
         }

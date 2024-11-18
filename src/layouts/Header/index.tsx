@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Brand from '../Brand';
 import MainNav from '../MainNav';
+import { basePath } from '@/config';
 
 const classPrefix = 'nav__';
 
@@ -20,11 +21,11 @@ const Header: React.FC = () => {
     const updateScrolledStateForPath = () => {
       const currentPath = window.location.pathname;
       const specialPages = [
-        '/hippocampus-portal-dev/terms-of-use/',
-        '/hippocampus-portal-dev/privacy-policy/',
-        '/hippocampus-portal-dev/cookies-policy/',
-        '/hippocampus-portal-dev/glossary/',
-        '/hippocampus-portal-dev/resources/'
+        `${basePath}/terms-of-use/`,
+        `${basePath}/privacy-policy/`,
+        `${basePath}/cookies-policy/`,
+        `${basePath}/glossary/`,
+        `${basePath}/resources`
       ];
 
       if (specialPages.includes(currentPath)) {

@@ -1,23 +1,23 @@
 
-import { basePath, staticDataBaseUrl } from '@/config';
+import { basePath, dataPath } from '@/config';
 import { VolumeSection } from '@/types';
 
 // Experimental Data
 
 export const expMorphFactesheetPath = (morphName: string) => {
-  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/morphology/${morphName}/factsheet.json`;
+  return `${dataPath}/1_experimental-data/neuronal-morphology/morphology/${morphName}/factsheet.json`;
 };
 
 export const expMorphPopulationFactesheetPath = (mtype: string) => {
-  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/mtype/${mtype}/factsheet.json`;
+  return `${dataPath}/1_experimental-data/neuronal-morphology/mtype/${mtype}/factsheet.json`;
 };
 
 export const expMorphPopulationDistributionPlotsPath = (mtype: string) => {
-  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/mtype/${mtype}/distribution-plots.json`;
+  return `${dataPath}/1_experimental-data/neuronal-morphology/mtype/${mtype}/distribution-plots.json`;
 };
 
 export const expMorphDistributionPlotsPath = (morph: string) => {
-  return `${staticDataBaseUrl}/1_experimental-data/neuronal-morphology/morphology/${morph}/distribution-plots.json`;
+  return `${dataPath}/1_experimental-data/neuronal-morphology/morphology/${morph}/distribution-plots.json`;
 };
 
 export const subregionCircuitFactsheetPath = (subregion: string): string => {
@@ -69,10 +69,10 @@ export const morphHistogramIndexPath = (region: string, mtype: string) => {
 export const volumeRasterDataPath = (volumeSection: VolumeSection) => {
   const fileName = volumeSection === 'region' ? 'CA1' : volumeSection;
 
-  return `${staticDataBaseUrl}/rec-data/volume/${fileName}.xz`;
+  return `${dataPath}/rec-data/volume/${fileName}.xz`;
 };
 
-export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_analysis.json`;
+export const volumeAnalysisPath = `${dataPath}/rec-data/volume/volume_analysis.json`;
 
 
 // Digital Reconstructions
@@ -82,14 +82,14 @@ export const volumeAnalysisPath = `${staticDataBaseUrl}/rec-data/volume/volume_a
 export const regionFactsheetPath = (volumeSection: VolumeSection) => {
   if (!volumeSection) return "";
 
-  return `${staticDataBaseUrl}/dig-rec/region/${volumeSection}/factsheet.json`;
+  return `${dataPath}/dig-rec/region/${volumeSection}/factsheet.json`;
 };
 
 // Digital Reconstructions - Pathways
 
-export const pathwayIndexPath = `${staticDataBaseUrl}/pathway-index.json`;
+export const pathwayIndexPath = `${dataPath}/pathway-index.json`;
 
 export const connectionViewerDataPath = (preMtype: string, postMtype: string) => {
-  return `${staticDataBaseUrl}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
+  return `${dataPath}/dig-rec/pathways/connection-viewer/${preMtype}-${postMtype}.msgpack`;
 };
 

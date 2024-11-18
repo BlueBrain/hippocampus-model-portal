@@ -3,16 +3,16 @@ import { createRoot } from 'react-dom/client';
 import Viewer from './Viewer/Viewer';
 import { assertType } from './type-guards';
 import { Bounds } from './types';
-import { basePath } from '@/config';
+import { dataPath } from '@/config';
 
 const CoordinatesViewer: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const start = async () => {
-            const info = await loadInfo(basePath + '/data/3d/2_reconstruction-data/coordinates/mesh.json');
-            const elemData = new Uint32Array(await loadData(basePath + '/data/3d/2_reconstruction-data/coordinates/elem.dat'));
-            const vertData = new Float32Array(await loadData(basePath + '/data/3d/2_reconstruction-data/coordinates/vert.dat'));
+            const info = await loadInfo(`${dataPath}/3d/2_reconstruction-data/coordinates/mesh.json`);
+            const elemData = new Uint32Array(await loadData(`${dataPath}/3d/2_reconstruction-data/coordinates/elem.dat`));
+            const vertData = new Float32Array(await loadData(`${dataPath}/3d/2_reconstruction-data/coordinates/vert.dat`));
             const container = document.getElementById('root') as HTMLElement;
             const root = createRoot(container);
             root.render(<Viewer meshInfo={info} vert={vertData} elem={Array.from(elemData)} />);

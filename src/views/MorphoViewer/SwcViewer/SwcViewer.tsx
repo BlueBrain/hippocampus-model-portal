@@ -75,8 +75,7 @@ const DEFAULT_LEGEND = [
   { label: "Dendrites", color: COLORS[2] },
 ];
 
-const defaultTextLoader: SwcViewerLoader = async (href: string) => {
-  const url = `${basePath}/${href}`;
+const defaultTextLoader: SwcViewerLoader = async (url: string) => {
   try {
     const resp = await fetch(url);
     const text = await resp.text();

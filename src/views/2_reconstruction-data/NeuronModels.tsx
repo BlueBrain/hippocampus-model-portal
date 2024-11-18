@@ -13,7 +13,7 @@ import Collapsible from "@/components/Collapsible";
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
-import { dataPath } from "@/config";
+import { basePath, dataPath } from "@/config";
 import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
@@ -499,7 +499,7 @@ const Neurons: React.FC = () => {
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
           <SwcViewer
-            href={`data/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
+            href={`${dataPath}/2_reconstruction-data/neuron-models/${currentInstance}/morphology.swc`}
           />
           <div className="mt-4">
             <DownloadModel
@@ -558,7 +558,7 @@ const Neurons: React.FC = () => {
           )}
         </Collapsible>
 
-        <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
+        <PranavViewer url={`${dataPath}/epsp-bpap/neurons_model/${currentInstance}`} />
 
         <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
           {efeatureData && (

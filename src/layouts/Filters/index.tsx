@@ -3,7 +3,7 @@ import React from 'react';
 import ScrollTo from '../../components/ScrollTo';
 import { Color } from '../../types';
 
-import { basePath } from '../../config';
+import { dataPath } from '../../config';
 
 import styles from './styles.module.scss';
 
@@ -31,7 +31,7 @@ const Filters: React.FC<FiltersProps> = ({
       <div
         className={`${styles.background} ${styles[`background--${theme}`]}`}
         style={{
-          backgroundImage: `url(${basePath}/data/ui/backgrounds/theme-bg-${theme}.svg)`,
+          backgroundImage: `url(${dataPath}/ui/backgrounds/theme-bg-${theme}.svg)`,
         }} />
       <div
         id={id}

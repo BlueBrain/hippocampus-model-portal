@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { basePath } from '@/config';
+import { basePath, imagesPath } from '@/config';
 import { graphTheme } from '@/constants';
 import { useRouter } from 'next/router';
 
@@ -50,7 +50,7 @@ const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ da
             width: 220,
             render: (ephys_id: string) => (
                 <Image
-                    src={`${basePath}/data/images/2_neuron-models/trace-preview/${ephys_id}.png`}
+                    src={`${imagesPath}/2_neuron-models/trace-preview/${ephys_id}.png`}
                     alt={`neuron trace preview ${ephys_id}`}
                     width={200}
                     height={100}

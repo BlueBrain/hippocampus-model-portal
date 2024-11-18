@@ -16,7 +16,7 @@ import LaminarGraph from "@/components/LaminarGraph";
 
 import { cellGroup, defaultSelection, volumeSections } from "@/constants";
 import { Layer, QuickSelectorEntry, VolumeSection } from "@/types";
-import { basePath } from "@/config";
+import { dataPath } from "@/config";
 
 import { downloadAsJson } from "@/utils";
 import withPreselection from "@/hoc/with-preselection";
@@ -124,7 +124,7 @@ const MergedConnectionsView: React.FC = () => {
   const fetchFactsheetData = async () => {
     try {
       const { volume_section, prelayer, postlayer } = quickSelection;
-      const filePath = `${basePath}/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
+      const filePath = `${dataPath}/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/distribution-plots.json`;
       const response = await fetch(filePath);
       const data = await response.json();
 
@@ -142,7 +142,7 @@ const MergedConnectionsView: React.FC = () => {
   const fetchLaminarData = async () => {
     try {
       const { volume_section, prelayer, postlayer } = quickSelection;
-      const filePath = `${basePath}/data/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
+      const filePath = `${dataPath}/3_digital-reconstruction/connection-anatomy/${volume_section}/${prelayer}-${postlayer}/Connections.json`;
       console.log("Fetching laminar data from:", filePath);
 
       const response = await fetch(filePath);
