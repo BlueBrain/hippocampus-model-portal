@@ -25,8 +25,11 @@ import DownloadModel from "@/components/DownloadModel";
 import ExperimentalMorphologyTable from "@/components/ExperiementalMorphologyUsed";
 import { PranavViewer } from "@/components/PranavViewer";
 import { SwcViewer } from "../MorphoViewer/SwcViewer";
+import LayerSelector3D from "@/components/LayerSelector3D";
+import { Layer } from "@/types";
 
 type ModelData = {
+  layer: Layer;
   mtype: string;
   etype: string;
   morphology: string;
@@ -51,13 +54,15 @@ const getUniqueValues = (
     )
   ).sort();
 };
-
 const getFilteredData = (filters: Partial<ModelData>): ModelData[] => {
   return modelsData.filter((model) =>
     Object.entries(filters).every(
       ([key, value]) => !value || model[key as keyof ModelData] === value
     )
-  );
+  ).map(model => ({
+    ...model,
+    layer: model.layer as Layer
+  }));
 };
 
 const NeuronsModelLibrary: React.FC = () => {
@@ -65,6 +70,7 @@ const NeuronsModelLibrary: React.FC = () => {
   const theme = 3;
 
   const { query } = router;
+  const [currentLayer, setCurrentLayer] = useState<Layer | "">("");
   const [currentMtype, setCurrentMtype] = useState("");
   const [currentEtype, setCurrentEtype] = useState("");
   const [currentMorphology, setCurrentMorphology] = useState("");
@@ -74,7 +80,11 @@ const NeuronsModelLibrary: React.FC = () => {
   const [morphologyData, setMorphologyData] = useState<string | null>(null);
   const [swcFile, setSwcFile] = useState<string>('');
 
-  const mtypes = useMemo(() => getUniqueValues("mtype"), []);
+  const layers = useMemo(() => getUniqueValues("layer") as Layer[], []);
+  const mtypes = useMemo(
+    () => getUniqueValues("mtype", { layer: currentLayer as Layer }),
+    [currentLayer]
+  );
   const etypes = useMemo(
     () => getUniqueValues("etype", { mtype: currentMtype }),
     [currentMtype]
@@ -101,10 +111,16 @@ const NeuronsModelLibrary: React.FC = () => {
   useEffect(() => {
     if (!router.isReady) return;
 
+    const newLayer =
+      typeof query.layer === "string" && layers.includes(query.layer as Layer)
+        ? (query.layer as Layer)
+        : layers[0] || "";
+
+    const newMtypes = getUniqueValues("mtype", { layer: newLayer });
     const newMtype =
-      typeof query.mtype === "string" && mtypes.includes(query.mtype)
+      typeof query.mtype === "string" && newMtypes.includes(query.mtype)
         ? query.mtype
-        : mtypes[0] || "";
+        : newMtypes[0] || "";
 
     const newEtypes = getUniqueValues("etype", { mtype: newMtype });
     const newEtype =
@@ -122,11 +138,12 @@ const NeuronsModelLibrary: React.FC = () => {
         : newIds[0] || "";
     
     const newMorphology = morphologies[0] || "";
+    setCurrentLayer(newLayer);
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
     setCurrentId(newId);
     setCurrentMorphology(newMorphology);
-  }, [query, mtypes, router.isReady]);
+  }, [query, layers, router.isReady]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,6 +186,7 @@ const NeuronsModelLibrary: React.FC = () => {
   }, [currentMtype, currentEtype, currentId]);
 
   const setParams = (params: {
+    layer?: Layer;
     mtype?: string;
     etype?: string;
     id?: string;
@@ -179,6 +197,29 @@ const NeuronsModelLibrary: React.FC = () => {
     };
     router.push({ query: newQuery, pathname: router.pathname }, undefined, {
       shallow: true,
+    });
+  };
+
+  const setLayer = (layer: Layer) => {
+    const newMtypes = getUniqueValues("mtype", { layer }) as string[];
+    const newMtype = newMtypes[0] || "";
+    const newEtypes = getUniqueValues("etype", {
+      layer,
+      mtype: newMtype,
+    }) as string[];
+    const newEtype = newEtypes[0] || "";
+    const newIds = getUniqueValues("id", {
+      layer,
+      mtype: newMtype,
+      etype: newEtype,
+    });
+    const newId = newIds[0] || "";
+
+    setParams({
+      layer,
+      mtype: newMtype,
+      etype: newEtype,
+      id: newId,
     });
   };
 
@@ -273,6 +314,18 @@ const NeuronsModelLibrary: React.FC = () => {
             <div className="selector">
               <div className={`selector__column theme-${theme}`}>
                 <div className={`selector__head theme-${theme}`}>
+                  Choose a layer
+                </div>
+                <div className="selector__selector-container">
+                  <LayerSelector3D
+                    value={currentLayer || undefined}
+                    onSelect={setLayer}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+              <div className={`selector__column theme-${theme}`}>
+                <div className={`selector__head theme-${theme}`}>
                   Select reconstruction
                 </div>
                 <div className="selector__body">
@@ -363,11 +416,7 @@ const NeuronsModelLibrary: React.FC = () => {
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`epsp-bpap/neuron_model_lib/${mapPranavFile(
-              currentMtype,
-              currentEtype,
-              currentMorphology
-            )}`}
+            url={`epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentId}`}
           />
         </Collapsible>
 
@@ -433,86 +482,3 @@ export default withPreselection(NeuronsModelLibrary, {
   key: "mtype",
   defaultQuery: defaultSelection.digitalReconstruction.NeuronModelLibrary,
 });
-
-function mapPranavFile(mType: string, eType: string, morphology: string) {
-  const key = `${mType}/${eType}/${morphology}.swc`;
-  const val = MAPPING[key];
-  if (!val) {
-    console.log(
-      "🚀 [NeuronModelLibrary] mType, eType, morphology = ",
-      mType,
-      eType,
-      morphology
-    ); // @FIXME: Remove this line written on 2024-10-24 at 14:55
-    console.error("No mapping found for ", key);
-  }
-  return val ?? "<Not found>";
-}
-
-const MAPPING = {
-  "SP_PC/cACpyr/dend-oh140807_A0_idA_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y1.100_z1.000_-_Clone_0.swc":
-    "SP_PC/cACpyr/3",
-  "SP_PC/cACpyr/dend-oh140807_A0_idA_axon-mpg141017_a1-2_idC_-_Clone_1.swc":
-    "SP_PC/cACpyr/5",
-  "SP_PC/cACpyr/dend-oh140807_A0_idG_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y0.900_z1.000_-_Clone_0.swc":
-    "SP_PC/cACpyr/2",
-  "SP_PC/cACpyr/dend-mpg141216_A_idC_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y0.850_z1.000_-_Clone_1.swc":
-    "SP_PC/cACpyr/4",
-  "SP_PC/cACpyr/dend-oh140807_A0_idH_axon-mpg141017_a1-2_idC_-_Clone_7.swc":
-    "SP_PC/cACpyr/1",
-  "SO_BS/bAC/011023HP2_-_Scale_x1.000_y1.100_z1.000_-_Clone_0.swc":
-    "SO_BS/bAC/3",
-  "SO_BS/bAC/011023HP2_-_Clone_0.swc": "SO_BS/bAC/2",
-  "SO_BS/bAC/011023HP2_-_Scale_x1.000_y1.050_z1.000_-_Clone_0.swc":
-    "SO_BS/bAC/4",
-  "SO_BS/bAC/011023HP2.swc": "SO_BS/bAC/1",
-  "SO_BS/cNAC/011023HP2_-_Scale_x1.000_y0.950_z1.000_-_Clone_0.swc":
-    "SO_BS/cNAC/1",
-  "SO_BS/cNAC/011023HP2_-_Clone_0.swc": "SO_BS/cNAC/4",
-  "SP_AA/bAC/970911C_-_Scale_x1.000_y0.850_z1.000_-_Clone_0.swc": "SP_AA/bAC/1",
-  "SP_AA/bAC/970911C_-_Clone_0.swc": "SP_AA/bAC/2",
-  "SP_AA/bAC/970911C_-_Scale_x1.000_y0.950_z1.000_-_Clone_0.swc": "SP_AA/bAC/4",
-  "SP_Ivy/bAC/010710HP2_-_Scale_x1.000_y1.100_z1.000_-_Clone_2.swc":
-    "SP_Ivy/bAC/3",
-  "SP_Ivy/bAC/010710HP2_-_Scale_x1.000_y1.050_z1.000_-_Clone_6.swc":
-    "SP_Ivy/bAC/5",
-  "SP_Ivy/bAC/010710HP2_-_Scale_x1.000_y1.100_z1.000_-_Clone_3.swc":
-    "SP_Ivy/bAC/2",
-  "SP_Ivy/bAC/970717D_-_Scale_x1.000_y0.850_z1.000_-_Clone_3.swc":
-    "SP_Ivy/bAC/1",
-  "SP_Ivy/cNAC/010710HP2_-_Scale_x1.000_y1.100_z1.000_-_Clone_3.swc":
-    "SP_Ivy/cNAC/3",
-  "SP_Ivy/cNAC/010710HP2_-_Scale_x1.000_y1.100_z1.000_-_Clone_5.swc":
-    "SP_Ivy/cNAC/5",
-  "SP_Ivy/cNAC/010710HP2_-_Scale_x1.000_y0.850_z1.000_-_Clone_6.swc":
-    "SP_Ivy/cNAC/2",
-  "SP_Ivy/cNAC/010710HP2_-_Clone_0.swc": "SP_Ivy/cNAC/4",
-  "SP_Ivy/cNAC/010710HP2_-_Scale_x1.000_y0.950_z1.000_-_Clone_2.swc":
-    "SP_Ivy/cNAC/1",
-  "SP_BS/bAC/980513B_-_Scale_x1.000_y1.150_z1.000_-_Clone_1.swc": "SP_BS/bAC/3",
-  "SP_BS/bAC/980513B_-_Scale_x1.000_y0.950_z1.000_-_Clone_0.swc": "SP_BS/bAC/1",
-  "SP_BS/bAC/980513B_-_Scale_x1.000_y0.900_z1.000_-_Clone_1.swc": "SP_BS/bAC/2",
-  "SP_BS/cNAC/980513B_-_Scale_x1.000_y0.950_z1.000_-_Clone_0.swc":
-    "SP_BS/cNAC/1",
-  "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.950_z1.000_-_Clone_0.swc":
-    "SO_BP/cNAC/3",
-  "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.850_z1.000.swc": "SO_BP/cNAC/5",
-  "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.950_z1.000.swc": "SO_BP/cNAC/2",
-  "SO_BP/cNAC/980120A.swc": "SO_BP/cNAC/4",
-  "SO_BP/cNAC/1.swc":"SO_BP/cNAC/1",
-  "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.900_z1.000.swc": "SO_BP/cNAC/1",
-  "SP_PVBC/bAC/060314AM2_-_Scale_x1.000_y1.050_z1.000.swc": "SP_PVBC/bAC/2",
-  "SP_PVBC/bAC/060314AM2_-_Scale_x1.000_y1.050_z1.000_-_Clone_1.swc":
-    "SP_PVBC/bAC/5",
-  "SP_PVBC/bAC/060314AM2_-_Scale_x1.000_y0.850_z1.000_-_Clone_2.swc":
-    "SP_PVBC/bAC/4",
-  "SP_PVBC/bAC/970627BHP1_-_Scale_x1.000_y0.950_z1.000_-_Clone_2.swc":
-    "SP_PVBC/bAC/1",
-  "SP_PVBC/cNAC/970627BHP1_-_Clone_1.swc": "SP_PVBC/cNAC/3",
-  "SP_PVBC/cNAC/990111HP2_-_Scale_x1.000_y0.900_z1.000_-_Clone_1.swc":
-    "SP_PVBC/cNAC/5",
-  "SP_PVBC/cNAC/060314AM2_-_Clone_0.swc": "SP_PVBC/cNAC/2",
-  "SP_PVBC/cNAC/060314AM2_-_Clone_1.swc": "SP_PVBC/cNAC/4",
-  "SP_PVBC/cNAC/060314AM2_-_Scale_x1.000_y0.900_z1.000_-_Clone_0.swc":
-    "SP_PVBC/cNAC/1",
-};
