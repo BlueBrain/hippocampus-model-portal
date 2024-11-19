@@ -2,6 +2,24 @@ import { nexus, dataPath } from '@/config';
 
 const originalFetch = typeof window !== 'undefined' ? window.fetch : undefined;
 
+function sanitizeHeaders(headers: Record<string, string>) {
+  if (!headers) {
+    return;
+  }
+
+  const sanitizedHeaders = {};
+
+  const headersToRemove = ['Authorization', 'Content-Type'].map(((header) => header.toLowerCase()));
+
+  Object.keys(headers).forEach((header) => {
+    if (!headersToRemove.includes(header.toLowerCase())) {
+      sanitizedHeaders[header] = headers[header];
+    }
+  });
+
+  return sanitizedHeaders;
+}
+
 export function registerNexusFetchInterceptor() {
   if (!originalFetch) {
     return;
@@ -28,6 +46,11 @@ export function registerNexusFetchInterceptor() {
 
     // Serving files from static storage
     if (url.includes('/files/')) {
+
+      if (options?.headers) {
+        options.headers = sanitizeHeaders(options.headers as Record<string, string>);
+      }
+
       const urlObj = new URL(url);
       const fileId = decodeURIComponent(urlObj.pathname.split('/').at(-1)!);
       const fileUUID = fileId.split('/').at(-1) as string;
@@ -43,6 +66,10 @@ export function registerNexusFetchInterceptor() {
 
     // Serving resources from static storage
     if (url.includes('/resources/')) {
+      if (options?.headers) {
+        options.headers = sanitizeHeaders(options.headers as Record<string, string>);
+      }
+
       const urlObj = new URL(url);
 
       const isIncomingResource = urlObj.pathname.includes('/incoming');
