@@ -5,6 +5,10 @@ import logger from 'node-color-log';
 import { nexus } from './config.mjs'
 
 export function ensureArray(value) {
+  if (!value) {
+    return [];
+  }
+
   return Array.isArray(value) ? value : [value];
 }
 

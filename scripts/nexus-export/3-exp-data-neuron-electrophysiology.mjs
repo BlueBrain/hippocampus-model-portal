@@ -4,6 +4,45 @@ import logger from 'node-color-log';
 import { nexus, targetBaseDir } from './config.mjs';
 import { ensureArray, save } from './utils.mjs';
 
+function entriesByIdsQuery(ids) {
+  if (!ids) {
+    throw new Error('ids is required');
+  }
+
+  return {
+    from: 0,
+    size: 100,
+    query: {
+      bool: {
+        filter: [
+          {
+            bool: {
+              should: [
+                {
+                  term: {
+                    _deprecated: false,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            bool: {
+              should: [
+                {
+                  terms: {
+                    '@id': ids,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  };
+};
+
 function agentsDataQuery() {
   return {
     from: 0,
@@ -81,62 +120,6 @@ export function fullElectroPhysiologyDataQuery(etype, experiment) {
   };
 }
 
-export function etypeTracesDataQuery(cellNames) {
-  if (!cellNames) {
-    throw new Error('cellNames is required');
-  }
-
-  return {
-    from: 0,
-    size: 10000,
-    query: {
-      bool: {
-        filter: [
-          {
-            bool: {
-              must: [{ term: { '@type': 'ExperimentalTrace' } }],
-            },
-          },
-          {
-            bool: {
-              must: [{ match: { note: 'All traces' } }],
-            },
-          },
-          {
-            bool: {
-              must: {
-                terms: { 'name.raw': cellNames },
-              },
-            },
-          },
-          {
-            nested: {
-              path: 'distribution',
-              query: {
-                bool: {
-                  must: {
-                    match: { 'distribution.encodingFormat': 'application/nwb' },
-                  },
-                },
-              },
-            },
-          },
-          // {
-          //   nested: {
-          //     path: 'annotation.hasBody',
-          //     query: {
-          //       bool: {
-          //         filter: { term: { 'annotation.hasBody.label.raw': etype } },
-          //       },
-          //     },
-          //   },
-          // },
-        ],
-      },
-    },
-  };
-}
-
 const esEndpointUrl = `${nexus.url}/views/${nexus.org}/${nexus.project}/${nexus.defaultESViewId}/_search`;
 
 logger.debug('Fetching agent resources');
@@ -152,7 +135,7 @@ const agentsRes = await fetch(esEndpointUrl, {
 });
 
 if (!agentsRes.ok || agentsRes.status !== 200) {
-  const resBody = await res.text();
+  const resBody = await agentsRes.text();
 
   logger.error(`Failed to fetch agents`);
   logger.error(resBody);
@@ -169,7 +152,6 @@ const agentsFilePath = `${agentsTargetDir}/agents.json`;
 writeFileSync(agentsFilePath, JSON.stringify(agents));
 logger.success(`Saved agents.json with ${agents.length} entries`);
 
-process.exit(0);
 
 const expEphysData = JSON.parse(
   readFileSync('../../src/traces.json', 'utf-8')
@@ -274,18 +256,6 @@ for (const tuple of ephysTuples) {
     logger.success('  + Saved TraceWebDataContainer RAB file');
   }
 
-  // downloading the ephys files in nwb format
-
-  // const distributions = ensureArray(ephysResource.distribution).filter((d) =>
-  //   ['nwb'].includes(d.encodingFormat.toLowerCase().replace('application/', ''))
-  // );
-
-  // for (const distribution of distributions) {
-  //   const fileUrl = distribution.contentUrl;
-
-  //   await save(fileUrl, `${targetBaseDir}/files`, '*/*');
-  // }
-
   for (const image of ensureArray(ephysResource.image)) {
     const id = image['@id'];
 
@@ -301,79 +271,52 @@ for (const tuple of ephysTuples) {
     logger.success(`  + Saved trace image ${id}`);
   }
 
+  const traceRelatedMorphIds = ensureArray(ephysResource.isRelatedTo).map(morph => morph['@id']).sort();
+
+  if (traceRelatedMorphIds.length > 0) {
+    const traceRelatedMorphsRes = await fetch(esEndpointUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${nexus.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entriesByIdsQuery(traceRelatedMorphIds)),
+    });
+
+    if (!traceRelatedMorphsRes.ok || traceRelatedMorphsRes.status !== 200) {
+      const resBody = await traceRelatedMorphsRes.text();
+
+      logger.error(`Failed to fetch trace related morphologies ${modelName}`);
+      logger.error(resBody);
+      continue;
+    }
+
+    const traceRelatedMorphsEsRes = await traceRelatedMorphsRes.json();
+    const traceRelatedMorphs = traceRelatedMorphsEsRes.hits.hits.map((hit) => hit._source);
+
+    const digest = await crypto.subtle.digest(
+      'SHA-256',
+      Buffer.from(traceRelatedMorphIds.join(''))
+    );
+
+    const idListHexHash = Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    const traceRelatedMorphsTargetDir = `${targetBaseDir}/views/experimental-data/neuron-electrophysiology/trace-related-morphologies`;
+    mkdirSync(traceRelatedMorphsTargetDir, { recursive: true });
+
+    const traceRelatedMorphsPath = `${traceRelatedMorphsTargetDir}/${idListHexHash}.json`;
+
+    writeFileSync(traceRelatedMorphsPath, JSON.stringify(traceRelatedMorphs), {
+      encoding: 'utf-8',
+    });
+    logger.success(`  + Saved a list of trace related morphologies`);
+  } else {
+    logger.warn(`     - No trace related morphologies found for ${cellName}`);
+  }
+
   logger.success(`Saved metadata, ephys files and trace images for ${etype} ${cellName}`);
 }
 
-process.exit(0);
-
-logger.debug('Fetching ephys resources per etype');
-
-const etypes = Array.from(new Set(ephysTuples.map(([etype]) => etype))).sort();
-
-logger.debug(`Found ${etypes.length} etypes`);
-
-logger.debug(etypes);
-
-for (const etype of etypes) {
-  const cellNames = ephysTuples
-    .filter(([tupleEtype]) => tupleEtype === etype)
-    .map(([_, cellName]) => cellName);
-
-  const query = etypeTracesDataQuery(cellNames);
-
-  const res = await fetch(esEndpointUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${nexus.accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(query),
-  });
-
-  if (!res.ok || res.status !== 200) {
-    const resBody = await res.text();
-
-    logger.error(`Failed to fetch ${etype} ephys`);
-    logger.error(resBody);
-    continue;
-  }
-
-  const esRes = await res.json();
-
-  if (esRes.hits.total.value === 0) {
-    logger.error(`No ${etype} ephys found in Nexus`);
-    continue;
-  }
-
-  const indexFileEphysCount = ephysTuples.filter(([tupleEtype]) => tupleEtype === etype).length;
-
-  if (esRes.hits.total.value !== indexFileEphysCount) {
-    logger.warn(
-      `Number of ephys in Nexus does not match number of ephys in index file for ${etype}: ${esRes.hits.total.value} vs ${indexFileEphysCount}`
-    );
-
-    const indexedCellNames = new Set(
-      ephysTuples.filter(([tupleEtype]) => tupleEtype === etype).map(([_, cellName]) => cellName)
-    );
-    const nexusCellNames = new Set(esRes.hits.hits.map((hit) => hit._source.name));
-
-    // missing ephys in nexus
-    const missingCellNames = Array.from(indexedCellNames)
-      .filter((cellName) => !nexusCellNames.has(cellName))
-      .sort();
-    logger.error(`Missing ephys in Nexus: ${missingCellNames.join(', ')}`);
-
-    continue;
-  }
-
-  const ephys = esRes.hits.hits.map((hit) => hit._source);
-
-  const ephysByEtypeTargetDir = `${targetBaseDir}/views/experimental-data/neuron-electrophysiology/by-etype`;
-  mkdirSync(ephysByEtypeTargetDir, { recursive: true });
-
-  const filePath = `${ephysByEtypeTargetDir}/${etype}.json`;
-
-  writeFileSync(filePath, JSON.stringify(ephys), { encoding: 'utf-8' });
-
-  logger.success(`Saved ${ephys.length} ephys for ${etype}`);
-}
+logger.success('Done');

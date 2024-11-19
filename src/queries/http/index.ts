@@ -28,6 +28,15 @@ export const fullElectroPhysiologyDataPath = (instance: string) => {
   return `${dataPath}/nexus/views/experimental-data/neuron-electrophysiology/by-name/${instance}.json`;
 }
 
+export const morphsByIdsDataPath = async (morphIds: string[]) => {
+  const digest = await crypto.subtle.digest('SHA-256', Buffer.from(morphIds.sort().join('')));
+  const hexHash = Array.from(new Uint8Array(digest))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  return `${dataPath}/nexus/views/experimental-data/neuron-electrophysiology/trace-related-morphologies/${hexHash}.json`;
+};
+
 export const subregionCircuitFactsheetPath = (subregion: string): string => {
   return `${basePath}/data/model-data/factsheets/REGION/${subregion}/Circuit/factsheet.json`;
 };
