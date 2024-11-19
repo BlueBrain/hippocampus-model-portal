@@ -30,6 +30,7 @@ type ModelData = {
   mtype: string;
   etype: string;
   morphology: string;
+  id: string;
 };
 
 const getUniqueValues = (
@@ -67,22 +68,34 @@ const NeuronsModelLibrary: React.FC = () => {
   const [currentMtype, setCurrentMtype] = useState("");
   const [currentEtype, setCurrentEtype] = useState("");
   const [currentMorphology, setCurrentMorphology] = useState("");
+  const [currentId, setCurrentId] = useState("");
   const [traceData, setTraceData] = useState<any | null>(null);
   const [factsheetData, setFactsheetData] = useState<any | null>(null);
   const [morphologyData, setMorphologyData] = useState<string | null>(null);
+  const [swcFile, setSwcFile] = useState<string>('');
 
   const mtypes = useMemo(() => getUniqueValues("mtype"), []);
   const etypes = useMemo(
     () => getUniqueValues("etype", { mtype: currentMtype }),
     [currentMtype]
   );
+  const ids = useMemo(
+    () =>
+      getUniqueValues("id", {
+        mtype: currentMtype,
+        etype: currentEtype,
+      }),
+    [currentMtype, currentEtype]
+  );
+
   const morphologies = useMemo(
     () =>
       getUniqueValues("morphology", {
         mtype: currentMtype,
         etype: currentEtype,
+        id: currentId,
       }),
-    [currentMtype, currentEtype]
+    [currentMtype, currentEtype, currentId]
   );
 
   useEffect(() => {
@@ -99,37 +112,42 @@ const NeuronsModelLibrary: React.FC = () => {
         ? query.etype
         : newEtypes[0] || "";
 
-    const newMorphologies = getUniqueValues("morphology", {
+    const newIds = getUniqueValues("id", {
       mtype: newMtype,
       etype: newEtype,
     });
-    const newMorphology =
-      typeof query.morphology === "string" &&
-      newMorphologies.includes(query.morphology)
-        ? query.morphology
-        : newMorphologies[0] || "";
-
+    const newId =
+      typeof query.id === "string" && newIds.includes(query.id)
+        ? query.id
+        : newIds[0] || "";
+    
+    const newMorphology = morphologies[0] || "";
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
+    setCurrentId(newId);
     setCurrentMorphology(newMorphology);
   }, [query, mtypes, router.isReady]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (currentMtype && currentEtype && currentMorphology) {
+      if (currentMtype && currentEtype && currentId) {
         try {
+
+
           const [traceResponse, factsheetResponse, morphologyResponse] =
             await Promise.all([
               fetch(
-                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`
+                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/trace.json`
               ),
               fetch(
-                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/features_with_rheobase.json`
+                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/processed_features.json`
               ),
               fetch(
-                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology.swc`
+                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/morphology/${currentMorphology}.swc`
               ),
             ]);
+          
+          console.log("**dataPath**", dataPath);
 
           const traceData = await traceResponse.json();
           const factsheetData = await factsheetResponse.json();
@@ -148,12 +166,12 @@ const NeuronsModelLibrary: React.FC = () => {
     };
 
     fetchData();
-  }, [currentMtype, currentEtype, currentMorphology]);
+  }, [currentMtype, currentEtype, currentId]);
 
   const setParams = (params: {
     mtype?: string;
     etype?: string;
-    morphology?: string;
+    id?: string;
   }) => {
     const newQuery = {
       ...router.query,
@@ -167,35 +185,35 @@ const NeuronsModelLibrary: React.FC = () => {
   const setMtype = (mtype: string) => {
     const newEtypes = getUniqueValues("etype", { mtype });
     const newEtype = newEtypes[0] || "";
-    const newMorphologies = getUniqueValues("morphology", {
+    const newIds = getUniqueValues("id", {
       mtype,
       etype: newEtype,
     });
-    const newMorphology = newMorphologies[0] || "";
+    const newId = newIds[0] || "";
 
     setParams({
       mtype,
       etype: newEtype,
-      morphology: newMorphology,
+      id: newId,
     });
   };
 
   const setEtype = (etype: string) => {
-    const newMorphologies = getUniqueValues("morphology", {
+    const newIds = getUniqueValues("id", {
       mtype: currentMtype,
       etype,
     });
-    const newMorphology = newMorphologies[0] || "";
+    const newId = newIds[0] || "";
 
     setParams({
       etype,
-      morphology: newMorphology,
+      id: newId,
     });
   };
 
-  const setMorphology = (morphology: string) => {
+  const setId = (id: string) => {
     setParams({
-      morphology,
+      id,
     });
   };
 
@@ -213,10 +231,10 @@ const NeuronsModelLibrary: React.FC = () => {
       setFn: setEtype,
     },
     {
-      title: "Morphology",
-      key: "morphology",
-      values: morphologies,
-      setFn: setMorphology,
+      title: "Cell model instance",
+      key: "id",
+      values: ids,
+      setFn: setId,
     },
   ];
 
@@ -282,13 +300,13 @@ const NeuronsModelLibrary: React.FC = () => {
                   />
                   <List
                     block
-                    list={morphologies}
-                    value={currentMorphology}
-                    title={`Morphology ${
-                      morphologies.length ? `(${morphologies.length})` : ""
+                    list={ids}
+                    value={currentId}
+                    title={`Cell model instance ${
+                      ids.length ? `(${ids.length})` : ""
                     }`}
                     color={colorName}
-                    onSelect={setMorphology}
+                    onSelect={setId}
                     anchor="data"
                     theme={theme}
                   />
@@ -302,6 +320,7 @@ const NeuronsModelLibrary: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: "downloadModelSection", label: "Download Model" },
           { id: "morphologySection", label: "Morphology" },
           { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "traceSection", label: "Trace" },
@@ -313,21 +332,34 @@ const NeuronsModelLibrary: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
+        <Collapsible id="downloadModelSection" className="mt-4" title="Download NEURON model">
+          <p>
+            Download the complete NEURON model package, including morphology, mechanisms, 
+            and electrophysiology data for the selected model instance.
+          </p>
+          <div className="mt-4">
+            <DownloadButton
+              onClick={() => downloadFile(`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/model_files.zip`, `${currentId}_model_files.zip`)}
+              theme={theme}
+            >
+              Download model package
+            </DownloadButton>
+          </div>
+        </Collapsible>
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
+        {/* Changed the href, below because it was not working with the dataPath */}
           <SwcViewer
-            href={`data/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`}
+            href={`data/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/morphology/${currentMorphology}.swc`}
           />
           <div className="mt-4">
-            <DownloadModel
+            <DownloadButton
+              onClick={() => downloadFile(`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/morphology/${currentMorphology}.swc`, `${currentMorphology}.swc`)}
               theme={theme}
-              resources={[
-                `${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`,
-                `${dataPath}/2_reconstruction-data/neuron-models/README.md`,
-                `${dataPath}/2_reconstruction-data/neuron-models/neuron_simulation.py`,
-                `${dataPath}2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/electrophysiology.zip`,
-              ]}
-            />
+            >
+              Download morphology
+            </DownloadButton>
           </div>
+
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
@@ -337,22 +369,6 @@ const NeuronsModelLibrary: React.FC = () => {
               currentMorphology
             )}`}
           />
-          <div className="graph"></div>
-          {morphologyData && (
-            <div className="mt-4">
-              <DownloadButton
-                onClick={() =>
-                  downloadAsJson(
-                    morphologyData,
-                    `${currentMtype}-${currentEtype}-morphology.json`
-                  )
-                }
-                theme={theme}
-              >
-                Morphology data
-              </DownloadButton>
-            </div>
-          )}
         </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
@@ -483,6 +499,7 @@ const MAPPING = {
   "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.850_z1.000.swc": "SO_BP/cNAC/5",
   "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.950_z1.000.swc": "SO_BP/cNAC/2",
   "SO_BP/cNAC/980120A.swc": "SO_BP/cNAC/4",
+  "SO_BP/cNAC/1.swc":"SO_BP/cNAC/1",
   "SO_BP/cNAC/980120A_-_Scale_x1.000_y0.900_z1.000.swc": "SO_BP/cNAC/1",
   "SP_PVBC/bAC/060314AM2_-_Scale_x1.000_y1.050_z1.000.swc": "SP_PVBC/bAC/2",
   "SP_PVBC/bAC/060314AM2_-_Scale_x1.000_y1.050_z1.000_-_Clone_1.swc":
