@@ -380,7 +380,7 @@ const NeuronsView: React.FC = () => {
         </Collapsible>
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
           <SwcViewer
-            href={`data/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/morphology.swc`}
+            href={`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/morphology.swc`}
           />
         </Collapsible>
         <Collapsible id="traceSection" className="mt-4" title="Trace">
@@ -428,7 +428,7 @@ const NeuronsView: React.FC = () => {
 
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentID}`}
+            url={`${dataPath}/epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentID}`}
           />
         </Collapsible>
 

@@ -2,13 +2,13 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { basePath } from '@/config';
+import { imagesPath } from '@/config';
 import { graphTheme } from '@/constants';
 import { useRouter } from 'next/router';
 
 type ElectrophysiologyTableData = {
     etype: string;
-    ephys_ids: string[];
+    ephys_ids: string[][] | string[];
 };
 
 type ElectrophysiologyTableTableProps = {
@@ -50,7 +50,7 @@ const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ da
             width: 220,
             render: (ephys_id: string) => (
                 <Image
-                    src={`${basePath}/data/images/2_neuron-models/trace-preview/${ephys_id}.png`}
+                    src={`${imagesPath}/2_neuron-models/trace-preview/${ephys_id}.png`}
                     alt={`neuron trace preview ${ephys_id}`}
                     width={200}
                     height={100}
@@ -69,7 +69,10 @@ const ElectrophysiologyTable: React.FC<ElectrophysiologyTableTableProps> = ({ da
             console.error('data.ephys_ids is not an array:', data.ephys_ids);
             return [];
         }
-        return data.ephys_ids.map((ephys_id) => ({
+
+        const ephys_ids = Array.isArray(data.ephys_ids[0]) ? data.ephys_ids[0] : data.ephys_ids;
+
+        return ephys_ids.map((ephys_id) => ({
             key: ephys_id,
             etype: data.etype || 'Unknown',
             ephys_id: ephys_id,

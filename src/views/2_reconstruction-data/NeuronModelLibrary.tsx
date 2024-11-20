@@ -13,7 +13,7 @@ import Collapsible from "@/components/Collapsible";
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
-import { dataPath } from "@/config";
+import { basePath, dataPath } from "@/config";
 import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
@@ -420,9 +420,8 @@ const NeuronsModelLibrary: React.FC = () => {
           </div>
         </Collapsible>
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
-        {/* Changed the href, below because it was not working with the dataPath */}
           <SwcViewer
-            href={`data/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/morphology/${currentMorphology}.swc`}
+            href={`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentId}/morphology/${currentMorphology}.swc`}
           />
           <div className="mt-4">
             <DownloadButton
@@ -480,7 +479,7 @@ const NeuronsModelLibrary: React.FC = () => {
 
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentId}`}
+            url={`${dataPath}/epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentId}`}
           />
         </Collapsible>
 

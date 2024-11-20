@@ -6,7 +6,7 @@ import Link from 'next/link';
 import VolumeViewer from './volume/volume-viewer';
 import CoordinatesViewer from './volume/coordinates-viewer/CoordinatesViewer';
 
-import { basePath } from '@/config';
+import { basePath, dataPath } from '@/config';
 import { volumeAnalysisPath, volumeRasterDataPath } from '@/queries/http';
 import { downloadAsJson } from '@/utils';
 import { defaultSelection, volumeSections } from '@/constants';
@@ -108,7 +108,7 @@ const VolumeView: React.FC = () => {
           <h3>3D volume viewer</h3>
           <Spin spinning={!volumeViewerReady}>
             <div className="graph no-padding">
-              <VolumeViewer meshPath={`${basePath}/data/3d/2_reconstruction-data/volume/volume.obj`} volumeSection={volumeSection} onReady={() => setVolumeViewerReady(true)} />
+              <VolumeViewer meshPath={`${dataPath}/3d/2_reconstruction-data/volume/volume.obj`} volumeSection={volumeSection} onReady={() => setVolumeViewerReady(true)} />
             </div>
 
           </Spin>
@@ -121,7 +121,7 @@ const VolumeView: React.FC = () => {
           <div className="mt-12">
             <h2 className='text-lg'>Volume analysis</h2>
             <HttpData
-              path={`${basePath}/data/2_reconstruction-data/volume/volume_analysis.json`}
+              path={`${dataPath}/2_reconstruction-data/volume/volume_analysis.json`}
             >
               {(factsheetData) => (
                 <>

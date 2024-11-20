@@ -1,0 +1,35 @@
+{
+  "neuron-electrophysiology": {
+    "modulePath": "neuron-electrophysiology.7aa65280958a44f7aea9.js",
+    "name": "Electrophysiological Recording Viewer",
+    "description": "Displays neuron electrophysiological data",
+    "version": "1.0.6",
+    "tags": [],
+    "author": "Kenneth Pirman <kenneth.pirman@epfl.ch>",
+    "license": "ISC",
+    "mapping": {
+      "@type": [
+        "Trace"
+      ]
+    },
+    "displayPriority": "2"
+  },
+  "neuron-morphology": {
+    "modulePath": "neuron-morphology.1183c00d53cd76c19996.js",
+    "name": "Neuron Morphology",
+    "description": "Displays neuron morphology data in a 3D view",
+    "version": "1.0.3",
+    "tags": [],
+    "author": "Kenneth Pirman <kenneth.pirman@epfl.ch>",
+    "license": "ISC",
+    "mapping": {
+      "@type": [
+        "ReconstructedCell",
+        "ReconstructedPatchedCell",
+        "NeuronMorphology",
+        "ReconstructedWholeBrainCell"
+      ]
+    },
+    "displayPriority": "2"
+  }
+}

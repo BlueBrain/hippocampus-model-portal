@@ -44,9 +44,6 @@ yarn-error.log*
 # python env
 venv
 
-# data 
-public/data
-public/connection-viewer
-
-# Keep EPSP-BPAP data
-!public/epsp-bpap
+# Static build
+/static-build/
+/out

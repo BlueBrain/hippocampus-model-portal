@@ -226,8 +226,8 @@ const DistributionPlot: React.FC<PlotDetailsProps> = ({
         <div>
             {MeanStd && (
                 <div className="mt-4">
-                    <p>Mean: {MeanStd.mean.toFixed(4)}</p>
-                    <p>Standard Deviation: {MeanStd.std.toFixed(4)}</p>
+                    <p>Mean: {MeanStd?.mean?.toFixed(4)}</p>
+                    <p>Standard Deviation: {MeanStd?.std?.toFixed(4)}</p>
                 </div>
             )}
             {name && <h2>{name}</h2>}

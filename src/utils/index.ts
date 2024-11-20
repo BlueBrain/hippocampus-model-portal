@@ -116,9 +116,9 @@ export function downloadFile(url: string, fileName: string) {
 }
 
 export function entryToArray(entry) {
-  if (Array.isArray(entry)) return entry;
+  if (!entry) return [];
 
-  return [entry];
+  return Array.isArray(entry) ? entry : [entry];
 }
 
 export function getCompareByFn(compareProp) {

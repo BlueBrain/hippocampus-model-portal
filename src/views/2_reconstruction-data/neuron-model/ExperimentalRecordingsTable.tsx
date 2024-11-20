@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { basePath } from '@/config';
+import { imagesPath } from '@/config';
 import traces from '@/traces.json';
 import { graphTheme } from '@/constants';
 
@@ -30,7 +30,7 @@ const ExperimentalRecordingsTable: React.FC<ExperimentalRecordingsTableProps> = 
             key: 'ephys_id',
             width: 150,
             render: (ephys_id: string, record: { etype: string }) => (
-                <Link href={`http://localhost:3000/hippocampus-portal-dev/experimental-data/neuronal-electrophysiology/?etype=${record.etype}&etype_instance=${ephys_id}`}>
+                <Link href={`/experimental-data/neuronal-electrophysiology/?etype=${record.etype}&etype_instance=${ephys_id}`}>
                     {ephys_id}
                 </Link>
             ),
@@ -48,7 +48,7 @@ const ExperimentalRecordingsTable: React.FC<ExperimentalRecordingsTableProps> = 
             width: 220,
             render: (ephys_id: string) => (
                 <Image
-                    src={`${basePath}/data/images/2_neuron-models/trace-preview/${ephys_id}.png`}
+                    src={`${imagesPath}/2_neuron-models/trace-preview/${ephys_id}.png`}
                     alt={`neuron trace preview ${ephys_id}`}
                     width={200}
                     height={100}

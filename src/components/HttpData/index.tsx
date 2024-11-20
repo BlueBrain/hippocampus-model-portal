@@ -1,9 +1,8 @@
 import React from 'react';
-import { captureException } from '@sentry/nextjs';
 import { decodeAsync } from "@msgpack/msgpack";
 
 type HttpDataProps = {
-  path: string;
+  path: string | Promise<string>;
   label?: string;
   children: (
     data: any,
@@ -13,8 +12,6 @@ type HttpDataProps = {
 };
 
 const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
-  const msgpackEncoded = path?.match(/\.msgpack/);
-
   const [state, setState] = React.useState<{
     data: any;
     loading: boolean;
@@ -29,16 +26,18 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
     if (!path) return;
 
     setState({ ...state, loading: true });
-    fetch(path)
+    Promise.resolve(path)
+      .then(fetch)
       .then(async res => {
         // TODO: remove when factesheets don't longer contain NaN values
         if (res.ok) {
+          const msgpackEncoded = (await Promise.resolve(path)).match(/\.msgpack/);
+
           if (msgpackEncoded) {
             if (res.body) {
               return decodeAsync(res.body);
             }
             const err = new Error(`Response body is null for ${path}`);
-            captureException(err);
             return Promise.reject(err);
           }
 
@@ -47,7 +46,6 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
         }
 
         const err = new Error(`Can't fetch ${path}`);
-        captureException(err);
 
         return Promise.reject(err);
       })
@@ -61,9 +59,7 @@ const HttpData: React.FC<HttpDataProps> = ({ path, children, label = '' }) => {
 
   if (state.error) {
     return (
-      <p>
-        {path}
-      </p>
+      <p>Fetching {label || 'data'} failed.</p>
     );
   }
 
