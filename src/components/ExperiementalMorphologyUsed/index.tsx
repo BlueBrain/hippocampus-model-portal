@@ -69,7 +69,7 @@ const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentIn
 
         let currentModel;
         if (isMorphologyLibrary) {
-            currentModel = MorphologyData.find(item => item.morphology === currentInstance);
+            currentModel = MorphologyData.find(item => item.morphology === currentInstance || item.id === currentInstance);
         } else {
             currentModel = MorphologyData.find(item => item.name === currentInstance);
         }

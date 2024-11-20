@@ -73,12 +73,11 @@ const NeuronsModelLibrary: React.FC = () => {
   const [currentLayer, setCurrentLayer] = useState<Layer | "">("");
   const [currentMtype, setCurrentMtype] = useState("");
   const [currentEtype, setCurrentEtype] = useState("");
-  const [currentMorphology, setCurrentMorphology] = useState("");
+  const [currentMorphology, setCurrentMorphology] = useState<any | null>(null);
   const [currentId, setCurrentId] = useState("");
   const [traceData, setTraceData] = useState<any | null>(null);
   const [factsheetData, setFactsheetData] = useState<any | null>(null);
   const [morphologyData, setMorphologyData] = useState<string | null>(null);
-  const [swcFile, setSwcFile] = useState<string>('');
 
   const layers = useMemo(() => getUniqueValues("layer") as Layer[], []);
   const mtypes = useMemo(
@@ -86,27 +85,32 @@ const NeuronsModelLibrary: React.FC = () => {
     [currentLayer]
   );
   const etypes = useMemo(
-    () => getUniqueValues("etype", { mtype: currentMtype }),
-    [currentMtype]
+    () => getUniqueValues("etype", { 
+      layer: currentLayer as Layer,
+      mtype: currentMtype 
+    }),
+    [currentLayer, currentMtype]
   );
   const ids = useMemo(
     () =>
       getUniqueValues("id", {
+        layer: currentLayer as Layer,
         mtype: currentMtype,
         etype: currentEtype,
       }),
-    [currentMtype, currentEtype]
+    [currentLayer, currentMtype, currentEtype]
   );
 
-  const morphologies = useMemo(
-    () =>
-      getUniqueValues("morphology", {
-        mtype: currentMtype,
-        etype: currentEtype,
-        id: currentId,
-      }),
-    [currentMtype, currentEtype, currentId]
-  );
+  // const morphologies = useMemo(
+  //   () =>
+  //     getUniqueValues("morphology", {
+  //       layer: currentLayer as Layer,
+  //       mtype: currentMtype,
+  //       etype: currentEtype,
+  //       id: currentId,
+  //     }),
+  //   [currentLayer, currentMtype, currentEtype, currentId]
+  // );
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -137,7 +141,23 @@ const NeuronsModelLibrary: React.FC = () => {
         ? query.id
         : newIds[0] || "";
     
-    const newMorphology = morphologies[0] || "";
+    const newMorphologies = getUniqueValues("morphology", {
+      mtype: newMtype,
+      etype: newEtype,
+      id: newId,
+    });
+    const newMorphology =
+      typeof query.morphology === "string" && newMorphologies.includes(query.morphology)
+        ? query.morphology
+        : newMorphologies[0] || "";
+
+    console.log("**query**", query);
+    console.log("**newLayer**", newLayer);
+    console.log("**newMtype**", newMtype);
+    console.log("**newEtype**", newEtype);
+    console.log("**newId**", newId);
+    console.log("**newMorphology**", newMorphology);
+    // console.log("**morphologies**", morphologies);
     setCurrentLayer(newLayer);
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
@@ -147,7 +167,7 @@ const NeuronsModelLibrary: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (currentMtype && currentEtype && currentId) {
+      if (currentMtype && currentEtype && currentId && currentMorphology && currentLayer) {
         try {
 
 
@@ -183,7 +203,7 @@ const NeuronsModelLibrary: React.FC = () => {
     };
 
     fetchData();
-  }, [currentMtype, currentEtype, currentId]);
+  }, [currentMtype, currentEtype, currentId, currentMorphology, currentLayer]);
 
   const setParams = (params: {
     layer?: Layer;
@@ -414,15 +434,10 @@ const NeuronsModelLibrary: React.FC = () => {
           </div>
 
         </Collapsible>
-        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
-          <PranavViewer
-            url={`epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentId}`}
-          />
-        </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
-            {traceData && <TraceGraph plotData={traceData} />}
+            {traceData && <TraceGraph plotData={traceData} maxTime={1200} />}
           </div>
 
           {traceData && (
@@ -462,6 +477,16 @@ const NeuronsModelLibrary: React.FC = () => {
             </>
           )}
         </Collapsible>
+
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <PranavViewer
+            url={`epsp-bpap/neuron_model_lib/${currentMtype}/${currentEtype}/${currentId}`}
+          />
+        </Collapsible>
+
+
+
+
         <Collapsible
           id="ExperimentalMorphologySection"
           className="mt-4"

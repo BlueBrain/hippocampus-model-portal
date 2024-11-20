@@ -1,380 +1,642 @@
 [
     {
-        "morphology": "455995",
-        "etype": "cNAC",
-        "mtype": "SO_BP",
-        "layer": "SO"
-    },
-    {
-        "morphology": "455996",
-        "etype": "cNAC",
-        "mtype": "SO_BP",
-        "layer": "SO"
-    },
-    {
-        "morphology": "455997",
-        "etype": "cNAC",
-        "mtype": "SO_BP",
-        "layer": "SO"
-    },
-    {
-        "morphology": "455998",
-        "etype": "cNAC",
-        "mtype": "SO_BP",
-        "layer": "SO"
-    },
-    {
-        "morphology": "455999",
-        "etype": "cNAC",
-        "mtype": "SO_BP",
-        "layer": "SO"
-    },
-    {
-        "morphology": "450290",
-        "etype": "cAC",
-        "mtype": "SO_OLM",
-        "layer": "SO"
-    },
-    {
-        "morphology": "450291",
-        "etype": "cAC",
-        "mtype": "SO_OLM",
-        "layer": "SO"
-    },
-    {
-        "morphology": "450292",
-        "etype": "cAC",
-        "mtype": "SO_OLM",
-        "layer": "SO"
-    },
-    {
-        "morphology": "450294",
-        "etype": "cAC",
-        "mtype": "SO_OLM",
-        "layer": "SO"
-    },
-    {
-        "morphology": "454569",
-        "etype": "cAC",
+        "layer": "SO",
+        "id": "454572",
         "mtype": "SO_Tri",
-        "layer": "SO"
-    },
-    {
-        "morphology": "454570",
         "etype": "cAC",
-        "mtype": "SO_Tri",
-        "layer": "SO"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "971114B_-_Scale_x1.000_y1.150_z1.000_-_Clone_0"
     },
     {
-        "morphology": "454571",
+        "layer": "SO",
+        "id": "454573",
+        "mtype": "SO_Tri",
         "etype": "cAC",
-        "mtype": "SO_Tri",
-        "layer": "SO"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "971114B_-_Clone_0"
     },
     {
-        "morphology": "454572",
+        "layer": "SO",
+        "id": "454569",
+        "mtype": "SO_Tri",
         "etype": "cAC",
-        "mtype": "SO_Tri",
-        "layer": "SO"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "971114B_-_Scale_x1.000_y1.150_z1.000"
     },
     {
-        "morphology": "454573",
+        "layer": "SO",
+        "id": "454571",
+        "mtype": "SO_Tri",
         "etype": "cAC",
-        "mtype": "SO_Tri",
-        "layer": "SO"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "971114B_-_Scale_x1.000_y0.850_z1.000"
     },
     {
-        "morphology": "430019",
+        "layer": "SO",
+        "id": "454570",
+        "mtype": "SO_Tri",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_980120A_2019032816092",
+        "morphology": "971114B_-_Scale_x1.000_y1.150_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SP",
+        "id": "408343",
+        "mtype": "SP_PVBC",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_970717D_2019030718251",
+        "morphology": "060314AM2_-_Scale_x1.000_y1.100_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SP",
+        "id": "408340",
+        "mtype": "SP_PVBC",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011023HP2_2019032816492",
+        "morphology": "060314AM2_-_Scale_x1.000_y0.850_z1.000_-_Clone_1"
+    },
+    {
+        "layer": "SP",
+        "id": "408341",
+        "mtype": "SP_PVBC",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_970717D_2019030718251",
+        "morphology": "970627BHP1"
+    },
+    {
+        "layer": "SP",
+        "id": "408339",
+        "mtype": "SP_PVBC",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_980120A_2019032915503",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "408338",
+        "mtype": "SP_PVBC",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_980120A_2019032915503",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.150_z1.000_-_Clone_1"
+    },
+    {
+        "layer": "SP",
+        "id": "408342",
+        "mtype": "SP_PVBC",
         "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.100_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "408359",
+        "mtype": "SP_PVBC",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_971114B_2019032912011",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.150_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "408361",
+        "mtype": "SP_PVBC",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.150_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "408370",
+        "mtype": "SP_PVBC",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_060314AM2_2019032911590",
+        "morphology": "060314AM2_-_Scale_x1.000_y1.100_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SP",
+        "id": "408353",
+        "mtype": "SP_PVBC",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_060314AM2_2019032911590",
+        "morphology": "970627BHP1_-_Scale_x1.000_y1.150_z1.000"
+    },
+    {
+        "layer": "SO",
+        "id": "455999",
+        "mtype": "SO_BP",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_980513B_2019032915552",
+        "morphology": "980120A_-_Scale_x1.000_y1.100_z1.000"
+    },
+    {
+        "layer": "SO",
+        "id": "455997",
+        "mtype": "SO_BP",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_970717D_2019030718251",
+        "morphology": "980120A_-_Scale_x1.000_y1.150_z1.000"
+    },
+    {
+        "layer": "SO",
+        "id": "455996",
+        "mtype": "SO_BP",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_990111HP2_2019032915570",
+        "morphology": "980120A_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SO",
+        "id": "455998",
+        "mtype": "SO_BP",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_990111HP2_2019032915570",
+        "morphology": "980120A_-_Scale_x1.000_y1.100_z1.000"
+    },
+    {
+        "layer": "SO",
+        "id": "455995",
+        "mtype": "SO_BP",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_970911C_2019030512040",
+        "morphology": "980120A_-_Scale_x1.000_y1.150_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "430022",
         "mtype": "SP_AA",
-        "layer": "SP"
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_980120A_2019032912023",
+        "morphology": "970911C_-_Scale_x1.000_y1.050_z1.000_-_Clone_2"
     },
     {
-        "morphology": "430020",
-        "etype": "bAC",
+        "layer": "SP",
+        "id": "430023",
         "mtype": "SP_AA",
-        "layer": "SP"
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "970911C_-_Scale_x1.000_y1.150_z1.000_-_Clone_2"
     },
     {
-        "morphology": "430021",
-        "etype": "bAC",
+        "layer": "SP",
+        "id": "430021",
         "mtype": "SP_AA",
-        "layer": "SP"
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "970911C_-_Scale_x1.000_y1.100_z1.000"
     },
     {
-        "morphology": "430022",
-        "etype": "bAC",
+        "layer": "SP",
+        "id": "430019",
         "mtype": "SP_AA",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426580",
         "etype": "bAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_980120A_2019032912023",
+        "morphology": "970911C_-_Scale_x1.000_y1.150_z1.000_-_Clone_0"
     },
     {
-        "morphology": "426587",
+        "layer": "SP",
+        "id": "430020",
+        "mtype": "SP_AA",
         "etype": "bAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_971114B_2019032912011",
+        "morphology": "970911C_-_Scale_x1.000_y1.050_z1.000_-_Clone_2"
     },
     {
-        "morphology": "426595",
-        "etype": "bAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426598",
-        "etype": "bAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426603",
-        "etype": "bAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426576",
-        "etype": "cNAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426577",
-        "etype": "cNAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426578",
-        "etype": "cNAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426579",
-        "etype": "cNAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "426581",
-        "etype": "cNAC",
-        "mtype": "SP_BS",
-        "layer": "SP"
-    },
-    {
-        "morphology": "419490",
+        "layer": "SO",
+        "id": "450293",
+        "mtype": "SO_OLM",
         "etype": "cAC",
-        "mtype": "SP_CCKBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "011017HP2"
     },
     {
-        "morphology": "419491",
+        "layer": "SO",
+        "id": "450294",
+        "mtype": "SO_OLM",
         "etype": "cAC",
-        "mtype": "SP_CCKBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "011017HP2"
     },
     {
-        "morphology": "419492",
+        "layer": "SO",
+        "id": "450292",
+        "mtype": "SO_OLM",
         "etype": "cAC",
-        "mtype": "SP_CCKBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "011017HP2_height_330"
     },
     {
-        "morphology": "419493",
+        "layer": "SO",
+        "id": "450290",
+        "mtype": "SO_OLM",
         "etype": "cAC",
-        "mtype": "SP_CCKBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "011017HP2_height_150"
     },
     {
-        "morphology": "419494",
+        "layer": "SO",
+        "id": "450291",
+        "mtype": "SO_OLM",
         "etype": "cAC",
-        "mtype": "SP_CCKBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cAC_011017HP2_2019032814552",
+        "morphology": "011017HP2_height_375"
     },
     {
-        "morphology": "432267",
-        "etype": "bAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
-    },
-    {
-        "morphology": "432268",
-        "etype": "bAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
-    },
-    {
-        "morphology": "432272",
-        "etype": "bAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
-    },
-    {
-        "morphology": "432273",
-        "etype": "bAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
-    },
-    {
-        "morphology": "432275",
-        "etype": "bAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
-    },
-    {
-        "morphology": "432269",
+        "layer": "SP",
+        "id": "426579",
+        "mtype": "SP_BS",
         "etype": "cNAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_980513B_2019032915552",
+        "morphology": "980513B_-_Scale_x1.000_y0.950_z1.000"
     },
     {
-        "morphology": "432270",
+        "layer": "SP",
+        "id": "426577",
+        "mtype": "SP_BS",
         "etype": "cNAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_970717D_2019030718251",
+        "morphology": "980513B_-_Clone_2"
     },
     {
-        "morphology": "432271",
+        "layer": "SP",
+        "id": "426576",
+        "mtype": "SP_BS",
         "etype": "cNAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_970509HP2_2019030511562",
+        "morphology": "980513B"
     },
     {
-        "morphology": "432274",
+        "layer": "SP",
+        "id": "426578",
+        "mtype": "SP_BS",
         "etype": "cNAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_011023HP2_2019032816492",
+        "morphology": "980513B_-_Clone_0"
     },
     {
-        "morphology": "432280",
+        "layer": "SP",
+        "id": "426581",
+        "mtype": "SP_BS",
         "etype": "cNAC",
-        "mtype": "SP_Ivy",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_060314AM2_2019032816533",
+        "morphology": "980513B_-_Scale_x1.000_y0.850_z1.000"
     },
     {
-        "morphology": "1672",
-        "etype": "cACpyr",
-        "mtype": "SP_PC",
-        "layer": "SP"
-    },
-    {
-        "morphology": "1673",
-        "etype": "cACpyr",
-        "mtype": "SP_PC",
-        "layer": "SP"
-    },
-    {
-        "morphology": "1674",
-        "etype": "cACpyr",
-        "mtype": "SP_PC",
-        "layer": "SP"
-    },
-    {
-        "morphology": "1675",
-        "etype": "cACpyr",
-        "mtype": "SP_PC",
-        "layer": "SP"
-    },
-    {
-        "morphology": "1676",
-        "etype": "cACpyr",
-        "mtype": "SP_PC",
-        "layer": "SP"
-    },
-    {
-        "morphology": "408342",
+        "layer": "SP",
+        "id": "426598",
+        "mtype": "SP_BS",
         "etype": "bAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "980513B_-_Scale_x1.000_y1.150_z1.000_-_Clone_2"
     },
     {
-        "morphology": "408353",
+        "layer": "SP",
+        "id": "426595",
+        "mtype": "SP_BS",
         "etype": "bAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_971114B_2019032912011",
+        "morphology": "980513B_-_Scale_x1.000_y0.850_z1.000_-_Clone_1"
     },
     {
-        "morphology": "408359",
+        "layer": "SP",
+        "id": "426587",
+        "mtype": "SP_BS",
         "etype": "bAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "980513B_-_Clone_0"
     },
     {
-        "morphology": "408361",
+        "layer": "SP",
+        "id": "426580",
+        "mtype": "SP_BS",
         "etype": "bAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "980513B_-_Clone_0"
     },
     {
-        "morphology": "408370",
+        "layer": "SP",
+        "id": "426603",
+        "mtype": "SP_BS",
         "etype": "bAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "980513B_-_Clone_0"
     },
     {
-        "morphology": "408338",
+        "layer": "SLM",
+        "id": "1",
+        "mtype": "SLM_PPA",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011127HP1_2019032911561",
+        "morphology": "011127HP1_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SLM",
+        "id": "4",
+        "mtype": "SLM_PPA",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011127HP1_2019032911561",
+        "morphology": "011127HP1_-_Scale_x1.000_y1.100_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SLM",
+        "id": "3",
+        "mtype": "SLM_PPA",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011127HP1_2019032911561",
+        "morphology": "011127HP1_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SLM",
+        "id": "2",
+        "mtype": "SLM_PPA",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011127HP1_2019032911561",
+        "morphology": "011127HP1_-_Scale_x1.000_y0.850_z1.000"
+    },
+    {
+        "layer": "SLM",
+        "id": "5",
+        "mtype": "SLM_PPA",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011127HP1_2019032911561",
+        "morphology": "011127HP1_-_Scale_x1.000_y1.150_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SO",
+        "id": "453609",
+        "mtype": "SO_BS",
         "etype": "cNAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_970509HP2_2019030511562",
+        "morphology": "011023HP2_-_Scale_x1.000_y1.050_z1.000"
     },
     {
-        "morphology": "408339",
+        "layer": "SO",
+        "id": "453607",
+        "mtype": "SO_BS",
         "etype": "cNAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_980120A_2019032915503",
+        "morphology": "011023HP2_-_Scale_x1.000_y1.050_z1.000"
     },
     {
-        "morphology": "408340",
+        "layer": "SO",
+        "id": "453608",
+        "mtype": "SO_BS",
         "etype": "cNAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_970509HP2_2019030511562",
+        "morphology": "011023HP2"
     },
     {
-        "morphology": "408341",
+        "layer": "SO",
+        "id": "453610",
+        "mtype": "SO_BS",
         "etype": "cNAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_980513B_2019032915552",
+        "morphology": "011023HP2"
     },
     {
-        "morphology": "408343",
+        "layer": "SO",
+        "id": "453605",
+        "mtype": "SO_BS",
         "etype": "cNAC",
-        "mtype": "SP_PVBC",
-        "layer": "SP"
+        "emodel_instance": "CA1_int_cNAC_010710HP2_2019032816325",
+        "morphology": "011023HP2_-_Scale_x1.000_y0.850_z1.000_-_Clone_0"
     },
     {
-        "morphology": "864",
-        "etype": "cAC",
+        "layer": "SO",
+        "id": "453615",
+        "mtype": "SO_BS",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_060314AM2_2019032911590",
+        "morphology": "011023HP2_-_Scale_x1.000_y0.850_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SO",
+        "id": "453624",
+        "mtype": "SO_BS",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "011023HP2_-_Scale_x1.000_y0.950_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SO",
+        "id": "453606",
+        "mtype": "SO_BS",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_060314AM2_2019032911590",
+        "morphology": "011023HP2_-_Scale_x1.000_y0.900_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SO",
+        "id": "453619",
+        "mtype": "SO_BS",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_060314AM2_2019032911590",
+        "morphology": "011023HP2_-_Scale_x1.000_y1.150_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SO",
+        "id": "453621",
+        "mtype": "SO_BS",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011017HP2_2019032911530",
+        "morphology": "011023HP2_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SR",
+        "id": "866",
         "mtype": "SR_SCA",
-        "layer": "SR"
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_990611HP2_2019032816214",
+        "morphology": "990611HP2_-_Scale_x1.000_y1.050_z1.000"
     },
     {
-        "morphology": "865",
-        "etype": "cAC",
+        "layer": "SR",
+        "id": "868",
         "mtype": "SR_SCA",
-        "layer": "SR"
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_990611HP2_2019032816214",
+        "morphology": "990611HP2_-_Scale_x1.000_y0.850_z1.000"
     },
     {
-        "morphology": "866",
-        "etype": "cAC",
+        "layer": "SR",
+        "id": "867",
         "mtype": "SR_SCA",
-        "layer": "SR"
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_990611HP2_2019032816214",
+        "morphology": "990611HP2_-_Scale_x1.000_y0.900_z1.000_-_Clone_0"
     },
     {
-        "morphology": "867",
-        "etype": "cAC",
+        "layer": "SR",
+        "id": "865",
         "mtype": "SR_SCA",
-        "layer": "SR"
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_990611HP2_2019032816214",
+        "morphology": "990611HP2_-_Scale_x1.000_y1.050_z1.000_-_Clone_0"
     },
     {
-        "morphology": "868",
-        "etype": "cAC",
+        "layer": "SR",
+        "id": "864",
         "mtype": "SR_SCA",
-        "layer": "SR"
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_990611HP2_2019032816214",
+        "morphology": "990611HP2_-_Scale_x1.000_y0.900_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "432270",
+        "mtype": "SP_Ivy",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011017HP2_2019032816461",
+        "morphology": "970717D_-_Scale_x1.000_y0.900_z1.000_-_Clone_2"
+    },
+    {
+        "layer": "SP",
+        "id": "432271",
+        "mtype": "SP_Ivy",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011017HP2_2019032816461",
+        "morphology": "970717D_-_Scale_x1.000_y1.050_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "432274",
+        "mtype": "SP_Ivy",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011017HP2_2019032816461",
+        "morphology": "010710HP2_-_Scale_x1.000_y0.850_z1.000_-_Clone_2"
+    },
+    {
+        "layer": "SP",
+        "id": "432280",
+        "mtype": "SP_Ivy",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011017HP2_2019032816461",
+        "morphology": "970717D_-_Scale_x1.000_y0.950_z1.000_-_Clone_6"
+    },
+    {
+        "layer": "SP",
+        "id": "432269",
+        "mtype": "SP_Ivy",
+        "etype": "cNAC",
+        "emodel_instance": "CA1_int_cNAC_011017HP2_2019032816461",
+        "morphology": "010710HP2_-_Scale_x1.000_y1.050_z1.000_-_Clone_4"
+    },
+    {
+        "layer": "SP",
+        "id": "432273",
+        "mtype": "SP_Ivy",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "010710HP2_-_Clone_5"
+    },
+    {
+        "layer": "SP",
+        "id": "432275",
+        "mtype": "SP_Ivy",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "970717D_-_Scale_x1.000_y0.950_z1.000_-_Clone_3"
+    },
+    {
+        "layer": "SP",
+        "id": "432272",
+        "mtype": "SP_Ivy",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "970717D_-_Scale_x1.000_y1.050_z1.000_-_Clone_2"
+    },
+    {
+        "layer": "SP",
+        "id": "432268",
+        "mtype": "SP_Ivy",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "970717D_-_Clone_1"
+    },
+    {
+        "layer": "SP",
+        "id": "432267",
+        "mtype": "SP_Ivy",
+        "etype": "bAC",
+        "emodel_instance": "CA1_int_bAC_011023HP2_2019032911555",
+        "morphology": "010710HP2_-_Scale_x1.000_y0.900_z1.000_-_Clone_6"
+    },
+    {
+        "layer": "SP",
+        "id": "419493",
+        "mtype": "SP_CCKBC",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_031031AM1_2019032815001",
+        "morphology": "031031AM1_-_Scale_x1.000_y0.850_z1.000"
+    },
+    {
+        "layer": "SP",
+        "id": "419494",
+        "mtype": "SP_CCKBC",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_031031AM1_2019032815001",
+        "morphology": "031031AM1_-_Scale_x1.000_y0.850_z1.000_-_Clone_3"
+    },
+    {
+        "layer": "SP",
+        "id": "419492",
+        "mtype": "SP_CCKBC",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_031031AM1_2019032815001",
+        "morphology": "031031AM1_-_Scale_x1.000_y1.150_z1.000_-_Clone_2"
+    },
+    {
+        "layer": "SP",
+        "id": "419490",
+        "mtype": "SP_CCKBC",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_031031AM1_2019032815001",
+        "morphology": "031031AM1_-_Scale_x1.000_y1.100_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SP",
+        "id": "419491",
+        "mtype": "SP_CCKBC",
+        "etype": "cAC",
+        "emodel_instance": "CA1_int_cAC_031031AM1_2019032815001",
+        "morphology": "031031AM1_-_Scale_x1.000_y1.100_z1.000_-_Clone_3"
+    },
+    {
+        "layer": "SP",
+        "id": "1676",
+        "mtype": "SP_PC",
+        "etype": "cACpyr",
+        "emodel_instance": "CA1_pyr_cACpyr_mpg141208_B_idA_2019032814400",
+        "morphology": "dend-mpg141217_A_idB_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y1.100_z1.000_-_Clone_0"
+    },
+    {
+        "layer": "SP",
+        "id": "1674",
+        "mtype": "SP_PC",
+        "etype": "cACpyr",
+        "emodel_instance": "CA1_pyr_cACpyr_mpg150305_A_idB_2019030511201",
+        "morphology": "dend-oh140807_A0_idC_axon-mpg141017_a1-2_idC_-_Clone_6"
+    },
+    {
+        "layer": "SP",
+        "id": "1673",
+        "mtype": "SP_PC",
+        "etype": "cACpyr",
+        "emodel_instance": "CA1_pyr_cACpyr_mpg141216_A_idA_2019030513333",
+        "morphology": "dend-050921AM2_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y1.050_z1.000_-_Clone_6"
+    },
+    {
+        "layer": "SP",
+        "id": "1672",
+        "mtype": "SP_PC",
+        "etype": "cACpyr",
+        "emodel_instance": "CA1_pyr_cACpyr_oh140807_A0_idJ_2019032814272",
+        "morphology": "dend-mpg141209_B_idA_axon-mpg141017_a1-2_idC_-_Clone_1"
+    },
+    {
+        "layer": "SP",
+        "id": "1675",
+        "mtype": "SP_PC",
+        "etype": "cACpyr",
+        "emodel_instance": "CA1_pyr_cACpyr_mpg141217_A_idB_2019030511280",
+        "morphology": "dend-oh140521_B0_Rat_idC_axon-mpg141017_a1-2_idC_-_Scale_x1.000_y1.150_z1.000_-_Clone_11"
     }
 ]

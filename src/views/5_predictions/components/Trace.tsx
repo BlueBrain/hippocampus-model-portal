@@ -13,9 +13,10 @@ interface TraceDataProps {
         units: string | null;
         value_map: { [key: string]: number[] } | number[][];
     };
+    maxTime?: number;
 }
 
-const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
+const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData, maxTime = 5000 }) => {
     const [data, setData] = useState<any[]>([]);
     const [layout, setLayout] = useState<any>({});
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -37,7 +38,6 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             // Prepare data for Plotly
             let traces;
-            const maxTime = 5000; // Maximum time in milliseconds
             if (Array.isArray(plotData.value_map)) {
                 traces = plotData.value_map.map((trace, index) => ({
                     x: Array.from({ length: trace.length }, (_, i) => i * (maxTime / (trace.length - 1))),
@@ -68,19 +68,38 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
 
             setData(traces);
 
-            // Set up the layout
+            // Calculate tick values and labels based on maxTime
+            const numTicks = 6;
+            const tickInterval = maxTime / (numTicks - 1);
+            const tickvals = Array.from({ length: numTicks }, (_, i) => i * tickInterval);
+            const ticktext = tickvals.map(val => `${Math.round(val)} ms`);
+
             setLayout({
                 xaxis: {
-                    title: { text: 'Time(s)', standoff: 20 },
+                    title: { text: 'Time (ms)', standoff: 20 },
                     showticklabels: true,
                     tickmode: 'array',
-                    tickvals: [0, 1000, 2000, 3000, 4000, 5000],
-                    ticktext: ['0 ms', '1', '2', '3', '4', '5'],
+                    tickvals: tickvals,
+                    ticktext: ticktext,
                     range: [0, maxTime],
+                    showgrid: true,
+                    gridwidth: 1,
+                    gridcolor: '#E0E0E0',
+                    linewidth: 2,
+                    tickwidth: 2,
+                    ticklen: 8,
+                    zeroline: false,
                 },
                 yaxis: {
                     title: { text: plotData.units ? `Voltage (${plotData.units})` : 'Voltage', standoff: 40 },
                     showticklabels: true,
+                    showgrid: true,
+                    gridwidth: 1,
+                    gridcolor: '#E0E0E0',
+                    linewidth: 2,
+                    tickwidth: 2,
+                    ticklen: 8,
+                    zeroline: false,
                 },
                 autosize: true,
                 margin: { l: 60, r: 50, b: 100, t: 50, pad: 4 },
@@ -97,7 +116,7 @@ const PlotlyTraceGraph: React.FC<TraceDataProps> = ({ plotData }) => {
             setIsLoading(false);
             setHasError(true);
         }
-    }, [plotData, allTracesVisible]);
+    }, [plotData, allTracesVisible, maxTime]);
 
     const containerStyle = {
         width: '100%',

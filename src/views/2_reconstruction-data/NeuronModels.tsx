@@ -529,7 +529,7 @@ const Neurons: React.FC = () => {
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
-            {traceData && <TraceGraph plotData={traceData} />}
+            {traceData && <TraceGraph plotData={traceData} maxTime={1200} />}
           </div>
 
           {traceData && (
@@ -569,8 +569,9 @@ const Neurons: React.FC = () => {
             </>
           )}
         </Collapsible>
-
-        <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <PranavViewer url={`epsp-bpap/neurons_model/${currentInstance}`} />
+        </Collapsible>
 
         <Collapsible id="efeaturesSection" className="mt-4" title="E-features">
           {efeatureData && (
