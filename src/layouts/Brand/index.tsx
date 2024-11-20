@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { basePath } from '../../config';
+import { dataPath } from '../../config';
 
 
 
@@ -12,7 +12,7 @@ const Brand: React.FC = () => {
       <a href="/">
         <img
           className="logo"
-          src={`${basePath}/data/ui/logos/epfl-logo-red.svg`}
+          src={`${dataPath}/ui/logos/epfl-logo-red.svg`}
           alt="EPFL logo"
         />
         <div className="divider"></div>

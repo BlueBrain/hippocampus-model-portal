@@ -13,7 +13,7 @@ import Collapsible from "@/components/Collapsible";
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
 import { colorName } from "./config";
-import { dataPath } from "@/config";
+import { basePath, dataPath } from "@/config";
 import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
@@ -315,7 +315,7 @@ const NeuronsModelLibrary: React.FC = () => {
       >
         <Collapsible id="morphologySection" className="mt-4" title="Morphology">
           <SwcViewer
-            href={`data/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`}
+            href={`${dataPath}/2_reconstruction-data/neuron-models-library/${currentMtype}/${currentEtype}/${currentMorphology}/morphology/${currentMorphology}.swc`}
           />
           <div className="mt-4">
             <DownloadModel
@@ -331,7 +331,7 @@ const NeuronsModelLibrary: React.FC = () => {
         </Collapsible>
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`epsp-bpap/neuron_model_lib/${mapPranavFile(
+            url={`${dataPath}/epsp-bpap/neuron_model_lib/${mapPranavFile(
               currentMtype,
               currentEtype,
               currentMorphology
@@ -422,13 +422,13 @@ function mapPranavFile(mType: string, eType: string, morphology: string) {
   const key = `${mType}/${eType}/${morphology}.swc`;
   const val = MAPPING[key];
   if (!val) {
-    console.log(
-      "🚀 [NeuronModelLibrary] mType, eType, morphology = ",
-      mType,
-      eType,
-      morphology
-    ); // @FIXME: Remove this line written on 2024-10-24 at 14:55
-    console.error("No mapping found for ", key);
+    // console.log(
+    //   "🚀 [NeuronModelLibrary] mType, eType, morphology = ",
+    //   mType,
+    //   eType,
+    //   morphology
+    // ); // @FIXME: Remove this line written on 2024-10-24 at 14:55
+    // console.error("No mapping found for ", key);
   }
   return val ?? "<Not found>";
 }

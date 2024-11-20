@@ -12,7 +12,7 @@ import AuthorBox from "@/components/AuthorBox/AuthorBox";
 import HttpData from "@/components/HttpData";
 import InstanceViewer from "./neuronal-morphology/InstanceViewer";
 import NeuronFactsheet from "./neuronal-morphology/NeuronFactsheet";
-import { basePath } from "@/config";
+import { dataPath, imagesPath } from "@/config";
 import { defaultSelection, layers } from "@/constants";
 import { Layer } from "@/types";
 import morphologies from "@/exp-morphology-list.json";
@@ -244,14 +244,14 @@ const NeuronalMorphologyView: React.FC = () => {
 
           <div className="graph no-padding">
             <SwcViewer
-              href={`data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
+              href={`${dataPath}/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`}
             />
           </div>
 
           <DownloadButton
             onClick={() =>
               downloadFile(
-                `data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`,
+                `${dataPath}/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/morphology.swc`,
                 `${quickSelection.instance}-morphology.swc`
               )
             }
@@ -262,7 +262,7 @@ const NeuronalMorphologyView: React.FC = () => {
 
           <div className="mb-4">
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/factsheet.json`}
             >
               {(factsheetData) => (
                 <>
@@ -293,7 +293,7 @@ const NeuronalMorphologyView: React.FC = () => {
           </div>
           <div className="mb-4">
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/distribution-plots.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/distribution-plots.json`}
             >
               {(plotsData) => (
                 <>
@@ -324,14 +324,14 @@ const NeuronalMorphologyView: React.FC = () => {
           </div>
           <div className="mt-8 ">
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/table.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/morphology/${quickSelection.instance}/table.json`}
             >
               {(tableData) => (
                 <>
                   {tableData && (
                     <NeuronTable
-                      imagePath={`${basePath}/data/images/1_experimental-data/slices`}
-                      thumbnailPath={`${basePath}/data/images/1_experimental-data/slices/thumbnails`}
+                      imagePath={`${imagesPath}/1_experimental-data/slices`}
+                      thumbnailPath={`${imagesPath}/1_experimental-data/slices/thumbnails`}
                       imageExt="jpeg"
                       theme={theme}
                       data={tableData}
@@ -351,7 +351,7 @@ const NeuronalMorphologyView: React.FC = () => {
           </p>
           <div className="mb-4">
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/factsheet.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/factsheet.json`}
             >
               {(factsheetData) => (
                 <>
@@ -383,7 +383,7 @@ const NeuronalMorphologyView: React.FC = () => {
 
           <div className="mt-8">
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/distribution-plots.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/distribution-plots.json`}
             >
               {(plotsData) => (
                 <>
@@ -414,14 +414,14 @@ const NeuronalMorphologyView: React.FC = () => {
           </div>
           <div>
             <HttpData
-              path={`${basePath}/data/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}
+              path={`${dataPath}/1_experimental-data/neuronal-morphology/mtype/${quickSelection.mtype}/table.json`}
             >
               {(tableData) => (
                 <>
                   {tableData && (
                     <NeuronTable
-                      imagePath={`${basePath}/data/images/1_experimental-data/neuronal-morphology`}
-                      thumbnailPath={`${basePath}/data/images/1_experimental-data/neuronal-morphology`}
+                      imagePath={`${imagesPath}/1_experimental-data/neuronal-morphology`}
+                      thumbnailPath={`${imagesPath}/1_experimental-data/neuronal-morphology`}
                       imageExt="png"
                       theme={theme}
                       data={tableData}

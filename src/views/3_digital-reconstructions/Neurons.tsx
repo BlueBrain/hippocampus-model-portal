@@ -12,7 +12,7 @@ import Collapsible from "@/components/Collapsible";
 
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
-import { dataPath } from "@/config";
+import { basePath, dataPath } from "@/config";
 import { downloadAsJson } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
@@ -367,7 +367,7 @@ const NeuronsView: React.FC = () => {
         quickSelectorEntries={qsEntries}
       >
         <SwcViewer
-          href={`data/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/morphology.swc`}
+          href={`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/morphology.swc`}
         />
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
@@ -414,7 +414,7 @@ const NeuronsView: React.FC = () => {
 
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentMorphology}`}
+            url={`${dataPath}/epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentMorphology}`}
           />
         </Collapsible>
 

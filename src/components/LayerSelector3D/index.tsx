@@ -4,6 +4,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { Layer } from '../../types';
 import { layers, theme } from '../../constants'; // Import theme
+import { basePath } from '@/config';
 
 type LayerSelectProps3D = {
     value?: Layer;
@@ -107,7 +108,7 @@ const LayerSelector3D: React.FC<LayerSelectProps3D> = ({ value, onSelect, theme:
         yOffset = totalHeight / 2;
 
         const loader = new FontLoader();
-        loader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
+        loader.load(`${basePath}/assets/fonts/Titillium_Web_Light_.json`, (font) => {
             for (let i = 0; i < numTrapezoids; i++) {
                 const height = trapezoidHeights[layers[i]] || 1;
                 const angleRad = THREE.MathUtils.degToRad(angle);

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNexusContext } from '@bbp/react-nexus';
 import get from 'lodash/get';
 import sortBy from 'lodash/sortBy';
 
-import { hippocampus } from '../../config';
+import { expDataAgentsPath } from '@/queries/http';
 
 function entryToArray(entry) {
   if (Array.isArray(entry)) return entry;
@@ -28,7 +27,6 @@ export type MetadataProps = {
 };
 
 const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
-  const nexus = useNexusContext();
   const [agents, setAgents] = useState<Record<string, any>[]>([]);
 
   const contributions = entryToArray(nexusDocument.contribution).filter(Boolean);
@@ -45,23 +43,9 @@ const Metadata: React.FC<MetadataProps> = ({ nexusDocument }) => {
   useEffect(() => {
     if (!agentIds.length) return;
 
-    const contributionEsQuery = {
-      from: 0,
-      size: 100,
-      query: {
-        terms: {
-          '_id': agentIds,
-        },
-      },
-    };
-
-    nexus.View
-      // query ElesticSearch endpoint to get agents by their ids
-      .elasticSearchQuery(hippocampus.org, hippocampus.project, hippocampus.datasetViewId, contributionEsQuery)
-      // extract ES documents
-      .then(data => data.hits.hits)
-      // extract Nexus original documents
-      .then(esDocuments => esDocuments.map(esDocument => esDocument._source))
+    fetch(expDataAgentsPath())
+      .then(res => res.json())
+      .then(allAgentResources => allAgentResources.filter(agentResource => agentIds.includes(agentResource['@id'])))
       // pick only agent ids and labels
       .then(agents =>
         agents.map(agent => ({

@@ -7,7 +7,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { VolumeSection } from '@/types';
 import { volumeSections, theme } from '@/constants';
 
-import { basePath } from '@/config';
+import { basePath, dataPath } from '@/config';
 
 import styles from './styles.module.scss';
 
@@ -113,7 +113,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
 
     const loader = new OBJLoader();
     loader.load(
-      basePath + '/data/3d/volume-selector/volume-selector.obj',
+      `${dataPath}/3d/volume-selector/volume-selector.obj`,
       (obj) => {
         [obj1Ref, obj2Ref, obj3Ref].forEach((ref, index) => {
           const newObj = obj.clone();
@@ -125,7 +125,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
         });
 
         const fontLoader = new FontLoader();
-        fontLoader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
+        fontLoader.load(`${basePath}/assets/fonts/Titillium_Web_Light_.json`, (font) => {
           ['Region', 'Slice', 'Cylinder'].forEach((text, index) => {
             createText(text, [obj1Ref, obj2Ref, obj3Ref][index].current!, text.toLowerCase(), font);
           });
@@ -319,7 +319,7 @@ const VolumeSectionSelector3D: React.FC<VolumeSectionSelectProps> = ({
             if (parentMesh) {
               parentMesh.remove(oldTextMesh);
               const fontLoader = new FontLoader();
-              fontLoader.load('/hippocampus-portal-dev/assets/fonts/Titillium_Web_Light_.json', (font) => {
+              fontLoader.load(`${basePath}/assets/fonts/Titillium_Web_Light_.json`, (font) => {
                 createText(text, obj, text.toLowerCase(), font);
               });
             }

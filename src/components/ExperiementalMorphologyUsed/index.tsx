@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Table } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { basePath } from '@/config';
+import { basePath, dataPath } from '@/config';
 
 
 type MorphologyTableProps = {
@@ -48,7 +48,7 @@ const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentIn
                 width: 220,
                 render: (morphology: string) => (
                     <Image
-                        src={`${basePath}/data/images/1_experimental-data/neuronal-morphology/${morphology}.png`}
+                        src={`${dataPath}/images/1_experimental-data/neuronal-morphology/${morphology}.png`}
                         alt={`morphology preview ${morphology}`}
                         width={200}
                         height={100}
@@ -63,7 +63,7 @@ const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentIn
 
     const tableData = useMemo(() => {
         if (!Array.isArray(MorphologyData)) {
-            console.error('MorphologyData is not an array:', MorphologyData);
+            // console.error('MorphologyData is not an array:', MorphologyData);
             return [];
         }
 
@@ -75,8 +75,8 @@ const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentIn
         }
 
         if (!currentModel) {
-            console.error('No matching model found for:', currentInstance);
-            console.log('Available models:', MorphologyData.map(item => isMorphologyLibrary ? item.morphology : item.name));
+            // console.error('No matching model found for:', currentInstance);
+            // console.log('Available models:', MorphologyData.map(item => isMorphologyLibrary ? item.morphology : item.name));
             return [];
         }
 
@@ -88,8 +88,8 @@ const ExperimentalMorphologyTable: React.FC<MorphologyTableProps> = ({ currentIn
         }];
     }, [currentInstance, isMorphologyLibrary, MorphologyData]);
 
-    console.log('Current instance:', currentInstance);
-    console.log('Table data:', tableData);
+    // console.log('Current instance:', currentInstance);
+    // console.log('Table data:', tableData);
 
     return (
         <>

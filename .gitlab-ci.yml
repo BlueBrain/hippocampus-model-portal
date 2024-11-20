@@ -37,8 +37,6 @@ build-img-dev:
   extends: .build-image-using-kaniko
   stage: build
   variables:
-    NEXT_PUBLIC_SENTRY_DSN: $SENTRY_DSN
-    SENTRY_AUTH_TOKEN: $SENTRY_AUTH_TOKEN
     NEXT_PUBLIC_NEXUS_TOKEN: $NEXUS_AUTH_TOKEN
     CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
     NEXT_PUBLIC_BASE_PATH: /hippocampus-portal-dev
@@ -47,8 +45,6 @@ build-img-dev:
     REGISTRY_IMAGE_TAG: dev-$CI_COMMIT_SHORT_SHA-$(date +%s)
     CI_PROJECT_DIR: /builds/nse/hippocampus-model-portal
     KANIKO_EXTRA_ARGS: >
-      --build-arg=NEXT_PUBLIC_SENTRY_DSN
-      --build-arg=SENTRY_AUTH_TOKEN
       --build-arg=NEXT_PUBLIC_NEXUS_TOKEN
       --build-arg=NEXT_PUBLIC_BASE_PATH
       --build-arg=NEXT_PUBLIC_STATIC_DATA_BASE_URL
