@@ -431,7 +431,31 @@ const NeuronsModelLibrary: React.FC = () => {
               Download morphology
             </DownloadButton>
           </div>
-
+        </Collapsible>
+        <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
+          <PranavViewer
+            url={`${dataPath}/epsp-bpap/neuron_model_lib/${mapPranavFile(
+              currentMtype,
+              currentEtype,
+              currentMorphology
+            )}`}
+          />
+          <div className="graph"></div>
+          {morphologyData && (
+            <div className="mt-4">
+              <DownloadButton
+                onClick={() =>
+                  downloadAsJson(
+                    morphologyData,
+                    `${currentMtype}-${currentEtype}-morphology.json`
+                  )
+                }
+                theme={theme}
+              >
+                Morphology data
+              </DownloadButton>
+            </div>
+          )}
         </Collapsible>
 
         <Collapsible id="traceSection" className="mt-4" title="Trace">

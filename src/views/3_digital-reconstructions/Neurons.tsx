@@ -12,6 +12,7 @@ import Collapsible from "@/components/Collapsible";
 
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
+
 import { dataPath } from "@/config";
 import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
@@ -364,6 +365,7 @@ const NeuronsView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
+
         <Collapsible id="downloadModelSection" className="mt-4" title="Download NEURON model">
           <p>
             Download the complete NEURON model package, including morphology, mechanisms, 
@@ -383,6 +385,7 @@ const NeuronsView: React.FC = () => {
             href={`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/morphology.swc`}
           />
         </Collapsible>
+
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
             {traceData && <TraceGraph plotData={traceData} maxTime={1200}/>}
@@ -428,7 +431,9 @@ const NeuronsView: React.FC = () => {
 
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
+
             url={`${dataPath}/epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentID}`}
+
           />
         </Collapsible>
 
