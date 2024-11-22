@@ -66,7 +66,7 @@ const ConnectionAnatomyView: React.FC = () => {
           <p className="mb-4">
             Synaptic boutons, or simply, boutons, are enlargements of the axon, visible with light
             microscopy, that represent putative synaptic contacts. Bouton density is normally
-            expressed as the number of boutons per 100 μm.
+            expressed as the number of boutons per 100 μm or per μm.
           </p>
           <BoutonDensityTable theme={theme} />
         </Collapsible>
@@ -92,9 +92,7 @@ const ConnectionAnatomyView: React.FC = () => {
 
         <Collapsible id="synapseDivergencePerTypeSection" className="mt-4" title="Synapse divergence per presynaptic type">
           <p className="mb-4">
-            We can express the synapse divergence also in relation to the postsynaptic target.
-            Here, we calculate the percentage of synapses made by a morphological type onto
-            pyramidal cells or interneurons.
+          Synapse divergence or outdegree is the number of synapses made by a presynaptic neuron or neuron type.
           </p>
           <SDPerPrenapticTypeTable theme={theme} />
         </Collapsible>

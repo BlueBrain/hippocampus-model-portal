@@ -12,8 +12,9 @@ import Collapsible from "@/components/Collapsible";
 
 import { defaultSelection } from "@/constants";
 import withPreselection from "@/hoc/with-preselection";
-import { basePath, dataPath } from "@/config";
-import { downloadAsJson } from "@/utils";
+
+import { dataPath } from "@/config";
+import { downloadAsJson, downloadFile } from "@/utils";
 import DownloadButton from "@/components/DownloadButton";
 import TraceGraph from "../5_predictions/components/Trace";
 import modelsData from "./neurons.json";
@@ -64,7 +65,7 @@ const getFilteredMorphologies = (
         (!etype || model.etype === etype) &&
         (!layer || model.layer === layer)
     )
-    .map((model) => model.morphology);
+    .map((model) => model.id);
 };
 
 const NeuronsView: React.FC = () => {
@@ -73,7 +74,7 @@ const NeuronsView: React.FC = () => {
   const theme = 3;
   const [currentMtype, setCurrentMtype] = useState<string>("");
   const [currentEtype, setCurrentEtype] = useState<string>("");
-  const [currentMorphology, setCurrentMorphology] = useState<string>("");
+  const [currentID, setCurrentID] = useState<string>("");
   const [traceData, setTraceData] = useState<any>(null);
   const [factsheetData, setFactsheetData] = useState<any>(null);
   const [experimentalRecordingData, setExperimentalRecordingData] =
@@ -98,7 +99,7 @@ const NeuronsView: React.FC = () => {
       ),
     [currentMtype, currentLayer]
   );
-  const morphologies = useMemo(
+  const ids = useMemo(
     () => getFilteredMorphologies(currentMtype, currentEtype, currentLayer),
     [currentMtype, currentEtype, currentLayer]
   );
@@ -132,33 +133,29 @@ const NeuronsView: React.FC = () => {
         ? query.etype
         : newEtypes[0] || "";
 
-    const newMorphologies = getFilteredMorphologies(
-      newMtype,
-      newEtype,
-      currentLayer
-    );
-    const newMorphology =
-      query.morphology &&
-      typeof query.morphology === "string" &&
-      newMorphologies.includes(query.morphology)
-        ? query.morphology
-        : newMorphologies[0] || "";
+    const newIds = getFilteredMorphologies(newMtype, newEtype, currentLayer);
+    const newID =
+      query.id &&
+      typeof query.id === "string" &&
+      newIds.includes(query.id)
+        ? query.id
+        : newIds[0] || "";
 
     setCurrentMtype(newMtype);
     setCurrentEtype(newEtype);
-    setCurrentMorphology(newMorphology);
+    setCurrentID(newID);
   }, [query, currentLayer]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (currentMorphology) {
+      if (currentID) {
         try {
           const [traceResponse, factsheetResponse] = await Promise.all([
             fetch(
-              `${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/trace.json`
+              `${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/trace.json`
             ),
             fetch(
-              `${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/features_with_rheobase.json`
+              `${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/processed_features.json`
             ),
           ]);
 
@@ -179,7 +176,7 @@ const NeuronsView: React.FC = () => {
     };
 
     fetchData();
-  }, [currentMorphology]);
+  }, [currentID]);
 
   const setParams = (params: Record<string, string>): void => {
     const newQuery = {
@@ -194,29 +191,29 @@ const NeuronsView: React.FC = () => {
   const setMtype = (mtype: string) => {
     const newEtypes = getUniqueValues("etype", "mtype", mtype);
     const newEtype = newEtypes[0] || "";
-    const newMorphologies = getFilteredMorphologies(mtype, newEtype);
-    const newMorphology = newMorphologies[0] || "";
+    const newIds = getFilteredMorphologies(mtype, newEtype);
+    const newID = newIds[0] || "";
 
     setParams({
       mtype,
       etype: newEtype,
-      morphology: newMorphology,
+      id: newID,
     });
   };
 
   const setEtype = (etype: string) => {
-    const newMorphologies = getFilteredMorphologies(currentMtype, etype);
-    const newMorphology = newMorphologies[0] || "";
+    const newIds = getFilteredMorphologies(currentMtype, etype);
+    const newID = newIds[0] || "";
 
     setParams({
       etype,
-      morphology: newMorphology,
+      id: newID,
     });
   };
 
-  const setMorphology = (morphology: string) => {
+  const setID = (id: string) => {
     setParams({
-      morphology,
+      id,
     });
   };
 
@@ -232,14 +229,14 @@ const NeuronsView: React.FC = () => {
       layer.toString()
     );
     const newEtype = newEtypes[0] || "";
-    const newMorphologies = getFilteredMorphologies(newMtype, newEtype, layer);
-    const newMorphology = newMorphologies[0] || "";
+    const newIds = getFilteredMorphologies(newMtype, newEtype, layer);
+    const newID = newIds[0] || "";
 
     setParams({
       layer: layer.toString(),
       mtype: newMtype,
       etype: newEtype,
-      morphology: newMorphology,
+      id: newID,
     });
   };
 
@@ -263,10 +260,10 @@ const NeuronsView: React.FC = () => {
       setFn: setEtype,
     },
     {
-      title: "Morphology",
-      key: "morphology",
-      values: morphologies,
-      setFn: setMorphology,
+      title: "Cell Instance",
+      key: "id",
+      values: ids,
+      setFn: setID,
     },
   ];
 
@@ -337,12 +334,12 @@ const NeuronsView: React.FC = () => {
                   />
                   <List
                     block
-                    list={morphologies}
-                    value={currentMorphology}
-                    title={`Morphology ${
-                      morphologies.length ? `(${morphologies.length})` : ""
+                    list={ids}
+                    value={currentID}
+                    title={`Cell Instance ${
+                      ids.length ? `(${ids.length})` : ""
                     }`}
-                    onSelect={setMorphology}
+                    onSelect={setID}
                     anchor="data"
                     theme={theme}
                   />
@@ -356,9 +353,11 @@ const NeuronsView: React.FC = () => {
       <DataContainer
         theme={theme}
         navItems={[
+          { id: "downloadModelSection", label: "Download NEURON model" },
+          { id: "morphologySection", label: "Morphology" },
           { id: "traceSection", label: "Trace" },
-          { id: "bPAPPSPSection", label: "bPAP & PSP" },
           { id: "factsheetSection", label: "Factsheet" },
+          { id: "bPAPPSPSection", label: "bPAP & PSP" },
           {
             id: "ExperimentalMorphologySection",
             label: "Experimental morphology used for this model",
@@ -366,12 +365,30 @@ const NeuronsView: React.FC = () => {
         ]}
         quickSelectorEntries={qsEntries}
       >
-        <SwcViewer
-          href={`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentMorphology}/morphology.swc`}
-        />
+
+        <Collapsible id="downloadModelSection" className="mt-4" title="Download NEURON model">
+          <p>
+            Download the complete NEURON model package, including morphology, mechanisms, 
+            and electrophysiology data for the selected model instance.
+          </p>
+          <div className="mt-4">
+            <DownloadButton
+              onClick={() => downloadFile(`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/model_files.zip`, `${currentID}_model_files.zip`)}
+              theme={theme}
+            >
+              Download model package
+            </DownloadButton>
+          </div>
+        </Collapsible>
+        <Collapsible id="morphologySection" className="mt-4" title="Morphology">
+          <SwcViewer
+            href={`${dataPath}/3_digital-reconstruction/neuron/${currentMtype}/${currentEtype}/${currentID}/morphology.swc`}
+          />
+        </Collapsible>
+
         <Collapsible id="traceSection" className="mt-4" title="Trace">
           <div className="graph">
-            {traceData && <TraceGraph plotData={traceData} />}
+            {traceData && <TraceGraph plotData={traceData} maxTime={1200}/>}
           </div>
 
           {traceData && (
@@ -380,7 +397,7 @@ const NeuronsView: React.FC = () => {
                 onClick={() =>
                   downloadAsJson(
                     traceData,
-                    `${currentMtype}-${currentEtype}-${currentMorphology}-trace.json`
+                    `${currentMtype}-${currentEtype}-${currentID}-trace.json`
                   )
                 }
                 theme={theme}
@@ -400,7 +417,7 @@ const NeuronsView: React.FC = () => {
                   onClick={() =>
                     downloadAsJson(
                       factsheetData,
-                      `${currentMtype}-${currentEtype}-${currentMorphology}-factsheet.json`
+                      `${currentMtype}-${currentEtype}-${currentID}-factsheet.json`
                     )
                   }
                   theme={theme}
@@ -414,7 +431,9 @@ const NeuronsView: React.FC = () => {
 
         <Collapsible id="bPAPPSPSection" className="mt-4" title="bPAP & PSP">
           <PranavViewer
-            url={`${dataPath}/epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentMorphology}`}
+
+            url={`${dataPath}/epsp-bpap/digital_recon/${currentMtype}/${currentEtype}/${currentID}`}
+
           />
         </Collapsible>
 
@@ -425,7 +444,7 @@ const NeuronsView: React.FC = () => {
         >
           <ExperimentalMorphologyTable
             MorphologyData={modelsData}
-            currentInstance={currentMorphology}
+            currentInstance={currentID}
             isMorphologyLibrary={true}
           />
         </Collapsible>
