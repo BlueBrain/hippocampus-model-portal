@@ -107,7 +107,7 @@ const columns = [
           }
           return null;
         });
-      } else if (typeof ref === 'object' && ref.entry) {
+      } else if (typeof ref === 'object' && 'entry' in ref) {
         return (
           <a href={record.ref_link as string} target="_blank" rel="noopener noreferrer">
             {ref.entry}
