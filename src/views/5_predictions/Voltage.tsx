@@ -288,6 +288,7 @@ const VoltageView: React.FC = () => {
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                <p>Distribution of neuron firing rate. We excluded first 1000 ms and sampled a maximum of 100 random neurons<sup>*</sup>.</p>
                     <div className="graph">
                         {meanFiringRateData ? (
                             <MeanFiringRatePlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
@@ -295,6 +296,11 @@ const VoltageView: React.FC = () => {
                             <p>Mean firing rate data not available</p>
                         )}
                     </div>
+                    <small>
+                        <sup>[*]</sup> We may see an empty mean firing rate plot, even though there are spikes in the network (see <a href="#spikeTimeSection">Spike Time</a> section). This is because the plot is based on a sample of 100 neurons, none of which may spike at low firing rates.
+                    </small>
+                    <br />
+                    <br />                      
                     <DownloadButton
                         theme={theme}
                         onClick={() => meanFiringRateData && downloadAsJson(meanFiringRateData, `mean-firing-rate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ca_o}-${quickSelection.k_inj}`)}
@@ -309,7 +315,7 @@ const VoltageView: React.FC = () => {
                 <Collapsible id='traceSection' title="Traces">
                     <div className="graph">
                         {traceData ? (
-                            <TraceGraph plotData={traceData} />
+                            <TraceGraph plotData={traceData} maxTime={10000}/>
                         ) : (
                             <p>Trace data not available</p>
                         )}

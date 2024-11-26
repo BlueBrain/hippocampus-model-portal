@@ -100,7 +100,7 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
     }, []);
 
     const layout = useMemo(() => {
-        const xTicks = generateTicks(dataRange.x[0], dataRange.x[1]);
+        const xTicks = generateTicks(0, dataRange.x[1]);
         const yTicks = generateTicks(dataRange.y[0], dataRange.y[1]);
 
         return {
@@ -113,11 +113,15 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                 tickmode: 'array',
                 tickvals: xTicks,
                 ticktext: xTicks.map(value => Math.round(value).toString()),
+                range: [0, dataRange.x[1]],
+                showline: true,
+                linecolor: '#666666',
+                zeroline: false,
             },
             yaxis: {
                 title: {
                     text: 'Neuron Index',
-                    standoff: 20,
+                    standoff: 40,
                 },
                 color: '#666666',
                 titlefont: { size: 12 },
@@ -126,12 +130,15 @@ const LargeDatasetScatterPlot: React.FC<PlotDetailsProps> = ({ plotData }) => {
                 tickmode: 'array',
                 tickvals: yTicks,
                 ticktext: yTicks.map(formatScientificNotation),
+                showline: true,
+                linecolor: '#666666',
+                zeroline: false,
             },
             autosize: true,
             plot_bgcolor: '#EFF1F8',
             paper_bgcolor: '#EFF1F8',
             showlegend: false,
-            margin: { l: 60, r: 10, b: 50, t: 10, pad: 4 }
+            margin: { l: 80, r: 10, b: 50, t: 10, pad: 4 }
         };
     }, [dataRange, generateTicks, formatScientificNotation]);
 

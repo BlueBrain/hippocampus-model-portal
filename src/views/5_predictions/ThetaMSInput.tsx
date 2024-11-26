@@ -22,7 +22,7 @@ import { downloadAsJson } from '@/utils';
 import DistributionPlot from '@/components/DistributionPlot';
 
 const ACh = [0, 0.1, 1, 3, 5];
-const Depolarisation = [105, 120, 125]; // Updated to include all unique values
+const Depolarisation = [105, 110, 115, 120, 125]; // Updated to include all unique values
 
 const getaCh = (): number[] => ACh;
 const getDepolarisation = (): number[] => Depolarisation;
@@ -273,9 +273,15 @@ const ThetaMSInputView: React.FC = () => {
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                <p>Distribution of neuron firing rate. We excluded first 1000 ms and sampled a maximum of 100 random neurons<sup>*</sup>.</p>
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={0.1} />
                     </div>
+                    <small>
+                        <sup>[*]</sup> We may see an empty mean firing rate plot, even though there are spikes in the network (see <a href="#spikeTimeSection">Spike Time</a> section). This is because the plot is based on a sample of 100 neurons, none of which may spike at low firing rates.
+                    </small>
+                    <br />
+                    <br />                    
                     <DownloadButton
                         theme={theme}
                         onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.ach}-${quickSelection.depolarisation}`)}>
@@ -283,11 +289,12 @@ const ThetaMSInputView: React.FC = () => {
                         <span className="!ml-0 collapsible-property small">{quickSelection.mtype}-{quickSelection.etype}</span>
                         <span className="!ml-0 collapsible-property small">{quickSelection.ach}-{quickSelection.depolarisation}</span>
                     </DownloadButton>
+                    
                 </Collapsible>
 
                 <Collapsible id='traceSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
                     <div className="graph">
-                        <TraceGraph plotData={traceData} />
+                        <TraceGraph plotData={traceData} maxTime={20000}/>
                     </div>
                     <DownloadButton
                         theme={theme}

@@ -317,9 +317,15 @@ const SchafferCollateralsView: React.FC = () => {
                 </Collapsible>
 
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                    <p>Distribution of neuron firing rate. We excluded first 1000 ms and sampled a maximum of 100 random neurons<sup>*</sup>.</p>
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringData} />
                     </div>
+                    <small>
+                        <sup>[*]</sup> We may see an empty mean firing rate plot, even though there are spikes in the network (see <a href="#spikeTimeSection">Spike Time</a> section). This is because the plot is based on a sample of 100 neurons, none of which may spike at low firing rates.
+                    </small>
+                    <br />
+                    <br />
                     <div className="mt-4">
                         <DownloadButton onClick={() => downloadAsJson(meanFiringData, 'layer-anatommy-summary.json')} theme={theme}>
 
@@ -338,7 +344,7 @@ const SchafferCollateralsView: React.FC = () => {
 
                 <Collapsible id='traceSection' properties={[quickSelection.simAndSliceSeed, quickSelection.stimulusPercent, quickSelection.maxSC, quickSelection.inhibition, quickSelection.mtype + "-" + quickSelection.etype]} title="Traces">
                     <div className="graph">
-                        <TraceGraph plotData={traceData} />
+                        <TraceGraph plotData={traceData} maxTime={1500}/>
                     </div>
                     <div className="mt-4">
                         <DownloadButton onClick={() => downloadAsJson(traceData, 'layer-anatommy-summary.json')} theme={theme}>

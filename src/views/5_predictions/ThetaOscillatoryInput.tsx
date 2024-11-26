@@ -290,9 +290,15 @@ const ThetaOscillatoryInputView: React.FC = () => {
                     </DownloadButton>
                 </Collapsible>
                 <Collapsible id='meanFiringRateSection' properties={[quickSelection.mtype + "-" + quickSelection.etype]} title="Mean Firing Rate">
+                    <p>Distribution of neuron firing rate. We excluded first 1000 ms and sampled a maximum of 100 random neurons<sup>*</sup>.</p>
                     <div className="graph">
                         <MeanFiringRatePlot plotData={meanFiringRateData} xAxis={"Firing Rate (Hz)"} yAxis={"Frequency"} xAxisTickStep={500} />
                     </div>
+                    <small>
+                        <sup>[*]</sup> We may see an empty mean firing rate plot, even though there are spikes in the network (see <a href="#spikeTimeSection">Spike Time</a> section). This is because the plot is based on a sample of 100 neurons, none of which may spike at low firing rates.
+                    </small>
+                    <br />
+                    <br />                      
                     <DownloadButton
                         theme={theme}
                         onClick={() => downloadAsJson(meanFiringRateData, `mean-firing-trate-${quickSelection.mtype}-${quickSelection.etype}_${quickSelection.signal_frequency}-${quickSelection.cell_frequency}`)}>
@@ -304,7 +310,7 @@ const ThetaOscillatoryInputView: React.FC = () => {
                 </Collapsible>
                 <Collapsible id='traceSection' title="Traces">
                     <div className="graph">
-                        <TraceGraph plotData={traceData} />
+                        <TraceGraph plotData={traceData} maxTime={10000}/>
                     </div>
                     <DownloadButton
                         theme={theme}
