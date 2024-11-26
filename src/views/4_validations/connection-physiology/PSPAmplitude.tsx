@@ -157,7 +157,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: `PSP amplitude (${data.units}) Experiment`
+                                    text: `PSP amplitude Experiment (${data.units})`
                                 },
                                 min: 0,
                                 max: 3.0,
@@ -167,7 +167,7 @@ const PSPAmplitude: React.FC<PSPAmplitudeProps> = ({ theme }) => {
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: `PSP amplitude (${data.units}) Model`,
+                                    text: `PSP amplitude Model (${data.units})`,
                                 },
                                 min: 0,
                                 max: 3.0,

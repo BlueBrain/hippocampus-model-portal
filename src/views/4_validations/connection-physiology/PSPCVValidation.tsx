@@ -154,7 +154,7 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: `PSP CV Experiment`
+                                    text: `PSP CV Experiment (${data.units})`
                                 },
                                 min: 0,
                                 max: 0.6,
@@ -164,7 +164,7 @@ const PSPCVValidation: React.FC<PSPCVValidationProps> = ({ theme }) => {
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: `PSP CV Model`,
+                                    text: `PSP CV Model (${data.units})`,
                                 },
                                 min: 0,
                                 max: 0.6,

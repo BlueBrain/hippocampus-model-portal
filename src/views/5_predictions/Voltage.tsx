@@ -315,7 +315,7 @@ const VoltageView: React.FC = () => {
                 <Collapsible id='traceSection' title="Traces">
                     <div className="graph">
                         {traceData ? (
-                            <TraceGraph plotData={traceData} />
+                            <TraceGraph plotData={traceData} maxTime={10000}/>
                         ) : (
                             <p>Trace data not available</p>
                         )}

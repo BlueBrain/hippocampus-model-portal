@@ -264,7 +264,7 @@ const OtherFrequenciesView: React.FC = () => {
                 </Collapsible>
                 <Collapsible id='traceSection' title="Traces">
                     <div className="graph">
-                        <TraceGraph plotData={traceData} />
+                        <TraceGraph plotData={traceData} maxTime={6000}/>
                     </div>
                     <DownloadButton
                         theme={theme}
