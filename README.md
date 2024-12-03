@@ -1,6 +1,10 @@
-# The Hippocampus Hub Explore
+# The Hippocampus Hub
 
-The Hippocampus portal is a freely accessible resource, which provides experimental data sets on the multi-scale organization of the rat hippocampus, and resulting computational models.
+[The Hippocampus Hub](https://www.hippocampushub.eu) is a freely accessible resource which brings together free research tools and services, and learning resources for scientists and students interested in the hippocampus. It aims to provide a unique resource and bring together those interested in the hippocampus to create an active community.
+
+## Explore Models
+
+In this section, you can explore the different stages of our model build and simulation. We began by transforming sparse experimental datasets into the dense datasets necessary for building the model. Subsequently, each component of the model and the compound network model were subjected to rigorous validation, after which the model was used to make predictions. The models presented in this section are a continuation of the pioneering hippocampal research conducted during the 2014-2020 period as part of the Human Brain Project, which was published in Romani et al. (2024).
 
 
 ## Getting started
@@ -21,24 +25,11 @@ Open [http://localhost:3000/](http://localhost:3000/) with your browser to see t
 
 ## Build for production
 
-Compile the app in .next folder:
+Build an app for production and export static files:
 
 ```bash
-npm run build
+npm run build && npm run export
 ```
-
-
-### ENV variables
-
-**NEXT_PUBLIC_NEXUS_TOKEN**: An auth token used to query the data from Nexus. By default not set.
-Hippocampus project data will become publicly accessible once the corresponding scientific paper is published
-and portal goes live, you can generate a token using your account with access
-to the `public | hippocampus` Nexus project.
-
-**NEXT_PUBLIC_NEXUS_URL**: The URL of the Nexus KG deployment, defaults to `https://bbp.epfl.ch/nexus/v1`.
-
-**NEXT_PUBLIC_NEXUS_AUTH_PROXY_URL**: Internal to deployment cluster URL of the HTTP auth proxy to access Nexus images.
-
 
 ## Docker image
 
@@ -51,17 +42,3 @@ You can then run it with:
 ```bash
 docker run -it --rm -p 8000:8000 hippocampus-model-portal
 ```
-
-## HTTP auth proxy
-
-The purpose of the auth proxy is to enable image optimisation service (which is a part of Next.js portal deployment
-and doesn't support auth headers) to fetch images from Nexus for already authenticated,
-internal (to the EPFL network) clients by adding an auth token to the proxied requests.
-
-```
-            |       OpenShift cluster     |
-WebClient --|-> ImageOpt ---> AuthProxy --|-> Nexus
-                (Next.js)
-```
-
-Relevant code is located in `tools/http-auth-proxy`.
