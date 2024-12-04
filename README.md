@@ -42,3 +42,11 @@ You can then run it with:
 ```bash
 docker run -it --rm -p 8000:8000 hippocampus-model-portal
 ```
+## Funding & Acknowledgements
+This work has been partially funded by the EBRAINS research infrastructure, funded from the European Union’s Horizon 2020 Framework Programme for Research and Innovation under the Specific Grant Agreement No. 945539 (Human Brain Project SGA3).
+
+The development of this software was supported by funding to the Blue Brain Project, a research center of the École polytechnique fédérale de Lausanne (EPFL), from the Swiss government’s ETH Board of the Swiss Federal Institutes of Technology.
+
+For license and authors, see `LICENSE.txt` and `AUTHORS.md` respectively.
+
+Copyright (c) 2019-2024 Blue Brain Project/EPFL
